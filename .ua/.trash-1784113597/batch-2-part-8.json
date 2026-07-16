@@ -1,0 +1,194 @@
+{
+  "nodes": [
+    {
+      "id": "file:source/module/tools/object/mmd_rigid_manager.h",
+      "type": "file",
+      "name": "mmd_rigid_manager.h",
+      "filePath": "source/module/tools/object/mmd_rigid_manager.h",
+      "summary": "Declares the rigid-body manager, scene message contract, PMX conversion API, and standalone physics-body lifecycle. / 声明刚体管理器、场景消息协议、PMX 转换 API 与独立物理刚体生命周期。",
+      "tags": [
+        "object-manager",
+        "rigid-body",
+        "api",
+        "physics",
+        "pmx"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "class:source/module/tools/object/mmd_rigid_manager.h:MMDRigidManagerObject",
+      "type": "class",
+      "name": "MMDRigidManagerObject",
+      "filePath": "source/module/tools/object/mmd_rigid_manager.h",
+      "lineRange": [
+        50,
+        88
+      ],
+      "summary": "MMDRigidManagerObject coordinates owned objects, persistent state, and lifecycle operations for rigid-manager API. / MMDRigidManagerObject 为刚体管理器 API协调所管理对象、持久状态与生命周期操作。",
+      "tags": [
+        "object-manager",
+        "rigid-body",
+        "api"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_rigid_manager.h:MMDRigidRootObjectMsg::MMDRigidRootObjectMsg",
+      "type": "function",
+      "name": "MMDRigidRootObjectMsg::MMDRigidRootObjectMsg",
+      "filePath": "source/module/tools/object/mmd_rigid_manager.h",
+      "lineRange": [
+        45,
+        47
+      ],
+      "summary": "MMDRigidRootObjectMsg::MMDRigidRootObjectMsg initializes an object used by rigid-manager API. / MMDRigidRootObjectMsg::MMDRigidRootObjectMsg 初始化刚体管理器 API所使用的对象。",
+      "tags": [
+        "physics",
+        "object-manager",
+        "rigid-body"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:source/module/tools/object/mmd_rigid_manager.cpp",
+      "type": "file",
+      "name": "mmd_rigid_manager.cpp",
+      "filePath": "source/module/tools/object/mmd_rigid_manager.cpp",
+      "summary": "Implements rigid-body collection management, PMX import/export, edit/runtime transform transitions, collision settings, and standalone physics-body construction. / 实现刚体集合管理、PMX 导入导出、编辑与运行时变换切换、碰撞设置以及独立物理刚体构建。",
+      "tags": [
+        "object-manager",
+        "rigid-body",
+        "pmx",
+        "physics",
+        "serialization"
+      ],
+      "complexity": "complex",
+      "languageNotes": "C++ integrates Cinema 4D SDK lifecycle hooks with explicit PMX/VMD conversion and runtime state management. / C++ 将 Cinema 4D SDK 生命周期钩子与显式 PMX/VMD 转换及运行时状态管理结合。"
+    },
+    {
+      "id": "file:source/module/tools/object/mmd_bone_manager.h",
+      "type": "file",
+      "name": "mmd_bone_manager.h",
+      "filePath": "source/module/tools/object/mmd_bone_manager.h",
+      "summary": "Declares the bone-manager object, its scene message contract, hierarchy indices, animation-slot controls, and physics-override API. / 声明骨骼管理器对象、场景消息协议、层级索引、动画槽控制以及物理覆盖 API。",
+      "tags": [
+        "object-manager",
+        "api",
+        "bone-hierarchy",
+        "animation",
+        "physics"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:source/module/tools/object/mmd_model_manager.h",
+      "type": "file",
+      "name": "mmd_model_manager.h",
+      "filePath": "source/module/tools/object/mmd_model_manager.h",
+      "summary": "Declares the central model-manager state, display-frame and animation-slot data, morph/material editing APIs, and standalone IK/physics runtime interfaces. / 声明核心模型管理器状态、显示框与动画槽数据、变形和材质编辑 API，以及独立 IK/物理运行时接口。",
+      "tags": [
+        "object-manager",
+        "api",
+        "data-model",
+        "animation",
+        "physics"
+      ],
+      "complexity": "complex",
+      "languageNotes": "C++ integrates Cinema 4D SDK lifecycle hooks with explicit PMX/VMD conversion and runtime state management. / C++ 将 Cinema 4D SDK 生命周期钩子与显式 PMX/VMD 转换及运行时状态管理结合。"
+    },
+    {
+      "id": "file:source/module/tools/object/mmd_rigid.h",
+      "type": "file",
+      "name": "mmd_rigid.h",
+      "filePath": "source/module/tools/object/mmd_rigid.h",
+      "summary": "Declares the MMD rigid-body object plugin and its parameter, drawing, execution, serialization, and mode-transition hooks. / 声明 MMD 刚体对象插件及其参数、绘制、执行、序列化与模式切换钩子。",
+      "tags": [
+        "rigid-body",
+        "physics",
+        "api",
+        "object-plugin",
+        "serialization"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:source/module/tools/object/mmd_manager.hpp",
+      "type": "file",
+      "name": "mmd_manager.hpp",
+      "filePath": "source/module/tools/object/mmd_manager.hpp",
+      "summary": "Defines the shared base for MMD manager objects, including protection/display tag creation and common persisted links. / 定义 MMD 管理器对象的共享基类，包括保护与显示标签创建以及通用持久链接。",
+      "tags": [
+        "object-manager",
+        "base-class",
+        "serialization",
+        "cinema-4d"
+      ],
+      "complexity": "moderate"
+    }
+  ],
+  "edges": [
+    {
+      "source": "file:source/module/tools/object/mmd_rigid_manager.h",
+      "target": "class:source/module/tools/object/mmd_rigid_manager.h:MMDRigidManagerObject",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid_manager.h",
+      "target": "class:source/module/tools/object/mmd_rigid_manager.h:MMDRigidManagerObject",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid_manager.h",
+      "target": "function:source/module/tools/object/mmd_rigid_manager.h:MMDRigidRootObjectMsg::MMDRigidRootObjectMsg",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid_manager.h",
+      "target": "function:source/module/tools/object/mmd_rigid_manager.h:MMDRigidRootObjectMsg::MMDRigidRootObjectMsg",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid_manager.cpp",
+      "target": "file:source/module/tools/object/mmd_bone_manager.h",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid_manager.cpp",
+      "target": "file:source/module/tools/object/mmd_model_manager.h",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid_manager.cpp",
+      "target": "file:source/module/tools/object/mmd_rigid_manager.h",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid_manager.cpp",
+      "target": "file:source/module/tools/object/mmd_rigid.h",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid_manager.h",
+      "target": "file:source/module/tools/object/mmd_manager.hpp",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    }
+  ]
+}

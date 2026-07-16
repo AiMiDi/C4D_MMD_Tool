@@ -1,0 +1,83 @@
+{
+  "nodes": [
+    {
+      "id": "document:.github/prompts/opsx-apply.prompt.md",
+      "type": "document",
+      "name": "opsx-apply.prompt.md",
+      "filePath": ".github/prompts/opsx-apply.prompt.md",
+      "summary": "GitHub prompt for selecting an OpenSpec change, following dynamic apply instructions, implementing remaining tasks, and recording progress. / GitHub 提示词，用于选择 OpenSpec 变更、遵循动态应用指令、实现剩余任务并记录进度。",
+      "tags": [
+        "documentation",
+        "openspec",
+        "prompt",
+        "implementation"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "document:.github/prompts/opsx-archive.prompt.md",
+      "type": "document",
+      "name": "opsx-archive.prompt.md",
+      "filePath": ".github/prompts/opsx-archive.prompt.md",
+      "summary": "GitHub prompt for checking completion, warning about unfinished work, synchronizing specifications, and archiving an OpenSpec change. / GitHub 提示词，用于检查完成状态、警告未完成工作、同步规范并归档 OpenSpec 变更。",
+      "tags": [
+        "documentation",
+        "openspec",
+        "prompt",
+        "archival"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "document:.github/prompts/opsx-explore.prompt.md",
+      "type": "document",
+      "name": "opsx-explore.prompt.md",
+      "filePath": ".github/prompts/opsx-explore.prompt.md",
+      "summary": "GitHub exploration prompt that frames read-only code and requirement discovery as an adaptive, visualization-friendly thinking mode. / GitHub 探索提示词，将只读代码与需求调查定义为自适应且鼓励可视化的思考模式。",
+      "tags": [
+        "documentation",
+        "openspec",
+        "prompt",
+        "exploration"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "document:.github/prompts/opsx-propose.prompt.md",
+      "type": "document",
+      "name": "opsx-propose.prompt.md",
+      "filePath": ".github/prompts/opsx-propose.prompt.md",
+      "summary": "GitHub prompt for turning a requested change into a scaffold and generating all required OpenSpec artifacts in dependency order. / GitHub 提示词，用于将变更请求转为脚手架，并按依赖顺序生成全部必需的 OpenSpec 产物。",
+      "tags": [
+        "documentation",
+        "openspec",
+        "prompt",
+        "proposal"
+      ],
+      "complexity": "moderate"
+    }
+  ],
+  "edges": [
+    {
+      "source": "document:.github/prompts/opsx-explore.prompt.md",
+      "target": "document:.github/prompts/opsx-propose.prompt.md",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.github/prompts/opsx-propose.prompt.md",
+      "target": "document:.github/prompts/opsx-apply.prompt.md",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.github/prompts/opsx-apply.prompt.md",
+      "target": "document:.github/prompts/opsx-archive.prompt.md",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    }
+  ]
+}

@@ -1,0 +1,411 @@
+{
+  "scriptCompleted": true,
+  "filesAnalyzed": 4,
+  "filesSkipped": [],
+  "results": [
+    {
+      "path": "docs/dev/anim-flow-debug.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 249,
+      "nonEmptyLines": 176,
+      "sections": [
+        {
+          "heading": "动画 / IK / 物理流水线诊断（CMT_ANIM_FLOW_DEBUG）",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "1. 启动方式",
+          "level": 2,
+          "line": 15
+        },
+        {
+          "heading": "1.1 环境变量",
+          "level": 3,
+          "line": 17
+        },
+        {
+          "heading": "1.2 复现工作流",
+          "level": 3,
+          "line": 40
+        },
+        {
+          "heading": "2. 输出结构",
+          "level": 2,
+          "line": 51
+        },
+        {
+          "heading": "2.1 `MMDBoneTag::Execute`（每帧、每根骨骼）",
+          "level": 3,
+          "line": 53
+        },
+        {
+          "heading": "2.2 `MMDBoneTag::ApplyActiveAnimation`（仅在该骨骼存在 keyframes 时）",
+          "level": 3,
+          "line": 69
+        },
+        {
+          "heading": "2.3 `MMDBoneTag::RunIKSolveAnimMode`",
+          "level": 3,
+          "line": 79
+        },
+        {
+          "heading": "2.4 `MMDModelManagerObject::Execute`",
+          "level": 3,
+          "line": 94
+        },
+        {
+          "heading": "2.5 `MMDModelManagerObject::SolveStandaloneIKBeforePhysics`",
+          "level": 3,
+          "line": 121
+        },
+        {
+          "heading": "3. 诊断假设与对应判断标准",
+          "level": 2,
+          "line": 132
+        },
+        {
+          "heading": "候选 1（最高嫌疑）：物理关闭时 IK 完全没解算",
+          "level": 3,
+          "line": 134
+        },
+        {
+          "heading": "候选 2（中等嫌疑）：同帧重入或 prev_time 短路",
+          "level": 3,
+          "line": 144
+        },
+        {
+          "heading": "候选 3（低嫌疑）：fps 不一致 / 时间步长漂移",
+          "level": 3,
+          "line": 151
+        },
+        {
+          "heading": "4. 配套：cli-anything-lldb 实时抓数据",
+          "level": 2,
+          "line": 158
+        },
+        {
+          "heading": "4.1 准备",
+          "level": 3,
+          "line": 166
+        },
+        {
+          "heading": "4.2 断点",
+          "level": 3,
+          "line": 184
+        },
+        {
+          "heading": "4.3 noisy stops 处理",
+          "level": 3,
+          "line": 204
+        },
+        {
+          "heading": "4.4 收尾",
+          "level": 3,
+          "line": 221
+        },
+        {
+          "heading": "5. 后续操作建议",
+          "level": 2,
+          "line": 230
+        },
+        {
+          "heading": "6. 关闭诊断",
+          "level": 2,
+          "line": 240
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 21
+      }
+    },
+    {
+      "path": "docs/dev/export-flow.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 261,
+      "nonEmptyLines": 214,
+      "sections": [
+        {
+          "heading": "导出流程",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "关键代码地图",
+          "level": 2,
+          "line": 5
+        },
+        {
+          "heading": "总览",
+          "level": 2,
+          "line": 18
+        },
+        {
+          "heading": "PMX 模型导出",
+          "level": 2,
+          "line": 44
+        },
+        {
+          "heading": "VPD 姿势导出",
+          "level": 2,
+          "line": 117
+        },
+        {
+          "heading": "v1 范围与限制",
+          "level": 2,
+          "line": 165
+        },
+        {
+          "heading": "导出前状态同步（Export-before-sync）",
+          "level": 2,
+          "line": 177
+        },
+        {
+          "heading": "失败路径（可验证）",
+          "level": 2,
+          "line": 195
+        },
+        {
+          "heading": "手动验收清单（tasks 5.1–5.3）",
+          "level": 2,
+          "line": 214
+        },
+        {
+          "heading": "5.1 PMX 往返导入",
+          "level": 3,
+          "line": 216
+        },
+        {
+          "heading": "5.2 EDIT 态编辑后导出",
+          "level": 3,
+          "line": 225
+        },
+        {
+          "heading": "5.3 中英文 UI 与资源配置",
+          "level": 3,
+          "line": 233
+        },
+        {
+          "heading": "导出问题定位",
+          "level": 2,
+          "line": 244
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 13
+      }
+    },
+    {
+      "path": "docs/dev/import-flow.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 328,
+      "nonEmptyLines": 263,
+      "sections": [
+        {
+          "heading": "导入流程",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "关键代码地图",
+          "level": 2,
+          "line": 7
+        },
+        {
+          "heading": "总览",
+          "level": 2,
+          "line": 22
+        },
+        {
+          "heading": "PMX 模型导入",
+          "level": 2,
+          "line": 43
+        },
+        {
+          "heading": "骨骼导入细节",
+          "level": 2,
+          "line": 94
+        },
+        {
+          "heading": "网格、刚体、关节导入细节",
+          "level": 2,
+          "line": 109
+        },
+        {
+          "heading": "材质表情（Material Morph）",
+          "level": 2,
+          "line": 130
+        },
+        {
+          "heading": "数据模型与持久化",
+          "level": 3,
+          "line": 135
+        },
+        {
+          "heading": "导入 / 导出 round-trip",
+          "level": 3,
+          "line": 146
+        },
+        {
+          "heading": "运行时合成（非累积）",
+          "level": 3,
+          "line": 155
+        },
+        {
+          "heading": "ShaderData 与 BaseShader 嵌套",
+          "level": 3,
+          "line": 171
+        },
+        {
+          "heading": "材质 adapter 同步",
+          "level": 3,
+          "line": 181
+        },
+        {
+          "heading": "UI 位置",
+          "level": 3,
+          "line": 194
+        },
+        {
+          "heading": "VMD 动作导入",
+          "level": 2,
+          "line": 202
+        },
+        {
+          "heading": "VPD 姿势导入",
+          "level": 2,
+          "line": 239
+        },
+        {
+          "heading": "VMD 相机导入",
+          "level": 2,
+          "line": 288
+        },
+        {
+          "heading": "导入问题定位",
+          "level": 2,
+          "line": 315
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 17
+      }
+    },
+    {
+      "path": "docs/dev/runtime-flow.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 267,
+      "nonEmptyLines": 206,
+      "sections": [
+        {
+          "heading": "运行时流程",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "关键代码地图",
+          "level": 2,
+          "line": 6
+        },
+        {
+          "heading": "Ownership 边界",
+          "level": 2,
+          "line": 18
+        },
+        {
+          "heading": "Standalone Runtime 重建",
+          "level": 2,
+          "line": 39
+        },
+        {
+          "heading": "Bone adapters",
+          "level": 3,
+          "line": 59
+        },
+        {
+          "heading": "IK runtime",
+          "level": 3,
+          "line": 71
+        },
+        {
+          "heading": "Physics runtime",
+          "level": 3,
+          "line": 84
+        },
+        {
+          "heading": "每帧主流程",
+          "level": 2,
+          "line": 98
+        },
+        {
+          "heading": "分层动画与 IK",
+          "level": 2,
+          "line": 129
+        },
+        {
+          "heading": "物理 step 与 override",
+          "level": 2,
+          "line": 158
+        },
+        {
+          "heading": "BoneManager 最终协调",
+          "level": 2,
+          "line": 172
+        },
+        {
+          "heading": "模式切换边界",
+          "level": 2,
+          "line": 182
+        },
+        {
+          "heading": "EDIT -> ANIM",
+          "level": 3,
+          "line": 209
+        },
+        {
+          "heading": "ANIM -> EDIT",
+          "level": 3,
+          "line": 221
+        },
+        {
+          "heading": "存档打开与旧模式值",
+          "level": 3,
+          "line": 232
+        },
+        {
+          "heading": "运行时失效点",
+          "level": 2,
+          "line": 238
+        },
+        {
+          "heading": "运行时问题定位",
+          "level": 2,
+          "line": 251
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 17
+      }
+    }
+  ]
+}

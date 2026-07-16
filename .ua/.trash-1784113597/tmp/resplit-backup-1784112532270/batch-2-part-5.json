@@ -1,0 +1,2050 @@
+{
+  "nodes": [
+    {
+      "id": "file:source/module/tools/object/mmd_morph.cpp",
+      "type": "file",
+      "name": "mmd_morph.cpp",
+      "filePath": "source/module/tools/object/mmd_morph.cpp",
+      "summary": "Implements group, flip, mesh, UV, bone, material, and impulse morph persistence, UI editing, PMX conversion, and runtime updates. / 实现组、翻转、网格、UV、骨骼、材质与冲量变形的持久化、UI 编辑、PMX 转换及运行时更新。",
+      "tags": [
+        "morph",
+        "data-model",
+        "serialization",
+        "ui",
+        "pmx"
+      ],
+      "complexity": "complex",
+      "languageNotes": "C++ integrates Cinema 4D SDK lifecycle hooks with explicit PMX/VMD conversion and runtime state management. / C++ 将 Cinema 4D SDK 生命周期钩子与显式 PMX/VMD 转换及运行时状态管理结合。"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_morph.cpp:IMorph::Read",
+      "type": "function",
+      "name": "IMorph::Read",
+      "filePath": "source/module/tools/object/mmd_morph.cpp",
+      "lineRange": [
+        11,
+        16
+      ],
+      "summary": "IMorph::Read reads persistent state for MMD morph data and editing. / IMorph::Read 为MMD 变形数据与编辑读取持久状态。",
+      "tags": [
+        "serialization",
+        "morph",
+        "data-model"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_morph.cpp:IMorph::Write",
+      "type": "function",
+      "name": "IMorph::Write",
+      "filePath": "source/module/tools/object/mmd_morph.cpp",
+      "lineRange": [
+        18,
+        23
+      ],
+      "summary": "IMorph::Write writes persistent state for MMD morph data and editing. / IMorph::Write 为MMD 变形数据与编辑写入持久状态。",
+      "tags": [
+        "serialization",
+        "morph",
+        "data-model"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_morph.cpp:IMorph::CopyTo",
+      "type": "function",
+      "name": "IMorph::CopyTo",
+      "filePath": "source/module/tools/object/mmd_morph.cpp",
+      "lineRange": [
+        25,
+        30
+      ],
+      "summary": "IMorph::CopyTo copies persistent state to another instance for MMD morph data and editing. / IMorph::CopyTo 为MMD 变形数据与编辑将持久状态复制到另一实例。",
+      "tags": [
+        "serialization",
+        "morph",
+        "data-model"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_morph.cpp:GroupMorph::Read",
+      "type": "function",
+      "name": "GroupMorph::Read",
+      "filePath": "source/module/tools/object/mmd_morph.cpp",
+      "lineRange": [
+        32,
+        46
+      ],
+      "summary": "GroupMorph::Read reads persistent state for MMD morph data and editing. / GroupMorph::Read 为MMD 变形数据与编辑读取持久状态。",
+      "tags": [
+        "serialization",
+        "morph",
+        "data-model"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_morph.cpp:GroupMorph::Write",
+      "type": "function",
+      "name": "GroupMorph::Write",
+      "filePath": "source/module/tools/object/mmd_morph.cpp",
+      "lineRange": [
+        48,
+        60
+      ],
+      "summary": "GroupMorph::Write writes persistent state for MMD morph data and editing. / GroupMorph::Write 为MMD 变形数据与编辑写入持久状态。",
+      "tags": [
+        "serialization",
+        "morph",
+        "data-model"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_morph.cpp:GroupMorph::CopyTo",
+      "type": "function",
+      "name": "GroupMorph::CopyTo",
+      "filePath": "source/module/tools/object/mmd_morph.cpp",
+      "lineRange": [
+        62,
+        72
+      ],
+      "summary": "GroupMorph::CopyTo copies persistent state to another instance for MMD morph data and editing. / GroupMorph::CopyTo 为MMD 变形数据与编辑将持久状态复制到另一实例。",
+      "tags": [
+        "serialization",
+        "morph",
+        "data-model"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_morph.cpp:FlipMorph::Read",
+      "type": "function",
+      "name": "FlipMorph::Read",
+      "filePath": "source/module/tools/object/mmd_morph.cpp",
+      "lineRange": [
+        74,
+        87
+      ],
+      "summary": "FlipMorph::Read reads persistent state for MMD morph data and editing. / FlipMorph::Read 为MMD 变形数据与编辑读取持久状态。",
+      "tags": [
+        "serialization",
+        "morph",
+        "data-model"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_morph.cpp:FlipMorph::Write",
+      "type": "function",
+      "name": "FlipMorph::Write",
+      "filePath": "source/module/tools/object/mmd_morph.cpp",
+      "lineRange": [
+        89,
+        101
+      ],
+      "summary": "FlipMorph::Write writes persistent state for MMD morph data and editing. / FlipMorph::Write 为MMD 变形数据与编辑写入持久状态。",
+      "tags": [
+        "serialization",
+        "morph",
+        "data-model"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_morph.cpp:FlipMorph::CopyTo",
+      "type": "function",
+      "name": "FlipMorph::CopyTo",
+      "filePath": "source/module/tools/object/mmd_morph.cpp",
+      "lineRange": [
+        103,
+        113
+      ],
+      "summary": "FlipMorph::CopyTo copies persistent state to another instance for MMD morph data and editing. / FlipMorph::CopyTo 为MMD 变形数据与编辑将持久状态复制到另一实例。",
+      "tags": [
+        "serialization",
+        "morph",
+        "data-model"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_morph.cpp:IMorph::IMorph",
+      "type": "function",
+      "name": "IMorph::IMorph",
+      "filePath": "source/module/tools/object/mmd_morph.cpp",
+      "lineRange": [
+        121,
+        123
+      ],
+      "summary": "IMorph::IMorph initializes an object used by MMD morph data and editing. / IMorph::IMorph 初始化MMD 变形数据与编辑所使用的对象。",
+      "tags": [
+        "morph",
+        "data-model",
+        "serialization"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_morph.cpp:IMorph::IMorph@125",
+      "type": "function",
+      "name": "IMorph::IMorph",
+      "filePath": "source/module/tools/object/mmd_morph.cpp",
+      "lineRange": [
+        125,
+        128
+      ],
+      "summary": "IMorph::IMorph initializes an object used by MMD morph data and editing. / IMorph::IMorph 初始化MMD 变形数据与编辑所使用的对象。",
+      "tags": [
+        "morph",
+        "data-model",
+        "serialization"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_morph.cpp:IMorph::AddPanelUI",
+      "type": "function",
+      "name": "IMorph::AddPanelUI",
+      "filePath": "source/module/tools/object/mmd_morph.cpp",
+      "lineRange": [
+        130,
+        146
+      ],
+      "summary": "IMorph::AddPanelUI adds panel ui for MMD morph data and editing. / IMorph::AddPanelUI 为MMD 变形数据与编辑添加 panel ui。",
+      "tags": [
+        "ui",
+        "morph",
+        "data-model"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_morph.cpp:IMorph::DeletePanelUI",
+      "type": "function",
+      "name": "IMorph::DeletePanelUI",
+      "filePath": "source/module/tools/object/mmd_morph.cpp",
+      "lineRange": [
+        148,
+        152
+      ],
+      "summary": "IMorph::DeletePanelUI deletes panel ui for MMD morph data and editing. / IMorph::DeletePanelUI 为MMD 变形数据与编辑删除 panel ui。",
+      "tags": [
+        "ui",
+        "morph",
+        "data-model"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_morph.cpp:IMorph::GetStrength",
+      "type": "function",
+      "name": "IMorph::GetStrength",
+      "filePath": "source/module/tools/object/mmd_morph.cpp",
+      "lineRange": [
+        154,
+        162
+      ],
+      "summary": "IMorph::GetStrength retrieves strength for MMD morph data and editing. / IMorph::GetStrength 为MMD 变形数据与编辑获取 strength。",
+      "tags": [
+        "morph",
+        "data-model",
+        "serialization"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_morph.cpp:IMorph::SetStrength",
+      "type": "function",
+      "name": "IMorph::SetStrength",
+      "filePath": "source/module/tools/object/mmd_morph.cpp",
+      "lineRange": [
+        164,
+        167
+      ],
+      "summary": "IMorph::SetStrength sets strength for MMD morph data and editing. / IMorph::SetStrength 为MMD 变形数据与编辑设置 strength。",
+      "tags": [
+        "morph",
+        "data-model",
+        "serialization"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_morph.cpp:IMorph::GetStrengthDescID",
+      "type": "function",
+      "name": "IMorph::GetStrengthDescID",
+      "filePath": "source/module/tools/object/mmd_morph.cpp",
+      "lineRange": [
+        169,
+        172
+      ],
+      "summary": "IMorph::GetStrengthDescID retrieves strength desc id for MMD morph data and editing. / IMorph::GetStrengthDescID 为MMD 变形数据与编辑获取 strength desc id。",
+      "tags": [
+        "morph",
+        "data-model",
+        "serialization"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_morph.cpp:operator==",
+      "type": "function",
+      "name": "operator==",
+      "filePath": "source/module/tools/object/mmd_morph.cpp",
+      "lineRange": [
+        174,
+        177
+      ],
+      "summary": "operator== implements value semantics required by MMD morph data and editing. / operator== 实现MMD 变形数据与编辑所需的值语义。",
+      "tags": [
+        "morph",
+        "data-model",
+        "serialization"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_morph.cpp:IMorph::RenameMorph",
+      "type": "function",
+      "name": "IMorph::RenameMorph",
+      "filePath": "source/module/tools/object/mmd_morph.cpp",
+      "lineRange": [
+        179,
+        182
+      ],
+      "summary": "IMorph::RenameMorph implements a focused operation in MMD morph data and editing. / IMorph::RenameMorph 实现MMD 变形数据与编辑中的专用操作。",
+      "tags": [
+        "morph",
+        "data-model",
+        "serialization"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_morph.cpp:GroupMorph::RenameSubMorph",
+      "type": "function",
+      "name": "GroupMorph::RenameSubMorph",
+      "filePath": "source/module/tools/object/mmd_morph.cpp",
+      "lineRange": [
+        184,
+        192
+      ],
+      "summary": "GroupMorph::RenameSubMorph implements a focused operation in MMD morph data and editing. / GroupMorph::RenameSubMorph 实现MMD 变形数据与编辑中的专用操作。",
+      "tags": [
+        "morph",
+        "data-model",
+        "serialization"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_morph.cpp:FlipMorph::RenameSubMorph",
+      "type": "function",
+      "name": "FlipMorph::RenameSubMorph",
+      "filePath": "source/module/tools/object/mmd_morph.cpp",
+      "lineRange": [
+        194,
+        202
+      ],
+      "summary": "FlipMorph::RenameSubMorph implements a focused operation in MMD morph data and editing. / FlipMorph::RenameSubMorph 实现MMD 变形数据与编辑中的专用操作。",
+      "tags": [
+        "morph",
+        "data-model",
+        "serialization"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_morph.cpp:GroupMorph::GroupMorph",
+      "type": "function",
+      "name": "GroupMorph::GroupMorph",
+      "filePath": "source/module/tools/object/mmd_morph.cpp",
+      "lineRange": [
+        204,
+        212
+      ],
+      "summary": "GroupMorph::GroupMorph initializes an object used by MMD morph data and editing. / GroupMorph::GroupMorph 初始化MMD 变形数据与编辑所使用的对象。",
+      "tags": [
+        "morph",
+        "data-model",
+        "serialization"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_morph.cpp:GroupMorph::GroupMorph@214",
+      "type": "function",
+      "name": "GroupMorph::GroupMorph",
+      "filePath": "source/module/tools/object/mmd_morph.cpp",
+      "lineRange": [
+        214,
+        221
+      ],
+      "summary": "GroupMorph::GroupMorph initializes an object used by MMD morph data and editing. / GroupMorph::GroupMorph 初始化MMD 变形数据与编辑所使用的对象。",
+      "tags": [
+        "morph",
+        "data-model",
+        "serialization"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_morph.cpp:GroupMorph::UpdateMorph",
+      "type": "function",
+      "name": "GroupMorph::UpdateMorph",
+      "filePath": "source/module/tools/object/mmd_morph.cpp",
+      "lineRange": [
+        223,
+        234
+      ],
+      "summary": "GroupMorph::UpdateMorph updates morph for MMD morph data and editing. / GroupMorph::UpdateMorph 为MMD 变形数据与编辑更新 morph。",
+      "tags": [
+        "morph",
+        "data-model",
+        "serialization"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_morph.cpp:FlipMorph::FlipMorph",
+      "type": "function",
+      "name": "FlipMorph::FlipMorph",
+      "filePath": "source/module/tools/object/mmd_morph.cpp",
+      "lineRange": [
+        236,
+        244
+      ],
+      "summary": "FlipMorph::FlipMorph initializes an object used by MMD morph data and editing. / FlipMorph::FlipMorph 初始化MMD 变形数据与编辑所使用的对象。",
+      "tags": [
+        "morph",
+        "data-model",
+        "serialization"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_morph.cpp:FlipMorph::FlipMorph@246",
+      "type": "function",
+      "name": "FlipMorph::FlipMorph",
+      "filePath": "source/module/tools/object/mmd_morph.cpp",
+      "lineRange": [
+        246,
+        253
+      ],
+      "summary": "FlipMorph::FlipMorph initializes an object used by MMD morph data and editing. / FlipMorph::FlipMorph 初始化MMD 变形数据与编辑所使用的对象。",
+      "tags": [
+        "morph",
+        "data-model",
+        "serialization"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_morph.cpp:FlipMorph::UpdateMorph",
+      "type": "function",
+      "name": "FlipMorph::UpdateMorph",
+      "filePath": "source/module/tools/object/mmd_morph.cpp",
+      "lineRange": [
+        255,
+        266
+      ],
+      "summary": "FlipMorph::UpdateMorph updates morph for MMD morph data and editing. / FlipMorph::UpdateMorph 为MMD 变形数据与编辑更新 morph。",
+      "tags": [
+        "morph",
+        "data-model",
+        "serialization"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_morph.cpp:MeshMorph::UpdateMorph",
+      "type": "function",
+      "name": "MeshMorph::UpdateMorph",
+      "filePath": "source/module/tools/object/mmd_morph.cpp",
+      "lineRange": [
+        268,
+        275
+      ],
+      "summary": "MeshMorph::UpdateMorph updates morph for MMD morph data and editing. / MeshMorph::UpdateMorph 为MMD 变形数据与编辑更新 morph。",
+      "tags": [
+        "morph",
+        "data-model",
+        "serialization"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_morph.cpp:BoneMorph::UpdateMorph",
+      "type": "function",
+      "name": "BoneMorph::UpdateMorph",
+      "filePath": "source/module/tools/object/mmd_morph.cpp",
+      "lineRange": [
+        277,
+        290
+      ],
+      "summary": "BoneMorph::UpdateMorph updates morph for MMD morph data and editing. / BoneMorph::UpdateMorph 为MMD 变形数据与编辑更新 morph。",
+      "tags": [
+        "morph",
+        "data-model",
+        "serialization"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_morph.cpp:GroupMorph::AddMorphUI",
+      "type": "function",
+      "name": "GroupMorph::AddMorphUI",
+      "filePath": "source/module/tools/object/mmd_morph.cpp",
+      "lineRange": [
+        292,
+        330
+      ],
+      "summary": "GroupMorph::AddMorphUI adds morph ui for MMD morph data and editing. / GroupMorph::AddMorphUI 为MMD 变形数据与编辑添加 morph ui。",
+      "tags": [
+        "morph",
+        "ui",
+        "data-model"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_morph.cpp:FlipMorph::AddMorphUI",
+      "type": "function",
+      "name": "FlipMorph::AddMorphUI",
+      "filePath": "source/module/tools/object/mmd_morph.cpp",
+      "lineRange": [
+        332,
+        370
+      ],
+      "summary": "FlipMorph::AddMorphUI adds morph ui for MMD morph data and editing. / FlipMorph::AddMorphUI 为MMD 变形数据与编辑添加 morph ui。",
+      "tags": [
+        "morph",
+        "ui",
+        "data-model"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_morph.cpp:MeshMorph::AddMorphUI",
+      "type": "function",
+      "name": "MeshMorph::AddMorphUI",
+      "filePath": "source/module/tools/object/mmd_morph.cpp",
+      "lineRange": [
+        372,
+        387
+      ],
+      "summary": "MeshMorph::AddMorphUI adds morph ui for MMD morph data and editing. / MeshMorph::AddMorphUI 为MMD 变形数据与编辑添加 morph ui。",
+      "tags": [
+        "morph",
+        "ui",
+        "data-model"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_morph.cpp:UVMorph::UpdateMorph",
+      "type": "function",
+      "name": "UVMorph::UpdateMorph",
+      "filePath": "source/module/tools/object/mmd_morph.cpp",
+      "lineRange": [
+        395,
+        401
+      ],
+      "summary": "UVMorph::UpdateMorph updates morph for MMD morph data and editing. / UVMorph::UpdateMorph 为MMD 变形数据与编辑更新 morph。",
+      "tags": [
+        "morph",
+        "data-model",
+        "serialization"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_morph.cpp:UVMorph::AddMorphUI",
+      "type": "function",
+      "name": "UVMorph::AddMorphUI",
+      "filePath": "source/module/tools/object/mmd_morph.cpp",
+      "lineRange": [
+        403,
+        418
+      ],
+      "summary": "UVMorph::AddMorphUI adds morph ui for MMD morph data and editing. / UVMorph::AddMorphUI 为MMD 变形数据与编辑添加 morph ui。",
+      "tags": [
+        "morph",
+        "ui",
+        "data-model"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_morph.cpp:UVMorph::DeleteMorphUI",
+      "type": "function",
+      "name": "UVMorph::DeleteMorphUI",
+      "filePath": "source/module/tools/object/mmd_morph.cpp",
+      "lineRange": [
+        420,
+        430
+      ],
+      "summary": "UVMorph::DeleteMorphUI deletes morph ui for MMD morph data and editing. / UVMorph::DeleteMorphUI 为MMD 变形数据与编辑删除 morph ui。",
+      "tags": [
+        "morph",
+        "ui",
+        "data-model"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_morph.cpp:BoneMorph::AddMorphUI",
+      "type": "function",
+      "name": "BoneMorph::AddMorphUI",
+      "filePath": "source/module/tools/object/mmd_morph.cpp",
+      "lineRange": [
+        432,
+        447
+      ],
+      "summary": "BoneMorph::AddMorphUI adds morph ui for MMD morph data and editing. / BoneMorph::AddMorphUI 为MMD 变形数据与编辑添加 morph ui。",
+      "tags": [
+        "morph",
+        "ui",
+        "data-model"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_morph.cpp:GroupMorph::DeleteMorphUI",
+      "type": "function",
+      "name": "GroupMorph::DeleteMorphUI",
+      "filePath": "source/module/tools/object/mmd_morph.cpp",
+      "lineRange": [
+        449,
+        464
+      ],
+      "summary": "GroupMorph::DeleteMorphUI deletes morph ui for MMD morph data and editing. / GroupMorph::DeleteMorphUI 为MMD 变形数据与编辑删除 morph ui。",
+      "tags": [
+        "morph",
+        "ui",
+        "data-model"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_morph.cpp:FlipMorph::DeleteMorphUI",
+      "type": "function",
+      "name": "FlipMorph::DeleteMorphUI",
+      "filePath": "source/module/tools/object/mmd_morph.cpp",
+      "lineRange": [
+        466,
+        481
+      ],
+      "summary": "FlipMorph::DeleteMorphUI deletes morph ui for MMD morph data and editing. / FlipMorph::DeleteMorphUI 为MMD 变形数据与编辑删除 morph ui。",
+      "tags": [
+        "morph",
+        "ui",
+        "data-model"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_morph.cpp:MeshMorph::DeleteMorphUI",
+      "type": "function",
+      "name": "MeshMorph::DeleteMorphUI",
+      "filePath": "source/module/tools/object/mmd_morph.cpp",
+      "lineRange": [
+        483,
+        493
+      ],
+      "summary": "MeshMorph::DeleteMorphUI deletes morph ui for MMD morph data and editing. / MeshMorph::DeleteMorphUI 为MMD 变形数据与编辑删除 morph ui。",
+      "tags": [
+        "morph",
+        "ui",
+        "data-model"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_morph.cpp:BoneMorph::DeleteMorphUI",
+      "type": "function",
+      "name": "BoneMorph::DeleteMorphUI",
+      "filePath": "source/module/tools/object/mmd_morph.cpp",
+      "lineRange": [
+        501,
+        511
+      ],
+      "summary": "BoneMorph::DeleteMorphUI deletes morph ui for MMD morph data and editing. / BoneMorph::DeleteMorphUI 为MMD 变形数据与编辑删除 morph ui。",
+      "tags": [
+        "morph",
+        "ui",
+        "data-model"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_morph.cpp:GroupMorph::AddSubMorph",
+      "type": "function",
+      "name": "GroupMorph::AddSubMorph",
+      "filePath": "source/module/tools/object/mmd_morph.cpp",
+      "lineRange": [
+        513,
+        519
+      ],
+      "summary": "GroupMorph::AddSubMorph adds sub morph for MMD morph data and editing. / GroupMorph::AddSubMorph 为MMD 变形数据与编辑添加 sub morph。",
+      "tags": [
+        "morph",
+        "data-model",
+        "serialization"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_morph.cpp:FlipMorph::AddSubMorph",
+      "type": "function",
+      "name": "FlipMorph::AddSubMorph",
+      "filePath": "source/module/tools/object/mmd_morph.cpp",
+      "lineRange": [
+        521,
+        526
+      ],
+      "summary": "FlipMorph::AddSubMorph adds sub morph for MMD morph data and editing. / FlipMorph::AddSubMorph 为MMD 变形数据与编辑添加 sub morph。",
+      "tags": [
+        "morph",
+        "data-model",
+        "serialization"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_morph.cpp:GroupMorph::AddSubMorphNoCheck",
+      "type": "function",
+      "name": "GroupMorph::AddSubMorphNoCheck",
+      "filePath": "source/module/tools/object/mmd_morph.cpp",
+      "lineRange": [
+        528,
+        531
+      ],
+      "summary": "GroupMorph::AddSubMorphNoCheck adds sub morph no check for MMD morph data and editing. / GroupMorph::AddSubMorphNoCheck 为MMD 变形数据与编辑添加 sub morph no check。",
+      "tags": [
+        "morph",
+        "data-model",
+        "serialization"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_morph.cpp:FlipMorph::AddSubMorphNoCheck",
+      "type": "function",
+      "name": "FlipMorph::AddSubMorphNoCheck",
+      "filePath": "source/module/tools/object/mmd_morph.cpp",
+      "lineRange": [
+        533,
+        536
+      ],
+      "summary": "FlipMorph::AddSubMorphNoCheck adds sub morph no check for MMD morph data and editing. / FlipMorph::AddSubMorphNoCheck 为MMD 变形数据与编辑添加 sub morph no check。",
+      "tags": [
+        "morph",
+        "data-model",
+        "serialization"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_morph.cpp:MMDMaterialMorphOffset::FromPMX",
+      "type": "function",
+      "name": "MMDMaterialMorphOffset::FromPMX",
+      "filePath": "source/module/tools/object/mmd_morph.cpp",
+      "lineRange": [
+        538,
+        558
+      ],
+      "summary": "MMDMaterialMorphOffset::FromPMX implements a focused operation in MMD morph data and editing. / MMDMaterialMorphOffset::FromPMX 实现MMD 变形数据与编辑中的专用操作。",
+      "tags": [
+        "pmx",
+        "import",
+        "morph"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_morph.cpp:MMDMaterialMorphOffset::ToPMX",
+      "type": "function",
+      "name": "MMDMaterialMorphOffset::ToPMX",
+      "filePath": "source/module/tools/object/mmd_morph.cpp",
+      "lineRange": [
+        560,
+        587
+      ],
+      "summary": "MMDMaterialMorphOffset::ToPMX implements a focused operation in MMD morph data and editing. / MMDMaterialMorphOffset::ToPMX 实现MMD 变形数据与编辑中的专用操作。",
+      "tags": [
+        "pmx",
+        "export",
+        "morph"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_morph.cpp:MMDMaterialMorphOffset::Read",
+      "type": "function",
+      "name": "MMDMaterialMorphOffset::Read",
+      "filePath": "source/module/tools/object/mmd_morph.cpp",
+      "lineRange": [
+        589,
+        608
+      ],
+      "summary": "MMDMaterialMorphOffset::Read reads persistent state for MMD morph data and editing. / MMDMaterialMorphOffset::Read 为MMD 变形数据与编辑读取持久状态。",
+      "tags": [
+        "serialization",
+        "morph",
+        "data-model"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_morph.cpp:MMDMaterialMorphOffset::Write",
+      "type": "function",
+      "name": "MMDMaterialMorphOffset::Write",
+      "filePath": "source/module/tools/object/mmd_morph.cpp",
+      "lineRange": [
+        610,
+        629
+      ],
+      "summary": "MMDMaterialMorphOffset::Write writes persistent state for MMD morph data and editing. / MMDMaterialMorphOffset::Write 为MMD 变形数据与编辑写入持久状态。",
+      "tags": [
+        "serialization",
+        "morph",
+        "data-model"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_morph.cpp:MaterialMorph::Read",
+      "type": "function",
+      "name": "MaterialMorph::Read",
+      "filePath": "source/module/tools/object/mmd_morph.cpp",
+      "lineRange": [
+        637,
+        649
+      ],
+      "summary": "MaterialMorph::Read reads persistent state for MMD morph data and editing. / MaterialMorph::Read 为MMD 变形数据与编辑读取持久状态。",
+      "tags": [
+        "serialization",
+        "morph",
+        "data-model"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_morph.cpp:MaterialMorph::Write",
+      "type": "function",
+      "name": "MaterialMorph::Write",
+      "filePath": "source/module/tools/object/mmd_morph.cpp",
+      "lineRange": [
+        651,
+        658
+      ],
+      "summary": "MaterialMorph::Write writes persistent state for MMD morph data and editing. / MaterialMorph::Write 为MMD 变形数据与编辑写入持久状态。",
+      "tags": [
+        "serialization",
+        "morph",
+        "data-model"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_morph.cpp:MaterialMorph::CopyTo",
+      "type": "function",
+      "name": "MaterialMorph::CopyTo",
+      "filePath": "source/module/tools/object/mmd_morph.cpp",
+      "lineRange": [
+        660,
+        672
+      ],
+      "summary": "MaterialMorph::CopyTo copies persistent state to another instance for MMD morph data and editing. / MaterialMorph::CopyTo 为MMD 变形数据与编辑将持久状态复制到另一实例。",
+      "tags": [
+        "serialization",
+        "morph",
+        "data-model"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_morph.cpp:MaterialMorph::ValidateMaterialIndices",
+      "type": "function",
+      "name": "MaterialMorph::ValidateMaterialIndices",
+      "filePath": "source/module/tools/object/mmd_morph.cpp",
+      "lineRange": [
+        674,
+        690
+      ],
+      "summary": "MaterialMorph::ValidateMaterialIndices validates material indices for MMD morph data and editing. / MaterialMorph::ValidateMaterialIndices 为MMD 变形数据与编辑校验 material indices。",
+      "tags": [
+        "morph",
+        "data-model",
+        "serialization"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_morph.cpp:MaterialMorph::AddMorphUI",
+      "type": "function",
+      "name": "MaterialMorph::AddMorphUI",
+      "filePath": "source/module/tools/object/mmd_morph.cpp",
+      "lineRange": [
+        695,
+        710
+      ],
+      "summary": "MaterialMorph::AddMorphUI adds morph ui for MMD morph data and editing. / MaterialMorph::AddMorphUI 为MMD 变形数据与编辑添加 morph ui。",
+      "tags": [
+        "morph",
+        "ui",
+        "data-model"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_morph.cpp:MaterialMorph::DeleteMorphUI",
+      "type": "function",
+      "name": "MaterialMorph::DeleteMorphUI",
+      "filePath": "source/module/tools/object/mmd_morph.cpp",
+      "lineRange": [
+        712,
+        721
+      ],
+      "summary": "MaterialMorph::DeleteMorphUI deletes morph ui for MMD morph data and editing. / MaterialMorph::DeleteMorphUI 为MMD 变形数据与编辑删除 morph ui。",
+      "tags": [
+        "morph",
+        "ui",
+        "data-model"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_morph.cpp:ImpulseMorph::AddMorphUI",
+      "type": "function",
+      "name": "ImpulseMorph::AddMorphUI",
+      "filePath": "source/module/tools/object/mmd_morph.cpp",
+      "lineRange": [
+        732,
+        747
+      ],
+      "summary": "ImpulseMorph::AddMorphUI adds morph ui for MMD morph data and editing. / ImpulseMorph::AddMorphUI 为MMD 变形数据与编辑添加 morph ui。",
+      "tags": [
+        "morph",
+        "ui",
+        "data-model"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_morph.cpp:ImpulseMorph::DeleteMorphUI",
+      "type": "function",
+      "name": "ImpulseMorph::DeleteMorphUI",
+      "filePath": "source/module/tools/object/mmd_morph.cpp",
+      "lineRange": [
+        749,
+        758
+      ],
+      "summary": "ImpulseMorph::DeleteMorphUI deletes morph ui for MMD morph data and editing. / ImpulseMorph::DeleteMorphUI 为MMD 变形数据与编辑删除 morph ui。",
+      "tags": [
+        "morph",
+        "ui",
+        "data-model"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:source/module/tools/object/mmd_morph.h",
+      "type": "file",
+      "name": "mmd_morph.h",
+      "filePath": "source/module/tools/object/mmd_morph.h",
+      "summary": "Defines the polymorphic MMD morph model and concrete group, flip, mesh, UV, bone, material, and impulse morph types. / 定义多态 MMD 变形模型，以及组、翻转、网格、UV、骨骼、材质和冲量等具体变形类型。",
+      "tags": [
+        "morph",
+        "data-model",
+        "polymorphism",
+        "type-definition",
+        "pmx"
+      ],
+      "complexity": "complex",
+      "languageNotes": "C++ integrates Cinema 4D SDK lifecycle hooks with explicit PMX/VMD conversion and runtime state management. / C++ 将 Cinema 4D SDK 生命周期钩子与显式 PMX/VMD 转换及运行时状态管理结合。"
+    },
+    {
+      "id": "class:source/module/tools/object/mmd_morph.h:MMDMaterialMorphOffset",
+      "type": "class",
+      "name": "MMDMaterialMorphOffset",
+      "filePath": "source/module/tools/object/mmd_morph.h",
+      "lineRange": [
+        34,
+        57
+      ],
+      "summary": "MMDMaterialMorphOffset represents a concrete MMD morph type and its editing/runtime state for MMD morph type system. / MMDMaterialMorphOffset 为MMD 变形类型体系表示具体 MMD 变形类型及其编辑与运行时状态。",
+      "tags": [
+        "morph",
+        "data-model",
+        "polymorphism"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "class:source/module/tools/object/mmd_morph.h:IMorph",
+      "type": "class",
+      "name": "IMorph",
+      "filePath": "source/module/tools/object/mmd_morph.h",
+      "lineRange": [
+        59,
+        99
+      ],
+      "summary": "IMorph represents a concrete MMD morph type and its editing/runtime state for MMD morph type system. / IMorph 为MMD 变形类型体系表示具体 MMD 变形类型及其编辑与运行时状态。",
+      "tags": [
+        "morph",
+        "data-model",
+        "polymorphism"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "class:source/module/tools/object/mmd_morph.h:GroupMorph",
+      "type": "class",
+      "name": "GroupMorph",
+      "filePath": "source/module/tools/object/mmd_morph.h",
+      "lineRange": [
+        101,
+        137
+      ],
+      "summary": "GroupMorph represents a concrete MMD morph type and its editing/runtime state for MMD morph type system. / GroupMorph 为MMD 变形类型体系表示具体 MMD 变形类型及其编辑与运行时状态。",
+      "tags": [
+        "morph",
+        "data-model",
+        "polymorphism"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "class:source/module/tools/object/mmd_morph.h:FlipMorph",
+      "type": "class",
+      "name": "FlipMorph",
+      "filePath": "source/module/tools/object/mmd_morph.h",
+      "lineRange": [
+        139,
+        174
+      ],
+      "summary": "FlipMorph represents a concrete MMD morph type and its editing/runtime state for MMD morph type system. / FlipMorph 为MMD 变形类型体系表示具体 MMD 变形类型及其编辑与运行时状态。",
+      "tags": [
+        "morph",
+        "data-model",
+        "polymorphism"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "class:source/module/tools/object/mmd_morph.h:MeshMorph",
+      "type": "class",
+      "name": "MeshMorph",
+      "filePath": "source/module/tools/object/mmd_morph.h",
+      "lineRange": [
+        176,
+        191
+      ],
+      "summary": "MeshMorph represents a concrete MMD morph type and its editing/runtime state for MMD morph type system. / MeshMorph 为MMD 变形类型体系表示具体 MMD 变形类型及其编辑与运行时状态。",
+      "tags": [
+        "morph",
+        "data-model",
+        "polymorphism"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:source/module/tools/object/mmd_morph.h:UVMorph",
+      "type": "class",
+      "name": "UVMorph",
+      "filePath": "source/module/tools/object/mmd_morph.h",
+      "lineRange": [
+        193,
+        208
+      ],
+      "summary": "UVMorph represents a concrete MMD morph type and its editing/runtime state for MMD morph type system. / UVMorph 为MMD 变形类型体系表示具体 MMD 变形类型及其编辑与运行时状态。",
+      "tags": [
+        "morph",
+        "data-model",
+        "polymorphism"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:source/module/tools/object/mmd_morph.h:BoneMorph",
+      "type": "class",
+      "name": "BoneMorph",
+      "filePath": "source/module/tools/object/mmd_morph.h",
+      "lineRange": [
+        210,
+        225
+      ],
+      "summary": "BoneMorph represents a concrete MMD morph type and its editing/runtime state for MMD morph type system. / BoneMorph 为MMD 变形类型体系表示具体 MMD 变形类型及其编辑与运行时状态。",
+      "tags": [
+        "morph",
+        "data-model",
+        "polymorphism"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:source/module/tools/object/mmd_morph.h:MaterialMorph",
+      "type": "class",
+      "name": "MaterialMorph",
+      "filePath": "source/module/tools/object/mmd_morph.h",
+      "lineRange": [
+        227,
+        260
+      ],
+      "summary": "MaterialMorph represents a concrete MMD morph type and its editing/runtime state for MMD morph type system. / MaterialMorph 为MMD 变形类型体系表示具体 MMD 变形类型及其编辑与运行时状态。",
+      "tags": [
+        "morph",
+        "data-model",
+        "polymorphism"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "class:source/module/tools/object/mmd_morph.h:ImpulseMorph",
+      "type": "class",
+      "name": "ImpulseMorph",
+      "filePath": "source/module/tools/object/mmd_morph.h",
+      "lineRange": [
+        262,
+        277
+      ],
+      "summary": "ImpulseMorph represents a concrete MMD morph type and its editing/runtime state for MMD morph type system. / ImpulseMorph 为MMD 变形类型体系表示具体 MMD 变形类型及其编辑与运行时状态。",
+      "tags": [
+        "morph",
+        "data-model",
+        "polymorphism"
+      ],
+      "complexity": "simple"
+    }
+  ],
+  "edges": [
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:IMorph::Read",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:IMorph::Read",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:IMorph::Write",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:IMorph::Write",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:IMorph::CopyTo",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:IMorph::CopyTo",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:GroupMorph::Read",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:GroupMorph::Read",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:GroupMorph::Write",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:GroupMorph::Write",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:GroupMorph::CopyTo",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:GroupMorph::CopyTo",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:FlipMorph::Read",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:FlipMorph::Read",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:FlipMorph::Write",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:FlipMorph::Write",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:FlipMorph::CopyTo",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:FlipMorph::CopyTo",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:IMorph::IMorph",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:IMorph::IMorph",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:IMorph::IMorph@125",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:IMorph::IMorph@125",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:IMorph::AddPanelUI",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:IMorph::AddPanelUI",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:IMorph::DeletePanelUI",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:IMorph::DeletePanelUI",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:IMorph::GetStrength",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:IMorph::GetStrength",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:IMorph::SetStrength",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:IMorph::SetStrength",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:IMorph::GetStrengthDescID",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:IMorph::GetStrengthDescID",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:operator==",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:operator==",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:IMorph::RenameMorph",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:IMorph::RenameMorph",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:GroupMorph::RenameSubMorph",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:GroupMorph::RenameSubMorph",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:FlipMorph::RenameSubMorph",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:FlipMorph::RenameSubMorph",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:GroupMorph::GroupMorph",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:GroupMorph::GroupMorph",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:GroupMorph::GroupMorph@214",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:GroupMorph::GroupMorph@214",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:GroupMorph::UpdateMorph",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:GroupMorph::UpdateMorph",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:FlipMorph::FlipMorph",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:FlipMorph::FlipMorph",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:FlipMorph::FlipMorph@246",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:FlipMorph::FlipMorph@246",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:FlipMorph::UpdateMorph",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:FlipMorph::UpdateMorph",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:MeshMorph::UpdateMorph",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:MeshMorph::UpdateMorph",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:BoneMorph::UpdateMorph",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:BoneMorph::UpdateMorph",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:GroupMorph::AddMorphUI",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:GroupMorph::AddMorphUI",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:FlipMorph::AddMorphUI",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:FlipMorph::AddMorphUI",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:MeshMorph::AddMorphUI",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:MeshMorph::AddMorphUI",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:UVMorph::UpdateMorph",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:UVMorph::UpdateMorph",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:UVMorph::AddMorphUI",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:UVMorph::AddMorphUI",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:UVMorph::DeleteMorphUI",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:UVMorph::DeleteMorphUI",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:BoneMorph::AddMorphUI",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:BoneMorph::AddMorphUI",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:GroupMorph::DeleteMorphUI",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:GroupMorph::DeleteMorphUI",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:FlipMorph::DeleteMorphUI",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:FlipMorph::DeleteMorphUI",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:MeshMorph::DeleteMorphUI",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:MeshMorph::DeleteMorphUI",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:BoneMorph::DeleteMorphUI",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:BoneMorph::DeleteMorphUI",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:GroupMorph::AddSubMorph",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:GroupMorph::AddSubMorph",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:FlipMorph::AddSubMorph",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:FlipMorph::AddSubMorph",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:GroupMorph::AddSubMorphNoCheck",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:GroupMorph::AddSubMorphNoCheck",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:FlipMorph::AddSubMorphNoCheck",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:FlipMorph::AddSubMorphNoCheck",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:MMDMaterialMorphOffset::FromPMX",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:MMDMaterialMorphOffset::FromPMX",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:MMDMaterialMorphOffset::ToPMX",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:MMDMaterialMorphOffset::ToPMX",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:MMDMaterialMorphOffset::Read",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:MMDMaterialMorphOffset::Read",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:MMDMaterialMorphOffset::Write",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:MMDMaterialMorphOffset::Write",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:MaterialMorph::Read",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:MaterialMorph::Read",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:MaterialMorph::Write",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:MaterialMorph::Write",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:MaterialMorph::CopyTo",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:MaterialMorph::CopyTo",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:MaterialMorph::ValidateMaterialIndices",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:MaterialMorph::ValidateMaterialIndices",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:MaterialMorph::AddMorphUI",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:MaterialMorph::AddMorphUI",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:MaterialMorph::DeleteMorphUI",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:MaterialMorph::DeleteMorphUI",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:ImpulseMorph::AddMorphUI",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:ImpulseMorph::AddMorphUI",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:ImpulseMorph::DeleteMorphUI",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "function:source/module/tools/object/mmd_morph.cpp:ImpulseMorph::DeleteMorphUI",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.h",
+      "target": "class:source/module/tools/object/mmd_morph.h:MMDMaterialMorphOffset",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.h",
+      "target": "class:source/module/tools/object/mmd_morph.h:MMDMaterialMorphOffset",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.h",
+      "target": "class:source/module/tools/object/mmd_morph.h:IMorph",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.h",
+      "target": "class:source/module/tools/object/mmd_morph.h:IMorph",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.h",
+      "target": "class:source/module/tools/object/mmd_morph.h:GroupMorph",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.h",
+      "target": "class:source/module/tools/object/mmd_morph.h:GroupMorph",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.h",
+      "target": "class:source/module/tools/object/mmd_morph.h:FlipMorph",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.h",
+      "target": "class:source/module/tools/object/mmd_morph.h:FlipMorph",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.h",
+      "target": "class:source/module/tools/object/mmd_morph.h:MeshMorph",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.h",
+      "target": "class:source/module/tools/object/mmd_morph.h:MeshMorph",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.h",
+      "target": "class:source/module/tools/object/mmd_morph.h:UVMorph",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.h",
+      "target": "class:source/module/tools/object/mmd_morph.h:UVMorph",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.h",
+      "target": "class:source/module/tools/object/mmd_morph.h:BoneMorph",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.h",
+      "target": "class:source/module/tools/object/mmd_morph.h:BoneMorph",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.h",
+      "target": "class:source/module/tools/object/mmd_morph.h:MaterialMorph",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.h",
+      "target": "class:source/module/tools/object/mmd_morph.h:MaterialMorph",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.h",
+      "target": "class:source/module/tools/object/mmd_morph.h:ImpulseMorph",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.h",
+      "target": "class:source/module/tools/object/mmd_morph.h:ImpulseMorph",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "file:source/module/tools/object/mmd_bone_manager.h",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "file:source/module/tools/object/mmd_mesh_manager.h",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "file:source/module/tools/object/mmd_model_manager.h",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_morph.cpp",
+      "target": "file:source/module/tools/object/mmd_morph.h",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    }
+  ]
+}

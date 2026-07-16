@@ -1,0 +1,42 @@
+{
+  "projectRoot": "E:/code/C4D_MMD_Tool",
+  "batchFiles": [
+    {
+      "path": "source/CMTSceneManager.cpp",
+      "language": "cpp",
+      "sizeLines": 534,
+      "fileCategory": "code"
+    },
+    {
+      "path": "source/module/tools/object/mmd_camera.cpp",
+      "language": "cpp",
+      "sizeLines": 546,
+      "fileCategory": "code"
+    },
+    {
+      "path": "source/module/tools/object/mmd_camera.h",
+      "language": "c",
+      "sizeLines": 111,
+      "fileCategory": "code"
+    },
+    {
+      "path": "source/plugin_resource.h",
+      "language": "c",
+      "sizeLines": 37,
+      "fileCategory": "code"
+    }
+  ],
+  "batchImportData": {
+    "source/CMTSceneManager.cpp": [
+      "source/CMTSceneManager.h",
+      "source/module/tools/object/mmd_camera.h",
+      "source/module/tools/object/mmd_model_manager.h",
+      "source/plugin_resource.h"
+    ],
+    "source/module/tools/object/mmd_camera.cpp": [
+      "source/module/tools/object/mmd_camera.h"
+    ],
+    "source/module/tools/object/mmd_camera.h": [],
+    "source/plugin_resource.h": []
+  }
+}

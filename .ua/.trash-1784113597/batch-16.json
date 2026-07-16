@@ -1,0 +1,379 @@
+{
+  "nodes": [
+    {
+      "id": "file:res/R20-S24/strings_en-US/description/OMMDJointManager.str",
+      "type": "file",
+      "name": "OMMDJointManager.str",
+      "filePath": "res/R20-S24/strings_en-US/description/OMMDJointManager.str",
+      "summary": "Provides English Cinema 4D resource labels for joint-manager list, display, and mode controls. / 为关节管理器的列表、显示与模式控制提供英语 Cinema 4D 资源标签。",
+      "tags": [
+        "localization",
+        "en-us",
+        "cinema-4d",
+        "joint-manager",
+        "legacy-sdk"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:res/R20-S24/strings_en-US/description/OMMDMeshManager.str",
+      "type": "file",
+      "name": "OMMDMeshManager.str",
+      "filePath": "res/R20-S24/strings_en-US/description/OMMDMeshManager.str",
+      "summary": "Provides English Cinema 4D resource labels for mesh-manager display, mesh-mode, and morph-mode controls. / 为网格管理器的显示、网格模式与变形模式控制提供英语 Cinema 4D 资源标签。",
+      "tags": [
+        "localization",
+        "en-us",
+        "cinema-4d",
+        "mesh-manager",
+        "legacy-sdk"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:res/R20-S24/strings_en-US/description/OMMDModelManager.str",
+      "type": "file",
+      "name": "OMMDModelManager.str",
+      "filePath": "res/R20-S24/strings_en-US/description/OMMDModelManager.str",
+      "summary": "Provides English Cinema 4D resource labels for model metadata, animation slots, physics, IK, morphs, materials, display frames, and model operations. / 为模型元数据、动画槽、物理、IK、变形、材质、显示框与模型操作提供英语 Cinema 4D 资源标签。",
+      "tags": [
+        "localization",
+        "en-us",
+        "cinema-4d",
+        "model-manager",
+        "legacy-sdk"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:res/R20-S24/strings_en-US/description/OMMDRigid.str",
+      "type": "file",
+      "name": "OMMDRigid.str",
+      "filePath": "res/R20-S24/strings_en-US/description/OMMDRigid.str",
+      "summary": "Provides English Cinema 4D resource labels for rigid-body transforms, shapes, collision groups, dynamics, display, and modes. / 为刚体变换、形状、碰撞组、动力学、显示与模式提供英语 Cinema 4D 资源标签。",
+      "tags": [
+        "localization",
+        "en-us",
+        "cinema-4d",
+        "rigid-body",
+        "legacy-sdk"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:res/R20-S24/strings_en-US/description/OMMDRigidManager.str",
+      "type": "file",
+      "name": "OMMDRigidManager.str",
+      "filePath": "res/R20-S24/strings_en-US/description/OMMDRigidManager.str",
+      "summary": "Provides English Cinema 4D resource labels for rigid-manager list, display, and mode controls. / 为刚体管理器的列表、显示与模式控制提供英语 Cinema 4D 资源标签。",
+      "tags": [
+        "localization",
+        "en-us",
+        "cinema-4d",
+        "rigid-manager",
+        "legacy-sdk"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:res/R20-S24/strings_en-US/description/TMMDBone.str",
+      "type": "file",
+      "name": "TMMDBone.str",
+      "filePath": "res/R20-S24/strings_en-US/description/TMMDBone.str",
+      "summary": "Provides English Cinema 4D resource labels for bone-tag PMX properties, append transforms, IK links, animation curves, and bone morphs. / 为骨骼标签的 PMX 属性、附加变换、IK 链接、动画曲线与骨骼变形提供英语 Cinema 4D 资源标签。",
+      "tags": [
+        "localization",
+        "en-us",
+        "cinema-4d",
+        "bone-tag",
+        "legacy-sdk"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:res/R20-S24/strings_en-US/description/Xmmdmaterialmorphshader.str",
+      "type": "file",
+      "name": "Xmmdmaterialmorphshader.str",
+      "filePath": "res/R20-S24/strings_en-US/description/Xmmdmaterialmorphshader.str",
+      "summary": "Provides English Cinema 4D resource labels for material-morph shader parameters and display names. / 为材质变形着色器参数与显示名称提供英语 Cinema 4D 资源标签。",
+      "tags": [
+        "localization",
+        "en-us",
+        "cinema-4d",
+        "material-morph",
+        "legacy-sdk"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:res/R20-S24/strings_en-US/dialogs/DLG_CMT_TOOL.str",
+      "type": "file",
+      "name": "DLG_CMT_TOOL.str",
+      "filePath": "res/R20-S24/strings_en-US/dialogs/DLG_CMT_TOOL.str",
+      "summary": "Provides English Cinema 4D resource labels for the main tool dialog's camera, motion, and model import/export options. / 为主工具对话框中的相机、动作与模型导入导出选项提供英语 Cinema 4D 资源标签。",
+      "tags": [
+        "localization",
+        "en-us",
+        "cinema-4d",
+        "tool-dialog",
+        "legacy-sdk"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:res/R20-S24/strings_en-US/dialogs/DLG_CMT_VMD_IMPORT.str",
+      "type": "file",
+      "name": "DLG_CMT_VMD_IMPORT.str",
+      "filePath": "res/R20-S24/strings_en-US/dialogs/DLG_CMT_VMD_IMPORT.str",
+      "summary": "Provides English Cinema 4D resource labels for the focused VMD import dialog and its model-selection controls. / 为聚焦的 VMD 导入对话框及其模型选择控制提供英语 Cinema 4D 资源标签。",
+      "tags": [
+        "localization",
+        "en-us",
+        "cinema-4d",
+        "vmd-import",
+        "legacy-sdk"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:res/R20-S24/strings_zh-CN/c4d_strings.str",
+      "type": "file",
+      "name": "c4d_strings.str",
+      "filePath": "res/R20-S24/strings_zh-CN/c4d_strings.str",
+      "summary": "Provides Simplified Chinese messages, confirmations, plugin names, shared morph labels, and runtime status strings for the legacy Cinema 4D resource set. / 为旧版 Cinema 4D 资源集提供简体中文消息、确认提示、插件名称、共享变形标签与运行时状态文本。",
+      "tags": [
+        "localization",
+        "zh-cn",
+        "cinema-4d",
+        "shared-strings",
+        "legacy-sdk"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:res/R20-S24/strings_zh-CN/description/OMMDBoneManager.str",
+      "type": "file",
+      "name": "OMMDBoneManager.str",
+      "filePath": "res/R20-S24/strings_zh-CN/description/OMMDBoneManager.str",
+      "summary": "Provides Simplified Chinese Cinema 4D resource labels for bone-manager display, hierarchy, refresh, and mode controls. / 为骨骼管理器的显示、层级、刷新与模式控制提供简体中文 Cinema 4D 资源标签。",
+      "tags": [
+        "localization",
+        "zh-cn",
+        "cinema-4d",
+        "bone-manager",
+        "legacy-sdk"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:res/R20-S24/strings_zh-CN/description/OMMDCamera.str",
+      "type": "file",
+      "name": "OMMDCamera.str",
+      "filePath": "res/R20-S24/strings_zh-CN/description/OMMDCamera.str",
+      "summary": "Provides Simplified Chinese Cinema 4D resource labels for MMD camera object labels. / 为MMD 相机对象标签提供简体中文 Cinema 4D 资源标签。",
+      "tags": [
+        "localization",
+        "zh-cn",
+        "cinema-4d",
+        "camera",
+        "legacy-sdk"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:res/R20-S24/strings_zh-CN/description/OMMDJoint.str",
+      "type": "file",
+      "name": "OMMDJoint.str",
+      "filePath": "res/R20-S24/strings_zh-CN/description/OMMDJoint.str",
+      "summary": "Provides Simplified Chinese Cinema 4D resource labels for joint transforms, limits, springs, display options, and physics modes. / 为关节变换、限制、弹簧、显示选项与物理模式提供简体中文 Cinema 4D 资源标签。",
+      "tags": [
+        "localization",
+        "zh-cn",
+        "cinema-4d",
+        "joint",
+        "legacy-sdk"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:res/R20-S24/strings_zh-CN/description/OMMDJointManager.str",
+      "type": "file",
+      "name": "OMMDJointManager.str",
+      "filePath": "res/R20-S24/strings_zh-CN/description/OMMDJointManager.str",
+      "summary": "Provides Simplified Chinese Cinema 4D resource labels for joint-manager list, display, and mode controls. / 为关节管理器的列表、显示与模式控制提供简体中文 Cinema 4D 资源标签。",
+      "tags": [
+        "localization",
+        "zh-cn",
+        "cinema-4d",
+        "joint-manager",
+        "legacy-sdk"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:res/R20-S24/strings_zh-CN/description/OMMDMeshManager.str",
+      "type": "file",
+      "name": "OMMDMeshManager.str",
+      "filePath": "res/R20-S24/strings_zh-CN/description/OMMDMeshManager.str",
+      "summary": "Provides Simplified Chinese Cinema 4D resource labels for mesh-manager display, mesh-mode, and morph-mode controls. / 为网格管理器的显示、网格模式与变形模式控制提供简体中文 Cinema 4D 资源标签。",
+      "tags": [
+        "localization",
+        "zh-cn",
+        "cinema-4d",
+        "mesh-manager",
+        "legacy-sdk"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:res/R20-S24/strings_zh-CN/description/OMMDModelManager.str",
+      "type": "file",
+      "name": "OMMDModelManager.str",
+      "filePath": "res/R20-S24/strings_zh-CN/description/OMMDModelManager.str",
+      "summary": "Provides Simplified Chinese Cinema 4D resource labels for model metadata, animation slots, physics, IK, morphs, materials, display frames, and model operations. / 为模型元数据、动画槽、物理、IK、变形、材质、显示框与模型操作提供简体中文 Cinema 4D 资源标签。",
+      "tags": [
+        "localization",
+        "zh-cn",
+        "cinema-4d",
+        "model-manager",
+        "legacy-sdk"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:res/R20-S24/strings_zh-CN/description/OMMDRigid.str",
+      "type": "file",
+      "name": "OMMDRigid.str",
+      "filePath": "res/R20-S24/strings_zh-CN/description/OMMDRigid.str",
+      "summary": "Provides Simplified Chinese Cinema 4D resource labels for rigid-body transforms, shapes, collision groups, dynamics, display, and modes. / 为刚体变换、形状、碰撞组、动力学、显示与模式提供简体中文 Cinema 4D 资源标签。",
+      "tags": [
+        "localization",
+        "zh-cn",
+        "cinema-4d",
+        "rigid-body",
+        "legacy-sdk"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:res/R20-S24/strings_zh-CN/description/OMMDRigidManager.str",
+      "type": "file",
+      "name": "OMMDRigidManager.str",
+      "filePath": "res/R20-S24/strings_zh-CN/description/OMMDRigidManager.str",
+      "summary": "Provides Simplified Chinese Cinema 4D resource labels for rigid-manager list, display, and mode controls. / 为刚体管理器的列表、显示与模式控制提供简体中文 Cinema 4D 资源标签。",
+      "tags": [
+        "localization",
+        "zh-cn",
+        "cinema-4d",
+        "rigid-manager",
+        "legacy-sdk"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:res/R20-S24/strings_zh-CN/description/TMMDBone.str",
+      "type": "file",
+      "name": "TMMDBone.str",
+      "filePath": "res/R20-S24/strings_zh-CN/description/TMMDBone.str",
+      "summary": "Provides Simplified Chinese Cinema 4D resource labels for bone-tag PMX properties, append transforms, IK links, animation curves, and bone morphs. / 为骨骼标签的 PMX 属性、附加变换、IK 链接、动画曲线与骨骼变形提供简体中文 Cinema 4D 资源标签。",
+      "tags": [
+        "localization",
+        "zh-cn",
+        "cinema-4d",
+        "bone-tag",
+        "legacy-sdk"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:res/R20-S24/strings_zh-CN/description/Xmmdmaterialmorphshader.str",
+      "type": "file",
+      "name": "Xmmdmaterialmorphshader.str",
+      "filePath": "res/R20-S24/strings_zh-CN/description/Xmmdmaterialmorphshader.str",
+      "summary": "Provides Simplified Chinese Cinema 4D resource labels for material-morph shader parameters and display names. / 为材质变形着色器参数与显示名称提供简体中文 Cinema 4D 资源标签。",
+      "tags": [
+        "localization",
+        "zh-cn",
+        "cinema-4d",
+        "material-morph",
+        "legacy-sdk"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:res/R20-S24/strings_zh-CN/dialogs/DLG_CMT_TOOL.str",
+      "type": "file",
+      "name": "DLG_CMT_TOOL.str",
+      "filePath": "res/R20-S24/strings_zh-CN/dialogs/DLG_CMT_TOOL.str",
+      "summary": "Provides Simplified Chinese Cinema 4D resource labels for the main tool dialog's camera, motion, and model import/export options. / 为主工具对话框中的相机、动作与模型导入导出选项提供简体中文 Cinema 4D 资源标签。",
+      "tags": [
+        "localization",
+        "zh-cn",
+        "cinema-4d",
+        "tool-dialog",
+        "legacy-sdk"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:res/R20-S24/strings_zh-CN/dialogs/DLG_CMT_VMD_IMPORT.str",
+      "type": "file",
+      "name": "DLG_CMT_VMD_IMPORT.str",
+      "filePath": "res/R20-S24/strings_zh-CN/dialogs/DLG_CMT_VMD_IMPORT.str",
+      "summary": "Provides Simplified Chinese Cinema 4D resource labels for the focused VMD import dialog and its model-selection controls. / 为聚焦的 VMD 导入对话框及其模型选择控制提供简体中文 Cinema 4D 资源标签。",
+      "tags": [
+        "localization",
+        "zh-cn",
+        "cinema-4d",
+        "vmd-import",
+        "legacy-sdk"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:res/S24_up/c4d_symbols.h",
+      "type": "file",
+      "name": "c4d_symbols.h",
+      "filePath": "res/S24_up/c4d_symbols.h",
+      "summary": "Declares S24-and-newer Cinema 4D string, command, dialog, plugin, and shared runtime symbol identifiers consumed by the current resource tree. / 声明 S24 及更新版本 Cinema 4D 当前资源树使用的字符串、命令、对话框、插件与共享运行时符号标识符。",
+      "tags": [
+        "cinema-4d",
+        "resource-id",
+        "current-sdk",
+        "localization"
+      ],
+      "complexity": "complex",
+      "languageNotes": "Cinema 4D resources keep stable symbolic identifiers separate from locale-specific STRINGTABLE values. / Cinema 4D 资源将稳定的符号标识符与特定语言区域的 STRINGTABLE 文本值分离。"
+    },
+    {
+      "id": "config:res/S24_up/cmt_config.json",
+      "type": "config",
+      "name": "cmt_config.json",
+      "filePath": "res/S24_up/cmt_config.json",
+      "summary": "Stores default user-facing import/export settings for camera, motion, and model workflows, including scale, offsets, baking, geometry, materials, IK, physics, and morph options. / 保存相机、动作与模型工作流的默认导入导出设置，包括缩放、偏移、烘焙、几何、材质、IK、物理与变形选项。",
+      "tags": [
+        "configuration",
+        "import",
+        "export",
+        "workflow-defaults",
+        "cinema-4d"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:res/S24_up/description/OMMDBoneManager.h",
+      "type": "file",
+      "name": "OMMDBoneManager.h",
+      "filePath": "res/S24_up/description/OMMDBoneManager.h",
+      "summary": "Declares S24-and-newer description identifiers for bone-manager display controls, hierarchy refresh, and bone modes. / 声明 S24 及更新版本骨骼管理器显示控制、层级刷新与骨骼模式的描述标识符。",
+      "tags": [
+        "cinema-4d",
+        "resource-id",
+        "bone-manager",
+        "current-sdk"
+      ],
+      "complexity": "simple"
+    }
+  ],
+  "edges": []
+}

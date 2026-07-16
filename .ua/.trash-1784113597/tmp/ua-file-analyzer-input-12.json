@@ -1,0 +1,28 @@
+{
+  "projectRoot": "E:/code/C4D_MMD_Tool",
+  "batchFiles": [
+    {
+      "path": "sdk_2026/CMakeLists.txt",
+      "language": "txt",
+      "sizeLines": 80,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "sdk_2026/CMakePresets.json",
+      "language": "json",
+      "sizeLines": 44,
+      "fileCategory": "config"
+    },
+    {
+      "path": "sdk_2026/sdk_modules.txt",
+      "language": "txt",
+      "sizeLines": 20,
+      "fileCategory": "docs"
+    }
+  ],
+  "batchImportData": {
+    "sdk_2026/CMakeLists.txt": [],
+    "sdk_2026/CMakePresets.json": [],
+    "sdk_2026/sdk_modules.txt": []
+  }
+}

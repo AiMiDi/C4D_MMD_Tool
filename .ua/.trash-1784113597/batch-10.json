@@ -1,0 +1,87 @@
+{
+  "nodes": [
+    {
+      "id": "document:docs/dev/anim-flow-debug.md",
+      "type": "document",
+      "name": "anim-flow-debug.md",
+      "filePath": "docs/dev/anim-flow-debug.md",
+      "summary": "Diagnostic guide for the animation, IK, and physics execution pipeline, covering debug environment variables, structured log fields, fault hypotheses, LLDB data capture, and cleanup. / 动画、IK 与物理执行流水线诊断指南，涵盖调试环境变量、结构化日志字段、故障假设、LLDB 数据采集与收尾。",
+      "tags": [
+        "documentation / 文档",
+        "debugging / 调试",
+        "animation-pipeline / 动画流水线",
+        "ik / IK",
+        "physics / 物理"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "document:docs/dev/export-flow.md",
+      "type": "document",
+      "name": "export-flow.md",
+      "filePath": "docs/dev/export-flow.md",
+      "summary": "Developer map of PMX model and VPD pose export, including orchestration, pre-export state synchronization, known v1 limits, failure paths, and manual acceptance checks. / PMX 模型与 VPD 姿势导出的开发者代码地图，包括编排、导出前状态同步、已知 v1 限制、失败路径与手动验收检查。",
+      "tags": [
+        "documentation / 文档",
+        "export-flow / 导出流程",
+        "pmx / PMX",
+        "vpd / VPD",
+        "validation / 验证"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "document:docs/dev/import-flow.md",
+      "type": "document",
+      "name": "import-flow.md",
+      "filePath": "docs/dev/import-flow.md",
+      "summary": "Developer map of PMX model, VMD motion, VPD pose, and VMD camera import, with detailed ownership, material-morph persistence and runtime composition, UI entry points, and troubleshooting. / PMX 模型、VMD 动作、VPD 姿势与 VMD 相机导入的开发者代码地图，详述所有权、材质表情持久化与运行时合成、UI 入口及故障定位。",
+      "tags": [
+        "documentation / 文档",
+        "import-flow / 导入流程",
+        "pmx / PMX",
+        "vmd / VMD",
+        "material-morph / 材质表情"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "document:docs/dev/runtime-flow.md",
+      "type": "document",
+      "name": "runtime-flow.md",
+      "filePath": "docs/dev/runtime-flow.md",
+      "summary": "Runtime architecture guide describing ownership boundaries, standalone bone, IK, and physics reconstruction, per-frame execution layers, mode transitions, invalidation points, and troubleshooting. / 运行时架构指南，描述所有权边界、独立骨骼、IK 与物理重建、逐帧执行分层、模式切换、失效点及故障定位。",
+      "tags": [
+        "documentation / 文档",
+        "runtime-flow / 运行时流程",
+        "ownership / 所有权",
+        "animation / 动画",
+        "physics / 物理"
+      ],
+      "complexity": "complex"
+    }
+  ],
+  "edges": [
+    {
+      "source": "document:docs/dev/anim-flow-debug.md",
+      "target": "document:docs/dev/runtime-flow.md",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:docs/dev/export-flow.md",
+      "target": "document:docs/dev/import-flow.md",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:docs/dev/import-flow.md",
+      "target": "document:docs/dev/runtime-flow.md",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    }
+  ]
+}

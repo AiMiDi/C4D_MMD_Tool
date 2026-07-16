@@ -1,0 +1,184 @@
+{
+  "projectRoot": "E:/code/C4D_MMD_Tool",
+  "batchFiles": [
+    {
+      "path": "sdk_r20/plugins/project/projectdefinition.txt",
+      "language": "txt",
+      "sizeLines": 9,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "sdk_r21/cmake/sdk_compat_r21.cmake",
+      "language": "cmake",
+      "sizeLines": 7,
+      "fileCategory": "code"
+    },
+    {
+      "path": "sdk_r21/CMakeLists.txt",
+      "language": "txt",
+      "sizeLines": 64,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "sdk_r21/CMakePresets.json",
+      "language": "json",
+      "sizeLines": 39,
+      "fileCategory": "config"
+    },
+    {
+      "path": "sdk_r21/plugins/mmdtool/project/CMakeLists.txt",
+      "language": "txt",
+      "sizeLines": 39,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "sdk_r21/plugins/mmdtool/project/projectdefinition.txt",
+      "language": "txt",
+      "sizeLines": 17,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "sdk_r21/plugins/project/projectdefinition.txt",
+      "language": "txt",
+      "sizeLines": 11,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "sdk_r23/cmake/sdk_compat_r23.cmake",
+      "language": "cmake",
+      "sizeLines": 7,
+      "fileCategory": "code"
+    },
+    {
+      "path": "sdk_r23/CMakeLists.txt",
+      "language": "txt",
+      "sizeLines": 64,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "sdk_r23/CMakePresets.json",
+      "language": "json",
+      "sizeLines": 39,
+      "fileCategory": "config"
+    },
+    {
+      "path": "sdk_r23/plugins/mmdtool/project/CMakeLists.txt",
+      "language": "txt",
+      "sizeLines": 39,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "sdk_r23/plugins/mmdtool/project/projectdefinition.txt",
+      "language": "txt",
+      "sizeLines": 17,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "sdk_r23/plugins/project/projectdefinition.txt",
+      "language": "txt",
+      "sizeLines": 6,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "sdk_r25/cmake/sdk_compat_r25.cmake",
+      "language": "cmake",
+      "sizeLines": 7,
+      "fileCategory": "code"
+    },
+    {
+      "path": "sdk_r25/CMakeLists.txt",
+      "language": "txt",
+      "sizeLines": 64,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "sdk_r25/CMakePresets.json",
+      "language": "json",
+      "sizeLines": 39,
+      "fileCategory": "config"
+    },
+    {
+      "path": "sdk_r25/plugins/mmdtool/project/CMakeLists.txt",
+      "language": "txt",
+      "sizeLines": 39,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "sdk_r25/plugins/mmdtool/project/projectdefinition.txt",
+      "language": "txt",
+      "sizeLines": 17,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "sdk_r25/plugins/project/projectdefinition.txt",
+      "language": "txt",
+      "sizeLines": 9,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "source/module/core/cmt_debug_log.h",
+      "language": "c",
+      "sizeLines": 12,
+      "fileCategory": "code"
+    },
+    {
+      "path": "source/module/core/cmt_old_sdk_stl_preload.h",
+      "language": "c",
+      "sizeLines": 22,
+      "fileCategory": "code"
+    },
+    {
+      "path": "source/module/ui/vmd_loader_camera_dialog.cpp",
+      "language": "cpp",
+      "sizeLines": 71,
+      "fileCategory": "code"
+    },
+    {
+      "path": "source/module/ui/vmd_loader_camera_dialog.h",
+      "language": "c",
+      "sizeLines": 31,
+      "fileCategory": "code"
+    },
+    {
+      "path": "source/utils/cmt_anim_flow_debug.hpp",
+      "language": "cpp",
+      "sizeLines": 106,
+      "fileCategory": "code"
+    },
+    {
+      "path": "source/utils/images_user_area_util.hpp",
+      "language": "cpp",
+      "sizeLines": 31,
+      "fileCategory": "code"
+    }
+  ],
+  "batchImportData": {
+    "sdk_r20/plugins/project/projectdefinition.txt": [],
+    "sdk_r21/cmake/sdk_compat_r21.cmake": [],
+    "sdk_r21/CMakeLists.txt": [],
+    "sdk_r21/CMakePresets.json": [],
+    "sdk_r21/plugins/mmdtool/project/CMakeLists.txt": [],
+    "sdk_r21/plugins/mmdtool/project/projectdefinition.txt": [],
+    "sdk_r21/plugins/project/projectdefinition.txt": [],
+    "sdk_r23/cmake/sdk_compat_r23.cmake": [],
+    "sdk_r23/CMakeLists.txt": [],
+    "sdk_r23/CMakePresets.json": [],
+    "sdk_r23/plugins/mmdtool/project/CMakeLists.txt": [],
+    "sdk_r23/plugins/mmdtool/project/projectdefinition.txt": [],
+    "sdk_r23/plugins/project/projectdefinition.txt": [],
+    "sdk_r25/cmake/sdk_compat_r25.cmake": [],
+    "sdk_r25/CMakeLists.txt": [],
+    "sdk_r25/CMakePresets.json": [],
+    "sdk_r25/plugins/mmdtool/project/CMakeLists.txt": [],
+    "sdk_r25/plugins/mmdtool/project/projectdefinition.txt": [],
+    "sdk_r25/plugins/project/projectdefinition.txt": [],
+    "source/module/core/cmt_debug_log.h": [],
+    "source/module/core/cmt_old_sdk_stl_preload.h": [],
+    "source/module/ui/vmd_loader_camera_dialog.cpp": [
+      "source/module/ui/vmd_loader_camera_dialog.h"
+    ],
+    "source/module/ui/vmd_loader_camera_dialog.h": [],
+    "source/utils/cmt_anim_flow_debug.hpp": [],
+    "source/utils/images_user_area_util.hpp": []
+  }
+}

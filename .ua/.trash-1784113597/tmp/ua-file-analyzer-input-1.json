@@ -1,0 +1,133 @@
+{
+  "projectRoot": "E:/code/C4D_MMD_Tool",
+  "batchFiles": [
+    {
+      "path": "source/CMTSceneManager.h",
+      "language": "c",
+      "sizeLines": 177,
+      "fileCategory": "code"
+    },
+    {
+      "path": "source/cmt_tools_config_manager.cpp",
+      "language": "cpp",
+      "sizeLines": 90,
+      "fileCategory": "code"
+    },
+    {
+      "path": "source/cmt_tools_config_manager.h",
+      "language": "c",
+      "sizeLines": 167,
+      "fileCategory": "code"
+    },
+    {
+      "path": "source/cmt_tools_manager.cpp",
+      "language": "cpp",
+      "sizeLines": 251,
+      "fileCategory": "code"
+    },
+    {
+      "path": "source/cmt_tools_manager.h",
+      "language": "c",
+      "sizeLines": 26,
+      "fileCategory": "code"
+    },
+    {
+      "path": "source/cmt_tools_setting.h",
+      "language": "c",
+      "sizeLines": 128,
+      "fileCategory": "code"
+    },
+    {
+      "path": "source/main.cpp",
+      "language": "cpp",
+      "sizeLines": 58,
+      "fileCategory": "code"
+    },
+    {
+      "path": "source/module/core/cmt_marco.h",
+      "language": "c",
+      "sizeLines": 331,
+      "fileCategory": "code"
+    },
+    {
+      "path": "source/module/ui/cmt_name_conversion_dialog.cpp",
+      "language": "cpp",
+      "sizeLines": 492,
+      "fileCategory": "code"
+    },
+    {
+      "path": "source/module/ui/cmt_name_conversion_dialog.h",
+      "language": "c",
+      "sizeLines": 51,
+      "fileCategory": "code"
+    },
+    {
+      "path": "source/register_entity.h",
+      "language": "c",
+      "sizeLines": 20,
+      "fileCategory": "code"
+    },
+    {
+      "path": "source/utils/filename_util.hpp",
+      "language": "cpp",
+      "sizeLines": 91,
+      "fileCategory": "code"
+    },
+    {
+      "path": "source/utils/json_util.hpp",
+      "language": "cpp",
+      "sizeLines": 374,
+      "fileCategory": "code"
+    },
+    {
+      "path": "source/utils/string_util.hpp",
+      "language": "cpp",
+      "sizeLines": 35,
+      "fileCategory": "code"
+    }
+  ],
+  "batchImportData": {
+    "source/CMTSceneManager.h": [
+      "source/cmt_tools_setting.h",
+      "source/module/core/cmt_marco.h"
+    ],
+    "source/cmt_tools_config_manager.cpp": [
+      "source/cmt_tools_config_manager.h",
+      "source/module/core/cmt_marco.h"
+    ],
+    "source/cmt_tools_config_manager.h": [
+      "source/module/core/cmt_marco.h",
+      "source/utils/json_util.hpp"
+    ],
+    "source/cmt_tools_manager.cpp": [
+      "source/cmt_tools_manager.h",
+      "source/CMTSceneManager.h",
+      "source/module/ui/cmt_name_conversion_dialog.h",
+      "source/utils/filename_util.hpp",
+      "source/utils/string_util.hpp"
+    ],
+    "source/cmt_tools_manager.h": [
+      "source/cmt_tools_setting.h"
+    ],
+    "source/cmt_tools_setting.h": [
+      "source/module/core/cmt_marco.h"
+    ],
+    "source/main.cpp": [
+      "source/cmt_tools_config_manager.h",
+      "source/module/core/cmt_marco.h",
+      "source/module/ui/cmt_name_conversion_dialog.h",
+      "source/register_entity.h"
+    ],
+    "source/module/core/cmt_marco.h": [],
+    "source/module/ui/cmt_name_conversion_dialog.cpp": [
+      "source/module/ui/cmt_name_conversion_dialog.h"
+    ],
+    "source/module/ui/cmt_name_conversion_dialog.h": [],
+    "source/register_entity.h": [
+      "source/module/core/cmt_marco.h"
+    ],
+    "source/utils/filename_util.hpp": [],
+    "source/utils/json_util.hpp": [],
+    "source/utils/string_util.hpp": []
+  }
+}

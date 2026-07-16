@@ -1,0 +1,83 @@
+{
+  "nodes": [
+    {
+      "id": "document:.cursor/commands/opsx-apply.md",
+      "type": "document",
+      "name": "opsx-apply.md",
+      "filePath": ".cursor/commands/opsx-apply.md",
+      "summary": "Cursor command specification for selecting an OpenSpec change, reading apply instructions, implementing remaining tasks, and updating completion state. / Cursor 命令规范，用于选择 OpenSpec 变更、读取应用指令、实现剩余任务并更新完成状态。",
+      "tags": [
+        "documentation",
+        "openspec",
+        "workflow",
+        "implementation"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "document:.cursor/commands/opsx-archive.md",
+      "type": "document",
+      "name": "opsx-archive.md",
+      "filePath": ".cursor/commands/opsx-archive.md",
+      "summary": "Cursor command specification for validating artifact and task completion, synchronizing specifications, and archiving an OpenSpec change with confirmation gates. / Cursor 命令规范，用于校验产物与任务完成度、同步规范，并通过确认门槛归档 OpenSpec 变更。",
+      "tags": [
+        "documentation",
+        "openspec",
+        "workflow",
+        "archival"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "document:.cursor/commands/opsx-explore.md",
+      "type": "document",
+      "name": "opsx-explore.md",
+      "filePath": ".cursor/commands/opsx-explore.md",
+      "summary": "Cursor exploration-mode guidance for investigating code and requirements as a read-only thinking partner while remaining aware of OpenSpec context. / Cursor 探索模式指南，要求以只读思考伙伴身份调查代码与需求，同时关注 OpenSpec 上下文。",
+      "tags": [
+        "documentation",
+        "openspec",
+        "exploration",
+        "read-only"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "document:.cursor/commands/opsx-propose.md",
+      "type": "document",
+      "name": "opsx-propose.md",
+      "filePath": ".cursor/commands/opsx-propose.md",
+      "summary": "Cursor command specification for deriving a change name and generating the complete OpenSpec proposal, design, specifications, and task artifacts. / Cursor 命令规范，用于推导变更名称并生成完整的 OpenSpec 提案、设计、规范与任务产物。",
+      "tags": [
+        "documentation",
+        "openspec",
+        "workflow",
+        "proposal"
+      ],
+      "complexity": "moderate"
+    }
+  ],
+  "edges": [
+    {
+      "source": "document:.cursor/commands/opsx-explore.md",
+      "target": "document:.cursor/commands/opsx-propose.md",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.cursor/commands/opsx-propose.md",
+      "target": "document:.cursor/commands/opsx-apply.md",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.cursor/commands/opsx-apply.md",
+      "target": "document:.cursor/commands/opsx-archive.md",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    }
+  ]
+}

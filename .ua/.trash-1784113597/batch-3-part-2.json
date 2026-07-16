@@ -1,0 +1,654 @@
+{
+  "nodes": [
+    {
+      "id": "file:source/module/tools/material/mmd_octane_material.cpp",
+      "type": "file",
+      "name": "mmd_octane_material.cpp",
+      "filePath": "source/module/tools/material/mmd_octane_material.cpp",
+      "summary": "Implements MMD data synchronization for Octane universal materials and translates renderer node parameters back into the common material model. / 实现 MMD 数据与 Octane Universal 材质的同步，并将渲染器节点参数反向转换为通用材质模型。",
+      "tags": [
+        "renderer-adapter / 渲染器适配器",
+        "octane / Octane",
+        "node-material / 节点材质",
+        "material-sync / 材质同步"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/material/mmd_octane_material.cpp:SyncTo",
+      "type": "function",
+      "name": "SyncTo",
+      "filePath": "source/module/tools/material/mmd_octane_material.cpp",
+      "lineRange": [
+        139,
+        167
+      ],
+      "summary": "Writes common MMD material values into a Octane material using renderer-specific parameters. / 使用渲染器专用参数将通用 MMD 材质值写入 Octane 材质。",
+      "tags": [
+        "material-sync / 材质同步",
+        "renderer-adapter / 渲染器适配器",
+        "forward-mapping / 正向映射"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/material/mmd_octane_material.cpp:ReadFrom",
+      "type": "function",
+      "name": "ReadFrom",
+      "filePath": "source/module/tools/material/mmd_octane_material.cpp",
+      "lineRange": [
+        169,
+        214
+      ],
+      "summary": "Reads a Octane material back into the common MMD material data model. / 将 Octane 材质反向读取到通用 MMD 材质数据模型。",
+      "tags": [
+        "material-sync / 材质同步",
+        "renderer-adapter / 渲染器适配器",
+        "reverse-mapping / 反向映射"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:source/module/tools/material/mmd_octane_material.h",
+      "type": "file",
+      "name": "mmd_octane_material.h",
+      "filePath": "source/module/tools/material/mmd_octane_material.h",
+      "summary": "Declares the final Octane adapter for creating, writing, and reading Octane materials through the shared MMD interface. / 声明最终的 Octane 适配器，通过共享 MMD 接口创建、写入并读取 Octane 材质。",
+      "tags": [
+        "renderer-adapter / 渲染器适配器",
+        "octane / Octane",
+        "interface / 接口",
+        "type-definition / 类型定义"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:source/module/tools/material/mmd_octane_material.h:MMDOctaneMaterialAdapter",
+      "type": "class",
+      "name": "MMDOctaneMaterialAdapter",
+      "filePath": "source/module/tools/material/mmd_octane_material.h",
+      "lineRange": [
+        6,
+        14
+      ],
+      "summary": "Adapts Octane materials to the shared MMD material creation and synchronization contract. / 将 Octane 材质适配到共享的 MMD 材质创建与同步契约。",
+      "tags": [
+        "renderer-adapter / 渲染器适配器",
+        "octane / Octane",
+        "material-sync / 材质同步"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:source/module/tools/material/mmd_redshift_material.cpp",
+      "type": "file",
+      "name": "mmd_redshift_material.cpp",
+      "filePath": "source/module/tools/material/mmd_redshift_material.cpp",
+      "summary": "Implements Redshift material creation and bidirectional property synchronization, including renderer-specific node and texture handling. / 实现 Redshift 材质创建与属性双向同步，包括渲染器专用的节点和贴图处理。",
+      "tags": [
+        "renderer-adapter / 渲染器适配器",
+        "redshift / Redshift",
+        "node-material / 节点材质",
+        "material-sync / 材质同步"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:source/module/tools/material/mmd_redshift_material.cpp:SyncTo",
+      "type": "function",
+      "name": "SyncTo",
+      "filePath": "source/module/tools/material/mmd_redshift_material.cpp",
+      "lineRange": [
+        298,
+        330
+      ],
+      "summary": "Writes common MMD material values into a Redshift material using renderer-specific parameters. / 使用渲染器专用参数将通用 MMD 材质值写入 Redshift 材质。",
+      "tags": [
+        "material-sync / 材质同步",
+        "renderer-adapter / 渲染器适配器",
+        "forward-mapping / 正向映射"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/material/mmd_redshift_material.cpp:ReadFrom",
+      "type": "function",
+      "name": "ReadFrom",
+      "filePath": "source/module/tools/material/mmd_redshift_material.cpp",
+      "lineRange": [
+        332,
+        365
+      ],
+      "summary": "Reads a Redshift material back into the common MMD material data model. / 将 Redshift 材质反向读取到通用 MMD 材质数据模型。",
+      "tags": [
+        "material-sync / 材质同步",
+        "renderer-adapter / 渲染器适配器",
+        "reverse-mapping / 反向映射"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:source/module/tools/material/mmd_redshift_material.h",
+      "type": "file",
+      "name": "mmd_redshift_material.h",
+      "filePath": "source/module/tools/material/mmd_redshift_material.h",
+      "summary": "Declares the final Redshift adapter, which uses renderer-specific alpha inspection while sharing the common MMD material contract. / 声明最终的 Redshift 适配器，在共享通用 MMD 材质契约的同时采用渲染器专用的 Alpha 检测。",
+      "tags": [
+        "renderer-adapter / 渲染器适配器",
+        "redshift / Redshift",
+        "interface / 接口",
+        "type-definition / 类型定义"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:source/module/tools/material/mmd_redshift_material.h:MMDRedShiftMaterialAdapter",
+      "type": "class",
+      "name": "MMDRedShiftMaterialAdapter",
+      "filePath": "source/module/tools/material/mmd_redshift_material.h",
+      "lineRange": [
+        6,
+        14
+      ],
+      "summary": "Adapts Redshift materials to the shared MMD contract with renderer-specific alpha handling. / 以渲染器专用 Alpha 处理将 Redshift 材质适配到共享 MMD 契约。",
+      "tags": [
+        "renderer-adapter / 渲染器适配器",
+        "redshift / Redshift",
+        "alpha-detection / Alpha 检测"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:source/module/tools/material/mmd_standard_material.cpp",
+      "type": "file",
+      "name": "mmd_standard_material.cpp",
+      "filePath": "source/module/tools/material/mmd_standard_material.cpp",
+      "summary": "Implements Standard-material creation and round-trip synchronization, toon and texture resolution, and non-accumulating runtime texture-morph wrapper updates. / 实现 Standard 材质创建与往返同步、Toon 与贴图解析，以及非累积的运行时贴图表情包装 Shader 更新。",
+      "tags": [
+        "renderer-adapter / 渲染器适配器",
+        "standard-material / 标准材质",
+        "material-morph / 材质表情",
+        "texture-pipeline / 贴图流水线",
+        "runtime-sync / 运行时同步"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:source/module/tools/material/mmd_standard_material.cpp:IsIdentityFactor",
+      "type": "function",
+      "name": "IsIdentityFactor",
+      "filePath": "source/module/tools/material/mmd_standard_material.cpp",
+      "lineRange": [
+        14,
+        17
+      ],
+      "summary": "Checks whether texture-morph RGB and alpha factors leave a sampled texture unchanged. / 检查贴图表情的 RGB 与 Alpha 系数是否保持采样贴图不变。",
+      "tags": [
+        "validation / 验证",
+        "material-morph / 材质表情",
+        "utility / 工具函数"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/material/mmd_standard_material.cpp:ComponentMultiply",
+      "type": "function",
+      "name": "ComponentMultiply",
+      "filePath": "source/module/tools/material/mmd_standard_material.cpp",
+      "lineRange": [
+        19,
+        22
+      ],
+      "summary": "Multiplies two Cinema 4D vectors component by component for morph-factor composition. / 对两个 Cinema 4D 向量逐分量相乘，用于表情系数组合。",
+      "tags": [
+        "math / 数学",
+        "material-morph / 材质表情",
+        "utility / 工具函数"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/material/mmd_standard_material.cpp:ResolveToonTexturePath",
+      "type": "function",
+      "name": "ResolveToonTexturePath",
+      "filePath": "source/module/tools/material/mmd_standard_material.cpp",
+      "lineRange": [
+        24,
+        41
+      ],
+      "summary": "Resolves shared or per-material PMX toon texture references to a concrete path. / 将共享或材质独立的 PMX Toon 贴图引用解析为具体路径。",
+      "tags": [
+        "path-resolution / 路径解析",
+        "toon-texture / Toon 贴图",
+        "pmx-import / PMX 导入"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/material/mmd_standard_material.cpp:SetChannelTexture",
+      "type": "function",
+      "name": "SetChannelTexture",
+      "filePath": "source/module/tools/material/mmd_standard_material.cpp",
+      "lineRange": [
+        43,
+        54
+      ],
+      "summary": "Installs a bitmap texture shader into a Standard material channel. / 将位图贴图 Shader 安装到 Standard 材质通道。",
+      "tags": [
+        "texture-binding / 贴图绑定",
+        "standard-material / 标准材质",
+        "shader / 着色器"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/material/mmd_standard_material.cpp:SetChannelTextureIfUnwrapped",
+      "type": "function",
+      "name": "SetChannelTextureIfUnwrapped",
+      "filePath": "source/module/tools/material/mmd_standard_material.cpp",
+      "lineRange": [
+        66,
+        73
+      ],
+      "summary": "Assigns a channel texture only when the channel is not already wrapped by the morph shader. / 仅在通道尚未被表情 Shader 包装时分配通道贴图。",
+      "tags": [
+        "texture-binding / 贴图绑定",
+        "material-morph / 材质表情",
+        "guard / 保护逻辑"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/material/mmd_standard_material.cpp:SetTextureMorphShaderFactor",
+      "type": "function",
+      "name": "SetTextureMorphShaderFactor",
+      "filePath": "source/module/tools/material/mmd_standard_material.cpp",
+      "lineRange": [
+        75,
+        81
+      ],
+      "summary": "Writes precomputed RGB and alpha factors into a texture-morph wrapper shader. / 将预计算的 RGB 与 Alpha 系数写入贴图表情包装 Shader。",
+      "tags": [
+        "runtime-sync / 运行时同步",
+        "shader-parameters / 着色器参数",
+        "material-morph / 材质表情"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/material/mmd_standard_material.cpp:SyncTextureMorphChannel",
+      "type": "function",
+      "name": "SyncTextureMorphChannel",
+      "filePath": "source/module/tools/material/mmd_standard_material.cpp",
+      "lineRange": [
+        83,
+        145
+      ],
+      "summary": "Creates, updates, or removes a Standard-channel wrapper shader to represent the effective texture-morph factor without nesting repeatedly. / 创建、更新或移除 Standard 通道包装 Shader，以表达有效贴图表情系数且避免重复嵌套。",
+      "tags": [
+        "runtime-sync / 运行时同步",
+        "shader-wrapper / 着色器包装器",
+        "material-morph / 材质表情",
+        "non-accumulating / 非累积"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/material/mmd_standard_material.cpp:SyncTo",
+      "type": "function",
+      "name": "SyncTo",
+      "filePath": "source/module/tools/material/mmd_standard_material.cpp",
+      "lineRange": [
+        288,
+        334
+      ],
+      "summary": "Writes common MMD material values into a Standard material using renderer-specific parameters. / 使用渲染器专用参数将通用 MMD 材质值写入 Standard 材质。",
+      "tags": [
+        "material-sync / 材质同步",
+        "renderer-adapter / 渲染器适配器",
+        "forward-mapping / 正向映射"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/material/mmd_standard_material.cpp:ReadFrom",
+      "type": "function",
+      "name": "ReadFrom",
+      "filePath": "source/module/tools/material/mmd_standard_material.cpp",
+      "lineRange": [
+        336,
+        395
+      ],
+      "summary": "Reads a Standard material back into the common MMD material data model. / 将 Standard 材质反向读取到通用 MMD 材质数据模型。",
+      "tags": [
+        "material-sync / 材质同步",
+        "renderer-adapter / 渲染器适配器",
+        "reverse-mapping / 反向映射"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/material/mmd_standard_material.cpp:SyncRuntimeState",
+      "type": "function",
+      "name": "SyncRuntimeState",
+      "filePath": "source/module/tools/material/mmd_standard_material.cpp",
+      "lineRange": [
+        397,
+        414
+      ],
+      "summary": "Applies composed runtime texture factors to Standard material channels through morph wrapper shaders. / 通过表情包装 Shader 将合成后的运行时贴图系数应用到 Standard 材质通道。",
+      "tags": [
+        "runtime-sync / 运行时同步",
+        "standard-material / 标准材质",
+        "material-morph / 材质表情"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:source/module/tools/material/mmd_standard_material.h",
+      "type": "file",
+      "name": "mmd_standard_material.h",
+      "filePath": "source/module/tools/material/mmd_standard_material.h",
+      "summary": "Declares the Standard material adapter and its runtime-state override for texture-morph wrapper shaders. / 声明 Standard 材质适配器及其用于贴图表情包装 Shader 的运行时状态覆盖。",
+      "tags": [
+        "renderer-adapter / 渲染器适配器",
+        "standard-material / 标准材质",
+        "runtime-state / 运行时状态",
+        "type-definition / 类型定义"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:source/module/tools/material/mmd_standard_material.h:MMDStandardMaterialAdapter",
+      "type": "class",
+      "name": "MMDStandardMaterialAdapter",
+      "filePath": "source/module/tools/material/mmd_standard_material.h",
+      "lineRange": [
+        6,
+        15
+      ],
+      "summary": "Adapts Cinema 4D Standard materials and additionally applies runtime texture-morph state. / 适配 Cinema 4D Standard 材质，并额外应用运行时贴图表情状态。",
+      "tags": [
+        "renderer-adapter / 渲染器适配器",
+        "standard-material / 标准材质",
+        "runtime-sync / 运行时同步"
+      ],
+      "complexity": "simple"
+    }
+  ],
+  "edges": [
+    {
+      "source": "file:source/module/tools/material/mmd_octane_material.cpp",
+      "target": "function:source/module/tools/material/mmd_octane_material.cpp:SyncTo",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_octane_material.cpp",
+      "target": "function:source/module/tools/material/mmd_octane_material.cpp:SyncTo",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_octane_material.cpp",
+      "target": "function:source/module/tools/material/mmd_octane_material.cpp:ReadFrom",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_octane_material.cpp",
+      "target": "function:source/module/tools/material/mmd_octane_material.cpp:ReadFrom",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_octane_material.cpp",
+      "target": "file:source/module/tools/material/mmd_octane_material.h",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_octane_material.h",
+      "target": "class:source/module/tools/material/mmd_octane_material.h:MMDOctaneMaterialAdapter",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_octane_material.h",
+      "target": "class:source/module/tools/material/mmd_octane_material.h:MMDOctaneMaterialAdapter",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_redshift_material.cpp",
+      "target": "function:source/module/tools/material/mmd_redshift_material.cpp:SyncTo",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_redshift_material.cpp",
+      "target": "function:source/module/tools/material/mmd_redshift_material.cpp:SyncTo",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_redshift_material.cpp",
+      "target": "function:source/module/tools/material/mmd_redshift_material.cpp:ReadFrom",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_redshift_material.cpp",
+      "target": "function:source/module/tools/material/mmd_redshift_material.cpp:ReadFrom",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_redshift_material.cpp",
+      "target": "file:source/module/tools/material/mmd_redshift_material.h",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_redshift_material.h",
+      "target": "class:source/module/tools/material/mmd_redshift_material.h:MMDRedShiftMaterialAdapter",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_redshift_material.h",
+      "target": "class:source/module/tools/material/mmd_redshift_material.h:MMDRedShiftMaterialAdapter",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_standard_material.cpp",
+      "target": "function:source/module/tools/material/mmd_standard_material.cpp:IsIdentityFactor",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_standard_material.cpp",
+      "target": "function:source/module/tools/material/mmd_standard_material.cpp:IsIdentityFactor",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_standard_material.cpp",
+      "target": "function:source/module/tools/material/mmd_standard_material.cpp:ComponentMultiply",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_standard_material.cpp",
+      "target": "function:source/module/tools/material/mmd_standard_material.cpp:ComponentMultiply",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_standard_material.cpp",
+      "target": "function:source/module/tools/material/mmd_standard_material.cpp:ResolveToonTexturePath",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_standard_material.cpp",
+      "target": "function:source/module/tools/material/mmd_standard_material.cpp:ResolveToonTexturePath",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_standard_material.cpp",
+      "target": "function:source/module/tools/material/mmd_standard_material.cpp:SetChannelTexture",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_standard_material.cpp",
+      "target": "function:source/module/tools/material/mmd_standard_material.cpp:SetChannelTexture",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_standard_material.cpp",
+      "target": "function:source/module/tools/material/mmd_standard_material.cpp:SetChannelTextureIfUnwrapped",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_standard_material.cpp",
+      "target": "function:source/module/tools/material/mmd_standard_material.cpp:SetChannelTextureIfUnwrapped",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_standard_material.cpp",
+      "target": "function:source/module/tools/material/mmd_standard_material.cpp:SetTextureMorphShaderFactor",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_standard_material.cpp",
+      "target": "function:source/module/tools/material/mmd_standard_material.cpp:SetTextureMorphShaderFactor",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_standard_material.cpp",
+      "target": "function:source/module/tools/material/mmd_standard_material.cpp:SyncTextureMorphChannel",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_standard_material.cpp",
+      "target": "function:source/module/tools/material/mmd_standard_material.cpp:SyncTextureMorphChannel",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_standard_material.cpp",
+      "target": "function:source/module/tools/material/mmd_standard_material.cpp:SyncTo",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_standard_material.cpp",
+      "target": "function:source/module/tools/material/mmd_standard_material.cpp:SyncTo",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_standard_material.cpp",
+      "target": "function:source/module/tools/material/mmd_standard_material.cpp:ReadFrom",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_standard_material.cpp",
+      "target": "function:source/module/tools/material/mmd_standard_material.cpp:ReadFrom",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_standard_material.cpp",
+      "target": "function:source/module/tools/material/mmd_standard_material.cpp:SyncRuntimeState",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_standard_material.cpp",
+      "target": "function:source/module/tools/material/mmd_standard_material.cpp:SyncRuntimeState",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_standard_material.cpp",
+      "target": "file:source/module/tools/material/mmd_material_morph_shader.h",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_standard_material.cpp",
+      "target": "file:source/module/tools/material/mmd_material.h",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_standard_material.cpp",
+      "target": "file:source/module/tools/material/mmd_standard_material.h",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_standard_material.h",
+      "target": "class:source/module/tools/material/mmd_standard_material.h:MMDStandardMaterialAdapter",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_standard_material.h",
+      "target": "class:source/module/tools/material/mmd_standard_material.h:MMDStandardMaterialAdapter",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    }
+  ]
+}

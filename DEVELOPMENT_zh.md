@@ -8,8 +8,8 @@
 
 ### CI（GitHub Actions）
 
-- **`.github/workflows/build.yml`** — 在推送到 `main`、`workflow_dispatch` 或作为**可复用工作流**（`workflow_call`）时运行。**矩阵并行：**每个 **（操作系统 × `sdk_*`）** 各占一个 job，八个 SDK 在 Windows 与 macOS 上各编一遍（共 **16 个 job**；组织并发上限可能导致排队）。与本地相同使用根目录 **`CMakePresets.json`**：`cmake --preset dev-windows` 或 `cmake --preset dev-macos`，再用 **`-D CMT_SDK_DIR=<仓库>/<sdk>`**、**`-D CMT_SDK_BUILD_CONFIG=Release`** 覆盖要选中的 SDK，随后 `cmake --build --preset workflow-release` 或 `workflow-release-macos`（Release 下的 `cmt-workflow`）。每个矩阵单元上传 `_build_msvc/<sdk>/bin/Release/plugins/mmdtool/` 为 artifact。
-- **`.github/workflows/package.yml`** — 推送 `v*` 标签时：调用 `build.yml`，将 Windows artifact 铺到 `_build_msvc/` 后跑 Inno（`setup/Common/installer_script.iss`，与本地 `CMT_ISS_EXTRA_ARGS` / `inno-installer` 思路一致），为 macOS 打包每 SDK 的 zip（含 `res/S24_up`），并用 `softprops/action-gh-release` 创建 **GitHub Release**。
+- **`.github/workflows/build.yml`** — 可由 `workflow_dispatch` 触发，或被**可复用工作流**（`workflow_call`）调用。矩阵在 Windows 2022 与 Intel macOS 上构建全部八个 SDK（`sdk_r20` … `sdk_2026`），另在 Apple Silicon 上原生验证 `sdk_r25` 与 2023–2026；共 **21 个 Release job**，`max-parallel: 4`。它复用本地根级预设，覆盖 `CMT_SDK_DIR` 与 `CMT_SDK_BUILD_CONFIG=Release`，再用 `workflow-release` 或 `workflow-release-macos` 构建 `cmt-workflow`。Windows 和 Intel macOS 的 `_build_msvc/<sdk>/bin/Release/plugins/mmdtool/` 会上传为 artifact；Apple Silicon job 仅作验证。
+- **`.github/workflows/package.yml`** — 推送 `v*` 标签时：调用 `build.yml`，将 Windows artifact 铺到 `_build_msvc/` 后跑 Inno（`setup/Common/installer_script.iss`，与本地 `CMT_ISS_EXTRA_ARGS` / `inno-installer` 思路一致），为 macOS 打包每 SDK 的 zip 并携带对应资源树（R20–R23 使用 `R20-S24`，其余使用 `S24_up`），再用 `softprops/action-gh-release` 创建 **GitHub Release**。
 
 本机 Inno 打包仍用下文 `package-windows` + `inno-installer` / `CMakeUserPresets.json`。
 
@@ -49,7 +49,7 @@ cmake --build --preset cmt-deps-test
 
 | 方式 | 说明 |
 |------|------|
-| **`CMakePresets.json`**（推荐） | 根目录已提供 `dev-windows`、`package-windows`、`dev-linux`、`dev-macos` 等 **configurePresets**，在 `cacheVariables` 里写好 `CMT_SDK_*`、`CMT_INNO_SETUP_ISCC`、`CMT_ISS_EXTRA_ARGS`；另有 **buildPresets**（如 `workflow-dev`、`workflow-release`、`workflow-release-macos`、`inno-installer`）。需要 **CMake ≥ 3.30** 与预设 schema v6 一致。 |
+| **`CMakePresets.json`**（推荐） | 根目录提供 `dev-windows`、`dev-windows-deps-test`、`package-windows`、`dev-linux`、`dev-macos` 等 **configurePresets**；**buildPresets** 包括 `cmt-deps-build`、`cmt-deps-test`、`workflow-dev`、`workflow-configure-all-sdks`、`workflow-release`、`workflow-release-macos` 和 `inno-installer`。根级工作流要求 CMake ≥ 3.23；主力的 2026 SDK 要求 CMake ≥ 3.30。 |
 | **`CMakeUserPresets.json`**（本机，勿提交） | 已加入 `.gitignore`。可复制 `CMakeUserPresets.SAMPLE.json` 为 `CMakeUserPresets.json`，用 `inherits` 继承 `package-windows` 再只改本机 **ISCC** 路径与 `/DPluginVersion=...`、`/DSdkBuildDir=...` 等 Inno 宏，避免改公共预设。 |
 | **初始缓存 `-C`** | `cmake/initial_cache/dev.example.cmake`、`package.example.cmake` 可复制后修改，执行：`cmake -S . -B _build_msvc -C cmake/initial_cache/你的文件.cmake`。适合脚本或 CI 注入。 |
 
@@ -67,11 +67,11 @@ cmake --preset package-windows
 cmake --build --preset inno-installer
 ```
 
-目标 **`cmt-package`**（`inno-installer` / `inno-installer-local` 所编）**依赖** **`cmt-workflow`**：会先编依赖子目录（`cmt-deps-build`）、再对当前 **`CMT_SDK_DIR`**（`package-windows` 下为 Release）做 configure + build，最后才执行 Inno（ISCC）。因此**不必**再单独跑一遍 `workflow-package`，除非只想编插件、不出安装包。
+目标 **`cmt-package`**（由 `inno-installer` 构建）会先构建共享的预编译依赖，再对**全部八个** SDK 树执行 configure 和 Release 构建，最后调用 Inno（ISCC）。`workflow-package` 只会按打包预设构建当前 `CMT_SDK_DIR`；需要 Release 插件但不需要安装包时使用它。
 
 `CMT_ISS_EXTRA_ARGS` 会原样拆给 ISCC，便于传 `/DPluginVersion=...` 而无需改 `installer_script.iss`。
 
-本机可继承 `package-windows` 写 `CMakeUserPresets.json`（如 `package-windows-local`），再 `cmake --build --preset inno-installer-local`。安装程序语言：`setup/Common/common_setup.iss` 中 **简体/繁体** 使用仓库 **`setup/Languages`**；其余仅 [Inno 官方翻译](https://jrsoftware.org/files/istrans/)（Official）中列出的语言，对应 **`compiler:Languages\*.isl`**（需本机 Inno 安装完整、含 `Languages` 目录），不引入 istrans 上 **Unofficial** 条目。**完整多版本**安装包仍要求 **其它代** `sdk_*`（非当前 `CMT_SDK_DIR`）在 `installer_script.iss` 约定路径下已有 **Release** 的 `mmdtool.xdl64`，否则会报 Source 文件不存在。
+本机可继承 `package-windows` 写 `CMakeUserPresets.json`（如 `package-windows-local`），再 `cmake --build --preset inno-installer-local`。安装程序语言：`setup/Common/common_setup.iss` 中 **简体/繁体** 使用仓库 **`setup/Languages`**；其余仅 [Inno 官方翻译](https://jrsoftware.org/files/istrans/)（Official）中列出的语言，对应 **`compiler:Languages\*.isl`**（需本机 Inno 安装完整、含 `Languages` 目录），不引入 istrans 上 **Unofficial** 条目。完整多版本安装包由 `inno-installer` 自行构建全部 SDK 树，并将生成的 Release 路径交给 `installer_script.iss`。
 
 ### 第二步：CMake 配置与构建
 
@@ -92,8 +92,7 @@ cmake --build ..\_build_msvc\sdk_2026 --config Release
 
 或直接用 Visual Studio 打开仓库根下的 `_build_msvc/sdk_2026/c4d-sdk.sln`。
 
-> 不需要手动创建符号链接。自定义 `CMakeLists.txt` 通过 `maxon_targetSourceDirectories` 直接引用
-> `source/` 和 `res/S24_up/` 的相对路径，构建系统自动处理文件扫描和 include 路径收集。
+> 不需要手动创建符号链接。共享 CMake 层会在 configure 阶段把模块内的 `source/` 与所选 `res/` 链接到仓库根目录的维护树，然后由构建系统扫描并收集 include 路径。
 
 ### 快速上手（最短路径）
 
@@ -152,6 +151,7 @@ C4D_MMDTool/
 │       ├── name_conversion/  #     名称转换配置 (.yaml)
 │       ├── strings_en-US/    #     英文字符串
 │       └── strings_zh-CN/    #     中文字符串
+├── cmake/                    # 共享插件、依赖与 SDK CMake 实现
 ├── sdk_2026/                 # Cinema 4D 2026 SDK 工程
 │   ├── CMakeLists.txt        #   根 CMake 配置
 │   ├── CMakePresets.json     #   CMake 预设 (VS2022 v143/ClangCL)
@@ -166,7 +166,8 @@ C4D_MMDTool/
 ├── sdk_2025/                 # Cinema 4D 2025 SDK 工程
 ├── sdk_2024/                 # Cinema 4D 2024 SDK 工程
 ├── sdk_2023/                 # Cinema 4D 2023 SDK 工程
-├── sdk_r20/ ~ sdk_s26/       # 更早版本 SDK 工程
+├── sdk_r20/、sdk_r21/、sdk_r23/、sdk_r25/、sdk_2023/ ~ sdk_2026/
+├── docs/dev/                 # 导入、导出、运行时与动画调试代码地图
 ├── setup/                    # 安装包脚本 (Inno Setup)
 └── .github/workflows/        # CI/CD 配置
 ```
@@ -219,6 +220,21 @@ source/
     ├── time_util.hpp
     └── unique_id_util.hpp
 ```
+
+## 架构与开发导航
+
+插件从 `source/main.cpp` 启动：它初始化共享配置并调用 `source/register_entity.cpp` 中的集中注册。UI 命令和文件 loader 将 PMX/VMD/VPD/相机操作委托给按文档存在的 `CMTSceneManager`；`source/module/tools/` 下的模型、骨骼、网格、材质、IK 与物理 manager 随后拥有具体场景对象和运行时求值。
+
+修改某个子系统前，先从对应的代码地图进入：
+
+| 变更范围 | 首读文档 | 后续代码 |
+| -------- | -------- | -------- |
+| PMX、VMD、VPD 或相机导入 | [`docs/dev/import-flow.md`](docs/dev/import-flow.md) | `CMTSceneManager.*`、`module/tools/loader/vmd_loader.*`、对象和材质 manager |
+| PMX 模型或 VPD 姿势导出 | [`docs/dev/export-flow.md`](docs/dev/export-flow.md) | `CMTSceneManager.*`、`mmd_model_manager.*`、`mmd_bone_manager.*` |
+| 动画求值、EDIT/ANIM 切换、IK 或物理 | [`docs/dev/runtime-flow.md`](docs/dev/runtime-flow.md) | `mmd_model_manager.*`、`mmd_bone_manager.*`、`module/tools/tag/mmd_bone.*` |
+| 动画 / IK / 物理诊断 | [`docs/dev/anim-flow-debug.md`](docs/dev/anim-flow-debug.md) | `cmt_anim_flow_debug.hpp` 和上述运行时代码 |
+
+`old/` 是历史归档，不应承载正常功能改动；也不要编辑 SDK 生成或镜像的源码/资源树。维护入口是仓库根的 `source/`、`res/` 与共享 `cmake/` 层。
 
 ### 源代码依赖关系
 
@@ -306,7 +322,7 @@ C4D_MMDTool (插件)
 **方式 A（本项目使用）：自定义 `CMakeLists.txt`**
 
 当 `project/` 目录下存在 `CMakeLists.txt` 时，构建系统**直接加载**该文件，`projectdefinition.txt` **不被解析**。
-这允许完全控制 CMake 变量，尤其是 `maxon_targetSourceDirectories`——可以指向项目内的任意目录。
+每个 SDK wrapper 都保持精简：选择资源代际、加入依赖，并委托给 `cmake/mmdtool_plugin_common.cmake` 完成共享 target 配置。该共享层在模块内创建指向根 `source/` 与所选 `res/` 的链接，使 `source_group(TREE …)` 与 include 路径保持有效。
 
 ```cmake
 # 在 configure 阶段自动创建 Junction，将 source/ 和 res/ 指向实际位置
@@ -366,7 +382,7 @@ Junction 的创建是幂等的——如果已存在且指向正确目标则跳�
 
 - 插件动态库输出到 `_build_msvc/sdk_2026/bin/{Debug|Release}/plugins/mmdtool/`（相对仓库根；其他 SDK 替换目录名）
 - 输出文件扩展名：Windows 为 `.xdl64`，macOS 为 `.xlib`
-- `res/` 目录会通过符号链接映射到输出目录的 `res/` 下
+- 输出目录旁的 `res/` 是指向 SDK wrapper 所选资源树的链接：`sdk_r20`、`sdk_r21`、`sdk_r23` 使用 `res/R20-S24`；`sdk_r25` 与 2023–2026 使用 `res/S24_up`
 
 ---
 
@@ -374,22 +390,16 @@ Junction 的创建是幂等的——如果已存在且指向正确目标则跳�
 
 ### `CMakeLists.txt`（实际构建配置）
 
-位于 `sdk_2026/plugins/mmdtool/project/CMakeLists.txt`，构建系统检测到此文件后直接加载。
+位于 `sdk_2026/plugins/mmdtool/project/CMakeLists.txt`，构建系统检测到此文件后直接加载。它只负责解析仓库/模块根目录、加入依赖并调用 `cmt_setup_mmdtool_plugin()`。
 
 关键配置项：
 
 ```cmake
-# 自动创建 Junction（configure 阶段，幂等操作）
-MaxonTargets_CreateDirectoryLink(PATH .../source TARGET .../source)
-MaxonTargets_CreateDirectoryLink(PATH .../res    TARGET .../res/S24_up)
+# 共享 CMake 层负责 source/resource 链接、Maxon target 变量、平台设置和依赖模式
+cmt_setup_mmdtool_plugin(...)
 
-# 标准源目录（通过 Junction 解析）
-set(maxon_targetSourceDirectories source res)
-
-# 默认 DEPENDENCY_MODE SUBDIR：头文件指向源码树中的 bullet/libMMD/eigen
-# 链接在 MaxonTargets_ProcessCinemaTargetVars() 之后对 mmdtool 追加 target_link_libraries(libMMD; Bullet...)
-
-# 若需旧版「先 cmake --install 到 dependency/install」可设 DEPENDENCY_MODE INSTALL 并提供 DEPENDENCY_INSTALL_DIR
+# 默认 SUBDIR 模式：在各 SDK 构建目录中编译 Bullet/libMMD。
+# CMT_DEPS_PREBUILT_DIR 非空时会改用 PREBUILT；INSTALL 是兼容旧 install-prefix 工作流的可选模式。
 ```
 
 ### `projectdefinition.txt`（仅供参考）
@@ -401,6 +411,7 @@ set(maxon_targetSourceDirectories source res)
 | 预设名                       | 生成器                    | 工具集    | 说明             |
 | ---------------------------- | ------------------------- | --------- | ---------------- |
 | `windows_vs2022_v143`        | Visual Studio 17 2022     | v143      | MSVC 编译（推荐） |
+| `windows_vs2026_v145`        | Visual Studio 18 2026     | v145      | 已安装时可用 |
 | `windows_vs2022_clangcl`     | Visual Studio 17 2022     | ClangCL   | Clang-CL 编译    |
 | `macos_universal_xcode`      | Xcode                     | -         | macOS 通用二进制  |
 | `linux_ninja`                | Ninja Multi-Config        | -         | Linux 构建        |

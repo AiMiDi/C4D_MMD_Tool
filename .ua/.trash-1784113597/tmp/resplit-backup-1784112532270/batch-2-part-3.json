@@ -1,0 +1,930 @@
+{
+  "nodes": [
+    {
+      "id": "file:source/module/tools/object/mmd_mesh_manager.cpp",
+      "type": "file",
+      "name": "mmd_mesh_manager.cpp",
+      "filePath": "source/module/tools/object/mmd_mesh_manager.cpp",
+      "summary": "Implements PMX mesh import/export, polygon and vertex remapping, BDEF/SDEF weight conversion, morph-tag binding, and runtime morph refresh. / 实现 PMX 网格导入导出、多边形与顶点重映射、BDEF/SDEF 权重转换、变形标签绑定以及运行时变形刷新。",
+      "tags": [
+        "object-manager",
+        "pmx-import",
+        "pmx-export",
+        "skinning",
+        "morph"
+      ],
+      "complexity": "complex",
+      "languageNotes": "C++ integrates Cinema 4D SDK lifecycle hooks with explicit PMX/VMD conversion and runtime state management. / C++ 将 Cinema 4D SDK 生命周期钩子与显式 PMX/VMD 转换及运行时状态管理结合。"
+    },
+    {
+      "id": "class:source/module/tools/object/mmd_mesh_manager.cpp:morph_tag_info",
+      "type": "class",
+      "name": "morph_tag_info",
+      "filePath": "source/module/tools/object/mmd_mesh_manager.cpp",
+      "lineRange": [
+        436,
+        445
+      ],
+      "summary": "morph_tag_info represents a concrete MMD morph type and its editing/runtime state for mesh, skin-weight, and morph management. / morph_tag_info 为网格、蒙皮权重与变形管理表示具体 MMD 变形类型及其编辑与运行时状态。",
+      "tags": [
+        "morph",
+        "object-manager",
+        "pmx-import"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:source/module/tools/object/mmd_mesh_manager.cpp:vertex_info",
+      "type": "class",
+      "name": "vertex_info",
+      "filePath": "source/module/tools/object/mmd_mesh_manager.cpp",
+      "lineRange": [
+        447,
+        456
+      ],
+      "summary": "vertex_info encapsulates a major runtime responsibility for mesh, skin-weight, and morph management. / vertex_info 为网格、蒙皮权重与变形管理封装主要运行时职责。",
+      "tags": [
+        "object-manager",
+        "pmx-import",
+        "pmx-export"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_mesh_manager.cpp:NormalizeMeshMode",
+      "type": "function",
+      "name": "NormalizeMeshMode",
+      "filePath": "source/module/tools/object/mmd_mesh_manager.cpp",
+      "lineRange": [
+        34,
+        38
+      ],
+      "summary": "NormalizeMeshMode normalizes mesh mode for mesh, skin-weight, and morph management. / NormalizeMeshMode 为网格、蒙皮权重与变形管理规范化 mesh mode。",
+      "tags": [
+        "object-manager",
+        "pmx-import",
+        "pmx-export"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_mesh_manager.cpp:ZeroPoseMorphSlider",
+      "type": "function",
+      "name": "ZeroPoseMorphSlider",
+      "filePath": "source/module/tools/object/mmd_mesh_manager.cpp",
+      "lineRange": [
+        52,
+        63
+      ],
+      "summary": "ZeroPoseMorphSlider implements a focused operation in mesh, skin-weight, and morph management. / ZeroPoseMorphSlider 实现网格、蒙皮权重与变形管理中的专用操作。",
+      "tags": [
+        "morph",
+        "object-manager",
+        "pmx-import"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_mesh_manager.cpp:MarkSceneNodeDirty",
+      "type": "function",
+      "name": "MarkSceneNodeDirty",
+      "filePath": "source/module/tools/object/mmd_mesh_manager.cpp",
+      "lineRange": [
+        65,
+        72
+      ],
+      "summary": "MarkSceneNodeDirty marks scene node dirty for mesh, skin-weight, and morph management. / MarkSceneNodeDirty 为网格、蒙皮权重与变形管理标记 scene node dirty。",
+      "tags": [
+        "object-manager",
+        "pmx-import",
+        "pmx-export"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_mesh_manager.cpp:MMDMeshManagerObject::Read",
+      "type": "function",
+      "name": "MMDMeshManagerObject::Read",
+      "filePath": "source/module/tools/object/mmd_mesh_manager.cpp",
+      "lineRange": [
+        103,
+        152
+      ],
+      "summary": "MMDMeshManagerObject::Read reads persistent state for mesh, skin-weight, and morph management. / MMDMeshManagerObject::Read 为网格、蒙皮权重与变形管理读取持久状态。",
+      "tags": [
+        "serialization",
+        "object-manager",
+        "pmx-import"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_mesh_manager.cpp:SDK2024_Write",
+      "type": "function",
+      "name": "SDK2024_Write",
+      "filePath": "source/module/tools/object/mmd_mesh_manager.cpp",
+      "lineRange": [
+        154,
+        183
+      ],
+      "summary": "SDK2024_Write implements the Cinema 4D SDK lifecycle hook for write in mesh, skin-weight, and morph management. / SDK2024_Write 实现网格、蒙皮权重与变形管理中用于 write 的 Cinema 4D SDK 生命周期钩子。",
+      "tags": [
+        "serialization",
+        "object-manager",
+        "pmx-import"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_mesh_manager.cpp:SDK2024_CopyTo",
+      "type": "function",
+      "name": "SDK2024_CopyTo",
+      "filePath": "source/module/tools/object/mmd_mesh_manager.cpp",
+      "lineRange": [
+        185,
+        201
+      ],
+      "summary": "SDK2024_CopyTo implements the Cinema 4D SDK lifecycle hook for copy to in mesh, skin-weight, and morph management. / SDK2024_CopyTo 实现网格、蒙皮权重与变形管理中用于 copy to 的 Cinema 4D SDK 生命周期钩子。",
+      "tags": [
+        "serialization",
+        "object-manager",
+        "pmx-import"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_mesh_manager.cpp:MMDMeshManagerObject::SetDParameter",
+      "type": "function",
+      "name": "MMDMeshManagerObject::SetDParameter",
+      "filePath": "source/module/tools/object/mmd_mesh_manager.cpp",
+      "lineRange": [
+        203,
+        281
+      ],
+      "summary": "MMDMeshManagerObject::SetDParameter applies parameter changes and their runtime side effects for mesh, skin-weight, and morph management. / MMDMeshManagerObject::SetDParameter 为网格、蒙皮权重与变形管理应用参数变更及其运行时副作用。",
+      "tags": [
+        "object-manager",
+        "pmx-import",
+        "pmx-export"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_mesh_manager.cpp:MMDMeshManagerObject::Message",
+      "type": "function",
+      "name": "MMDMeshManagerObject::Message",
+      "filePath": "source/module/tools/object/mmd_mesh_manager.cpp",
+      "lineRange": [
+        283,
+        300
+      ],
+      "summary": "MMDMeshManagerObject::Message dispatches Cinema 4D messages and state transitions for mesh, skin-weight, and morph management. / MMDMeshManagerObject::Message 为网格、蒙皮权重与变形管理分发 Cinema 4D 消息与状态切换。",
+      "tags": [
+        "object-manager",
+        "pmx-import",
+        "pmx-export"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_mesh_manager.cpp:MMDMeshManagerObject::Execute",
+      "type": "function",
+      "name": "MMDMeshManagerObject::Execute",
+      "filePath": "source/module/tools/object/mmd_mesh_manager.cpp",
+      "lineRange": [
+        302,
+        323
+      ],
+      "summary": "MMDMeshManagerObject::Execute runs the Cinema 4D evaluation-stage behavior for mesh, skin-weight, and morph management. / MMDMeshManagerObject::Execute 为网格、蒙皮权重与变形管理执行 Cinema 4D 求值阶段行为。",
+      "tags": [
+        "runtime",
+        "object-manager",
+        "pmx-import"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_mesh_manager.cpp:MMDMeshManagerObject::AddToExecution",
+      "type": "function",
+      "name": "MMDMeshManagerObject::AddToExecution",
+      "filePath": "source/module/tools/object/mmd_mesh_manager.cpp",
+      "lineRange": [
+        325,
+        332
+      ],
+      "summary": "MMDMeshManagerObject::AddToExecution registers the object in Cinema 4D execution order for mesh, skin-weight, and morph management. / MMDMeshManagerObject::AddToExecution 为网格、蒙皮权重与变形管理将对象注册到 Cinema 4D 执行顺序。",
+      "tags": [
+        "object-manager",
+        "pmx-import",
+        "pmx-export"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_mesh_manager.cpp:MMDMeshManagerObject::SetMorphStrength",
+      "type": "function",
+      "name": "MMDMeshManagerObject::SetMorphStrength",
+      "filePath": "source/module/tools/object/mmd_mesh_manager.cpp",
+      "lineRange": [
+        344,
+        358
+      ],
+      "summary": "MMDMeshManagerObject::SetMorphStrength sets morph strength for mesh, skin-weight, and morph management. / MMDMeshManagerObject::SetMorphStrength 为网格、蒙皮权重与变形管理设置 morph strength。",
+      "tags": [
+        "morph",
+        "object-manager",
+        "pmx-import"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_mesh_manager.cpp:MMDMeshManagerObject::GetMorphStrength",
+      "type": "function",
+      "name": "MMDMeshManagerObject::GetMorphStrength",
+      "filePath": "source/module/tools/object/mmd_mesh_manager.cpp",
+      "lineRange": [
+        360,
+        373
+      ],
+      "summary": "MMDMeshManagerObject::GetMorphStrength retrieves morph strength for mesh, skin-weight, and morph management. / MMDMeshManagerObject::GetMorphStrength 为网格、蒙皮权重与变形管理获取 morph strength。",
+      "tags": [
+        "morph",
+        "object-manager",
+        "pmx-import"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_mesh_manager.cpp:MMDMeshManagerObject::ResetMorphStrengths",
+      "type": "function",
+      "name": "MMDMeshManagerObject::ResetMorphStrengths",
+      "filePath": "source/module/tools/object/mmd_mesh_manager.cpp",
+      "lineRange": [
+        375,
+        382
+      ],
+      "summary": "MMDMeshManagerObject::ResetMorphStrengths resets morph strengths for mesh, skin-weight, and morph management. / MMDMeshManagerObject::ResetMorphStrengths 为网格、蒙皮权重与变形管理重置 morph strengths。",
+      "tags": [
+        "morph",
+        "object-manager",
+        "pmx-import"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_mesh_manager.cpp:MMDMeshManagerObject::RequestMorphDataRefresh",
+      "type": "function",
+      "name": "MMDMeshManagerObject::RequestMorphDataRefresh",
+      "filePath": "source/module/tools/object/mmd_mesh_manager.cpp",
+      "lineRange": [
+        384,
+        387
+      ],
+      "summary": "MMDMeshManagerObject::RequestMorphDataRefresh implements a focused operation in mesh, skin-weight, and morph management. / MMDMeshManagerObject::RequestMorphDataRefresh 实现网格、蒙皮权重与变形管理中的专用操作。",
+      "tags": [
+        "morph",
+        "object-manager",
+        "pmx-import"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_mesh_manager.cpp:MMDMeshManagerObject::ForceRefreshMorphData",
+      "type": "function",
+      "name": "MMDMeshManagerObject::ForceRefreshMorphData",
+      "filePath": "source/module/tools/object/mmd_mesh_manager.cpp",
+      "lineRange": [
+        389,
+        396
+      ],
+      "summary": "MMDMeshManagerObject::ForceRefreshMorphData implements a focused operation in mesh, skin-weight, and morph management. / MMDMeshManagerObject::ForceRefreshMorphData 实现网格、蒙皮权重与变形管理中的专用操作。",
+      "tags": [
+        "morph",
+        "object-manager",
+        "pmx-import"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_mesh_manager.cpp:MMDMeshManagerObject::RefreshWeightBindPoses",
+      "type": "function",
+      "name": "MMDMeshManagerObject::RefreshWeightBindPoses",
+      "filePath": "source/module/tools/object/mmd_mesh_manager.cpp",
+      "lineRange": [
+        398,
+        434
+      ],
+      "summary": "MMDMeshManagerObject::RefreshWeightBindPoses refreshes weight bind poses for mesh, skin-weight, and morph management. / MMDMeshManagerObject::RefreshWeightBindPoses 为网格、蒙皮权重与变形管理刷新 weight bind poses。",
+      "tags": [
+        "object-manager",
+        "pmx-import",
+        "pmx-export"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_mesh_manager.cpp:vertex_info::GetHashCode",
+      "type": "function",
+      "name": "vertex_info::GetHashCode",
+      "filePath": "source/module/tools/object/mmd_mesh_manager.cpp",
+      "lineRange": [
+        458,
+        461
+      ],
+      "summary": "vertex_info::GetHashCode retrieves hash code for mesh, skin-weight, and morph management. / vertex_info::GetHashCode 为网格、蒙皮权重与变形管理获取 hash code。",
+      "tags": [
+        "object-manager",
+        "pmx-import",
+        "pmx-export"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_mesh_manager.cpp:MMDMeshManagerObject::LoadPMX",
+      "type": "function",
+      "name": "MMDMeshManagerObject::LoadPMX",
+      "filePath": "source/module/tools/object/mmd_mesh_manager.cpp",
+      "lineRange": [
+        463,
+        1591
+      ],
+      "summary": "MMDMeshManagerObject::LoadPMX loads pmx for mesh, skin-weight, and morph management. / MMDMeshManagerObject::LoadPMX 为网格、蒙皮权重与变形管理加载 pmx。",
+      "tags": [
+        "pmx",
+        "import",
+        "object-manager"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_mesh_manager.cpp:MakePmxVertexKey",
+      "type": "function",
+      "name": "MakePmxVertexKey",
+      "filePath": "source/module/tools/object/mmd_mesh_manager.cpp",
+      "lineRange": [
+        1614,
+        1641
+      ],
+      "summary": "MakePmxVertexKey creates pmx vertex key for mesh, skin-weight, and morph management. / MakePmxVertexKey 为网格、蒙皮权重与变形管理创建 pmx vertex key。",
+      "tags": [
+        "pmx",
+        "object-manager",
+        "pmx-import"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_mesh_manager.cpp:GetPolygonCornerPointIndex",
+      "type": "function",
+      "name": "GetPolygonCornerPointIndex",
+      "filePath": "source/module/tools/object/mmd_mesh_manager.cpp",
+      "lineRange": [
+        1669,
+        1678
+      ],
+      "summary": "GetPolygonCornerPointIndex retrieves polygon corner point index for mesh, skin-weight, and morph management. / GetPolygonCornerPointIndex 为网格、蒙皮权重与变形管理获取 polygon corner point index。",
+      "tags": [
+        "object-manager",
+        "pmx-import",
+        "pmx-export"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_mesh_manager.cpp:ReadSdefData",
+      "type": "function",
+      "name": "ReadSdefData",
+      "filePath": "source/module/tools/object/mmd_mesh_manager.cpp",
+      "lineRange": [
+        1715,
+        1748
+      ],
+      "summary": "ReadSdefData reads sdef data for mesh, skin-weight, and morph management. / ReadSdefData 为网格、蒙皮权重与变形管理读取 sdef data。",
+      "tags": [
+        "serialization",
+        "object-manager",
+        "pmx-import"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_mesh_manager.cpp:AssignVertexWeights",
+      "type": "function",
+      "name": "AssignVertexWeights",
+      "filePath": "source/module/tools/object/mmd_mesh_manager.cpp",
+      "lineRange": [
+        1751,
+        1839
+      ],
+      "summary": "AssignVertexWeights implements a focused operation in mesh, skin-weight, and morph management. / AssignVertexWeights 实现网格、蒙皮权重与变形管理中的专用操作。",
+      "tags": [
+        "object-manager",
+        "pmx-import",
+        "pmx-export"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_mesh_manager.cpp:MMDMeshManagerObject::ExportMeshMorphsToPMX",
+      "type": "function",
+      "name": "MMDMeshManagerObject::ExportMeshMorphsToPMX",
+      "filePath": "source/module/tools/object/mmd_mesh_manager.cpp",
+      "lineRange": [
+        1843,
+        1982
+      ],
+      "summary": "MMDMeshManagerObject::ExportMeshMorphsToPMX exports mesh morphs to pmx for mesh, skin-weight, and morph management. / MMDMeshManagerObject::ExportMeshMorphsToPMX 为网格、蒙皮权重与变形管理导出 mesh morphs to pmx。",
+      "tags": [
+        "pmx",
+        "morph",
+        "export",
+        "object-manager"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_mesh_manager.cpp:MMDMeshManagerObject::SavePMX",
+      "type": "function",
+      "name": "MMDMeshManagerObject::SavePMX",
+      "filePath": "source/module/tools/object/mmd_mesh_manager.cpp",
+      "lineRange": [
+        1984,
+        2218
+      ],
+      "summary": "MMDMeshManagerObject::SavePMX saves pmx for mesh, skin-weight, and morph management. / MMDMeshManagerObject::SavePMX 为网格、蒙皮权重与变形管理保存 pmx。",
+      "tags": [
+        "pmx",
+        "export",
+        "object-manager"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_mesh_manager.cpp:MMDMeshManagerObject::RefreshMeshMorphData",
+      "type": "function",
+      "name": "MMDMeshManagerObject::RefreshMeshMorphData",
+      "filePath": "source/module/tools/object/mmd_mesh_manager.cpp",
+      "lineRange": [
+        2220,
+        2318
+      ],
+      "summary": "MMDMeshManagerObject::RefreshMeshMorphData refreshes mesh morph data for mesh, skin-weight, and morph management. / MMDMeshManagerObject::RefreshMeshMorphData 为网格、蒙皮权重与变形管理刷新 mesh morph data。",
+      "tags": [
+        "morph",
+        "object-manager",
+        "pmx-import"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:source/module/tools/object/mmd_mesh_manager.h",
+      "type": "file",
+      "name": "mmd_mesh_manager.h",
+      "filePath": "source/module/tools/object/mmd_mesh_manager.h",
+      "summary": "Declares the mesh-manager object and its PMX loading, export, morph-strength, bind-pose, and refresh interfaces. / 声明网格管理器对象及其 PMX 加载、导出、变形强度、绑定姿态与刷新接口。",
+      "tags": [
+        "object-manager",
+        "api",
+        "skinning",
+        "morph",
+        "pmx"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "class:source/module/tools/object/mmd_mesh_manager.h:MMDMeshManagerObject",
+      "type": "class",
+      "name": "MMDMeshManagerObject",
+      "filePath": "source/module/tools/object/mmd_mesh_manager.h",
+      "lineRange": [
+        43,
+        90
+      ],
+      "summary": "MMDMeshManagerObject coordinates owned objects, persistent state, and lifecycle operations for mesh-manager API. / MMDMeshManagerObject 为网格管理器 API协调所管理对象、持久状态与生命周期操作。",
+      "tags": [
+        "object-manager",
+        "api",
+        "skinning"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_mesh_manager.h:MMDMeshManagerObjectMsg::MMDMeshManagerObjectMsg",
+      "type": "function",
+      "name": "MMDMeshManagerObjectMsg::MMDMeshManagerObjectMsg",
+      "filePath": "source/module/tools/object/mmd_mesh_manager.h",
+      "lineRange": [
+        38,
+        40
+      ],
+      "summary": "MMDMeshManagerObjectMsg::MMDMeshManagerObjectMsg initializes an object used by mesh-manager API. / MMDMeshManagerObjectMsg::MMDMeshManagerObjectMsg 初始化网格管理器 API所使用的对象。",
+      "tags": [
+        "object-manager",
+        "api",
+        "skinning"
+      ],
+      "complexity": "simple"
+    }
+  ],
+  "edges": [
+    {
+      "source": "file:source/module/tools/object/mmd_mesh_manager.cpp",
+      "target": "class:source/module/tools/object/mmd_mesh_manager.cpp:morph_tag_info",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_mesh_manager.cpp",
+      "target": "class:source/module/tools/object/mmd_mesh_manager.cpp:morph_tag_info",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_mesh_manager.cpp",
+      "target": "class:source/module/tools/object/mmd_mesh_manager.cpp:vertex_info",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_mesh_manager.cpp",
+      "target": "class:source/module/tools/object/mmd_mesh_manager.cpp:vertex_info",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_mesh_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_mesh_manager.cpp:NormalizeMeshMode",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_mesh_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_mesh_manager.cpp:NormalizeMeshMode",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_mesh_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_mesh_manager.cpp:ZeroPoseMorphSlider",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_mesh_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_mesh_manager.cpp:MarkSceneNodeDirty",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_mesh_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_mesh_manager.cpp:MarkSceneNodeDirty",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_mesh_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_mesh_manager.cpp:MMDMeshManagerObject::Read",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_mesh_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_mesh_manager.cpp:MMDMeshManagerObject::Read",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_mesh_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_mesh_manager.cpp:SDK2024_Write",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_mesh_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_mesh_manager.cpp:SDK2024_Write",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_mesh_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_mesh_manager.cpp:SDK2024_CopyTo",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_mesh_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_mesh_manager.cpp:SDK2024_CopyTo",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_mesh_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_mesh_manager.cpp:MMDMeshManagerObject::SetDParameter",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_mesh_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_mesh_manager.cpp:MMDMeshManagerObject::SetDParameter",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_mesh_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_mesh_manager.cpp:MMDMeshManagerObject::Message",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_mesh_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_mesh_manager.cpp:MMDMeshManagerObject::Message",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_mesh_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_mesh_manager.cpp:MMDMeshManagerObject::Execute",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_mesh_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_mesh_manager.cpp:MMDMeshManagerObject::Execute",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_mesh_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_mesh_manager.cpp:MMDMeshManagerObject::AddToExecution",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_mesh_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_mesh_manager.cpp:MMDMeshManagerObject::AddToExecution",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_mesh_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_mesh_manager.cpp:MMDMeshManagerObject::SetMorphStrength",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_mesh_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_mesh_manager.cpp:MMDMeshManagerObject::SetMorphStrength",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_mesh_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_mesh_manager.cpp:MMDMeshManagerObject::GetMorphStrength",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_mesh_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_mesh_manager.cpp:MMDMeshManagerObject::GetMorphStrength",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_mesh_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_mesh_manager.cpp:MMDMeshManagerObject::ResetMorphStrengths",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_mesh_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_mesh_manager.cpp:MMDMeshManagerObject::ResetMorphStrengths",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_mesh_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_mesh_manager.cpp:MMDMeshManagerObject::RequestMorphDataRefresh",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_mesh_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_mesh_manager.cpp:MMDMeshManagerObject::RequestMorphDataRefresh",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_mesh_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_mesh_manager.cpp:MMDMeshManagerObject::ForceRefreshMorphData",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_mesh_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_mesh_manager.cpp:MMDMeshManagerObject::ForceRefreshMorphData",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_mesh_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_mesh_manager.cpp:MMDMeshManagerObject::RefreshWeightBindPoses",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_mesh_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_mesh_manager.cpp:MMDMeshManagerObject::RefreshWeightBindPoses",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_mesh_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_mesh_manager.cpp:vertex_info::GetHashCode",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_mesh_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_mesh_manager.cpp:vertex_info::GetHashCode",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_mesh_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_mesh_manager.cpp:MMDMeshManagerObject::LoadPMX",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_mesh_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_mesh_manager.cpp:MMDMeshManagerObject::LoadPMX",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_mesh_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_mesh_manager.cpp:MakePmxVertexKey",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_mesh_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_mesh_manager.cpp:GetPolygonCornerPointIndex",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_mesh_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_mesh_manager.cpp:ReadSdefData",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_mesh_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_mesh_manager.cpp:AssignVertexWeights",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_mesh_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_mesh_manager.cpp:MMDMeshManagerObject::ExportMeshMorphsToPMX",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_mesh_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_mesh_manager.cpp:MMDMeshManagerObject::ExportMeshMorphsToPMX",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_mesh_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_mesh_manager.cpp:MMDMeshManagerObject::SavePMX",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_mesh_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_mesh_manager.cpp:MMDMeshManagerObject::SavePMX",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_mesh_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_mesh_manager.cpp:MMDMeshManagerObject::RefreshMeshMorphData",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_mesh_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_mesh_manager.cpp:MMDMeshManagerObject::RefreshMeshMorphData",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_mesh_manager.h",
+      "target": "class:source/module/tools/object/mmd_mesh_manager.h:MMDMeshManagerObject",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_mesh_manager.h",
+      "target": "class:source/module/tools/object/mmd_mesh_manager.h:MMDMeshManagerObject",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_mesh_manager.h",
+      "target": "function:source/module/tools/object/mmd_mesh_manager.h:MMDMeshManagerObjectMsg::MMDMeshManagerObjectMsg",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_mesh_manager.h",
+      "target": "function:source/module/tools/object/mmd_mesh_manager.h:MMDMeshManagerObjectMsg::MMDMeshManagerObjectMsg",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_mesh_manager.cpp",
+      "target": "file:source/module/tools/object/mmd_bone_manager.h",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_mesh_manager.cpp",
+      "target": "file:source/module/tools/object/mmd_mesh_manager.h",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_mesh_manager.cpp",
+      "target": "file:source/module/tools/object/mmd_model_manager.h",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_mesh_manager.h",
+      "target": "file:source/module/tools/object/mmd_manager.hpp",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    }
+  ]
+}

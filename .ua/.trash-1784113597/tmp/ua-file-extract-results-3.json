@@ -1,0 +1,3416 @@
+{
+  "scriptCompleted": true,
+  "filesAnalyzed": 12,
+  "filesSkipped": [],
+  "results": [
+    {
+      "path": "source/module/tools/material/mmd_corona_material.cpp",
+      "language": "cpp",
+      "fileCategory": "code",
+      "totalLines": 121,
+      "nonEmptyLines": 109,
+      "functions": [
+        {
+          "name": "SyncTo",
+          "startLine": 102,
+          "endLine": 109,
+          "params": [
+            "data",
+            "material"
+          ]
+        },
+        {
+          "name": "ReadFrom",
+          "startLine": 111,
+          "endLine": 121,
+          "params": [
+            "material",
+            "data"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "SyncTo",
+          "line": 102,
+          "isDefault": false
+        },
+        {
+          "name": "ReadFrom",
+          "line": 111,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "SyncTo",
+          "callee": "GetType",
+          "lineNumber": 104
+        },
+        {
+          "caller": "SyncTo",
+          "callee": "SetName",
+          "lineNumber": 106
+        },
+        {
+          "caller": "SyncTo",
+          "callee": "SetParameter",
+          "lineNumber": 107
+        },
+        {
+          "caller": "SyncTo",
+          "callee": "ConstDescID",
+          "lineNumber": 107
+        },
+        {
+          "caller": "SyncTo",
+          "callee": "DescLevel",
+          "lineNumber": 107
+        },
+        {
+          "caller": "SyncTo",
+          "callee": "SetParameter",
+          "lineNumber": 108
+        },
+        {
+          "caller": "SyncTo",
+          "callee": "ConstDescID",
+          "lineNumber": 108
+        },
+        {
+          "caller": "SyncTo",
+          "callee": "DescLevel",
+          "lineNumber": 108
+        },
+        {
+          "caller": "ReadFrom",
+          "callee": "GetType",
+          "lineNumber": 113
+        },
+        {
+          "caller": "ReadFrom",
+          "callee": "GetName",
+          "lineNumber": 115
+        },
+        {
+          "caller": "ReadFrom",
+          "callee": "GetAtomParameter",
+          "lineNumber": 117
+        },
+        {
+          "caller": "ReadFrom",
+          "callee": "ConstDescID",
+          "lineNumber": 117
+        },
+        {
+          "caller": "ReadFrom",
+          "callee": "DescLevel",
+          "lineNumber": 117
+        },
+        {
+          "caller": "ReadFrom",
+          "callee": "GetVector",
+          "lineNumber": 118
+        },
+        {
+          "caller": "ReadFrom",
+          "callee": "GetAtomParameter",
+          "lineNumber": 119
+        },
+        {
+          "caller": "ReadFrom",
+          "callee": "ConstDescID",
+          "lineNumber": 119
+        },
+        {
+          "caller": "ReadFrom",
+          "callee": "DescLevel",
+          "lineNumber": 119
+        },
+        {
+          "caller": "ReadFrom",
+          "callee": "GetFloat",
+          "lineNumber": 120
+        }
+      ],
+      "metrics": {
+        "importCount": 1,
+        "exportCount": 2,
+        "functionCount": 2,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "source/module/tools/material/mmd_corona_material.h",
+      "language": "c",
+      "fileCategory": "code",
+      "totalLines": 14,
+      "nonEmptyLines": 12,
+      "classes": [
+        {
+          "name": "MMDCoronaMaterialAdapter",
+          "startLine": 6,
+          "endLine": 14,
+          "methods": [
+            "SyncTo",
+            "ReadFrom"
+          ],
+          "properties": [
+            "CreateFromPMX",
+            "CreateFromData"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "SyncTo",
+          "line": 12,
+          "isDefault": false
+        },
+        {
+          "name": "ReadFrom",
+          "line": 13,
+          "isDefault": false
+        },
+        {
+          "name": "MMDCoronaMaterialAdapter",
+          "line": 6,
+          "isDefault": false
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 3,
+        "functionCount": 0,
+        "classCount": 1
+      }
+    },
+    {
+      "path": "source/module/tools/material/mmd_material.cpp",
+      "language": "cpp",
+      "fileCategory": "code",
+      "totalLines": 440,
+      "nonEmptyLines": 418,
+      "functions": [
+        {
+          "name": "DetectType",
+          "startLine": 23,
+          "endLine": 50,
+          "params": [
+            "material"
+          ]
+        },
+        {
+          "name": "DetectTextureFromPMX",
+          "startLine": 52,
+          "endLine": 72,
+          "params": [
+            "pmx_material",
+            "texture_paths"
+          ]
+        },
+        {
+          "name": "DetectTextureFromData",
+          "startLine": 74,
+          "endLine": 90,
+          "params": [
+            "data"
+          ]
+        },
+        {
+          "name": "Create",
+          "startLine": 92,
+          "endLine": 102,
+          "params": [
+            "type"
+          ]
+        },
+        {
+          "name": "CreateFor",
+          "startLine": 104,
+          "endLine": 108,
+          "params": [
+            "material"
+          ]
+        },
+        {
+          "name": "SyncToMaterial",
+          "startLine": 110,
+          "endLine": 115,
+          "params": [
+            "data",
+            "material"
+          ]
+        },
+        {
+          "name": "ReadFromMaterial",
+          "startLine": 117,
+          "endLine": 122,
+          "params": [
+            "material",
+            "data"
+          ]
+        },
+        {
+          "name": "SyncRuntimeStateToMaterial",
+          "startLine": 130,
+          "endLine": 135,
+          "params": [
+            "state",
+            "material"
+          ]
+        },
+        {
+          "name": "FromPMX",
+          "startLine": 137,
+          "endLine": 170,
+          "params": [
+            "pmx_material"
+          ]
+        },
+        {
+          "name": "ToPMX",
+          "startLine": 172,
+          "endLine": 208,
+          "params": [
+            "pmx_material",
+            "texture_index",
+            "sphere_texture_index",
+            "resolved_toon_texture_index"
+          ]
+        },
+        {
+          "name": "Read",
+          "startLine": 210,
+          "endLine": 257,
+          "params": [
+            "hf"
+          ]
+        },
+        {
+          "name": "Write",
+          "startLine": 259,
+          "endLine": 296,
+          "params": [
+            "hf"
+          ]
+        },
+        {
+          "name": "CopyTo",
+          "startLine": 298,
+          "endLine": 345,
+          "params": [
+            "dest"
+          ]
+        },
+        {
+          "name": "FromBase",
+          "startLine": 347,
+          "endLine": 360,
+          "params": [
+            "base"
+          ]
+        },
+        {
+          "name": "WriteSupportedFieldsTo",
+          "startLine": 362,
+          "endLine": 372,
+          "params": [
+            "data"
+          ]
+        },
+        {
+          "name": "Checksum",
+          "startLine": 374,
+          "endLine": 398,
+          "params": []
+        },
+        {
+          "name": "SetTextureRelativePath",
+          "startLine": 400,
+          "endLine": 403,
+          "params": [
+            "texture_relative_path"
+          ]
+        },
+        {
+          "name": "LoadPMXTextures",
+          "startLine": 405,
+          "endLine": 426,
+          "params": [
+            "pmx_textures"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "DetectType",
+          "line": 23,
+          "isDefault": false
+        },
+        {
+          "name": "DetectTextureFromPMX",
+          "line": 52,
+          "isDefault": false
+        },
+        {
+          "name": "DetectTextureFromData",
+          "line": 74,
+          "isDefault": false
+        },
+        {
+          "name": "Create",
+          "line": 92,
+          "isDefault": false
+        },
+        {
+          "name": "CreateFor",
+          "line": 104,
+          "isDefault": false
+        },
+        {
+          "name": "SyncToMaterial",
+          "line": 110,
+          "isDefault": false
+        },
+        {
+          "name": "ReadFromMaterial",
+          "line": 117,
+          "isDefault": false
+        },
+        {
+          "name": "SyncRuntimeStateToMaterial",
+          "line": 130,
+          "isDefault": false
+        },
+        {
+          "name": "FromPMX",
+          "line": 137,
+          "isDefault": false
+        },
+        {
+          "name": "ToPMX",
+          "line": 172,
+          "isDefault": false
+        },
+        {
+          "name": "Read",
+          "line": 210,
+          "isDefault": false
+        },
+        {
+          "name": "Write",
+          "line": 259,
+          "isDefault": false
+        },
+        {
+          "name": "CopyTo",
+          "line": 298,
+          "isDefault": false
+        },
+        {
+          "name": "FromBase",
+          "line": 347,
+          "isDefault": false
+        },
+        {
+          "name": "WriteSupportedFieldsTo",
+          "line": 362,
+          "isDefault": false
+        },
+        {
+          "name": "Checksum",
+          "line": 374,
+          "isDefault": false
+        },
+        {
+          "name": "SetTextureRelativePath",
+          "line": 400,
+          "isDefault": false
+        },
+        {
+          "name": "LoadPMXTextures",
+          "line": 405,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "DetectType",
+          "callee": "GetType",
+          "lineNumber": 27
+        },
+        {
+          "caller": "DetectType",
+          "callee": "IsNodeBased",
+          "lineNumber": 32
+        },
+        {
+          "caller": "DetectType",
+          "callee": "static_cast<NodeMaterial*>",
+          "lineNumber": 34
+        },
+        {
+          "caller": "DetectType",
+          "callee": "const_cast<BaseMaterial*>",
+          "lineNumber": 34
+        },
+        {
+          "caller": "DetectType",
+          "callee": "HasSpace",
+          "lineNumber": 35
+        },
+        {
+          "caller": "DetectTextureFromPMX",
+          "callee": "GetCount",
+          "lineNumber": 57
+        },
+        {
+          "caller": "DetectTextureFromPMX",
+          "callee": "GeFExist",
+          "lineNumber": 60
+        },
+        {
+          "caller": "DetectTextureFromPMX",
+          "callee": "Init",
+          "lineNumber": 64
+        },
+        {
+          "caller": "DetectTextureFromPMX",
+          "callee": "GetChannelCount",
+          "lineNumber": 66
+        },
+        {
+          "caller": "DetectTextureFromPMX",
+          "callee": "Compare",
+          "lineNumber": 67
+        },
+        {
+          "caller": "DetectTextureFromPMX",
+          "callee": "ToLower",
+          "lineNumber": 67
+        },
+        {
+          "caller": "DetectTextureFromPMX",
+          "callee": "GetSuffix",
+          "lineNumber": 67
+        },
+        {
+          "caller": "DetectTextureFromPMX",
+          "callee": "Compare",
+          "lineNumber": 68
+        },
+        {
+          "caller": "DetectTextureFromPMX",
+          "callee": "ToLower",
+          "lineNumber": 68
+        },
+        {
+          "caller": "DetectTextureFromPMX",
+          "callee": "GetSuffix",
+          "lineNumber": 68
+        },
+        {
+          "caller": "DetectTextureFromData",
+          "callee": "IsPopulated",
+          "lineNumber": 78
+        },
+        {
+          "caller": "DetectTextureFromData",
+          "callee": "GeFExist",
+          "lineNumber": 78
+        },
+        {
+          "caller": "DetectTextureFromData",
+          "callee": "Init",
+          "lineNumber": 82
+        },
+        {
+          "caller": "DetectTextureFromData",
+          "callee": "GetChannelCount",
+          "lineNumber": 84
+        },
+        {
+          "caller": "DetectTextureFromData",
+          "callee": "Compare",
+          "lineNumber": 85
+        },
+        {
+          "caller": "DetectTextureFromData",
+          "callee": "ToLower",
+          "lineNumber": 85
+        },
+        {
+          "caller": "DetectTextureFromData",
+          "callee": "GetSuffix",
+          "lineNumber": 85
+        },
+        {
+          "caller": "DetectTextureFromData",
+          "callee": "Compare",
+          "lineNumber": 86
+        },
+        {
+          "caller": "DetectTextureFromData",
+          "callee": "ToLower",
+          "lineNumber": 86
+        },
+        {
+          "caller": "DetectTextureFromData",
+          "callee": "GetSuffix",
+          "lineNumber": 86
+        },
+        {
+          "caller": "Create",
+          "callee": "std::make_unique<MMDStandardMaterialAdapter>",
+          "lineNumber": 96
+        },
+        {
+          "caller": "Create",
+          "callee": "std::make_unique<MMDRedShiftMaterialAdapter>",
+          "lineNumber": 97
+        },
+        {
+          "caller": "Create",
+          "callee": "std::make_unique<MMDOctaneMaterialAdapter>",
+          "lineNumber": 98
+        },
+        {
+          "caller": "Create",
+          "callee": "std::make_unique<MMDCoronaMaterialAdapter>",
+          "lineNumber": 99
+        },
+        {
+          "caller": "CreateFor",
+          "callee": "DetectType",
+          "lineNumber": 106
+        },
+        {
+          "caller": "CreateFor",
+          "callee": "Create",
+          "lineNumber": 107
+        },
+        {
+          "caller": "SyncToMaterial",
+          "callee": "MMDMaterialAdapter::CreateFor",
+          "lineNumber": 112
+        },
+        {
+          "caller": "SyncToMaterial",
+          "callee": "SyncTo",
+          "lineNumber": 114
+        },
+        {
+          "caller": "ReadFromMaterial",
+          "callee": "MMDMaterialAdapter::CreateFor",
+          "lineNumber": 119
+        },
+        {
+          "caller": "ReadFromMaterial",
+          "callee": "ReadFrom",
+          "lineNumber": 121
+        },
+        {
+          "caller": "SyncRuntimeStateToMaterial",
+          "callee": "MMDMaterialAdapter::CreateFor",
+          "lineNumber": 132
+        },
+        {
+          "caller": "SyncRuntimeStateToMaterial",
+          "callee": "SyncRuntimeState",
+          "lineNumber": 134
+        },
+        {
+          "caller": "FromPMX",
+          "callee": "String",
+          "lineNumber": 139
+        },
+        {
+          "caller": "FromPMX",
+          "callee": "c_str",
+          "lineNumber": 139
+        },
+        {
+          "caller": "FromPMX",
+          "callee": "String",
+          "lineNumber": 140
+        },
+        {
+          "caller": "FromPMX",
+          "callee": "c_str",
+          "lineNumber": 140
+        },
+        {
+          "caller": "FromPMX",
+          "callee": "static_cast<uint8_t>",
+          "lineNumber": 152
+        },
+        {
+          "caller": "FromPMX",
+          "callee": "static_cast<uint8_t>",
+          "lineNumber": 153
+        },
+        {
+          "caller": "FromPMX",
+          "callee": "static_cast<uint8_t>",
+          "lineNumber": 154
+        },
+        {
+          "caller": "FromPMX",
+          "callee": "static_cast<uint8_t>",
+          "lineNumber": 155
+        },
+        {
+          "caller": "FromPMX",
+          "callee": "static_cast<uint8_t>",
+          "lineNumber": 156
+        },
+        {
+          "caller": "FromPMX",
+          "callee": "static_cast<uint8_t>",
+          "lineNumber": 157
+        },
+        {
+          "caller": "FromPMX",
+          "callee": "static_cast<uint8_t>",
+          "lineNumber": 158
+        },
+        {
+          "caller": "FromPMX",
+          "callee": "static_cast<Int32>",
+          "lineNumber": 164
+        },
+        {
+          "caller": "FromPMX",
+          "callee": "static_cast<Int32>",
+          "lineNumber": 165
+        },
+        {
+          "caller": "FromPMX",
+          "callee": "String",
+          "lineNumber": 167
+        },
+        {
+          "caller": "FromPMX",
+          "callee": "c_str",
+          "lineNumber": 167
+        },
+        {
+          "caller": "FromPMX",
+          "callee": "maxon::StrongRef<AutoAlloc<BaseLink>>",
+          "lineNumber": 169
+        },
+        {
+          "caller": "ToPMX",
+          "callee": "string_util::GetStdString",
+          "lineNumber": 175
+        },
+        {
+          "caller": "ToPMX",
+          "callee": "string_util::GetStdString",
+          "lineNumber": 176
+        },
+        {
+          "caller": "ToPMX",
+          "callee": "static_cast<uint8_t>",
+          "lineNumber": 189
+        },
+        {
+          "caller": "ToPMX",
+          "callee": "static_cast<uint8_t>",
+          "lineNumber": 190
+        },
+        {
+          "caller": "ToPMX",
+          "callee": "static_cast<uint8_t>",
+          "lineNumber": 191
+        },
+        {
+          "caller": "ToPMX",
+          "callee": "static_cast<uint8_t>",
+          "lineNumber": 192
+        },
+        {
+          "caller": "ToPMX",
+          "callee": "static_cast<uint8_t>",
+          "lineNumber": 193
+        },
+        {
+          "caller": "ToPMX",
+          "callee": "static_cast<uint8_t>",
+          "lineNumber": 194
+        },
+        {
+          "caller": "ToPMX",
+          "callee": "static_cast<libmmd::PMXDrawModeFlags>",
+          "lineNumber": 195
+        },
+        {
+          "caller": "ToPMX",
+          "callee": "static_cast<libmmd::PMXSphereMode>",
+          "lineNumber": 203
+        },
+        {
+          "caller": "ToPMX",
+          "callee": "static_cast<libmmd::PMXToonMode>",
+          "lineNumber": 204
+        },
+        {
+          "caller": "ToPMX",
+          "callee": "string_util::GetStdString",
+          "lineNumber": 206
+        },
+        {
+          "caller": "Read",
+          "callee": "ReadData",
+          "lineNumber": 212
+        },
+        {
+          "caller": "Read",
+          "callee": "ReadData",
+          "lineNumber": 212
+        },
+        {
+          "caller": "Read",
+          "callee": "ReadData",
+          "lineNumber": 214
+        },
+        {
+          "caller": "Read",
+          "callee": "ReadData",
+          "lineNumber": 214
+        },
+        {
+          "caller": "Read",
+          "callee": "ReadData",
+          "lineNumber": 216
+        },
+        {
+          "caller": "Read",
+          "callee": "ReadData",
+          "lineNumber": 216
+        },
+        {
+          "caller": "Read",
+          "callee": "ReadData",
+          "lineNumber": 216
+        },
+        {
+          "caller": "Read",
+          "callee": "ReadData",
+          "lineNumber": 219
+        },
+        {
+          "caller": "Read",
+          "callee": "ReadData",
+          "lineNumber": 219
+        },
+        {
+          "caller": "Read",
+          "callee": "ReadData",
+          "lineNumber": 219
+        },
+        {
+          "caller": "Read",
+          "callee": "ReadData",
+          "lineNumber": 219
+        },
+        {
+          "caller": "Read",
+          "callee": "ReadData",
+          "lineNumber": 219
+        },
+        {
+          "caller": "Read",
+          "callee": "ReadData",
+          "lineNumber": 226
+        },
+        {
+          "caller": "Read",
+          "callee": "ReadData",
+          "lineNumber": 226
+        },
+        {
+          "caller": "Read",
+          "callee": "ReadData",
+          "lineNumber": 226
+        },
+        {
+          "caller": "Read",
+          "callee": "ReadData",
+          "lineNumber": 226
+        },
+        {
+          "caller": "Read",
+          "callee": "ReadData",
+          "lineNumber": 228
+        },
+        {
+          "caller": "Read",
+          "callee": "ReadData",
+          "lineNumber": 228
+        },
+        {
+          "caller": "Read",
+          "callee": "ReadData",
+          "lineNumber": 228
+        },
+        {
+          "caller": "Read",
+          "callee": "ReadData",
+          "lineNumber": 228
+        },
+        {
+          "caller": "Read",
+          "callee": "ReadData",
+          "lineNumber": 228
+        },
+        {
+          "caller": "Read",
+          "callee": "ReadData",
+          "lineNumber": 230
+        },
+        {
+          "caller": "Read",
+          "callee": "ReadData",
+          "lineNumber": 232
+        },
+        {
+          "caller": "Read",
+          "callee": "ReadData",
+          "lineNumber": 232
+        },
+        {
+          "caller": "Read",
+          "callee": "ReadBool",
+          "lineNumber": 235
+        },
+        {
+          "caller": "Read",
+          "callee": "ReadData",
+          "lineNumber": 239
+        },
+        {
+          "caller": "Read",
+          "callee": "maxon::StrongRef<AutoAlloc<BaseLink>>",
+          "lineNumber": 243
+        },
+        {
+          "caller": "Read",
+          "callee": "ReadBool",
+          "lineNumber": 245
+        },
+        {
+          "caller": "Read",
+          "callee": "ReadData",
+          "lineNumber": 249
+        },
+        {
+          "caller": "Read",
+          "callee": "maxon::StrongRef<AutoAlloc<BaseLink>>",
+          "lineNumber": 253
+        },
+        {
+          "caller": "Read",
+          "callee": "ReadData",
+          "lineNumber": 254
+        },
+        {
+          "caller": "Write",
+          "callee": "WriteData",
+          "lineNumber": 261
+        },
+        {
+          "caller": "Write",
+          "callee": "WriteData",
+          "lineNumber": 261
+        },
+        {
+          "caller": "Write",
+          "callee": "WriteData",
+          "lineNumber": 263
+        },
+        {
+          "caller": "Write",
+          "callee": "WriteData",
+          "lineNumber": 263
+        },
+        {
+          "caller": "Write",
+          "callee": "WriteData",
+          "lineNumber": 265
+        },
+        {
+          "caller": "Write",
+          "callee": "WriteData",
+          "lineNumber": 265
+        },
+        {
+          "caller": "Write",
+          "callee": "WriteData",
+          "lineNumber": 265
+        },
+        {
+          "caller": "Write",
+          "callee": "WriteData",
+          "lineNumber": 267
+        },
+        {
+          "caller": "Write",
+          "callee": "WriteData",
+          "lineNumber": 267
+        },
+        {
+          "caller": "Write",
+          "callee": "WriteData",
+          "lineNumber": 267
+        },
+        {
+          "caller": "Write",
+          "callee": "WriteData",
+          "lineNumber": 267
+        },
+        {
+          "caller": "Write",
+          "callee": "WriteData",
+          "lineNumber": 267
+        },
+        {
+          "caller": "Write",
+          "callee": "WriteData",
+          "lineNumber": 269
+        },
+        {
+          "caller": "Write",
+          "callee": "WriteData",
+          "lineNumber": 269
+        },
+        {
+          "caller": "Write",
+          "callee": "WriteData",
+          "lineNumber": 269
+        },
+        {
+          "caller": "Write",
+          "callee": "WriteData",
+          "lineNumber": 269
+        },
+        {
+          "caller": "Write",
+          "callee": "WriteData",
+          "lineNumber": 271
+        },
+        {
+          "caller": "Write",
+          "callee": "WriteData",
+          "lineNumber": 271
+        },
+        {
+          "caller": "Write",
+          "callee": "WriteData",
+          "lineNumber": 271
+        },
+        {
+          "caller": "Write",
+          "callee": "WriteData",
+          "lineNumber": 271
+        },
+        {
+          "caller": "Write",
+          "callee": "WriteData",
+          "lineNumber": 271
+        },
+        {
+          "caller": "Write",
+          "callee": "WriteData",
+          "lineNumber": 273
+        },
+        {
+          "caller": "Write",
+          "callee": "WriteData",
+          "lineNumber": 275
+        },
+        {
+          "caller": "Write",
+          "callee": "WriteData",
+          "lineNumber": 275
+        },
+        {
+          "caller": "Write",
+          "callee": "WriteBool",
+          "lineNumber": 278
+        },
+        {
+          "caller": "Write",
+          "callee": "WriteData",
+          "lineNumber": 282
+        },
+        {
+          "caller": "Write",
+          "callee": "WriteBool",
+          "lineNumber": 286
+        },
+        {
+          "caller": "Write",
+          "callee": "WriteData",
+          "lineNumber": 290
+        },
+        {
+          "caller": "Write",
+          "callee": "WriteData",
+          "lineNumber": 293
+        },
+        {
+          "caller": "CopyTo",
+          "callee": "maxon::StrongRef<AutoAlloc<BaseLink>>::Create",
+          "lineNumber": 327
+        },
+        {
+          "caller": "CopyTo",
+          "callee": "SetLink",
+          "lineNumber": 330
+        },
+        {
+          "caller": "CopyTo",
+          "callee": "ForceGetLink",
+          "lineNumber": 330
+        },
+        {
+          "caller": "CopyTo",
+          "callee": "maxon::StrongRef<AutoAlloc<BaseLink>>",
+          "lineNumber": 333
+        },
+        {
+          "caller": "CopyTo",
+          "callee": "maxon::StrongRef<AutoAlloc<BaseLink>>::Create",
+          "lineNumber": 336
+        },
+        {
+          "caller": "CopyTo",
+          "callee": "SetLink",
+          "lineNumber": 339
+        },
+        {
+          "caller": "CopyTo",
+          "callee": "ForceGetLink",
+          "lineNumber": 339
+        },
+        {
+          "caller": "CopyTo",
+          "callee": "maxon::StrongRef<AutoAlloc<BaseLink>>",
+          "lineNumber": 342
+        },
+        {
+          "caller": "Checksum",
+          "callee": "static_cast<Int64>",
+          "lineNumber": 380
+        },
+        {
+          "caller": "Checksum",
+          "callee": "static_cast<UInt64>",
+          "lineNumber": 381
+        },
+        {
+          "caller": "Checksum",
+          "callee": "mix",
+          "lineNumber": 389
+        },
+        {
+          "caller": "Checksum",
+          "callee": "mix",
+          "lineNumber": 389
+        },
+        {
+          "caller": "Checksum",
+          "callee": "mix",
+          "lineNumber": 389
+        },
+        {
+          "caller": "Checksum",
+          "callee": "mix_vec",
+          "lineNumber": 390
+        },
+        {
+          "caller": "Checksum",
+          "callee": "mix",
+          "lineNumber": 390
+        },
+        {
+          "caller": "Checksum",
+          "callee": "mix_vec",
+          "lineNumber": 391
+        },
+        {
+          "caller": "Checksum",
+          "callee": "mix",
+          "lineNumber": 391
+        },
+        {
+          "caller": "Checksum",
+          "callee": "mix_vec",
+          "lineNumber": 392
+        },
+        {
+          "caller": "Checksum",
+          "callee": "mix_vec",
+          "lineNumber": 393
+        },
+        {
+          "caller": "Checksum",
+          "callee": "mix",
+          "lineNumber": 393
+        },
+        {
+          "caller": "Checksum",
+          "callee": "mix",
+          "lineNumber": 393
+        },
+        {
+          "caller": "Checksum",
+          "callee": "mix_vec",
+          "lineNumber": 394
+        },
+        {
+          "caller": "Checksum",
+          "callee": "mix",
+          "lineNumber": 394
+        },
+        {
+          "caller": "Checksum",
+          "callee": "mix_vec",
+          "lineNumber": 395
+        },
+        {
+          "caller": "Checksum",
+          "callee": "mix",
+          "lineNumber": 395
+        },
+        {
+          "caller": "Checksum",
+          "callee": "mix_vec",
+          "lineNumber": 396
+        },
+        {
+          "caller": "Checksum",
+          "callee": "mix",
+          "lineNumber": 396
+        },
+        {
+          "caller": "LoadPMXTextures",
+          "callee": "Reset",
+          "lineNumber": 407
+        },
+        {
+          "caller": "LoadPMXTextures",
+          "callee": "size",
+          "lineNumber": 408
+        },
+        {
+          "caller": "LoadPMXTextures",
+          "callee": "iferr",
+          "lineNumber": 409
+        },
+        {
+          "caller": "LoadPMXTextures",
+          "callee": "SetCapacityHint",
+          "lineNumber": 409
+        },
+        {
+          "caller": "LoadPMXTextures",
+          "callee": "static_cast<Int>",
+          "lineNumber": 409
+        },
+        {
+          "caller": "LoadPMXTextures",
+          "callee": "c_str",
+          "lineNumber": 416
+        },
+        {
+          "caller": "LoadPMXTextures",
+          "callee": "IsPopulated",
+          "lineNumber": 418
+        },
+        {
+          "caller": "LoadPMXTextures",
+          "callee": "GeFExist",
+          "lineNumber": 418
+        },
+        {
+          "caller": "LoadPMXTextures",
+          "callee": "FormatString",
+          "lineNumber": 420
+        },
+        {
+          "caller": "LoadPMXTextures",
+          "callee": "GetString",
+          "lineNumber": 420
+        },
+        {
+          "caller": "LoadPMXTextures",
+          "callee": "iferr",
+          "lineNumber": 422
+        },
+        {
+          "caller": "LoadPMXTextures",
+          "callee": "SDK2024_Append",
+          "lineNumber": 422
+        },
+        {
+          "caller": "LoadPMXTextures",
+          "callee": "std::move",
+          "lineNumber": 422
+        }
+      ],
+      "metrics": {
+        "importCount": 5,
+        "exportCount": 18,
+        "functionCount": 18,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "source/module/tools/material/mmd_material.h",
+      "language": "c",
+      "fileCategory": "code",
+      "totalLines": 152,
+      "nonEmptyLines": 131,
+      "functions": [
+        {
+          "name": "~MMDMaterialAdapter",
+          "startLine": 92,
+          "endLine": 92,
+          "params": []
+        },
+        {
+          "name": "SyncRuntimeState",
+          "startLine": 106,
+          "endLine": 106,
+          "params": [
+            "state",
+            "material"
+          ]
+        },
+        {
+          "name": "MMDMaterialManager",
+          "startLine": 144,
+          "endLine": 144,
+          "params": []
+        },
+        {
+          "name": "~MMDMaterialManager",
+          "startLine": 145,
+          "endLine": 145,
+          "params": []
+        }
+      ],
+      "classes": [
+        {
+          "name": "ModelImport",
+          "startLine": 10,
+          "endLine": 10,
+          "methods": [],
+          "properties": []
+        },
+        {
+          "name": "MMDMaterialData",
+          "startLine": 14,
+          "endLine": 50,
+          "methods": [
+            "FromPMX",
+            "ToPMX",
+            "Read",
+            "Write",
+            "CopyTo"
+          ],
+          "properties": [
+            "name_local",
+            "name_universal",
+            "diffuse_rgb",
+            "diffuse_alpha",
+            "specular",
+            "specular_power",
+            "ambient",
+            "draw_both_face",
+            "draw_ground_shadow",
+            "draw_cast_self_shadow",
+            "draw_receive_self_shadow",
+            "draw_vertex_color",
+            "edge_enabled",
+            "edge_color_rgb",
+            "edge_color_alpha",
+            "edge_size",
+            "texture_path",
+            "sphere_texture_path",
+            "sphere_mode",
+            "toon_mode",
+            "toon_texture_index",
+            "toon_texture_path",
+            "memo",
+            "num_face_vertices",
+            "material_link",
+            "mesh_link",
+            "selection_name"
+          ]
+        },
+        {
+          "name": "MMDMaterialRuntimeState",
+          "startLine": 59,
+          "endLine": 84,
+          "methods": [
+            "FromBase",
+            "WriteSupportedFieldsTo",
+            "Checksum"
+          ],
+          "properties": [
+            "diffuse_rgb",
+            "diffuse_alpha",
+            "specular",
+            "specular_power",
+            "ambient",
+            "edge_color_rgb",
+            "edge_color_alpha",
+            "edge_size",
+            "texture_factor_rgb",
+            "texture_factor_alpha",
+            "sphere_texture_factor_rgb",
+            "sphere_texture_factor_alpha",
+            "toon_texture_factor_rgb",
+            "toon_texture_factor_alpha"
+          ]
+        },
+        {
+          "name": "MMDMaterialAdapter",
+          "startLine": 89,
+          "endLine": 121,
+          "methods": [
+            "~MMDMaterialAdapter",
+            "SyncTo",
+            "ReadFrom",
+            "SyncRuntimeState",
+            "Create",
+            "CreateFor",
+            "DetectType",
+            "DetectTextureFromPMX",
+            "DetectTextureFromData"
+          ],
+          "properties": [
+            "CreateFromPMX",
+            "CreateFromData"
+          ]
+        },
+        {
+          "name": "MMDMaterialManager",
+          "startLine": 136,
+          "endLine": 152,
+          "methods": [
+            "MMDMaterialManager",
+            "~MMDMaterialManager",
+            "SetTextureRelativePath",
+            "LoadPMXTextures"
+          ],
+          "properties": [
+            "m_texture_relative_path",
+            "m_texture_path_array",
+            "MMDMaterialManager",
+            "MMDMaterialManager",
+            "LoadPMXMaterial"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "ModelImport",
+          "line": 10,
+          "isDefault": false
+        },
+        {
+          "name": "FromPMX",
+          "line": 44,
+          "isDefault": false
+        },
+        {
+          "name": "ToPMX",
+          "line": 45,
+          "isDefault": false
+        },
+        {
+          "name": "Read",
+          "line": 47,
+          "isDefault": false
+        },
+        {
+          "name": "Write",
+          "line": 48,
+          "isDefault": false
+        },
+        {
+          "name": "CopyTo",
+          "line": 49,
+          "isDefault": false
+        },
+        {
+          "name": "MMDMaterialData",
+          "line": 14,
+          "isDefault": false
+        },
+        {
+          "name": "FromBase",
+          "line": 77,
+          "isDefault": false
+        },
+        {
+          "name": "WriteSupportedFieldsTo",
+          "line": 80,
+          "isDefault": false
+        },
+        {
+          "name": "Checksum",
+          "line": 83,
+          "isDefault": false
+        },
+        {
+          "name": "MMDMaterialRuntimeState",
+          "line": 59,
+          "isDefault": false
+        },
+        {
+          "name": "~MMDMaterialAdapter",
+          "line": 92,
+          "isDefault": false
+        },
+        {
+          "name": "SyncTo",
+          "line": 97,
+          "isDefault": false
+        },
+        {
+          "name": "ReadFrom",
+          "line": 98,
+          "isDefault": false
+        },
+        {
+          "name": "SyncRuntimeState",
+          "line": 106,
+          "isDefault": false
+        },
+        {
+          "name": "Create",
+          "line": 108,
+          "isDefault": false
+        },
+        {
+          "name": "CreateFor",
+          "line": 109,
+          "isDefault": false
+        },
+        {
+          "name": "DetectType",
+          "line": 110,
+          "isDefault": false
+        },
+        {
+          "name": "MMDMaterialAdapter",
+          "line": 89,
+          "isDefault": false
+        },
+        {
+          "name": "MMDMaterialManager",
+          "line": 144,
+          "isDefault": false
+        },
+        {
+          "name": "~MMDMaterialManager",
+          "line": 145,
+          "isDefault": false
+        },
+        {
+          "name": "SetTextureRelativePath",
+          "line": 147,
+          "isDefault": false
+        },
+        {
+          "name": "LoadPMXTextures",
+          "line": 148,
+          "isDefault": false
+        },
+        {
+          "name": "MMDMaterialManager",
+          "line": 136,
+          "isDefault": false
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 24,
+        "functionCount": 4,
+        "classCount": 5
+      }
+    },
+    {
+      "path": "source/module/tools/material/mmd_material_morph_shader.cpp",
+      "language": "cpp",
+      "fileCategory": "code",
+      "totalLines": 71,
+      "nonEmptyLines": 63,
+      "functions": [
+        {
+          "name": "SDK2024_Init",
+          "startLine": 14,
+          "endLine": 24,
+          "params": []
+        },
+        {
+          "name": "InitRender",
+          "startLine": 26,
+          "endLine": 40,
+          "params": [
+            "sh",
+            "irs"
+          ]
+        },
+        {
+          "name": "FreeRender",
+          "startLine": 42,
+          "endLine": 49,
+          "params": [
+            "sh"
+          ]
+        },
+        {
+          "name": "Output",
+          "startLine": 51,
+          "endLine": 64,
+          "params": [
+            "sh",
+            "cd"
+          ]
+        },
+        {
+          "name": "RegisterMMDMaterialTextureMorphShader",
+          "startLine": 66,
+          "endLine": 71,
+          "params": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "SDK2024_Init",
+          "line": 14,
+          "isDefault": false
+        },
+        {
+          "name": "InitRender",
+          "line": 26,
+          "isDefault": false
+        },
+        {
+          "name": "FreeRender",
+          "line": 42,
+          "isDefault": false
+        },
+        {
+          "name": "Output",
+          "line": 51,
+          "isDefault": false
+        },
+        {
+          "name": "RegisterMMDMaterialTextureMorphShader",
+          "line": 66,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "SDK2024_Init",
+          "callee": "GetDataInstance",
+          "lineNumber": 16
+        },
+        {
+          "caller": "SDK2024_Init",
+          "callee": "static_cast<BaseList2D*>",
+          "lineNumber": 16
+        },
+        {
+          "caller": "SDK2024_Init",
+          "callee": "SetVector",
+          "lineNumber": 18
+        },
+        {
+          "caller": "SDK2024_Init",
+          "callee": "Vector",
+          "lineNumber": 18
+        },
+        {
+          "caller": "SDK2024_Init",
+          "callee": "SetFloat",
+          "lineNumber": 19
+        },
+        {
+          "caller": "SDK2024_Init",
+          "callee": "Vector",
+          "lineNumber": 21
+        },
+        {
+          "caller": "InitRender",
+          "callee": "GetDataInstance",
+          "lineNumber": 30
+        },
+        {
+          "caller": "InitRender",
+          "callee": "GetVector",
+          "lineNumber": 32
+        },
+        {
+          "caller": "InitRender",
+          "callee": "Vector",
+          "lineNumber": 32
+        },
+        {
+          "caller": "InitRender",
+          "callee": "GetFloat",
+          "lineNumber": 33
+        },
+        {
+          "caller": "InitRender",
+          "callee": "GetDown",
+          "lineNumber": 36
+        },
+        {
+          "caller": "InitRender",
+          "callee": "InitRender",
+          "lineNumber": 37
+        },
+        {
+          "caller": "FreeRender",
+          "callee": "GetDown",
+          "lineNumber": 46
+        },
+        {
+          "caller": "FreeRender",
+          "callee": "FreeRender",
+          "lineNumber": 47
+        },
+        {
+          "caller": "Output",
+          "callee": "GetDown",
+          "lineNumber": 56
+        },
+        {
+          "caller": "Output",
+          "callee": "Sample",
+          "lineNumber": 57
+        },
+        {
+          "caller": "Output",
+          "callee": "Vector",
+          "lineNumber": 60
+        },
+        {
+          "caller": "RegisterMMDMaterialTextureMorphShader",
+          "callee": "RegisterShaderPlugin",
+          "lineNumber": 68
+        }
+      ],
+      "metrics": {
+        "importCount": 1,
+        "exportCount": 5,
+        "functionCount": 5,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "source/module/tools/material/mmd_material_morph_shader.h",
+      "language": "c",
+      "fileCategory": "code",
+      "totalLines": 40,
+      "nonEmptyLines": 32,
+      "classes": [
+        {
+          "name": "MMDMaterialTextureMorphShader",
+          "startLine": 24,
+          "endLine": 35,
+          "methods": [
+            "InitRender",
+            "FreeRender",
+            "Output"
+          ],
+          "properties": [
+            "m_factor_rgb",
+            "m_factor_alpha"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "InitRender",
+          "line": 32,
+          "isDefault": false
+        },
+        {
+          "name": "FreeRender",
+          "line": 33,
+          "isDefault": false
+        },
+        {
+          "name": "Output",
+          "line": 34,
+          "isDefault": false
+        },
+        {
+          "name": "MMDMaterialTextureMorphShader",
+          "line": 24,
+          "isDefault": false
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 4,
+        "functionCount": 0,
+        "classCount": 1
+      }
+    },
+    {
+      "path": "source/module/tools/material/mmd_octane_material.cpp",
+      "language": "cpp",
+      "fileCategory": "code",
+      "totalLines": 214,
+      "nonEmptyLines": 197,
+      "functions": [
+        {
+          "name": "SyncTo",
+          "startLine": 139,
+          "endLine": 167,
+          "params": [
+            "data",
+            "material"
+          ]
+        },
+        {
+          "name": "ReadFrom",
+          "startLine": 169,
+          "endLine": 214,
+          "params": [
+            "material",
+            "data"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "SyncTo",
+          "line": 139,
+          "isDefault": false
+        },
+        {
+          "name": "ReadFrom",
+          "line": 169,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "SyncTo",
+          "callee": "GetType",
+          "lineNumber": 141
+        },
+        {
+          "caller": "SyncTo",
+          "callee": "SetName",
+          "lineNumber": 143
+        },
+        {
+          "caller": "SyncTo",
+          "callee": "GetAtomParameter",
+          "lineNumber": 145
+        },
+        {
+          "caller": "SyncTo",
+          "callee": "ConstDescID",
+          "lineNumber": 145
+        },
+        {
+          "caller": "SyncTo",
+          "callee": "DescLevel",
+          "lineNumber": 145
+        },
+        {
+          "caller": "SyncTo",
+          "callee": "GetBaseLink",
+          "lineNumber": 147
+        },
+        {
+          "caller": "SyncTo",
+          "callee": "reinterpret_cast<BaseShader*>",
+          "lineNumber": 149
+        },
+        {
+          "caller": "SyncTo",
+          "callee": "ForceGetLink",
+          "lineNumber": 149
+        },
+        {
+          "caller": "SyncTo",
+          "callee": "GetType",
+          "lineNumber": 151
+        },
+        {
+          "caller": "SyncTo",
+          "callee": "SetParameter",
+          "lineNumber": 152
+        },
+        {
+          "caller": "SyncTo",
+          "callee": "ConstDescID",
+          "lineNumber": 152
+        },
+        {
+          "caller": "SyncTo",
+          "callee": "DescLevel",
+          "lineNumber": 152
+        },
+        {
+          "caller": "SyncTo",
+          "callee": "GetAtomParameter",
+          "lineNumber": 156
+        },
+        {
+          "caller": "SyncTo",
+          "callee": "ConstDescID",
+          "lineNumber": 156
+        },
+        {
+          "caller": "SyncTo",
+          "callee": "DescLevel",
+          "lineNumber": 156
+        },
+        {
+          "caller": "SyncTo",
+          "callee": "GetBaseLink",
+          "lineNumber": 158
+        },
+        {
+          "caller": "SyncTo",
+          "callee": "reinterpret_cast<BaseShader*>",
+          "lineNumber": 160
+        },
+        {
+          "caller": "SyncTo",
+          "callee": "ForceGetLink",
+          "lineNumber": 160
+        },
+        {
+          "caller": "SyncTo",
+          "callee": "GetType",
+          "lineNumber": 162
+        },
+        {
+          "caller": "SyncTo",
+          "callee": "SetParameter",
+          "lineNumber": 163
+        },
+        {
+          "caller": "SyncTo",
+          "callee": "ConstDescID",
+          "lineNumber": 163
+        },
+        {
+          "caller": "SyncTo",
+          "callee": "DescLevel",
+          "lineNumber": 163
+        },
+        {
+          "caller": "ReadFrom",
+          "callee": "GetType",
+          "lineNumber": 171
+        },
+        {
+          "caller": "ReadFrom",
+          "callee": "GetName",
+          "lineNumber": 173
+        },
+        {
+          "caller": "ReadFrom",
+          "callee": "GetAtomParameter",
+          "lineNumber": 176
+        },
+        {
+          "caller": "ReadFrom",
+          "callee": "ConstDescID",
+          "lineNumber": 176
+        },
+        {
+          "caller": "ReadFrom",
+          "callee": "DescLevel",
+          "lineNumber": 176
+        },
+        {
+          "caller": "ReadFrom",
+          "callee": "GetBaseLink",
+          "lineNumber": 178
+        },
+        {
+          "caller": "ReadFrom",
+          "callee": "reinterpret_cast<BaseShader*>",
+          "lineNumber": 180
+        },
+        {
+          "caller": "ReadFrom",
+          "callee": "ForceGetLink",
+          "lineNumber": 180
+        },
+        {
+          "caller": "ReadFrom",
+          "callee": "GetType",
+          "lineNumber": 182
+        },
+        {
+          "caller": "ReadFrom",
+          "callee": "GetAtomParameter",
+          "lineNumber": 185
+        },
+        {
+          "caller": "ReadFrom",
+          "callee": "ConstDescID",
+          "lineNumber": 185
+        },
+        {
+          "caller": "ReadFrom",
+          "callee": "DescLevel",
+          "lineNumber": 185
+        },
+        {
+          "caller": "ReadFrom",
+          "callee": "GetVector",
+          "lineNumber": 187
+        },
+        {
+          "caller": "ReadFrom",
+          "callee": "GetAtomParameter",
+          "lineNumber": 196
+        },
+        {
+          "caller": "ReadFrom",
+          "callee": "ConstDescID",
+          "lineNumber": 196
+        },
+        {
+          "caller": "ReadFrom",
+          "callee": "DescLevel",
+          "lineNumber": 196
+        },
+        {
+          "caller": "ReadFrom",
+          "callee": "GetVector",
+          "lineNumber": 197
+        },
+        {
+          "caller": "ReadFrom",
+          "callee": "GetAtomParameter",
+          "lineNumber": 199
+        },
+        {
+          "caller": "ReadFrom",
+          "callee": "ConstDescID",
+          "lineNumber": 199
+        },
+        {
+          "caller": "ReadFrom",
+          "callee": "DescLevel",
+          "lineNumber": 199
+        },
+        {
+          "caller": "ReadFrom",
+          "callee": "GetBaseLink",
+          "lineNumber": 201
+        },
+        {
+          "caller": "ReadFrom",
+          "callee": "reinterpret_cast<BaseShader*>",
+          "lineNumber": 203
+        },
+        {
+          "caller": "ReadFrom",
+          "callee": "ForceGetLink",
+          "lineNumber": 203
+        },
+        {
+          "caller": "ReadFrom",
+          "callee": "GetType",
+          "lineNumber": 205
+        },
+        {
+          "caller": "ReadFrom",
+          "callee": "GetAtomParameter",
+          "lineNumber": 208
+        },
+        {
+          "caller": "ReadFrom",
+          "callee": "ConstDescID",
+          "lineNumber": 208
+        },
+        {
+          "caller": "ReadFrom",
+          "callee": "DescLevel",
+          "lineNumber": 208
+        },
+        {
+          "caller": "ReadFrom",
+          "callee": "GetFloat",
+          "lineNumber": 209
+        }
+      ],
+      "metrics": {
+        "importCount": 1,
+        "exportCount": 2,
+        "functionCount": 2,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "source/module/tools/material/mmd_octane_material.h",
+      "language": "c",
+      "fileCategory": "code",
+      "totalLines": 14,
+      "nonEmptyLines": 12,
+      "classes": [
+        {
+          "name": "MMDOctaneMaterialAdapter",
+          "startLine": 6,
+          "endLine": 14,
+          "methods": [
+            "SyncTo",
+            "ReadFrom"
+          ],
+          "properties": [
+            "CreateFromPMX",
+            "CreateFromData"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "SyncTo",
+          "line": 12,
+          "isDefault": false
+        },
+        {
+          "name": "ReadFrom",
+          "line": 13,
+          "isDefault": false
+        },
+        {
+          "name": "MMDOctaneMaterialAdapter",
+          "line": 6,
+          "isDefault": false
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 3,
+        "functionCount": 0,
+        "classCount": 1
+      }
+    },
+    {
+      "path": "source/module/tools/material/mmd_redshift_material.cpp",
+      "language": "cpp",
+      "fileCategory": "code",
+      "totalLines": 365,
+      "nonEmptyLines": 322,
+      "functions": [
+        {
+          "name": "SyncTo",
+          "startLine": 298,
+          "endLine": 330,
+          "params": [
+            "data",
+            "material"
+          ]
+        },
+        {
+          "name": "ReadFrom",
+          "startLine": 332,
+          "endLine": 365,
+          "params": [
+            "material",
+            "data"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "SyncTo",
+          "line": 298,
+          "isDefault": false
+        },
+        {
+          "name": "ReadFrom",
+          "line": 332,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "IsRedShiftMaterial",
+          "callee": "GetType",
+          "lineNumber": 27
+        },
+        {
+          "caller": "IsRedShiftMaterial",
+          "callee": "static_cast<NodeMaterial*>",
+          "lineNumber": 29
+        },
+        {
+          "caller": "IsRedShiftMaterial",
+          "callee": "const_cast<BaseMaterial*>",
+          "lineNumber": 29
+        },
+        {
+          "caller": "IsRedShiftMaterial",
+          "callee": "HasSpace",
+          "lineNumber": 30
+        },
+        {
+          "caller": "FindStandardMaterialNode",
+          "callee": "maxon::GraphModelHelper::FindNodesByAssetId",
+          "lineNumber": 38
+        },
+        {
+          "caller": "FindStandardMaterialNode",
+          "callee": "maxon::GraphNode",
+          "lineNumber": 47
+        },
+        {
+          "caller": "SetPortValue",
+          "callee": "GetInputs",
+          "lineNumber": 55
+        },
+        {
+          "caller": "SetPortValue",
+          "callee": "FindChild",
+          "lineNumber": 56
+        },
+        {
+          "caller": "SetPortValue",
+          "callee": "IsValid",
+          "lineNumber": 57
+        },
+        {
+          "caller": "SetPortValue",
+          "callee": "SetPortValue",
+          "lineNumber": 59
+        },
+        {
+          "caller": "ConnectOutputToInput",
+          "callee": "GetOutputs",
+          "lineNumber": 69
+        },
+        {
+          "caller": "ConnectOutputToInput",
+          "callee": "FindChild",
+          "lineNumber": 70
+        },
+        {
+          "caller": "ConnectOutputToInput",
+          "callee": "GetInputs",
+          "lineNumber": 71
+        },
+        {
+          "caller": "ConnectOutputToInput",
+          "callee": "FindChild",
+          "lineNumber": 72
+        },
+        {
+          "caller": "ConnectOutputToInput",
+          "callee": "IsValid",
+          "lineNumber": 73
+        },
+        {
+          "caller": "ConnectOutputToInput",
+          "callee": "IsValid",
+          "lineNumber": 73
+        },
+        {
+          "caller": "ConnectOutputToInput",
+          "callee": "Connect",
+          "lineNumber": 75
+        },
+        {
+          "caller": "GetPortValue",
+          "callee": "GetInputs",
+          "lineNumber": 83
+        },
+        {
+          "caller": "GetPortValue",
+          "callee": "FindChild",
+          "lineNumber": 84
+        },
+        {
+          "caller": "GetPortValue",
+          "callee": "IsValid",
+          "lineNumber": 85
+        },
+        {
+          "caller": "GetPortValue",
+          "callee": "maxon::Opt<const maxon::Color64&>",
+          "lineNumber": 86
+        },
+        {
+          "caller": "GetPortValue",
+          "callee": "GetPortValue<maxon::Color64>",
+          "lineNumber": 87
+        },
+        {
+          "caller": "SyncTo",
+          "callee": "IsRedShiftMaterial",
+          "lineNumber": 301
+        },
+        {
+          "caller": "SyncTo",
+          "callee": "SetName",
+          "lineNumber": 305
+        },
+        {
+          "caller": "SyncTo",
+          "callee": "static_cast<NodeMaterial*>",
+          "lineNumber": 307
+        },
+        {
+          "caller": "SyncTo",
+          "callee": "HasSpace",
+          "lineNumber": 308
+        },
+        {
+          "caller": "SyncTo",
+          "callee": "GetGraph",
+          "lineNumber": 310
+        },
+        {
+          "caller": "SyncTo",
+          "callee": "FindStandardMaterialNode",
+          "lineNumber": 312
+        },
+        {
+          "caller": "SyncTo",
+          "callee": "IsValid",
+          "lineNumber": 313
+        },
+        {
+          "caller": "SyncTo",
+          "callee": "BeginTransaction",
+          "lineNumber": 315
+        },
+        {
+          "caller": "SyncTo",
+          "callee": "SetPortValue",
+          "lineNumber": 318
+        },
+        {
+          "caller": "SyncTo",
+          "callee": "static_cast<Float64>",
+          "lineNumber": 320
+        },
+        {
+          "caller": "SyncTo",
+          "callee": "SetPortValue",
+          "lineNumber": 322
+        },
+        {
+          "caller": "SyncTo",
+          "callee": "Commit",
+          "lineNumber": 324
+        },
+        {
+          "caller": "ReadFrom",
+          "callee": "IsRedShiftMaterial",
+          "lineNumber": 335
+        },
+        {
+          "caller": "ReadFrom",
+          "callee": "GetName",
+          "lineNumber": 339
+        },
+        {
+          "caller": "ReadFrom",
+          "callee": "static_cast<NodeMaterial*>",
+          "lineNumber": 341
+        },
+        {
+          "caller": "ReadFrom",
+          "callee": "const_cast<BaseMaterial*>",
+          "lineNumber": 341
+        },
+        {
+          "caller": "ReadFrom",
+          "callee": "HasSpace",
+          "lineNumber": 342
+        },
+        {
+          "caller": "ReadFrom",
+          "callee": "GetGraph",
+          "lineNumber": 344
+        },
+        {
+          "caller": "ReadFrom",
+          "callee": "FindStandardMaterialNode",
+          "lineNumber": 346
+        },
+        {
+          "caller": "ReadFrom",
+          "callee": "IsValid",
+          "lineNumber": 347
+        },
+        {
+          "caller": "ReadFrom",
+          "callee": "GetPortValue",
+          "lineNumber": 349
+        },
+        {
+          "caller": "ReadFrom",
+          "callee": "static_cast<Float>",
+          "lineNumber": 352
+        },
+        {
+          "caller": "ReadFrom",
+          "callee": "static_cast<Float>",
+          "lineNumber": 353
+        },
+        {
+          "caller": "ReadFrom",
+          "callee": "static_cast<Float>",
+          "lineNumber": 354
+        },
+        {
+          "caller": "ReadFrom",
+          "callee": "GetPortValue",
+          "lineNumber": 357
+        },
+        {
+          "caller": "ReadFrom",
+          "callee": "static_cast<Float>",
+          "lineNumber": 359
+        }
+      ],
+      "metrics": {
+        "importCount": 1,
+        "exportCount": 2,
+        "functionCount": 2,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "source/module/tools/material/mmd_redshift_material.h",
+      "language": "c",
+      "fileCategory": "code",
+      "totalLines": 14,
+      "nonEmptyLines": 12,
+      "classes": [
+        {
+          "name": "MMDRedShiftMaterialAdapter",
+          "startLine": 6,
+          "endLine": 14,
+          "methods": [
+            "SyncTo",
+            "ReadFrom"
+          ],
+          "properties": [
+            "CreateFromPMX",
+            "CreateFromData"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "SyncTo",
+          "line": 12,
+          "isDefault": false
+        },
+        {
+          "name": "ReadFrom",
+          "line": 13,
+          "isDefault": false
+        },
+        {
+          "name": "MMDRedShiftMaterialAdapter",
+          "line": 6,
+          "isDefault": false
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 3,
+        "functionCount": 0,
+        "classCount": 1
+      }
+    },
+    {
+      "path": "source/module/tools/material/mmd_standard_material.cpp",
+      "language": "cpp",
+      "fileCategory": "code",
+      "totalLines": 414,
+      "nonEmptyLines": 376,
+      "functions": [
+        {
+          "name": "IsIdentityFactor",
+          "startLine": 14,
+          "endLine": 17,
+          "params": [
+            "factor",
+            "factor_alpha"
+          ]
+        },
+        {
+          "name": "ComponentMultiply",
+          "startLine": 19,
+          "endLine": 22,
+          "params": [
+            "lhs",
+            "rhs"
+          ]
+        },
+        {
+          "name": "ResolveToonTexturePath",
+          "startLine": 24,
+          "endLine": 41,
+          "params": [
+            "material",
+            "texture_paths"
+          ]
+        },
+        {
+          "name": "SetChannelTexture",
+          "startLine": 43,
+          "endLine": 54,
+          "params": [
+            "material",
+            "channel_id",
+            "texture_path"
+          ]
+        },
+        {
+          "name": "SetChannelTextureIfUnwrapped",
+          "startLine": 66,
+          "endLine": 73,
+          "params": [
+            "material",
+            "doc",
+            "channel_id",
+            "shader_param_id",
+            "texture_path"
+          ]
+        },
+        {
+          "name": "SetTextureMorphShaderFactor",
+          "startLine": 75,
+          "endLine": 81,
+          "params": [
+            "shader",
+            "factor",
+            "factor_alpha"
+          ]
+        },
+        {
+          "name": "SyncTextureMorphChannel",
+          "startLine": 83,
+          "endLine": 145,
+          "params": [
+            "material",
+            "doc",
+            "channel_id",
+            "shader_param_id",
+            "factor",
+            "factor_alpha"
+          ]
+        },
+        {
+          "name": "SyncTo",
+          "startLine": 288,
+          "endLine": 334,
+          "params": [
+            "data",
+            "material"
+          ]
+        },
+        {
+          "name": "ReadFrom",
+          "startLine": 336,
+          "endLine": 395,
+          "params": [
+            "material",
+            "data"
+          ]
+        },
+        {
+          "name": "SyncRuntimeState",
+          "startLine": 397,
+          "endLine": 414,
+          "params": [
+            "state",
+            "material"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "IsIdentityFactor",
+          "line": 14,
+          "isDefault": false
+        },
+        {
+          "name": "ComponentMultiply",
+          "line": 19,
+          "isDefault": false
+        },
+        {
+          "name": "ResolveToonTexturePath",
+          "line": 24,
+          "isDefault": false
+        },
+        {
+          "name": "SetChannelTexture",
+          "line": 43,
+          "isDefault": false
+        },
+        {
+          "name": "SetChannelTextureIfUnwrapped",
+          "line": 66,
+          "isDefault": false
+        },
+        {
+          "name": "SetTextureMorphShaderFactor",
+          "line": 75,
+          "isDefault": false
+        },
+        {
+          "name": "SyncTextureMorphChannel",
+          "line": 83,
+          "isDefault": false
+        },
+        {
+          "name": "SyncTo",
+          "line": 288,
+          "isDefault": false
+        },
+        {
+          "name": "ReadFrom",
+          "line": 336,
+          "isDefault": false
+        },
+        {
+          "name": "SyncRuntimeState",
+          "line": 397,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "ComponentMultiply",
+          "callee": "Vector",
+          "lineNumber": 21
+        },
+        {
+          "caller": "ResolveToonTexturePath",
+          "callee": "GetCount",
+          "lineNumber": 33
+        },
+        {
+          "caller": "ResolveToonTexturePath",
+          "callee": "GetString",
+          "lineNumber": 33
+        },
+        {
+          "caller": "ResolveToonTexturePath",
+          "callee": "String",
+          "lineNumber": 33
+        },
+        {
+          "caller": "ResolveToonTexturePath",
+          "callee": "std::snprintf",
+          "lineNumber": 39
+        },
+        {
+          "caller": "ResolveToonTexturePath",
+          "callee": "static_cast<int>",
+          "lineNumber": 39
+        },
+        {
+          "caller": "ResolveToonTexturePath",
+          "callee": "GetString",
+          "lineNumber": 40
+        },
+        {
+          "caller": "ResolveToonTexturePath",
+          "callee": "GeGetPluginResourcePath",
+          "lineNumber": 40
+        },
+        {
+          "caller": "ResolveToonTexturePath",
+          "callee": "Filename",
+          "lineNumber": 40
+        },
+        {
+          "caller": "ResolveToonTexturePath",
+          "callee": "Filename",
+          "lineNumber": 40
+        },
+        {
+          "caller": "SetChannelTexture",
+          "callee": "IsEmpty",
+          "lineNumber": 45
+        },
+        {
+          "caller": "SetChannelTexture",
+          "callee": "SetChannelState",
+          "lineNumber": 47
+        },
+        {
+          "caller": "SetChannelTexture",
+          "callee": "GetChannel",
+          "lineNumber": 48
+        },
+        {
+          "caller": "SetChannelTexture",
+          "callee": "GetData",
+          "lineNumber": 50
+        },
+        {
+          "caller": "SetChannelTexture",
+          "callee": "SetString",
+          "lineNumber": 51
+        },
+        {
+          "caller": "SetChannelTexture",
+          "callee": "SetData",
+          "lineNumber": 52
+        },
+        {
+          "caller": "SetChannelTextureIfUnwrapped",
+          "callee": "GetMaterialShader",
+          "lineNumber": 69
+        },
+        {
+          "caller": "SetChannelTextureIfUnwrapped",
+          "callee": "IsInstanceOf",
+          "lineNumber": 70
+        },
+        {
+          "caller": "SetChannelTextureIfUnwrapped",
+          "callee": "SetChannelTexture",
+          "lineNumber": 72
+        },
+        {
+          "caller": "SetTextureMorphShaderFactor",
+          "callee": "SetParameter",
+          "lineNumber": 79
+        },
+        {
+          "caller": "SetTextureMorphShaderFactor",
+          "callee": "ConstDescID",
+          "lineNumber": 79
+        },
+        {
+          "caller": "SetTextureMorphShaderFactor",
+          "callee": "DescLevel",
+          "lineNumber": 79
+        },
+        {
+          "caller": "SetTextureMorphShaderFactor",
+          "callee": "SetParameter",
+          "lineNumber": 80
+        },
+        {
+          "caller": "SetTextureMorphShaderFactor",
+          "callee": "ConstDescID",
+          "lineNumber": 80
+        },
+        {
+          "caller": "SetTextureMorphShaderFactor",
+          "callee": "DescLevel",
+          "lineNumber": 80
+        },
+        {
+          "caller": "SyncTextureMorphChannel",
+          "callee": "GetChannel",
+          "lineNumber": 88
+        },
+        {
+          "caller": "SyncTextureMorphChannel",
+          "callee": "GetMaterialShader",
+          "lineNumber": 92
+        },
+        {
+          "caller": "SyncTextureMorphChannel",
+          "callee": "IsInstanceOf",
+          "lineNumber": 93
+        },
+        {
+          "caller": "SyncTextureMorphChannel",
+          "callee": "SetTextureMorphShaderFactor",
+          "lineNumber": 95
+        },
+        {
+          "caller": "SyncTextureMorphChannel",
+          "callee": "IsInstanceOf",
+          "lineNumber": 101
+        },
+        {
+          "caller": "SyncTextureMorphChannel",
+          "callee": "IsIdentityFactor",
+          "lineNumber": 104
+        },
+        {
+          "caller": "SyncTextureMorphChannel",
+          "callee": "GetData",
+          "lineNumber": 107
+        },
+        {
+          "caller": "SyncTextureMorphChannel",
+          "callee": "GetString",
+          "lineNumber": 108
+        },
+        {
+          "caller": "SyncTextureMorphChannel",
+          "callee": "IsEmpty",
+          "lineNumber": 114
+        },
+        {
+          "caller": "SyncTextureMorphChannel",
+          "callee": "BaseShader::Alloc",
+          "lineNumber": 116
+        },
+        {
+          "caller": "SyncTextureMorphChannel",
+          "callee": "SetParameter",
+          "lineNumber": 119
+        },
+        {
+          "caller": "SyncTextureMorphChannel",
+          "callee": "ConstDescID",
+          "lineNumber": 119
+        },
+        {
+          "caller": "SyncTextureMorphChannel",
+          "callee": "DescLevel",
+          "lineNumber": 119
+        },
+        {
+          "caller": "SyncTextureMorphChannel",
+          "callee": "Filename",
+          "lineNumber": 119
+        },
+        {
+          "caller": "SyncTextureMorphChannel",
+          "callee": "BaseShader::Alloc",
+          "lineNumber": 123
+        },
+        {
+          "caller": "SyncTextureMorphChannel",
+          "callee": "BaseShader::Free",
+          "lineNumber": 127
+        },
+        {
+          "caller": "SyncTextureMorphChannel",
+          "callee": "SetTextureMorphShaderFactor",
+          "lineNumber": 130
+        },
+        {
+          "caller": "SyncTextureMorphChannel",
+          "callee": "Remove",
+          "lineNumber": 133
+        },
+        {
+          "caller": "SyncTextureMorphChannel",
+          "callee": "InsertShader",
+          "lineNumber": 135
+        },
+        {
+          "caller": "SyncTextureMorphChannel",
+          "callee": "InsertUnder",
+          "lineNumber": 136
+        },
+        {
+          "caller": "SyncTextureMorphChannel",
+          "callee": "SetParameter",
+          "lineNumber": 137
+        },
+        {
+          "caller": "SyncTextureMorphChannel",
+          "callee": "CreateDescID",
+          "lineNumber": 137
+        },
+        {
+          "caller": "SyncTextureMorphChannel",
+          "callee": "DescLevel",
+          "lineNumber": 137
+        },
+        {
+          "caller": "SyncTextureMorphChannel",
+          "callee": "SetChannelState",
+          "lineNumber": 138
+        },
+        {
+          "caller": "SyncTextureMorphChannel",
+          "callee": "IsPopulated",
+          "lineNumber": 140
+        },
+        {
+          "caller": "SyncTextureMorphChannel",
+          "callee": "SetString",
+          "lineNumber": 142
+        },
+        {
+          "caller": "SyncTextureMorphChannel",
+          "callee": "SetData",
+          "lineNumber": 143
+        },
+        {
+          "caller": "SyncTo",
+          "callee": "IsInstanceOf",
+          "lineNumber": 290
+        },
+        {
+          "caller": "SyncTo",
+          "callee": "static_cast<Material*>",
+          "lineNumber": 292
+        },
+        {
+          "caller": "SyncTo",
+          "callee": "SetName",
+          "lineNumber": 293
+        },
+        {
+          "caller": "SyncTo",
+          "callee": "GetDocument",
+          "lineNumber": 294
+        },
+        {
+          "caller": "SyncTo",
+          "callee": "GetChannel",
+          "lineNumber": 295
+        },
+        {
+          "caller": "SyncTo",
+          "callee": "GetData",
+          "lineNumber": 298
+        },
+        {
+          "caller": "SyncTo",
+          "callee": "IsEmpty",
+          "lineNumber": 299
+        },
+        {
+          "caller": "SyncTo",
+          "callee": "GetString",
+          "lineNumber": 299
+        },
+        {
+          "caller": "SyncTo",
+          "callee": "GetAtomParameter",
+          "lineNumber": 302
+        },
+        {
+          "caller": "SyncTo",
+          "callee": "ConstDescID",
+          "lineNumber": 302
+        },
+        {
+          "caller": "SyncTo",
+          "callee": "DescLevel",
+          "lineNumber": 302
+        },
+        {
+          "caller": "SyncTo",
+          "callee": "static_cast<BaseShader*>",
+          "lineNumber": 304
+        },
+        {
+          "caller": "SyncTo",
+          "callee": "GetLink",
+          "lineNumber": 304
+        },
+        {
+          "caller": "SyncTo",
+          "callee": "IsInstanceOf",
+          "lineNumber": 305
+        },
+        {
+          "caller": "SyncTo",
+          "callee": "SetParameter",
+          "lineNumber": 306
+        },
+        {
+          "caller": "SyncTo",
+          "callee": "ConstDescID",
+          "lineNumber": 306
+        },
+        {
+          "caller": "SyncTo",
+          "callee": "DescLevel",
+          "lineNumber": 306
+        },
+        {
+          "caller": "SyncTo",
+          "callee": "GetChannel",
+          "lineNumber": 310
+        },
+        {
+          "caller": "SyncTo",
+          "callee": "GetData",
+          "lineNumber": 313
+        },
+        {
+          "caller": "SyncTo",
+          "callee": "IsEmpty",
+          "lineNumber": 314
+        },
+        {
+          "caller": "SyncTo",
+          "callee": "GetString",
+          "lineNumber": 314
+        },
+        {
+          "caller": "SyncTo",
+          "callee": "GetAtomParameter",
+          "lineNumber": 317
+        },
+        {
+          "caller": "SyncTo",
+          "callee": "ConstDescID",
+          "lineNumber": 317
+        },
+        {
+          "caller": "SyncTo",
+          "callee": "DescLevel",
+          "lineNumber": 317
+        },
+        {
+          "caller": "SyncTo",
+          "callee": "static_cast<BaseShader*>",
+          "lineNumber": 319
+        },
+        {
+          "caller": "SyncTo",
+          "callee": "GetLink",
+          "lineNumber": 319
+        },
+        {
+          "caller": "SyncTo",
+          "callee": "IsInstanceOf",
+          "lineNumber": 320
+        },
+        {
+          "caller": "SyncTo",
+          "callee": "SetParameter",
+          "lineNumber": 321
+        },
+        {
+          "caller": "SyncTo",
+          "callee": "ConstDescID",
+          "lineNumber": 321
+        },
+        {
+          "caller": "SyncTo",
+          "callee": "DescLevel",
+          "lineNumber": 321
+        },
+        {
+          "caller": "SyncTo",
+          "callee": "SetChannelState",
+          "lineNumber": 325
+        },
+        {
+          "caller": "SyncTo",
+          "callee": "SetParameter",
+          "lineNumber": 326
+        },
+        {
+          "caller": "SyncTo",
+          "callee": "ConstDescID",
+          "lineNumber": 326
+        },
+        {
+          "caller": "SyncTo",
+          "callee": "DescLevel",
+          "lineNumber": 326
+        },
+        {
+          "caller": "SyncTo",
+          "callee": "maxon::Clamp01",
+          "lineNumber": 327
+        },
+        {
+          "caller": "SyncTo",
+          "callee": "SetParameter",
+          "lineNumber": 328
+        },
+        {
+          "caller": "SyncTo",
+          "callee": "ConstDescID",
+          "lineNumber": 328
+        },
+        {
+          "caller": "SyncTo",
+          "callee": "DescLevel",
+          "lineNumber": 328
+        },
+        {
+          "caller": "SyncTo",
+          "callee": "SetChannelState",
+          "lineNumber": 330
+        },
+        {
+          "caller": "SyncTo",
+          "callee": "SetParameter",
+          "lineNumber": 331
+        },
+        {
+          "caller": "SyncTo",
+          "callee": "ConstDescID",
+          "lineNumber": 331
+        },
+        {
+          "caller": "SyncTo",
+          "callee": "DescLevel",
+          "lineNumber": 331
+        },
+        {
+          "caller": "SyncTo",
+          "callee": "SetChannelTextureIfUnwrapped",
+          "lineNumber": 332
+        },
+        {
+          "caller": "SyncTo",
+          "callee": "SetChannelTextureIfUnwrapped",
+          "lineNumber": 333
+        },
+        {
+          "caller": "ReadFrom",
+          "callee": "IsInstanceOf",
+          "lineNumber": 338
+        },
+        {
+          "caller": "ReadFrom",
+          "callee": "const_cast<Material*>",
+          "lineNumber": 340
+        },
+        {
+          "caller": "ReadFrom",
+          "callee": "static_cast<const Material*>",
+          "lineNumber": 340
+        },
+        {
+          "caller": "ReadFrom",
+          "callee": "GetName",
+          "lineNumber": 341
+        },
+        {
+          "caller": "ReadFrom",
+          "callee": "GetDocument",
+          "lineNumber": 342
+        },
+        {
+          "caller": "ReadFrom",
+          "callee": "GetChannel",
+          "lineNumber": 343
+        },
+        {
+          "caller": "ReadFrom",
+          "callee": "GetData",
+          "lineNumber": 346
+        },
+        {
+          "caller": "ReadFrom",
+          "callee": "GetString",
+          "lineNumber": 347
+        },
+        {
+          "caller": "ReadFrom",
+          "callee": "IsPopulated",
+          "lineNumber": 348
+        },
+        {
+          "caller": "ReadFrom",
+          "callee": "GetAtomParameter",
+          "lineNumber": 355
+        },
+        {
+          "caller": "ReadFrom",
+          "callee": "ConstDescID",
+          "lineNumber": 355
+        },
+        {
+          "caller": "ReadFrom",
+          "callee": "DescLevel",
+          "lineNumber": 355
+        },
+        {
+          "caller": "ReadFrom",
+          "callee": "static_cast<BaseShader*>",
+          "lineNumber": 357
+        },
+        {
+          "caller": "ReadFrom",
+          "callee": "GetLink",
+          "lineNumber": 357
+        },
+        {
+          "caller": "ReadFrom",
+          "callee": "IsInstanceOf",
+          "lineNumber": 358
+        },
+        {
+          "caller": "ReadFrom",
+          "callee": "GetAtomParameter",
+          "lineNumber": 361
+        },
+        {
+          "caller": "ReadFrom",
+          "callee": "ConstDescID",
+          "lineNumber": 361
+        },
+        {
+          "caller": "ReadFrom",
+          "callee": "DescLevel",
+          "lineNumber": 361
+        },
+        {
+          "caller": "ReadFrom",
+          "callee": "GetVector",
+          "lineNumber": 362
+        },
+        {
+          "caller": "ReadFrom",
+          "callee": "GetChannel",
+          "lineNumber": 367
+        },
+        {
+          "caller": "ReadFrom",
+          "callee": "GetData",
+          "lineNumber": 370
+        },
+        {
+          "caller": "ReadFrom",
+          "callee": "IsEmpty",
+          "lineNumber": 371
+        },
+        {
+          "caller": "ReadFrom",
+          "callee": "GetString",
+          "lineNumber": 371
+        },
+        {
+          "caller": "ReadFrom",
+          "callee": "GetAtomParameter",
+          "lineNumber": 374
+        },
+        {
+          "caller": "ReadFrom",
+          "callee": "ConstDescID",
+          "lineNumber": 374
+        },
+        {
+          "caller": "ReadFrom",
+          "callee": "DescLevel",
+          "lineNumber": 374
+        },
+        {
+          "caller": "ReadFrom",
+          "callee": "static_cast<BaseShader*>",
+          "lineNumber": 376
+        },
+        {
+          "caller": "ReadFrom",
+          "callee": "GetLink",
+          "lineNumber": 376
+        },
+        {
+          "caller": "ReadFrom",
+          "callee": "IsInstanceOf",
+          "lineNumber": 377
+        },
+        {
+          "caller": "ReadFrom",
+          "callee": "GetAtomParameter",
+          "lineNumber": 380
+        },
+        {
+          "caller": "ReadFrom",
+          "callee": "ConstDescID",
+          "lineNumber": 380
+        },
+        {
+          "caller": "ReadFrom",
+          "callee": "DescLevel",
+          "lineNumber": 380
+        },
+        {
+          "caller": "ReadFrom",
+          "callee": "GetFloat",
+          "lineNumber": 381
+        },
+        {
+          "caller": "ReadFrom",
+          "callee": "GetAtomParameter",
+          "lineNumber": 387
+        },
+        {
+          "caller": "ReadFrom",
+          "callee": "ConstDescID",
+          "lineNumber": 387
+        },
+        {
+          "caller": "ReadFrom",
+          "callee": "DescLevel",
+          "lineNumber": 387
+        },
+        {
+          "caller": "ReadFrom",
+          "callee": "GetVector",
+          "lineNumber": 388
+        },
+        {
+          "caller": "ReadFrom",
+          "callee": "GetAtomParameter",
+          "lineNumber": 390
+        },
+        {
+          "caller": "ReadFrom",
+          "callee": "ConstDescID",
+          "lineNumber": 390
+        },
+        {
+          "caller": "ReadFrom",
+          "callee": "DescLevel",
+          "lineNumber": 390
+        },
+        {
+          "caller": "ReadFrom",
+          "callee": "GetFloat",
+          "lineNumber": 391
+        },
+        {
+          "caller": "ReadFrom",
+          "callee": "GetAtomParameter",
+          "lineNumber": 393
+        },
+        {
+          "caller": "ReadFrom",
+          "callee": "ConstDescID",
+          "lineNumber": 393
+        },
+        {
+          "caller": "ReadFrom",
+          "callee": "DescLevel",
+          "lineNumber": 393
+        },
+        {
+          "caller": "ReadFrom",
+          "callee": "GetVector",
+          "lineNumber": 394
+        },
+        {
+          "caller": "SyncRuntimeState",
+          "callee": "IsInstanceOf",
+          "lineNumber": 399
+        },
+        {
+          "caller": "SyncRuntimeState",
+          "callee": "static_cast<Material*>",
+          "lineNumber": 401
+        },
+        {
+          "caller": "SyncRuntimeState",
+          "callee": "GetDocument",
+          "lineNumber": 402
+        },
+        {
+          "caller": "SyncRuntimeState",
+          "callee": "SyncTextureMorphChannel",
+          "lineNumber": 406
+        },
+        {
+          "caller": "SyncRuntimeState",
+          "callee": "ComponentMultiply",
+          "lineNumber": 407
+        },
+        {
+          "caller": "SyncRuntimeState",
+          "callee": "SyncTextureMorphChannel",
+          "lineNumber": 408
+        },
+        {
+          "caller": "SyncRuntimeState",
+          "callee": "Vector",
+          "lineNumber": 409
+        },
+        {
+          "caller": "SyncRuntimeState",
+          "callee": "SyncTextureMorphChannel",
+          "lineNumber": 410
+        },
+        {
+          "caller": "SyncRuntimeState",
+          "callee": "SyncTextureMorphChannel",
+          "lineNumber": 412
+        }
+      ],
+      "metrics": {
+        "importCount": 3,
+        "exportCount": 10,
+        "functionCount": 10,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "source/module/tools/material/mmd_standard_material.h",
+      "language": "c",
+      "fileCategory": "code",
+      "totalLines": 16,
+      "nonEmptyLines": 13,
+      "classes": [
+        {
+          "name": "MMDStandardMaterialAdapter",
+          "startLine": 6,
+          "endLine": 15,
+          "methods": [
+            "SyncTo",
+            "ReadFrom",
+            "SyncRuntimeState"
+          ],
+          "properties": [
+            "CreateFromPMX",
+            "CreateFromData"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "SyncTo",
+          "line": 12,
+          "isDefault": false
+        },
+        {
+          "name": "ReadFrom",
+          "line": 13,
+          "isDefault": false
+        },
+        {
+          "name": "SyncRuntimeState",
+          "line": 14,
+          "isDefault": false
+        },
+        {
+          "name": "MMDStandardMaterialAdapter",
+          "line": 6,
+          "isDefault": false
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 4,
+        "functionCount": 0,
+        "classCount": 1
+      }
+    }
+  ]
+}

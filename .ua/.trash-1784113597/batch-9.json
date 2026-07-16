@@ -1,0 +1,230 @@
+{
+  "nodes": [
+    {
+      "id": "document:AGENTS.md",
+      "type": "document",
+      "name": "AGENTS.md",
+      "filePath": "AGENTS.md",
+      "summary": "Repository-wide agent guidance covering maintained source layout, build validation, runtime resources, LLDB-DAP debugging, and diagnostic logging. / 仓库级智能体指南，涵盖维护中的源码布局、构建验证、运行时资源、LLDB-DAP 调试与诊断日志。",
+      "tags": [
+        "documentation",
+        "development",
+        "debugging",
+        "build-system"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "document:CMakeLists.txt",
+      "type": "document",
+      "name": "CMakeLists.txt",
+      "filePath": "CMakeLists.txt",
+      "summary": "Root CMake orchestration for dependency builds, multi-SDK configuration, cleanup, tests, runtime synchronization, and Windows packaging. / 根级 CMake 编排，负责依赖构建、多 SDK 配置、清理、测试、运行时同步与 Windows 打包。",
+      "tags": [
+        "build-system",
+        "cmake",
+        "multi-sdk",
+        "packaging"
+      ],
+      "complexity": "complex",
+      "languageNotes": "The root project acts as a workflow coordinator; each sdk_* project remains the actual plugin compilation context. / 根工程充当工作流协调器，各 sdk_* 工程仍是插件实际编译上下文。"
+    },
+    {
+      "id": "config:CMakePresets.json",
+      "type": "config",
+      "name": "CMakePresets.json",
+      "filePath": "CMakePresets.json",
+      "summary": "Defines root configure and build presets for development, dependency smoke tests, all-SDK workflows, cleanup, and installer packaging. / 定义根级配置与构建预设，覆盖开发、依赖冒烟测试、全 SDK 工作流、清理和安装包打包。",
+      "tags": [
+        "configuration",
+        "cmake",
+        "build-system",
+        "multi-sdk"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "config:CMakeUserPresets.SAMPLE.json",
+      "type": "config",
+      "name": "CMakeUserPresets.SAMPLE.json",
+      "filePath": "CMakeUserPresets.SAMPLE.json",
+      "summary": "Provides a user-local preset template for selecting a Cinema 4D SDK root without committing workstation-specific paths. / 提供用户本地预设模板，用于选择 Cinema 4D SDK 根目录且不提交工作站特定路径。",
+      "tags": [
+        "configuration",
+        "cmake",
+        "template"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:DEVELOPMENT.md",
+      "type": "document",
+      "name": "DEVELOPMENT.md",
+      "filePath": "DEVELOPMENT.md",
+      "summary": "English development guide explaining prerequisites, dependency and SDK builds, repository structure, include conventions, and generated outputs. / 英文开发指南，说明前置条件、依赖与 SDK 构建、仓库结构、包含约定及生成输出。",
+      "tags": [
+        "documentation",
+        "development",
+        "build-system",
+        "architecture"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "document:DEVELOPMENT_zh.md",
+      "type": "document",
+      "name": "DEVELOPMENT_zh.md",
+      "filePath": "DEVELOPMENT_zh.md",
+      "summary": "Chinese development guide with expanded coverage of multi-SDK builds, dependency topology, source discovery, and configuration files. / 中文开发指南，扩展说明多 SDK 构建、依赖拓扑、源码发现与配置文件。",
+      "tags": [
+        "documentation",
+        "development",
+        "build-system",
+        "architecture"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "document:LICENSE.md",
+      "type": "document",
+      "name": "LICENSE.md",
+      "filePath": "LICENSE.md",
+      "summary": "GNU General Public License version 3 text governing redistribution, modification, warranty, and source-disclosure obligations. / GNU 通用公共许可证第 3 版全文，规定再分发、修改、担保与源码披露义务。",
+      "tags": [
+        "documentation",
+        "license",
+        "gpl-3"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "document:README.md",
+      "type": "document",
+      "name": "README.md",
+      "filePath": "README.md",
+      "summary": "English project overview documenting installation, user-facing PMX and VMD features, version history, and authorship. / 英文项目概览，记录安装方式、面向用户的 PMX 与 VMD 功能、版本历史和作者信息。",
+      "tags": [
+        "documentation",
+        "entry-point",
+        "usage",
+        "release-notes"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "document:README_zh.md",
+      "type": "document",
+      "name": "README_zh.md",
+      "filePath": "README_zh.md",
+      "summary": "Chinese project overview documenting releases, multi-SDK developer setup, interface usage, feature history, and authorship. / 中文项目概览，记录发行版、多 SDK 开发环境、界面使用、功能历史与作者信息。",
+      "tags": [
+        "documentation",
+        "entry-point",
+        "usage",
+        "release-notes"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:configure_sdk.bat",
+      "type": "file",
+      "name": "configure_sdk.bat",
+      "filePath": "configure_sdk.bat",
+      "summary": "Validates an SDK directory, selects a preset, and runs CMake configuration from that SDK tree while preserving the exit code. / 校验 SDK 目录、选择预设，并在该 SDK 树中运行 CMake 配置，同时保留退出码。",
+      "tags": [
+        "build-system",
+        "cmake",
+        "automation",
+        "validation"
+      ],
+      "complexity": "simple",
+      "languageNotes": "Uses delayed-free batch parameter expansion conservatively and returns CMake's original ERRORLEVEL. / 保守使用批处理参数展开，并原样返回 CMake 的 ERRORLEVEL。"
+    }
+  ],
+  "edges": [
+    {
+      "source": "document:AGENTS.md",
+      "target": "document:DEVELOPMENT.md",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:AGENTS.md",
+      "target": "document:CMakeLists.txt",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:CMakeLists.txt",
+      "target": "config:CMakePresets.json",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "config:CMakePresets.json",
+      "target": "document:CMakeLists.txt",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:CMakeUserPresets.SAMPLE.json",
+      "target": "config:CMakePresets.json",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "document:DEVELOPMENT.md",
+      "target": "document:CMakeLists.txt",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:DEVELOPMENT_zh.md",
+      "target": "document:CMakeLists.txt",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:LICENSE.md",
+      "target": "document:README.md",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:README.md",
+      "target": "document:DEVELOPMENT.md",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:README_zh.md",
+      "target": "document:DEVELOPMENT_zh.md",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "file:configure_sdk.bat",
+      "target": "config:CMakePresets.json",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:configure_sdk.bat",
+      "target": "document:CMakeLists.txt",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    }
+  ]
+}

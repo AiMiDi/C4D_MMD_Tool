@@ -1,0 +1,131 @@
+[
+  {
+    "order": 1,
+    "title": "Project Overview / 项目概览",
+    "description": "Start with README.md to understand the plugin's user-facing purpose, installation path, and PMX/VMD feature set. This context establishes what the runtime must accomplish before the tour enters Cinema 4D lifecycle code. / 从 README.md 开始，了解插件面向用户的用途、安装路径以及 PMX/VMD 功能范围。这些背景先明确运行时必须完成的目标，再进入 Cinema 4D 生命周期代码。",
+    "nodeIds": [
+      "document:README.md"
+    ]
+  },
+  {
+    "order": 2,
+    "title": "Plugin Startup / 插件启动",
+    "description": "main.cpp is the code entry point: it participates in the Cinema 4D plugin lifecycle, initializes shared configuration, and reaches the registration API identified by the BFS traversal. register_entity.cpp then exposes the scene manager, loaders, object/tag plugins, and command UI, while the configuration contract keeps startup and dialogs consistent. / main.cpp 是代码入口：它参与 Cinema 4D 插件生命周期、初始化共享配置，并沿 BFS 路径连接到注册 API。随后 register_entity.cpp 注册场景管理器、加载器、对象与标签插件以及命令 UI，而配置协议保证启动流程与对话框行为一致。",
+    "nodeIds": [
+      "file:source/main.cpp",
+      "file:source/register_entity.cpp",
+      "file:source/register_entity.h",
+      "file:source/cmt_tools_config_manager.h"
+    ],
+    "languageLesson": "Cinema 4D plugins expose lifecycle callbacks and register each plugin type through stable numeric identities; keeping registration centralized makes startup ordering auditable. / Cinema 4D 插件通过生命周期回调与稳定数值 ID 注册各类插件；集中注册可以让启动顺序更容易审计。"
+  },
+  {
+    "order": 3,
+    "title": "Import Orchestration / 导入编排",
+    "description": "Building on startup, the tool dialog and VMD loader collect user intent and hand commands to the high-level tools manager. CMTSceneManager forms the scene boundary that coordinates PMX models, VMD motion/cameras, VPD poses, and structured operation reports instead of scattering file workflows across plugins. / 在启动层之上，工具对话框与 VMD 加载器收集用户意图，并把命令交给高层工具管理器。CMTSceneManager 构成场景边界，集中协调 PMX 模型、VMD 动作与相机、VPD 姿势及结构化操作报告，避免文件流程散落在各插件中。",
+    "nodeIds": [
+      "file:source/module/ui/cmt_tools_dialog.cpp",
+      "file:source/module/tools/loader/vmd_loader.cpp",
+      "file:source/cmt_tools_manager.cpp",
+      "file:source/CMTSceneManager.cpp",
+      "file:source/CMTSceneManager.h"
+    ]
+  },
+  {
+    "order": 4,
+    "title": "Model and Morph Runtime / 模型与变形运行时",
+    "description": "mmd_model_manager.cpp has the graph's highest fan-out, while its header has the highest fan-in, marking this pair as the central runtime hub. The mesh manager translates geometry and BDEF/SDEF weights, and the morph layer persists and evaluates group, flip, mesh, UV, bone, material, and impulse morph families around that hub. / mmd_model_manager.cpp 在图中具有最高扇出，其头文件具有最高扇入，因此这对文件是核心运行时枢纽。网格管理器转换几何与 BDEF/SDEF 权重，变形层则围绕该枢纽持久化并求值组、翻转、网格、UV、骨骼、材质与冲量等变形类型。",
+    "nodeIds": [
+      "file:source/module/tools/object/mmd_model_manager.cpp",
+      "file:source/module/tools/object/mmd_model_manager.h",
+      "file:source/module/tools/object/mmd_mesh_manager.cpp",
+      "file:source/module/tools/object/mmd_mesh_manager.h",
+      "file:source/module/tools/object/mmd_morph.cpp"
+    ]
+  },
+  {
+    "order": 5,
+    "title": "Bone Animation and IK / 骨骼动画与 IK",
+    "description": "The bone tag is the second broadest file by fan-out, implementing bind-state persistence, append transforms, interpolation, layered IK, and the handoff to physics. The bone manager orders the hierarchy and execution layers, while the control utility maps animator-facing spline controls back into bone-space deltas. / 骨骼标签按扇出排名第二，负责绑定状态持久化、附加变换、插值、分层 IK 以及向物理阶段的交接。骨骼管理器安排层级与执行分层，控制工具则把动画师操作的样条控制器映射回骨骼空间增量。",
+    "nodeIds": [
+      "file:source/module/tools/tag/mmd_bone.cpp",
+      "file:source/module/tools/tag/mmd_bone.h",
+      "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "file:source/module/tools/object/mmd_bone_manager.h",
+      "file:source/utils/mmd_bone_control_util.cpp"
+    ],
+    "languageLesson": "The runtime treats EDIT and ANIM behavior as explicit state transitions and uses ordered evaluation layers so append transforms, IK, and physics do not overwrite one another unpredictably. / 运行时将 EDIT 与 ANIM 行为视为显式状态切换，并使用有序求值分层，避免附加变换、IK 与物理以不可预测的方式互相覆盖。"
+  },
+  {
+    "order": 6,
+    "title": "Physics Runtime / 物理运行时",
+    "description": "After bone evaluation, rigid-body and joint managers translate PMX definitions into runtime bodies and constraints, including collision settings, index remapping, and edit/runtime transform transitions. Their object and manager split keeps per-element visualization and execution separate from collection-level construction and lifecycle ownership. / 骨骼求值之后，刚体与关节管理器把 PMX 定义转换为运行时刚体和约束，包括碰撞设置、索引重映射以及编辑与运行时变换切换。对象与管理器的拆分让单元素可视化和执行职责，与集合级构建及生命周期所有权保持分离。",
+    "nodeIds": [
+      "file:source/module/tools/object/mmd_rigid.cpp",
+      "file:source/module/tools/object/mmd_rigid_manager.cpp",
+      "file:source/module/tools/object/mmd_rigid_manager.h",
+      "file:source/module/tools/object/mmd_joint_manager.cpp",
+      "file:source/module/tools/object/mmd_joint_manager.h"
+    ]
+  },
+  {
+    "order": 7,
+    "title": "Materials and Renderers / 材质与渲染器",
+    "description": "The renderer-agnostic material model converts PMX data, persists shared state, and dispatches through renderer adapters; its high fan-out reflects that coordinating role. Standard, Redshift, and Octane implementations translate the common model into renderer-specific nodes, while the morph shader applies precomputed texture factors without consulting mutable scene state during rendering. / 与渲染器无关的材质模型转换 PMX 数据、持久化共享状态并分发到渲染器适配器；较高扇出体现了它的协调职责。Standard、Redshift 与 Octane 实现把通用模型转换为渲染器专用节点，而变形 Shader 使用预计算贴图系数，避免渲染期间读取可变场景状态。",
+    "nodeIds": [
+      "file:source/module/tools/material/mmd_material.cpp",
+      "file:source/module/tools/material/mmd_material_morph_shader.cpp",
+      "file:source/module/tools/material/mmd_standard_material.cpp",
+      "file:source/module/tools/material/mmd_redshift_material.cpp",
+      "file:source/module/tools/material/mmd_octane_material.cpp"
+    ]
+  },
+  {
+    "order": 8,
+    "title": "Resources and Localization / 资源与本地化",
+    "description": "Runtime behavior becomes user-facing through the S24+ configuration defaults, Attribute Manager description, English and Simplified Chinese string tables, and MMD palette data. Reading these together shows how one stable parameter vocabulary drives defaults, layout, localization, and visual compatibility without duplicating C++ logic. / 运行时行为通过 S24+ 配置默认值、属性管理器描述、英文与简体中文字符串表以及 MMD 调色板数据呈现给用户。把这些文件放在一起阅读，可以看到同一套稳定参数词汇如何驱动默认值、布局、本地化与视觉兼容，而无需复制 C++ 逻辑。",
+    "nodeIds": [
+      "config:res/S24_up/cmt_config.json",
+      "file:res/S24_up/description/OMMDModelManager.res",
+      "file:res/S24_up/strings_en-US/description/OMMDModelManager.str",
+      "file:res/S24_up/strings_zh-CN/description/OMMDModelManager.str",
+      "document:res/S24_up/mikumikudance_data/color.txt"
+    ],
+    "languageLesson": "Cinema 4D resources separate symbolic parameter IDs, declarative UI descriptions, and locale-specific STRINGTABLE values; IDs must remain stable while labels can evolve independently. / Cinema 4D 资源将符号参数 ID、声明式 UI 描述与特定语言的 STRINGTABLE 文本分离；ID 必须保持稳定，而标签可以独立演进。"
+  },
+  {
+    "order": 9,
+    "title": "Build and SDK Bridge / 构建与 SDK 桥接",
+    "description": "The root CMake workflow and presets coordinate dependencies, tests, packaging, and multi-SDK builds, while shared plugin setup prevents each compatibility tree from becoming a fork. sdk_targets.cmake is a topology hotspot for source discovery and target generation, and the SDK 2026 wrapper demonstrates how a thin project binds the shared source and S24+ resources to one concrete SDK. / 根级 CMake 工作流与预设协调依赖、测试、打包和多 SDK 构建，共享插件设置则避免每个兼容树演变成独立分叉。sdk_targets.cmake 是源码发现与目标生成的拓扑热点，SDK 2026 包装层展示了精简工程如何把共享源码与 S24+ 资源绑定到具体 SDK。",
+    "nodeIds": [
+      "document:CMakeLists.txt",
+      "config:CMakePresets.json",
+      "file:cmake/mmdtool_plugin_common.cmake",
+      "file:cmake/sdk/sdk_targets.cmake",
+      "document:sdk_2026/plugins/mmdtool/project/CMakeLists.txt"
+    ],
+    "languageLesson": "CMake presets name repeatable configure/build profiles, while thin SDK wrappers delegate common behavior to shared functions and variables instead of copying target logic. / CMake 预设为可重复的配置与构建方案命名，精简 SDK 包装层则把通用行为委托给共享函数和变量，而不是复制目标逻辑。"
+  },
+  {
+    "order": 10,
+    "title": "CI and Releases / CI 与发布",
+    "description": "The reusable or manually dispatched build workflow runs 21 Release jobs: eight Windows 2022 x64 builds, eight Intel macOS 26 x86_64 builds, and five Apple Silicon macOS 26 arm64 builds limited to R25 and 2023–2026. Each job checks out Bullet and libMMD, reuses or builds dependencies, configures root CMake presets, and uploads the supported Windows and Intel artifacts. The tag-triggered packaging workflow reuses these builds to assemble the Windows Inno installer and per-SDK macOS archives for GitHub Release. / 可复用或手动触发的构建工作流运行 21 个 Release 作业：8 个 Windows 2022 x64 构建、8 个 Intel macOS 26 x86_64 构建，以及仅覆盖 R25 与 2023–2026 的 5 个 Apple Silicon macOS 26 arm64 构建。每个作业都会检出 Bullet 与 libMMD、复用或构建依赖、配置根级 CMake 预设，并上传受支持的 Windows 与 Intel 产物。由标签触发的打包工作流复用这些构建，组装 Windows Inno 安装包与逐 SDK macOS 压缩包，并发布到 GitHub Release。",
+    "nodeIds": [
+      "pipeline:.github/workflows/build.yml",
+      "pipeline:.github/workflows/package.yml"
+    ],
+    "languageLesson": "GitHub Actions reusable workflows can combine a full compatibility matrix with an architecture-specific subset, while downstream tag jobs consume tested artifacts instead of duplicating compiler logic. / GitHub Actions 可复用工作流可以把完整兼容矩阵与特定架构子集结合起来，下游标签任务则消费已经验证的产物，避免重复编译逻辑。"
+  },
+  {
+    "order": 11,
+    "title": "Developer Deep Dives / 开发者深入指南",
+    "description": "Finish with the development guide and the import, export, runtime, and animation-debug maps, which connect the architectural stops above to concrete ownership boundaries, failure paths, diagnostics, and acceptance checks. These documents are the fastest route from orientation to safe modification because they explain not only where code lives, but how to verify behavior across Cinema 4D modes and SDKs. / 最后阅读开发指南以及导入、导出、运行时与动画调试地图，把前述架构节点连接到具体所有权边界、失败路径、诊断方法与验收检查。这些文档不仅说明代码位置，还解释如何跨 Cinema 4D 模式与 SDK 验证行为，因此是从理解项目走向安全修改的最快路径。",
+    "nodeIds": [
+      "document:DEVELOPMENT.md",
+      "document:docs/dev/import-flow.md",
+      "document:docs/dev/export-flow.md",
+      "document:docs/dev/runtime-flow.md",
+      "document:docs/dev/anim-flow-debug.md"
+    ]
+  }
+]

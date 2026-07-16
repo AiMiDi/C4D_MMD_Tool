@@ -1,0 +1,719 @@
+{
+  "scriptCompleted": true,
+  "filesAnalyzed": 25,
+  "filesSkipped": [],
+  "results": [
+    {
+      "path": "sdk_r20/plugins/project/projectdefinition.txt",
+      "language": "txt",
+      "fileCategory": "docs",
+      "totalLines": 9,
+      "nonEmptyLines": 7,
+      "metrics": {}
+    },
+    {
+      "path": "sdk_r21/cmake/sdk_compat_r21.cmake",
+      "language": "cmake",
+      "fileCategory": "code",
+      "totalLines": 7,
+      "nonEmptyLines": 6,
+      "metrics": {}
+    },
+    {
+      "path": "sdk_r21/CMakeLists.txt",
+      "language": "txt",
+      "fileCategory": "docs",
+      "totalLines": 64,
+      "nonEmptyLines": 51,
+      "metrics": {}
+    },
+    {
+      "path": "sdk_r21/CMakePresets.json",
+      "language": "json",
+      "fileCategory": "config",
+      "totalLines": 39,
+      "nonEmptyLines": 39,
+      "sections": [
+        {
+          "heading": "version",
+          "level": 1,
+          "line": 2
+        },
+        {
+          "heading": "cmakeMinimumRequired",
+          "level": 1,
+          "line": 3
+        },
+        {
+          "heading": "configurePresets",
+          "level": 1,
+          "line": 8
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 3
+      }
+    },
+    {
+      "path": "sdk_r21/plugins/mmdtool/project/CMakeLists.txt",
+      "language": "txt",
+      "fileCategory": "docs",
+      "totalLines": 39,
+      "nonEmptyLines": 33,
+      "metrics": {}
+    },
+    {
+      "path": "sdk_r21/plugins/mmdtool/project/projectdefinition.txt",
+      "language": "txt",
+      "fileCategory": "docs",
+      "totalLines": 18,
+      "nonEmptyLines": 12,
+      "metrics": {}
+    },
+    {
+      "path": "sdk_r21/plugins/project/projectdefinition.txt",
+      "language": "txt",
+      "fileCategory": "docs",
+      "totalLines": 11,
+      "nonEmptyLines": 6,
+      "metrics": {}
+    },
+    {
+      "path": "sdk_r23/cmake/sdk_compat_r23.cmake",
+      "language": "cmake",
+      "fileCategory": "code",
+      "totalLines": 7,
+      "nonEmptyLines": 6,
+      "metrics": {}
+    },
+    {
+      "path": "sdk_r23/CMakeLists.txt",
+      "language": "txt",
+      "fileCategory": "docs",
+      "totalLines": 64,
+      "nonEmptyLines": 51,
+      "metrics": {}
+    },
+    {
+      "path": "sdk_r23/CMakePresets.json",
+      "language": "json",
+      "fileCategory": "config",
+      "totalLines": 39,
+      "nonEmptyLines": 39,
+      "sections": [
+        {
+          "heading": "version",
+          "level": 1,
+          "line": 2
+        },
+        {
+          "heading": "cmakeMinimumRequired",
+          "level": 1,
+          "line": 3
+        },
+        {
+          "heading": "configurePresets",
+          "level": 1,
+          "line": 8
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 3
+      }
+    },
+    {
+      "path": "sdk_r23/plugins/mmdtool/project/CMakeLists.txt",
+      "language": "txt",
+      "fileCategory": "docs",
+      "totalLines": 39,
+      "nonEmptyLines": 33,
+      "metrics": {}
+    },
+    {
+      "path": "sdk_r23/plugins/mmdtool/project/projectdefinition.txt",
+      "language": "txt",
+      "fileCategory": "docs",
+      "totalLines": 18,
+      "nonEmptyLines": 12,
+      "metrics": {}
+    },
+    {
+      "path": "sdk_r23/plugins/project/projectdefinition.txt",
+      "language": "txt",
+      "fileCategory": "docs",
+      "totalLines": 6,
+      "nonEmptyLines": 4,
+      "metrics": {}
+    },
+    {
+      "path": "sdk_r25/cmake/sdk_compat_r25.cmake",
+      "language": "cmake",
+      "fileCategory": "code",
+      "totalLines": 7,
+      "nonEmptyLines": 6,
+      "metrics": {}
+    },
+    {
+      "path": "sdk_r25/CMakeLists.txt",
+      "language": "txt",
+      "fileCategory": "docs",
+      "totalLines": 64,
+      "nonEmptyLines": 51,
+      "metrics": {}
+    },
+    {
+      "path": "sdk_r25/CMakePresets.json",
+      "language": "json",
+      "fileCategory": "config",
+      "totalLines": 39,
+      "nonEmptyLines": 39,
+      "sections": [
+        {
+          "heading": "version",
+          "level": 1,
+          "line": 2
+        },
+        {
+          "heading": "cmakeMinimumRequired",
+          "level": 1,
+          "line": 3
+        },
+        {
+          "heading": "configurePresets",
+          "level": 1,
+          "line": 8
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 3
+      }
+    },
+    {
+      "path": "sdk_r25/plugins/mmdtool/project/CMakeLists.txt",
+      "language": "txt",
+      "fileCategory": "docs",
+      "totalLines": 39,
+      "nonEmptyLines": 33,
+      "metrics": {}
+    },
+    {
+      "path": "sdk_r25/plugins/mmdtool/project/projectdefinition.txt",
+      "language": "txt",
+      "fileCategory": "docs",
+      "totalLines": 18,
+      "nonEmptyLines": 12,
+      "metrics": {}
+    },
+    {
+      "path": "sdk_r25/plugins/project/projectdefinition.txt",
+      "language": "txt",
+      "fileCategory": "docs",
+      "totalLines": 9,
+      "nonEmptyLines": 6,
+      "metrics": {}
+    },
+    {
+      "path": "source/module/core/cmt_debug_log.h",
+      "language": "c",
+      "fileCategory": "code",
+      "totalLines": 12,
+      "nonEmptyLines": 10,
+      "functions": [
+        {
+          "name": "Log",
+          "startLine": 7,
+          "endLine": 11,
+          "params": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "Log",
+          "line": 7,
+          "isDefault": false
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 1,
+        "functionCount": 1,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "source/module/core/cmt_old_sdk_stl_preload.h",
+      "language": "c",
+      "fileCategory": "code",
+      "totalLines": 22,
+      "nonEmptyLines": 21,
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "source/module/ui/vmd_loader_camera_dialog.cpp",
+      "language": "cpp",
+      "fileCategory": "code",
+      "totalLines": 71,
+      "nonEmptyLines": 60,
+      "functions": [
+        {
+          "name": "~VMDLoaderCameraDialog",
+          "startLine": 17,
+          "endLine": 20,
+          "params": []
+        },
+        {
+          "name": "CreateLayout",
+          "startLine": 22,
+          "endLine": 36,
+          "params": []
+        },
+        {
+          "name": "InitValues",
+          "startLine": 38,
+          "endLine": 43,
+          "params": []
+        },
+        {
+          "name": "Command",
+          "startLine": 45,
+          "endLine": 71,
+          "params": [
+            "id",
+            "msg"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "~VMDLoaderCameraDialog",
+          "line": 17,
+          "isDefault": false
+        },
+        {
+          "name": "CreateLayout",
+          "line": 22,
+          "isDefault": false
+        },
+        {
+          "name": "InitValues",
+          "line": 38,
+          "isDefault": false
+        },
+        {
+          "name": "Command",
+          "line": 45,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "~VMDLoaderCameraDialog",
+          "callee": "DeleteObj",
+          "lineNumber": 19
+        },
+        {
+          "caller": "CreateLayout",
+          "callee": "GeDialog::CreateLayout",
+          "lineNumber": 25
+        },
+        {
+          "caller": "CreateLayout",
+          "callee": "LoadDialogResource",
+          "lineNumber": 29
+        },
+        {
+          "caller": "CreateLayout",
+          "callee": "GetValue",
+          "lineNumber": 32
+        },
+        {
+          "caller": "CreateLayout",
+          "callee": "NewObj",
+          "lineNumber": 32
+        },
+        {
+          "caller": "CreateLayout",
+          "callee": "AttachUserArea",
+          "lineNumber": 33
+        },
+        {
+          "caller": "InitValues",
+          "callee": "SetFloat",
+          "lineNumber": 40
+        },
+        {
+          "caller": "InitValues",
+          "callee": "SetFloat",
+          "lineNumber": 41
+        },
+        {
+          "caller": "Command",
+          "callee": "GetFloat",
+          "lineNumber": 56
+        },
+        {
+          "caller": "Command",
+          "callee": "GetFloat",
+          "lineNumber": 57
+        },
+        {
+          "caller": "Command",
+          "callee": "CMTToolsManager::ImportVMDCamera",
+          "lineNumber": 58
+        },
+        {
+          "caller": "Command",
+          "callee": "Close",
+          "lineNumber": 59
+        },
+        {
+          "caller": "Command",
+          "callee": "Close",
+          "lineNumber": 64
+        },
+        {
+          "caller": "Command",
+          "callee": "SUPER::Command",
+          "lineNumber": 70
+        }
+      ],
+      "metrics": {
+        "importCount": 1,
+        "exportCount": 4,
+        "functionCount": 4,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "source/module/ui/vmd_loader_camera_dialog.h",
+      "language": "c",
+      "fileCategory": "code",
+      "totalLines": 31,
+      "nonEmptyLines": 24,
+      "functions": [
+        {
+          "name": "VMDLoaderCameraDialog",
+          "startLine": 24,
+          "endLine": 24,
+          "params": [
+            "fn",
+            "doc"
+          ]
+        }
+      ],
+      "classes": [
+        {
+          "name": "VMDLoaderCameraDialog",
+          "startLine": 17,
+          "endLine": 30,
+          "methods": [
+            "VMDLoaderCameraDialog",
+            "CreateLayout",
+            "InitValues",
+            "Command"
+          ],
+          "properties": [
+            "m_filename",
+            "m_images",
+            "m_document"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "VMDLoaderCameraDialog",
+          "line": 24,
+          "isDefault": false
+        },
+        {
+          "name": "CreateLayout",
+          "line": 27,
+          "isDefault": false
+        },
+        {
+          "name": "InitValues",
+          "line": 28,
+          "isDefault": false
+        },
+        {
+          "name": "Command",
+          "line": 29,
+          "isDefault": false
+        },
+        {
+          "name": "VMDLoaderCameraDialog",
+          "line": 17,
+          "isDefault": false
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 5,
+        "functionCount": 1,
+        "classCount": 1
+      }
+    },
+    {
+      "path": "source/utils/cmt_anim_flow_debug.hpp",
+      "language": "cpp",
+      "fileCategory": "code",
+      "totalLines": 106,
+      "nonEmptyLines": 90,
+      "functions": [
+        {
+          "name": "ParseTruthyEnv",
+          "startLine": 34,
+          "endLine": 42,
+          "params": [
+            "name"
+          ]
+        },
+        {
+          "name": "ParseInt32Env",
+          "startLine": 44,
+          "endLine": 50,
+          "params": [
+            "name",
+            "fallback"
+          ]
+        },
+        {
+          "name": "IsAnimationFlowDebugEnabled",
+          "startLine": 59,
+          "endLine": 63,
+          "params": []
+        },
+        {
+          "name": "GetAnimationFlowDebugBoneFilter",
+          "startLine": 71,
+          "endLine": 75,
+          "params": []
+        },
+        {
+          "name": "ShouldLogAnimationFlow",
+          "startLine": 77,
+          "endLine": 80,
+          "params": []
+        },
+        {
+          "name": "ShouldLogAnimationFlowForBone",
+          "startLine": 82,
+          "endLine": 88,
+          "params": [
+            "bone_index"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "ParseTruthyEnv",
+          "line": 34,
+          "isDefault": false
+        },
+        {
+          "name": "ParseInt32Env",
+          "line": 44,
+          "isDefault": false
+        },
+        {
+          "name": "IsAnimationFlowDebugEnabled",
+          "line": 59,
+          "isDefault": false
+        },
+        {
+          "name": "GetAnimationFlowDebugBoneFilter",
+          "line": 71,
+          "isDefault": false
+        },
+        {
+          "name": "ShouldLogAnimationFlow",
+          "line": 77,
+          "isDefault": false
+        },
+        {
+          "name": "ShouldLogAnimationFlowForBone",
+          "line": 82,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "ParseTruthyEnv",
+          "callee": "std::getenv",
+          "lineNumber": 36
+        },
+        {
+          "caller": "ParseTruthyEnv",
+          "callee": "std::strcmp",
+          "lineNumber": 39
+        },
+        {
+          "caller": "ParseTruthyEnv",
+          "callee": "std::strcmp",
+          "lineNumber": 40
+        },
+        {
+          "caller": "ParseTruthyEnv",
+          "callee": "std::strcmp",
+          "lineNumber": 41
+        },
+        {
+          "caller": "ParseInt32Env",
+          "callee": "std::getenv",
+          "lineNumber": 46
+        },
+        {
+          "caller": "ParseInt32Env",
+          "callee": "static_cast<Int32>",
+          "lineNumber": 49
+        },
+        {
+          "caller": "ParseInt32Env",
+          "callee": "std::strtol",
+          "lineNumber": 49
+        },
+        {
+          "caller": "IsAnimationFlowDebugEnabled",
+          "callee": "detail::ParseTruthyEnv",
+          "lineNumber": 61
+        },
+        {
+          "caller": "GetAnimationFlowDebugBoneFilter",
+          "callee": "detail::ParseInt32Env",
+          "lineNumber": 73
+        },
+        {
+          "caller": "ShouldLogAnimationFlow",
+          "callee": "IsAnimationFlowDebugEnabled",
+          "lineNumber": 79
+        },
+        {
+          "caller": "ShouldLogAnimationFlowForBone",
+          "callee": "IsAnimationFlowDebugEnabled",
+          "lineNumber": 84
+        },
+        {
+          "caller": "ShouldLogAnimationFlowForBone",
+          "callee": "GetAnimationFlowDebugBoneFilter",
+          "lineNumber": 86
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 6,
+        "functionCount": 6,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "source/utils/images_user_area_util.hpp",
+      "language": "cpp",
+      "fileCategory": "code",
+      "totalLines": 31,
+      "nonEmptyLines": 25,
+      "functions": [
+        {
+          "name": "ImagesUserArea",
+          "startLine": 22,
+          "endLine": 22,
+          "params": [
+            "bitmap",
+            "w",
+            "h"
+          ]
+        },
+        {
+          "name": "~ImagesUserArea",
+          "startLine": 23,
+          "endLine": 23,
+          "params": []
+        },
+        {
+          "name": "DrawMsg",
+          "startLine": 25,
+          "endLine": 30,
+          "params": [
+            "x1",
+            "y1",
+            "x2",
+            "y2",
+            "msg"
+          ]
+        }
+      ],
+      "classes": [
+        {
+          "name": "ImagesUserArea",
+          "startLine": 16,
+          "endLine": 31,
+          "methods": [
+            "ImagesUserArea",
+            "~ImagesUserArea",
+            "DrawMsg"
+          ],
+          "properties": [
+            "m_bitmap",
+            "m_width"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "ImagesUserArea",
+          "line": 22,
+          "isDefault": false
+        },
+        {
+          "name": "~ImagesUserArea",
+          "line": 23,
+          "isDefault": false
+        },
+        {
+          "name": "DrawMsg",
+          "line": 25,
+          "isDefault": false
+        },
+        {
+          "name": "ImagesUserArea",
+          "line": 16,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "DrawMsg",
+          "callee": "OffScreenOn",
+          "lineNumber": 28
+        },
+        {
+          "caller": "DrawMsg",
+          "callee": "DrawBitmap",
+          "lineNumber": 29
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 4,
+        "functionCount": 3,
+        "classCount": 1
+      }
+    }
+  ]
+}

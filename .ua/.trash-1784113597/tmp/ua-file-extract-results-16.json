@@ -1,0 +1,465 @@
+{
+  "scriptCompleted": true,
+  "filesAnalyzed": 25,
+  "filesSkipped": [],
+  "results": [
+    {
+      "path": "res/R20-S24/strings_en-US/description/OMMDJointManager.str",
+      "language": "str",
+      "fileCategory": "code",
+      "totalLines": 15,
+      "nonEmptyLines": 13,
+      "metrics": {}
+    },
+    {
+      "path": "res/R20-S24/strings_en-US/description/OMMDMeshManager.str",
+      "language": "str",
+      "fileCategory": "code",
+      "totalLines": 18,
+      "nonEmptyLines": 16,
+      "metrics": {}
+    },
+    {
+      "path": "res/R20-S24/strings_en-US/description/OMMDModelManager.str",
+      "language": "str",
+      "fileCategory": "code",
+      "totalLines": 152,
+      "nonEmptyLines": 152,
+      "metrics": {}
+    },
+    {
+      "path": "res/R20-S24/strings_en-US/description/OMMDRigid.str",
+      "language": "str",
+      "fileCategory": "code",
+      "totalLines": 80,
+      "nonEmptyLines": 73,
+      "metrics": {}
+    },
+    {
+      "path": "res/R20-S24/strings_en-US/description/OMMDRigidManager.str",
+      "language": "str",
+      "fileCategory": "code",
+      "totalLines": 15,
+      "nonEmptyLines": 13,
+      "metrics": {}
+    },
+    {
+      "path": "res/R20-S24/strings_en-US/description/TMMDBone.str",
+      "language": "str",
+      "fileCategory": "code",
+      "totalLines": 83,
+      "nonEmptyLines": 72,
+      "metrics": {}
+    },
+    {
+      "path": "res/R20-S24/strings_en-US/description/Xmmdmaterialmorphshader.str",
+      "language": "str",
+      "fileCategory": "code",
+      "totalLines": 6,
+      "nonEmptyLines": 6,
+      "metrics": {}
+    },
+    {
+      "path": "res/R20-S24/strings_en-US/dialogs/DLG_CMT_TOOL.str",
+      "language": "str",
+      "fileCategory": "code",
+      "totalLines": 56,
+      "nonEmptyLines": 56,
+      "metrics": {}
+    },
+    {
+      "path": "res/R20-S24/strings_en-US/dialogs/DLG_CMT_VMD_IMPORT.str",
+      "language": "str",
+      "fileCategory": "code",
+      "totalLines": 9,
+      "nonEmptyLines": 9,
+      "metrics": {}
+    },
+    {
+      "path": "res/R20-S24/strings_zh-CN/c4d_strings.str",
+      "language": "str",
+      "fileCategory": "code",
+      "totalLines": 104,
+      "nonEmptyLines": 90,
+      "metrics": {}
+    },
+    {
+      "path": "res/R20-S24/strings_zh-CN/description/OMMDBoneManager.str",
+      "language": "str",
+      "fileCategory": "code",
+      "totalLines": 21,
+      "nonEmptyLines": 19,
+      "metrics": {}
+    },
+    {
+      "path": "res/R20-S24/strings_zh-CN/description/OMMDCamera.str",
+      "language": "str",
+      "fileCategory": "code",
+      "totalLines": 4,
+      "nonEmptyLines": 4,
+      "metrics": {}
+    },
+    {
+      "path": "res/R20-S24/strings_zh-CN/description/OMMDJoint.str",
+      "language": "str",
+      "fileCategory": "code",
+      "totalLines": 68,
+      "nonEmptyLines": 61,
+      "metrics": {}
+    },
+    {
+      "path": "res/R20-S24/strings_zh-CN/description/OMMDJointManager.str",
+      "language": "str",
+      "fileCategory": "code",
+      "totalLines": 15,
+      "nonEmptyLines": 13,
+      "metrics": {}
+    },
+    {
+      "path": "res/R20-S24/strings_zh-CN/description/OMMDMeshManager.str",
+      "language": "str",
+      "fileCategory": "code",
+      "totalLines": 18,
+      "nonEmptyLines": 16,
+      "metrics": {}
+    },
+    {
+      "path": "res/R20-S24/strings_zh-CN/description/OMMDModelManager.str",
+      "language": "str",
+      "fileCategory": "code",
+      "totalLines": 152,
+      "nonEmptyLines": 152,
+      "metrics": {}
+    },
+    {
+      "path": "res/R20-S24/strings_zh-CN/description/OMMDRigid.str",
+      "language": "str",
+      "fileCategory": "code",
+      "totalLines": 80,
+      "nonEmptyLines": 73,
+      "metrics": {}
+    },
+    {
+      "path": "res/R20-S24/strings_zh-CN/description/OMMDRigidManager.str",
+      "language": "str",
+      "fileCategory": "code",
+      "totalLines": 15,
+      "nonEmptyLines": 13,
+      "metrics": {}
+    },
+    {
+      "path": "res/R20-S24/strings_zh-CN/description/TMMDBone.str",
+      "language": "str",
+      "fileCategory": "code",
+      "totalLines": 83,
+      "nonEmptyLines": 72,
+      "metrics": {}
+    },
+    {
+      "path": "res/R20-S24/strings_zh-CN/description/Xmmdmaterialmorphshader.str",
+      "language": "str",
+      "fileCategory": "code",
+      "totalLines": 6,
+      "nonEmptyLines": 6,
+      "metrics": {}
+    },
+    {
+      "path": "res/R20-S24/strings_zh-CN/dialogs/DLG_CMT_TOOL.str",
+      "language": "str",
+      "fileCategory": "code",
+      "totalLines": 56,
+      "nonEmptyLines": 56,
+      "metrics": {}
+    },
+    {
+      "path": "res/R20-S24/strings_zh-CN/dialogs/DLG_CMT_VMD_IMPORT.str",
+      "language": "str",
+      "fileCategory": "code",
+      "totalLines": 9,
+      "nonEmptyLines": 9,
+      "metrics": {}
+    },
+    {
+      "path": "res/S24_up/c4d_symbols.h",
+      "language": "c",
+      "fileCategory": "code",
+      "totalLines": 337,
+      "nonEmptyLines": 309,
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "res/S24_up/cmt_config.json",
+      "language": "json",
+      "fileCategory": "config",
+      "totalLines": 50,
+      "nonEmptyLines": 50,
+      "sections": [
+        {
+          "heading": "DLG_CMT_TOOL_MODEL_EXPORT_EXPRESSION",
+          "level": 1,
+          "line": 2
+        },
+        {
+          "heading": "DLG_CMT_TOOL_MODEL_EXPORT_UV",
+          "level": 1,
+          "line": 3
+        },
+        {
+          "heading": "DLG_CMT_TOOL_MODEL_IMPORT_ENGLISH",
+          "level": 1,
+          "line": 4
+        },
+        {
+          "heading": "DLG_CMT_TOOL_MODEL_IMPORT_INHERIT",
+          "level": 1,
+          "line": 5
+        },
+        {
+          "heading": "DLG_CMT_TOOL_MODEL_IMPORT_SIZE",
+          "level": 1,
+          "line": 6
+        },
+        {
+          "heading": "DLG_CMT_TOOL_MOTION_EXPORT_ROTATION_TWEEN",
+          "level": 1,
+          "line": 7
+        },
+        {
+          "heading": "DLG_CMT_TOOL_MODEL_EXPORT_MATERIAL",
+          "level": 1,
+          "line": 8
+        },
+        {
+          "heading": "DLG_CMT_TOOL_MODEL_IMPORT_IK",
+          "level": 1,
+          "line": 9
+        },
+        {
+          "heading": "DLG_CMT_TOOL_MOTION_IMPORT_BY_LOCAL_NAME",
+          "level": 1,
+          "line": 10
+        },
+        {
+          "heading": "DLG_CMT_TOOL_MODEL_IMPORT_MATERIAL",
+          "level": 1,
+          "line": 11
+        },
+        {
+          "heading": "DLG_CMT_TOOL_MODEL_IMPORT_MULTIPART",
+          "level": 1,
+          "line": 12
+        },
+        {
+          "heading": "DLG_CMT_TOOL_MOTION_EXPORT_MORPH",
+          "level": 1,
+          "line": 13
+        },
+        {
+          "heading": "DLG_CMT_TOOL_MODEL_EXPORT_POLYGON",
+          "level": 1,
+          "line": 14
+        },
+        {
+          "heading": "DLG_CMT_TOOL_MODEL_EXPORT_INHERIT",
+          "level": 1,
+          "line": 15
+        },
+        {
+          "heading": "DLG_CMT_TOOL_MOTION_EXPORT_SIZE",
+          "level": 1,
+          "line": 16
+        },
+        {
+          "heading": "DLG_CMT_TOOL_MODEL_IMPORT_BONE",
+          "level": 1,
+          "line": 17
+        },
+        {
+          "heading": "DLG_CMT_TOOL_MOTION_EXPORT_MOTION",
+          "level": 1,
+          "line": 18
+        },
+        {
+          "heading": "DLG_CMT_TOOL_MOTION_EXPORT_OFFSET",
+          "level": 1,
+          "line": 19
+        },
+        {
+          "heading": "DLG_CMT_TOOL_MOTION_IMPORT_DETAIL",
+          "level": 1,
+          "line": 20
+        },
+        {
+          "heading": "DLG_CMT_TOOL_MOTION_IMPORT_DELETE_PREVIOUS_ANIMATION",
+          "level": 1,
+          "line": 21
+        },
+        {
+          "heading": "DLG_CMT_TOOL_MOTION_IMPORT_OFFSET",
+          "level": 1,
+          "line": 22
+        },
+        {
+          "heading": "DLG_CMT_TOOL_MODEL_IMPORT_MATERIAL_TYPE",
+          "level": 1,
+          "line": 23
+        },
+        {
+          "heading": "DLG_CMT_TOOL_MODEL_IMPORT_WEIGHTS",
+          "level": 1,
+          "line": 24
+        },
+        {
+          "heading": "DLG_CMT_TOOL_MODEL_EXPORT_NORMAL",
+          "level": 1,
+          "line": 25
+        },
+        {
+          "heading": "DLG_CMT_TOOL_MODEL_EXPORT_BONE",
+          "level": 1,
+          "line": 26
+        },
+        {
+          "heading": "DLG_CMT_TOOL_CAMERA_EXPORT_OFFSET",
+          "level": 1,
+          "line": 27
+        },
+        {
+          "heading": "DLG_CMT_TOOL_MOTION_IMPORT_IGNORE_PHYSICAL",
+          "level": 1,
+          "line": 28
+        },
+        {
+          "heading": "DLG_CMT_TOOL_MODEL_EXPORT_SIZE",
+          "level": 1,
+          "line": 29
+        },
+        {
+          "heading": "DLG_CMT_TOOL_MODEL_IMPORT_NORMAL",
+          "level": 1,
+          "line": 30
+        },
+        {
+          "heading": "DLG_CMT_TOOL_CAMERA_EXPORT_SIZE",
+          "level": 1,
+          "line": 31
+        },
+        {
+          "heading": "DLG_CMT_TOOL_MOTION_IMPORT_MOTION",
+          "level": 1,
+          "line": 32
+        },
+        {
+          "heading": "DLG_CMT_TOOL_MODEL_IMPORT_UV",
+          "level": 1,
+          "line": 33
+        },
+        {
+          "heading": "DLG_CMT_TOOL_MOTION_IMPORT_SIZE",
+          "level": 1,
+          "line": 34
+        },
+        {
+          "heading": "DLG_CMT_TOOL_MOTION_EXPORT_USE_BAKE",
+          "level": 1,
+          "line": 35
+        },
+        {
+          "heading": "DLG_CMT_TOOL_MODEL_EXPORT_IK",
+          "level": 1,
+          "line": 36
+        },
+        {
+          "heading": "DLG_CMT_TOOL_CAMERA_CONVER_DIS",
+          "level": 1,
+          "line": 37
+        },
+        {
+          "heading": "DLG_CMT_TOOL_CAMERA_CONV_ROTATION_TWEEN",
+          "level": 1,
+          "line": 38
+        },
+        {
+          "heading": "DLG_CMT_TOOL_CAMERA_EXPORT_ROTATION_TWEEN",
+          "level": 1,
+          "line": 39
+        },
+        {
+          "heading": "DLG_CMT_TOOL_MOTION_IMPORT_MODEL_INFO",
+          "level": 1,
+          "line": 40
+        },
+        {
+          "heading": "DLG_CMT_TOOL_MOTION_EXPORT_MODEL_INFO",
+          "level": 1,
+          "line": 41
+        },
+        {
+          "heading": "DLG_CMT_TOOL_CAMERA_IMPORT_SIZE",
+          "level": 1,
+          "line": 42
+        },
+        {
+          "heading": "DLG_CMT_TOOL_CAMERA_IMPORT_OFFSET",
+          "level": 1,
+          "line": 43
+        },
+        {
+          "heading": "DLG_CMT_TOOL_MODEL_IMPORT_ENGLISH_CHECK",
+          "level": 1,
+          "line": 44
+        },
+        {
+          "heading": "DLG_CMT_TOOL_MODEL_IMPORT_POLYGON",
+          "level": 1,
+          "line": 45
+        },
+        {
+          "heading": "DLG_CMT_TOOL_MODEL_EXPORT_WEIGHTS",
+          "level": 1,
+          "line": 46
+        },
+        {
+          "heading": "DLG_CMT_TOOL_MOTION_IMPORT_MORPH",
+          "level": 1,
+          "line": 47
+        },
+        {
+          "heading": "DLG_CMT_TOOL_CAMERA_EXPORT_USE_BAKE",
+          "level": 1,
+          "line": 48
+        },
+        {
+          "heading": "DLG_CMT_TOOL_MODEL_IMPORT_EXPRESSION",
+          "level": 1,
+          "line": 49
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 48
+      }
+    },
+    {
+      "path": "res/S24_up/description/OMMDBoneManager.h",
+      "language": "c",
+      "fileCategory": "code",
+      "totalLines": 22,
+      "nonEmptyLines": 21,
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    }
+  ]
+}

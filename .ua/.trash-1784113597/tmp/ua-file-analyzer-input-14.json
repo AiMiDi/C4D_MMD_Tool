@@ -1,0 +1,232 @@
+{
+    "projectRoot":  "E:\\code\\C4D_MMD_Tool",
+    "batchFiles":  [
+                       {
+                           "path":  "cmake/sdk/base_settings/warnings.clang.cmake",
+                           "language":  "cmake",
+                           "sizeLines":  143,
+                           "fileCategory":  "code"
+                       },
+                       {
+                           "path":  "cmake/sdk/base_settings/warnings.gcc.cmake",
+                           "language":  "cmake",
+                           "sizeLines":  23,
+                           "fileCategory":  "code"
+                       },
+                       {
+                           "path":  "cmake/sdk/base_settings/warnings.msvc.cmake",
+                           "language":  "cmake",
+                           "sizeLines":  83,
+                           "fileCategory":  "code"
+                       },
+                       {
+                           "path":  "cmake/sdk/commands/create_directory_symlink.cmake",
+                           "language":  "cmake",
+                           "sizeLines":  10,
+                           "fileCategory":  "code"
+                       },
+                       {
+                           "path":  "cmake/sdk/commands/update_filelist.cmake",
+                           "language":  "cmake",
+                           "sizeLines":  20,
+                           "fileCategory":  "code"
+                       },
+                       {
+                           "path":  "cmake/sdk/sdk_compiler_helper.cmake",
+                           "language":  "cmake",
+                           "sizeLines":  458,
+                           "fileCategory":  "code"
+                       },
+                       {
+                           "path":  "cmake/sdk/sdk_library_template.cmake",
+                           "language":  "cmake",
+                           "sizeLines":  100,
+                           "fileCategory":  "code"
+                       },
+                       {
+                           "path":  "cmake/sdk/sdk_targets.cmake",
+                           "language":  "cmake",
+                           "sizeLines":  1214,
+                           "fileCategory":  "code"
+                       },
+                       {
+                           "path":  "cmake/sdk/sdk_update_projects.cmake",
+                           "language":  "cmake",
+                           "sizeLines":  1151,
+                           "fileCategory":  "code"
+                       },
+                       {
+                           "path":  "dependency/CMakeLists.txt",
+                           "language":  "txt",
+                           "sizeLines":  44,
+                           "fileCategory":  "docs"
+                       },
+                       {
+                           "path":  "res/R20-S24/c4d_symbols.h",
+                           "language":  "c",
+                           "sizeLines":  335,
+                           "fileCategory":  "code"
+                       },
+                       {
+                           "path":  "res/R20-S24/description/OMMDBoneManager.h",
+                           "language":  "c",
+                           "sizeLines":  22,
+                           "fileCategory":  "code"
+                       },
+                       {
+                           "path":  "res/R20-S24/description/OMMDBoneManager.res",
+                           "language":  "res",
+                           "sizeLines":  45,
+                           "fileCategory":  "code"
+                       },
+                       {
+                           "path":  "res/R20-S24/description/OMMDCamera.h",
+                           "language":  "c",
+                           "sizeLines":  8,
+                           "fileCategory":  "code"
+                       },
+                       {
+                           "path":  "res/R20-S24/description/OMMDCamera.res",
+                           "language":  "res",
+                           "sizeLines":  4,
+                           "fileCategory":  "code"
+                       },
+                       {
+                           "path":  "res/R20-S24/description/OMMDJoint.h",
+                           "language":  "c",
+                           "sizeLines":  71,
+                           "fileCategory":  "code"
+                       },
+                       {
+                           "path":  "res/R20-S24/description/OMMDJoint.res",
+                           "language":  "res",
+                           "sizeLines":  352,
+                           "fileCategory":  "code"
+                       },
+                       {
+                           "path":  "res/R20-S24/description/OMMDJointManager.h",
+                           "language":  "c",
+                           "sizeLines":  17,
+                           "fileCategory":  "code"
+                       },
+                       {
+                           "path":  "res/R20-S24/description/OMMDJointManager.res",
+                           "language":  "res",
+                           "sizeLines":  37,
+                           "fileCategory":  "code"
+                       },
+                       {
+                           "path":  "res/R20-S24/description/OMMDMeshManager.h",
+                           "language":  "c",
+                           "sizeLines":  19,
+                           "fileCategory":  "code"
+                       },
+                       {
+                           "path":  "res/R20-S24/description/OMMDMeshManager.res",
+                           "language":  "res",
+                           "sizeLines":  37,
+                           "fileCategory":  "code"
+                       },
+                       {
+                           "path":  "res/R20-S24/description/OMMDModelManager.h",
+                           "language":  "c",
+                           "sizeLines":  158,
+                           "fileCategory":  "code"
+                       },
+                       {
+                           "path":  "res/R20-S24/description/OMMDModelManager.res",
+                           "language":  "res",
+                           "sizeLines":  594,
+                           "fileCategory":  "code"
+                       },
+                       {
+                           "path":  "res/R20-S24/description/OMMDRigid.h",
+                           "language":  "c",
+                           "sizeLines":  85,
+                           "fileCategory":  "code"
+                       },
+                       {
+                           "path":  "res/R20-S24/description/OMMDRigid.res",
+                           "language":  "res",
+                           "sizeLines":  290,
+                           "fileCategory":  "code"
+                       }
+                   ],
+    "batchImportData":  {
+                            "cmake/sdk/base_settings/warnings.clang.cmake":  [
+
+                                                                             ],
+                            "cmake/sdk/base_settings/warnings.gcc.cmake":  [
+
+                                                                           ],
+                            "cmake/sdk/base_settings/warnings.msvc.cmake":  [
+
+                                                                            ],
+                            "cmake/sdk/commands/create_directory_symlink.cmake":  [
+
+                                                                                  ],
+                            "cmake/sdk/commands/update_filelist.cmake":  [
+
+                                                                         ],
+                            "cmake/sdk/sdk_compiler_helper.cmake":  [
+
+                                                                    ],
+                            "cmake/sdk/sdk_library_template.cmake":  [
+
+                                                                     ],
+                            "cmake/sdk/sdk_targets.cmake":  [
+
+                                                            ],
+                            "cmake/sdk/sdk_update_projects.cmake":  [
+
+                                                                    ],
+                            "dependency/CMakeLists.txt":  [
+
+                                                          ],
+                            "res/R20-S24/c4d_symbols.h":  [
+
+                                                          ],
+                            "res/R20-S24/description/OMMDBoneManager.h":  [
+
+                                                                          ],
+                            "res/R20-S24/description/OMMDBoneManager.res":  [
+
+                                                                            ],
+                            "res/R20-S24/description/OMMDCamera.h":  [
+
+                                                                     ],
+                            "res/R20-S24/description/OMMDCamera.res":  [
+
+                                                                       ],
+                            "res/R20-S24/description/OMMDJoint.h":  [
+
+                                                                    ],
+                            "res/R20-S24/description/OMMDJoint.res":  [
+
+                                                                      ],
+                            "res/R20-S24/description/OMMDJointManager.h":  [
+
+                                                                           ],
+                            "res/R20-S24/description/OMMDJointManager.res":  [
+
+                                                                             ],
+                            "res/R20-S24/description/OMMDMeshManager.h":  [
+
+                                                                          ],
+                            "res/R20-S24/description/OMMDMeshManager.res":  [
+
+                                                                            ],
+                            "res/R20-S24/description/OMMDModelManager.h":  [
+
+                                                                           ],
+                            "res/R20-S24/description/OMMDModelManager.res":  [
+
+                                                                             ],
+                            "res/R20-S24/description/OMMDRigid.h":  [
+
+                                                                    ],
+                            "res/R20-S24/description/OMMDRigid.res":  [
+
+                                                                      ]
+                        }
+}

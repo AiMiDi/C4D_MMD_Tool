@@ -1,0 +1,43 @@
+{
+  "nodes": [
+    {
+      "id": "pipeline:.github/workflows/build.yml",
+      "type": "pipeline",
+      "name": "build.yml",
+      "filePath": ".github/workflows/build.yml",
+      "summary": "Reusable GitHub Actions build pipeline that compiles eight Cinema 4D SDK targets on Windows and macOS, caches shared dependencies, and uploads per-platform plugin artifacts. / 可复用的 GitHub Actions 构建流水线，在 Windows 与 macOS 上编译八个 Cinema 4D SDK 目标，缓存共享依赖并上传逐平台插件产物。",
+      "tags": [
+        "ci-cd / 持续集成与交付",
+        "matrix-build / 矩阵构建",
+        "cross-platform / 跨平台",
+        "cmake / CMake",
+        "artifact / 构建产物"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "pipeline:.github/workflows/package.yml",
+      "type": "pipeline",
+      "name": "package.yml",
+      "filePath": ".github/workflows/package.yml",
+      "summary": "Tag-triggered release pipeline that reuses the build workflow, assembles a Windows Inno installer and per-SDK macOS archives, then publishes all assets to a GitHub Release. / 由版本标签触发的发布流水线，复用构建工作流，组装 Windows Inno 安装包与逐 SDK macOS 压缩包，并将全部资产发布到 GitHub Release。",
+      "tags": [
+        "ci-cd / 持续集成与交付",
+        "release / 发布",
+        "packaging / 打包",
+        "inno-setup / Inno Setup",
+        "github-release / GitHub 发布"
+      ],
+      "complexity": "moderate"
+    }
+  ],
+  "edges": [
+    {
+      "source": "pipeline:.github/workflows/package.yml",
+      "target": "pipeline:.github/workflows/build.yml",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    }
+  ]
+}

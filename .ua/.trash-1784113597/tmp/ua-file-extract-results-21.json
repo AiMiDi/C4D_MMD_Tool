@@ -1,0 +1,230 @@
+{
+  "scriptCompleted": true,
+  "filesAnalyzed": 25,
+  "filesSkipped": [],
+  "results": [
+    {
+      "path": "sdk_2025/cmake/sdk_library_template.cmake",
+      "language": "cmake",
+      "fileCategory": "code",
+      "totalLines": 100,
+      "nonEmptyLines": 86,
+      "metrics": {}
+    },
+    {
+      "path": "sdk_2025/cmake/sdk_targets.cmake",
+      "language": "cmake",
+      "fileCategory": "code",
+      "totalLines": 1214,
+      "nonEmptyLines": 978,
+      "metrics": {}
+    },
+    {
+      "path": "sdk_2025/cmake/sdk_update_projects.cmake",
+      "language": "cmake",
+      "fileCategory": "code",
+      "totalLines": 1149,
+      "nonEmptyLines": 941,
+      "metrics": {}
+    },
+    {
+      "path": "sdk_2025/plugins/mmdtool/project/CMakeLists.txt",
+      "language": "txt",
+      "fileCategory": "docs",
+      "totalLines": 25,
+      "nonEmptyLines": 20,
+      "metrics": {}
+    },
+    {
+      "path": "sdk_2025/plugins/mmdtool/project/projectdefinition.txt",
+      "language": "txt",
+      "fileCategory": "docs",
+      "totalLines": 18,
+      "nonEmptyLines": 15,
+      "metrics": {}
+    },
+    {
+      "path": "sdk_2026/cmake/base_settings/compile_definitions.cmake",
+      "language": "cmake",
+      "fileCategory": "code",
+      "totalLines": 42,
+      "nonEmptyLines": 35,
+      "metrics": {}
+    },
+    {
+      "path": "sdk_2026/cmake/base_settings/compile_options.cmake",
+      "language": "cmake",
+      "fileCategory": "code",
+      "totalLines": 97,
+      "nonEmptyLines": 80,
+      "metrics": {}
+    },
+    {
+      "path": "sdk_2026/cmake/base_settings/link_options.cmake",
+      "language": "cmake",
+      "fileCategory": "code",
+      "totalLines": 29,
+      "nonEmptyLines": 23,
+      "metrics": {}
+    },
+    {
+      "path": "sdk_2026/cmake/base_settings/sanitize.cmake",
+      "language": "cmake",
+      "fileCategory": "code",
+      "totalLines": 26,
+      "nonEmptyLines": 21,
+      "metrics": {}
+    },
+    {
+      "path": "sdk_2026/cmake/base_settings/warnings.clang.cmake",
+      "language": "cmake",
+      "fileCategory": "code",
+      "totalLines": 143,
+      "nonEmptyLines": 136,
+      "metrics": {}
+    },
+    {
+      "path": "sdk_2026/cmake/base_settings/warnings.gcc.cmake",
+      "language": "cmake",
+      "fileCategory": "code",
+      "totalLines": 23,
+      "nonEmptyLines": 20,
+      "metrics": {}
+    },
+    {
+      "path": "sdk_2026/cmake/base_settings/warnings.msvc.cmake",
+      "language": "cmake",
+      "fileCategory": "code",
+      "totalLines": 83,
+      "nonEmptyLines": 81,
+      "metrics": {}
+    },
+    {
+      "path": "sdk_2026/cmake/commands/create_directory_symlink.cmake",
+      "language": "cmake",
+      "fileCategory": "code",
+      "totalLines": 11,
+      "nonEmptyLines": 8,
+      "metrics": {}
+    },
+    {
+      "path": "sdk_2026/cmake/commands/update_filelist.cmake",
+      "language": "cmake",
+      "fileCategory": "code",
+      "totalLines": 20,
+      "nonEmptyLines": 16,
+      "metrics": {}
+    },
+    {
+      "path": "sdk_2026/cmake/sdk_compiler_helper.cmake",
+      "language": "cmake",
+      "fileCategory": "code",
+      "totalLines": 458,
+      "nonEmptyLines": 375,
+      "metrics": {}
+    },
+    {
+      "path": "sdk_2026/cmake/sdk_library_template.cmake",
+      "language": "cmake",
+      "fileCategory": "code",
+      "totalLines": 100,
+      "nonEmptyLines": 86,
+      "metrics": {}
+    },
+    {
+      "path": "sdk_2026/cmake/sdk_targets.cmake",
+      "language": "cmake",
+      "fileCategory": "code",
+      "totalLines": 1214,
+      "nonEmptyLines": 978,
+      "metrics": {}
+    },
+    {
+      "path": "sdk_2026/cmake/sdk_update_projects.cmake",
+      "language": "cmake",
+      "fileCategory": "code",
+      "totalLines": 1151,
+      "nonEmptyLines": 943,
+      "metrics": {}
+    },
+    {
+      "path": "sdk_2026/plugins/mmdtool/project/CMakeLists.txt",
+      "language": "txt",
+      "fileCategory": "docs",
+      "totalLines": 25,
+      "nonEmptyLines": 20,
+      "metrics": {}
+    },
+    {
+      "path": "sdk_2026/plugins/mmdtool/project/projectdefinition.txt",
+      "language": "txt",
+      "fileCategory": "docs",
+      "totalLines": 18,
+      "nonEmptyLines": 15,
+      "metrics": {}
+    },
+    {
+      "path": "sdk_r20/cmake/sdk_compat_r20.cmake",
+      "language": "cmake",
+      "fileCategory": "code",
+      "totalLines": 7,
+      "nonEmptyLines": 6,
+      "metrics": {}
+    },
+    {
+      "path": "sdk_r20/CMakeLists.txt",
+      "language": "txt",
+      "fileCategory": "docs",
+      "totalLines": 64,
+      "nonEmptyLines": 51,
+      "metrics": {}
+    },
+    {
+      "path": "sdk_r20/CMakePresets.json",
+      "language": "json",
+      "fileCategory": "config",
+      "totalLines": 39,
+      "nonEmptyLines": 39,
+      "sections": [
+        {
+          "heading": "version",
+          "level": 1,
+          "line": 2
+        },
+        {
+          "heading": "cmakeMinimumRequired",
+          "level": 1,
+          "line": 3
+        },
+        {
+          "heading": "configurePresets",
+          "level": 1,
+          "line": 8
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 3
+      }
+    },
+    {
+      "path": "sdk_r20/plugins/mmdtool/project/CMakeLists.txt",
+      "language": "txt",
+      "fileCategory": "docs",
+      "totalLines": 41,
+      "nonEmptyLines": 35,
+      "metrics": {}
+    },
+    {
+      "path": "sdk_r20/plugins/mmdtool/project/projectdefinition.txt",
+      "language": "txt",
+      "fileCategory": "docs",
+      "totalLines": 18,
+      "nonEmptyLines": 12,
+      "metrics": {}
+    }
+  ]
+}

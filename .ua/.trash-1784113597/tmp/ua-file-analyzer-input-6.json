@@ -1,0 +1,11 @@
+{
+  "projectRoot": "E:\\code\\C4D_MMD_Tool",
+  "batchFiles": [
+    {"path": ".github/workflows/build.yml", "language": "yaml", "sizeLines": 123, "fileCategory": "infra"},
+    {"path": ".github/workflows/package.yml", "language": "yaml", "sizeLines": 193, "fileCategory": "infra"}
+  ],
+  "batchImportData": {
+    ".github/workflows/build.yml": [],
+    ".github/workflows/package.yml": []
+  }
+}

@@ -1,0 +1,715 @@
+{
+  "nodes": [
+    {
+      "id": "file:source/module/tools/loader/vmd_loader.cpp",
+      "type": "file",
+      "name": "vmd_loader.cpp",
+      "filePath": "source/module/tools/loader/vmd_loader.cpp",
+      "summary": "Implements the Cinema 4D scene-loader entry point that validates VMD files and delegates motion import to the scene manager. / 实现 Cinema 4D 场景加载器入口，负责校验 VMD 文件并将动作导入委托给场景管理器。",
+      "tags": [
+        "scene-loader",
+        "vmd-animation",
+        "entry-point",
+        "import"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/loader/vmd_loader.cpp:VMDLoaderData::Identify",
+      "type": "function",
+      "name": "VMDLoaderData::Identify",
+      "filePath": "source/module/tools/loader/vmd_loader.cpp",
+      "lineRange": [
+        20,
+        47
+      ],
+      "summary": "VMDLoaderData::Identify implements a focused operation in VMD scene loading. / VMDLoaderData::Identify 实现VMD 场景加载中的专用操作。",
+      "tags": [
+        "scene-loader",
+        "vmd-animation",
+        "entry-point"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/loader/vmd_loader.cpp:VMDLoaderData::Load",
+      "type": "function",
+      "name": "VMDLoaderData::Load",
+      "filePath": "source/module/tools/loader/vmd_loader.cpp",
+      "lineRange": [
+        49,
+        61
+      ],
+      "summary": "VMDLoaderData::Load loads runtime state for VMD scene loading. / VMDLoaderData::Load 为VMD 场景加载加载 runtime state。",
+      "tags": [
+        "import",
+        "scene-loader",
+        "vmd-animation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:source/module/tools/loader/vmd_loader.h",
+      "type": "file",
+      "name": "vmd_loader.h",
+      "filePath": "source/module/tools/loader/vmd_loader.h",
+      "summary": "Declares the Cinema 4D VMD scene-loader plugin interface. / 声明 Cinema 4D VMD 场景加载器插件接口。",
+      "tags": [
+        "scene-loader",
+        "vmd-animation",
+        "api",
+        "plugin"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:source/module/tools/loader/vmd_loader.h:VMDLoaderData",
+      "type": "class",
+      "name": "VMDLoaderData",
+      "filePath": "source/module/tools/loader/vmd_loader.h",
+      "lineRange": [
+        19,
+        32
+      ],
+      "summary": "VMDLoaderData stores structured persistent and runtime data for VMD loader API. / VMDLoaderData 为VMD 加载器 API保存结构化持久数据与运行时数据。",
+      "tags": [
+        "data-model",
+        "scene-loader",
+        "vmd-animation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:source/module/tools/object/mmd_joint.cpp",
+      "type": "file",
+      "name": "mmd_joint.cpp",
+      "filePath": "source/module/tools/object/mmd_joint.cpp",
+      "summary": "Implements the per-joint constraint object, including PMX parameter mapping, constraint visualization, mode changes, and runtime physics execution. / 实现单个关节约束对象，包括 PMX 参数映射、约束可视化、模式切换与运行时物理执行。",
+      "tags": [
+        "joint",
+        "physics",
+        "object-plugin",
+        "viewport",
+        "pmx"
+      ],
+      "complexity": "complex",
+      "languageNotes": "C++ integrates Cinema 4D SDK lifecycle hooks with explicit PMX/VMD conversion and runtime state management. / C++ 将 Cinema 4D SDK 生命周期钩子与显式 PMX/VMD 转换及运行时状态管理结合。"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_joint.cpp:NormalizeJointMode",
+      "type": "function",
+      "name": "NormalizeJointMode",
+      "filePath": "source/module/tools/object/mmd_joint.cpp",
+      "lineRange": [
+        29,
+        33
+      ],
+      "summary": "NormalizeJointMode normalizes joint mode for per-joint constraint behavior. / NormalizeJointMode 为单关节约束行为规范化 joint mode。",
+      "tags": [
+        "physics",
+        "joint",
+        "object-plugin"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_joint.cpp:MarkSceneTransformDirty",
+      "type": "function",
+      "name": "MarkSceneTransformDirty",
+      "filePath": "source/module/tools/object/mmd_joint.cpp",
+      "lineRange": [
+        35,
+        43
+      ],
+      "summary": "MarkSceneTransformDirty marks scene transform dirty for per-joint constraint behavior. / MarkSceneTransformDirty 为单关节约束行为标记 scene transform dirty。",
+      "tags": [
+        "joint",
+        "physics",
+        "object-plugin"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_joint.cpp:BuildJointMatrix",
+      "type": "function",
+      "name": "BuildJointMatrix",
+      "filePath": "source/module/tools/object/mmd_joint.cpp",
+      "lineRange": [
+        45,
+        55
+      ],
+      "summary": "BuildJointMatrix builds joint matrix for per-joint constraint behavior. / BuildJointMatrix 为单关节约束行为构建 joint matrix。",
+      "tags": [
+        "physics",
+        "ui",
+        "joint"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_joint.cpp:ConfigureJointExecutionPriority",
+      "type": "function",
+      "name": "ConfigureJointExecutionPriority",
+      "filePath": "source/module/tools/object/mmd_joint.cpp",
+      "lineRange": [
+        57,
+        75
+      ],
+      "summary": "ConfigureJointExecutionPriority configures joint execution priority for per-joint constraint behavior. / ConfigureJointExecutionPriority 为单关节约束行为配置 joint execution priority。",
+      "tags": [
+        "physics",
+        "joint",
+        "object-plugin"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_joint.cpp:SDK2024_Init",
+      "type": "function",
+      "name": "SDK2024_Init",
+      "filePath": "source/module/tools/object/mmd_joint.cpp",
+      "lineRange": [
+        99,
+        121
+      ],
+      "summary": "SDK2024_Init implements the Cinema 4D SDK lifecycle hook for init in per-joint constraint behavior. / SDK2024_Init 实现单关节约束行为中用于 init 的 Cinema 4D SDK 生命周期钩子。",
+      "tags": [
+        "joint",
+        "physics",
+        "object-plugin"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_joint.cpp:MMDJointObject::SetDParameter",
+      "type": "function",
+      "name": "MMDJointObject::SetDParameter",
+      "filePath": "source/module/tools/object/mmd_joint.cpp",
+      "lineRange": [
+        123,
+        143
+      ],
+      "summary": "MMDJointObject::SetDParameter applies parameter changes and their runtime side effects for per-joint constraint behavior. / MMDJointObject::SetDParameter 为单关节约束行为应用参数变更及其运行时副作用。",
+      "tags": [
+        "joint",
+        "physics",
+        "object-plugin"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_joint.cpp:SDK2024_GetDDescription",
+      "type": "function",
+      "name": "SDK2024_GetDDescription",
+      "filePath": "source/module/tools/object/mmd_joint.cpp",
+      "lineRange": [
+        145,
+        182
+      ],
+      "summary": "SDK2024_GetDDescription implements the Cinema 4D SDK lifecycle hook for get d description in per-joint constraint behavior. / SDK2024_GetDDescription 实现单关节约束行为中用于 get d description 的 Cinema 4D SDK 生命周期钩子。",
+      "tags": [
+        "ui",
+        "joint",
+        "physics"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_joint.cpp:SDK2024_GetDEnabling",
+      "type": "function",
+      "name": "SDK2024_GetDEnabling",
+      "filePath": "source/module/tools/object/mmd_joint.cpp",
+      "lineRange": [
+        184,
+        190
+      ],
+      "summary": "SDK2024_GetDEnabling implements the Cinema 4D SDK lifecycle hook for get d enabling in per-joint constraint behavior. / SDK2024_GetDEnabling 实现单关节约束行为中用于 get d enabling 的 Cinema 4D SDK 生命周期钩子。",
+      "tags": [
+        "joint",
+        "physics",
+        "object-plugin"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_joint.cpp:MMDJointObject::HandleJointModeChange",
+      "type": "function",
+      "name": "MMDJointObject::HandleJointModeChange",
+      "filePath": "source/module/tools/object/mmd_joint.cpp",
+      "lineRange": [
+        192,
+        204
+      ],
+      "summary": "MMDJointObject::HandleJointModeChange handles joint mode change for per-joint constraint behavior. / MMDJointObject::HandleJointModeChange 为单关节约束行为处理 joint mode change。",
+      "tags": [
+        "physics",
+        "joint",
+        "object-plugin"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_joint.cpp:MMDJointObject::Message",
+      "type": "function",
+      "name": "MMDJointObject::Message",
+      "filePath": "source/module/tools/object/mmd_joint.cpp",
+      "lineRange": [
+        206,
+        349
+      ],
+      "summary": "MMDJointObject::Message dispatches Cinema 4D messages and state transitions for per-joint constraint behavior. / MMDJointObject::Message 为单关节约束行为分发 Cinema 4D 消息与状态切换。",
+      "tags": [
+        "joint",
+        "physics",
+        "object-plugin"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_joint.cpp:MMDJointObject::DrawBox",
+      "type": "function",
+      "name": "MMDJointObject::DrawBox",
+      "filePath": "source/module/tools/object/mmd_joint.cpp",
+      "lineRange": [
+        351,
+        361
+      ],
+      "summary": "MMDJointObject::DrawBox draws box for per-joint constraint behavior. / MMDJointObject::DrawBox 为单关节约束行为绘制 box。",
+      "tags": [
+        "joint",
+        "physics",
+        "object-plugin"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_joint.cpp:MMDJointObject::Draw",
+      "type": "function",
+      "name": "MMDJointObject::Draw",
+      "filePath": "source/module/tools/object/mmd_joint.cpp",
+      "lineRange": [
+        363,
+        395
+      ],
+      "summary": "MMDJointObject::Draw renders the plugin's viewport representation for per-joint constraint behavior. / MMDJointObject::Draw 为单关节约束行为绘制插件的视口表示。",
+      "tags": [
+        "joint",
+        "physics",
+        "object-plugin"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_joint.cpp:MMDJointObject::HandleJointIndexUpdate",
+      "type": "function",
+      "name": "MMDJointObject::HandleJointIndexUpdate",
+      "filePath": "source/module/tools/object/mmd_joint.cpp",
+      "lineRange": [
+        397,
+        412
+      ],
+      "summary": "MMDJointObject::HandleJointIndexUpdate handles joint index update for per-joint constraint behavior. / MMDJointObject::HandleJointIndexUpdate 为单关节约束行为处理 joint index update。",
+      "tags": [
+        "physics",
+        "joint",
+        "object-plugin"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_joint.cpp:MMDJointObject::Execute",
+      "type": "function",
+      "name": "MMDJointObject::Execute",
+      "filePath": "source/module/tools/object/mmd_joint.cpp",
+      "lineRange": [
+        414,
+        433
+      ],
+      "summary": "MMDJointObject::Execute runs the Cinema 4D evaluation-stage behavior for per-joint constraint behavior. / MMDJointObject::Execute 为单关节约束行为执行 Cinema 4D 求值阶段行为。",
+      "tags": [
+        "runtime",
+        "joint",
+        "physics"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_joint.cpp:SDK2024_CopyTo",
+      "type": "function",
+      "name": "SDK2024_CopyTo",
+      "filePath": "source/module/tools/object/mmd_joint.cpp",
+      "lineRange": [
+        435,
+        454
+      ],
+      "summary": "SDK2024_CopyTo implements the Cinema 4D SDK lifecycle hook for copy to in per-joint constraint behavior. / SDK2024_CopyTo 实现单关节约束行为中用于 copy to 的 Cinema 4D SDK 生命周期钩子。",
+      "tags": [
+        "serialization",
+        "joint",
+        "physics"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_joint.cpp:MMDJointObject::Read",
+      "type": "function",
+      "name": "MMDJointObject::Read",
+      "filePath": "source/module/tools/object/mmd_joint.cpp",
+      "lineRange": [
+        456,
+        469
+      ],
+      "summary": "MMDJointObject::Read reads persistent state for per-joint constraint behavior. / MMDJointObject::Read 为单关节约束行为读取持久状态。",
+      "tags": [
+        "serialization",
+        "joint",
+        "physics"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_joint.cpp:SDK2024_Write",
+      "type": "function",
+      "name": "SDK2024_Write",
+      "filePath": "source/module/tools/object/mmd_joint.cpp",
+      "lineRange": [
+        471,
+        480
+      ],
+      "summary": "SDK2024_Write implements the Cinema 4D SDK lifecycle hook for write in per-joint constraint behavior. / SDK2024_Write 实现单关节约束行为中用于 write 的 Cinema 4D SDK 生命周期钩子。",
+      "tags": [
+        "serialization",
+        "joint",
+        "physics"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_joint.cpp:MMDJointObject::AddToExecution",
+      "type": "function",
+      "name": "MMDJointObject::AddToExecution",
+      "filePath": "source/module/tools/object/mmd_joint.cpp",
+      "lineRange": [
+        482,
+        490
+      ],
+      "summary": "MMDJointObject::AddToExecution registers the object in Cinema 4D execution order for per-joint constraint behavior. / MMDJointObject::AddToExecution 为单关节约束行为将对象注册到 Cinema 4D 执行顺序。",
+      "tags": [
+        "joint",
+        "physics",
+        "object-plugin"
+      ],
+      "complexity": "simple"
+    }
+  ],
+  "edges": [
+    {
+      "source": "file:source/module/tools/loader/vmd_loader.cpp",
+      "target": "function:source/module/tools/loader/vmd_loader.cpp:VMDLoaderData::Identify",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/loader/vmd_loader.cpp",
+      "target": "function:source/module/tools/loader/vmd_loader.cpp:VMDLoaderData::Identify",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/loader/vmd_loader.cpp",
+      "target": "function:source/module/tools/loader/vmd_loader.cpp:VMDLoaderData::Load",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/loader/vmd_loader.cpp",
+      "target": "function:source/module/tools/loader/vmd_loader.cpp:VMDLoaderData::Load",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/loader/vmd_loader.h",
+      "target": "class:source/module/tools/loader/vmd_loader.h:VMDLoaderData",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/loader/vmd_loader.h",
+      "target": "class:source/module/tools/loader/vmd_loader.h:VMDLoaderData",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_joint.cpp",
+      "target": "function:source/module/tools/object/mmd_joint.cpp:NormalizeJointMode",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_joint.cpp",
+      "target": "function:source/module/tools/object/mmd_joint.cpp:NormalizeJointMode",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_joint.cpp",
+      "target": "function:source/module/tools/object/mmd_joint.cpp:MarkSceneTransformDirty",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_joint.cpp",
+      "target": "function:source/module/tools/object/mmd_joint.cpp:MarkSceneTransformDirty",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_joint.cpp",
+      "target": "function:source/module/tools/object/mmd_joint.cpp:BuildJointMatrix",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_joint.cpp",
+      "target": "function:source/module/tools/object/mmd_joint.cpp:BuildJointMatrix",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_joint.cpp",
+      "target": "function:source/module/tools/object/mmd_joint.cpp:ConfigureJointExecutionPriority",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_joint.cpp",
+      "target": "function:source/module/tools/object/mmd_joint.cpp:ConfigureJointExecutionPriority",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_joint.cpp",
+      "target": "function:source/module/tools/object/mmd_joint.cpp:SDK2024_Init",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_joint.cpp",
+      "target": "function:source/module/tools/object/mmd_joint.cpp:SDK2024_Init",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_joint.cpp",
+      "target": "function:source/module/tools/object/mmd_joint.cpp:MMDJointObject::SetDParameter",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_joint.cpp",
+      "target": "function:source/module/tools/object/mmd_joint.cpp:MMDJointObject::SetDParameter",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_joint.cpp",
+      "target": "function:source/module/tools/object/mmd_joint.cpp:SDK2024_GetDDescription",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_joint.cpp",
+      "target": "function:source/module/tools/object/mmd_joint.cpp:SDK2024_GetDDescription",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_joint.cpp",
+      "target": "function:source/module/tools/object/mmd_joint.cpp:SDK2024_GetDEnabling",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_joint.cpp",
+      "target": "function:source/module/tools/object/mmd_joint.cpp:SDK2024_GetDEnabling",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_joint.cpp",
+      "target": "function:source/module/tools/object/mmd_joint.cpp:MMDJointObject::HandleJointModeChange",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_joint.cpp",
+      "target": "function:source/module/tools/object/mmd_joint.cpp:MMDJointObject::HandleJointModeChange",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_joint.cpp",
+      "target": "function:source/module/tools/object/mmd_joint.cpp:MMDJointObject::Message",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_joint.cpp",
+      "target": "function:source/module/tools/object/mmd_joint.cpp:MMDJointObject::Message",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_joint.cpp",
+      "target": "function:source/module/tools/object/mmd_joint.cpp:MMDJointObject::DrawBox",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_joint.cpp",
+      "target": "function:source/module/tools/object/mmd_joint.cpp:MMDJointObject::DrawBox",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_joint.cpp",
+      "target": "function:source/module/tools/object/mmd_joint.cpp:MMDJointObject::Draw",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_joint.cpp",
+      "target": "function:source/module/tools/object/mmd_joint.cpp:MMDJointObject::Draw",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_joint.cpp",
+      "target": "function:source/module/tools/object/mmd_joint.cpp:MMDJointObject::HandleJointIndexUpdate",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_joint.cpp",
+      "target": "function:source/module/tools/object/mmd_joint.cpp:MMDJointObject::HandleJointIndexUpdate",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_joint.cpp",
+      "target": "function:source/module/tools/object/mmd_joint.cpp:MMDJointObject::Execute",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_joint.cpp",
+      "target": "function:source/module/tools/object/mmd_joint.cpp:MMDJointObject::Execute",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_joint.cpp",
+      "target": "function:source/module/tools/object/mmd_joint.cpp:SDK2024_CopyTo",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_joint.cpp",
+      "target": "function:source/module/tools/object/mmd_joint.cpp:SDK2024_CopyTo",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_joint.cpp",
+      "target": "function:source/module/tools/object/mmd_joint.cpp:MMDJointObject::Read",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_joint.cpp",
+      "target": "function:source/module/tools/object/mmd_joint.cpp:MMDJointObject::Read",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_joint.cpp",
+      "target": "function:source/module/tools/object/mmd_joint.cpp:SDK2024_Write",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_joint.cpp",
+      "target": "function:source/module/tools/object/mmd_joint.cpp:SDK2024_Write",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_joint.cpp",
+      "target": "function:source/module/tools/object/mmd_joint.cpp:MMDJointObject::AddToExecution",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_joint.cpp",
+      "target": "function:source/module/tools/object/mmd_joint.cpp:MMDJointObject::AddToExecution",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/loader/vmd_loader.cpp",
+      "target": "file:source/module/tools/loader/vmd_loader.h",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_joint.cpp",
+      "target": "file:source/module/tools/object/mmd_joint.h",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    }
+  ]
+}

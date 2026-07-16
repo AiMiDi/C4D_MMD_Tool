@@ -1,0 +1,110 @@
+{
+  "scriptCompleted": true,
+  "filesAnalyzed": 4,
+  "filesSkipped": [],
+  "results": [
+    {
+      "path": ".github/prompts/opsx-apply.prompt.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 149,
+      "nonEmptyLines": 110,
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 0
+      }
+    },
+    {
+      "path": ".github/prompts/opsx-archive.prompt.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 154,
+      "nonEmptyLines": 107,
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 0
+      }
+    },
+    {
+      "path": ".github/prompts/opsx-explore.prompt.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 170,
+      "nonEmptyLines": 126,
+      "sections": [
+        {
+          "heading": "The Stance",
+          "level": 2,
+          "line": 20
+        },
+        {
+          "heading": "What You Might Do",
+          "level": 2,
+          "line": 31
+        },
+        {
+          "heading": "OpenSpec Awareness",
+          "level": 2,
+          "line": 78
+        },
+        {
+          "heading": "Check for context",
+          "level": 3,
+          "line": 82
+        },
+        {
+          "heading": "When no change exists",
+          "level": 3,
+          "line": 96
+        },
+        {
+          "heading": "When a change exists",
+          "level": 3,
+          "line": 103
+        },
+        {
+          "heading": "What You Don't Have To Do",
+          "level": 2,
+          "line": 137
+        },
+        {
+          "heading": "Ending Discovery",
+          "level": 2,
+          "line": 148
+        },
+        {
+          "heading": "Guardrails",
+          "level": 2,
+          "line": 161
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 9
+      }
+    },
+    {
+      "path": ".github/prompts/opsx-propose.prompt.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 103,
+      "nonEmptyLines": 79,
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 0
+      }
+    }
+  ]
+}

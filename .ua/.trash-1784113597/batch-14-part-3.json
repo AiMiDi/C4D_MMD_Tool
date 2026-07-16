@@ -1,0 +1,328 @@
+{
+  "nodes": [
+    {
+      "id": "file:cmake/sdk/base_settings/warnings.clang.cmake",
+      "type": "file",
+      "name": "warnings.clang.cmake",
+      "filePath": "cmake/sdk/base_settings/warnings.clang.cmake",
+      "summary": "Defines the Maxon SDK's Clang warning policy, separating enabled diagnostics from explicitly muted warnings for consistent plugin builds. / 定义 Maxon SDK 的 Clang 警告策略，将启用的诊断与显式屏蔽的警告分开，以保证插件构建一致性。",
+      "tags": [
+        "cmake",
+        "build-system",
+        "clang",
+        "compiler-warnings"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:cmake/sdk/base_settings/warnings.gcc.cmake",
+      "type": "file",
+      "name": "warnings.gcc.cmake",
+      "filePath": "cmake/sdk/base_settings/warnings.gcc.cmake",
+      "summary": "Defines the Maxon SDK's GCC warning flags and targeted suppressions used by shared plugin targets. / 定义 Maxon SDK 的 GCC 警告标志与定向抑制项，供共享插件目标使用。",
+      "tags": [
+        "cmake",
+        "build-system",
+        "gcc",
+        "compiler-warnings"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:cmake/sdk/base_settings/warnings.msvc.cmake",
+      "type": "file",
+      "name": "warnings.msvc.cmake",
+      "filePath": "cmake/sdk/base_settings/warnings.msvc.cmake",
+      "summary": "Defines the Maxon SDK's MSVC warning level, conformance diagnostics, and compatibility suppressions for Windows builds. / 定义 Maxon SDK 的 MSVC 警告级别、标准一致性诊断与 Windows 构建兼容性抑制项。",
+      "tags": [
+        "cmake",
+        "build-system",
+        "msvc",
+        "compiler-warnings"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:cmake/sdk/commands/create_directory_symlink.cmake",
+      "type": "file",
+      "name": "create_directory_symlink.cmake",
+      "filePath": "cmake/sdk/commands/create_directory_symlink.cmake",
+      "summary": "Provides a CMake script-mode entry point that validates arguments and delegates directory-link creation to the shared target helpers. / 提供 CMake 脚本模式入口，校验参数后将目录链接创建委托给共享目标辅助函数。",
+      "tags": [
+        "cmake",
+        "build-system",
+        "script-entry-point",
+        "filesystem"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:cmake/sdk/commands/update_filelist.cmake",
+      "type": "file",
+      "name": "update_filelist.cmake",
+      "filePath": "cmake/sdk/commands/update_filelist.cmake",
+      "summary": "Provides a CMake script-mode entry point that normalizes search directories and refreshes generated source file lists, with Xcode-specific change handling. / 提供 CMake 脚本模式入口，规范化搜索目录并刷新生成的源文件列表，同时处理 Xcode 特有的变更行为。",
+      "tags": [
+        "cmake",
+        "build-system",
+        "script-entry-point",
+        "source-discovery"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:cmake/sdk/sdk_library_template.cmake",
+      "type": "file",
+      "name": "sdk_library_template.cmake",
+      "filePath": "cmake/sdk/sdk_library_template.cmake",
+      "summary": "Template for generated Maxon SDK library projects, exposing platform, compiler, linker, source, framework, and prebuild placeholders before target configuration. / Maxon SDK 库项目生成模板，在配置目标前提供平台、编译器、链接器、源码、框架与预构建占位符。",
+      "tags": [
+        "cmake",
+        "build-system",
+        "template",
+        "target-configuration"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "document:dependency/CMakeLists.txt",
+      "type": "document",
+      "name": "CMakeLists.txt",
+      "filePath": "dependency/CMakeLists.txt",
+      "summary": "Defines the standalone dependency workflow that adds Bullet3 and libMMD, exposes a build aggregate, and optionally runs the focused libMMD CTest targets. / 定义独立依赖工作流，引入 Bullet3 与 libMMD，提供聚合构建目标，并可选运行聚焦的 libMMD CTest 目标。",
+      "tags": [
+        "build-system",
+        "dependency-management",
+        "libmmd",
+        "bullet",
+        "testing"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:res/R20-S24/c4d_symbols.h",
+      "type": "file",
+      "name": "c4d_symbols.h",
+      "filePath": "res/R20-S24/c4d_symbols.h",
+      "summary": "Declares legacy R20-S24 Cinema 4D string, command, dialog, and plugin symbol identifiers shared by the resource system. / 声明旧版 R20-S24 Cinema 4D 资源系统共享的字符串、命令、对话框与插件符号标识符。",
+      "tags": [
+        "cinema-4d",
+        "resource-id",
+        "legacy-sdk",
+        "localization"
+      ],
+      "complexity": "complex",
+      "languageNotes": "Cinema 4D resource syntax separates numeric identifiers from declarative description layouts consumed by legacy SDK versions. / Cinema 4D 资源语法将数值标识符与旧版 SDK 使用的声明式描述布局分离。"
+    },
+    {
+      "id": "file:res/R20-S24/description/OMMDBoneManager.h",
+      "type": "file",
+      "name": "OMMDBoneManager.h",
+      "filePath": "res/R20-S24/description/OMMDBoneManager.h",
+      "summary": "Declares legacy description identifiers for bone-manager display controls, hierarchy refresh, and bone mode parameters. / 声明骨骼管理器显示控制、层级刷新与骨骼模式参数的旧版描述标识符。",
+      "tags": [
+        "cinema-4d",
+        "resource-id",
+        "bone-manager",
+        "legacy-sdk"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:res/R20-S24/description/OMMDBoneManager.res",
+      "type": "file",
+      "name": "OMMDBoneManager.res",
+      "filePath": "res/R20-S24/description/OMMDBoneManager.res",
+      "summary": "Defines the legacy Cinema 4D description layout for bone-manager display, hierarchy, and mode controls. / 定义骨骼管理器显示、层级与模式控制的旧版 Cinema 4D 描述布局。",
+      "tags": [
+        "cinema-4d",
+        "resource-definition",
+        "bone-manager",
+        "ui",
+        "legacy-sdk"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:res/R20-S24/description/OMMDCamera.h",
+      "type": "file",
+      "name": "OMMDCamera.h",
+      "filePath": "res/R20-S24/description/OMMDCamera.h",
+      "summary": "Declares legacy description identifiers for the MMD camera object's parameters. / 声明 MMD 相机对象参数的旧版描述标识符。",
+      "tags": [
+        "cinema-4d",
+        "resource-id",
+        "camera",
+        "legacy-sdk"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:res/R20-S24/description/OMMDCamera.res",
+      "type": "file",
+      "name": "OMMDCamera.res",
+      "filePath": "res/R20-S24/description/OMMDCamera.res",
+      "summary": "Defines the minimal legacy Cinema 4D description container for the MMD camera object. / 定义 MMD 相机对象的最小旧版 Cinema 4D 描述容器。",
+      "tags": [
+        "cinema-4d",
+        "resource-definition",
+        "camera",
+        "legacy-sdk"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:res/R20-S24/description/OMMDJoint.h",
+      "type": "file",
+      "name": "OMMDJoint.h",
+      "filePath": "res/R20-S24/description/OMMDJoint.h",
+      "summary": "Declares legacy description identifiers for joint transforms, constraint limits, spring parameters, display, and physics modes. / 声明关节变换、约束限制、弹簧参数、显示与物理模式的旧版描述标识符。",
+      "tags": [
+        "cinema-4d",
+        "resource-id",
+        "joint",
+        "physics",
+        "legacy-sdk"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:res/R20-S24/description/OMMDJoint.res",
+      "type": "file",
+      "name": "OMMDJoint.res",
+      "filePath": "res/R20-S24/description/OMMDJoint.res",
+      "summary": "Defines the legacy joint-object UI for transforms, linear and angular limits, spring settings, display options, and physics behavior. / 定义旧版关节对象 UI，包括变换、线性与角度限制、弹簧设置、显示选项及物理行为。",
+      "tags": [
+        "cinema-4d",
+        "resource-definition",
+        "joint",
+        "physics",
+        "ui"
+      ],
+      "complexity": "complex",
+      "languageNotes": "Cinema 4D resource syntax separates numeric identifiers from declarative description layouts consumed by legacy SDK versions. / Cinema 4D 资源语法将数值标识符与旧版 SDK 使用的声明式描述布局分离。"
+    },
+    {
+      "id": "file:res/R20-S24/description/OMMDJointManager.h",
+      "type": "file",
+      "name": "OMMDJointManager.h",
+      "filePath": "res/R20-S24/description/OMMDJointManager.h",
+      "summary": "Declares legacy description identifiers for joint-manager list, display, and mode controls. / 声明关节管理器列表、显示与模式控制的旧版描述标识符。",
+      "tags": [
+        "cinema-4d",
+        "resource-id",
+        "joint-manager",
+        "legacy-sdk"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:res/R20-S24/description/OMMDJointManager.res",
+      "type": "file",
+      "name": "OMMDJointManager.res",
+      "filePath": "res/R20-S24/description/OMMDJointManager.res",
+      "summary": "Defines the legacy Cinema 4D description layout for joint-manager list, display, and mode controls. / 定义关节管理器列表、显示与模式控制的旧版 Cinema 4D 描述布局。",
+      "tags": [
+        "cinema-4d",
+        "resource-definition",
+        "joint-manager",
+        "ui",
+        "legacy-sdk"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:res/R20-S24/description/OMMDMeshManager.h",
+      "type": "file",
+      "name": "OMMDMeshManager.h",
+      "filePath": "res/R20-S24/description/OMMDMeshManager.h",
+      "summary": "Declares legacy description identifiers for mesh-manager display, mesh mode, and morph mode controls. / 声明网格管理器显示、网格模式与变形模式控制的旧版描述标识符。",
+      "tags": [
+        "cinema-4d",
+        "resource-id",
+        "mesh-manager",
+        "morph",
+        "legacy-sdk"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:res/R20-S24/description/OMMDMeshManager.res",
+      "type": "file",
+      "name": "OMMDMeshManager.res",
+      "filePath": "res/R20-S24/description/OMMDMeshManager.res",
+      "summary": "Defines the legacy Cinema 4D description layout for mesh-manager display, edit mode, and morph controls. / 定义网格管理器显示、编辑模式与变形控制的旧版 Cinema 4D 描述布局。",
+      "tags": [
+        "cinema-4d",
+        "resource-definition",
+        "mesh-manager",
+        "morph",
+        "ui"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:res/R20-S24/description/OMMDModelManager.h",
+      "type": "file",
+      "name": "OMMDModelManager.h",
+      "filePath": "res/R20-S24/description/OMMDModelManager.h",
+      "summary": "Declares legacy description identifiers for model metadata, animation slots, morph/material editing, display frames, physics, and import/export controls. / 声明模型元数据、动画槽、变形与材质编辑、显示框、物理及导入导出控制的旧版描述标识符。",
+      "tags": [
+        "cinema-4d",
+        "resource-id",
+        "model-manager",
+        "animation",
+        "legacy-sdk"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:res/R20-S24/description/OMMDModelManager.res",
+      "type": "file",
+      "name": "OMMDModelManager.res",
+      "filePath": "res/R20-S24/description/OMMDModelManager.res",
+      "summary": "Defines the comprehensive legacy model-manager UI for metadata, animation, morphs, materials, display frames, physics, and model operations. / 定义完整的旧版模型管理器 UI，涵盖元数据、动画、变形、材质、显示框、物理与模型操作。",
+      "tags": [
+        "cinema-4d",
+        "resource-definition",
+        "model-manager",
+        "animation",
+        "ui"
+      ],
+      "complexity": "complex",
+      "languageNotes": "Cinema 4D resource syntax separates numeric identifiers from declarative description layouts consumed by legacy SDK versions. / Cinema 4D 资源语法将数值标识符与旧版 SDK 使用的声明式描述布局分离。"
+    },
+    {
+      "id": "file:res/R20-S24/description/OMMDRigid.h",
+      "type": "file",
+      "name": "OMMDRigid.h",
+      "filePath": "res/R20-S24/description/OMMDRigid.h",
+      "summary": "Declares legacy description identifiers for rigid-body naming, transforms, shapes, collision groups, dynamics, display, and modes. / 声明刚体命名、变换、形状、碰撞组、动力学、显示与模式的旧版描述标识符。",
+      "tags": [
+        "cinema-4d",
+        "resource-id",
+        "rigid-body",
+        "physics",
+        "legacy-sdk"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:res/R20-S24/description/OMMDRigid.res",
+      "type": "file",
+      "name": "OMMDRigid.res",
+      "filePath": "res/R20-S24/description/OMMDRigid.res",
+      "summary": "Defines the legacy rigid-body object UI for transforms, collision shapes and groups, dynamics, display options, and editing modes. / 定义旧版刚体对象 UI，包括变换、碰撞形状与分组、动力学、显示选项及编辑模式。",
+      "tags": [
+        "cinema-4d",
+        "resource-definition",
+        "rigid-body",
+        "physics",
+        "ui"
+      ],
+      "complexity": "complex",
+      "languageNotes": "Cinema 4D resource syntax separates numeric identifiers from declarative description layouts consumed by legacy SDK versions. / Cinema 4D 资源语法将数值标识符与旧版 SDK 使用的声明式描述布局分离。"
+    }
+  ],
+  "edges": []
+}

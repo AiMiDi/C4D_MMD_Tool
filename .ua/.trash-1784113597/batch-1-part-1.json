@@ -1,0 +1,1770 @@
+{
+  "nodes": [
+    {
+      "id": "file:source/CMTSceneManager.h",
+      "type": "file",
+      "name": "CMTSceneManager.h",
+      "filePath": "source/CMTSceneManager.h",
+      "summary": "Declares the scene-level PMX, VMD, and VPD orchestration API together with structured result logs for import and export operations. / 声明场景级 PMX、VMD 与 VPD 编排 API，并定义导入导出操作的结构化结果日志。",
+      "tags": [
+        "scene-management",
+        "import-export",
+        "api",
+        "diagnostics"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/CMTSceneManager.h:CMTSceneManager",
+      "type": "function",
+      "name": "CMTSceneManager",
+      "filePath": "source/CMTSceneManager.h",
+      "lineRange": [
+        147,
+        147
+      ],
+      "summary": "Constructs the per-document scene manager used by MMD import and export workflows. / 构造供 MMD 导入导出流程使用的按文档场景管理器。",
+      "tags": [
+        "utility",
+        "cinema-4d",
+        "plugin-runtime"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/CMTSceneManager.h:~CMTSceneManager",
+      "type": "function",
+      "name": "~CMTSceneManager",
+      "filePath": "source/CMTSceneManager.h",
+      "lineRange": [
+        151,
+        151
+      ],
+      "summary": "Releases the per-document scene manager and its tracked runtime state. / 释放按文档存在的场景管理器及其跟踪的运行时状态。",
+      "tags": [
+        "utility",
+        "cinema-4d",
+        "plugin-runtime"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:source/CMTSceneManager.h:IOLog",
+      "type": "class",
+      "name": "IOLog",
+      "filePath": "source/CMTSceneManager.h",
+      "lineRange": [
+        25,
+        32
+      ],
+      "summary": "Base diagnostic state providing shared memory and file I/O error dialogs with operation timing. / 基础诊断状态，提供共享的内存与文件读写错误对话框及操作计时。",
+      "tags": [
+        "diagnostics",
+        "data-model",
+        "localization"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:source/CMTSceneManager.h:LoadVmdCameraLog",
+      "type": "class",
+      "name": "LoadVmdCameraLog",
+      "filePath": "source/CMTSceneManager.h",
+      "lineRange": [
+        34,
+        40
+      ],
+      "summary": "Tracks imported VMD camera frame counts and reports camera-specific success or validation failures. / 跟踪导入的 VMD 相机帧数，并报告相机相关成功或校验失败。",
+      "tags": [
+        "diagnostics",
+        "data-model",
+        "localization"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:source/CMTSceneManager.h:SaveVmdCameraLog",
+      "type": "class",
+      "name": "SaveVmdCameraLog",
+      "filePath": "source/CMTSceneManager.h",
+      "lineRange": [
+        42,
+        45
+      ],
+      "summary": "Reports VMD camera export completion and elapsed time. / 报告 VMD 相机导出完成状态与耗时。",
+      "tags": [
+        "diagnostics",
+        "data-model",
+        "localization"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:source/CMTSceneManager.h:ConversionVmdCameraLog",
+      "type": "class",
+      "name": "ConversionVmdCameraLog",
+      "filePath": "source/CMTSceneManager.h",
+      "lineRange": [
+        47,
+        50
+      ],
+      "summary": "Carries timing state for camera conversion reporting. / 保存相机转换报告所需的计时状态。",
+      "tags": [
+        "diagnostics",
+        "data-model",
+        "localization"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:source/CMTSceneManager.h:LoadVmdMotionLog",
+      "type": "class",
+      "name": "LoadVmdMotionLog",
+      "filePath": "source/CMTSceneManager.h",
+      "lineRange": [
+        52,
+        65
+      ],
+      "summary": "Accumulates imported motion counts and unmatched bone or morph names for detailed VMD reports. / 累积导入动作数量及未匹配骨骼或变形名称，用于详细 VMD 报告。",
+      "tags": [
+        "diagnostics",
+        "data-model",
+        "localization"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:source/CMTSceneManager.h:SaveVmdMotionLog",
+      "type": "class",
+      "name": "SaveVmdMotionLog",
+      "filePath": "source/CMTSceneManager.h",
+      "lineRange": [
+        67,
+        77
+      ],
+      "summary": "Tracks exported VMD bone, morph, and frame counts and exposes validation error reports. / 跟踪导出的 VMD 骨骼、变形与帧数量，并提供校验错误报告。",
+      "tags": [
+        "diagnostics",
+        "data-model",
+        "localization"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:source/CMTSceneManager.h:LoadVpdPoseLog",
+      "type": "class",
+      "name": "LoadVpdPoseLog",
+      "filePath": "source/CMTSceneManager.h",
+      "lineRange": [
+        79,
+        92
+      ],
+      "summary": "Tracks matched and unmatched VPD pose bones and morphs for import diagnostics. / 跟踪 VPD 姿势导入中匹配与未匹配的骨骼和变形。",
+      "tags": [
+        "diagnostics",
+        "data-model",
+        "localization"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:source/CMTSceneManager.h:SaveVpdPoseLog",
+      "type": "class",
+      "name": "SaveVpdPoseLog",
+      "filePath": "source/CMTSceneManager.h",
+      "lineRange": [
+        94,
+        102
+      ],
+      "summary": "Tracks exported VPD bone and morph counts and reports selection or model errors. / 跟踪导出的 VPD 骨骼与变形数量，并报告选择或模型错误。",
+      "tags": [
+        "diagnostics",
+        "data-model",
+        "localization"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:source/CMTSceneManager.h:LoadModelLog",
+      "type": "class",
+      "name": "LoadModelLog",
+      "filePath": "source/CMTSceneManager.h",
+      "lineRange": [
+        104,
+        120
+      ],
+      "summary": "Captures imported PMX metadata and enabled element counts for the completion report. / 捕获导入的 PMX 元数据与已启用元素数量，用于完成报告。",
+      "tags": [
+        "diagnostics",
+        "data-model",
+        "localization"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:source/CMTSceneManager.h:SavePmxModelLog",
+      "type": "class",
+      "name": "SavePmxModelLog",
+      "filePath": "source/CMTSceneManager.h",
+      "lineRange": [
+        122,
+        138
+      ],
+      "summary": "Captures exported PMX metadata and element counts for the completion report. / 捕获导出的 PMX 元数据与元素数量，用于完成报告。",
+      "tags": [
+        "diagnostics",
+        "data-model",
+        "localization"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:source/CMTSceneManager.h:CMTSceneManager",
+      "type": "class",
+      "name": "CMTSceneManager",
+      "filePath": "source/CMTSceneManager.h",
+      "lineRange": [
+        140,
+        177
+      ],
+      "summary": "Per-document singleton that coordinates MMD model managers and camera objects across import and export workflows. / 按文档存在的单例，负责在导入导出流程中协调 MMD 模型管理器与相机对象。",
+      "tags": [
+        "service",
+        "orchestration",
+        "data-model"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:source/cmt_tools_setting.h",
+      "type": "file",
+      "name": "cmt_tools_setting.h",
+      "filePath": "source/cmt_tools_setting.h",
+      "summary": "Defines document-bound option structures for every camera, motion, pose, and model conversion workflow. / 定义绑定到文档的选项结构，覆盖所有相机、动作、姿势与模型转换流程。",
+      "tags": [
+        "configuration",
+        "data-model",
+        "serialization",
+        "type-definition"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:source/module/core/cmt_marco.h",
+      "type": "file",
+      "name": "cmt_marco.h",
+      "filePath": "source/module/core/cmt_marco.h",
+      "summary": "Collects cross-SDK compatibility macros, constants, type helpers, parameter accessors, and Cinema 4D utility functions. / 汇集跨 SDK 兼容宏、常量、类型辅助、参数访问器与 Cinema 4D 工具函数。",
+      "tags": [
+        "compatibility",
+        "utility",
+        "macros",
+        "cinema-4d"
+      ],
+      "complexity": "complex",
+      "languageNotes": "Centralizes Cinema 4D SDK-version conditionals so the maintained source can compile across multiple SDK trees. / 集中封装 Cinema 4D SDK 版本条件，使同一套维护源码可在多个 SDK 树中编译。"
+    },
+    {
+      "id": "file:source/cmt_tools_config_manager.cpp",
+      "type": "file",
+      "name": "cmt_tools_config_manager.cpp",
+      "filePath": "source/cmt_tools_config_manager.cpp",
+      "summary": "Implements configuration loading, default initialization, dialog synchronization, and JSON persistence for tool settings. / 实现工具设置的配置加载、默认值初始化、对话框同步与 JSON 持久化。",
+      "tags": [
+        "configuration",
+        "persistence",
+        "singleton",
+        "ui"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/cmt_tools_config_manager.cpp:InitDialog",
+      "type": "function",
+      "name": "InitDialog",
+      "filePath": "source/cmt_tools_config_manager.cpp",
+      "lineRange": [
+        15,
+        42
+      ],
+      "summary": "Copies typed configuration values into matching Cinema 4D dialog controls. / 将类型化配置值复制到对应的 Cinema 4D 对话框控件。",
+      "tags": [
+        "configuration",
+        "data-model",
+        "persistence"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/cmt_tools_config_manager.cpp:InitConfig",
+      "type": "function",
+      "name": "InitConfig",
+      "filePath": "source/cmt_tools_config_manager.cpp",
+      "lineRange": [
+        44,
+        71
+      ],
+      "summary": "Seeds a configuration entry from its declared default while preserving any compatible persisted value. / 从声明的默认值初始化配置项，同时保留类型兼容的持久化值。",
+      "tags": [
+        "configuration",
+        "data-model",
+        "persistence"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/cmt_tools_config_manager.cpp:InitConfigManager",
+      "type": "function",
+      "name": "InitConfigManager",
+      "filePath": "source/cmt_tools_config_manager.cpp",
+      "lineRange": [
+        73,
+        85
+      ],
+      "summary": "Loads the JSON configuration, initializes the full setting table, and writes defaults when no file exists. / 加载 JSON 配置、初始化完整设置表，并在文件不存在时写入默认值。",
+      "tags": [
+        "configuration",
+        "data-model",
+        "persistence"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/cmt_tools_config_manager.cpp:SaveConfig",
+      "type": "function",
+      "name": "SaveConfig",
+      "filePath": "source/cmt_tools_config_manager.cpp",
+      "lineRange": [
+        87,
+        90
+      ],
+      "summary": "Serializes the current configuration table to the configured JSON file. / 将当前配置表序列化到指定 JSON 文件。",
+      "tags": [
+        "configuration",
+        "data-model",
+        "persistence"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:source/cmt_tools_config_manager.h",
+      "type": "file",
+      "name": "cmt_tools_config_manager.h",
+      "filePath": "source/cmt_tools_config_manager.h",
+      "summary": "Defines the singleton configuration manager and its typed configuration table used by plugin dialogs and startup code. / 定义单例配置管理器及其类型化配置表，供插件对话框和启动代码使用。",
+      "tags": [
+        "configuration",
+        "singleton",
+        "data-model",
+        "api"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "Uses a C++ variant-backed table with templated getters and setters to keep heterogeneous settings type-safe. / 使用基于 C++ variant 的表和模板化读写接口，使异构设置保持类型安全。"
+    },
+    {
+      "id": "function:source/cmt_tools_config_manager.h:CMTToolConfigManager",
+      "type": "function",
+      "name": "CMTToolConfigManager",
+      "filePath": "source/cmt_tools_config_manager.h",
+      "lineRange": [
+        30,
+        30
+      ],
+      "summary": "Constructs the singleton configuration manager and its default setting table. / 构造单例配置管理器及其默认设置表。",
+      "tags": [
+        "configuration",
+        "data-model",
+        "persistence"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/cmt_tools_config_manager.h:operator =",
+      "type": "function",
+      "name": "operator =",
+      "filePath": "source/cmt_tools_config_manager.h",
+      "lineRange": [
+        33,
+        33
+      ],
+      "summary": "Disables or controls assignment for the singleton configuration manager. / 禁用或控制单例配置管理器的赋值。",
+      "tags": [
+        "configuration",
+        "data-model",
+        "persistence"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:source/cmt_tools_config_manager.h:CMTToolConfigManager",
+      "type": "class",
+      "name": "CMTToolConfigManager",
+      "filePath": "source/cmt_tools_config_manager.h",
+      "lineRange": [
+        24,
+        167
+      ],
+      "summary": "Singleton service that owns typed tool settings, default declarations, dialog binding, and JSON persistence. / 单例服务，负责类型化工具设置、默认值声明、对话框绑定与 JSON 持久化。",
+      "tags": [
+        "service",
+        "orchestration",
+        "data-model"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:source/utils/json_util.hpp",
+      "type": "file",
+      "name": "json_util.hpp",
+      "filePath": "source/utils/json_util.hpp",
+      "summary": "Implements a compact JSON parser, serializer, and file I/O layer for the plugin configuration variant model. / 为插件配置的变体数据模型实现轻量 JSON 解析、序列化与文件读写层。",
+      "tags": [
+        "serialization",
+        "parser",
+        "file-io",
+        "utility"
+      ],
+      "complexity": "complex",
+      "languageNotes": "A header-only recursive-descent parser serializes the project-specific variant model without an external JSON dependency. / 采用仅头文件的递归下降解析器，在不依赖外部 JSON 库的情况下序列化项目专用变体模型。"
+    },
+    {
+      "id": "file:source/cmt_tools_manager.cpp",
+      "type": "file",
+      "name": "cmt_tools_manager.cpp",
+      "filePath": "source/cmt_tools_manager.cpp",
+      "summary": "Implements the high-level commands that import and export VMD cameras, motions, VPD poses, and PMX models through libMMD and the scene manager. / 实现通过 libMMD 与场景管理器导入导出 VMD 相机、动作、VPD 姿势和 PMX 模型的高层命令。",
+      "tags": [
+        "import-export",
+        "orchestration",
+        "libmmd",
+        "service"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:source/cmt_tools_manager.cpp:ImportVMDCamera",
+      "type": "function",
+      "name": "ImportVMDCamera",
+      "filePath": "source/cmt_tools_manager.cpp",
+      "lineRange": [
+        22,
+        61
+      ],
+      "summary": "Reads and imports VMDCamera data into the active Cinema 4D document through the scene manager. / 读取 VMDCamera 数据，并通过场景管理器导入当前 Cinema 4D 文档。",
+      "tags": [
+        "import-export",
+        "orchestration",
+        "serialization"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/cmt_tools_manager.cpp:ConversionCamera",
+      "type": "function",
+      "name": "ConversionCamera",
+      "filePath": "source/cmt_tools_manager.cpp",
+      "lineRange": [
+        63,
+        71
+      ],
+      "summary": "Converts the selected Cinema 4D camera representation through the scene manager. / 通过场景管理器转换选定的 Cinema 4D 相机表示。",
+      "tags": [
+        "import-export",
+        "orchestration",
+        "serialization"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/cmt_tools_manager.cpp:ExportVMDCamera",
+      "type": "function",
+      "name": "ExportVMDCamera",
+      "filePath": "source/cmt_tools_manager.cpp",
+      "lineRange": [
+        73,
+        90
+      ],
+      "summary": "Collects VMDCamera data from the active scene and writes it through the matching MMD serializer. / 从当前场景收集 VMDCamera 数据，并通过对应的 MMD 序列化器写出。",
+      "tags": [
+        "import-export",
+        "orchestration",
+        "serialization"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/cmt_tools_manager.cpp:ImportVMDMotion",
+      "type": "function",
+      "name": "ImportVMDMotion",
+      "filePath": "source/cmt_tools_manager.cpp",
+      "lineRange": [
+        92,
+        118
+      ],
+      "summary": "Reads and imports VMDMotion data into the active Cinema 4D document through the scene manager. / 读取 VMDMotion 数据，并通过场景管理器导入当前 Cinema 4D 文档。",
+      "tags": [
+        "import-export",
+        "orchestration",
+        "serialization"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/cmt_tools_manager.cpp:ImportVPDPose",
+      "type": "function",
+      "name": "ImportVPDPose",
+      "filePath": "source/cmt_tools_manager.cpp",
+      "lineRange": [
+        120,
+        139
+      ],
+      "summary": "Reads and imports VPDPose data into the active Cinema 4D document through the scene manager. / 读取 VPDPose 数据，并通过场景管理器导入当前 Cinema 4D 文档。",
+      "tags": [
+        "import-export",
+        "orchestration",
+        "serialization"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/cmt_tools_manager.cpp:ExportVPDPose",
+      "type": "function",
+      "name": "ExportVPDPose",
+      "filePath": "source/cmt_tools_manager.cpp",
+      "lineRange": [
+        141,
+        162
+      ],
+      "summary": "Collects VPDPose data from the active scene and writes it through the matching MMD serializer. / 从当前场景收集 VPDPose 数据，并通过对应的 MMD 序列化器写出。",
+      "tags": [
+        "import-export",
+        "orchestration",
+        "serialization"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/cmt_tools_manager.cpp:ExportVMDMotion",
+      "type": "function",
+      "name": "ExportVMDMotion",
+      "filePath": "source/cmt_tools_manager.cpp",
+      "lineRange": [
+        164,
+        193
+      ],
+      "summary": "Collects VMDMotion data from the active scene and writes it through the matching MMD serializer. / 从当前场景收集 VMDMotion 数据，并通过对应的 MMD 序列化器写出。",
+      "tags": [
+        "import-export",
+        "orchestration",
+        "serialization"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/cmt_tools_manager.cpp:ImportPMXModel",
+      "type": "function",
+      "name": "ImportPMXModel",
+      "filePath": "source/cmt_tools_manager.cpp",
+      "lineRange": [
+        195,
+        230
+      ],
+      "summary": "Reads and imports PMXModel data into the active Cinema 4D document through the scene manager. / 读取 PMXModel 数据，并通过场景管理器导入当前 Cinema 4D 文档。",
+      "tags": [
+        "import-export",
+        "orchestration",
+        "serialization"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/cmt_tools_manager.cpp:ExportPMXModel",
+      "type": "function",
+      "name": "ExportPMXModel",
+      "filePath": "source/cmt_tools_manager.cpp",
+      "lineRange": [
+        232,
+        250
+      ],
+      "summary": "Collects PMXModel data from the active scene and writes it through the matching MMD serializer. / 从当前场景收集 PMXModel 数据，并通过对应的 MMD 序列化器写出。",
+      "tags": [
+        "import-export",
+        "orchestration",
+        "serialization"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:source/cmt_tools_manager.h",
+      "type": "file",
+      "name": "cmt_tools_manager.h",
+      "filePath": "source/cmt_tools_manager.h",
+      "summary": "Declares the public tool-command surface for camera, motion, pose, and model import and export. / 声明相机、动作、姿势与模型导入导出的公共工具命令接口。",
+      "tags": [
+        "import-export",
+        "api",
+        "type-definition"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:source/module/ui/cmt_name_conversion_dialog.h",
+      "type": "file",
+      "name": "cmt_name_conversion_dialog.h",
+      "filePath": "source/module/ui/cmt_name_conversion_dialog.h",
+      "summary": "Declares the reusable name-mapping engine and Cinema 4D dialog used to edit and apply local-to-universal name conversions. / 声明可复用的名称映射引擎及 Cinema 4D 对话框，用于编辑并应用本地名到通用名的转换。",
+      "tags": [
+        "ui",
+        "name-conversion",
+        "data-model",
+        "type-definition"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:source/utils/filename_util.hpp",
+      "type": "file",
+      "name": "filename_util.hpp",
+      "filePath": "source/utils/filename_util.hpp",
+      "summary": "Provides binary file reading, suffix validation, and Cinema 4D import/export file-selection helpers. / 提供二进制文件读取、后缀校验及 Cinema 4D 导入导出文件选择辅助。",
+      "tags": [
+        "utility",
+        "file-io",
+        "validation"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:source/utils/string_util.hpp",
+      "type": "file",
+      "name": "string_util.hpp",
+      "filePath": "source/utils/string_util.hpp",
+      "summary": "Converts Cinema 4D strings to UTF-8 standard strings for library and filesystem boundaries. / 将 Cinema 4D 字符串转换为 UTF-8 标准字符串，用于库与文件系统边界。",
+      "tags": [
+        "utility",
+        "string-conversion",
+        "utf-8"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/cmt_tools_setting.h:BaseSetting",
+      "type": "function",
+      "name": "BaseSetting",
+      "filePath": "source/cmt_tools_setting.h",
+      "lineRange": [
+        23,
+        23
+      ],
+      "summary": "Constructs BaseSetting workflow options from the active Cinema 4D document. / 从当前 Cinema 4D 文档构造 BaseSetting 工作流选项。",
+      "tags": [
+        "configuration",
+        "data-model",
+        "persistence"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/cmt_tools_setting.h:CameraImport",
+      "type": "function",
+      "name": "CameraImport",
+      "filePath": "source/cmt_tools_setting.h",
+      "lineRange": [
+        31,
+        31
+      ],
+      "summary": "Constructs CameraImport workflow options from the active Cinema 4D document. / 从当前 Cinema 4D 文档构造 CameraImport 工作流选项。",
+      "tags": [
+        "configuration",
+        "data-model",
+        "persistence"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/cmt_tools_setting.h:CameraExport",
+      "type": "function",
+      "name": "CameraExport",
+      "filePath": "source/cmt_tools_setting.h",
+      "lineRange": [
+        40,
+        40
+      ],
+      "summary": "Constructs CameraExport workflow options from the active Cinema 4D document. / 从当前 Cinema 4D 文档构造 CameraExport 工作流选项。",
+      "tags": [
+        "configuration",
+        "data-model",
+        "persistence"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/cmt_tools_setting.h:CameraConversion",
+      "type": "function",
+      "name": "CameraConversion",
+      "filePath": "source/cmt_tools_setting.h",
+      "lineRange": [
+        49,
+        50
+      ],
+      "summary": "Constructs CameraConversion workflow options from the active Cinema 4D document. / 从当前 Cinema 4D 文档构造 CameraConversion 工作流选项。",
+      "tags": [
+        "configuration",
+        "data-model",
+        "persistence"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/cmt_tools_setting.h:MotionImport",
+      "type": "function",
+      "name": "MotionImport",
+      "filePath": "source/cmt_tools_setting.h",
+      "lineRange": [
+        64,
+        64
+      ],
+      "summary": "Constructs MotionImport workflow options from the active Cinema 4D document. / 从当前 Cinema 4D 文档构造 MotionImport 工作流选项。",
+      "tags": [
+        "configuration",
+        "data-model",
+        "persistence"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/cmt_tools_setting.h:MotionExport",
+      "type": "function",
+      "name": "MotionExport",
+      "filePath": "source/cmt_tools_setting.h",
+      "lineRange": [
+        76,
+        76
+      ],
+      "summary": "Constructs MotionExport workflow options from the active Cinema 4D document. / 从当前 Cinema 4D 文档构造 MotionExport 工作流选项。",
+      "tags": [
+        "configuration",
+        "data-model",
+        "persistence"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/cmt_tools_setting.h:PoseImport",
+      "type": "function",
+      "name": "PoseImport",
+      "filePath": "source/cmt_tools_setting.h",
+      "lineRange": [
+        80,
+        80
+      ],
+      "summary": "Constructs PoseImport workflow options from the active Cinema 4D document. / 从当前 Cinema 4D 文档构造 PoseImport 工作流选项。",
+      "tags": [
+        "configuration",
+        "data-model",
+        "persistence"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/cmt_tools_setting.h:PoseExport",
+      "type": "function",
+      "name": "PoseExport",
+      "filePath": "source/cmt_tools_setting.h",
+      "lineRange": [
+        84,
+        84
+      ],
+      "summary": "Constructs PoseExport workflow options from the active Cinema 4D document. / 从当前 Cinema 4D 文档构造 PoseExport 工作流选项。",
+      "tags": [
+        "configuration",
+        "data-model",
+        "persistence"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/cmt_tools_setting.h:ModelImport",
+      "type": "function",
+      "name": "ModelImport",
+      "filePath": "source/cmt_tools_setting.h",
+      "lineRange": [
+        111,
+        111
+      ],
+      "summary": "Constructs ModelImport workflow options from the active Cinema 4D document. / 从当前 Cinema 4D 文档构造 ModelImport 工作流选项。",
+      "tags": [
+        "configuration",
+        "data-model",
+        "persistence"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/cmt_tools_setting.h:ModelExport",
+      "type": "function",
+      "name": "ModelExport",
+      "filePath": "source/cmt_tools_setting.h",
+      "lineRange": [
+        126,
+        126
+      ],
+      "summary": "Constructs ModelExport workflow options from the active Cinema 4D document. / 从当前 Cinema 4D 文档构造 ModelExport 工作流选项。",
+      "tags": [
+        "configuration",
+        "data-model",
+        "persistence"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:source/cmt_tools_setting.h:BaseSetting",
+      "type": "class",
+      "name": "BaseSetting",
+      "filePath": "source/cmt_tools_setting.h",
+      "lineRange": [
+        18,
+        24
+      ],
+      "summary": "Stores BaseSetting conversion options initialized from a Cinema 4D document. / 保存从 Cinema 4D 文档初始化的 BaseSetting 转换选项。",
+      "tags": [
+        "configuration",
+        "data-model",
+        "serialization"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:source/cmt_tools_setting.h:CameraImport",
+      "type": "class",
+      "name": "CameraImport",
+      "filePath": "source/cmt_tools_setting.h",
+      "lineRange": [
+        26,
+        32
+      ],
+      "summary": "Stores CameraImport conversion options initialized from a Cinema 4D document. / 保存从 Cinema 4D 文档初始化的 CameraImport 转换选项。",
+      "tags": [
+        "configuration",
+        "data-model",
+        "serialization"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:source/cmt_tools_setting.h:CameraExport",
+      "type": "class",
+      "name": "CameraExport",
+      "filePath": "source/cmt_tools_setting.h",
+      "lineRange": [
+        33,
+        41
+      ],
+      "summary": "Stores CameraExport conversion options initialized from a Cinema 4D document. / 保存从 Cinema 4D 文档初始化的 CameraExport 转换选项。",
+      "tags": [
+        "configuration",
+        "data-model",
+        "serialization"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:source/cmt_tools_setting.h:CameraConversion",
+      "type": "class",
+      "name": "CameraConversion",
+      "filePath": "source/cmt_tools_setting.h",
+      "lineRange": [
+        42,
+        51
+      ],
+      "summary": "Stores CameraConversion conversion options initialized from a Cinema 4D document. / 保存从 Cinema 4D 文档初始化的 CameraConversion 转换选项。",
+      "tags": [
+        "configuration",
+        "data-model",
+        "serialization"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:source/cmt_tools_setting.h:MotionImport",
+      "type": "class",
+      "name": "MotionImport",
+      "filePath": "source/cmt_tools_setting.h",
+      "lineRange": [
+        52,
+        65
+      ],
+      "summary": "Stores MotionImport conversion options initialized from a Cinema 4D document. / 保存从 Cinema 4D 文档初始化的 MotionImport 转换选项。",
+      "tags": [
+        "configuration",
+        "data-model",
+        "serialization"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:source/cmt_tools_setting.h:MotionExport",
+      "type": "class",
+      "name": "MotionExport",
+      "filePath": "source/cmt_tools_setting.h",
+      "lineRange": [
+        66,
+        77
+      ],
+      "summary": "Stores MotionExport conversion options initialized from a Cinema 4D document. / 保存从 Cinema 4D 文档初始化的 MotionExport 转换选项。",
+      "tags": [
+        "configuration",
+        "data-model",
+        "serialization"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:source/cmt_tools_setting.h:PoseImport",
+      "type": "class",
+      "name": "PoseImport",
+      "filePath": "source/cmt_tools_setting.h",
+      "lineRange": [
+        78,
+        81
+      ],
+      "summary": "Stores PoseImport conversion options initialized from a Cinema 4D document. / 保存从 Cinema 4D 文档初始化的 PoseImport 转换选项。",
+      "tags": [
+        "configuration",
+        "data-model",
+        "serialization"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:source/cmt_tools_setting.h:PoseExport",
+      "type": "class",
+      "name": "PoseExport",
+      "filePath": "source/cmt_tools_setting.h",
+      "lineRange": [
+        82,
+        85
+      ],
+      "summary": "Stores PoseExport conversion options initialized from a Cinema 4D document. / 保存从 Cinema 4D 文档初始化的 PoseExport 转换选项。",
+      "tags": [
+        "configuration",
+        "data-model",
+        "serialization"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:source/cmt_tools_setting.h:ModelImport",
+      "type": "class",
+      "name": "ModelImport",
+      "filePath": "source/cmt_tools_setting.h",
+      "lineRange": [
+        86,
+        112
+      ],
+      "summary": "Stores ModelImport conversion options initialized from a Cinema 4D document. / 保存从 Cinema 4D 文档初始化的 ModelImport 转换选项。",
+      "tags": [
+        "configuration",
+        "data-model",
+        "serialization"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:source/cmt_tools_setting.h:ModelExport",
+      "type": "class",
+      "name": "ModelExport",
+      "filePath": "source/cmt_tools_setting.h",
+      "lineRange": [
+        113,
+        127
+      ],
+      "summary": "Stores ModelExport conversion options initialized from a Cinema 4D document. / 保存从 Cinema 4D 文档初始化的 ModelExport 转换选项。",
+      "tags": [
+        "configuration",
+        "data-model",
+        "serialization"
+      ],
+      "complexity": "simple"
+    }
+  ],
+  "edges": [
+    {
+      "source": "file:source/CMTSceneManager.h",
+      "target": "function:source/CMTSceneManager.h:CMTSceneManager",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/CMTSceneManager.h",
+      "target": "function:source/CMTSceneManager.h:CMTSceneManager",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/CMTSceneManager.h",
+      "target": "function:source/CMTSceneManager.h:~CMTSceneManager",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/CMTSceneManager.h",
+      "target": "function:source/CMTSceneManager.h:~CMTSceneManager",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/CMTSceneManager.h",
+      "target": "class:source/CMTSceneManager.h:IOLog",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/CMTSceneManager.h",
+      "target": "class:source/CMTSceneManager.h:IOLog",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/CMTSceneManager.h",
+      "target": "class:source/CMTSceneManager.h:LoadVmdCameraLog",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/CMTSceneManager.h",
+      "target": "class:source/CMTSceneManager.h:LoadVmdCameraLog",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/CMTSceneManager.h",
+      "target": "class:source/CMTSceneManager.h:SaveVmdCameraLog",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/CMTSceneManager.h",
+      "target": "class:source/CMTSceneManager.h:SaveVmdCameraLog",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/CMTSceneManager.h",
+      "target": "class:source/CMTSceneManager.h:ConversionVmdCameraLog",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/CMTSceneManager.h",
+      "target": "class:source/CMTSceneManager.h:ConversionVmdCameraLog",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/CMTSceneManager.h",
+      "target": "class:source/CMTSceneManager.h:LoadVmdMotionLog",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/CMTSceneManager.h",
+      "target": "class:source/CMTSceneManager.h:LoadVmdMotionLog",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/CMTSceneManager.h",
+      "target": "class:source/CMTSceneManager.h:SaveVmdMotionLog",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/CMTSceneManager.h",
+      "target": "class:source/CMTSceneManager.h:SaveVmdMotionLog",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/CMTSceneManager.h",
+      "target": "class:source/CMTSceneManager.h:LoadVpdPoseLog",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/CMTSceneManager.h",
+      "target": "class:source/CMTSceneManager.h:LoadVpdPoseLog",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/CMTSceneManager.h",
+      "target": "class:source/CMTSceneManager.h:SaveVpdPoseLog",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/CMTSceneManager.h",
+      "target": "class:source/CMTSceneManager.h:SaveVpdPoseLog",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/CMTSceneManager.h",
+      "target": "class:source/CMTSceneManager.h:LoadModelLog",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/CMTSceneManager.h",
+      "target": "class:source/CMTSceneManager.h:LoadModelLog",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/CMTSceneManager.h",
+      "target": "class:source/CMTSceneManager.h:SavePmxModelLog",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/CMTSceneManager.h",
+      "target": "class:source/CMTSceneManager.h:SavePmxModelLog",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/CMTSceneManager.h",
+      "target": "class:source/CMTSceneManager.h:CMTSceneManager",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/CMTSceneManager.h",
+      "target": "class:source/CMTSceneManager.h:CMTSceneManager",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/CMTSceneManager.h",
+      "target": "file:source/cmt_tools_setting.h",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:source/CMTSceneManager.h",
+      "target": "file:source/module/core/cmt_marco.h",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:source/cmt_tools_config_manager.cpp",
+      "target": "function:source/cmt_tools_config_manager.cpp:InitDialog",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/cmt_tools_config_manager.cpp",
+      "target": "function:source/cmt_tools_config_manager.cpp:InitDialog",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/cmt_tools_config_manager.cpp",
+      "target": "function:source/cmt_tools_config_manager.cpp:InitConfig",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/cmt_tools_config_manager.cpp",
+      "target": "function:source/cmt_tools_config_manager.cpp:InitConfig",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/cmt_tools_config_manager.cpp",
+      "target": "function:source/cmt_tools_config_manager.cpp:InitConfigManager",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/cmt_tools_config_manager.cpp",
+      "target": "function:source/cmt_tools_config_manager.cpp:InitConfigManager",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/cmt_tools_config_manager.cpp",
+      "target": "function:source/cmt_tools_config_manager.cpp:SaveConfig",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/cmt_tools_config_manager.cpp",
+      "target": "function:source/cmt_tools_config_manager.cpp:SaveConfig",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/cmt_tools_config_manager.cpp",
+      "target": "file:source/cmt_tools_config_manager.h",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:source/cmt_tools_config_manager.cpp",
+      "target": "file:source/module/core/cmt_marco.h",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:source/cmt_tools_config_manager.h",
+      "target": "function:source/cmt_tools_config_manager.h:CMTToolConfigManager",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/cmt_tools_config_manager.h",
+      "target": "function:source/cmt_tools_config_manager.h:CMTToolConfigManager",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/cmt_tools_config_manager.h",
+      "target": "function:source/cmt_tools_config_manager.h:operator =",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/cmt_tools_config_manager.h",
+      "target": "function:source/cmt_tools_config_manager.h:operator =",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/cmt_tools_config_manager.h",
+      "target": "class:source/cmt_tools_config_manager.h:CMTToolConfigManager",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/cmt_tools_config_manager.h",
+      "target": "class:source/cmt_tools_config_manager.h:CMTToolConfigManager",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/cmt_tools_config_manager.h",
+      "target": "file:source/module/core/cmt_marco.h",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:source/cmt_tools_config_manager.h",
+      "target": "file:source/utils/json_util.hpp",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:source/cmt_tools_manager.cpp",
+      "target": "function:source/cmt_tools_manager.cpp:ImportVMDCamera",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/cmt_tools_manager.cpp",
+      "target": "function:source/cmt_tools_manager.cpp:ImportVMDCamera",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/cmt_tools_manager.cpp",
+      "target": "function:source/cmt_tools_manager.cpp:ConversionCamera",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/cmt_tools_manager.cpp",
+      "target": "function:source/cmt_tools_manager.cpp:ConversionCamera",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/cmt_tools_manager.cpp",
+      "target": "function:source/cmt_tools_manager.cpp:ExportVMDCamera",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/cmt_tools_manager.cpp",
+      "target": "function:source/cmt_tools_manager.cpp:ExportVMDCamera",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/cmt_tools_manager.cpp",
+      "target": "function:source/cmt_tools_manager.cpp:ImportVMDMotion",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/cmt_tools_manager.cpp",
+      "target": "function:source/cmt_tools_manager.cpp:ImportVMDMotion",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/cmt_tools_manager.cpp",
+      "target": "function:source/cmt_tools_manager.cpp:ImportVPDPose",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/cmt_tools_manager.cpp",
+      "target": "function:source/cmt_tools_manager.cpp:ImportVPDPose",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/cmt_tools_manager.cpp",
+      "target": "function:source/cmt_tools_manager.cpp:ExportVPDPose",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/cmt_tools_manager.cpp",
+      "target": "function:source/cmt_tools_manager.cpp:ExportVPDPose",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/cmt_tools_manager.cpp",
+      "target": "function:source/cmt_tools_manager.cpp:ExportVMDMotion",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/cmt_tools_manager.cpp",
+      "target": "function:source/cmt_tools_manager.cpp:ExportVMDMotion",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/cmt_tools_manager.cpp",
+      "target": "function:source/cmt_tools_manager.cpp:ImportPMXModel",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/cmt_tools_manager.cpp",
+      "target": "function:source/cmt_tools_manager.cpp:ImportPMXModel",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/cmt_tools_manager.cpp",
+      "target": "function:source/cmt_tools_manager.cpp:ExportPMXModel",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/cmt_tools_manager.cpp",
+      "target": "function:source/cmt_tools_manager.cpp:ExportPMXModel",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/cmt_tools_manager.cpp",
+      "target": "file:source/cmt_tools_manager.h",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:source/cmt_tools_manager.cpp",
+      "target": "file:source/CMTSceneManager.h",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:source/cmt_tools_manager.cpp",
+      "target": "file:source/module/ui/cmt_name_conversion_dialog.h",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:source/cmt_tools_manager.cpp",
+      "target": "file:source/utils/filename_util.hpp",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:source/cmt_tools_manager.cpp",
+      "target": "file:source/utils/string_util.hpp",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:source/cmt_tools_manager.h",
+      "target": "file:source/cmt_tools_setting.h",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:source/cmt_tools_setting.h",
+      "target": "function:source/cmt_tools_setting.h:BaseSetting",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/cmt_tools_setting.h",
+      "target": "function:source/cmt_tools_setting.h:BaseSetting",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/cmt_tools_setting.h",
+      "target": "function:source/cmt_tools_setting.h:CameraImport",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/cmt_tools_setting.h",
+      "target": "function:source/cmt_tools_setting.h:CameraImport",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/cmt_tools_setting.h",
+      "target": "function:source/cmt_tools_setting.h:CameraExport",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/cmt_tools_setting.h",
+      "target": "function:source/cmt_tools_setting.h:CameraExport",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/cmt_tools_setting.h",
+      "target": "function:source/cmt_tools_setting.h:CameraConversion",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/cmt_tools_setting.h",
+      "target": "function:source/cmt_tools_setting.h:CameraConversion",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/cmt_tools_setting.h",
+      "target": "function:source/cmt_tools_setting.h:MotionImport",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/cmt_tools_setting.h",
+      "target": "function:source/cmt_tools_setting.h:MotionImport",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/cmt_tools_setting.h",
+      "target": "function:source/cmt_tools_setting.h:MotionExport",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/cmt_tools_setting.h",
+      "target": "function:source/cmt_tools_setting.h:MotionExport",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/cmt_tools_setting.h",
+      "target": "function:source/cmt_tools_setting.h:PoseImport",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/cmt_tools_setting.h",
+      "target": "function:source/cmt_tools_setting.h:PoseImport",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/cmt_tools_setting.h",
+      "target": "function:source/cmt_tools_setting.h:PoseExport",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/cmt_tools_setting.h",
+      "target": "function:source/cmt_tools_setting.h:PoseExport",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/cmt_tools_setting.h",
+      "target": "function:source/cmt_tools_setting.h:ModelImport",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/cmt_tools_setting.h",
+      "target": "function:source/cmt_tools_setting.h:ModelImport",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/cmt_tools_setting.h",
+      "target": "function:source/cmt_tools_setting.h:ModelExport",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/cmt_tools_setting.h",
+      "target": "function:source/cmt_tools_setting.h:ModelExport",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/cmt_tools_setting.h",
+      "target": "class:source/cmt_tools_setting.h:BaseSetting",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/cmt_tools_setting.h",
+      "target": "class:source/cmt_tools_setting.h:BaseSetting",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/cmt_tools_setting.h",
+      "target": "class:source/cmt_tools_setting.h:CameraImport",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/cmt_tools_setting.h",
+      "target": "class:source/cmt_tools_setting.h:CameraImport",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/cmt_tools_setting.h",
+      "target": "class:source/cmt_tools_setting.h:CameraExport",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/cmt_tools_setting.h",
+      "target": "class:source/cmt_tools_setting.h:CameraExport",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/cmt_tools_setting.h",
+      "target": "class:source/cmt_tools_setting.h:CameraConversion",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/cmt_tools_setting.h",
+      "target": "class:source/cmt_tools_setting.h:CameraConversion",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/cmt_tools_setting.h",
+      "target": "class:source/cmt_tools_setting.h:MotionImport",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/cmt_tools_setting.h",
+      "target": "class:source/cmt_tools_setting.h:MotionImport",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/cmt_tools_setting.h",
+      "target": "class:source/cmt_tools_setting.h:MotionExport",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/cmt_tools_setting.h",
+      "target": "class:source/cmt_tools_setting.h:MotionExport",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/cmt_tools_setting.h",
+      "target": "class:source/cmt_tools_setting.h:PoseImport",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/cmt_tools_setting.h",
+      "target": "class:source/cmt_tools_setting.h:PoseImport",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/cmt_tools_setting.h",
+      "target": "class:source/cmt_tools_setting.h:PoseExport",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/cmt_tools_setting.h",
+      "target": "class:source/cmt_tools_setting.h:PoseExport",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/cmt_tools_setting.h",
+      "target": "class:source/cmt_tools_setting.h:ModelImport",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/cmt_tools_setting.h",
+      "target": "class:source/cmt_tools_setting.h:ModelImport",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/cmt_tools_setting.h",
+      "target": "class:source/cmt_tools_setting.h:ModelExport",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/cmt_tools_setting.h",
+      "target": "class:source/cmt_tools_setting.h:ModelExport",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/cmt_tools_setting.h",
+      "target": "file:source/module/core/cmt_marco.h",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    }
+  ]
+}

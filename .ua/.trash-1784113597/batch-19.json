@@ -1,0 +1,474 @@
+{
+  "nodes": [
+    {
+      "id": "file:res/S24_up/strings_zh-CN/description/OMMDJoint.str",
+      "type": "file",
+      "name": "OMMDJoint.str",
+      "filePath": "res/S24_up/strings_zh-CN/description/OMMDJoint.str",
+      "summary": "Provides Simplified Chinese Cinema 4D resource labels for joint transforms, limits, springs, display options, and physics modes in the S24-and-newer resource tree. / 为 S24 及更新版本资源树中的关节变换、限制、弹簧、显示选项与物理模式提供简体中文 Cinema 4D 资源标签。",
+      "tags": [
+        "localization",
+        "zh-cn",
+        "cinema-4d",
+        "joint",
+        "current-sdk"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:res/S24_up/strings_zh-CN/description/OMMDJointManager.str",
+      "type": "file",
+      "name": "OMMDJointManager.str",
+      "filePath": "res/S24_up/strings_zh-CN/description/OMMDJointManager.str",
+      "summary": "Provides Simplified Chinese Cinema 4D resource labels for joint-manager list, display, and mode controls in the S24-and-newer resource tree. / 为 S24 及更新版本资源树中的关节管理器的列表、显示与模式控制提供简体中文 Cinema 4D 资源标签。",
+      "tags": [
+        "localization",
+        "zh-cn",
+        "cinema-4d",
+        "joint-manager",
+        "current-sdk"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:res/S24_up/strings_zh-CN/description/OMMDMeshManager.str",
+      "type": "file",
+      "name": "OMMDMeshManager.str",
+      "filePath": "res/S24_up/strings_zh-CN/description/OMMDMeshManager.str",
+      "summary": "Provides Simplified Chinese Cinema 4D resource labels for mesh-manager display, mesh-mode, and morph-mode controls in the S24-and-newer resource tree. / 为 S24 及更新版本资源树中的网格管理器的显示、网格模式与变形模式控制提供简体中文 Cinema 4D 资源标签。",
+      "tags": [
+        "localization",
+        "zh-cn",
+        "cinema-4d",
+        "mesh-manager",
+        "current-sdk"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:res/S24_up/strings_zh-CN/description/OMMDModelManager.str",
+      "type": "file",
+      "name": "OMMDModelManager.str",
+      "filePath": "res/S24_up/strings_zh-CN/description/OMMDModelManager.str",
+      "summary": "Provides Simplified Chinese Cinema 4D resource labels for model metadata, animation slots, physics, IK, morphs, materials, display frames, and model operations in the S24-and-newer resource tree. / 为 S24 及更新版本资源树中的模型元数据、动画槽、物理、IK、变形、材质、显示框与模型操作提供简体中文 Cinema 4D 资源标签。",
+      "tags": [
+        "localization",
+        "zh-cn",
+        "cinema-4d",
+        "model-manager",
+        "current-sdk"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:res/S24_up/strings_zh-CN/description/OMMDRigid.str",
+      "type": "file",
+      "name": "OMMDRigid.str",
+      "filePath": "res/S24_up/strings_zh-CN/description/OMMDRigid.str",
+      "summary": "Provides Simplified Chinese Cinema 4D resource labels for rigid-body transforms, shapes, collision groups, dynamics, display, and modes in the S24-and-newer resource tree. / 为 S24 及更新版本资源树中的刚体变换、形状、碰撞组、动力学、显示与模式提供简体中文 Cinema 4D 资源标签。",
+      "tags": [
+        "localization",
+        "zh-cn",
+        "cinema-4d",
+        "rigid-body",
+        "current-sdk"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:res/S24_up/strings_zh-CN/description/OMMDRigidManager.str",
+      "type": "file",
+      "name": "OMMDRigidManager.str",
+      "filePath": "res/S24_up/strings_zh-CN/description/OMMDRigidManager.str",
+      "summary": "Provides Simplified Chinese Cinema 4D resource labels for rigid-manager list, display, and mode controls in the S24-and-newer resource tree. / 为 S24 及更新版本资源树中的刚体管理器的列表、显示与模式控制提供简体中文 Cinema 4D 资源标签。",
+      "tags": [
+        "localization",
+        "zh-cn",
+        "cinema-4d",
+        "rigid-manager",
+        "current-sdk"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:res/S24_up/strings_zh-CN/description/TMMDBone.str",
+      "type": "file",
+      "name": "TMMDBone.str",
+      "filePath": "res/S24_up/strings_zh-CN/description/TMMDBone.str",
+      "summary": "Provides Simplified Chinese Cinema 4D resource labels for bone-tag PMX properties, append transforms, IK links, animation curves, and bone morphs in the S24-and-newer resource tree. / 为 S24 及更新版本资源树中的骨骼标签的 PMX 属性、附加变换、IK 链接、动画曲线与骨骼变形提供简体中文 Cinema 4D 资源标签。",
+      "tags": [
+        "localization",
+        "zh-cn",
+        "cinema-4d",
+        "bone-tag",
+        "current-sdk"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:res/S24_up/strings_zh-CN/description/Xmmdmaterialmorphshader.str",
+      "type": "file",
+      "name": "Xmmdmaterialmorphshader.str",
+      "filePath": "res/S24_up/strings_zh-CN/description/Xmmdmaterialmorphshader.str",
+      "summary": "Provides Simplified Chinese Cinema 4D resource labels for material-morph shader parameters and display names in the S24-and-newer resource tree. / 为 S24 及更新版本资源树中的材质变形着色器参数与显示名称提供简体中文 Cinema 4D 资源标签。",
+      "tags": [
+        "localization",
+        "zh-cn",
+        "cinema-4d",
+        "material-morph",
+        "current-sdk"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:res/S24_up/strings_zh-CN/dialogs/DLG_CMT_TOOL.str",
+      "type": "file",
+      "name": "DLG_CMT_TOOL.str",
+      "filePath": "res/S24_up/strings_zh-CN/dialogs/DLG_CMT_TOOL.str",
+      "summary": "Provides Simplified Chinese Cinema 4D resource labels for the main tool dialog's camera, motion, and model import/export options in the S24-and-newer resource tree. / 为 S24 及更新版本资源树中的主工具对话框中的相机、动作与模型导入导出选项提供简体中文 Cinema 4D 资源标签。",
+      "tags": [
+        "localization",
+        "zh-cn",
+        "cinema-4d",
+        "tool-dialog",
+        "current-sdk"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:res/S24_up/strings_zh-CN/dialogs/DLG_CMT_VMD_IMPORT.str",
+      "type": "file",
+      "name": "DLG_CMT_VMD_IMPORT.str",
+      "filePath": "res/S24_up/strings_zh-CN/dialogs/DLG_CMT_VMD_IMPORT.str",
+      "summary": "Provides Simplified Chinese Cinema 4D resource labels for the focused VMD import dialog and its model-selection controls in the S24-and-newer resource tree. / 为 S24 及更新版本资源树中的聚焦的 VMD 导入对话框及其模型选择控制提供简体中文 Cinema 4D 资源标签。",
+      "tags": [
+        "localization",
+        "zh-cn",
+        "cinema-4d",
+        "vmd-import",
+        "current-sdk"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:scripts/build_macos.sh",
+      "type": "file",
+      "name": "build_macos.sh",
+      "filePath": "scripts/build_macos.sh",
+      "summary": "Builds one or all supported Cinema 4D SDK plugin variants on macOS by validating the Xcode toolchain, staging SDK sources, selecting architectures, recovering libMMD when needed, configuring CMake, and invoking cmt-workflow. / 在 macOS 上构建一个或全部受支持的 Cinema 4D SDK 插件版本，负责校验 Xcode 工具链、暂存 SDK 源码、选择架构、按需恢复 libMMD、配置 CMake 并调用 cmt-workflow。",
+      "tags": [
+        "build-script",
+        "macos",
+        "cmake",
+        "multi-sdk",
+        "dependency-management"
+      ],
+      "complexity": "complex",
+      "languageNotes": "The Bash workflow uses strict error handling, array-safe argument construction, isolated SDK staging, and build-only Git worktrees for dependency recovery. / 该 Bash 工作流使用严格错误处理、数组安全的参数构造、隔离 SDK 暂存以及仅用于构建的 Git worktree 来恢复依赖。"
+    },
+    {
+      "id": "function:scripts/build_macos.sh:usage",
+      "type": "function",
+      "name": "usage",
+      "filePath": "scripts/build_macos.sh",
+      "lineRange": [
+        4,
+        31
+      ],
+      "summary": "Prints the macOS build command syntax and supported environment overrides, including SDK, generator, architecture, compiler, build directory, and libMMD options. / 输出 macOS 构建命令语法与支持的环境变量覆盖项，包括 SDK、生成器、架构、编译器、构建目录与 libMMD 选项。",
+      "tags": [
+        "cli",
+        "help",
+        "build-script"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:scripts/build_macos.sh:prepare_sdk_source",
+      "type": "function",
+      "name": "prepare_sdk_source",
+      "filePath": "scripts/build_macos.sh",
+      "lineRange": [
+        90,
+        105
+      ],
+      "summary": "Stages an SDK tree under the build directory, links the shared CMake tooling, excludes tracked plugin source/resource links, and returns the isolated SDK path. / 将 SDK 树暂存到构建目录，链接共享 CMake 工具链，排除受版本控制的插件源码与资源链接，并返回隔离后的 SDK 路径。",
+      "tags": [
+        "sdk-staging",
+        "filesystem",
+        "build-script"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:scripts/build_macos.sh:reset_sdk_build_dir_if_needed",
+      "type": "function",
+      "name": "reset_sdk_build_dir_if_needed",
+      "filePath": "scripts/build_macos.sh",
+      "lineRange": [
+        107,
+        120
+      ],
+      "summary": "Compares the cached CMake source directory with the staged SDK path and removes stale generated output when the source location changes. / 比较缓存的 CMake 源目录与暂存 SDK 路径，并在源码位置变化时移除过期生成输出。",
+      "tags": [
+        "cmake-cache",
+        "build-directory",
+        "validation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:scripts/build_macos.sh:build_sdk",
+      "type": "function",
+      "name": "build_sdk",
+      "filePath": "scripts/build_macos.sh",
+      "lineRange": [
+        212,
+        254
+      ],
+      "summary": "Configures a staged SDK with the selected macOS toolchain, architecture, generator, and libMMD source, then builds the mmdtool target through the root cmt-workflow. / 使用选定的 macOS 工具链、架构、生成器与 libMMD 源码配置暂存 SDK，随后通过根级 cmt-workflow 构建 mmdtool 目标。",
+      "tags": [
+        "cmake",
+        "macos",
+        "multi-sdk",
+        "build-orchestration"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:sdk_2023/cmake/sdk_compat_2023.cmake",
+      "type": "file",
+      "name": "sdk_compat_2023.cmake",
+      "filePath": "sdk_2023/cmake/sdk_compat_2023.cmake",
+      "summary": "Defines conservative SDK 2023 compatibility defaults: C++20, parallel and permissive MSVC compilation, AVX baseline instructions, and reduced warning noise. / 定义保守的 SDK 2023 兼容默认值：C++20、MSVC 并行与宽松编译、AVX 基线指令以及降低警告噪声。",
+      "tags": [
+        "cmake",
+        "sdk-2023",
+        "compatibility",
+        "msvc",
+        "toolchain"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:sdk_2023/CMakeLists.txt",
+      "type": "document",
+      "name": "CMakeLists.txt",
+      "filePath": "sdk_2023/CMakeLists.txt",
+      "summary": "SDK 2023 bridge build definition that reuses the shared Maxon tooling, discovers plugin module paths, configures output directories, and loads only the frameworks required by participating modules. / SDK 2023 桥接构建定义，复用共享 Maxon 工具链，发现插件模块路径，配置输出目录，并仅加载参与模块所需的框架。",
+      "tags": [
+        "documentation",
+        "cmake",
+        "sdk-2023",
+        "build-system",
+        "frameworks"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "config:sdk_2023/CMakePresets.json",
+      "type": "config",
+      "name": "CMakePresets.json",
+      "filePath": "sdk_2023/CMakePresets.json",
+      "summary": "Defines SDK 2023 configure presets for Linux Ninja, universal macOS Xcode, Visual Studio 2022 v143, and Visual Studio ClangCL builds. / 定义 SDK 2023 的 Linux Ninja、macOS 通用 Xcode、Visual Studio 2022 v143 与 Visual Studio ClangCL 配置预设。",
+      "tags": [
+        "configuration",
+        "cmake-presets",
+        "sdk-2023",
+        "cross-platform"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:sdk_2023/plugins/mmdtool/project/CMakeLists.txt",
+      "type": "document",
+      "name": "CMakeLists.txt",
+      "filePath": "sdk_2023/plugins/mmdtool/project/CMakeLists.txt",
+      "summary": "Thin SDK 2023 plugin wrapper that resolves the shared project root, adds libMMD dependencies, includes common plugin setup, and supplies SDK framework source paths and dependencies. / 精简的 SDK 2023 插件包装层，解析共享项目根目录，引入 libMMD 依赖，包含通用插件设置，并提供 SDK 框架源码路径与依赖项。",
+      "tags": [
+        "documentation",
+        "cmake",
+        "sdk-2023",
+        "plugin-build",
+        "thin-wrapper"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:sdk_2023/plugins/mmdtool/project/mmdtool.vcxproj",
+      "type": "file",
+      "name": "mmdtool.vcxproj",
+      "filePath": "sdk_2023/plugins/mmdtool/project/mmdtool.vcxproj",
+      "summary": "Generated Visual Studio project for the SDK 2023 mmdtool module, defining configurations, toolsets, SDK properties, source items, framework references, and plugin outputs. / 为 SDK 2023 mmdtool 模块生成的 Visual Studio 项目，定义配置、工具集、SDK 属性、源码项、框架引用与插件输出。",
+      "tags": [
+        "visual-studio",
+        "sdk-2023",
+        "generated-project",
+        "msbuild",
+        "plugin-build"
+      ],
+      "complexity": "complex",
+      "languageNotes": "Generated IDE metadata mirrors build configurations and file references and should follow the shared CMake source of truth. / 生成的 IDE 元数据镜像构建配置与文件引用，应以共享 CMake 配置为事实来源。"
+    },
+    {
+      "id": "file:sdk_2023/plugins/mmdtool/project/mmdtool.vcxproj.filters",
+      "type": "file",
+      "name": "mmdtool.vcxproj.filters",
+      "filePath": "sdk_2023/plugins/mmdtool/project/mmdtool.vcxproj.filters",
+      "summary": "Defines Visual Studio Solution Explorer filters that group the generated SDK 2023 plugin sources and resources. / 定义 Visual Studio 解决方案资源管理器筛选器，用于组织生成的 SDK 2023 插件源码与资源。",
+      "tags": [
+        "visual-studio",
+        "sdk-2023",
+        "generated-project",
+        "ide-metadata"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:sdk_2023/plugins/mmdtool/project/mmdtool.vcxproj.user",
+      "type": "file",
+      "name": "mmdtool.vcxproj.user",
+      "filePath": "sdk_2023/plugins/mmdtool/project/mmdtool.vcxproj.user",
+      "summary": "Provides an intentionally empty per-user Visual Studio settings file for the SDK 2023 plugin project. / 为 SDK 2023 插件项目提供刻意留空的 Visual Studio 用户级设置文件。",
+      "tags": [
+        "visual-studio",
+        "sdk-2023",
+        "user-settings",
+        "ide-metadata"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:sdk_2023/plugins/mmdtool/project/mmdtool.xcodeproj/project.pbxproj",
+      "type": "file",
+      "name": "project.pbxproj",
+      "filePath": "sdk_2023/plugins/mmdtool/project/mmdtool.xcodeproj/project.pbxproj",
+      "summary": "Generated Xcode project model for the SDK 2023 plugin, including file references, build phases, target dependencies, configurations, architecture settings, and plugin product output. / 为 SDK 2023 插件生成的 Xcode 项目模型，包含文件引用、构建阶段、目标依赖、配置、架构设置与插件产品输出。",
+      "tags": [
+        "xcode",
+        "sdk-2023",
+        "generated-project",
+        "macos",
+        "plugin-build"
+      ],
+      "complexity": "complex",
+      "languageNotes": "Generated IDE metadata mirrors build configurations and file references and should follow the shared CMake source of truth. / 生成的 IDE 元数据镜像构建配置与文件引用，应以共享 CMake 配置为事实来源。"
+    },
+    {
+      "id": "document:sdk_2023/plugins/mmdtool/project/projectdefinition.txt",
+      "type": "document",
+      "name": "projectdefinition.txt",
+      "filePath": "sdk_2023/plugins/mmdtool/project/projectdefinition.txt",
+      "summary": "Maxon project metadata for the SDK 2023 mmdtool DLL, declaring Windows/macOS platforms, required Cinema 4D frameworks, component status, module ID, and style-check policy. / SDK 2023 mmdtool DLL 的 Maxon 项目元数据，声明 Windows/macOS 平台、所需 Cinema 4D 框架、组件状态、模块 ID 与样式检查策略。",
+      "tags": [
+        "documentation",
+        "sdk-2023",
+        "project-metadata",
+        "frameworks",
+        "plugin-build"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:sdk_2023/plugins/mmdtool/project/projectsettings.props",
+      "type": "file",
+      "name": "projectsettings.props",
+      "filePath": "sdk_2023/plugins/mmdtool/project/projectsettings.props",
+      "summary": "MSBuild property sheet that anchors the SDK 2023 Maxon root directory and injects the USE_API_MAXON preprocessor definition. / MSBuild 属性表，用于定位 SDK 2023 Maxon 根目录并注入 USE_API_MAXON 预处理定义。",
+      "tags": [
+        "msbuild",
+        "sdk-2023",
+        "project-settings",
+        "compiler-configuration"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:sdk_2023/plugins/project/projectdefinition.txt",
+      "type": "document",
+      "name": "projectdefinition.txt",
+      "filePath": "sdk_2023/plugins/project/projectdefinition.txt",
+      "summary": "Solution-level Maxon project metadata that groups the SDK 2023 mmdtool plugin for Windows and macOS generation. / 解决方案级 Maxon 项目元数据，用于在 Windows 与 macOS 生成流程中组织 SDK 2023 mmdtool 插件。",
+      "tags": [
+        "documentation",
+        "sdk-2023",
+        "solution-metadata",
+        "project-generation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:sdk_2024/cmake/commands/create_directory_symlink.cmake",
+      "type": "file",
+      "name": "create_directory_symlink.cmake",
+      "filePath": "sdk_2024/cmake/commands/create_directory_symlink.cmake",
+      "summary": "Compatibility forwarding shim that includes the shared directory-symlink CMake script for SDK 2024. / 兼容性转发垫片，为 SDK 2024 引入共享目录符号链接 CMake 脚本。",
+      "tags": [
+        "cmake",
+        "sdk-2024",
+        "compatibility",
+        "filesystem"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:sdk_2024/cmake/commands/update_filelist.cmake",
+      "type": "file",
+      "name": "update_filelist.cmake",
+      "filePath": "sdk_2024/cmake/commands/update_filelist.cmake",
+      "summary": "Compatibility forwarding shim that includes the shared generated-file-list updater for SDK 2024. / 兼容性转发垫片，为 SDK 2024 引入共享生成文件列表更新器。",
+      "tags": [
+        "cmake",
+        "sdk-2024",
+        "compatibility",
+        "source-discovery"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:sdk_2024/cmake/sdk_compat_2024.cmake",
+      "type": "file",
+      "name": "sdk_compat_2024.cmake",
+      "filePath": "sdk_2024/cmake/sdk_compat_2024.cmake",
+      "summary": "Defines conservative SDK 2024 compatibility defaults: C++20, permissive parallel MSVC compilation, AVX baseline instructions, and reduced warning noise. / 定义保守的 SDK 2024 兼容默认值：C++20、MSVC 宽松并行编译、AVX 基线指令以及降低警告噪声。",
+      "tags": [
+        "cmake",
+        "sdk-2024",
+        "compatibility",
+        "msvc",
+        "toolchain"
+      ],
+      "complexity": "simple"
+    }
+  ],
+  "edges": [
+    {
+      "source": "file:scripts/build_macos.sh",
+      "target": "function:scripts/build_macos.sh:usage",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:scripts/build_macos.sh",
+      "target": "function:scripts/build_macos.sh:prepare_sdk_source",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:scripts/build_macos.sh",
+      "target": "function:scripts/build_macos.sh:reset_sdk_build_dir_if_needed",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:scripts/build_macos.sh",
+      "target": "function:scripts/build_macos.sh:build_sdk",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    }
+  ]
+}

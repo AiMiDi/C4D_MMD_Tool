@@ -1,0 +1,182 @@
+{
+  "projectRoot": "E:/code/C4D_MMD_Tool",
+  "batchFiles": [
+    {
+      "path": "res/R20-S24/description/OMMDRigidManager.h",
+      "language": "c",
+      "sizeLines": 17,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/R20-S24/description/OMMDRigidManager.res",
+      "language": "res",
+      "sizeLines": 38,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/R20-S24/description/TMMDBone.h",
+      "language": "c",
+      "sizeLines": 92,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/R20-S24/description/TMMDBone.res",
+      "language": "res",
+      "sizeLines": 319,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/R20-S24/description/Xmmdmaterialmorphshader.h",
+      "language": "c",
+      "sizeLines": 8,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/R20-S24/description/Xmmdmaterialmorphshader.res",
+      "language": "res",
+      "sizeLines": 11,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/R20-S24/dialogs/DLG_CMT_TOOL.res",
+      "language": "res",
+      "sizeLines": 773,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/R20-S24/dialogs/DLG_CMT_VMD_IMPORT.res",
+      "language": "res",
+      "sizeLines": 73,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/R20-S24/mikumikudance_data/color.txt",
+      "language": "txt",
+      "sizeLines": 76,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "res/R20-S24/mikumikudance_data/toon01.bmp",
+      "language": "bmp",
+      "sizeLines": 0,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/R20-S24/mikumikudance_data/toon02.bmp",
+      "language": "bmp",
+      "sizeLines": 0,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/R20-S24/mikumikudance_data/toon03.bmp",
+      "language": "bmp",
+      "sizeLines": 0,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/R20-S24/mikumikudance_data/toon04.bmp",
+      "language": "bmp",
+      "sizeLines": 0,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/R20-S24/mikumikudance_data/toon05.bmp",
+      "language": "bmp",
+      "sizeLines": 0,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/R20-S24/mikumikudance_data/toon06.bmp",
+      "language": "bmp",
+      "sizeLines": 0,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/R20-S24/mikumikudance_data/toon07.bmp",
+      "language": "bmp",
+      "sizeLines": 0,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/R20-S24/mikumikudance_data/toon08.bmp",
+      "language": "bmp",
+      "sizeLines": 0,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/R20-S24/mikumikudance_data/toon09.bmp",
+      "language": "bmp",
+      "sizeLines": 0,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/R20-S24/mikumikudance_data/toon10.bmp",
+      "language": "bmp",
+      "sizeLines": 0,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/R20-S24/name_conversion/default.json",
+      "language": "json",
+      "sizeLines": 248,
+      "fileCategory": "config"
+    },
+    {
+      "path": "res/R20-S24/name_conversion/UE5.json",
+      "language": "json",
+      "sizeLines": 246,
+      "fileCategory": "config"
+    },
+    {
+      "path": "res/R20-S24/strings_en-US/c4d_strings.str",
+      "language": "str",
+      "sizeLines": 104,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/R20-S24/strings_en-US/description/OMMDBoneManager.str",
+      "language": "str",
+      "sizeLines": 21,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/R20-S24/strings_en-US/description/OMMDCamera.str",
+      "language": "str",
+      "sizeLines": 5,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/R20-S24/strings_en-US/description/OMMDJoint.str",
+      "language": "str",
+      "sizeLines": 64,
+      "fileCategory": "code"
+    }
+  ],
+  "batchImportData": {
+    "res/R20-S24/description/OMMDRigidManager.h": [],
+    "res/R20-S24/description/OMMDRigidManager.res": [],
+    "res/R20-S24/description/TMMDBone.h": [],
+    "res/R20-S24/description/TMMDBone.res": [],
+    "res/R20-S24/description/Xmmdmaterialmorphshader.h": [],
+    "res/R20-S24/description/Xmmdmaterialmorphshader.res": [],
+    "res/R20-S24/dialogs/DLG_CMT_TOOL.res": [],
+    "res/R20-S24/dialogs/DLG_CMT_VMD_IMPORT.res": [],
+    "res/R20-S24/mikumikudance_data/color.txt": [],
+    "res/R20-S24/mikumikudance_data/toon01.bmp": [],
+    "res/R20-S24/mikumikudance_data/toon02.bmp": [],
+    "res/R20-S24/mikumikudance_data/toon03.bmp": [],
+    "res/R20-S24/mikumikudance_data/toon04.bmp": [],
+    "res/R20-S24/mikumikudance_data/toon05.bmp": [],
+    "res/R20-S24/mikumikudance_data/toon06.bmp": [],
+    "res/R20-S24/mikumikudance_data/toon07.bmp": [],
+    "res/R20-S24/mikumikudance_data/toon08.bmp": [],
+    "res/R20-S24/mikumikudance_data/toon09.bmp": [],
+    "res/R20-S24/mikumikudance_data/toon10.bmp": [],
+    "res/R20-S24/name_conversion/default.json": [],
+    "res/R20-S24/name_conversion/UE5.json": [],
+    "res/R20-S24/strings_en-US/c4d_strings.str": [],
+    "res/R20-S24/strings_en-US/description/OMMDBoneManager.str": [],
+    "res/R20-S24/strings_en-US/description/OMMDCamera.str": [],
+    "res/R20-S24/strings_en-US/description/OMMDJoint.str": []
+  }
+}

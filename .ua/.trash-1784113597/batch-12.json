@@ -1,0 +1,63 @@
+{
+  "nodes": [
+    {
+      "id": "document:sdk_2026/CMakeLists.txt",
+      "type": "document",
+      "name": "CMakeLists.txt",
+      "filePath": "sdk_2026/CMakeLists.txt",
+      "summary": "Cinema 4D 2026 SDK root build configuration that initializes C++20 tooling, discovers plugin modules, loads frameworks, and defines build outputs. / Cinema 4D 2026 SDK 根构建配置，负责初始化 C++20 工具链、发现插件模块、加载框架并定义构建输出。",
+      "tags": [
+        "build-system",
+        "cmake",
+        "sdk",
+        "module-discovery"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "Uses Maxon SDK helper modules and custom-path parsing rather than compiling the shared plugin source directly at the root. / 使用 Maxon SDK 辅助模块与自定义路径解析，而不是在根目录直接编译共享插件源码。"
+    },
+    {
+      "id": "config:sdk_2026/CMakePresets.json",
+      "type": "config",
+      "name": "CMakePresets.json",
+      "filePath": "sdk_2026/CMakePresets.json",
+      "summary": "Cross-platform configure presets for the Cinema 4D 2026 SDK tree, including Visual Studio 2022 v143, Visual Studio 2026 v145, and ClangCL. / Cinema 4D 2026 SDK 树的跨平台配置预设，包含 Visual Studio 2022 v143、Visual Studio 2026 v145 与 ClangCL。",
+      "tags": [
+        "configuration",
+        "cmake",
+        "cross-platform",
+        "sdk"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:sdk_2026/sdk_modules.txt",
+      "type": "document",
+      "name": "sdk_modules.txt",
+      "filePath": "sdk_2026/sdk_modules.txt",
+      "summary": "SDK module-list configuration that selects plugins/mmdtool as the module loaded by the Cinema 4D 2026 build system. / SDK 模块列表配置，指定 Cinema 4D 2026 构建系统加载 plugins/mmdtool 模块。",
+      "tags": [
+        "configuration",
+        "module-discovery",
+        "sdk",
+        "plugin"
+      ],
+      "complexity": "simple"
+    }
+  ],
+  "edges": [
+    {
+      "source": "config:sdk_2026/CMakePresets.json",
+      "target": "document:sdk_2026/CMakeLists.txt",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "document:sdk_2026/sdk_modules.txt",
+      "target": "document:sdk_2026/CMakeLists.txt",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    }
+  ]
+}

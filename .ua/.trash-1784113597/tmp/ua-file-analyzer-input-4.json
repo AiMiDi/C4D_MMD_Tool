@@ -1,0 +1,124 @@
+{
+    "projectRoot":  "E:\\code\\C4D_MMD_Tool",
+    "batchFiles":  [
+                       {
+                           "path":  "source/module/tools/loader/vmd_loader.cpp",
+                           "language":  "cpp",
+                           "sizeLines":  61,
+                           "fileCategory":  "code"
+                       },
+                       {
+                           "path":  "source/module/tools/loader/vmd_loader.h",
+                           "language":  "c",
+                           "sizeLines":  32,
+                           "fileCategory":  "code"
+                       },
+                       {
+                           "path":  "source/module/tools/object/mmd_joint.cpp",
+                           "language":  "cpp",
+                           "sizeLines":  495,
+                           "fileCategory":  "code"
+                       },
+                       {
+                           "path":  "source/module/tools/object/mmd_joint.h",
+                           "language":  "c",
+                           "sizeLines":  54,
+                           "fileCategory":  "code"
+                       },
+                       {
+                           "path":  "source/module/tools/object/mmd_joint_manager.cpp",
+                           "language":  "cpp",
+                           "sizeLines":  671,
+                           "fileCategory":  "code"
+                       },
+                       {
+                           "path":  "source/module/tools/object/mmd_joint_manager.h",
+                           "language":  "c",
+                           "sizeLines":  88,
+                           "fileCategory":  "code"
+                       },
+                       {
+                           "path":  "source/module/tools/tag/mmd_bone.cpp",
+                           "language":  "cpp",
+                           "sizeLines":  3720,
+                           "fileCategory":  "code"
+                       },
+                       {
+                           "path":  "source/module/tools/tag/mmd_bone.h",
+                           "language":  "c",
+                           "sizeLines":  461,
+                           "fileCategory":  "code"
+                       },
+                       {
+                           "path":  "source/module/ui/cmt_tools_dialog.cpp",
+                           "language":  "cpp",
+                           "sizeLines":  379,
+                           "fileCategory":  "code"
+                       },
+                       {
+                           "path":  "source/module/ui/cmt_tools_dialog.h",
+                           "language":  "c",
+                           "sizeLines":  68,
+                           "fileCategory":  "code"
+                       },
+                       {
+                           "path":  "source/register_entity.cpp",
+                           "language":  "cpp",
+                           "sizeLines":  112,
+                           "fileCategory":  "code"
+                       }
+                   ],
+    "batchImportData":  {
+                            "source/module/tools/loader/vmd_loader.cpp":  [
+                                                                              "source/module/tools/loader/vmd_loader.h"
+                                                                          ],
+                            "source/module/tools/loader/vmd_loader.h":  [
+
+                                                                        ],
+                            "source/module/tools/object/mmd_joint.cpp":  [
+                                                                             "source/module/tools/object/mmd_joint.h"
+                                                                         ],
+                            "source/module/tools/object/mmd_joint.h":  [
+                                                                           "source/module/tools/object/mmd_joint_manager.h"
+                                                                       ],
+                            "source/module/tools/object/mmd_joint_manager.cpp":  [
+                                                                                     "source/module/tools/object/mmd_bone_manager.h",
+                                                                                     "source/module/tools/object/mmd_joint_manager.h",
+                                                                                     "source/module/tools/object/mmd_joint.h",
+                                                                                     "source/module/tools/object/mmd_model_manager.h",
+                                                                                     "source/module/tools/object/mmd_rigid_manager.h"
+                                                                                 ],
+                            "source/module/tools/object/mmd_joint_manager.h":  [
+                                                                                   "source/module/tools/object/mmd_manager.hpp"
+                                                                               ],
+                            "source/module/tools/tag/mmd_bone.cpp":  [
+                                                                         "source/module/tools/tag/mmd_bone.h"
+                                                                     ],
+                            "source/module/tools/tag/mmd_bone.h":  [
+
+                                                                   ],
+                            "source/module/ui/cmt_tools_dialog.cpp":  [
+                                                                          "source/module/ui/cmt_tools_dialog.h"
+                                                                      ],
+                            "source/module/ui/cmt_tools_dialog.h":  [
+
+                                                                    ],
+                            "source/register_entity.cpp":  [
+                                                               "source/CMTSceneManager.h",
+                                                               "source/module/tools/loader/vmd_loader.h",
+                                                               "source/module/tools/material/mmd_material_morph_shader.h",
+                                                               "source/module/tools/object/mmd_bone_manager.h",
+                                                               "source/module/tools/object/mmd_camera.h",
+                                                               "source/module/tools/object/mmd_joint_manager.h",
+                                                               "source/module/tools/object/mmd_joint.h",
+                                                               "source/module/tools/object/mmd_mesh_manager.h",
+                                                               "source/module/tools/object/mmd_model_manager.h",
+                                                               "source/module/tools/object/mmd_rigid_manager.h",
+                                                               "source/module/tools/object/mmd_rigid.h",
+                                                               "source/module/tools/tag/mmd_bone.h",
+                                                               "source/module/ui/cmt_tools_dialog.h",
+                                                               "source/plugin_resource.h",
+                                                               "source/register_entity.h"
+                                                           ]
+                        }
+}

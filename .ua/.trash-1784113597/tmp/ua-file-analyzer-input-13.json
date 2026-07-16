@@ -1,0 +1,182 @@
+{
+  "projectRoot": "E:\\code\\C4D_MMD_Tool",
+  "batchFiles": [
+    {
+      "path": ".codex/skills/openspec-apply-change/SKILL.md",
+      "language": "markdown",
+      "sizeLines": 156,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".codex/skills/openspec-archive-change/SKILL.md",
+      "language": "markdown",
+      "sizeLines": 114,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".codex/skills/openspec-explore/SKILL.md",
+      "language": "markdown",
+      "sizeLines": 288,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".codex/skills/openspec-propose/SKILL.md",
+      "language": "markdown",
+      "sizeLines": 110,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".cursor/rules/c4d-cpp-style-guide.mdc",
+      "language": "mdc",
+      "sizeLines": 70,
+      "fileCategory": "code"
+    },
+    {
+      "path": ".cursor/rules/project-structure.mdc",
+      "language": "mdc",
+      "sizeLines": 71,
+      "fileCategory": "code"
+    },
+    {
+      "path": ".cursor/skills/openspec-apply-change/SKILL.md",
+      "language": "markdown",
+      "sizeLines": 156,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".cursor/skills/openspec-archive-change/SKILL.md",
+      "language": "markdown",
+      "sizeLines": 114,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".cursor/skills/openspec-explore/SKILL.md",
+      "language": "markdown",
+      "sizeLines": 288,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".cursor/skills/openspec-propose/SKILL.md",
+      "language": "markdown",
+      "sizeLines": 110,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".cursorignore",
+      "language": "unknown",
+      "sizeLines": 9,
+      "fileCategory": "code"
+    },
+    {
+      "path": ".gitattributes",
+      "language": "unknown",
+      "sizeLines": 2,
+      "fileCategory": "code"
+    },
+    {
+      "path": ".github/skills/openspec-apply-change/SKILL.md",
+      "language": "markdown",
+      "sizeLines": 156,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".github/skills/openspec-archive-change/SKILL.md",
+      "language": "markdown",
+      "sizeLines": 114,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".github/skills/openspec-explore/SKILL.md",
+      "language": "markdown",
+      "sizeLines": 288,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".github/skills/openspec-propose/SKILL.md",
+      "language": "markdown",
+      "sizeLines": 110,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".gitmodules",
+      "language": "unknown",
+      "sizeLines": 9,
+      "fileCategory": "code"
+    },
+    {
+      "path": "cmake/initial_cache/dev.example.cmake",
+      "language": "cmake",
+      "sizeLines": 22,
+      "fileCategory": "code"
+    },
+    {
+      "path": "cmake/initial_cache/package.example.cmake",
+      "language": "cmake",
+      "sizeLines": 26,
+      "fileCategory": "code"
+    },
+    {
+      "path": "cmake/mmdtool_plugin_common.cmake",
+      "language": "cmake",
+      "sizeLines": 427,
+      "fileCategory": "code"
+    },
+    {
+      "path": "cmake/mmdtool_plugin_dependencies.cmake",
+      "language": "cmake",
+      "sizeLines": 76,
+      "fileCategory": "code"
+    },
+    {
+      "path": "cmake/sdk/base_settings/compile_definitions.cmake",
+      "language": "cmake",
+      "sizeLines": 41,
+      "fileCategory": "code"
+    },
+    {
+      "path": "cmake/sdk/base_settings/compile_options.cmake",
+      "language": "cmake",
+      "sizeLines": 97,
+      "fileCategory": "code"
+    },
+    {
+      "path": "cmake/sdk/base_settings/link_options.cmake",
+      "language": "cmake",
+      "sizeLines": 29,
+      "fileCategory": "code"
+    },
+    {
+      "path": "cmake/sdk/base_settings/sanitize.cmake",
+      "language": "cmake",
+      "sizeLines": 25,
+      "fileCategory": "code"
+    }
+  ],
+  "batchImportData": {
+    ".codex/skills/openspec-apply-change/SKILL.md": [],
+    ".codex/skills/openspec-archive-change/SKILL.md": [],
+    ".codex/skills/openspec-explore/SKILL.md": [],
+    ".codex/skills/openspec-propose/SKILL.md": [],
+    ".cursor/rules/c4d-cpp-style-guide.mdc": [],
+    ".cursor/rules/project-structure.mdc": [],
+    ".cursor/skills/openspec-apply-change/SKILL.md": [],
+    ".cursor/skills/openspec-archive-change/SKILL.md": [],
+    ".cursor/skills/openspec-explore/SKILL.md": [],
+    ".cursor/skills/openspec-propose/SKILL.md": [],
+    ".cursorignore": [],
+    ".gitattributes": [],
+    ".github/skills/openspec-apply-change/SKILL.md": [],
+    ".github/skills/openspec-archive-change/SKILL.md": [],
+    ".github/skills/openspec-explore/SKILL.md": [],
+    ".github/skills/openspec-propose/SKILL.md": [],
+    ".gitmodules": [],
+    "cmake/initial_cache/dev.example.cmake": [],
+    "cmake/initial_cache/package.example.cmake": [],
+    "cmake/mmdtool_plugin_common.cmake": [],
+    "cmake/mmdtool_plugin_dependencies.cmake": [],
+    "cmake/sdk/base_settings/compile_definitions.cmake": [],
+    "cmake/sdk/base_settings/compile_options.cmake": [],
+    "cmake/sdk/base_settings/link_options.cmake": [],
+    "cmake/sdk/base_settings/sanitize.cmake": []
+  }
+}

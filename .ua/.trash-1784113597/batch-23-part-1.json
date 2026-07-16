@@ -1,0 +1,1196 @@
+{
+  "nodes": [
+    {
+      "id": "file:source/utils/io_util.hpp",
+      "type": "file",
+      "name": "io_util.hpp",
+      "filePath": "source/utils/io_util.hpp",
+      "summary": "Provides generic Cinema 4D HyperFile serialization templates for custom values, linear containers, hash maps, BaseList2D links, SDK-native types, and strong link references. / 提供通用 Cinema 4D HyperFile 序列化模板，覆盖自定义值、线性容器、哈希表、BaseList2D 链接、SDK 原生类型与强链接引用。",
+      "tags": [
+        "utility",
+        "serialization",
+        "hyperfile",
+        "template"
+      ],
+      "complexity": "complex",
+      "languageNotes": "C++ combines Cinema 4D SDK ownership conventions with explicit templates, matrices, and persisted runtime state. / C++ 将 Cinema 4D SDK 所有权约定与显式模板、矩阵及持久运行时状态结合。"
+    },
+    {
+      "id": "function:source/utils/io_util.hpp:ReadData",
+      "type": "function",
+      "name": "ReadData",
+      "filePath": "source/utils/io_util.hpp",
+      "lineRange": [
+        17,
+        20
+      ],
+      "summary": "ReadData deserializes a custom value through its Read contract for HyperFile serialization. / ReadData 为HyperFile 序列化通过 Read 协议反序列化自定义值。",
+      "tags": [
+        "serialization",
+        "utility",
+        "hyperfile"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/utils/io_util.hpp:WriteData",
+      "type": "function",
+      "name": "WriteData",
+      "filePath": "source/utils/io_util.hpp",
+      "lineRange": [
+        31,
+        38
+      ],
+      "summary": "WriteData serializes a custom value through its Write contract for HyperFile serialization. / WriteData 为HyperFile 序列化通过 Write 协议序列化自定义值。",
+      "tags": [
+        "serialization",
+        "utility",
+        "hyperfile"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/utils/io_util.hpp:ReadLinearContainer",
+      "type": "function",
+      "name": "ReadLinearContainer",
+      "filePath": "source/utils/io_util.hpp",
+      "lineRange": [
+        49,
+        64
+      ],
+      "summary": "ReadLinearContainer reads a sized linear container element by element for HyperFile serialization. / ReadLinearContainer 为HyperFile 序列化逐元素读取带长度的线性容器。",
+      "tags": [
+        "serialization",
+        "utility",
+        "hyperfile"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/utils/io_util.hpp:WriteLinearContainer",
+      "type": "function",
+      "name": "WriteLinearContainer",
+      "filePath": "source/utils/io_util.hpp",
+      "lineRange": [
+        75,
+        88
+      ],
+      "summary": "WriteLinearContainer writes a linear container count and elements for HyperFile serialization. / WriteLinearContainer 为HyperFile 序列化写入线性容器的数量与元素。",
+      "tags": [
+        "serialization",
+        "utility",
+        "hyperfile"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/utils/io_util.hpp:ReadHashMap",
+      "type": "function",
+      "name": "ReadHashMap",
+      "filePath": "source/utils/io_util.hpp",
+      "lineRange": [
+        101,
+        120
+      ],
+      "summary": "ReadHashMap reconstructs hash-map key/value entries from HyperFile for HyperFile serialization. / ReadHashMap 为HyperFile 序列化从 HyperFile 重建哈希表键值项。",
+      "tags": [
+        "serialization",
+        "hashing",
+        "utility"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/utils/io_util.hpp:WriteHashMap",
+      "type": "function",
+      "name": "WriteHashMap",
+      "filePath": "source/utils/io_util.hpp",
+      "lineRange": [
+        132,
+        147
+      ],
+      "summary": "WriteHashMap serializes hash-map key/value entries to HyperFile for HyperFile serialization. / WriteHashMap 为HyperFile 序列化将哈希表键值项序列化到 HyperFile。",
+      "tags": [
+        "serialization",
+        "hashing",
+        "utility"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/utils/io_util.hpp:WriteBaseList2D",
+      "type": "function",
+      "name": "WriteBaseList2D",
+      "filePath": "source/utils/io_util.hpp",
+      "lineRange": [
+        158,
+        167
+      ],
+      "summary": "WriteBaseList2D serializes a BaseList2D-derived object through a BaseLink for HyperFile serialization. / WriteBaseList2D 为HyperFile 序列化通过 BaseLink 序列化 BaseList2D 派生对象。",
+      "tags": [
+        "serialization",
+        "utility",
+        "hyperfile"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/utils/io_util.hpp:ReadBaseList2D",
+      "type": "function",
+      "name": "ReadBaseList2D",
+      "filePath": "source/utils/io_util.hpp",
+      "lineRange": [
+        178,
+        188
+      ],
+      "summary": "ReadBaseList2D restores a BaseList2D-derived object through a BaseLink for HyperFile serialization. / ReadBaseList2D 为HyperFile 序列化通过 BaseLink 恢复 BaseList2D 派生对象。",
+      "tags": [
+        "serialization",
+        "utility",
+        "hyperfile"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/utils/io_util.hpp:ReadData<AutoAlloc<BaseLink>>",
+      "type": "function",
+      "name": "ReadData<AutoAlloc<BaseLink>>",
+      "filePath": "source/utils/io_util.hpp",
+      "lineRange": [
+        227,
+        231
+      ],
+      "summary": "ReadData<AutoAlloc<BaseLink>> restores a managed Cinema 4D link reference from HyperFile. / ReadData<AutoAlloc<BaseLink>> 从 HyperFile 恢复受管理的 Cinema 4D 链接引用。",
+      "tags": [
+        "serialization",
+        "utility",
+        "hyperfile"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/utils/io_util.hpp:ReadData<maxon::StrongRef<AutoAlloc<BaseLink>>>",
+      "type": "function",
+      "name": "ReadData<maxon::StrongRef<AutoAlloc<BaseLink>>>",
+      "filePath": "source/utils/io_util.hpp",
+      "lineRange": [
+        232,
+        250
+      ],
+      "summary": "ReadData<maxon::StrongRef<AutoAlloc<BaseLink>>> restores a managed Cinema 4D link reference from HyperFile. / ReadData<maxon::StrongRef<AutoAlloc<BaseLink>>> 从 HyperFile 恢复受管理的 Cinema 4D 链接引用。",
+      "tags": [
+        "serialization",
+        "utility",
+        "hyperfile"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/utils/io_util.hpp:WriteData<AutoAlloc<BaseLink>>",
+      "type": "function",
+      "name": "WriteData<AutoAlloc<BaseLink>>",
+      "filePath": "source/utils/io_util.hpp",
+      "lineRange": [
+        277,
+        281
+      ],
+      "summary": "WriteData<AutoAlloc<BaseLink>> writes a managed Cinema 4D link reference to HyperFile. / WriteData<AutoAlloc<BaseLink>> 将受管理的 Cinema 4D 链接引用写入 HyperFile。",
+      "tags": [
+        "serialization",
+        "utility",
+        "hyperfile"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/utils/io_util.hpp:WriteData<maxon::StrongRef<AutoAlloc<BaseLink>>>",
+      "type": "function",
+      "name": "WriteData<maxon::StrongRef<AutoAlloc<BaseLink>>>",
+      "filePath": "source/utils/io_util.hpp",
+      "lineRange": [
+        282,
+        290
+      ],
+      "summary": "WriteData<maxon::StrongRef<AutoAlloc<BaseLink>>> writes a managed Cinema 4D link reference to HyperFile. / WriteData<maxon::StrongRef<AutoAlloc<BaseLink>>> 将受管理的 Cinema 4D 链接引用写入 HyperFile。",
+      "tags": [
+        "serialization",
+        "utility",
+        "hyperfile"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/utils/io_util.hpp:ResolveObjectLink",
+      "type": "function",
+      "name": "ResolveObjectLink",
+      "filePath": "source/utils/io_util.hpp",
+      "lineRange": [
+        292,
+        295
+      ],
+      "summary": "ResolveObjectLink resolves an AutoAlloc BaseLink to a BaseObject for HyperFile serialization. / ResolveObjectLink 为HyperFile 序列化将 AutoAlloc BaseLink 解析为 BaseObject。",
+      "tags": [
+        "utility",
+        "serialization",
+        "hyperfile"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:source/utils/math_util.hpp",
+      "type": "file",
+      "name": "math_util.hpp",
+      "filePath": "source/utils/math_util.hpp",
+      "summary": "Converts between Cinema 4D Euler/HPB rotations and quaternion arrays while handling axis conventions and singularity corrections. / 在 Cinema 4D 欧拉/HPB 旋转与四元数数组之间转换，并处理轴约定与奇异点修正。",
+      "tags": [
+        "utility",
+        "math",
+        "quaternion",
+        "rotation"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/utils/math_util.hpp:EulerToQuaternion",
+      "type": "function",
+      "name": "EulerToQuaternion",
+      "filePath": "source/utils/math_util.hpp",
+      "lineRange": [
+        24,
+        38
+      ],
+      "summary": "EulerToQuaternion performs a focused operation for Euler and quaternion conversion. / EulerToQuaternion 为欧拉角与四元数转换执行专用操作。",
+      "tags": [
+        "utility",
+        "math",
+        "quaternion"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/utils/math_util.hpp:QuaternionToEuler",
+      "type": "function",
+      "name": "QuaternionToEuler",
+      "filePath": "source/utils/math_util.hpp",
+      "lineRange": [
+        45,
+        100
+      ],
+      "summary": "QuaternionToEuler performs a focused operation for Euler and quaternion conversion. / QuaternionToEuler 为欧拉角与四元数转换执行专用操作。",
+      "tags": [
+        "utility",
+        "math",
+        "quaternion"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:source/utils/mmd_bone_control_util.cpp",
+      "type": "file",
+      "name": "mmd_bone_control_util.cpp",
+      "filePath": "source/utils/mmd_bone_control_util.cpp",
+      "summary": "Implements generation and refresh of visual bone controls, hierarchy-aware shapes and colors, protected transform axes, pose synchronization, checksums, and control-to-bone delta extraction. / 实现可视化骨骼控制器的生成与刷新、层级感知形状和颜色、受保护变换轴、姿态同步、校验和及控制器到骨骼的增量提取。",
+      "tags": [
+        "utility",
+        "bone-control",
+        "runtime",
+        "transforms",
+        "ui"
+      ],
+      "complexity": "complex",
+      "languageNotes": "C++ combines Cinema 4D SDK ownership conventions with explicit templates, matrices, and persisted runtime state. / C++ 将 Cinema 4D SDK 所有权约定与显式模板、矩阵及持久运行时状态结合。"
+    },
+    {
+      "id": "function:source/utils/mmd_bone_control_util.cpp:MatrixToEigen",
+      "type": "function",
+      "name": "MatrixToEigen",
+      "filePath": "source/utils/mmd_bone_control_util.cpp",
+      "lineRange": [
+        68,
+        84
+      ],
+      "summary": "MatrixToEigen performs a focused operation for MMD visual bone-control runtime. / MatrixToEigen 为MMD 可视化骨骼控制运行时执行专用操作。",
+      "tags": [
+        "transforms",
+        "utility",
+        "bone-control"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/utils/mmd_bone_control_util.cpp:MarkControlTransformDirty",
+      "type": "function",
+      "name": "MarkControlTransformDirty",
+      "filePath": "source/utils/mmd_bone_control_util.cpp",
+      "lineRange": [
+        124,
+        134
+      ],
+      "summary": "MarkControlTransformDirty marks control transform dirty for MMD visual bone-control runtime. / MarkControlTransformDirty 为MMD 可视化骨骼控制运行时标记 control transform dirty。",
+      "tags": [
+        "bone-control",
+        "utility",
+        "runtime"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/utils/mmd_bone_control_util.cpp:BuildFrozenBoneGlobalMatrix",
+      "type": "function",
+      "name": "BuildFrozenBoneGlobalMatrix",
+      "filePath": "source/utils/mmd_bone_control_util.cpp",
+      "lineRange": [
+        141,
+        152
+      ],
+      "summary": "BuildFrozenBoneGlobalMatrix builds frozen bone global matrix for MMD visual bone-control runtime. / BuildFrozenBoneGlobalMatrix 为MMD 可视化骨骼控制运行时构建 frozen bone global matrix。",
+      "tags": [
+        "transforms",
+        "utility",
+        "bone-control"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/utils/mmd_bone_control_util.cpp:TransformRestDirectionToCurrent",
+      "type": "function",
+      "name": "TransformRestDirectionToCurrent",
+      "filePath": "source/utils/mmd_bone_control_util.cpp",
+      "lineRange": [
+        154,
+        173
+      ],
+      "summary": "TransformRestDirectionToCurrent transforms rest direction to current for MMD visual bone-control runtime. / TransformRestDirectionToCurrent 为MMD 可视化骨骼控制运行时转换 rest direction to current。",
+      "tags": [
+        "utility",
+        "bone-control",
+        "runtime"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/utils/mmd_bone_control_util.cpp:ShouldUseTailPosition",
+      "type": "function",
+      "name": "ShouldUseTailPosition",
+      "filePath": "source/utils/mmd_bone_control_util.cpp",
+      "lineRange": [
+        220,
+        235
+      ],
+      "summary": "ShouldUseTailPosition decides use tail position for MMD visual bone-control runtime. / ShouldUseTailPosition 为MMD 可视化骨骼控制运行时判定 use tail position。",
+      "tags": [
+        "utility",
+        "bone-control",
+        "runtime"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/utils/mmd_bone_control_util.cpp:GetTailBonePoint",
+      "type": "function",
+      "name": "GetTailBonePoint",
+      "filePath": "source/utils/mmd_bone_control_util.cpp",
+      "lineRange": [
+        237,
+        280
+      ],
+      "summary": "GetTailBonePoint retrieves tail bone point for MMD visual bone-control runtime. / GetTailBonePoint 为MMD 可视化骨骼控制运行时获取 tail bone point。",
+      "tags": [
+        "utility",
+        "bone-control",
+        "runtime"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/utils/mmd_bone_control_util.cpp:GetTailBoneAxis",
+      "type": "function",
+      "name": "GetTailBoneAxis",
+      "filePath": "source/utils/mmd_bone_control_util.cpp",
+      "lineRange": [
+        282,
+        292
+      ],
+      "summary": "GetTailBoneAxis retrieves tail bone axis for MMD visual bone-control runtime. / GetTailBoneAxis 为MMD 可视化骨骼控制运行时获取 tail bone axis。",
+      "tags": [
+        "transforms",
+        "utility",
+        "bone-control"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/utils/mmd_bone_control_util.cpp:GetFallbackReference",
+      "type": "function",
+      "name": "GetFallbackReference",
+      "filePath": "source/utils/mmd_bone_control_util.cpp",
+      "lineRange": [
+        294,
+        305
+      ],
+      "summary": "GetFallbackReference retrieves fallback reference for MMD visual bone-control runtime. / GetFallbackReference 为MMD 可视化骨骼控制运行时获取 fallback reference。",
+      "tags": [
+        "utility",
+        "bone-control",
+        "runtime"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/utils/mmd_bone_control_util.cpp:BuildBasisFromNormal",
+      "type": "function",
+      "name": "BuildBasisFromNormal",
+      "filePath": "source/utils/mmd_bone_control_util.cpp",
+      "lineRange": [
+        307,
+        330
+      ],
+      "summary": "BuildBasisFromNormal builds basis from normal for MMD visual bone-control runtime. / BuildBasisFromNormal 为MMD 可视化骨骼控制运行时构建 basis from normal。",
+      "tags": [
+        "utility",
+        "bone-control",
+        "runtime"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/utils/mmd_bone_control_util.cpp:GetBoneHierarchyDepth",
+      "type": "function",
+      "name": "GetBoneHierarchyDepth",
+      "filePath": "source/utils/mmd_bone_control_util.cpp",
+      "lineRange": [
+        332,
+        342
+      ],
+      "summary": "GetBoneHierarchyDepth retrieves bone hierarchy depth for MMD visual bone-control runtime. / GetBoneHierarchyDepth 为MMD 可视化骨骼控制运行时获取 bone hierarchy depth。",
+      "tags": [
+        "utility",
+        "bone-control",
+        "runtime"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/utils/mmd_bone_control_util.cpp:SetLinkedObjectParameter",
+      "type": "function",
+      "name": "SetLinkedObjectParameter",
+      "filePath": "source/utils/mmd_bone_control_util.cpp",
+      "lineRange": [
+        385,
+        395
+      ],
+      "summary": "SetLinkedObjectParameter sets linked object parameter for MMD visual bone-control runtime. / SetLinkedObjectParameter 为MMD 可视化骨骼控制运行时设置 linked object parameter。",
+      "tags": [
+        "utility",
+        "bone-control",
+        "runtime"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/utils/mmd_bone_control_util.cpp:GetControlBaseName",
+      "type": "function",
+      "name": "GetControlBaseName",
+      "filePath": "source/utils/mmd_bone_control_util.cpp",
+      "lineRange": [
+        427,
+        451
+      ],
+      "summary": "GetControlBaseName retrieves control base name for MMD visual bone-control runtime. / GetControlBaseName 为MMD 可视化骨骼控制运行时获取 control base name。",
+      "tags": [
+        "bone-control",
+        "utility",
+        "runtime"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/utils/mmd_bone_control_util.cpp:BuildControlMatrix",
+      "type": "function",
+      "name": "BuildControlMatrix",
+      "filePath": "source/utils/mmd_bone_control_util.cpp",
+      "lineRange": [
+        458,
+        476
+      ],
+      "summary": "BuildControlMatrix builds control matrix for MMD visual bone-control runtime. / BuildControlMatrix 为MMD 可视化骨骼控制运行时构建 control matrix。",
+      "tags": [
+        "transforms",
+        "bone-control",
+        "utility"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/utils/mmd_bone_control_util.cpp:CommitObjectLocalToFrozen",
+      "type": "function",
+      "name": "CommitObjectLocalToFrozen",
+      "filePath": "source/utils/mmd_bone_control_util.cpp",
+      "lineRange": [
+        488,
+        500
+      ],
+      "summary": "CommitObjectLocalToFrozen commits object local to frozen for MMD visual bone-control runtime. / CommitObjectLocalToFrozen 为MMD 可视化骨骼控制运行时提交 object local to frozen。",
+      "tags": [
+        "utility",
+        "bone-control",
+        "runtime"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/utils/mmd_bone_control_util.cpp:MoveControlUnder",
+      "type": "function",
+      "name": "MoveControlUnder",
+      "filePath": "source/utils/mmd_bone_control_util.cpp",
+      "lineRange": [
+        511,
+        520
+      ],
+      "summary": "MoveControlUnder moves control under for MMD visual bone-control runtime. / MoveControlUnder 为MMD 可视化骨骼控制运行时移动 control under。",
+      "tags": [
+        "bone-control",
+        "utility",
+        "runtime"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/utils/mmd_bone_control_util.cpp:BuildControlShapePoints",
+      "type": "function",
+      "name": "BuildControlShapePoints",
+      "filePath": "source/utils/mmd_bone_control_util.cpp",
+      "lineRange": [
+        522,
+        564
+      ],
+      "summary": "BuildControlShapePoints builds control shape points for MMD visual bone-control runtime. / BuildControlShapePoints 为MMD 可视化骨骼控制运行时构建 control shape points。",
+      "tags": [
+        "bone-control",
+        "utility",
+        "runtime"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/utils/mmd_bone_control_util.cpp:ApplyControlSplineShape",
+      "type": "function",
+      "name": "ApplyControlSplineShape",
+      "filePath": "source/utils/mmd_bone_control_util.cpp",
+      "lineRange": [
+        566,
+        591
+      ],
+      "summary": "ApplyControlSplineShape applies control spline shape for MMD visual bone-control runtime. / ApplyControlSplineShape 为MMD 可视化骨骼控制运行时应用 control spline shape。",
+      "tags": [
+        "bone-control",
+        "utility",
+        "runtime"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/utils/mmd_bone_control_util.cpp:HashMatrix",
+      "type": "function",
+      "name": "HashMatrix",
+      "filePath": "source/utils/mmd_bone_control_util.cpp",
+      "lineRange": [
+        642,
+        657
+      ],
+      "summary": "HashMatrix hashes matrix for MMD visual bone-control runtime. / HashMatrix 为MMD 可视化骨骼控制运行时计算哈希 matrix。",
+      "tags": [
+        "transforms",
+        "hashing",
+        "utility"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/utils/mmd_bone_control_util.cpp:ConfigureControlProtection",
+      "type": "function",
+      "name": "ConfigureControlProtection",
+      "filePath": "source/utils/mmd_bone_control_util.cpp",
+      "lineRange": [
+        677,
+        697
+      ],
+      "summary": "ConfigureControlProtection configures control protection for MMD visual bone-control runtime. / ConfigureControlProtection 为MMD 可视化骨骼控制运行时配置 control protection。",
+      "tags": [
+        "bone-control",
+        "utility",
+        "runtime"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/utils/mmd_bone_control_util.cpp:ProjectRotationToAxis",
+      "type": "function",
+      "name": "ProjectRotationToAxis",
+      "filePath": "source/utils/mmd_bone_control_util.cpp",
+      "lineRange": [
+        699,
+        715
+      ],
+      "summary": "ProjectRotationToAxis projects rotation to axis for MMD visual bone-control runtime. / ProjectRotationToAxis 为MMD 可视化骨骼控制运行时投影 rotation to axis。",
+      "tags": [
+        "transforms",
+        "utility",
+        "bone-control"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/utils/mmd_bone_control_util.cpp:CreateOrRefreshControls",
+      "type": "function",
+      "name": "CreateOrRefreshControls",
+      "filePath": "source/utils/mmd_bone_control_util.cpp",
+      "lineRange": [
+        718,
+        841
+      ],
+      "summary": "CreateOrRefreshControls creates or refresh controls for MMD visual bone-control runtime. / CreateOrRefreshControls 为MMD 可视化骨骼控制运行时创建 or refresh controls。",
+      "tags": [
+        "bone-control",
+        "utility",
+        "runtime"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:source/utils/mmd_bone_control_util.cpp:HasActiveControlDelta",
+      "type": "function",
+      "name": "HasActiveControlDelta",
+      "filePath": "source/utils/mmd_bone_control_util.cpp",
+      "lineRange": [
+        843,
+        856
+      ],
+      "summary": "HasActiveControlDelta checks active control delta for MMD visual bone-control runtime. / HasActiveControlDelta 为MMD 可视化骨骼控制运行时检查 active control delta。",
+      "tags": [
+        "bone-control",
+        "utility",
+        "runtime"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/utils/mmd_bone_control_util.cpp:GetControlStateChecksum",
+      "type": "function",
+      "name": "GetControlStateChecksum",
+      "filePath": "source/utils/mmd_bone_control_util.cpp",
+      "lineRange": [
+        858,
+        881
+      ],
+      "summary": "GetControlStateChecksum retrieves control state checksum for MMD visual bone-control runtime. / GetControlStateChecksum 为MMD 可视化骨骼控制运行时获取 control state checksum。",
+      "tags": [
+        "bone-control",
+        "hashing",
+        "utility"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/utils/mmd_bone_control_util.cpp:SyncControlsToCurrentPose",
+      "type": "function",
+      "name": "SyncControlsToCurrentPose",
+      "filePath": "source/utils/mmd_bone_control_util.cpp",
+      "lineRange": [
+        883,
+        938
+      ],
+      "summary": "SyncControlsToCurrentPose synchronizes controls to current pose for MMD visual bone-control runtime. / SyncControlsToCurrentPose 为MMD 可视化骨骼控制运行时同步 controls to current pose。",
+      "tags": [
+        "bone-control",
+        "utility",
+        "runtime"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/utils/mmd_bone_control_util.cpp:GetControlDeltaInBoneSpace",
+      "type": "function",
+      "name": "GetControlDeltaInBoneSpace",
+      "filePath": "source/utils/mmd_bone_control_util.cpp",
+      "lineRange": [
+        940,
+        969
+      ],
+      "summary": "GetControlDeltaInBoneSpace retrieves control delta in bone space for MMD visual bone-control runtime. / GetControlDeltaInBoneSpace 为MMD 可视化骨骼控制运行时获取 control delta in bone space。",
+      "tags": [
+        "bone-control",
+        "utility",
+        "runtime"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/utils/mmd_bone_control_util.cpp:ResetControlRelativeTransform",
+      "type": "function",
+      "name": "ResetControlRelativeTransform",
+      "filePath": "source/utils/mmd_bone_control_util.cpp",
+      "lineRange": [
+        971,
+        979
+      ],
+      "summary": "ResetControlRelativeTransform resets control relative transform for MMD visual bone-control runtime. / ResetControlRelativeTransform 为MMD 可视化骨骼控制运行时重置 control relative transform。",
+      "tags": [
+        "bone-control",
+        "utility",
+        "runtime"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:source/utils/mmd_bone_control_util.hpp",
+      "type": "file",
+      "name": "mmd_bone_control_util.hpp",
+      "filePath": "source/utils/mmd_bone_control_util.hpp",
+      "summary": "Declares the public bone-control lifecycle, pose synchronization, active-delta detection, state checksum, bone-space delta, and reset API. / 声明骨骼控制器生命周期、姿态同步、活动增量检测、状态校验和、骨骼空间增量与重置 API。",
+      "tags": [
+        "utility",
+        "bone-control",
+        "api",
+        "transforms"
+      ],
+      "complexity": "simple"
+    }
+  ],
+  "edges": [
+    {
+      "source": "file:source/utils/io_util.hpp",
+      "target": "function:source/utils/io_util.hpp:ReadData",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/utils/io_util.hpp",
+      "target": "function:source/utils/io_util.hpp:ReadData",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/utils/io_util.hpp",
+      "target": "function:source/utils/io_util.hpp:WriteData",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/utils/io_util.hpp",
+      "target": "function:source/utils/io_util.hpp:WriteData",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/utils/io_util.hpp",
+      "target": "function:source/utils/io_util.hpp:ReadLinearContainer",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/utils/io_util.hpp",
+      "target": "function:source/utils/io_util.hpp:ReadLinearContainer",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/utils/io_util.hpp",
+      "target": "function:source/utils/io_util.hpp:WriteLinearContainer",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/utils/io_util.hpp",
+      "target": "function:source/utils/io_util.hpp:WriteLinearContainer",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/utils/io_util.hpp",
+      "target": "function:source/utils/io_util.hpp:ReadHashMap",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/utils/io_util.hpp",
+      "target": "function:source/utils/io_util.hpp:ReadHashMap",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/utils/io_util.hpp",
+      "target": "function:source/utils/io_util.hpp:WriteHashMap",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/utils/io_util.hpp",
+      "target": "function:source/utils/io_util.hpp:WriteHashMap",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/utils/io_util.hpp",
+      "target": "function:source/utils/io_util.hpp:WriteBaseList2D",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/utils/io_util.hpp",
+      "target": "function:source/utils/io_util.hpp:WriteBaseList2D",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/utils/io_util.hpp",
+      "target": "function:source/utils/io_util.hpp:ReadBaseList2D",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/utils/io_util.hpp",
+      "target": "function:source/utils/io_util.hpp:ReadBaseList2D",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/utils/io_util.hpp",
+      "target": "function:source/utils/io_util.hpp:ReadData<AutoAlloc<BaseLink>>",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/utils/io_util.hpp",
+      "target": "function:source/utils/io_util.hpp:ReadData<AutoAlloc<BaseLink>>",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/utils/io_util.hpp",
+      "target": "function:source/utils/io_util.hpp:ReadData<maxon::StrongRef<AutoAlloc<BaseLink>>>",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/utils/io_util.hpp",
+      "target": "function:source/utils/io_util.hpp:ReadData<maxon::StrongRef<AutoAlloc<BaseLink>>>",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/utils/io_util.hpp",
+      "target": "function:source/utils/io_util.hpp:WriteData<AutoAlloc<BaseLink>>",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/utils/io_util.hpp",
+      "target": "function:source/utils/io_util.hpp:WriteData<AutoAlloc<BaseLink>>",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/utils/io_util.hpp",
+      "target": "function:source/utils/io_util.hpp:WriteData<maxon::StrongRef<AutoAlloc<BaseLink>>>",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/utils/io_util.hpp",
+      "target": "function:source/utils/io_util.hpp:WriteData<maxon::StrongRef<AutoAlloc<BaseLink>>>",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/utils/io_util.hpp",
+      "target": "function:source/utils/io_util.hpp:ResolveObjectLink",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/utils/io_util.hpp",
+      "target": "function:source/utils/io_util.hpp:ResolveObjectLink",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/utils/math_util.hpp",
+      "target": "function:source/utils/math_util.hpp:EulerToQuaternion",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/utils/math_util.hpp",
+      "target": "function:source/utils/math_util.hpp:EulerToQuaternion",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/utils/math_util.hpp",
+      "target": "function:source/utils/math_util.hpp:QuaternionToEuler",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/utils/math_util.hpp",
+      "target": "function:source/utils/math_util.hpp:QuaternionToEuler",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/utils/mmd_bone_control_util.cpp",
+      "target": "function:source/utils/mmd_bone_control_util.cpp:MatrixToEigen",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/utils/mmd_bone_control_util.cpp",
+      "target": "function:source/utils/mmd_bone_control_util.cpp:MarkControlTransformDirty",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/utils/mmd_bone_control_util.cpp",
+      "target": "function:source/utils/mmd_bone_control_util.cpp:BuildFrozenBoneGlobalMatrix",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/utils/mmd_bone_control_util.cpp",
+      "target": "function:source/utils/mmd_bone_control_util.cpp:TransformRestDirectionToCurrent",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/utils/mmd_bone_control_util.cpp",
+      "target": "function:source/utils/mmd_bone_control_util.cpp:ShouldUseTailPosition",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/utils/mmd_bone_control_util.cpp",
+      "target": "function:source/utils/mmd_bone_control_util.cpp:GetTailBonePoint",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/utils/mmd_bone_control_util.cpp",
+      "target": "function:source/utils/mmd_bone_control_util.cpp:GetTailBoneAxis",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/utils/mmd_bone_control_util.cpp",
+      "target": "function:source/utils/mmd_bone_control_util.cpp:GetFallbackReference",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/utils/mmd_bone_control_util.cpp",
+      "target": "function:source/utils/mmd_bone_control_util.cpp:BuildBasisFromNormal",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/utils/mmd_bone_control_util.cpp",
+      "target": "function:source/utils/mmd_bone_control_util.cpp:GetBoneHierarchyDepth",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/utils/mmd_bone_control_util.cpp",
+      "target": "function:source/utils/mmd_bone_control_util.cpp:SetLinkedObjectParameter",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/utils/mmd_bone_control_util.cpp",
+      "target": "function:source/utils/mmd_bone_control_util.cpp:GetControlBaseName",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/utils/mmd_bone_control_util.cpp",
+      "target": "function:source/utils/mmd_bone_control_util.cpp:BuildControlMatrix",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/utils/mmd_bone_control_util.cpp",
+      "target": "function:source/utils/mmd_bone_control_util.cpp:CommitObjectLocalToFrozen",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/utils/mmd_bone_control_util.cpp",
+      "target": "function:source/utils/mmd_bone_control_util.cpp:MoveControlUnder",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/utils/mmd_bone_control_util.cpp",
+      "target": "function:source/utils/mmd_bone_control_util.cpp:BuildControlShapePoints",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/utils/mmd_bone_control_util.cpp",
+      "target": "function:source/utils/mmd_bone_control_util.cpp:ApplyControlSplineShape",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/utils/mmd_bone_control_util.cpp",
+      "target": "function:source/utils/mmd_bone_control_util.cpp:HashMatrix",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/utils/mmd_bone_control_util.cpp",
+      "target": "function:source/utils/mmd_bone_control_util.cpp:ConfigureControlProtection",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/utils/mmd_bone_control_util.cpp",
+      "target": "function:source/utils/mmd_bone_control_util.cpp:ProjectRotationToAxis",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/utils/mmd_bone_control_util.cpp",
+      "target": "function:source/utils/mmd_bone_control_util.cpp:CreateOrRefreshControls",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/utils/mmd_bone_control_util.cpp",
+      "target": "function:source/utils/mmd_bone_control_util.cpp:CreateOrRefreshControls",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/utils/mmd_bone_control_util.cpp",
+      "target": "function:source/utils/mmd_bone_control_util.cpp:HasActiveControlDelta",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/utils/mmd_bone_control_util.cpp",
+      "target": "function:source/utils/mmd_bone_control_util.cpp:HasActiveControlDelta",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/utils/mmd_bone_control_util.cpp",
+      "target": "function:source/utils/mmd_bone_control_util.cpp:GetControlStateChecksum",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/utils/mmd_bone_control_util.cpp",
+      "target": "function:source/utils/mmd_bone_control_util.cpp:GetControlStateChecksum",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/utils/mmd_bone_control_util.cpp",
+      "target": "function:source/utils/mmd_bone_control_util.cpp:SyncControlsToCurrentPose",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/utils/mmd_bone_control_util.cpp",
+      "target": "function:source/utils/mmd_bone_control_util.cpp:SyncControlsToCurrentPose",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/utils/mmd_bone_control_util.cpp",
+      "target": "function:source/utils/mmd_bone_control_util.cpp:GetControlDeltaInBoneSpace",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/utils/mmd_bone_control_util.cpp",
+      "target": "function:source/utils/mmd_bone_control_util.cpp:GetControlDeltaInBoneSpace",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/utils/mmd_bone_control_util.cpp",
+      "target": "function:source/utils/mmd_bone_control_util.cpp:ResetControlRelativeTransform",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/utils/mmd_bone_control_util.cpp",
+      "target": "function:source/utils/mmd_bone_control_util.cpp:ResetControlRelativeTransform",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    }
+  ]
+}

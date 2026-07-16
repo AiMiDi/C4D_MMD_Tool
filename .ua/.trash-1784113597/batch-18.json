@@ -1,0 +1,287 @@
+{
+  "nodes": [
+    {
+      "id": "file:res/S24_up/mikumikudance_data/toon04.bmp",
+      "type": "file",
+      "name": "toon04.bmp",
+      "filePath": "res/S24_up/mikumikudance_data/toon04.bmp",
+      "summary": "A 32×32 two-band white and pale-pink toon ramp used as the fourth bundled MMD material shading texture. / 一张 32×32 的白色与浅粉色双色 toon 色阶图，作为内置 MMD 材质的第 4 张卡通着色纹理。",
+      "tags": ["texture-asset / 纹理资源", "toon-shading / 卡通着色", "mmd / MMD", "runtime-resource / 运行时资源"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:res/S24_up/mikumikudance_data/toon05.bmp",
+      "type": "file",
+      "name": "toon05.bmp",
+      "filePath": "res/S24_up/mikumikudance_data/toon05.bmp",
+      "summary": "A 32×32 white-to-peach gradient toon ramp used as the fifth bundled MMD material shading texture. / 一张 32×32 的白色至桃色渐变 toon 色阶图，作为内置 MMD 材质的第 5 张卡通着色纹理。",
+      "tags": ["texture-asset / 纹理资源", "toon-shading / 卡通着色", "mmd / MMD", "runtime-resource / 运行时资源"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:res/S24_up/mikumikudance_data/toon06.bmp",
+      "type": "file",
+      "name": "toon06.bmp",
+      "filePath": "res/S24_up/mikumikudance_data/toon06.bmp",
+      "summary": "A 32×32 yellow-to-gold gradient toon ramp used as the sixth bundled MMD material shading texture. / 一张 32×32 的黄色至金色渐变 toon 色阶图，作为内置 MMD 材质的第 6 张卡通着色纹理。",
+      "tags": ["texture-asset / 纹理资源", "toon-shading / 卡通着色", "mmd / MMD", "runtime-resource / 运行时资源"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:res/S24_up/mikumikudance_data/toon07.bmp",
+      "type": "file",
+      "name": "toon07.bmp",
+      "filePath": "res/S24_up/mikumikudance_data/toon07.bmp",
+      "summary": "A 32×32 solid-white toon texture stored as bundled MMD preset 07, providing neutral material shading. / 一张 32×32 的纯白 toon 纹理，作为内置 MMD 预设 07 提供中性材质着色。",
+      "tags": ["texture-asset / 纹理资源", "toon-shading / 卡通着色", "mmd / MMD", "neutral-texture / 中性纹理"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:res/S24_up/mikumikudance_data/toon08.bmp",
+      "type": "file",
+      "name": "toon08.bmp",
+      "filePath": "res/S24_up/mikumikudance_data/toon08.bmp",
+      "summary": "A 32×32 solid-white toon texture stored as bundled MMD preset 08, providing neutral material shading. / 一张 32×32 的纯白 toon 纹理，作为内置 MMD 预设 08 提供中性材质着色。",
+      "tags": ["texture-asset / 纹理资源", "toon-shading / 卡通着色", "mmd / MMD", "neutral-texture / 中性纹理"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:res/S24_up/mikumikudance_data/toon09.bmp",
+      "type": "file",
+      "name": "toon09.bmp",
+      "filePath": "res/S24_up/mikumikudance_data/toon09.bmp",
+      "summary": "A 32×32 solid-white toon texture stored as bundled MMD preset 09, providing neutral material shading. / 一张 32×32 的纯白 toon 纹理，作为内置 MMD 预设 09 提供中性材质着色。",
+      "tags": ["texture-asset / 纹理资源", "toon-shading / 卡通着色", "mmd / MMD", "neutral-texture / 中性纹理"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:res/S24_up/mikumikudance_data/toon10.bmp",
+      "type": "file",
+      "name": "toon10.bmp",
+      "filePath": "res/S24_up/mikumikudance_data/toon10.bmp",
+      "summary": "A 32×32 solid-white toon texture stored as bundled MMD preset 10, providing neutral material shading. / 一张 32×32 的纯白 toon 纹理，作为内置 MMD 预设 10 提供中性材质着色。",
+      "tags": ["texture-asset / 纹理资源", "toon-shading / 卡通着色", "mmd / MMD", "neutral-texture / 中性纹理"],
+      "complexity": "simple"
+    },
+    {
+      "id": "config:res/S24_up/name_conversion/default.json",
+      "type": "config",
+      "name": "default.json",
+      "filePath": "res/S24_up/name_conversion/default.json",
+      "summary": "Maps 246 Japanese MMD bone and morph names to generic English identifiers for the default name-conversion profile. / 为默认名称转换配置将 246 个日文 MMD 骨骼和 morph 名称映射为通用英文标识符。",
+      "tags": ["configuration / 配置", "name-conversion / 名称转换", "mmd-naming / MMD 命名", "localization / 本地化"],
+      "complexity": "complex"
+    },
+    {
+      "id": "config:res/S24_up/name_conversion/UE5.json",
+      "type": "config",
+      "name": "UE5.json",
+      "filePath": "res/S24_up/name_conversion/UE5.json",
+      "summary": "Maps 244 Japanese MMD bone and morph labels to Unreal Engine 5 mannequin-style identifiers such as pelvis, spine_01, and clavicle_l for export or retargeting. / 为导出或重定向，将 244 个日文 MMD 骨骼和 morph 标签映射为 pelvis、spine_01、clavicle_l 等 Unreal Engine 5 Mannequin 风格标识符。",
+      "tags": ["configuration / 配置", "name-conversion / 名称转换", "unreal-engine / 虚幻引擎", "retargeting / 重定向"],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:res/S24_up/strings_en-US/c4d_strings.str",
+      "type": "file",
+      "name": "c4d_strings.str",
+      "filePath": "res/S24_up/strings_en-US/c4d_strings.str",
+      "summary": "Provides the English global string table for file import and export results, errors, confirmations, morph and name-conversion actions, plugin object names, IK labels, and rigid-body dimensions. / 提供英文全局字符串表，覆盖文件导入导出结果、错误、确认提示、morph 与名称转换操作、插件对象名称、IK 标签和刚体尺寸。",
+      "tags": ["localization / 本地化", "english / 英文", "cinema-4d-resource / Cinema 4D 资源", "messages / 消息"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:res/S24_up/strings_en-US/description/OMMDBoneManager.str",
+      "type": "file",
+      "name": "OMMDBoneManager.str",
+      "filePath": "res/S24_up/strings_en-US/description/OMMDBoneManager.str",
+      "summary": "Localizes the MMD Bone Manager attributes in English, including display filters, edit and animation modes, bone creation, and controller refresh actions. / 为 MMD Bone Manager 属性提供英文文本，包括显示筛选、编辑与动画模式、骨骼创建及控制器刷新操作。",
+      "tags": ["localization / 本地化", "english / 英文", "bone-manager / 骨骼管理器", "attribute-description / 属性描述"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:res/S24_up/strings_en-US/description/OMMDCamera.str",
+      "type": "file",
+      "name": "OMMDCamera.str",
+      "filePath": "res/S24_up/strings_en-US/description/OMMDCamera.str",
+      "summary": "Defines the English display name for the MMD Camera object description. / 定义 MMD Camera 对象描述的英文显示名称。",
+      "tags": ["localization / 本地化", "english / 英文", "camera / 摄像机", "attribute-description / 属性描述"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:res/S24_up/strings_en-US/description/OMMDJoint.str",
+      "type": "file",
+      "name": "OMMDJoint.str",
+      "filePath": "res/S24_up/strings_en-US/description/OMMDJoint.str",
+      "summary": "Localizes MMD Joint attributes in English for identity, linked rigid bodies, transforms, positional and rotational limits, spring parameters, and supported joint types. / 为 MMD Joint 的标识、关联刚体、变换、位置与旋转限制、弹簧参数及支持的 joint 类型提供英文文本。",
+      "tags": ["localization / 本地化", "english / 英文", "physics-joint / 物理关节", "attribute-description / 属性描述"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:res/S24_up/strings_en-US/description/OMMDJointManager.str",
+      "type": "file",
+      "name": "OMMDJointManager.str",
+      "filePath": "res/S24_up/strings_en-US/description/OMMDJointManager.str",
+      "summary": "Localizes the MMD Joint Manager controls in English for display mode, wireframe state, edit or animation mode, and joint creation. / 为 MMD Joint Manager 的显示模式、线框状态、编辑或动画模式及 joint 创建控件提供英文文本。",
+      "tags": ["localization / 本地化", "english / 英文", "joint-manager / 关节管理器", "attribute-description / 属性描述"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:res/S24_up/strings_en-US/description/OMMDMeshManager.str",
+      "type": "file",
+      "name": "OMMDMeshManager.str",
+      "filePath": "res/S24_up/strings_en-US/description/OMMDMeshManager.str",
+      "summary": "Localizes the MMD Mesh Manager controls in English for normal, quick, hidden-line, wireframe, edit, and animation display modes. / 为 MMD Mesh Manager 的普通、快速、隐藏线、线框、编辑及动画显示模式提供英文文本。",
+      "tags": ["localization / 本地化", "english / 英文", "mesh-manager / 网格管理器", "display-mode / 显示模式"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:res/S24_up/strings_en-US/description/OMMDModelManager.str",
+      "type": "file",
+      "name": "OMMDModelManager.str",
+      "filePath": "res/S24_up/strings_en-US/description/OMMDModelManager.str",
+      "summary": "Provides the comprehensive English attribute table for the MMD Model Manager, spanning model metadata, animation, physics, IK, morphs, display frames, materials, renderer selection, toon textures, and material morph offsets. / 提供完整的 MMD Model Manager 英文属性表，涵盖模型元数据、动画、物理、IK、morph、显示帧、材质、渲染器选择、toon 纹理和材质 morph 偏移。",
+      "tags": ["localization / 本地化", "english / 英文", "model-manager / 模型管理器", "material-system / 材质系统", "attribute-description / 属性描述"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:res/S24_up/strings_en-US/description/OMMDRigid.str",
+      "type": "file",
+      "name": "OMMDRigid.str",
+      "filePath": "res/S24_up/strings_en-US/description/OMMDRigid.str",
+      "summary": "Localizes MMD rigid-body attributes in English for identity, bone binding, shape and posture, collision groups, mass, friction, damping, and simulation modes. / 为 MMD 刚体的标识、骨骼绑定、形状与姿态、碰撞组、质量、摩擦、阻尼及模拟模式提供英文文本。",
+      "tags": ["localization / 本地化", "english / 英文", "rigid-body / 刚体", "physics / 物理", "attribute-description / 属性描述"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:res/S24_up/strings_en-US/description/OMMDRigidManager.str",
+      "type": "file",
+      "name": "OMMDRigidManager.str",
+      "filePath": "res/S24_up/strings_en-US/description/OMMDRigidManager.str",
+      "summary": "Localizes the MMD Rigid Manager controls in English for display state, wireframe mode, edit or animation mode, and rigid-body creation. / 为 MMD Rigid Manager 的显示状态、线框模式、编辑或动画模式及刚体创建控件提供英文文本。",
+      "tags": ["localization / 本地化", "english / 英文", "rigid-manager / 刚体管理器", "attribute-description / 属性描述"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:res/S24_up/strings_en-US/description/TMMDBone.str",
+      "type": "file",
+      "name": "TMMDBone.str",
+      "filePath": "res/S24_up/strings_en-US/description/TMMDBone.str",
+      "summary": "Localizes the MMD Bone Tag interface in English for hierarchy, flags, deform layers, tails, inheritance, fixed and local axes, IK links, animation curves, and bone morph creation. / 为 MMD Bone Tag 的层级、属性标志、变形层、骨骼尾端、继承、固定与局部轴、IK 链接、动画曲线和骨骼 morph 创建界面提供英文文本。",
+      "tags": ["localization / 本地化", "english / 英文", "bone-tag / 骨骼标签", "ik / IK", "attribute-description / 属性描述"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:res/S24_up/strings_en-US/description/Xmmdmaterialmorphshader.str",
+      "type": "file",
+      "name": "Xmmdmaterialmorphshader.str",
+      "filePath": "res/S24_up/strings_en-US/description/Xmmdmaterialmorphshader.str",
+      "summary": "Defines English labels for the MMD material texture-morph shader and its color and alpha factor parameters. / 定义 MMD 材质纹理 morph shader 及其颜色和 alpha 因子参数的英文标签。",
+      "tags": ["localization / 本地化", "english / 英文", "shader / 着色器", "material-morph / 材质变形"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:res/S24_up/strings_en-US/dialogs/DLG_CMT_TOOL.str",
+      "type": "file",
+      "name": "DLG_CMT_TOOL.str",
+      "filePath": "res/S24_up/strings_en-US/dialogs/DLG_CMT_TOOL.str",
+      "summary": "Localizes the main C4D MMD Tools dialog in English, including camera, motion, pose, and model import or export controls plus material conversion choices. / 为 C4D MMD Tools 主对话框提供英文文本，包括摄像机、动作、姿势与模型导入导出控件，以及材质转换选项。",
+      "tags": ["localization / 本地化", "english / 英文", "dialog / 对话框", "import-export / 导入导出", "user-interface / 用户界面"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:res/S24_up/strings_en-US/dialogs/DLG_CMT_VMD_IMPORT.str",
+      "type": "file",
+      "name": "DLG_CMT_VMD_IMPORT.str",
+      "filePath": "res/S24_up/strings_en-US/dialogs/DLG_CMT_VMD_IMPORT.str",
+      "summary": "Localizes the compact VMD camera-import dialog in English with size, offset, import, and cancel controls. / 为简洁的 VMD 摄像机导入对话框提供英文文本，包括尺寸、偏移、导入和取消控件。",
+      "tags": ["localization / 本地化", "english / 英文", "dialog / 对话框", "vmd-import / VMD 导入"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:res/S24_up/strings_zh-CN/c4d_strings.str",
+      "type": "file",
+      "name": "c4d_strings.str",
+      "filePath": "res/S24_up/strings_zh-CN/c4d_strings.str",
+      "summary": "Provides the Simplified Chinese global string table for import and export results, errors, confirmations, morph and name-conversion actions, plugin object names, IK labels, and rigid-body dimensions. / 提供简体中文全局字符串表，覆盖导入导出结果、错误、确认提示、morph 与名称转换操作、插件对象名称、IK 标签和刚体尺寸。",
+      "tags": ["localization / 本地化", "simplified-chinese / 简体中文", "cinema-4d-resource / Cinema 4D 资源", "messages / 消息"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:res/S24_up/strings_zh-CN/description/OMMDBoneManager.str",
+      "type": "file",
+      "name": "OMMDBoneManager.str",
+      "filePath": "res/S24_up/strings_zh-CN/description/OMMDBoneManager.str",
+      "summary": "Localizes the MMD Bone Manager attributes in Simplified Chinese, including display filters, edit and animation modes, bone creation, and controller refresh actions. / 为 MMD Bone Manager 属性提供简体中文文本，包括显示筛选、编辑与动画模式、骨骼创建及控制器刷新操作。",
+      "tags": ["localization / 本地化", "simplified-chinese / 简体中文", "bone-manager / 骨骼管理器", "attribute-description / 属性描述"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:res/S24_up/strings_zh-CN/description/OMMDCamera.str",
+      "type": "file",
+      "name": "OMMDCamera.str",
+      "filePath": "res/S24_up/strings_zh-CN/description/OMMDCamera.str",
+      "summary": "Defines the Simplified Chinese display name for the MMD Camera object description. / 定义 MMD Camera 对象描述的简体中文显示名称。",
+      "tags": ["localization / 本地化", "simplified-chinese / 简体中文", "camera / 摄像机", "attribute-description / 属性描述"],
+      "complexity": "simple"
+    }
+  ],
+  "edges": [
+    {
+      "source": "config:res/S24_up/name_conversion/default.json",
+      "target": "config:res/S24_up/name_conversion/UE5.json",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "file:res/S24_up/strings_en-US/description/OMMDModelManager.str",
+      "target": "file:res/S24_up/mikumikudance_data/toon04.bmp",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:res/S24_up/strings_en-US/description/OMMDModelManager.str",
+      "target": "file:res/S24_up/mikumikudance_data/toon05.bmp",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:res/S24_up/strings_en-US/description/OMMDModelManager.str",
+      "target": "file:res/S24_up/mikumikudance_data/toon06.bmp",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:res/S24_up/strings_en-US/description/OMMDModelManager.str",
+      "target": "file:res/S24_up/mikumikudance_data/toon07.bmp",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:res/S24_up/strings_en-US/description/OMMDModelManager.str",
+      "target": "file:res/S24_up/mikumikudance_data/toon08.bmp",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:res/S24_up/strings_en-US/description/OMMDModelManager.str",
+      "target": "file:res/S24_up/mikumikudance_data/toon09.bmp",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:res/S24_up/strings_en-US/description/OMMDModelManager.str",
+      "target": "file:res/S24_up/mikumikudance_data/toon10.bmp",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    }
+  ]
+}

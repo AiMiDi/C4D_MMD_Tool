@@ -1,0 +1,232 @@
+{
+    "projectRoot":  "E:\\code\\C4D_MMD_Tool",
+    "batchFiles":  [
+                       {
+                           "path":  "res/R20-S24/strings_en-US/description/OMMDJointManager.str",
+                           "language":  "str",
+                           "sizeLines":  15,
+                           "fileCategory":  "code"
+                       },
+                       {
+                           "path":  "res/R20-S24/strings_en-US/description/OMMDMeshManager.str",
+                           "language":  "str",
+                           "sizeLines":  18,
+                           "fileCategory":  "code"
+                       },
+                       {
+                           "path":  "res/R20-S24/strings_en-US/description/OMMDModelManager.str",
+                           "language":  "str",
+                           "sizeLines":  152,
+                           "fileCategory":  "code"
+                       },
+                       {
+                           "path":  "res/R20-S24/strings_en-US/description/OMMDRigid.str",
+                           "language":  "str",
+                           "sizeLines":  79,
+                           "fileCategory":  "code"
+                       },
+                       {
+                           "path":  "res/R20-S24/strings_en-US/description/OMMDRigidManager.str",
+                           "language":  "str",
+                           "sizeLines":  15,
+                           "fileCategory":  "code"
+                       },
+                       {
+                           "path":  "res/R20-S24/strings_en-US/description/TMMDBone.str",
+                           "language":  "str",
+                           "sizeLines":  83,
+                           "fileCategory":  "code"
+                       },
+                       {
+                           "path":  "res/R20-S24/strings_en-US/description/Xmmdmaterialmorphshader.str",
+                           "language":  "str",
+                           "sizeLines":  6,
+                           "fileCategory":  "code"
+                       },
+                       {
+                           "path":  "res/R20-S24/strings_en-US/dialogs/DLG_CMT_TOOL.str",
+                           "language":  "str",
+                           "sizeLines":  56,
+                           "fileCategory":  "code"
+                       },
+                       {
+                           "path":  "res/R20-S24/strings_en-US/dialogs/DLG_CMT_VMD_IMPORT.str",
+                           "language":  "str",
+                           "sizeLines":  8,
+                           "fileCategory":  "code"
+                       },
+                       {
+                           "path":  "res/R20-S24/strings_zh-CN/c4d_strings.str",
+                           "language":  "str",
+                           "sizeLines":  104,
+                           "fileCategory":  "code"
+                       },
+                       {
+                           "path":  "res/R20-S24/strings_zh-CN/description/OMMDBoneManager.str",
+                           "language":  "str",
+                           "sizeLines":  21,
+                           "fileCategory":  "code"
+                       },
+                       {
+                           "path":  "res/R20-S24/strings_zh-CN/description/OMMDCamera.str",
+                           "language":  "str",
+                           "sizeLines":  4,
+                           "fileCategory":  "code"
+                       },
+                       {
+                           "path":  "res/R20-S24/strings_zh-CN/description/OMMDJoint.str",
+                           "language":  "str",
+                           "sizeLines":  67,
+                           "fileCategory":  "code"
+                       },
+                       {
+                           "path":  "res/R20-S24/strings_zh-CN/description/OMMDJointManager.str",
+                           "language":  "str",
+                           "sizeLines":  15,
+                           "fileCategory":  "code"
+                       },
+                       {
+                           "path":  "res/R20-S24/strings_zh-CN/description/OMMDMeshManager.str",
+                           "language":  "str",
+                           "sizeLines":  18,
+                           "fileCategory":  "code"
+                       },
+                       {
+                           "path":  "res/R20-S24/strings_zh-CN/description/OMMDModelManager.str",
+                           "language":  "str",
+                           "sizeLines":  152,
+                           "fileCategory":  "code"
+                       },
+                       {
+                           "path":  "res/R20-S24/strings_zh-CN/description/OMMDRigid.str",
+                           "language":  "str",
+                           "sizeLines":  79,
+                           "fileCategory":  "code"
+                       },
+                       {
+                           "path":  "res/R20-S24/strings_zh-CN/description/OMMDRigidManager.str",
+                           "language":  "str",
+                           "sizeLines":  15,
+                           "fileCategory":  "code"
+                       },
+                       {
+                           "path":  "res/R20-S24/strings_zh-CN/description/TMMDBone.str",
+                           "language":  "str",
+                           "sizeLines":  83,
+                           "fileCategory":  "code"
+                       },
+                       {
+                           "path":  "res/R20-S24/strings_zh-CN/description/Xmmdmaterialmorphshader.str",
+                           "language":  "str",
+                           "sizeLines":  6,
+                           "fileCategory":  "code"
+                       },
+                       {
+                           "path":  "res/R20-S24/strings_zh-CN/dialogs/DLG_CMT_TOOL.str",
+                           "language":  "str",
+                           "sizeLines":  56,
+                           "fileCategory":  "code"
+                       },
+                       {
+                           "path":  "res/R20-S24/strings_zh-CN/dialogs/DLG_CMT_VMD_IMPORT.str",
+                           "language":  "str",
+                           "sizeLines":  8,
+                           "fileCategory":  "code"
+                       },
+                       {
+                           "path":  "res/S24_up/c4d_symbols.h",
+                           "language":  "c",
+                           "sizeLines":  337,
+                           "fileCategory":  "code"
+                       },
+                       {
+                           "path":  "res/S24_up/cmt_config.json",
+                           "language":  "json",
+                           "sizeLines":  50,
+                           "fileCategory":  "config"
+                       },
+                       {
+                           "path":  "res/S24_up/description/OMMDBoneManager.h",
+                           "language":  "c",
+                           "sizeLines":  22,
+                           "fileCategory":  "code"
+                       }
+                   ],
+    "batchImportData":  {
+                            "res/R20-S24/strings_en-US/description/OMMDJointManager.str":  [
+
+                                                                                           ],
+                            "res/R20-S24/strings_en-US/description/OMMDMeshManager.str":  [
+
+                                                                                          ],
+                            "res/R20-S24/strings_en-US/description/OMMDModelManager.str":  [
+
+                                                                                           ],
+                            "res/R20-S24/strings_en-US/description/OMMDRigid.str":  [
+
+                                                                                    ],
+                            "res/R20-S24/strings_en-US/description/OMMDRigidManager.str":  [
+
+                                                                                           ],
+                            "res/R20-S24/strings_en-US/description/TMMDBone.str":  [
+
+                                                                                   ],
+                            "res/R20-S24/strings_en-US/description/Xmmdmaterialmorphshader.str":  [
+
+                                                                                                  ],
+                            "res/R20-S24/strings_en-US/dialogs/DLG_CMT_TOOL.str":  [
+
+                                                                                   ],
+                            "res/R20-S24/strings_en-US/dialogs/DLG_CMT_VMD_IMPORT.str":  [
+
+                                                                                         ],
+                            "res/R20-S24/strings_zh-CN/c4d_strings.str":  [
+
+                                                                          ],
+                            "res/R20-S24/strings_zh-CN/description/OMMDBoneManager.str":  [
+
+                                                                                          ],
+                            "res/R20-S24/strings_zh-CN/description/OMMDCamera.str":  [
+
+                                                                                     ],
+                            "res/R20-S24/strings_zh-CN/description/OMMDJoint.str":  [
+
+                                                                                    ],
+                            "res/R20-S24/strings_zh-CN/description/OMMDJointManager.str":  [
+
+                                                                                           ],
+                            "res/R20-S24/strings_zh-CN/description/OMMDMeshManager.str":  [
+
+                                                                                          ],
+                            "res/R20-S24/strings_zh-CN/description/OMMDModelManager.str":  [
+
+                                                                                           ],
+                            "res/R20-S24/strings_zh-CN/description/OMMDRigid.str":  [
+
+                                                                                    ],
+                            "res/R20-S24/strings_zh-CN/description/OMMDRigidManager.str":  [
+
+                                                                                           ],
+                            "res/R20-S24/strings_zh-CN/description/TMMDBone.str":  [
+
+                                                                                   ],
+                            "res/R20-S24/strings_zh-CN/description/Xmmdmaterialmorphshader.str":  [
+
+                                                                                                  ],
+                            "res/R20-S24/strings_zh-CN/dialogs/DLG_CMT_TOOL.str":  [
+
+                                                                                   ],
+                            "res/R20-S24/strings_zh-CN/dialogs/DLG_CMT_VMD_IMPORT.str":  [
+
+                                                                                         ],
+                            "res/S24_up/c4d_symbols.h":  [
+
+                                                         ],
+                            "res/S24_up/cmt_config.json":  [
+
+                                                           ],
+                            "res/S24_up/description/OMMDBoneManager.h":  [
+
+                                                                         ]
+                        }
+}

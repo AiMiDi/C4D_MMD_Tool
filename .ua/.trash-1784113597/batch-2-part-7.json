@@ -1,0 +1,1801 @@
+{
+  "nodes": [
+    {
+      "id": "file:source/module/tools/object/mmd_rigid.cpp",
+      "type": "file",
+      "name": "mmd_rigid.cpp",
+      "filePath": "source/module/tools/object/mmd_rigid.cpp",
+      "summary": "Implements the per-rigid-body Cinema 4D object, including shape parameters, viewport drawing, manager linkage, transform tracking, and execution behavior. / 实现单个刚体的 Cinema 4D 对象，包括形状参数、视口绘制、管理器关联、变换跟踪与执行行为。",
+      "tags": [
+        "rigid-body",
+        "physics",
+        "object-plugin",
+        "viewport",
+        "runtime"
+      ],
+      "complexity": "complex",
+      "languageNotes": "C++ integrates Cinema 4D SDK lifecycle hooks with explicit PMX/VMD conversion and runtime state management. / C++ 将 Cinema 4D SDK 生命周期钩子与显式 PMX/VMD 转换及运行时状态管理结合。"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_rigid.cpp:NormalizeRigidMode",
+      "type": "function",
+      "name": "NormalizeRigidMode",
+      "filePath": "source/module/tools/object/mmd_rigid.cpp",
+      "lineRange": [
+        33,
+        37
+      ],
+      "summary": "NormalizeRigidMode normalizes rigid mode for per-rigid-body object behavior. / NormalizeRigidMode 为单刚体对象行为规范化 rigid mode。",
+      "tags": [
+        "physics",
+        "rigid-body",
+        "object-plugin"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_rigid.cpp:MarkSceneTransformDirty",
+      "type": "function",
+      "name": "MarkSceneTransformDirty",
+      "filePath": "source/module/tools/object/mmd_rigid.cpp",
+      "lineRange": [
+        39,
+        47
+      ],
+      "summary": "MarkSceneTransformDirty marks scene transform dirty for per-rigid-body object behavior. / MarkSceneTransformDirty 为单刚体对象行为标记 scene transform dirty。",
+      "tags": [
+        "rigid-body",
+        "physics",
+        "object-plugin"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_rigid.cpp:NormalizeMatrixBasis",
+      "type": "function",
+      "name": "NormalizeMatrixBasis",
+      "filePath": "source/module/tools/object/mmd_rigid.cpp",
+      "lineRange": [
+        49,
+        54
+      ],
+      "summary": "NormalizeMatrixBasis normalizes matrix basis for per-rigid-body object behavior. / NormalizeMatrixBasis 为单刚体对象行为规范化 matrix basis。",
+      "tags": [
+        "rigid-body",
+        "physics",
+        "object-plugin"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_rigid.cpp:MatrixToEigen",
+      "type": "function",
+      "name": "MatrixToEigen",
+      "filePath": "source/module/tools/object/mmd_rigid.cpp",
+      "lineRange": [
+        56,
+        72
+      ],
+      "summary": "MatrixToEigen implements a focused operation in per-rigid-body object behavior. / MatrixToEigen 实现单刚体对象行为中的专用操作。",
+      "tags": [
+        "rigid-body",
+        "physics",
+        "object-plugin"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_rigid.cpp:EigenToMatrix",
+      "type": "function",
+      "name": "EigenToMatrix",
+      "filePath": "source/module/tools/object/mmd_rigid.cpp",
+      "lineRange": [
+        74,
+        82
+      ],
+      "summary": "EigenToMatrix implements a focused operation in per-rigid-body object behavior. / EigenToMatrix 实现单刚体对象行为中的专用操作。",
+      "tags": [
+        "rigid-body",
+        "physics",
+        "object-plugin"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_rigid.cpp:BuildBoneRawGlobalMatrix",
+      "type": "function",
+      "name": "BuildBoneRawGlobalMatrix",
+      "filePath": "source/module/tools/object/mmd_rigid.cpp",
+      "lineRange": [
+        84,
+        104
+      ],
+      "summary": "BuildBoneRawGlobalMatrix builds bone raw global matrix for per-rigid-body object behavior. / BuildBoneRawGlobalMatrix 为单刚体对象行为构建 bone raw global matrix。",
+      "tags": [
+        "ui",
+        "rigid-body",
+        "physics"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_rigid.cpp:BuildRigidBindMatrix",
+      "type": "function",
+      "name": "BuildRigidBindMatrix",
+      "filePath": "source/module/tools/object/mmd_rigid.cpp",
+      "lineRange": [
+        106,
+        123
+      ],
+      "summary": "BuildRigidBindMatrix builds rigid bind matrix for per-rigid-body object behavior. / BuildRigidBindMatrix 为单刚体对象行为构建 rigid bind matrix。",
+      "tags": [
+        "physics",
+        "ui",
+        "rigid-body"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_rigid.cpp:BuildTrackBoneRigidLocalMatrix",
+      "type": "function",
+      "name": "BuildTrackBoneRigidLocalMatrix",
+      "filePath": "source/module/tools/object/mmd_rigid.cpp",
+      "lineRange": [
+        125,
+        145
+      ],
+      "summary": "BuildTrackBoneRigidLocalMatrix builds track bone rigid local matrix for per-rigid-body object behavior. / BuildTrackBoneRigidLocalMatrix 为单刚体对象行为构建 track bone rigid local matrix。",
+      "tags": [
+        "physics",
+        "ui",
+        "rigid-body"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_rigid.cpp:ConfigureRigidExecutionPriority",
+      "type": "function",
+      "name": "ConfigureRigidExecutionPriority",
+      "filePath": "source/module/tools/object/mmd_rigid.cpp",
+      "lineRange": [
+        147,
+        165
+      ],
+      "summary": "ConfigureRigidExecutionPriority configures rigid execution priority for per-rigid-body object behavior. / ConfigureRigidExecutionPriority 为单刚体对象行为配置 rigid execution priority。",
+      "tags": [
+        "physics",
+        "rigid-body",
+        "object-plugin"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_rigid.cpp:SDK2024_Init",
+      "type": "function",
+      "name": "SDK2024_Init",
+      "filePath": "source/module/tools/object/mmd_rigid.cpp",
+      "lineRange": [
+        209,
+        238
+      ],
+      "summary": "SDK2024_Init implements the Cinema 4D SDK lifecycle hook for init in per-rigid-body object behavior. / SDK2024_Init 实现单刚体对象行为中用于 init 的 Cinema 4D SDK 生命周期钩子。",
+      "tags": [
+        "rigid-body",
+        "physics",
+        "object-plugin"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_rigid.cpp:SDK2024_GetDDescription",
+      "type": "function",
+      "name": "SDK2024_GetDDescription",
+      "filePath": "source/module/tools/object/mmd_rigid.cpp",
+      "lineRange": [
+        240,
+        337
+      ],
+      "summary": "SDK2024_GetDDescription implements the Cinema 4D SDK lifecycle hook for get d description in per-rigid-body object behavior. / SDK2024_GetDDescription 实现单刚体对象行为中用于 get d description 的 Cinema 4D SDK 生命周期钩子。",
+      "tags": [
+        "ui",
+        "rigid-body",
+        "physics"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_rigid.cpp:BoxType::InitParameter",
+      "type": "function",
+      "name": "BoxType::InitParameter",
+      "filePath": "source/module/tools/object/mmd_rigid.cpp",
+      "lineRange": [
+        343,
+        346
+      ],
+      "summary": "BoxType::InitParameter initializes parameter for per-rigid-body object behavior. / BoxType::InitParameter 为单刚体对象行为初始化 parameter。",
+      "tags": [
+        "rigid-body",
+        "physics",
+        "object-plugin"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_rigid.cpp:SphericalType::InitParameter",
+      "type": "function",
+      "name": "SphericalType::InitParameter",
+      "filePath": "source/module/tools/object/mmd_rigid.cpp",
+      "lineRange": [
+        353,
+        356
+      ],
+      "summary": "SphericalType::InitParameter initializes parameter for per-rigid-body object behavior. / SphericalType::InitParameter 为单刚体对象行为初始化 parameter。",
+      "tags": [
+        "rigid-body",
+        "physics",
+        "object-plugin"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_rigid.cpp:CaplsuleType::InitParameter",
+      "type": "function",
+      "name": "CaplsuleType::InitParameter",
+      "filePath": "source/module/tools/object/mmd_rigid.cpp",
+      "lineRange": [
+        363,
+        367
+      ],
+      "summary": "CaplsuleType::InitParameter initializes parameter for per-rigid-body object behavior. / CaplsuleType::InitParameter 为单刚体对象行为初始化 parameter。",
+      "tags": [
+        "rigid-body",
+        "physics",
+        "object-plugin"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_rigid.cpp:MMDRigidObject::SetDParameter",
+      "type": "function",
+      "name": "MMDRigidObject::SetDParameter",
+      "filePath": "source/module/tools/object/mmd_rigid.cpp",
+      "lineRange": [
+        398,
+        426
+      ],
+      "summary": "MMDRigidObject::SetDParameter applies parameter changes and their runtime side effects for per-rigid-body object behavior. / MMDRigidObject::SetDParameter 为单刚体对象行为应用参数变更及其运行时副作用。",
+      "tags": [
+        "rigid-body",
+        "physics",
+        "object-plugin"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_rigid.cpp:SDK2024_GetDEnabling",
+      "type": "function",
+      "name": "SDK2024_GetDEnabling",
+      "filePath": "source/module/tools/object/mmd_rigid.cpp",
+      "lineRange": [
+        428,
+        434
+      ],
+      "summary": "SDK2024_GetDEnabling implements the Cinema 4D SDK lifecycle hook for get d enabling in per-rigid-body object behavior. / SDK2024_GetDEnabling 实现单刚体对象行为中用于 get d enabling 的 Cinema 4D SDK 生命周期钩子。",
+      "tags": [
+        "rigid-body",
+        "physics",
+        "object-plugin"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_rigid.cpp:MMDRigidObject::UpdateRigidShape",
+      "type": "function",
+      "name": "MMDRigidObject::UpdateRigidShape",
+      "filePath": "source/module/tools/object/mmd_rigid.cpp",
+      "lineRange": [
+        436,
+        453
+      ],
+      "summary": "MMDRigidObject::UpdateRigidShape updates rigid shape for per-rigid-body object behavior. / MMDRigidObject::UpdateRigidShape 为单刚体对象行为更新 rigid shape。",
+      "tags": [
+        "physics",
+        "rigid-body",
+        "object-plugin"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_rigid.cpp:MMDRigidObject::UpdateRigidSize",
+      "type": "function",
+      "name": "MMDRigidObject::UpdateRigidSize",
+      "filePath": "source/module/tools/object/mmd_rigid.cpp",
+      "lineRange": [
+        455,
+        471
+      ],
+      "summary": "MMDRigidObject::UpdateRigidSize updates rigid size for per-rigid-body object behavior. / MMDRigidObject::UpdateRigidSize 为单刚体对象行为更新 rigid size。",
+      "tags": [
+        "physics",
+        "rigid-body",
+        "object-plugin"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_rigid.cpp:MMDRigidObject::UpdateRigidPhysics",
+      "type": "function",
+      "name": "MMDRigidObject::UpdateRigidPhysics",
+      "filePath": "source/module/tools/object/mmd_rigid.cpp",
+      "lineRange": [
+        473,
+        480
+      ],
+      "summary": "MMDRigidObject::UpdateRigidPhysics updates rigid physics for per-rigid-body object behavior. / MMDRigidObject::UpdateRigidPhysics 为单刚体对象行为更新 rigid physics。",
+      "tags": [
+        "physics",
+        "rigid-body",
+        "object-plugin"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_rigid.cpp:MMDRigidObject::UpdateRigidGroup",
+      "type": "function",
+      "name": "MMDRigidObject::UpdateRigidGroup",
+      "filePath": "source/module/tools/object/mmd_rigid.cpp",
+      "lineRange": [
+        482,
+        489
+      ],
+      "summary": "MMDRigidObject::UpdateRigidGroup updates rigid group for per-rigid-body object behavior. / MMDRigidObject::UpdateRigidGroup 为单刚体对象行为更新 rigid group。",
+      "tags": [
+        "physics",
+        "rigid-body",
+        "object-plugin"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_rigid.cpp:MMDRigidObject::Message",
+      "type": "function",
+      "name": "MMDRigidObject::Message",
+      "filePath": "source/module/tools/object/mmd_rigid.cpp",
+      "lineRange": [
+        491,
+        567
+      ],
+      "summary": "MMDRigidObject::Message dispatches Cinema 4D messages and state transitions for per-rigid-body object behavior. / MMDRigidObject::Message 为单刚体对象行为分发 Cinema 4D 消息与状态切换。",
+      "tags": [
+        "rigid-body",
+        "physics",
+        "object-plugin"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_rigid.cpp:MMDRigidObject::Draw",
+      "type": "function",
+      "name": "MMDRigidObject::Draw",
+      "filePath": "source/module/tools/object/mmd_rigid.cpp",
+      "lineRange": [
+        569,
+        636
+      ],
+      "summary": "MMDRigidObject::Draw renders the plugin's viewport representation for per-rigid-body object behavior. / MMDRigidObject::Draw 为单刚体对象行为绘制插件的视口表示。",
+      "tags": [
+        "rigid-body",
+        "physics",
+        "object-plugin"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_rigid.cpp:MMDRigidObject::HandleRigidIndexUpdate",
+      "type": "function",
+      "name": "MMDRigidObject::HandleRigidIndexUpdate",
+      "filePath": "source/module/tools/object/mmd_rigid.cpp",
+      "lineRange": [
+        638,
+        669
+      ],
+      "summary": "MMDRigidObject::HandleRigidIndexUpdate handles rigid index update for per-rigid-body object behavior. / MMDRigidObject::HandleRigidIndexUpdate 为单刚体对象行为处理 rigid index update。",
+      "tags": [
+        "physics",
+        "rigid-body",
+        "object-plugin"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_rigid.cpp:MMDRigidObject::Execute",
+      "type": "function",
+      "name": "MMDRigidObject::Execute",
+      "filePath": "source/module/tools/object/mmd_rigid.cpp",
+      "lineRange": [
+        671,
+        705
+      ],
+      "summary": "MMDRigidObject::Execute runs the Cinema 4D evaluation-stage behavior for per-rigid-body object behavior. / MMDRigidObject::Execute 为单刚体对象行为执行 Cinema 4D 求值阶段行为。",
+      "tags": [
+        "runtime",
+        "rigid-body",
+        "physics"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_rigid.cpp:MMDRigidObject::AddToExecution",
+      "type": "function",
+      "name": "MMDRigidObject::AddToExecution",
+      "filePath": "source/module/tools/object/mmd_rigid.cpp",
+      "lineRange": [
+        707,
+        715
+      ],
+      "summary": "MMDRigidObject::AddToExecution registers the object in Cinema 4D execution order for per-rigid-body object behavior. / MMDRigidObject::AddToExecution 为单刚体对象行为将对象注册到 Cinema 4D 执行顺序。",
+      "tags": [
+        "rigid-body",
+        "physics",
+        "object-plugin"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_rigid.cpp:MMDRigidObject::Read",
+      "type": "function",
+      "name": "MMDRigidObject::Read",
+      "filePath": "source/module/tools/object/mmd_rigid.cpp",
+      "lineRange": [
+        717,
+        740
+      ],
+      "summary": "MMDRigidObject::Read reads persistent state for per-rigid-body object behavior. / MMDRigidObject::Read 为单刚体对象行为读取持久状态。",
+      "tags": [
+        "serialization",
+        "rigid-body",
+        "physics"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_rigid.cpp:SDK2024_Write",
+      "type": "function",
+      "name": "SDK2024_Write",
+      "filePath": "source/module/tools/object/mmd_rigid.cpp",
+      "lineRange": [
+        742,
+        752
+      ],
+      "summary": "SDK2024_Write implements the Cinema 4D SDK lifecycle hook for write in per-rigid-body object behavior. / SDK2024_Write 实现单刚体对象行为中用于 write 的 Cinema 4D SDK 生命周期钩子。",
+      "tags": [
+        "serialization",
+        "rigid-body",
+        "physics"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_rigid.cpp:SDK2024_CopyTo",
+      "type": "function",
+      "name": "SDK2024_CopyTo",
+      "filePath": "source/module/tools/object/mmd_rigid.cpp",
+      "lineRange": [
+        754,
+        771
+      ],
+      "summary": "SDK2024_CopyTo implements the Cinema 4D SDK lifecycle hook for copy to in per-rigid-body object behavior. / SDK2024_CopyTo 实现单刚体对象行为中用于 copy to 的 Cinema 4D SDK 生命周期钩子。",
+      "tags": [
+        "serialization",
+        "rigid-body",
+        "physics"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_rigid.cpp:MMDRigidObject::HandleRigidModeChange",
+      "type": "function",
+      "name": "MMDRigidObject::HandleRigidModeChange",
+      "filePath": "source/module/tools/object/mmd_rigid.cpp",
+      "lineRange": [
+        778,
+        790
+      ],
+      "summary": "MMDRigidObject::HandleRigidModeChange handles rigid mode change for per-rigid-body object behavior. / MMDRigidObject::HandleRigidModeChange 为单刚体对象行为处理 rigid mode change。",
+      "tags": [
+        "physics",
+        "rigid-body",
+        "object-plugin"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:source/module/tools/object/mmd_rigid.h",
+      "type": "file",
+      "name": "mmd_rigid.h",
+      "filePath": "source/module/tools/object/mmd_rigid.h",
+      "summary": "Declares the MMD rigid-body object plugin and its parameter, drawing, execution, serialization, and mode-transition hooks. / 声明 MMD 刚体对象插件及其参数、绘制、执行、序列化与模式切换钩子。",
+      "tags": [
+        "rigid-body",
+        "physics",
+        "api",
+        "object-plugin",
+        "serialization"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "class:source/module/tools/object/mmd_rigid.h:MMDRigidObject",
+      "type": "class",
+      "name": "MMDRigidObject",
+      "filePath": "source/module/tools/object/mmd_rigid.h",
+      "lineRange": [
+        21,
+        73
+      ],
+      "summary": "MMDRigidObject encapsulates a major runtime responsibility for rigid-body object API. / MMDRigidObject 为刚体对象 API封装主要运行时职责。",
+      "tags": [
+        "rigid-body",
+        "physics",
+        "api"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:source/module/tools/object/mmd_bone_manager.h",
+      "type": "file",
+      "name": "mmd_bone_manager.h",
+      "filePath": "source/module/tools/object/mmd_bone_manager.h",
+      "summary": "Declares the bone-manager object, its scene message contract, hierarchy indices, animation-slot controls, and physics-override API. / 声明骨骼管理器对象、场景消息协议、层级索引、动画槽控制以及物理覆盖 API。",
+      "tags": [
+        "object-manager",
+        "api",
+        "bone-hierarchy",
+        "animation",
+        "physics"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:source/module/tools/object/mmd_model_manager.h",
+      "type": "file",
+      "name": "mmd_model_manager.h",
+      "filePath": "source/module/tools/object/mmd_model_manager.h",
+      "summary": "Declares the central model-manager state, display-frame and animation-slot data, morph/material editing APIs, and standalone IK/physics runtime interfaces. / 声明核心模型管理器状态、显示框与动画槽数据、变形和材质编辑 API，以及独立 IK/物理运行时接口。",
+      "tags": [
+        "object-manager",
+        "api",
+        "data-model",
+        "animation",
+        "physics"
+      ],
+      "complexity": "complex",
+      "languageNotes": "C++ integrates Cinema 4D SDK lifecycle hooks with explicit PMX/VMD conversion and runtime state management. / C++ 将 Cinema 4D SDK 生命周期钩子与显式 PMX/VMD 转换及运行时状态管理结合。"
+    },
+    {
+      "id": "file:source/module/tools/object/mmd_rigid_manager.h",
+      "type": "file",
+      "name": "mmd_rigid_manager.h",
+      "filePath": "source/module/tools/object/mmd_rigid_manager.h",
+      "summary": "Declares the rigid-body manager, scene message contract, PMX conversion API, and standalone physics-body lifecycle. / 声明刚体管理器、场景消息协议、PMX 转换 API 与独立物理刚体生命周期。",
+      "tags": [
+        "object-manager",
+        "rigid-body",
+        "api",
+        "physics",
+        "pmx"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:source/module/tools/object/mmd_rigid_manager.cpp",
+      "type": "file",
+      "name": "mmd_rigid_manager.cpp",
+      "filePath": "source/module/tools/object/mmd_rigid_manager.cpp",
+      "summary": "Implements rigid-body collection management, PMX import/export, edit/runtime transform transitions, collision settings, and standalone physics-body construction. / 实现刚体集合管理、PMX 导入导出、编辑与运行时变换切换、碰撞设置以及独立物理刚体构建。",
+      "tags": [
+        "object-manager",
+        "rigid-body",
+        "pmx",
+        "physics",
+        "serialization"
+      ],
+      "complexity": "complex",
+      "languageNotes": "C++ integrates Cinema 4D SDK lifecycle hooks with explicit PMX/VMD conversion and runtime state management. / C++ 将 Cinema 4D SDK 生命周期钩子与显式 PMX/VMD 转换及运行时状态管理结合。"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_rigid_manager.cpp:NormalizeRigidMode",
+      "type": "function",
+      "name": "NormalizeRigidMode",
+      "filePath": "source/module/tools/object/mmd_rigid_manager.cpp",
+      "lineRange": [
+        23,
+        27
+      ],
+      "summary": "NormalizeRigidMode normalizes rigid mode for rigid-body collection and physics setup. / NormalizeRigidMode 为刚体集合与物理设置规范化 rigid mode。",
+      "tags": [
+        "physics",
+        "object-manager",
+        "rigid-body"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_rigid_manager.cpp:ResolveImportedBoneIndex",
+      "type": "function",
+      "name": "ResolveImportedBoneIndex",
+      "filePath": "source/module/tools/object/mmd_rigid_manager.cpp",
+      "lineRange": [
+        29,
+        43
+      ],
+      "summary": "ResolveImportedBoneIndex resolves imported bone index for rigid-body collection and physics setup. / ResolveImportedBoneIndex 为刚体集合与物理设置解析 imported bone index。",
+      "tags": [
+        "import",
+        "object-manager",
+        "rigid-body"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_rigid_manager.cpp:NormalizeMatrixBasis",
+      "type": "function",
+      "name": "NormalizeMatrixBasis",
+      "filePath": "source/module/tools/object/mmd_rigid_manager.cpp",
+      "lineRange": [
+        45,
+        50
+      ],
+      "summary": "NormalizeMatrixBasis normalizes matrix basis for rigid-body collection and physics setup. / NormalizeMatrixBasis 为刚体集合与物理设置规范化 matrix basis。",
+      "tags": [
+        "object-manager",
+        "rigid-body",
+        "pmx"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_rigid_manager.cpp:GetObjectRotationOrder",
+      "type": "function",
+      "name": "GetObjectRotationOrder",
+      "filePath": "source/module/tools/object/mmd_rigid_manager.cpp",
+      "lineRange": [
+        52,
+        58
+      ],
+      "summary": "GetObjectRotationOrder retrieves object rotation order for rigid-body collection and physics setup. / GetObjectRotationOrder 为刚体集合与物理设置获取 object rotation order。",
+      "tags": [
+        "object-manager",
+        "rigid-body",
+        "pmx"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_rigid_manager.cpp:MarkSceneNodeDirty",
+      "type": "function",
+      "name": "MarkSceneNodeDirty",
+      "filePath": "source/module/tools/object/mmd_rigid_manager.cpp",
+      "lineRange": [
+        60,
+        67
+      ],
+      "summary": "MarkSceneNodeDirty marks scene node dirty for rigid-body collection and physics setup. / MarkSceneNodeDirty 为刚体集合与物理设置标记 scene node dirty。",
+      "tags": [
+        "object-manager",
+        "rigid-body",
+        "pmx"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_rigid_manager.cpp:SetFloatParameter",
+      "type": "function",
+      "name": "SetFloatParameter",
+      "filePath": "source/module/tools/object/mmd_rigid_manager.cpp",
+      "lineRange": [
+        69,
+        73
+      ],
+      "summary": "SetFloatParameter sets float parameter for rigid-body collection and physics setup. / SetFloatParameter 为刚体集合与物理设置设置 float parameter。",
+      "tags": [
+        "object-manager",
+        "rigid-body",
+        "pmx"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_rigid_manager.cpp:SetVectorXYZParameters",
+      "type": "function",
+      "name": "SetVectorXYZParameters",
+      "filePath": "source/module/tools/object/mmd_rigid_manager.cpp",
+      "lineRange": [
+        75,
+        80
+      ],
+      "summary": "SetVectorXYZParameters sets vector xyz parameters for rigid-body collection and physics setup. / SetVectorXYZParameters 为刚体集合与物理设置设置 vector xyz parameters。",
+      "tags": [
+        "object-manager",
+        "rigid-body",
+        "pmx"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_rigid_manager.cpp:ReadObjectStoredString",
+      "type": "function",
+      "name": "ReadObjectStoredString",
+      "filePath": "source/module/tools/object/mmd_rigid_manager.cpp",
+      "lineRange": [
+        82,
+        94
+      ],
+      "summary": "ReadObjectStoredString reads object stored string for rigid-body collection and physics setup. / ReadObjectStoredString 为刚体集合与物理设置读取 object stored string。",
+      "tags": [
+        "serialization",
+        "object-manager",
+        "rigid-body"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_rigid_manager.cpp:ReadObjectStoredIndex",
+      "type": "function",
+      "name": "ReadObjectStoredIndex",
+      "filePath": "source/module/tools/object/mmd_rigid_manager.cpp",
+      "lineRange": [
+        96,
+        112
+      ],
+      "summary": "ReadObjectStoredIndex reads object stored index for rigid-body collection and physics setup. / ReadObjectStoredIndex 为刚体集合与物理设置读取 object stored index。",
+      "tags": [
+        "serialization",
+        "object-manager",
+        "rigid-body"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_rigid_manager.cpp:BuildPRSMatrix",
+      "type": "function",
+      "name": "BuildPRSMatrix",
+      "filePath": "source/module/tools/object/mmd_rigid_manager.cpp",
+      "lineRange": [
+        114,
+        119
+      ],
+      "summary": "BuildPRSMatrix builds prs matrix for rigid-body collection and physics setup. / BuildPRSMatrix 为刚体集合与物理设置构建 prs matrix。",
+      "tags": [
+        "ui",
+        "object-manager",
+        "rigid-body"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_rigid_manager.cpp:MMDRigidManagerObject::Read",
+      "type": "function",
+      "name": "MMDRigidManagerObject::Read",
+      "filePath": "source/module/tools/object/mmd_rigid_manager.cpp",
+      "lineRange": [
+        122,
+        135
+      ],
+      "summary": "MMDRigidManagerObject::Read reads persistent state for rigid-body collection and physics setup. / MMDRigidManagerObject::Read 为刚体集合与物理设置读取持久状态。",
+      "tags": [
+        "serialization",
+        "object-manager",
+        "rigid-body"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_rigid_manager.cpp:SDK2024_Write",
+      "type": "function",
+      "name": "SDK2024_Write",
+      "filePath": "source/module/tools/object/mmd_rigid_manager.cpp",
+      "lineRange": [
+        137,
+        143
+      ],
+      "summary": "SDK2024_Write implements the Cinema 4D SDK lifecycle hook for write in rigid-body collection and physics setup. / SDK2024_Write 实现刚体集合与物理设置中用于 write 的 Cinema 4D SDK 生命周期钩子。",
+      "tags": [
+        "serialization",
+        "object-manager",
+        "rigid-body"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_rigid_manager.cpp:SDK2024_CopyTo",
+      "type": "function",
+      "name": "SDK2024_CopyTo",
+      "filePath": "source/module/tools/object/mmd_rigid_manager.cpp",
+      "lineRange": [
+        145,
+        159
+      ],
+      "summary": "SDK2024_CopyTo implements the Cinema 4D SDK lifecycle hook for copy to in rigid-body collection and physics setup. / SDK2024_CopyTo 实现刚体集合与物理设置中用于 copy to 的 Cinema 4D SDK 生命周期钩子。",
+      "tags": [
+        "serialization",
+        "object-manager",
+        "rigid-body"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_rigid_manager.cpp:MMDRigidManagerObject::Message",
+      "type": "function",
+      "name": "MMDRigidManagerObject::Message",
+      "filePath": "source/module/tools/object/mmd_rigid_manager.cpp",
+      "lineRange": [
+        194,
+        227
+      ],
+      "summary": "MMDRigidManagerObject::Message dispatches Cinema 4D messages and state transitions for rigid-body collection and physics setup. / MMDRigidManagerObject::Message 为刚体集合与物理设置分发 Cinema 4D 消息与状态切换。",
+      "tags": [
+        "object-manager",
+        "rigid-body",
+        "pmx"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_rigid_manager.cpp:MMDRigidManagerObject::SetDParameter",
+      "type": "function",
+      "name": "MMDRigidManagerObject::SetDParameter",
+      "filePath": "source/module/tools/object/mmd_rigid_manager.cpp",
+      "lineRange": [
+        229,
+        275
+      ],
+      "summary": "MMDRigidManagerObject::SetDParameter applies parameter changes and their runtime side effects for rigid-body collection and physics setup. / MMDRigidManagerObject::SetDParameter 为刚体集合与物理设置应用参数变更及其运行时副作用。",
+      "tags": [
+        "object-manager",
+        "rigid-body",
+        "pmx"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_rigid_manager.cpp:MMDRigidManagerObject::SetAllRigidMode",
+      "type": "function",
+      "name": "MMDRigidManagerObject::SetAllRigidMode",
+      "filePath": "source/module/tools/object/mmd_rigid_manager.cpp",
+      "lineRange": [
+        277,
+        302
+      ],
+      "summary": "MMDRigidManagerObject::SetAllRigidMode sets all rigid mode for rigid-body collection and physics setup. / MMDRigidManagerObject::SetAllRigidMode 为刚体集合与物理设置设置 all rigid mode。",
+      "tags": [
+        "physics",
+        "object-manager",
+        "rigid-body"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_rigid_manager.cpp:MMDRigidManagerObject::CommitEditorTransforms",
+      "type": "function",
+      "name": "MMDRigidManagerObject::CommitEditorTransforms",
+      "filePath": "source/module/tools/object/mmd_rigid_manager.cpp",
+      "lineRange": [
+        304,
+        320
+      ],
+      "summary": "MMDRigidManagerObject::CommitEditorTransforms commits editor transforms for rigid-body collection and physics setup. / MMDRigidManagerObject::CommitEditorTransforms 为刚体集合与物理设置提交 editor transforms。",
+      "tags": [
+        "object-manager",
+        "rigid-body",
+        "pmx"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_rigid_manager.cpp:MMDRigidManagerObject::RestoreEditorTransforms",
+      "type": "function",
+      "name": "MMDRigidManagerObject::RestoreEditorTransforms",
+      "filePath": "source/module/tools/object/mmd_rigid_manager.cpp",
+      "lineRange": [
+        322,
+        347
+      ],
+      "summary": "MMDRigidManagerObject::RestoreEditorTransforms restores editor transforms for rigid-body collection and physics setup. / MMDRigidManagerObject::RestoreEditorTransforms 为刚体集合与物理设置恢复 editor transforms。",
+      "tags": [
+        "object-manager",
+        "rigid-body",
+        "pmx"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_rigid_manager.cpp:MMDRigidManagerObject::UpdateRigidList",
+      "type": "function",
+      "name": "MMDRigidManagerObject::UpdateRigidList",
+      "filePath": "source/module/tools/object/mmd_rigid_manager.cpp",
+      "lineRange": [
+        364,
+        387
+      ],
+      "summary": "MMDRigidManagerObject::UpdateRigidList updates rigid list for rigid-body collection and physics setup. / MMDRigidManagerObject::UpdateRigidList 为刚体集合与物理设置更新 rigid list。",
+      "tags": [
+        "physics",
+        "object-manager",
+        "rigid-body"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_rigid_manager.cpp:MMDRigidManagerObject::LoadPMX",
+      "type": "function",
+      "name": "MMDRigidManagerObject::LoadPMX",
+      "filePath": "source/module/tools/object/mmd_rigid_manager.cpp",
+      "lineRange": [
+        433,
+        492
+      ],
+      "summary": "MMDRigidManagerObject::LoadPMX loads pmx for rigid-body collection and physics setup. / MMDRigidManagerObject::LoadPMX 为刚体集合与物理设置加载 pmx。",
+      "tags": [
+        "pmx",
+        "import",
+        "object-manager"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_rigid_manager.cpp:ReadCollisionGroupMask",
+      "type": "function",
+      "name": "ReadCollisionGroupMask",
+      "filePath": "source/module/tools/object/mmd_rigid_manager.cpp",
+      "lineRange": [
+        502,
+        511
+      ],
+      "summary": "ReadCollisionGroupMask reads collision group mask for rigid-body collection and physics setup. / ReadCollisionGroupMask 为刚体集合与物理设置读取 collision group mask。",
+      "tags": [
+        "serialization",
+        "object-manager",
+        "rigid-body"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_rigid_manager.cpp:MMDRigidManagerObject::SavePMX",
+      "type": "function",
+      "name": "MMDRigidManagerObject::SavePMX",
+      "filePath": "source/module/tools/object/mmd_rigid_manager.cpp",
+      "lineRange": [
+        514,
+        578
+      ],
+      "summary": "MMDRigidManagerObject::SavePMX saves pmx for rigid-body collection and physics setup. / MMDRigidManagerObject::SavePMX 为刚体集合与物理设置保存 pmx。",
+      "tags": [
+        "pmx",
+        "export",
+        "object-manager"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_rigid_manager.cpp:MMDRigidManagerObject::BuildStandaloneRigidBodies",
+      "type": "function",
+      "name": "MMDRigidManagerObject::BuildStandaloneRigidBodies",
+      "filePath": "source/module/tools/object/mmd_rigid_manager.cpp",
+      "lineRange": [
+        580,
+        676
+      ],
+      "summary": "MMDRigidManagerObject::BuildStandaloneRigidBodies builds standalone rigid bodies for rigid-body collection and physics setup. / MMDRigidManagerObject::BuildStandaloneRigidBodies 为刚体集合与物理设置构建 standalone rigid bodies。",
+      "tags": [
+        "physics",
+        "ui",
+        "object-manager"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_rigid_manager.cpp:MMDRigidManagerObject::ReconnectRigidBodyPointers",
+      "type": "function",
+      "name": "MMDRigidManagerObject::ReconnectRigidBodyPointers",
+      "filePath": "source/module/tools/object/mmd_rigid_manager.cpp",
+      "lineRange": [
+        678,
+        708
+      ],
+      "summary": "MMDRigidManagerObject::ReconnectRigidBodyPointers reconnects rigid body pointers for rigid-body collection and physics setup. / MMDRigidManagerObject::ReconnectRigidBodyPointers 为刚体集合与物理设置重新连接 rigid body pointers。",
+      "tags": [
+        "physics",
+        "object-manager",
+        "rigid-body"
+      ],
+      "complexity": "moderate"
+    }
+  ],
+  "edges": [
+    {
+      "source": "file:source/module/tools/object/mmd_rigid.cpp",
+      "target": "function:source/module/tools/object/mmd_rigid.cpp:NormalizeRigidMode",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid.cpp",
+      "target": "function:source/module/tools/object/mmd_rigid.cpp:NormalizeRigidMode",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid.cpp",
+      "target": "function:source/module/tools/object/mmd_rigid.cpp:MarkSceneTransformDirty",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid.cpp",
+      "target": "function:source/module/tools/object/mmd_rigid.cpp:MarkSceneTransformDirty",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid.cpp",
+      "target": "function:source/module/tools/object/mmd_rigid.cpp:NormalizeMatrixBasis",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid.cpp",
+      "target": "function:source/module/tools/object/mmd_rigid.cpp:NormalizeMatrixBasis",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid.cpp",
+      "target": "function:source/module/tools/object/mmd_rigid.cpp:MatrixToEigen",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid.cpp",
+      "target": "function:source/module/tools/object/mmd_rigid.cpp:MatrixToEigen",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid.cpp",
+      "target": "function:source/module/tools/object/mmd_rigid.cpp:EigenToMatrix",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid.cpp",
+      "target": "function:source/module/tools/object/mmd_rigid.cpp:EigenToMatrix",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid.cpp",
+      "target": "function:source/module/tools/object/mmd_rigid.cpp:BuildBoneRawGlobalMatrix",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid.cpp",
+      "target": "function:source/module/tools/object/mmd_rigid.cpp:BuildBoneRawGlobalMatrix",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid.cpp",
+      "target": "function:source/module/tools/object/mmd_rigid.cpp:BuildRigidBindMatrix",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid.cpp",
+      "target": "function:source/module/tools/object/mmd_rigid.cpp:BuildRigidBindMatrix",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid.cpp",
+      "target": "function:source/module/tools/object/mmd_rigid.cpp:BuildTrackBoneRigidLocalMatrix",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid.cpp",
+      "target": "function:source/module/tools/object/mmd_rigid.cpp:BuildTrackBoneRigidLocalMatrix",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid.cpp",
+      "target": "function:source/module/tools/object/mmd_rigid.cpp:ConfigureRigidExecutionPriority",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid.cpp",
+      "target": "function:source/module/tools/object/mmd_rigid.cpp:ConfigureRigidExecutionPriority",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid.cpp",
+      "target": "function:source/module/tools/object/mmd_rigid.cpp:SDK2024_Init",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid.cpp",
+      "target": "function:source/module/tools/object/mmd_rigid.cpp:SDK2024_Init",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid.cpp",
+      "target": "function:source/module/tools/object/mmd_rigid.cpp:SDK2024_GetDDescription",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid.cpp",
+      "target": "function:source/module/tools/object/mmd_rigid.cpp:SDK2024_GetDDescription",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid.cpp",
+      "target": "function:source/module/tools/object/mmd_rigid.cpp:BoxType::InitParameter",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid.cpp",
+      "target": "function:source/module/tools/object/mmd_rigid.cpp:BoxType::InitParameter",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid.cpp",
+      "target": "function:source/module/tools/object/mmd_rigid.cpp:SphericalType::InitParameter",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid.cpp",
+      "target": "function:source/module/tools/object/mmd_rigid.cpp:SphericalType::InitParameter",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid.cpp",
+      "target": "function:source/module/tools/object/mmd_rigid.cpp:CaplsuleType::InitParameter",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid.cpp",
+      "target": "function:source/module/tools/object/mmd_rigid.cpp:CaplsuleType::InitParameter",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid.cpp",
+      "target": "function:source/module/tools/object/mmd_rigid.cpp:MMDRigidObject::SetDParameter",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid.cpp",
+      "target": "function:source/module/tools/object/mmd_rigid.cpp:MMDRigidObject::SetDParameter",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid.cpp",
+      "target": "function:source/module/tools/object/mmd_rigid.cpp:SDK2024_GetDEnabling",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid.cpp",
+      "target": "function:source/module/tools/object/mmd_rigid.cpp:SDK2024_GetDEnabling",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid.cpp",
+      "target": "function:source/module/tools/object/mmd_rigid.cpp:MMDRigidObject::UpdateRigidShape",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid.cpp",
+      "target": "function:source/module/tools/object/mmd_rigid.cpp:MMDRigidObject::UpdateRigidShape",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid.cpp",
+      "target": "function:source/module/tools/object/mmd_rigid.cpp:MMDRigidObject::UpdateRigidSize",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid.cpp",
+      "target": "function:source/module/tools/object/mmd_rigid.cpp:MMDRigidObject::UpdateRigidSize",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid.cpp",
+      "target": "function:source/module/tools/object/mmd_rigid.cpp:MMDRigidObject::UpdateRigidPhysics",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid.cpp",
+      "target": "function:source/module/tools/object/mmd_rigid.cpp:MMDRigidObject::UpdateRigidPhysics",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid.cpp",
+      "target": "function:source/module/tools/object/mmd_rigid.cpp:MMDRigidObject::UpdateRigidGroup",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid.cpp",
+      "target": "function:source/module/tools/object/mmd_rigid.cpp:MMDRigidObject::UpdateRigidGroup",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid.cpp",
+      "target": "function:source/module/tools/object/mmd_rigid.cpp:MMDRigidObject::Message",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid.cpp",
+      "target": "function:source/module/tools/object/mmd_rigid.cpp:MMDRigidObject::Message",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid.cpp",
+      "target": "function:source/module/tools/object/mmd_rigid.cpp:MMDRigidObject::Draw",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid.cpp",
+      "target": "function:source/module/tools/object/mmd_rigid.cpp:MMDRigidObject::Draw",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid.cpp",
+      "target": "function:source/module/tools/object/mmd_rigid.cpp:MMDRigidObject::HandleRigidIndexUpdate",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid.cpp",
+      "target": "function:source/module/tools/object/mmd_rigid.cpp:MMDRigidObject::HandleRigidIndexUpdate",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid.cpp",
+      "target": "function:source/module/tools/object/mmd_rigid.cpp:MMDRigidObject::Execute",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid.cpp",
+      "target": "function:source/module/tools/object/mmd_rigid.cpp:MMDRigidObject::Execute",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid.cpp",
+      "target": "function:source/module/tools/object/mmd_rigid.cpp:MMDRigidObject::AddToExecution",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid.cpp",
+      "target": "function:source/module/tools/object/mmd_rigid.cpp:MMDRigidObject::AddToExecution",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid.cpp",
+      "target": "function:source/module/tools/object/mmd_rigid.cpp:MMDRigidObject::Read",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid.cpp",
+      "target": "function:source/module/tools/object/mmd_rigid.cpp:MMDRigidObject::Read",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid.cpp",
+      "target": "function:source/module/tools/object/mmd_rigid.cpp:SDK2024_Write",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid.cpp",
+      "target": "function:source/module/tools/object/mmd_rigid.cpp:SDK2024_Write",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid.cpp",
+      "target": "function:source/module/tools/object/mmd_rigid.cpp:SDK2024_CopyTo",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid.cpp",
+      "target": "function:source/module/tools/object/mmd_rigid.cpp:SDK2024_CopyTo",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid.cpp",
+      "target": "function:source/module/tools/object/mmd_rigid.cpp:MMDRigidObject::HandleRigidModeChange",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid.cpp",
+      "target": "function:source/module/tools/object/mmd_rigid.cpp:MMDRigidObject::HandleRigidModeChange",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid.h",
+      "target": "class:source/module/tools/object/mmd_rigid.h:MMDRigidObject",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid.h",
+      "target": "class:source/module/tools/object/mmd_rigid.h:MMDRigidObject",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid.cpp",
+      "target": "file:source/module/tools/object/mmd_bone_manager.h",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid.cpp",
+      "target": "file:source/module/tools/object/mmd_model_manager.h",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid.cpp",
+      "target": "file:source/module/tools/object/mmd_rigid_manager.h",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid.cpp",
+      "target": "file:source/module/tools/object/mmd_rigid.h",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_rigid_manager.cpp:NormalizeRigidMode",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_rigid_manager.cpp:NormalizeRigidMode",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_rigid_manager.cpp:ResolveImportedBoneIndex",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_rigid_manager.cpp:ResolveImportedBoneIndex",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_rigid_manager.cpp:NormalizeMatrixBasis",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_rigid_manager.cpp:NormalizeMatrixBasis",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_rigid_manager.cpp:GetObjectRotationOrder",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_rigid_manager.cpp:GetObjectRotationOrder",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_rigid_manager.cpp:MarkSceneNodeDirty",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_rigid_manager.cpp:MarkSceneNodeDirty",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_rigid_manager.cpp:SetFloatParameter",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_rigid_manager.cpp:SetFloatParameter",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_rigid_manager.cpp:SetVectorXYZParameters",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_rigid_manager.cpp:SetVectorXYZParameters",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_rigid_manager.cpp:ReadObjectStoredString",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_rigid_manager.cpp:ReadObjectStoredString",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_rigid_manager.cpp:ReadObjectStoredIndex",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_rigid_manager.cpp:ReadObjectStoredIndex",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_rigid_manager.cpp:BuildPRSMatrix",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_rigid_manager.cpp:BuildPRSMatrix",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_rigid_manager.cpp:MMDRigidManagerObject::Read",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_rigid_manager.cpp:MMDRigidManagerObject::Read",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_rigid_manager.cpp:SDK2024_Write",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_rigid_manager.cpp:SDK2024_Write",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_rigid_manager.cpp:SDK2024_CopyTo",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_rigid_manager.cpp:SDK2024_CopyTo",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_rigid_manager.cpp:MMDRigidManagerObject::Message",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_rigid_manager.cpp:MMDRigidManagerObject::Message",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_rigid_manager.cpp:MMDRigidManagerObject::SetDParameter",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_rigid_manager.cpp:MMDRigidManagerObject::SetDParameter",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_rigid_manager.cpp:MMDRigidManagerObject::SetAllRigidMode",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_rigid_manager.cpp:MMDRigidManagerObject::SetAllRigidMode",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_rigid_manager.cpp:MMDRigidManagerObject::CommitEditorTransforms",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_rigid_manager.cpp:MMDRigidManagerObject::CommitEditorTransforms",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_rigid_manager.cpp:MMDRigidManagerObject::RestoreEditorTransforms",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_rigid_manager.cpp:MMDRigidManagerObject::RestoreEditorTransforms",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_rigid_manager.cpp:MMDRigidManagerObject::UpdateRigidList",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_rigid_manager.cpp:MMDRigidManagerObject::UpdateRigidList",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_rigid_manager.cpp:MMDRigidManagerObject::LoadPMX",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_rigid_manager.cpp:MMDRigidManagerObject::LoadPMX",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_rigid_manager.cpp:ReadCollisionGroupMask",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_rigid_manager.cpp:ReadCollisionGroupMask",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_rigid_manager.cpp:MMDRigidManagerObject::SavePMX",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_rigid_manager.cpp:MMDRigidManagerObject::SavePMX",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_rigid_manager.cpp:MMDRigidManagerObject::BuildStandaloneRigidBodies",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_rigid_manager.cpp:MMDRigidManagerObject::BuildStandaloneRigidBodies",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_rigid_manager.cpp:MMDRigidManagerObject::ReconnectRigidBodyPointers",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_rigid_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_rigid_manager.cpp:MMDRigidManagerObject::ReconnectRigidBodyPointers",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    }
+  ]
+}

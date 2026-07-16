@@ -1,0 +1,252 @@
+{
+  "scriptCompleted": true,
+  "filesAnalyzed": 25,
+  "filesSkipped": [],
+  "results": [
+    {
+      "path": "res/S24_up/description/OMMDBoneManager.res",
+      "language": "res",
+      "fileCategory": "code",
+      "totalLines": 45,
+      "nonEmptyLines": 38,
+      "metrics": {}
+    },
+    {
+      "path": "res/S24_up/description/OMMDCamera.h",
+      "language": "c",
+      "fileCategory": "code",
+      "totalLines": 8,
+      "nonEmptyLines": 6,
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "res/S24_up/description/OMMDCamera.res",
+      "language": "res",
+      "fileCategory": "code",
+      "totalLines": 4,
+      "nonEmptyLines": 4,
+      "metrics": {}
+    },
+    {
+      "path": "res/S24_up/description/OMMDJoint.h",
+      "language": "c",
+      "fileCategory": "code",
+      "totalLines": 71,
+      "nonEmptyLines": 63,
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "res/S24_up/description/OMMDJoint.res",
+      "language": "res",
+      "fileCategory": "code",
+      "totalLines": 352,
+      "nonEmptyLines": 289,
+      "metrics": {}
+    },
+    {
+      "path": "res/S24_up/description/OMMDJointManager.h",
+      "language": "c",
+      "fileCategory": "code",
+      "totalLines": 17,
+      "nonEmptyLines": 15,
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "res/S24_up/description/OMMDJointManager.res",
+      "language": "res",
+      "fileCategory": "code",
+      "totalLines": 37,
+      "nonEmptyLines": 31,
+      "metrics": {}
+    },
+    {
+      "path": "res/S24_up/description/OMMDMeshManager.h",
+      "language": "c",
+      "fileCategory": "code",
+      "totalLines": 19,
+      "nonEmptyLines": 18,
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "res/S24_up/description/OMMDMeshManager.res",
+      "language": "res",
+      "fileCategory": "code",
+      "totalLines": 37,
+      "nonEmptyLines": 31,
+      "metrics": {}
+    },
+    {
+      "path": "res/S24_up/description/OMMDModelManager.h",
+      "language": "c",
+      "fileCategory": "code",
+      "totalLines": 158,
+      "nonEmptyLines": 156,
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "res/S24_up/description/OMMDModelManager.res",
+      "language": "res",
+      "fileCategory": "code",
+      "totalLines": 594,
+      "nonEmptyLines": 486,
+      "metrics": {}
+    },
+    {
+      "path": "res/S24_up/description/OMMDRigid.h",
+      "language": "c",
+      "fileCategory": "code",
+      "totalLines": 85,
+      "nonEmptyLines": 76,
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "res/S24_up/description/OMMDRigid.res",
+      "language": "res",
+      "fileCategory": "code",
+      "totalLines": 290,
+      "nonEmptyLines": 237,
+      "metrics": {}
+    },
+    {
+      "path": "res/S24_up/description/OMMDRigidManager.h",
+      "language": "c",
+      "fileCategory": "code",
+      "totalLines": 17,
+      "nonEmptyLines": 15,
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "res/S24_up/description/OMMDRigidManager.res",
+      "language": "res",
+      "fileCategory": "code",
+      "totalLines": 38,
+      "nonEmptyLines": 31,
+      "metrics": {}
+    },
+    {
+      "path": "res/S24_up/description/TMMDBone.h",
+      "language": "c",
+      "fileCategory": "code",
+      "totalLines": 92,
+      "nonEmptyLines": 74,
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "res/S24_up/description/TMMDBone.res",
+      "language": "res",
+      "fileCategory": "code",
+      "totalLines": 319,
+      "nonEmptyLines": 258,
+      "metrics": {}
+    },
+    {
+      "path": "res/S24_up/description/Xmmdmaterialmorphshader.h",
+      "language": "c",
+      "fileCategory": "code",
+      "totalLines": 8,
+      "nonEmptyLines": 8,
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "res/S24_up/description/Xmmdmaterialmorphshader.res",
+      "language": "res",
+      "fileCategory": "code",
+      "totalLines": 11,
+      "nonEmptyLines": 10,
+      "metrics": {}
+    },
+    {
+      "path": "res/S24_up/dialogs/DLG_CMT_TOOL.res",
+      "language": "res",
+      "fileCategory": "code",
+      "totalLines": 773,
+      "nonEmptyLines": 659,
+      "metrics": {}
+    },
+    {
+      "path": "res/S24_up/dialogs/DLG_CMT_VMD_IMPORT.res",
+      "language": "res",
+      "fileCategory": "code",
+      "totalLines": 74,
+      "nonEmptyLines": 63,
+      "metrics": {}
+    },
+    {
+      "path": "res/S24_up/mikumikudance_data/color.txt",
+      "language": "txt",
+      "fileCategory": "docs",
+      "totalLines": 77,
+      "nonEmptyLines": 58,
+      "metrics": {}
+    },
+    {
+      "path": "res/S24_up/mikumikudance_data/toon01.bmp",
+      "language": "bmp",
+      "fileCategory": "code",
+      "totalLines": 1,
+      "nonEmptyLines": 1,
+      "metrics": {}
+    },
+    {
+      "path": "res/S24_up/mikumikudance_data/toon02.bmp",
+      "language": "bmp",
+      "fileCategory": "code",
+      "totalLines": 1,
+      "nonEmptyLines": 1,
+      "metrics": {}
+    },
+    {
+      "path": "res/S24_up/mikumikudance_data/toon03.bmp",
+      "language": "bmp",
+      "fileCategory": "code",
+      "totalLines": 1,
+      "nonEmptyLines": 1,
+      "metrics": {}
+    }
+  ]
+}

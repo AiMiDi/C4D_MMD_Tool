@@ -1,0 +1,574 @@
+{
+  "scriptCompleted": true,
+  "filesAnalyzed": 10,
+  "filesSkipped": [],
+  "results": [
+    {
+      "path": "AGENTS.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 113,
+      "nonEmptyLines": 97,
+      "sections": [
+        {
+          "heading": "Repository Guidance",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "Scope",
+          "level": 2,
+          "line": 3
+        },
+        {
+          "heading": "Project Structure",
+          "level": 2,
+          "line": 7
+        },
+        {
+          "heading": "Build And Validation",
+          "level": 2,
+          "line": 25
+        },
+        {
+          "heading": "Include Conventions",
+          "level": 2,
+          "line": 47
+        },
+        {
+          "heading": "Runtime Resource Layout",
+          "level": 2,
+          "line": 54
+        },
+        {
+          "heading": "Cinema 4D LLDB-DAP Debugging",
+          "level": 2,
+          "line": 60
+        },
+        {
+          "heading": "Capturing Plugin Diagnostic Logs",
+          "level": 2,
+          "line": 94
+        },
+        {
+          "heading": "Working Notes",
+          "level": 2,
+          "line": 108
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 9
+      }
+    },
+    {
+      "path": "CMakeLists.txt",
+      "language": "txt",
+      "fileCategory": "docs",
+      "totalLines": 337,
+      "nonEmptyLines": 312,
+      "metrics": {}
+    },
+    {
+      "path": "CMakePresets.json",
+      "language": "json",
+      "fileCategory": "config",
+      "totalLines": 171,
+      "nonEmptyLines": 171,
+      "sections": [
+        {
+          "heading": "version",
+          "level": 1,
+          "line": 2
+        },
+        {
+          "heading": "cmakeMinimumRequired",
+          "level": 1,
+          "line": 3
+        },
+        {
+          "heading": "configurePresets",
+          "level": 1,
+          "line": 8
+        },
+        {
+          "heading": "buildPresets",
+          "level": 1,
+          "line": 103
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 4
+      }
+    },
+    {
+      "path": "CMakeUserPresets.SAMPLE.json",
+      "language": "json",
+      "fileCategory": "config",
+      "totalLines": 27,
+      "nonEmptyLines": 27,
+      "sections": [
+        {
+          "heading": "version",
+          "level": 1,
+          "line": 2
+        },
+        {
+          "heading": "cmakeMinimumRequired",
+          "level": 1,
+          "line": 3
+        },
+        {
+          "heading": "configurePresets",
+          "level": 1,
+          "line": 8
+        },
+        {
+          "heading": "buildPresets",
+          "level": 1,
+          "line": 19
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 4
+      }
+    },
+    {
+      "path": "DEVELOPMENT.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 256,
+      "nonEmptyLines": 176,
+      "sections": [
+        {
+          "heading": "C4D_MMDTool — Project Structure and Build Guide",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "Build workflow",
+          "level": 2,
+          "line": 7
+        },
+        {
+          "heading": "CI (GitHub Actions)",
+          "level": 3,
+          "line": 9
+        },
+        {
+          "heading": "Prerequisites",
+          "level": 3,
+          "line": 16
+        },
+        {
+          "heading": "Step 1: Third-party dependencies (optional root workflow)",
+          "level": 3,
+          "line": 23
+        },
+        {
+          "heading": "Root `CMakeLists.txt`: presets and “config files”",
+          "level": 3,
+          "line": 46
+        },
+        {
+          "heading": "Step 2: Configure and build the SDK project",
+          "level": 3,
+          "line": 76
+        },
+        {
+          "heading": "Quick start (minimal commands)",
+          "level": 3,
+          "line": 100
+        },
+        {
+          "heading": "Overview",
+          "level": 2,
+          "line": 117
+        },
+        {
+          "heading": "Repository layout",
+          "level": 2,
+          "line": 125
+        },
+        {
+          "heading": "`source/` layout",
+          "level": 2,
+          "line": 155
+        },
+        {
+          "heading": "Include conventions",
+          "level": 3,
+          "line": 174
+        },
+        {
+          "heading": "Third-party dependencies (`dependency/`)",
+          "level": 2,
+          "line": 188
+        },
+        {
+          "heading": "Dependency graph (conceptual)",
+          "level": 3,
+          "line": 190
+        },
+        {
+          "heading": "Library naming (`CMAKE_DEBUG_POSTFIX=\"_Debug\"`)",
+          "level": 3,
+          "line": 201
+        },
+        {
+          "heading": "Cinema 4D 2026 SDK build system",
+          "level": 2,
+          "line": 207
+        },
+        {
+          "heading": "Overview",
+          "level": 3,
+          "line": 209
+        },
+        {
+          "heading": "Module discovery",
+          "level": 3,
+          "line": 213
+        },
+        {
+          "heading": "Custom `CMakeLists.txt` vs generated (Mode A vs B)",
+          "level": 3,
+          "line": 221
+        },
+        {
+          "heading": "`projectdefinition.txt` → CMake mapping",
+          "level": 3,
+          "line": 227
+        },
+        {
+          "heading": "Output",
+          "level": 3,
+          "line": 231
+        },
+        {
+          "heading": "Configuration files",
+          "level": 2,
+          "line": 239
+        },
+        {
+          "heading": "`sdk_2026/plugins/mmdtool/project/CMakeLists.txt`",
+          "level": 3,
+          "line": 241
+        },
+        {
+          "heading": "`projectdefinition.txt`",
+          "level": 3,
+          "line": 245
+        },
+        {
+          "heading": "SDK `CMakePresets.json` (inside `sdk_*`)",
+          "level": 3,
+          "line": 249
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 25
+      }
+    },
+    {
+      "path": "DEVELOPMENT_zh.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 406,
+      "nonEmptyLines": 301,
+      "sections": [
+        {
+          "heading": "C4D_MMDTool 项目结构与构建流程",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "构建流程",
+          "level": 2,
+          "line": 7
+        },
+        {
+          "heading": "CI（GitHub Actions）",
+          "level": 3,
+          "line": 9
+        },
+        {
+          "heading": "前置条件",
+          "level": 3,
+          "line": 16
+        },
+        {
+          "heading": "第一步：第三方依赖（可选根工程流程）",
+          "level": 3,
+          "line": 23
+        },
+        {
+          "heading": "根目录 `CMakeLists.txt`：预设与「配置文件」",
+          "level": 3,
+          "line": 46
+        },
+        {
+          "heading": "第二步：CMake 配置与构建",
+          "level": 3,
+          "line": 76
+        },
+        {
+          "heading": "快速上手（最短路径）",
+          "level": 3,
+          "line": 98
+        },
+        {
+          "heading": "项目概述",
+          "level": 2,
+          "line": 120
+        },
+        {
+          "heading": "目录结构",
+          "level": 2,
+          "line": 128
+        },
+        {
+          "heading": "源代码结构 (`source/`)",
+          "level": 2,
+          "line": 176
+        },
+        {
+          "heading": "源代码依赖关系",
+          "level": 3,
+          "line": 223
+        },
+        {
+          "heading": "第三方依赖 (`dependency/`)",
+          "level": 2,
+          "line": 239
+        },
+        {
+          "heading": "依赖关系图",
+          "level": 3,
+          "line": 241
+        },
+        {
+          "heading": "依赖库版本",
+          "level": 3,
+          "line": 262
+        },
+        {
+          "heading": "编译输出命名规则",
+          "level": 3,
+          "line": 271
+        },
+        {
+          "heading": "Cinema 4D 2026 SDK 构建系统",
+          "level": 2,
+          "line": 288
+        },
+        {
+          "heading": "概述",
+          "level": 3,
+          "line": 290
+        },
+        {
+          "heading": "模块发现流程",
+          "level": 3,
+          "line": 294
+        },
+        {
+          "heading": "构建配置方式：自定义 CMakeLists.txt vs projectdefinition.txt",
+          "level": 3,
+          "line": 302
+        },
+        {
+          "heading": "projectdefinition.txt → CMake 变量映射参考",
+          "level": 3,
+          "line": 328
+        },
+        {
+          "heading": "路径变量",
+          "level": 3,
+          "line": 344
+        },
+        {
+          "heading": "源文件扫描机制",
+          "level": 3,
+          "line": 356
+        },
+        {
+          "heading": "构建输出",
+          "level": 3,
+          "line": 365
+        },
+        {
+          "heading": "配置文件说明",
+          "level": 2,
+          "line": 373
+        },
+        {
+          "heading": "`CMakeLists.txt`（实际构建配置）",
+          "level": 3,
+          "line": 375
+        },
+        {
+          "heading": "`projectdefinition.txt`（仅供参考）",
+          "level": 3,
+          "line": 395
+        },
+        {
+          "heading": "CMake 预设 (`CMakePresets.json`)",
+          "level": 3,
+          "line": 399
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 28
+      }
+    },
+    {
+      "path": "LICENSE.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 675,
+      "nonEmptyLines": 553,
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 0
+      }
+    },
+    {
+      "path": "README.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 381,
+      "nonEmptyLines": 217,
+      "sections": [
+        {
+          "heading": "C4D MMD Tool",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "About",
+          "level": 2,
+          "line": 11
+        },
+        {
+          "heading": "Release",
+          "level": 2,
+          "line": 19
+        },
+        {
+          "heading": "usage",
+          "level": 2,
+          "line": 29
+        },
+        {
+          "heading": "Functions",
+          "level": 3,
+          "line": 35
+        },
+        {
+          "heading": "version",
+          "level": 2,
+          "line": 200
+        },
+        {
+          "heading": "Author",
+          "level": 2,
+          "line": 375
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 7
+      }
+    },
+    {
+      "path": "README_zh.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 409,
+      "nonEmptyLines": 234,
+      "sections": [
+        {
+          "heading": "C4D MMD Tool",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "关于",
+          "level": 2,
+          "line": 11
+        },
+        {
+          "heading": "发行版",
+          "level": 2,
+          "line": 19
+        },
+        {
+          "heading": "开发者：CMake 构建（多 SDK）",
+          "level": 3,
+          "line": 25
+        },
+        {
+          "heading": "使用方法",
+          "level": 2,
+          "line": 45
+        },
+        {
+          "heading": "界面介绍",
+          "level": 3,
+          "line": 50
+        },
+        {
+          "heading": "版本更新",
+          "level": 2,
+          "line": 231
+        },
+        {
+          "heading": "作者",
+          "level": 2,
+          "line": 401
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 8
+      }
+    },
+    {
+      "path": "configure_sdk.bat",
+      "language": "batch",
+      "fileCategory": "script",
+      "totalLines": 45,
+      "nonEmptyLines": 39,
+      "metrics": {}
+    }
+  ]
+}

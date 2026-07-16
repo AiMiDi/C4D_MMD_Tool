@@ -1,0 +1,21 @@
+{
+  "nodes": [
+    {
+      "id": "pipeline:.github/workflows/build.yml",
+      "type": "pipeline",
+      "name": "build.yml",
+      "filePath": ".github/workflows/build.yml",
+      "summary": "Reusable or manually dispatched GitHub Actions build pipeline that runs 21 Release jobs: eight Windows 2022 x64 SDK builds, eight Intel macOS 26 x86_64 builds, and five Apple Silicon macOS 26 arm64 builds limited to R25 and 2023–2026. It checks out Bullet and libMMD submodules, caches or builds dependencies, configures root CMake presets for each SDK, builds the plugin, and uploads Windows and Intel artifacts. / 可复用或手动触发的 GitHub Actions 构建流水线，共运行 21 个 Release 作业：8 个 Windows 2022 x64 SDK 构建、8 个 Intel macOS 26 x86_64 构建，以及仅覆盖 R25 与 2023–2026 的 5 个 Apple Silicon macOS 26 arm64 构建。它检出 Bullet 与 libMMD 子模块，缓存或构建依赖，为各 SDK 配置根级 CMake 预设，构建插件，并上传 Windows 与 Intel 产物。",
+      "tags": [
+        "ci-cd",
+        "github-actions",
+        "build-matrix",
+        "multi-sdk",
+        "cross-platform"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "GitHub Actions matrix include enriches the 16 base OS×SDK combinations with platform presets and appends five ARM64-only combinations; fail-fast is disabled and maximum parallelism is four. / GitHub Actions 的 matrix include 为 16 个基础 OS×SDK 组合补充平台预设，并追加 5 个仅限 ARM64 的组合；流水线关闭 fail-fast，最大并行度为 4。"
+    }
+  ],
+  "edges": []
+}

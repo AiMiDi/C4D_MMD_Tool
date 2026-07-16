@@ -1,0 +1,1854 @@
+{
+  "nodes": [
+    {
+      "id": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "type": "file",
+      "name": "mmd_model_manager.cpp",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "summary": "Implements the central model workflow for PMX, VMD, and VPD import/export, dynamic morph and material UI, animation slots, standalone IK, and physics playback. / 实现 PMX、VMD 与 VPD 导入导出的核心模型流程，以及动态变形和材质 UI、动画槽、独立 IK 与物理播放。",
+      "tags": [
+        "object-manager",
+        "pmx",
+        "vmd-animation",
+        "morph",
+        "physics"
+      ],
+      "complexity": "complex",
+      "languageNotes": "C++ integrates Cinema 4D SDK lifecycle hooks with explicit PMX/VMD conversion and runtime state management. / C++ 将 Cinema 4D SDK 生命周期钩子与显式 PMX/VMD 转换及运行时状态管理结合。"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:SDK2024_Write",
+      "type": "function",
+      "name": "SDK2024_Write",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        1445,
+        1529
+      ],
+      "summary": "SDK2024_Write implements the Cinema 4D SDK lifecycle hook for write in central model, animation, IK, and physics orchestration. / SDK2024_Write 实现核心模型、动画、IK 与物理编排中用于 write 的 Cinema 4D SDK 生命周期钩子。",
+      "tags": [
+        "serialization",
+        "object-manager",
+        "pmx"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:SDK2024_CopyTo",
+      "type": "function",
+      "name": "SDK2024_CopyTo",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        1530,
+        1591
+      ],
+      "summary": "SDK2024_CopyTo implements the Cinema 4D SDK lifecycle hook for copy to in central model, animation, IK, and physics orchestration. / SDK2024_CopyTo 实现核心模型、动画、IK 与物理编排中用于 copy to 的 Cinema 4D SDK 生命周期钩子。",
+      "tags": [
+        "serialization",
+        "object-manager",
+        "pmx"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::ReadMorph",
+      "type": "function",
+      "name": "MMDModelManagerObject::ReadMorph",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        1592,
+        1622
+      ],
+      "summary": "MMDModelManagerObject::ReadMorph reads morph for central model, animation, IK, and physics orchestration. / MMDModelManagerObject::ReadMorph 为核心模型、动画、IK 与物理编排读取 morph。",
+      "tags": [
+        "serialization",
+        "morph",
+        "object-manager"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::WriteMorph",
+      "type": "function",
+      "name": "MMDModelManagerObject::WriteMorph",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        1623,
+        1637
+      ],
+      "summary": "MMDModelManagerObject::WriteMorph writes morph for central model, animation, IK, and physics orchestration. / MMDModelManagerObject::WriteMorph 为核心模型、动画、IK 与物理编排写入 morph。",
+      "tags": [
+        "serialization",
+        "morph",
+        "object-manager"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::CopyMorph",
+      "type": "function",
+      "name": "MMDModelManagerObject::CopyMorph",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        1638,
+        1660
+      ],
+      "summary": "MMDModelManagerObject::CopyMorph copies morph for central model, animation, IK, and physics orchestration. / MMDModelManagerObject::CopyMorph 为核心模型、动画、IK 与物理编排复制 morph。",
+      "tags": [
+        "serialization",
+        "morph",
+        "object-manager"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::BeginMorphChange",
+      "type": "function",
+      "name": "MMDModelManagerObject::BeginMorphChange",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        1662,
+        1665
+      ],
+      "summary": "MMDModelManagerObject::BeginMorphChange begins morph change for central model, animation, IK, and physics orchestration. / MMDModelManagerObject::BeginMorphChange 为核心模型、动画、IK 与物理编排开始 morph change。",
+      "tags": [
+        "morph",
+        "object-manager",
+        "pmx"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::MMDModelManagerObject",
+      "type": "function",
+      "name": "MMDModelManagerObject::MMDModelManagerObject",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        1667,
+        1669
+      ],
+      "summary": "MMDModelManagerObject::MMDModelManagerObject initializes an object used by central model, animation, IK, and physics orchestration. / MMDModelManagerObject::MMDModelManagerObject 初始化核心模型、动画、IK 与物理编排所使用的对象。",
+      "tags": [
+        "object-manager",
+        "pmx",
+        "vmd-animation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::EnsureMorphAnimationSlotCount",
+      "type": "function",
+      "name": "MMDModelManagerObject::EnsureMorphAnimationSlotCount",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        1671,
+        1688
+      ],
+      "summary": "MMDModelManagerObject::EnsureMorphAnimationSlotCount ensures morph animation slot count for central model, animation, IK, and physics orchestration. / MMDModelManagerObject::EnsureMorphAnimationSlotCount 为核心模型、动画、IK 与物理编排确保 morph animation slot count。",
+      "tags": [
+        "vmd-animation",
+        "morph",
+        "object-manager"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::ClearMorphAnimationSlots",
+      "type": "function",
+      "name": "MMDModelManagerObject::ClearMorphAnimationSlots",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        1690,
+        1693
+      ],
+      "summary": "MMDModelManagerObject::ClearMorphAnimationSlots clears morph animation slots for central model, animation, IK, and physics orchestration. / MMDModelManagerObject::ClearMorphAnimationSlots 为核心模型、动画、IK 与物理编排清除 morph animation slots。",
+      "tags": [
+        "vmd-animation",
+        "morph",
+        "object-manager"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::EnsureAnimationSlotCount",
+      "type": "function",
+      "name": "MMDModelManagerObject::EnsureAnimationSlotCount",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        1695,
+        1721
+      ],
+      "summary": "MMDModelManagerObject::EnsureAnimationSlotCount ensures animation slot count for central model, animation, IK, and physics orchestration. / MMDModelManagerObject::EnsureAnimationSlotCount 为核心模型、动画、IK 与物理编排确保 animation slot count。",
+      "tags": [
+        "vmd-animation",
+        "object-manager",
+        "pmx"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::SetAnimationSlotMetadata",
+      "type": "function",
+      "name": "MMDModelManagerObject::SetAnimationSlotMetadata",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        1723,
+        1734
+      ],
+      "summary": "MMDModelManagerObject::SetAnimationSlotMetadata sets animation slot metadata for central model, animation, IK, and physics orchestration. / MMDModelManagerObject::SetAnimationSlotMetadata 为核心模型、动画、IK 与物理编排设置 animation slot metadata。",
+      "tags": [
+        "vmd-animation",
+        "object-manager",
+        "pmx"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::RefreshAnimationSlotItems",
+      "type": "function",
+      "name": "MMDModelManagerObject::RefreshAnimationSlotItems",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        1736,
+        1747
+      ],
+      "summary": "MMDModelManagerObject::RefreshAnimationSlotItems refreshes animation slot items for central model, animation, IK, and physics orchestration. / MMDModelManagerObject::RefreshAnimationSlotItems 为核心模型、动画、IK 与物理编排刷新 animation slot items。",
+      "tags": [
+        "vmd-animation",
+        "object-manager",
+        "pmx"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::GetAnimationSlotMaxFrame",
+      "type": "function",
+      "name": "MMDModelManagerObject::GetAnimationSlotMaxFrame",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        1749,
+        1754
+      ],
+      "summary": "MMDModelManagerObject::GetAnimationSlotMaxFrame retrieves animation slot max frame for central model, animation, IK, and physics orchestration. / MMDModelManagerObject::GetAnimationSlotMaxFrame 为核心模型、动画、IK 与物理编排获取 animation slot max frame。",
+      "tags": [
+        "vmd-animation",
+        "object-manager",
+        "pmx"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::ApplyAnimationSlotSelection",
+      "type": "function",
+      "name": "MMDModelManagerObject::ApplyAnimationSlotSelection",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        1756,
+        1807
+      ],
+      "summary": "MMDModelManagerObject::ApplyAnimationSlotSelection applies animation slot selection for central model, animation, IK, and physics orchestration. / MMDModelManagerObject::ApplyAnimationSlotSelection 为核心模型、动画、IK 与物理编排应用 animation slot selection。",
+      "tags": [
+        "vmd-animation",
+        "runtime",
+        "object-manager"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::RefreshMorph",
+      "type": "function",
+      "name": "MMDModelManagerObject::RefreshMorph",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        1809,
+        1836
+      ],
+      "summary": "MMDModelManagerObject::RefreshMorph refreshes morph for central model, animation, IK, and physics orchestration. / MMDModelManagerObject::RefreshMorph 为核心模型、动画、IK 与物理编排刷新 morph。",
+      "tags": [
+        "morph",
+        "object-manager",
+        "pmx"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::SyncMorphSlidersFromTags",
+      "type": "function",
+      "name": "MMDModelManagerObject::SyncMorphSlidersFromTags",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        1838,
+        1854
+      ],
+      "summary": "MMDModelManagerObject::SyncMorphSlidersFromTags synchronizes morph sliders from tags for central model, animation, IK, and physics orchestration. / MMDModelManagerObject::SyncMorphSlidersFromTags 为核心模型、动画、IK 与物理编排同步 morph sliders from tags。",
+      "tags": [
+        "morph",
+        "object-manager",
+        "pmx"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::CaptureAndClearPMXExportMorphState",
+      "type": "function",
+      "name": "MMDModelManagerObject::CaptureAndClearPMXExportMorphState",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        1856,
+        1883
+      ],
+      "summary": "MMDModelManagerObject::CaptureAndClearPMXExportMorphState captures and clear pmx export morph state for central model, animation, IK, and physics orchestration. / MMDModelManagerObject::CaptureAndClearPMXExportMorphState 为核心模型、动画、IK 与物理编排捕获 and clear pmx export morph state。",
+      "tags": [
+        "pmx",
+        "morph",
+        "export",
+        "object-manager"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::RestorePMXExportMorphState",
+      "type": "function",
+      "name": "MMDModelManagerObject::RestorePMXExportMorphState",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        1885,
+        1911
+      ],
+      "summary": "MMDModelManagerObject::RestorePMXExportMorphState restores pmx export morph state for central model, animation, IK, and physics orchestration. / MMDModelManagerObject::RestorePMXExportMorphState 为核心模型、动画、IK 与物理编排恢复 pmx export morph state。",
+      "tags": [
+        "pmx",
+        "morph",
+        "export",
+        "object-manager"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::ClearMorphRuntimeForEdit",
+      "type": "function",
+      "name": "MMDModelManagerObject::ClearMorphRuntimeForEdit",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        1913,
+        1952
+      ],
+      "summary": "MMDModelManagerObject::ClearMorphRuntimeForEdit clears morph runtime for edit for central model, animation, IK, and physics orchestration. / MMDModelManagerObject::ClearMorphRuntimeForEdit 为核心模型、动画、IK 与物理编排清除 morph runtime for edit。",
+      "tags": [
+        "morph",
+        "runtime",
+        "object-manager"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::UpdateManagers",
+      "type": "function",
+      "name": "MMDModelManagerObject::UpdateManagers",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        1960,
+        2066
+      ],
+      "summary": "MMDModelManagerObject::UpdateManagers updates managers for central model, animation, IK, and physics orchestration. / MMDModelManagerObject::UpdateManagers 为核心模型、动画、IK 与物理编排更新 managers。",
+      "tags": [
+        "object-manager",
+        "pmx",
+        "vmd-animation"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::Execute",
+      "type": "function",
+      "name": "MMDModelManagerObject::Execute",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        2068,
+        2182
+      ],
+      "summary": "MMDModelManagerObject::Execute runs the Cinema 4D evaluation-stage behavior for central model, animation, IK, and physics orchestration. / MMDModelManagerObject::Execute 为核心模型、动画、IK 与物理编排执行 Cinema 4D 求值阶段行为。",
+      "tags": [
+        "runtime",
+        "object-manager",
+        "pmx"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::ImportGroupAndFlipMorph",
+      "type": "function",
+      "name": "MMDModelManagerObject::ImportGroupAndFlipMorph",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        2184,
+        2214
+      ],
+      "summary": "MMDModelManagerObject::ImportGroupAndFlipMorph imports group and flip morph for central model, animation, IK, and physics orchestration. / MMDModelManagerObject::ImportGroupAndFlipMorph 为核心模型、动画、IK 与物理编排导入 group and flip morph。",
+      "tags": [
+        "morph",
+        "import",
+        "object-manager"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::AddDynamicDescription",
+      "type": "function",
+      "name": "MMDModelManagerObject::AddDynamicDescription",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        2216,
+        2226
+      ],
+      "summary": "MMDModelManagerObject::AddDynamicDescription adds dynamic description for central model, animation, IK, and physics orchestration. / MMDModelManagerObject::AddDynamicDescription 为核心模型、动画、IK 与物理编排添加 dynamic description。",
+      "tags": [
+        "ui",
+        "object-manager",
+        "pmx"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::DeleteDynamicDescription",
+      "type": "function",
+      "name": "MMDModelManagerObject::DeleteDynamicDescription",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        2228,
+        2235
+      ],
+      "summary": "MMDModelManagerObject::DeleteDynamicDescription deletes dynamic description for central model, animation, IK, and physics orchestration. / MMDModelManagerObject::DeleteDynamicDescription 为核心模型、动画、IK 与物理编排删除 dynamic description。",
+      "tags": [
+        "ui",
+        "object-manager",
+        "pmx"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::StripIKSolverDynamicUI",
+      "type": "function",
+      "name": "MMDModelManagerObject::StripIKSolverDynamicUI",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        2237,
+        2255
+      ],
+      "summary": "MMDModelManagerObject::StripIKSolverDynamicUI strips ik solver dynamic ui for central model, animation, IK, and physics orchestration. / MMDModelManagerObject::StripIKSolverDynamicUI 为核心模型、动画、IK 与物理编排移除 ik solver dynamic ui。",
+      "tags": [
+        "ik",
+        "ui",
+        "object-manager"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::SyncIKSolverDynamicParamsFromDescMap",
+      "type": "function",
+      "name": "MMDModelManagerObject::SyncIKSolverDynamicParamsFromDescMap",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        2257,
+        2266
+      ],
+      "summary": "MMDModelManagerObject::SyncIKSolverDynamicParamsFromDescMap synchronizes ik solver dynamic params from desc map for central model, animation, IK, and physics orchestration. / MMDModelManagerObject::SyncIKSolverDynamicParamsFromDescMap 为核心模型、动画、IK 与物理编排同步 ik solver dynamic params from desc map。",
+      "tags": [
+        "ik",
+        "object-manager",
+        "pmx"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::BuildIKSolverUI",
+      "type": "function",
+      "name": "MMDModelManagerObject::BuildIKSolverUI",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        2268,
+        2291
+      ],
+      "summary": "MMDModelManagerObject::BuildIKSolverUI builds ik solver ui for central model, animation, IK, and physics orchestration. / MMDModelManagerObject::BuildIKSolverUI 为核心模型、动画、IK 与物理编排构建 ik solver ui。",
+      "tags": [
+        "ik",
+        "ui",
+        "object-manager"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::ApplyIKSolverStates",
+      "type": "function",
+      "name": "MMDModelManagerObject::ApplyIKSolverStates",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        2293,
+        2314
+      ],
+      "summary": "MMDModelManagerObject::ApplyIKSolverStates applies ik solver states for central model, animation, IK, and physics orchestration. / MMDModelManagerObject::ApplyIKSolverStates 为核心模型、动画、IK 与物理编排应用 ik solver states。",
+      "tags": [
+        "ik",
+        "runtime",
+        "object-manager"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::ApplyIKSolverFromParameters",
+      "type": "function",
+      "name": "MMDModelManagerObject::ApplyIKSolverFromParameters",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        2316,
+        2332
+      ],
+      "summary": "MMDModelManagerObject::ApplyIKSolverFromParameters applies ik solver from parameters for central model, animation, IK, and physics orchestration. / MMDModelManagerObject::ApplyIKSolverFromParameters 为核心模型、动画、IK 与物理编排应用 ik solver from parameters。",
+      "tags": [
+        "ik",
+        "runtime",
+        "object-manager"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::ImportVMDIKKeyframes",
+      "type": "function",
+      "name": "MMDModelManagerObject::ImportVMDIKKeyframes",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        2334,
+        2392
+      ],
+      "summary": "MMDModelManagerObject::ImportVMDIKKeyframes imports vmdik keyframes for central model, animation, IK, and physics orchestration. / MMDModelManagerObject::ImportVMDIKKeyframes 为核心模型、动画、IK 与物理编排导入 vmdik keyframes。",
+      "tags": [
+        "vmd-animation",
+        "ik",
+        "import",
+        "object-manager"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::GetMorphNum",
+      "type": "function",
+      "name": "MMDModelManagerObject::GetMorphNum",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        2394,
+        2397
+      ],
+      "summary": "MMDModelManagerObject::GetMorphNum retrieves morph num for central model, animation, IK, and physics orchestration. / MMDModelManagerObject::GetMorphNum 为核心模型、动画、IK 与物理编排获取 morph num。",
+      "tags": [
+        "morph",
+        "object-manager",
+        "pmx"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::SyncStandaloneBoneAdaptersFromScene",
+      "type": "function",
+      "name": "MMDModelManagerObject::SyncStandaloneBoneAdaptersFromScene",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        2441,
+        2454
+      ],
+      "summary": "MMDModelManagerObject::SyncStandaloneBoneAdaptersFromScene synchronizes standalone bone adapters from scene for central model, animation, IK, and physics orchestration. / MMDModelManagerObject::SyncStandaloneBoneAdaptersFromScene 为核心模型、动画、IK 与物理编排同步 standalone bone adapters from scene。",
+      "tags": [
+        "object-manager",
+        "pmx",
+        "vmd-animation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::SyncStandaloneBoneAdaptersLocalFromGlobal",
+      "type": "function",
+      "name": "MMDModelManagerObject::SyncStandaloneBoneAdaptersLocalFromGlobal",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        2456,
+        2469
+      ],
+      "summary": "MMDModelManagerObject::SyncStandaloneBoneAdaptersLocalFromGlobal synchronizes standalone bone adapters local from global for central model, animation, IK, and physics orchestration. / MMDModelManagerObject::SyncStandaloneBoneAdaptersLocalFromGlobal 为核心模型、动画、IK 与物理编排同步 standalone bone adapters local from global。",
+      "tags": [
+        "object-manager",
+        "pmx",
+        "vmd-animation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::SolveStandaloneIKBeforePhysics",
+      "type": "function",
+      "name": "MMDModelManagerObject::SolveStandaloneIKBeforePhysics",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        2471,
+        2486
+      ],
+      "summary": "MMDModelManagerObject::SolveStandaloneIKBeforePhysics implements a focused operation in central model, animation, IK, and physics orchestration. / MMDModelManagerObject::SolveStandaloneIKBeforePhysics 实现核心模型、动画、IK 与物理编排中的专用操作。",
+      "tags": [
+        "ik",
+        "physics",
+        "object-manager"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::SolveStandaloneIKForLayer",
+      "type": "function",
+      "name": "MMDModelManagerObject::SolveStandaloneIKForLayer",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        2488,
+        2586
+      ],
+      "summary": "MMDModelManagerObject::SolveStandaloneIKForLayer implements a focused operation in central model, animation, IK, and physics orchestration. / MMDModelManagerObject::SolveStandaloneIKForLayer 实现核心模型、动画、IK 与物理编排中的专用操作。",
+      "tags": [
+        "ik",
+        "object-manager",
+        "pmx"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::RunLayeredBonePass",
+      "type": "function",
+      "name": "MMDModelManagerObject::RunLayeredBonePass",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        2588,
+        2607
+      ],
+      "summary": "MMDModelManagerObject::RunLayeredBonePass implements a focused operation in central model, animation, IK, and physics orchestration. / MMDModelManagerObject::RunLayeredBonePass 实现核心模型、动画、IK 与物理编排中的专用操作。",
+      "tags": [
+        "object-manager",
+        "pmx",
+        "vmd-animation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::ApplyStandaloneBoneAdaptersToScene",
+      "type": "function",
+      "name": "MMDModelManagerObject::ApplyStandaloneBoneAdaptersToScene",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        2609,
+        2616
+      ],
+      "summary": "MMDModelManagerObject::ApplyStandaloneBoneAdaptersToScene applies standalone bone adapters to scene for central model, animation, IK, and physics orchestration. / MMDModelManagerObject::ApplyStandaloneBoneAdaptersToScene 为核心模型、动画、IK 与物理编排应用 standalone bone adapters to scene。",
+      "tags": [
+        "runtime",
+        "object-manager",
+        "pmx"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::ApplyStandaloneBoneAdaptersToScene@2618",
+      "type": "function",
+      "name": "MMDModelManagerObject::ApplyStandaloneBoneAdaptersToScene",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        2618,
+        2625
+      ],
+      "summary": "MMDModelManagerObject::ApplyStandaloneBoneAdaptersToScene applies standalone bone adapters to scene for central model, animation, IK, and physics orchestration. / MMDModelManagerObject::ApplyStandaloneBoneAdaptersToScene 为核心模型、动画、IK 与物理编排应用 standalone bone adapters to scene。",
+      "tags": [
+        "runtime",
+        "object-manager",
+        "pmx"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::InvalidateStandaloneRuntime",
+      "type": "function",
+      "name": "MMDModelManagerObject::InvalidateStandaloneRuntime",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        2627,
+        2645
+      ],
+      "summary": "MMDModelManagerObject::InvalidateStandaloneRuntime invalidates standalone runtime for central model, animation, IK, and physics orchestration. / MMDModelManagerObject::InvalidateStandaloneRuntime 为核心模型、动画、IK 与物理编排使失效 standalone runtime。",
+      "tags": [
+        "runtime",
+        "object-manager",
+        "pmx"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::BuildStandaloneBoneAdapters",
+      "type": "function",
+      "name": "MMDModelManagerObject::BuildStandaloneBoneAdapters",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        2647,
+        2728
+      ],
+      "summary": "MMDModelManagerObject::BuildStandaloneBoneAdapters builds standalone bone adapters for central model, animation, IK, and physics orchestration. / MMDModelManagerObject::BuildStandaloneBoneAdapters 为核心模型、动画、IK 与物理编排构建 standalone bone adapters。",
+      "tags": [
+        "ui",
+        "object-manager",
+        "pmx"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::BuildStandaloneIKManager",
+      "type": "function",
+      "name": "MMDModelManagerObject::BuildStandaloneIKManager",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        2730,
+        2828
+      ],
+      "summary": "MMDModelManagerObject::BuildStandaloneIKManager builds standalone ik manager for central model, animation, IK, and physics orchestration. / MMDModelManagerObject::BuildStandaloneIKManager 为核心模型、动画、IK 与物理编排构建 standalone ik manager。",
+      "tags": [
+        "ik",
+        "ui",
+        "object-manager"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::BuildStandalonePhysics",
+      "type": "function",
+      "name": "MMDModelManagerObject::BuildStandalonePhysics",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        2830,
+        2906
+      ],
+      "summary": "MMDModelManagerObject::BuildStandalonePhysics builds standalone physics for central model, animation, IK, and physics orchestration. / MMDModelManagerObject::BuildStandalonePhysics 为核心模型、动画、IK 与物理编排构建 standalone physics。",
+      "tags": [
+        "physics",
+        "ui",
+        "object-manager"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::EnsureStandaloneRuntimeManagers",
+      "type": "function",
+      "name": "MMDModelManagerObject::EnsureStandaloneRuntimeManagers",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        2908,
+        2957
+      ],
+      "summary": "MMDModelManagerObject::EnsureStandaloneRuntimeManagers ensures standalone runtime managers for central model, animation, IK, and physics orchestration. / MMDModelManagerObject::EnsureStandaloneRuntimeManagers 为核心模型、动画、IK 与物理编排确保 standalone runtime managers。",
+      "tags": [
+        "runtime",
+        "object-manager",
+        "pmx"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::ResetStandalonePhysics",
+      "type": "function",
+      "name": "MMDModelManagerObject::ResetStandalonePhysics",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        2959,
+        2977
+      ],
+      "summary": "MMDModelManagerObject::ResetStandalonePhysics resets standalone physics for central model, animation, IK, and physics orchestration. / MMDModelManagerObject::ResetStandalonePhysics 为核心模型、动画、IK 与物理编排重置 standalone physics。",
+      "tags": [
+        "physics",
+        "object-manager",
+        "pmx"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::StepStandalonePhysics",
+      "type": "function",
+      "name": "MMDModelManagerObject::StepStandalonePhysics",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        2979,
+        3018
+      ],
+      "summary": "MMDModelManagerObject::StepStandalonePhysics implements a focused operation in central model, animation, IK, and physics orchestration. / MMDModelManagerObject::StepStandalonePhysics 实现核心模型、动画、IK 与物理编排中的专用操作。",
+      "tags": [
+        "physics",
+        "object-manager",
+        "pmx"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::ApplyPhysicsResultsToBoneObjects",
+      "type": "function",
+      "name": "MMDModelManagerObject::ApplyPhysicsResultsToBoneObjects",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        3020,
+        3024
+      ],
+      "summary": "MMDModelManagerObject::ApplyPhysicsResultsToBoneObjects applies physics results to bone objects for central model, animation, IK, and physics orchestration. / MMDModelManagerObject::ApplyPhysicsResultsToBoneObjects 为核心模型、动画、IK 与物理编排应用 physics results to bone objects。",
+      "tags": [
+        "physics",
+        "runtime",
+        "object-manager"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::CommitEditModeBindState",
+      "type": "function",
+      "name": "MMDModelManagerObject::CommitEditModeBindState",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        3026,
+        3050
+      ],
+      "summary": "MMDModelManagerObject::CommitEditModeBindState commits edit mode bind state for central model, animation, IK, and physics orchestration. / MMDModelManagerObject::CommitEditModeBindState 为核心模型、动画、IK 与物理编排提交 edit mode bind state。",
+      "tags": [
+        "object-manager",
+        "pmx",
+        "vmd-animation"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::RestoreBindStateForEdit",
+      "type": "function",
+      "name": "MMDModelManagerObject::RestoreBindStateForEdit",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        3052,
+        3074
+      ],
+      "summary": "MMDModelManagerObject::RestoreBindStateForEdit restores bind state for edit for central model, animation, IK, and physics orchestration. / MMDModelManagerObject::RestoreBindStateForEdit 为核心模型、动画、IK 与物理编排恢复 bind state for edit。",
+      "tags": [
+        "object-manager",
+        "pmx",
+        "vmd-animation"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::IsPhysicsEnabled",
+      "type": "function",
+      "name": "MMDModelManagerObject::IsPhysicsEnabled",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        3076,
+        3080
+      ],
+      "summary": "MMDModelManagerObject::IsPhysicsEnabled checks physics enabled for central model, animation, IK, and physics orchestration. / MMDModelManagerObject::IsPhysicsEnabled 为核心模型、动画、IK 与物理编排检查 physics enabled。",
+      "tags": [
+        "physics",
+        "object-manager",
+        "pmx"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::ShouldResetPhysicsOnSeek",
+      "type": "function",
+      "name": "MMDModelManagerObject::ShouldResetPhysicsOnSeek",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        3082,
+        3086
+      ],
+      "summary": "MMDModelManagerObject::ShouldResetPhysicsOnSeek decides reset physics on seek for central model, animation, IK, and physics orchestration. / MMDModelManagerObject::ShouldResetPhysicsOnSeek 为核心模型、动画、IK 与物理编排判定 reset physics on seek。",
+      "tags": [
+        "physics",
+        "object-manager",
+        "pmx"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::GetPhysicsGravity",
+      "type": "function",
+      "name": "MMDModelManagerObject::GetPhysicsGravity",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        3088,
+        3101
+      ],
+      "summary": "MMDModelManagerObject::GetPhysicsGravity retrieves physics gravity for central model, animation, IK, and physics orchestration. / MMDModelManagerObject::GetPhysicsGravity 为核心模型、动画、IK 与物理编排获取 physics gravity。",
+      "tags": [
+        "physics",
+        "object-manager",
+        "pmx"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::ApplyPhysicsConfigToRuntime",
+      "type": "function",
+      "name": "MMDModelManagerObject::ApplyPhysicsConfigToRuntime",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        3103,
+        3120
+      ],
+      "summary": "MMDModelManagerObject::ApplyPhysicsConfigToRuntime applies physics config to runtime for central model, animation, IK, and physics orchestration. / MMDModelManagerObject::ApplyPhysicsConfigToRuntime 为核心模型、动画、IK 与物理编排应用 physics config to runtime。",
+      "tags": [
+        "physics",
+        "runtime",
+        "object-manager"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::SyncSubManagerScale",
+      "type": "function",
+      "name": "MMDModelManagerObject::SyncSubManagerScale",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        3122,
+        3126
+      ],
+      "summary": "MMDModelManagerObject::SyncSubManagerScale synchronizes sub manager scale for central model, animation, IK, and physics orchestration. / MMDModelManagerObject::SyncSubManagerScale 为核心模型、动画、IK 与物理编排同步 sub manager scale。",
+      "tags": [
+        "object-manager",
+        "pmx",
+        "vmd-animation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::CreateManagers",
+      "type": "function",
+      "name": "MMDModelManagerObject::CreateManagers",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        3128,
+        3175
+      ],
+      "summary": "MMDModelManagerObject::CreateManagers creates managers for central model, animation, IK, and physics orchestration. / MMDModelManagerObject::CreateManagers 为核心模型、动画、IK 与物理编排创建 managers。",
+      "tags": [
+        "object-manager",
+        "pmx",
+        "vmd-animation"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::ImportDisplayFrames",
+      "type": "function",
+      "name": "MMDModelManagerObject::ImportDisplayFrames",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        3177,
+        3188
+      ],
+      "summary": "MMDModelManagerObject::ImportDisplayFrames imports display frames for central model, animation, IK, and physics orchestration. / MMDModelManagerObject::ImportDisplayFrames 为核心模型、动画、IK 与物理编排导入 display frames。",
+      "tags": [
+        "import",
+        "object-manager",
+        "pmx"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::RefreshDisplayFrameUI",
+      "type": "function",
+      "name": "MMDModelManagerObject::RefreshDisplayFrameUI",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        3190,
+        3329
+      ],
+      "summary": "MMDModelManagerObject::RefreshDisplayFrameUI refreshes display frame ui for central model, animation, IK, and physics orchestration. / MMDModelManagerObject::RefreshDisplayFrameUI 为核心模型、动画、IK 与物理编排刷新 display frame ui。",
+      "tags": [
+        "ui",
+        "object-manager",
+        "pmx"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::LoadPMX",
+      "type": "function",
+      "name": "MMDModelManagerObject::LoadPMX",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        3331,
+        3418
+      ],
+      "summary": "MMDModelManagerObject::LoadPMX loads pmx for central model, animation, IK, and physics orchestration. / MMDModelManagerObject::LoadPMX 为核心模型、动画、IK 与物理编排加载 pmx。",
+      "tags": [
+        "pmx",
+        "import",
+        "object-manager"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::AddMaterial",
+      "type": "function",
+      "name": "MMDModelManagerObject::AddMaterial",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        3420,
+        3465
+      ],
+      "summary": "MMDModelManagerObject::AddMaterial adds material for central model, animation, IK, and physics orchestration. / MMDModelManagerObject::AddMaterial 为核心模型、动画、IK 与物理编排添加 material。",
+      "tags": [
+        "object-manager",
+        "pmx",
+        "vmd-animation"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::AdjustMaterialMorphIndicesAfterMaterialRemoval",
+      "type": "function",
+      "name": "MMDModelManagerObject::AdjustMaterialMorphIndicesAfterMaterialRemoval",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        3467,
+        3488
+      ],
+      "summary": "MMDModelManagerObject::AdjustMaterialMorphIndicesAfterMaterialRemoval implements a focused operation in central model, animation, IK, and physics orchestration. / MMDModelManagerObject::AdjustMaterialMorphIndicesAfterMaterialRemoval 实现核心模型、动画、IK 与物理编排中的专用操作。",
+      "tags": [
+        "morph",
+        "object-manager",
+        "pmx"
+      ],
+      "complexity": "moderate"
+    }
+  ],
+  "edges": [
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:SDK2024_Write",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:SDK2024_Write",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:SDK2024_CopyTo",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:SDK2024_CopyTo",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::ReadMorph",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::ReadMorph",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::WriteMorph",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::WriteMorph",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::CopyMorph",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::CopyMorph",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::BeginMorphChange",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::BeginMorphChange",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::MMDModelManagerObject",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::MMDModelManagerObject",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::EnsureMorphAnimationSlotCount",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::EnsureMorphAnimationSlotCount",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::ClearMorphAnimationSlots",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::ClearMorphAnimationSlots",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::EnsureAnimationSlotCount",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::EnsureAnimationSlotCount",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::SetAnimationSlotMetadata",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::SetAnimationSlotMetadata",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::RefreshAnimationSlotItems",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::RefreshAnimationSlotItems",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::GetAnimationSlotMaxFrame",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::GetAnimationSlotMaxFrame",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::ApplyAnimationSlotSelection",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::ApplyAnimationSlotSelection",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::RefreshMorph",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::RefreshMorph",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::SyncMorphSlidersFromTags",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::SyncMorphSlidersFromTags",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::CaptureAndClearPMXExportMorphState",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::CaptureAndClearPMXExportMorphState",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::RestorePMXExportMorphState",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::RestorePMXExportMorphState",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::ClearMorphRuntimeForEdit",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::ClearMorphRuntimeForEdit",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::UpdateManagers",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::UpdateManagers",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::Execute",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::Execute",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::ImportGroupAndFlipMorph",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::ImportGroupAndFlipMorph",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::AddDynamicDescription",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::AddDynamicDescription",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::DeleteDynamicDescription",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::DeleteDynamicDescription",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::StripIKSolverDynamicUI",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::StripIKSolverDynamicUI",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::SyncIKSolverDynamicParamsFromDescMap",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::SyncIKSolverDynamicParamsFromDescMap",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::BuildIKSolverUI",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::BuildIKSolverUI",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::ApplyIKSolverStates",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::ApplyIKSolverStates",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::ApplyIKSolverFromParameters",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::ApplyIKSolverFromParameters",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::ImportVMDIKKeyframes",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::ImportVMDIKKeyframes",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::GetMorphNum",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::GetMorphNum",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::SyncStandaloneBoneAdaptersFromScene",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::SyncStandaloneBoneAdaptersFromScene",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::SyncStandaloneBoneAdaptersLocalFromGlobal",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::SyncStandaloneBoneAdaptersLocalFromGlobal",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::SolveStandaloneIKBeforePhysics",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::SolveStandaloneIKBeforePhysics",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::SolveStandaloneIKForLayer",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::SolveStandaloneIKForLayer",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::RunLayeredBonePass",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::RunLayeredBonePass",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::ApplyStandaloneBoneAdaptersToScene",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::ApplyStandaloneBoneAdaptersToScene",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::ApplyStandaloneBoneAdaptersToScene@2618",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::ApplyStandaloneBoneAdaptersToScene@2618",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::InvalidateStandaloneRuntime",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::InvalidateStandaloneRuntime",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::BuildStandaloneBoneAdapters",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::BuildStandaloneBoneAdapters",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::BuildStandaloneIKManager",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::BuildStandaloneIKManager",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::BuildStandalonePhysics",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::BuildStandalonePhysics",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::EnsureStandaloneRuntimeManagers",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::EnsureStandaloneRuntimeManagers",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::ResetStandalonePhysics",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::ResetStandalonePhysics",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::StepStandalonePhysics",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::StepStandalonePhysics",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::ApplyPhysicsResultsToBoneObjects",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::ApplyPhysicsResultsToBoneObjects",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::CommitEditModeBindState",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::CommitEditModeBindState",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::RestoreBindStateForEdit",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::RestoreBindStateForEdit",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::IsPhysicsEnabled",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::IsPhysicsEnabled",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::ShouldResetPhysicsOnSeek",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::ShouldResetPhysicsOnSeek",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::GetPhysicsGravity",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::GetPhysicsGravity",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::ApplyPhysicsConfigToRuntime",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::ApplyPhysicsConfigToRuntime",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::SyncSubManagerScale",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::SyncSubManagerScale",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::CreateManagers",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::CreateManagers",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::ImportDisplayFrames",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::ImportDisplayFrames",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::RefreshDisplayFrameUI",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::RefreshDisplayFrameUI",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::LoadPMX",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::LoadPMX",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::AddMaterial",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::AddMaterial",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::AdjustMaterialMorphIndicesAfterMaterialRemoval",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::AdjustMaterialMorphIndicesAfterMaterialRemoval",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    }
+  ]
+}

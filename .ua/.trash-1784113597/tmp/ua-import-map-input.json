@@ -1,0 +1,2063 @@
+{
+  "projectRoot": "E:\\code\\C4D_MMD_Tool",
+  "files": [
+    {
+      "path": ".codex/skills/openspec-apply-change/SKILL.md",
+      "language": "markdown",
+      "sizeLines": 156,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".codex/skills/openspec-archive-change/SKILL.md",
+      "language": "markdown",
+      "sizeLines": 114,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".codex/skills/openspec-explore/SKILL.md",
+      "language": "markdown",
+      "sizeLines": 288,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".codex/skills/openspec-propose/SKILL.md",
+      "language": "markdown",
+      "sizeLines": 110,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".cursor/commands/opsx-apply.md",
+      "language": "markdown",
+      "sizeLines": 152,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".cursor/commands/opsx-archive.md",
+      "language": "markdown",
+      "sizeLines": 157,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".cursor/commands/opsx-explore.md",
+      "language": "markdown",
+      "sizeLines": 173,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".cursor/commands/opsx-propose.md",
+      "language": "markdown",
+      "sizeLines": 106,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".cursor/rules/c4d-cpp-style-guide.mdc",
+      "language": "mdc",
+      "sizeLines": 70,
+      "fileCategory": "code"
+    },
+    {
+      "path": ".cursor/rules/project-structure.mdc",
+      "language": "mdc",
+      "sizeLines": 71,
+      "fileCategory": "code"
+    },
+    {
+      "path": ".cursor/skills/openspec-apply-change/SKILL.md",
+      "language": "markdown",
+      "sizeLines": 156,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".cursor/skills/openspec-archive-change/SKILL.md",
+      "language": "markdown",
+      "sizeLines": 114,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".cursor/skills/openspec-explore/SKILL.md",
+      "language": "markdown",
+      "sizeLines": 288,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".cursor/skills/openspec-propose/SKILL.md",
+      "language": "markdown",
+      "sizeLines": 110,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".cursorignore",
+      "language": "unknown",
+      "sizeLines": 9,
+      "fileCategory": "code"
+    },
+    {
+      "path": ".gitattributes",
+      "language": "unknown",
+      "sizeLines": 2,
+      "fileCategory": "code"
+    },
+    {
+      "path": ".github/prompts/opsx-apply.prompt.md",
+      "language": "markdown",
+      "sizeLines": 149,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".github/prompts/opsx-archive.prompt.md",
+      "language": "markdown",
+      "sizeLines": 154,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".github/prompts/opsx-explore.prompt.md",
+      "language": "markdown",
+      "sizeLines": 170,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".github/prompts/opsx-propose.prompt.md",
+      "language": "markdown",
+      "sizeLines": 103,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".github/skills/openspec-apply-change/SKILL.md",
+      "language": "markdown",
+      "sizeLines": 156,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".github/skills/openspec-archive-change/SKILL.md",
+      "language": "markdown",
+      "sizeLines": 114,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".github/skills/openspec-explore/SKILL.md",
+      "language": "markdown",
+      "sizeLines": 288,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".github/skills/openspec-propose/SKILL.md",
+      "language": "markdown",
+      "sizeLines": 110,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".github/workflows/build.yml",
+      "language": "yaml",
+      "sizeLines": 125,
+      "fileCategory": "infra"
+    },
+    {
+      "path": ".github/workflows/package.yml",
+      "language": "yaml",
+      "sizeLines": 193,
+      "fileCategory": "infra"
+    },
+    {
+      "path": ".gitmodules",
+      "language": "unknown",
+      "sizeLines": 9,
+      "fileCategory": "code"
+    },
+    {
+      "path": "AGENTS.md",
+      "language": "markdown",
+      "sizeLines": 113,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "cmake/initial_cache/dev.example.cmake",
+      "language": "cmake",
+      "sizeLines": 22,
+      "fileCategory": "code"
+    },
+    {
+      "path": "cmake/initial_cache/package.example.cmake",
+      "language": "cmake",
+      "sizeLines": 26,
+      "fileCategory": "code"
+    },
+    {
+      "path": "cmake/mmdtool_plugin_common.cmake",
+      "language": "cmake",
+      "sizeLines": 427,
+      "fileCategory": "code"
+    },
+    {
+      "path": "cmake/mmdtool_plugin_dependencies.cmake",
+      "language": "cmake",
+      "sizeLines": 76,
+      "fileCategory": "code"
+    },
+    {
+      "path": "cmake/sdk/base_settings/compile_definitions.cmake",
+      "language": "cmake",
+      "sizeLines": 41,
+      "fileCategory": "code"
+    },
+    {
+      "path": "cmake/sdk/base_settings/compile_options.cmake",
+      "language": "cmake",
+      "sizeLines": 97,
+      "fileCategory": "code"
+    },
+    {
+      "path": "cmake/sdk/base_settings/link_options.cmake",
+      "language": "cmake",
+      "sizeLines": 29,
+      "fileCategory": "code"
+    },
+    {
+      "path": "cmake/sdk/base_settings/sanitize.cmake",
+      "language": "cmake",
+      "sizeLines": 25,
+      "fileCategory": "code"
+    },
+    {
+      "path": "cmake/sdk/base_settings/warnings.clang.cmake",
+      "language": "cmake",
+      "sizeLines": 143,
+      "fileCategory": "code"
+    },
+    {
+      "path": "cmake/sdk/base_settings/warnings.gcc.cmake",
+      "language": "cmake",
+      "sizeLines": 23,
+      "fileCategory": "code"
+    },
+    {
+      "path": "cmake/sdk/base_settings/warnings.msvc.cmake",
+      "language": "cmake",
+      "sizeLines": 83,
+      "fileCategory": "code"
+    },
+    {
+      "path": "cmake/sdk/commands/create_directory_symlink.cmake",
+      "language": "cmake",
+      "sizeLines": 10,
+      "fileCategory": "code"
+    },
+    {
+      "path": "cmake/sdk/commands/update_filelist.cmake",
+      "language": "cmake",
+      "sizeLines": 20,
+      "fileCategory": "code"
+    },
+    {
+      "path": "cmake/sdk/sdk_compiler_helper.cmake",
+      "language": "cmake",
+      "sizeLines": 458,
+      "fileCategory": "code"
+    },
+    {
+      "path": "cmake/sdk/sdk_library_template.cmake",
+      "language": "cmake",
+      "sizeLines": 100,
+      "fileCategory": "code"
+    },
+    {
+      "path": "cmake/sdk/sdk_targets.cmake",
+      "language": "cmake",
+      "sizeLines": 1214,
+      "fileCategory": "code"
+    },
+    {
+      "path": "cmake/sdk/sdk_update_projects.cmake",
+      "language": "cmake",
+      "sizeLines": 1151,
+      "fileCategory": "code"
+    },
+    {
+      "path": "CMakeLists.txt",
+      "language": "txt",
+      "sizeLines": 337,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "CMakePresets.json",
+      "language": "json",
+      "sizeLines": 170,
+      "fileCategory": "config"
+    },
+    {
+      "path": "CMakeUserPresets.SAMPLE.json",
+      "language": "json",
+      "sizeLines": 27,
+      "fileCategory": "config"
+    },
+    {
+      "path": "configure_sdk.bat",
+      "language": "batch",
+      "sizeLines": 45,
+      "fileCategory": "script"
+    },
+    {
+      "path": "dependency/CMakeLists.txt",
+      "language": "txt",
+      "sizeLines": 44,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "DEVELOPMENT_zh.md",
+      "language": "markdown",
+      "sizeLines": 406,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "DEVELOPMENT.md",
+      "language": "markdown",
+      "sizeLines": 256,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/dev/anim-flow-debug.md",
+      "language": "markdown",
+      "sizeLines": 249,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/dev/export-flow.md",
+      "language": "markdown",
+      "sizeLines": 261,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/dev/import-flow.md",
+      "language": "markdown",
+      "sizeLines": 328,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/dev/runtime-flow.md",
+      "language": "markdown",
+      "sizeLines": 267,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "LICENSE.md",
+      "language": "markdown",
+      "sizeLines": 675,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "README_zh.md",
+      "language": "markdown",
+      "sizeLines": 408,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "README.md",
+      "language": "markdown",
+      "sizeLines": 380,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "res/R20-S24/c4d_symbols.h",
+      "language": "c",
+      "sizeLines": 335,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/R20-S24/description/OMMDBoneManager.h",
+      "language": "c",
+      "sizeLines": 22,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/R20-S24/description/OMMDBoneManager.res",
+      "language": "res",
+      "sizeLines": 45,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/R20-S24/description/OMMDCamera.h",
+      "language": "c",
+      "sizeLines": 8,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/R20-S24/description/OMMDCamera.res",
+      "language": "res",
+      "sizeLines": 4,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/R20-S24/description/OMMDJoint.h",
+      "language": "c",
+      "sizeLines": 71,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/R20-S24/description/OMMDJoint.res",
+      "language": "res",
+      "sizeLines": 352,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/R20-S24/description/OMMDJointManager.h",
+      "language": "c",
+      "sizeLines": 17,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/R20-S24/description/OMMDJointManager.res",
+      "language": "res",
+      "sizeLines": 37,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/R20-S24/description/OMMDMeshManager.h",
+      "language": "c",
+      "sizeLines": 19,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/R20-S24/description/OMMDMeshManager.res",
+      "language": "res",
+      "sizeLines": 37,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/R20-S24/description/OMMDModelManager.h",
+      "language": "c",
+      "sizeLines": 158,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/R20-S24/description/OMMDModelManager.res",
+      "language": "res",
+      "sizeLines": 594,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/R20-S24/description/OMMDRigid.h",
+      "language": "c",
+      "sizeLines": 85,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/R20-S24/description/OMMDRigid.res",
+      "language": "res",
+      "sizeLines": 290,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/R20-S24/description/OMMDRigidManager.h",
+      "language": "c",
+      "sizeLines": 17,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/R20-S24/description/OMMDRigidManager.res",
+      "language": "res",
+      "sizeLines": 38,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/R20-S24/description/TMMDBone.h",
+      "language": "c",
+      "sizeLines": 92,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/R20-S24/description/TMMDBone.res",
+      "language": "res",
+      "sizeLines": 319,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/R20-S24/description/Xmmdmaterialmorphshader.h",
+      "language": "c",
+      "sizeLines": 8,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/R20-S24/description/Xmmdmaterialmorphshader.res",
+      "language": "res",
+      "sizeLines": 11,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/R20-S24/dialogs/DLG_CMT_TOOL.res",
+      "language": "res",
+      "sizeLines": 773,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/R20-S24/dialogs/DLG_CMT_VMD_IMPORT.res",
+      "language": "res",
+      "sizeLines": 73,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/R20-S24/mikumikudance_data/color.txt",
+      "language": "txt",
+      "sizeLines": 76,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "res/R20-S24/mikumikudance_data/toon01.bmp",
+      "language": "bmp",
+      "sizeLines": 0,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/R20-S24/mikumikudance_data/toon02.bmp",
+      "language": "bmp",
+      "sizeLines": 0,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/R20-S24/mikumikudance_data/toon03.bmp",
+      "language": "bmp",
+      "sizeLines": 0,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/R20-S24/mikumikudance_data/toon04.bmp",
+      "language": "bmp",
+      "sizeLines": 0,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/R20-S24/mikumikudance_data/toon05.bmp",
+      "language": "bmp",
+      "sizeLines": 0,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/R20-S24/mikumikudance_data/toon06.bmp",
+      "language": "bmp",
+      "sizeLines": 0,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/R20-S24/mikumikudance_data/toon07.bmp",
+      "language": "bmp",
+      "sizeLines": 0,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/R20-S24/mikumikudance_data/toon08.bmp",
+      "language": "bmp",
+      "sizeLines": 0,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/R20-S24/mikumikudance_data/toon09.bmp",
+      "language": "bmp",
+      "sizeLines": 0,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/R20-S24/mikumikudance_data/toon10.bmp",
+      "language": "bmp",
+      "sizeLines": 0,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/R20-S24/name_conversion/default.json",
+      "language": "json",
+      "sizeLines": 248,
+      "fileCategory": "config"
+    },
+    {
+      "path": "res/R20-S24/name_conversion/UE5.json",
+      "language": "json",
+      "sizeLines": 246,
+      "fileCategory": "config"
+    },
+    {
+      "path": "res/R20-S24/strings_en-US/c4d_strings.str",
+      "language": "str",
+      "sizeLines": 104,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/R20-S24/strings_en-US/description/OMMDBoneManager.str",
+      "language": "str",
+      "sizeLines": 21,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/R20-S24/strings_en-US/description/OMMDCamera.str",
+      "language": "str",
+      "sizeLines": 5,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/R20-S24/strings_en-US/description/OMMDJoint.str",
+      "language": "str",
+      "sizeLines": 64,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/R20-S24/strings_en-US/description/OMMDJointManager.str",
+      "language": "str",
+      "sizeLines": 15,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/R20-S24/strings_en-US/description/OMMDMeshManager.str",
+      "language": "str",
+      "sizeLines": 18,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/R20-S24/strings_en-US/description/OMMDModelManager.str",
+      "language": "str",
+      "sizeLines": 152,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/R20-S24/strings_en-US/description/OMMDRigid.str",
+      "language": "str",
+      "sizeLines": 79,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/R20-S24/strings_en-US/description/OMMDRigidManager.str",
+      "language": "str",
+      "sizeLines": 15,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/R20-S24/strings_en-US/description/TMMDBone.str",
+      "language": "str",
+      "sizeLines": 83,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/R20-S24/strings_en-US/description/Xmmdmaterialmorphshader.str",
+      "language": "str",
+      "sizeLines": 6,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/R20-S24/strings_en-US/dialogs/DLG_CMT_TOOL.str",
+      "language": "str",
+      "sizeLines": 56,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/R20-S24/strings_en-US/dialogs/DLG_CMT_VMD_IMPORT.str",
+      "language": "str",
+      "sizeLines": 8,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/R20-S24/strings_zh-CN/c4d_strings.str",
+      "language": "str",
+      "sizeLines": 104,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/R20-S24/strings_zh-CN/description/OMMDBoneManager.str",
+      "language": "str",
+      "sizeLines": 21,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/R20-S24/strings_zh-CN/description/OMMDCamera.str",
+      "language": "str",
+      "sizeLines": 4,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/R20-S24/strings_zh-CN/description/OMMDJoint.str",
+      "language": "str",
+      "sizeLines": 67,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/R20-S24/strings_zh-CN/description/OMMDJointManager.str",
+      "language": "str",
+      "sizeLines": 15,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/R20-S24/strings_zh-CN/description/OMMDMeshManager.str",
+      "language": "str",
+      "sizeLines": 18,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/R20-S24/strings_zh-CN/description/OMMDModelManager.str",
+      "language": "str",
+      "sizeLines": 152,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/R20-S24/strings_zh-CN/description/OMMDRigid.str",
+      "language": "str",
+      "sizeLines": 79,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/R20-S24/strings_zh-CN/description/OMMDRigidManager.str",
+      "language": "str",
+      "sizeLines": 15,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/R20-S24/strings_zh-CN/description/TMMDBone.str",
+      "language": "str",
+      "sizeLines": 83,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/R20-S24/strings_zh-CN/description/Xmmdmaterialmorphshader.str",
+      "language": "str",
+      "sizeLines": 6,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/R20-S24/strings_zh-CN/dialogs/DLG_CMT_TOOL.str",
+      "language": "str",
+      "sizeLines": 56,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/R20-S24/strings_zh-CN/dialogs/DLG_CMT_VMD_IMPORT.str",
+      "language": "str",
+      "sizeLines": 8,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/S24_up/c4d_symbols.h",
+      "language": "c",
+      "sizeLines": 337,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/S24_up/cmt_config.json",
+      "language": "json",
+      "sizeLines": 50,
+      "fileCategory": "config"
+    },
+    {
+      "path": "res/S24_up/description/OMMDBoneManager.h",
+      "language": "c",
+      "sizeLines": 22,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/S24_up/description/OMMDBoneManager.res",
+      "language": "res",
+      "sizeLines": 45,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/S24_up/description/OMMDCamera.h",
+      "language": "c",
+      "sizeLines": 8,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/S24_up/description/OMMDCamera.res",
+      "language": "res",
+      "sizeLines": 4,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/S24_up/description/OMMDJoint.h",
+      "language": "c",
+      "sizeLines": 71,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/S24_up/description/OMMDJoint.res",
+      "language": "res",
+      "sizeLines": 352,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/S24_up/description/OMMDJointManager.h",
+      "language": "c",
+      "sizeLines": 17,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/S24_up/description/OMMDJointManager.res",
+      "language": "res",
+      "sizeLines": 37,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/S24_up/description/OMMDMeshManager.h",
+      "language": "c",
+      "sizeLines": 19,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/S24_up/description/OMMDMeshManager.res",
+      "language": "res",
+      "sizeLines": 37,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/S24_up/description/OMMDModelManager.h",
+      "language": "c",
+      "sizeLines": 158,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/S24_up/description/OMMDModelManager.res",
+      "language": "res",
+      "sizeLines": 594,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/S24_up/description/OMMDRigid.h",
+      "language": "c",
+      "sizeLines": 85,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/S24_up/description/OMMDRigid.res",
+      "language": "res",
+      "sizeLines": 290,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/S24_up/description/OMMDRigidManager.h",
+      "language": "c",
+      "sizeLines": 17,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/S24_up/description/OMMDRigidManager.res",
+      "language": "res",
+      "sizeLines": 38,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/S24_up/description/TMMDBone.h",
+      "language": "c",
+      "sizeLines": 92,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/S24_up/description/TMMDBone.res",
+      "language": "res",
+      "sizeLines": 319,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/S24_up/description/Xmmdmaterialmorphshader.h",
+      "language": "c",
+      "sizeLines": 8,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/S24_up/description/Xmmdmaterialmorphshader.res",
+      "language": "res",
+      "sizeLines": 11,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/S24_up/dialogs/DLG_CMT_TOOL.res",
+      "language": "res",
+      "sizeLines": 773,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/S24_up/dialogs/DLG_CMT_VMD_IMPORT.res",
+      "language": "res",
+      "sizeLines": 73,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/S24_up/mikumikudance_data/color.txt",
+      "language": "txt",
+      "sizeLines": 76,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "res/S24_up/mikumikudance_data/toon01.bmp",
+      "language": "bmp",
+      "sizeLines": 0,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/S24_up/mikumikudance_data/toon02.bmp",
+      "language": "bmp",
+      "sizeLines": 0,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/S24_up/mikumikudance_data/toon03.bmp",
+      "language": "bmp",
+      "sizeLines": 0,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/S24_up/mikumikudance_data/toon04.bmp",
+      "language": "bmp",
+      "sizeLines": 0,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/S24_up/mikumikudance_data/toon05.bmp",
+      "language": "bmp",
+      "sizeLines": 0,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/S24_up/mikumikudance_data/toon06.bmp",
+      "language": "bmp",
+      "sizeLines": 0,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/S24_up/mikumikudance_data/toon07.bmp",
+      "language": "bmp",
+      "sizeLines": 0,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/S24_up/mikumikudance_data/toon08.bmp",
+      "language": "bmp",
+      "sizeLines": 0,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/S24_up/mikumikudance_data/toon09.bmp",
+      "language": "bmp",
+      "sizeLines": 0,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/S24_up/mikumikudance_data/toon10.bmp",
+      "language": "bmp",
+      "sizeLines": 0,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/S24_up/name_conversion/default.json",
+      "language": "json",
+      "sizeLines": 248,
+      "fileCategory": "config"
+    },
+    {
+      "path": "res/S24_up/name_conversion/UE5.json",
+      "language": "json",
+      "sizeLines": 246,
+      "fileCategory": "config"
+    },
+    {
+      "path": "res/S24_up/strings_en-US/c4d_strings.str",
+      "language": "str",
+      "sizeLines": 104,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/S24_up/strings_en-US/description/OMMDBoneManager.str",
+      "language": "str",
+      "sizeLines": 21,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/S24_up/strings_en-US/description/OMMDCamera.str",
+      "language": "str",
+      "sizeLines": 5,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/S24_up/strings_en-US/description/OMMDJoint.str",
+      "language": "str",
+      "sizeLines": 64,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/S24_up/strings_en-US/description/OMMDJointManager.str",
+      "language": "str",
+      "sizeLines": 15,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/S24_up/strings_en-US/description/OMMDMeshManager.str",
+      "language": "str",
+      "sizeLines": 18,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/S24_up/strings_en-US/description/OMMDModelManager.str",
+      "language": "str",
+      "sizeLines": 152,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/S24_up/strings_en-US/description/OMMDRigid.str",
+      "language": "str",
+      "sizeLines": 79,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/S24_up/strings_en-US/description/OMMDRigidManager.str",
+      "language": "str",
+      "sizeLines": 15,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/S24_up/strings_en-US/description/TMMDBone.str",
+      "language": "str",
+      "sizeLines": 83,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/S24_up/strings_en-US/description/Xmmdmaterialmorphshader.str",
+      "language": "str",
+      "sizeLines": 6,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/S24_up/strings_en-US/dialogs/DLG_CMT_TOOL.str",
+      "language": "str",
+      "sizeLines": 56,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/S24_up/strings_en-US/dialogs/DLG_CMT_VMD_IMPORT.str",
+      "language": "str",
+      "sizeLines": 8,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/S24_up/strings_zh-CN/c4d_strings.str",
+      "language": "str",
+      "sizeLines": 104,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/S24_up/strings_zh-CN/description/OMMDBoneManager.str",
+      "language": "str",
+      "sizeLines": 21,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/S24_up/strings_zh-CN/description/OMMDCamera.str",
+      "language": "str",
+      "sizeLines": 4,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/S24_up/strings_zh-CN/description/OMMDJoint.str",
+      "language": "str",
+      "sizeLines": 67,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/S24_up/strings_zh-CN/description/OMMDJointManager.str",
+      "language": "str",
+      "sizeLines": 15,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/S24_up/strings_zh-CN/description/OMMDMeshManager.str",
+      "language": "str",
+      "sizeLines": 18,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/S24_up/strings_zh-CN/description/OMMDModelManager.str",
+      "language": "str",
+      "sizeLines": 152,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/S24_up/strings_zh-CN/description/OMMDRigid.str",
+      "language": "str",
+      "sizeLines": 79,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/S24_up/strings_zh-CN/description/OMMDRigidManager.str",
+      "language": "str",
+      "sizeLines": 15,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/S24_up/strings_zh-CN/description/TMMDBone.str",
+      "language": "str",
+      "sizeLines": 83,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/S24_up/strings_zh-CN/description/Xmmdmaterialmorphshader.str",
+      "language": "str",
+      "sizeLines": 6,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/S24_up/strings_zh-CN/dialogs/DLG_CMT_TOOL.str",
+      "language": "str",
+      "sizeLines": 56,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/S24_up/strings_zh-CN/dialogs/DLG_CMT_VMD_IMPORT.str",
+      "language": "str",
+      "sizeLines": 8,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/build_macos.sh",
+      "language": "shell",
+      "sizeLines": 264,
+      "fileCategory": "script"
+    },
+    {
+      "path": "sdk_2023/cmake/sdk_compat_2023.cmake",
+      "language": "cmake",
+      "sizeLines": 8,
+      "fileCategory": "code"
+    },
+    {
+      "path": "sdk_2023/CMakeLists.txt",
+      "language": "txt",
+      "sizeLines": 65,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "sdk_2023/CMakePresets.json",
+      "language": "json",
+      "sizeLines": 39,
+      "fileCategory": "config"
+    },
+    {
+      "path": "sdk_2023/plugins/mmdtool/project/CMakeLists.txt",
+      "language": "txt",
+      "sizeLines": 38,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "sdk_2023/plugins/mmdtool/project/mmdtool.vcxproj",
+      "language": "vcxproj",
+      "sizeLines": 216,
+      "fileCategory": "code"
+    },
+    {
+      "path": "sdk_2023/plugins/mmdtool/project/mmdtool.vcxproj.filters",
+      "language": "filters",
+      "sizeLines": 80,
+      "fileCategory": "code"
+    },
+    {
+      "path": "sdk_2023/plugins/mmdtool/project/mmdtool.vcxproj.user",
+      "language": "user",
+      "sizeLines": 3,
+      "fileCategory": "code"
+    },
+    {
+      "path": "sdk_2023/plugins/mmdtool/project/mmdtool.xcodeproj/project.pbxproj",
+      "language": "pbxproj",
+      "sizeLines": 789,
+      "fileCategory": "code"
+    },
+    {
+      "path": "sdk_2023/plugins/mmdtool/project/projectdefinition.txt",
+      "language": "txt",
+      "sizeLines": 17,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "sdk_2023/plugins/mmdtool/project/projectsettings.props",
+      "language": "props",
+      "sizeLines": 19,
+      "fileCategory": "code"
+    },
+    {
+      "path": "sdk_2023/plugins/project/projectdefinition.txt",
+      "language": "txt",
+      "sizeLines": 6,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "sdk_2024/cmake/commands/create_directory_symlink.cmake",
+      "language": "cmake",
+      "sizeLines": 1,
+      "fileCategory": "code"
+    },
+    {
+      "path": "sdk_2024/cmake/commands/update_filelist.cmake",
+      "language": "cmake",
+      "sizeLines": 1,
+      "fileCategory": "code"
+    },
+    {
+      "path": "sdk_2024/cmake/sdk_compat_2024.cmake",
+      "language": "cmake",
+      "sizeLines": 15,
+      "fileCategory": "code"
+    },
+    {
+      "path": "sdk_2024/cmake/sdk_compiler_helper.cmake",
+      "language": "cmake",
+      "sizeLines": 4,
+      "fileCategory": "code"
+    },
+    {
+      "path": "sdk_2024/cmake/sdk_library_template.cmake",
+      "language": "cmake",
+      "sizeLines": 100,
+      "fileCategory": "code"
+    },
+    {
+      "path": "sdk_2024/cmake/sdk_targets.cmake",
+      "language": "cmake",
+      "sizeLines": 4,
+      "fileCategory": "code"
+    },
+    {
+      "path": "sdk_2024/cmake/sdk_update_projects.cmake",
+      "language": "cmake",
+      "sizeLines": 4,
+      "fileCategory": "code"
+    },
+    {
+      "path": "sdk_2024/CMakeLists.txt",
+      "language": "txt",
+      "sizeLines": 65,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "sdk_2024/CMakePresets.json",
+      "language": "json",
+      "sizeLines": 39,
+      "fileCategory": "config"
+    },
+    {
+      "path": "sdk_2024/plugins/mmdtool/mmdtool.xdl64.manifest",
+      "language": "manifest",
+      "sizeLines": 1,
+      "fileCategory": "code"
+    },
+    {
+      "path": "sdk_2024/plugins/mmdtool/project/CMakeLists.txt",
+      "language": "txt",
+      "sizeLines": 28,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "sdk_2024/plugins/mmdtool/project/mmdtool.vcxproj",
+      "language": "vcxproj",
+      "sizeLines": 308,
+      "fileCategory": "code"
+    },
+    {
+      "path": "sdk_2024/plugins/mmdtool/project/mmdtool.vcxproj.filters",
+      "language": "filters",
+      "sizeLines": 269,
+      "fileCategory": "code"
+    },
+    {
+      "path": "sdk_2024/plugins/mmdtool/project/mmdtool.vcxproj.user",
+      "language": "user",
+      "sizeLines": 7,
+      "fileCategory": "code"
+    },
+    {
+      "path": "sdk_2024/plugins/mmdtool/project/mmdtool.xcodeproj/project.pbxproj",
+      "language": "pbxproj",
+      "sizeLines": 907,
+      "fileCategory": "code"
+    },
+    {
+      "path": "sdk_2024/plugins/mmdtool/project/projectdefinition.txt",
+      "language": "txt",
+      "sizeLines": 19,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "sdk_2024/plugins/mmdtool/project/projectsettings.props",
+      "language": "props",
+      "sizeLines": 19,
+      "fileCategory": "code"
+    },
+    {
+      "path": "sdk_2024/plugins/project/projectdefinition.txt",
+      "language": "txt",
+      "sizeLines": 2,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "sdk_2025/cmake/base_settings/compile_definitions.cmake",
+      "language": "cmake",
+      "sizeLines": 42,
+      "fileCategory": "code"
+    },
+    {
+      "path": "sdk_2025/cmake/base_settings/compile_options.cmake",
+      "language": "cmake",
+      "sizeLines": 95,
+      "fileCategory": "code"
+    },
+    {
+      "path": "sdk_2025/cmake/base_settings/link_options.cmake",
+      "language": "cmake",
+      "sizeLines": 29,
+      "fileCategory": "code"
+    },
+    {
+      "path": "sdk_2025/cmake/base_settings/sanitize.cmake",
+      "language": "cmake",
+      "sizeLines": 25,
+      "fileCategory": "code"
+    },
+    {
+      "path": "sdk_2025/cmake/base_settings/warnings.clang.cmake",
+      "language": "cmake",
+      "sizeLines": 143,
+      "fileCategory": "code"
+    },
+    {
+      "path": "sdk_2025/cmake/base_settings/warnings.gcc.cmake",
+      "language": "cmake",
+      "sizeLines": 23,
+      "fileCategory": "code"
+    },
+    {
+      "path": "sdk_2025/cmake/base_settings/warnings.msvc.cmake",
+      "language": "cmake",
+      "sizeLines": 83,
+      "fileCategory": "code"
+    },
+    {
+      "path": "sdk_2025/cmake/commands/create_directory_symlink.cmake",
+      "language": "cmake",
+      "sizeLines": 10,
+      "fileCategory": "code"
+    },
+    {
+      "path": "sdk_2025/cmake/commands/update_filelist.cmake",
+      "language": "cmake",
+      "sizeLines": 20,
+      "fileCategory": "code"
+    },
+    {
+      "path": "sdk_2025/cmake/sdk_compiler_helper.cmake",
+      "language": "cmake",
+      "sizeLines": 458,
+      "fileCategory": "code"
+    },
+    {
+      "path": "sdk_2025/cmake/sdk_library_template.cmake",
+      "language": "cmake",
+      "sizeLines": 100,
+      "fileCategory": "code"
+    },
+    {
+      "path": "sdk_2025/cmake/sdk_targets.cmake",
+      "language": "cmake",
+      "sizeLines": 1214,
+      "fileCategory": "code"
+    },
+    {
+      "path": "sdk_2025/cmake/sdk_update_projects.cmake",
+      "language": "cmake",
+      "sizeLines": 1149,
+      "fileCategory": "code"
+    },
+    {
+      "path": "sdk_2025/CMakeLists.txt",
+      "language": "txt",
+      "sizeLines": 80,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "sdk_2025/CMakePresets.json",
+      "language": "json",
+      "sizeLines": 40,
+      "fileCategory": "config"
+    },
+    {
+      "path": "sdk_2025/custom_paths.txt",
+      "language": "txt",
+      "sizeLines": 56,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "sdk_2025/plugins/mmdtool/project/CMakeLists.txt",
+      "language": "txt",
+      "sizeLines": 25,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "sdk_2025/plugins/mmdtool/project/projectdefinition.txt",
+      "language": "txt",
+      "sizeLines": 18,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "sdk_2026/cmake/base_settings/compile_definitions.cmake",
+      "language": "cmake",
+      "sizeLines": 41,
+      "fileCategory": "code"
+    },
+    {
+      "path": "sdk_2026/cmake/base_settings/compile_options.cmake",
+      "language": "cmake",
+      "sizeLines": 97,
+      "fileCategory": "code"
+    },
+    {
+      "path": "sdk_2026/cmake/base_settings/link_options.cmake",
+      "language": "cmake",
+      "sizeLines": 29,
+      "fileCategory": "code"
+    },
+    {
+      "path": "sdk_2026/cmake/base_settings/sanitize.cmake",
+      "language": "cmake",
+      "sizeLines": 25,
+      "fileCategory": "code"
+    },
+    {
+      "path": "sdk_2026/cmake/base_settings/warnings.clang.cmake",
+      "language": "cmake",
+      "sizeLines": 143,
+      "fileCategory": "code"
+    },
+    {
+      "path": "sdk_2026/cmake/base_settings/warnings.gcc.cmake",
+      "language": "cmake",
+      "sizeLines": 23,
+      "fileCategory": "code"
+    },
+    {
+      "path": "sdk_2026/cmake/base_settings/warnings.msvc.cmake",
+      "language": "cmake",
+      "sizeLines": 83,
+      "fileCategory": "code"
+    },
+    {
+      "path": "sdk_2026/cmake/commands/create_directory_symlink.cmake",
+      "language": "cmake",
+      "sizeLines": 10,
+      "fileCategory": "code"
+    },
+    {
+      "path": "sdk_2026/cmake/commands/update_filelist.cmake",
+      "language": "cmake",
+      "sizeLines": 20,
+      "fileCategory": "code"
+    },
+    {
+      "path": "sdk_2026/cmake/sdk_compiler_helper.cmake",
+      "language": "cmake",
+      "sizeLines": 458,
+      "fileCategory": "code"
+    },
+    {
+      "path": "sdk_2026/cmake/sdk_library_template.cmake",
+      "language": "cmake",
+      "sizeLines": 100,
+      "fileCategory": "code"
+    },
+    {
+      "path": "sdk_2026/cmake/sdk_targets.cmake",
+      "language": "cmake",
+      "sizeLines": 1214,
+      "fileCategory": "code"
+    },
+    {
+      "path": "sdk_2026/cmake/sdk_update_projects.cmake",
+      "language": "cmake",
+      "sizeLines": 1151,
+      "fileCategory": "code"
+    },
+    {
+      "path": "sdk_2026/CMakeLists.txt",
+      "language": "txt",
+      "sizeLines": 80,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "sdk_2026/CMakePresets.json",
+      "language": "json",
+      "sizeLines": 44,
+      "fileCategory": "config"
+    },
+    {
+      "path": "sdk_2026/plugins/mmdtool/project/CMakeLists.txt",
+      "language": "txt",
+      "sizeLines": 25,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "sdk_2026/plugins/mmdtool/project/projectdefinition.txt",
+      "language": "txt",
+      "sizeLines": 18,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "sdk_2026/sdk_modules.txt",
+      "language": "txt",
+      "sizeLines": 20,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "sdk_r20/cmake/sdk_compat_r20.cmake",
+      "language": "cmake",
+      "sizeLines": 7,
+      "fileCategory": "code"
+    },
+    {
+      "path": "sdk_r20/CMakeLists.txt",
+      "language": "txt",
+      "sizeLines": 64,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "sdk_r20/CMakePresets.json",
+      "language": "json",
+      "sizeLines": 39,
+      "fileCategory": "config"
+    },
+    {
+      "path": "sdk_r20/plugins/mmdtool/project/CMakeLists.txt",
+      "language": "txt",
+      "sizeLines": 41,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "sdk_r20/plugins/mmdtool/project/projectdefinition.txt",
+      "language": "txt",
+      "sizeLines": 17,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "sdk_r20/plugins/project/projectdefinition.txt",
+      "language": "txt",
+      "sizeLines": 9,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "sdk_r21/cmake/sdk_compat_r21.cmake",
+      "language": "cmake",
+      "sizeLines": 7,
+      "fileCategory": "code"
+    },
+    {
+      "path": "sdk_r21/CMakeLists.txt",
+      "language": "txt",
+      "sizeLines": 64,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "sdk_r21/CMakePresets.json",
+      "language": "json",
+      "sizeLines": 39,
+      "fileCategory": "config"
+    },
+    {
+      "path": "sdk_r21/plugins/mmdtool/project/CMakeLists.txt",
+      "language": "txt",
+      "sizeLines": 39,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "sdk_r21/plugins/mmdtool/project/projectdefinition.txt",
+      "language": "txt",
+      "sizeLines": 17,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "sdk_r21/plugins/project/projectdefinition.txt",
+      "language": "txt",
+      "sizeLines": 11,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "sdk_r23/cmake/sdk_compat_r23.cmake",
+      "language": "cmake",
+      "sizeLines": 7,
+      "fileCategory": "code"
+    },
+    {
+      "path": "sdk_r23/CMakeLists.txt",
+      "language": "txt",
+      "sizeLines": 64,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "sdk_r23/CMakePresets.json",
+      "language": "json",
+      "sizeLines": 39,
+      "fileCategory": "config"
+    },
+    {
+      "path": "sdk_r23/plugins/mmdtool/project/CMakeLists.txt",
+      "language": "txt",
+      "sizeLines": 39,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "sdk_r23/plugins/mmdtool/project/projectdefinition.txt",
+      "language": "txt",
+      "sizeLines": 17,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "sdk_r23/plugins/project/projectdefinition.txt",
+      "language": "txt",
+      "sizeLines": 6,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "sdk_r25/cmake/sdk_compat_r25.cmake",
+      "language": "cmake",
+      "sizeLines": 7,
+      "fileCategory": "code"
+    },
+    {
+      "path": "sdk_r25/CMakeLists.txt",
+      "language": "txt",
+      "sizeLines": 64,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "sdk_r25/CMakePresets.json",
+      "language": "json",
+      "sizeLines": 39,
+      "fileCategory": "config"
+    },
+    {
+      "path": "sdk_r25/plugins/mmdtool/project/CMakeLists.txt",
+      "language": "txt",
+      "sizeLines": 39,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "sdk_r25/plugins/mmdtool/project/projectdefinition.txt",
+      "language": "txt",
+      "sizeLines": 17,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "sdk_r25/plugins/project/projectdefinition.txt",
+      "language": "txt",
+      "sizeLines": 9,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "source/cmt_tools_config_manager.cpp",
+      "language": "cpp",
+      "sizeLines": 90,
+      "fileCategory": "code"
+    },
+    {
+      "path": "source/cmt_tools_config_manager.h",
+      "language": "c",
+      "sizeLines": 167,
+      "fileCategory": "code"
+    },
+    {
+      "path": "source/cmt_tools_manager.cpp",
+      "language": "cpp",
+      "sizeLines": 251,
+      "fileCategory": "code"
+    },
+    {
+      "path": "source/cmt_tools_manager.h",
+      "language": "c",
+      "sizeLines": 26,
+      "fileCategory": "code"
+    },
+    {
+      "path": "source/cmt_tools_setting.h",
+      "language": "c",
+      "sizeLines": 128,
+      "fileCategory": "code"
+    },
+    {
+      "path": "source/CMTSceneManager.cpp",
+      "language": "cpp",
+      "sizeLines": 534,
+      "fileCategory": "code"
+    },
+    {
+      "path": "source/CMTSceneManager.h",
+      "language": "c",
+      "sizeLines": 177,
+      "fileCategory": "code"
+    },
+    {
+      "path": "source/main.cpp",
+      "language": "cpp",
+      "sizeLines": 58,
+      "fileCategory": "code"
+    },
+    {
+      "path": "source/module/core/cmt_debug_log.h",
+      "language": "c",
+      "sizeLines": 12,
+      "fileCategory": "code"
+    },
+    {
+      "path": "source/module/core/cmt_marco.h",
+      "language": "c",
+      "sizeLines": 331,
+      "fileCategory": "code"
+    },
+    {
+      "path": "source/module/core/cmt_old_sdk_stl_preload.h",
+      "language": "c",
+      "sizeLines": 22,
+      "fileCategory": "code"
+    },
+    {
+      "path": "source/module/tools/loader/vmd_loader.cpp",
+      "language": "cpp",
+      "sizeLines": 61,
+      "fileCategory": "code"
+    },
+    {
+      "path": "source/module/tools/loader/vmd_loader.h",
+      "language": "c",
+      "sizeLines": 32,
+      "fileCategory": "code"
+    },
+    {
+      "path": "source/module/tools/material/mmd_corona_material.cpp",
+      "language": "cpp",
+      "sizeLines": 121,
+      "fileCategory": "code"
+    },
+    {
+      "path": "source/module/tools/material/mmd_corona_material.h",
+      "language": "c",
+      "sizeLines": 14,
+      "fileCategory": "code"
+    },
+    {
+      "path": "source/module/tools/material/mmd_material_morph_shader.cpp",
+      "language": "cpp",
+      "sizeLines": 71,
+      "fileCategory": "code"
+    },
+    {
+      "path": "source/module/tools/material/mmd_material_morph_shader.h",
+      "language": "c",
+      "sizeLines": 40,
+      "fileCategory": "code"
+    },
+    {
+      "path": "source/module/tools/material/mmd_material.cpp",
+      "language": "cpp",
+      "sizeLines": 440,
+      "fileCategory": "code"
+    },
+    {
+      "path": "source/module/tools/material/mmd_material.h",
+      "language": "c",
+      "sizeLines": 152,
+      "fileCategory": "code"
+    },
+    {
+      "path": "source/module/tools/material/mmd_octane_material.cpp",
+      "language": "cpp",
+      "sizeLines": 214,
+      "fileCategory": "code"
+    },
+    {
+      "path": "source/module/tools/material/mmd_octane_material.h",
+      "language": "c",
+      "sizeLines": 14,
+      "fileCategory": "code"
+    },
+    {
+      "path": "source/module/tools/material/mmd_redshift_material.cpp",
+      "language": "cpp",
+      "sizeLines": 365,
+      "fileCategory": "code"
+    },
+    {
+      "path": "source/module/tools/material/mmd_redshift_material.h",
+      "language": "c",
+      "sizeLines": 14,
+      "fileCategory": "code"
+    },
+    {
+      "path": "source/module/tools/material/mmd_standard_material.cpp",
+      "language": "cpp",
+      "sizeLines": 414,
+      "fileCategory": "code"
+    },
+    {
+      "path": "source/module/tools/material/mmd_standard_material.h",
+      "language": "c",
+      "sizeLines": 16,
+      "fileCategory": "code"
+    },
+    {
+      "path": "source/module/tools/object/mmd_bone_manager.cpp",
+      "language": "cpp",
+      "sizeLines": 2397,
+      "fileCategory": "code"
+    },
+    {
+      "path": "source/module/tools/object/mmd_bone_manager.h",
+      "language": "c",
+      "sizeLines": 161,
+      "fileCategory": "code"
+    },
+    {
+      "path": "source/module/tools/object/mmd_camera.cpp",
+      "language": "cpp",
+      "sizeLines": 546,
+      "fileCategory": "code"
+    },
+    {
+      "path": "source/module/tools/object/mmd_camera.h",
+      "language": "c",
+      "sizeLines": 111,
+      "fileCategory": "code"
+    },
+    {
+      "path": "source/module/tools/object/mmd_display_frame.cpp",
+      "language": "cpp",
+      "sizeLines": 105,
+      "fileCategory": "code"
+    },
+    {
+      "path": "source/module/tools/object/mmd_joint_manager.cpp",
+      "language": "cpp",
+      "sizeLines": 671,
+      "fileCategory": "code"
+    },
+    {
+      "path": "source/module/tools/object/mmd_joint_manager.h",
+      "language": "c",
+      "sizeLines": 88,
+      "fileCategory": "code"
+    },
+    {
+      "path": "source/module/tools/object/mmd_joint.cpp",
+      "language": "cpp",
+      "sizeLines": 495,
+      "fileCategory": "code"
+    },
+    {
+      "path": "source/module/tools/object/mmd_joint.h",
+      "language": "c",
+      "sizeLines": 54,
+      "fileCategory": "code"
+    },
+    {
+      "path": "source/module/tools/object/mmd_manager.hpp",
+      "language": "cpp",
+      "sizeLines": 74,
+      "fileCategory": "code"
+    },
+    {
+      "path": "source/module/tools/object/mmd_mesh_manager.cpp",
+      "language": "cpp",
+      "sizeLines": 2318,
+      "fileCategory": "code"
+    },
+    {
+      "path": "source/module/tools/object/mmd_mesh_manager.h",
+      "language": "c",
+      "sizeLines": 90,
+      "fileCategory": "code"
+    },
+    {
+      "path": "source/module/tools/object/mmd_model_manager.cpp",
+      "language": "cpp",
+      "sizeLines": 6799,
+      "fileCategory": "code"
+    },
+    {
+      "path": "source/module/tools/object/mmd_model_manager.h",
+      "language": "c",
+      "sizeLines": 430,
+      "fileCategory": "code"
+    },
+    {
+      "path": "source/module/tools/object/mmd_morph.cpp",
+      "language": "cpp",
+      "sizeLines": 758,
+      "fileCategory": "code"
+    },
+    {
+      "path": "source/module/tools/object/mmd_morph.h",
+      "language": "c",
+      "sizeLines": 277,
+      "fileCategory": "code"
+    },
+    {
+      "path": "source/module/tools/object/mmd_rigid_manager.cpp",
+      "language": "cpp",
+      "sizeLines": 709,
+      "fileCategory": "code"
+    },
+    {
+      "path": "source/module/tools/object/mmd_rigid_manager.h",
+      "language": "c",
+      "sizeLines": 89,
+      "fileCategory": "code"
+    },
+    {
+      "path": "source/module/tools/object/mmd_rigid.cpp",
+      "language": "cpp",
+      "sizeLines": 790,
+      "fileCategory": "code"
+    },
+    {
+      "path": "source/module/tools/object/mmd_rigid.h",
+      "language": "c",
+      "sizeLines": 73,
+      "fileCategory": "code"
+    },
+    {
+      "path": "source/module/tools/tag/mmd_bone.cpp",
+      "language": "cpp",
+      "sizeLines": 3720,
+      "fileCategory": "code"
+    },
+    {
+      "path": "source/module/tools/tag/mmd_bone.h",
+      "language": "c",
+      "sizeLines": 461,
+      "fileCategory": "code"
+    },
+    {
+      "path": "source/module/ui/cmt_name_conversion_dialog.cpp",
+      "language": "cpp",
+      "sizeLines": 492,
+      "fileCategory": "code"
+    },
+    {
+      "path": "source/module/ui/cmt_name_conversion_dialog.h",
+      "language": "c",
+      "sizeLines": 51,
+      "fileCategory": "code"
+    },
+    {
+      "path": "source/module/ui/cmt_tools_dialog.cpp",
+      "language": "cpp",
+      "sizeLines": 379,
+      "fileCategory": "code"
+    },
+    {
+      "path": "source/module/ui/cmt_tools_dialog.h",
+      "language": "c",
+      "sizeLines": 68,
+      "fileCategory": "code"
+    },
+    {
+      "path": "source/module/ui/vmd_loader_camera_dialog.cpp",
+      "language": "cpp",
+      "sizeLines": 71,
+      "fileCategory": "code"
+    },
+    {
+      "path": "source/module/ui/vmd_loader_camera_dialog.h",
+      "language": "c",
+      "sizeLines": 31,
+      "fileCategory": "code"
+    },
+    {
+      "path": "source/plugin_resource.h",
+      "language": "c",
+      "sizeLines": 37,
+      "fileCategory": "code"
+    },
+    {
+      "path": "source/register_entity.cpp",
+      "language": "cpp",
+      "sizeLines": 112,
+      "fileCategory": "code"
+    },
+    {
+      "path": "source/register_entity.h",
+      "language": "c",
+      "sizeLines": 20,
+      "fileCategory": "code"
+    },
+    {
+      "path": "source/utils/cmt_anim_flow_debug.hpp",
+      "language": "cpp",
+      "sizeLines": 106,
+      "fileCategory": "code"
+    },
+    {
+      "path": "source/utils/filename_util.hpp",
+      "language": "cpp",
+      "sizeLines": 91,
+      "fileCategory": "code"
+    },
+    {
+      "path": "source/utils/images_user_area_util.hpp",
+      "language": "cpp",
+      "sizeLines": 31,
+      "fileCategory": "code"
+    },
+    {
+      "path": "source/utils/io_util.hpp",
+      "language": "cpp",
+      "sizeLines": 300,
+      "fileCategory": "code"
+    },
+    {
+      "path": "source/utils/json_util.hpp",
+      "language": "cpp",
+      "sizeLines": 374,
+      "fileCategory": "code"
+    },
+    {
+      "path": "source/utils/math_util.hpp",
+      "language": "cpp",
+      "sizeLines": 101,
+      "fileCategory": "code"
+    },
+    {
+      "path": "source/utils/mmd_bone_control_util.cpp",
+      "language": "cpp",
+      "sizeLines": 979,
+      "fileCategory": "code"
+    },
+    {
+      "path": "source/utils/mmd_bone_control_util.hpp",
+      "language": "cpp",
+      "sizeLines": 28,
+      "fileCategory": "code"
+    },
+    {
+      "path": "source/utils/morph_ui_data_util.hpp",
+      "language": "cpp",
+      "sizeLines": 68,
+      "fileCategory": "code"
+    },
+    {
+      "path": "source/utils/pmx_util.hpp",
+      "language": "cpp",
+      "sizeLines": 170,
+      "fileCategory": "code"
+    },
+    {
+      "path": "source/utils/string_util.hpp",
+      "language": "cpp",
+      "sizeLines": 35,
+      "fileCategory": "code"
+    },
+    {
+      "path": "source/utils/time_util.hpp",
+      "language": "cpp",
+      "sizeLines": 35,
+      "fileCategory": "code"
+    },
+    {
+      "path": "source/utils/unique_id_util.hpp",
+      "language": "cpp",
+      "sizeLines": 52,
+      "fileCategory": "code"
+    }
+  ]
+}

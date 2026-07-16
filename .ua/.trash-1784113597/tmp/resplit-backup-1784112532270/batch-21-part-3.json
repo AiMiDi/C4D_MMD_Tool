@@ -1,0 +1,109 @@
+{
+  "nodes": [
+    {
+      "id": "document:sdk_2026/plugins/mmdtool/project/CMakeLists.txt",
+      "type": "document",
+      "name": "CMakeLists.txt",
+      "filePath": "sdk_2026/plugins/mmdtool/project/CMakeLists.txt",
+      "summary": "Thin SDK 2026 mmdtool wrapper that adds shared dependencies and plugin setup, resolves the project/module roots, and uses the shared source and S24+ resource trees. / 精简的 SDK 2026 mmdtool 包装层，引入共享依赖与插件设置，解析项目及模块根目录，并使用共享源码树与 S24+ 资源树。",
+      "tags": [
+        "documentation",
+        "cmake",
+        "sdk-2026",
+        "plugin-build",
+        "thin-wrapper"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:sdk_2026/plugins/mmdtool/project/projectdefinition.txt",
+      "type": "document",
+      "name": "projectdefinition.txt",
+      "filePath": "sdk_2026/plugins/mmdtool/project/projectdefinition.txt",
+      "summary": "Maxon project metadata for the SDK 2026 mmdtool DLL, declaring supported platforms, Cinema 4D framework dependencies, component status, module ID, and style-check policy. / SDK 2026 mmdtool DLL 的 Maxon 项目元数据，声明支持平台、Cinema 4D 框架依赖、组件状态、模块 ID 与样式检查策略。",
+      "tags": [
+        "documentation",
+        "sdk-2026",
+        "project-metadata",
+        "frameworks",
+        "plugin-build"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:sdk_r20/cmake/sdk_compat_r20.cmake",
+      "type": "file",
+      "name": "sdk_compat_r20.cmake",
+      "filePath": "sdk_r20/cmake/sdk_compat_r20.cmake",
+      "summary": "Defines conservative R20 compatibility defaults: C++17, parallel and permissive MSVC compilation, AVX baseline instructions, and reduced warning noise. / 定义保守的 R20 兼容默认值：C++17、MSVC 并行与宽松编译、AVX 基线指令以及降低警告噪声。",
+      "tags": [
+        "cmake",
+        "sdk-r20",
+        "compatibility",
+        "msvc",
+        "toolchain"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:sdk_r20/CMakeLists.txt",
+      "type": "document",
+      "name": "CMakeLists.txt",
+      "filePath": "sdk_r20/CMakeLists.txt",
+      "summary": "R20 bridge build definition that reuses shared Maxon tooling, discovers plugin module paths, configures output directories, and loads only frameworks required by participating modules. / R20 桥接构建定义，复用共享 Maxon 工具链，发现插件模块路径，配置输出目录，并仅加载参与模块所需框架。",
+      "tags": [
+        "documentation",
+        "cmake",
+        "sdk-r20",
+        "build-system",
+        "frameworks"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "config:sdk_r20/CMakePresets.json",
+      "type": "config",
+      "name": "CMakePresets.json",
+      "filePath": "sdk_r20/CMakePresets.json",
+      "summary": "Defines R20 configure presets for Linux Ninja, x86_64 macOS Xcode, Visual Studio 2022 v143, and Visual Studio ClangCL builds. / 定义 R20 的 Linux Ninja、x86_64 macOS Xcode、Visual Studio 2022 v143 与 Visual Studio ClangCL 配置预设。",
+      "tags": [
+        "configuration",
+        "cmake-presets",
+        "sdk-r20",
+        "cross-platform"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:sdk_r20/plugins/mmdtool/project/CMakeLists.txt",
+      "type": "document",
+      "name": "CMakeLists.txt",
+      "filePath": "sdk_r20/plugins/mmdtool/project/CMakeLists.txt",
+      "summary": "Thin Cinema 4D R20 SDK mmdtool wrapper that adds shared dependencies and plugin setup, resolves the project/module roots, and selects the R20-S24 resource tree, narrows generated registration sources, and adds legacy framework headers. / 精简的 Cinema 4D R20 SDK mmdtool 包装层，引入共享依赖与插件设置，解析项目及模块根目录，并选择 R20-S24 资源树，收窄生成的注册源码，并加入旧版框架头文件。",
+      "tags": [
+        "documentation",
+        "cmake",
+        "sdk-r20",
+        "plugin-build",
+        "thin-wrapper"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:sdk_r20/plugins/mmdtool/project/projectdefinition.txt",
+      "type": "document",
+      "name": "projectdefinition.txt",
+      "filePath": "sdk_r20/plugins/mmdtool/project/projectdefinition.txt",
+      "summary": "Maxon project metadata for the Cinema 4D R20 SDK mmdtool DLL, declaring supported platforms, Cinema 4D framework dependencies, component status, module ID, and style-check policy. / Cinema 4D R20 SDK mmdtool DLL 的 Maxon 项目元数据，声明支持平台、Cinema 4D 框架依赖、组件状态、模块 ID 与样式检查策略。",
+      "tags": [
+        "documentation",
+        "sdk-r20",
+        "project-metadata",
+        "frameworks",
+        "plugin-build"
+      ],
+      "complexity": "simple"
+    }
+  ],
+  "edges": []
+}

@@ -1,0 +1,963 @@
+{
+  "nodes": [
+    {
+      "id": "file:source/utils/morph_ui_data_util.hpp",
+      "type": "file",
+      "name": "morph_ui_data_util.hpp",
+      "filePath": "source/utils/morph_ui_data_util.hpp",
+      "summary": "Defines a persistent morph-UI binding between a Cinema 4D tag and strength parameter, with HyperFile serialization, identity comparison, and safe strength access. / 定义 Cinema 4D 标签与强度参数之间的持久变形 UI 绑定，并提供 HyperFile 序列化、身份比较与安全强度访问。",
+      "tags": [
+        "utility",
+        "morph",
+        "ui",
+        "serialization",
+        "data-model"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "class:source/utils/morph_ui_data_util.hpp:MorphUIData",
+      "type": "class",
+      "name": "MorphUIData",
+      "filePath": "source/utils/morph_ui_data_util.hpp",
+      "lineRange": [
+        18,
+        67
+      ],
+      "summary": "MorphUIData binds a morph strength parameter to its owning tag for morph UI binding and persistence. / MorphUIData 为变形 UI 绑定与持久化将变形强度参数绑定到所属标签。",
+      "tags": [
+        "utility",
+        "morph",
+        "ui"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/utils/morph_ui_data_util.hpp:MorphUIData::MorphUIData",
+      "type": "function",
+      "name": "MorphUIData::MorphUIData",
+      "filePath": "source/utils/morph_ui_data_util.hpp",
+      "lineRange": [
+        23,
+        25
+      ],
+      "summary": "MorphUIData::MorphUIData initializes a helper used by morph UI binding and persistence. / MorphUIData::MorphUIData 初始化变形 UI 绑定与持久化所使用的辅助对象。",
+      "tags": [
+        "utility",
+        "morph",
+        "ui"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/utils/morph_ui_data_util.hpp:MorphUIData::Write",
+      "type": "function",
+      "name": "MorphUIData::Write",
+      "filePath": "source/utils/morph_ui_data_util.hpp",
+      "lineRange": [
+        33,
+        38
+      ],
+      "summary": "MorphUIData::Write writes runtime state for morph UI binding and persistence. / MorphUIData::Write 为变形 UI 绑定与持久化写入 runtime state。",
+      "tags": [
+        "serialization",
+        "utility",
+        "morph"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/utils/morph_ui_data_util.hpp:MorphUIData::Read",
+      "type": "function",
+      "name": "MorphUIData::Read",
+      "filePath": "source/utils/morph_ui_data_util.hpp",
+      "lineRange": [
+        40,
+        45
+      ],
+      "summary": "MorphUIData::Read reads runtime state for morph UI binding and persistence. / MorphUIData::Read 为变形 UI 绑定与持久化读取 runtime state。",
+      "tags": [
+        "serialization",
+        "utility",
+        "morph"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/utils/morph_ui_data_util.hpp:MorphUIData::Compare",
+      "type": "function",
+      "name": "MorphUIData::Compare",
+      "filePath": "source/utils/morph_ui_data_util.hpp",
+      "lineRange": [
+        46,
+        49
+      ],
+      "summary": "MorphUIData::Compare compares runtime state for morph UI binding and persistence. / MorphUIData::Compare 为变形 UI 绑定与持久化比较 runtime state。",
+      "tags": [
+        "utility",
+        "morph",
+        "ui"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/utils/morph_ui_data_util.hpp:MorphUIData::SetStrength",
+      "type": "function",
+      "name": "MorphUIData::SetStrength",
+      "filePath": "source/utils/morph_ui_data_util.hpp",
+      "lineRange": [
+        51,
+        56
+      ],
+      "summary": "MorphUIData::SetStrength sets strength for morph UI binding and persistence. / MorphUIData::SetStrength 为变形 UI 绑定与持久化设置 strength。",
+      "tags": [
+        "utility",
+        "morph",
+        "ui"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/utils/morph_ui_data_util.hpp:MorphUIData::GetStrength",
+      "type": "function",
+      "name": "MorphUIData::GetStrength",
+      "filePath": "source/utils/morph_ui_data_util.hpp",
+      "lineRange": [
+        58,
+        66
+      ],
+      "summary": "MorphUIData::GetStrength retrieves strength for morph UI binding and persistence. / MorphUIData::GetStrength 为变形 UI 绑定与持久化获取 strength。",
+      "tags": [
+        "utility",
+        "morph",
+        "ui"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:source/utils/pmx_util.hpp",
+      "type": "file",
+      "name": "pmx_util.hpp",
+      "filePath": "source/utils/pmx_util.hpp",
+      "summary": "Defines configurable PMX text, signed-index, and unsigned-index readers that handle variable encoding and one-, two-, or four-byte index widths. / 定义可配置的 PMX 文本、有符号索引与无符号索引读取器，处理可变编码以及一、二或四字节索引宽度。",
+      "tags": [
+        "utility",
+        "pmx",
+        "binary-io",
+        "parser",
+        "data-model"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "class:source/utils/pmx_util.hpp:PMXTextReader",
+      "type": "class",
+      "name": "PMXTextReader",
+      "filePath": "source/utils/pmx_util.hpp",
+      "lineRange": [
+        18,
+        66
+      ],
+      "summary": "PMXTextReader encapsulates configured binary-field reading for PMX binary field reading. / PMXTextReader 为PMX 二进制字段读取封装可配置的二进制字段读取。",
+      "tags": [
+        "serialization",
+        "pmx",
+        "utility"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "class:source/utils/pmx_util.hpp:PMXIndexReader",
+      "type": "class",
+      "name": "PMXIndexReader",
+      "filePath": "source/utils/pmx_util.hpp",
+      "lineRange": [
+        68,
+        117
+      ],
+      "summary": "PMXIndexReader encapsulates configured binary-field reading for PMX binary field reading. / PMXIndexReader 为PMX 二进制字段读取封装可配置的二进制字段读取。",
+      "tags": [
+        "serialization",
+        "pmx",
+        "utility"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "class:source/utils/pmx_util.hpp:PMXUIndexReader",
+      "type": "class",
+      "name": "PMXUIndexReader",
+      "filePath": "source/utils/pmx_util.hpp",
+      "lineRange": [
+        119,
+        168
+      ],
+      "summary": "PMXUIndexReader encapsulates configured binary-field reading for PMX binary field reading. / PMXUIndexReader 为PMX 二进制字段读取封装可配置的二进制字段读取。",
+      "tags": [
+        "serialization",
+        "pmx",
+        "utility"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/utils/pmx_util.hpp:PMXTextReader::PMXTextReader",
+      "type": "function",
+      "name": "PMXTextReader::PMXTextReader",
+      "filePath": "source/utils/pmx_util.hpp",
+      "lineRange": [
+        22,
+        25
+      ],
+      "summary": "PMXTextReader::PMXTextReader initializes a helper used by PMX binary field reading. / PMXTextReader::PMXTextReader 初始化PMX 二进制字段读取所使用的辅助对象。",
+      "tags": [
+        "serialization",
+        "pmx",
+        "utility"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/utils/pmx_util.hpp:PMXTextReader::SetTextEncoding",
+      "type": "function",
+      "name": "PMXTextReader::SetTextEncoding",
+      "filePath": "source/utils/pmx_util.hpp",
+      "lineRange": [
+        26,
+        30
+      ],
+      "summary": "PMXTextReader::SetTextEncoding sets text encoding for PMX binary field reading. / PMXTextReader::SetTextEncoding 为PMX 二进制字段读取设置 text encoding。",
+      "tags": [
+        "serialization",
+        "pmx",
+        "utility"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/utils/pmx_util.hpp:PMXTextReader::operator()",
+      "type": "function",
+      "name": "PMXTextReader::operator()",
+      "filePath": "source/utils/pmx_util.hpp",
+      "lineRange": [
+        31,
+        37
+      ],
+      "summary": "PMXTextReader::operator() reads or skips a PMX field using the configured encoding or index width. / PMXTextReader::operator() 使用已配置的编码或索引宽度读取或跳过 PMX 字段。",
+      "tags": [
+        "serialization",
+        "pmx",
+        "utility"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/utils/pmx_util.hpp:PMXTextReader::operator()@38",
+      "type": "function",
+      "name": "PMXTextReader::operator()",
+      "filePath": "source/utils/pmx_util.hpp",
+      "lineRange": [
+        38,
+        65
+      ],
+      "summary": "PMXTextReader::operator() reads or skips a PMX field using the configured encoding or index width. / PMXTextReader::operator() 使用已配置的编码或索引宽度读取或跳过 PMX 字段。",
+      "tags": [
+        "serialization",
+        "pmx",
+        "utility"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/utils/pmx_util.hpp:PMXIndexReader::PMXIndexReader",
+      "type": "function",
+      "name": "PMXIndexReader::PMXIndexReader",
+      "filePath": "source/utils/pmx_util.hpp",
+      "lineRange": [
+        72,
+        75
+      ],
+      "summary": "PMXIndexReader::PMXIndexReader initializes a helper used by PMX binary field reading. / PMXIndexReader::PMXIndexReader 初始化PMX 二进制字段读取所使用的辅助对象。",
+      "tags": [
+        "serialization",
+        "pmx",
+        "utility"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/utils/pmx_util.hpp:PMXIndexReader::SetIndexSize",
+      "type": "function",
+      "name": "PMXIndexReader::SetIndexSize",
+      "filePath": "source/utils/pmx_util.hpp",
+      "lineRange": [
+        76,
+        80
+      ],
+      "summary": "PMXIndexReader::SetIndexSize sets index size for PMX binary field reading. / PMXIndexReader::SetIndexSize 为PMX 二进制字段读取设置 index size。",
+      "tags": [
+        "serialization",
+        "pmx",
+        "utility"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/utils/pmx_util.hpp:PMXIndexReader::operator()",
+      "type": "function",
+      "name": "PMXIndexReader::operator()",
+      "filePath": "source/utils/pmx_util.hpp",
+      "lineRange": [
+        81,
+        84
+      ],
+      "summary": "PMXIndexReader::operator() reads or skips a PMX field using the configured encoding or index width. / PMXIndexReader::operator() 使用已配置的编码或索引宽度读取或跳过 PMX 字段。",
+      "tags": [
+        "serialization",
+        "pmx",
+        "utility"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/utils/pmx_util.hpp:PMXIndexReader::operator()@85",
+      "type": "function",
+      "name": "PMXIndexReader::operator()",
+      "filePath": "source/utils/pmx_util.hpp",
+      "lineRange": [
+        85,
+        116
+      ],
+      "summary": "PMXIndexReader::operator() reads or skips a PMX field using the configured encoding or index width. / PMXIndexReader::operator() 使用已配置的编码或索引宽度读取或跳过 PMX 字段。",
+      "tags": [
+        "serialization",
+        "pmx",
+        "utility"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/utils/pmx_util.hpp:PMXUIndexReader::PMXUIndexReader",
+      "type": "function",
+      "name": "PMXUIndexReader::PMXUIndexReader",
+      "filePath": "source/utils/pmx_util.hpp",
+      "lineRange": [
+        123,
+        126
+      ],
+      "summary": "PMXUIndexReader::PMXUIndexReader initializes a helper used by PMX binary field reading. / PMXUIndexReader::PMXUIndexReader 初始化PMX 二进制字段读取所使用的辅助对象。",
+      "tags": [
+        "serialization",
+        "pmx",
+        "utility"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/utils/pmx_util.hpp:PMXUIndexReader::SetIndexSize",
+      "type": "function",
+      "name": "PMXUIndexReader::SetIndexSize",
+      "filePath": "source/utils/pmx_util.hpp",
+      "lineRange": [
+        127,
+        131
+      ],
+      "summary": "PMXUIndexReader::SetIndexSize sets index size for PMX binary field reading. / PMXUIndexReader::SetIndexSize 为PMX 二进制字段读取设置 index size。",
+      "tags": [
+        "serialization",
+        "pmx",
+        "utility"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/utils/pmx_util.hpp:PMXUIndexReader::operator()",
+      "type": "function",
+      "name": "PMXUIndexReader::operator()",
+      "filePath": "source/utils/pmx_util.hpp",
+      "lineRange": [
+        132,
+        135
+      ],
+      "summary": "PMXUIndexReader::operator() reads or skips a PMX field using the configured encoding or index width. / PMXUIndexReader::operator() 使用已配置的编码或索引宽度读取或跳过 PMX 字段。",
+      "tags": [
+        "serialization",
+        "pmx",
+        "utility"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/utils/pmx_util.hpp:PMXUIndexReader::operator()@136",
+      "type": "function",
+      "name": "PMXUIndexReader::operator()",
+      "filePath": "source/utils/pmx_util.hpp",
+      "lineRange": [
+        136,
+        167
+      ],
+      "summary": "PMXUIndexReader::operator() reads or skips a PMX field using the configured encoding or index width. / PMXUIndexReader::operator() 使用已配置的编码或索引宽度读取或跳过 PMX 字段。",
+      "tags": [
+        "serialization",
+        "pmx",
+        "utility"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:source/utils/time_util.hpp",
+      "type": "file",
+      "name": "time_util.hpp",
+      "filePath": "source/utils/time_util.hpp",
+      "summary": "Defines a hashable BaseTime subtype that preserves Cinema 4D time semantics while deriving a stable hash from numerator and denominator. / 定义可哈希的 BaseTime 子类型，在保留 Cinema 4D 时间语义的同时，根据分子与分母生成稳定哈希。",
+      "tags": [
+        "utility",
+        "time",
+        "hashing",
+        "data-model"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:source/utils/time_util.hpp:HashTime",
+      "type": "class",
+      "name": "HashTime",
+      "filePath": "source/utils/time_util.hpp",
+      "lineRange": [
+        23,
+        34
+      ],
+      "summary": "HashTime extends BaseTime with stable hash semantics for hashable Cinema 4D time values. / HashTime 为可哈希的 Cinema 4D 时间值为 BaseTime 扩展稳定哈希语义。",
+      "tags": [
+        "hashing",
+        "utility",
+        "time"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/utils/time_util.hpp:HashTime::GetHashCode",
+      "type": "function",
+      "name": "HashTime::GetHashCode",
+      "filePath": "source/utils/time_util.hpp",
+      "lineRange": [
+        26,
+        29
+      ],
+      "summary": "HashTime::GetHashCode retrieves hash code for hashable Cinema 4D time values. / HashTime::GetHashCode 为可哈希的 Cinema 4D 时间值获取 hash code。",
+      "tags": [
+        "hashing",
+        "utility",
+        "time"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:source/utils/unique_id_util.hpp",
+      "type": "file",
+      "name": "unique_id_util.hpp",
+      "filePath": "source/utils/unique_id_util.hpp",
+      "summary": "Provides helpers for reading, testing, and writing UTF-8 application-specific unique IDs on Cinema 4D BaseList2D objects. / 提供在 Cinema 4D BaseList2D 对象上读取、检测与写入 UTF-8 应用专用唯一 ID 的辅助工具。",
+      "tags": [
+        "utility",
+        "unique-id",
+        "cinema-4d",
+        "serialization"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:source/utils/unique_id_util.hpp:UniqueIDReader",
+      "type": "class",
+      "name": "UniqueIDReader",
+      "filePath": "source/utils/unique_id_util.hpp",
+      "lineRange": [
+        17,
+        38
+      ],
+      "summary": "UniqueIDReader encapsulates configured binary-field reading for Cinema 4D object unique IDs. / UniqueIDReader 为Cinema 4D 对象唯一 ID封装可配置的二进制字段读取。",
+      "tags": [
+        "serialization",
+        "utility",
+        "unique-id"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "class:source/utils/unique_id_util.hpp:UniqueIDWriter",
+      "type": "class",
+      "name": "UniqueIDWriter",
+      "filePath": "source/utils/unique_id_util.hpp",
+      "lineRange": [
+        40,
+        52
+      ],
+      "summary": "UniqueIDWriter encapsulates application-specific unique-ID access for Cinema 4D object unique IDs. / UniqueIDWriter 为Cinema 4D 对象唯一 ID封装应用专用唯一 ID 访问。",
+      "tags": [
+        "serialization",
+        "utility",
+        "unique-id"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/utils/unique_id_util.hpp:UniqueIDReader::GetUniqueIDString",
+      "type": "function",
+      "name": "UniqueIDReader::GetUniqueIDString",
+      "filePath": "source/utils/unique_id_util.hpp",
+      "lineRange": [
+        22,
+        30
+      ],
+      "summary": "UniqueIDReader::GetUniqueIDString retrieves unique id string for Cinema 4D object unique IDs. / UniqueIDReader::GetUniqueIDString 为Cinema 4D 对象唯一 ID获取 unique id string。",
+      "tags": [
+        "serialization",
+        "utility",
+        "unique-id"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/utils/unique_id_util.hpp:UniqueIDReader::FindUniqueID",
+      "type": "function",
+      "name": "UniqueIDReader::FindUniqueID",
+      "filePath": "source/utils/unique_id_util.hpp",
+      "lineRange": [
+        32,
+        37
+      ],
+      "summary": "UniqueIDReader::FindUniqueID finds unique id for Cinema 4D object unique IDs. / UniqueIDReader::FindUniqueID 为Cinema 4D 对象唯一 ID查找 unique id。",
+      "tags": [
+        "serialization",
+        "utility",
+        "unique-id"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/utils/unique_id_util.hpp:UniqueIDWriter::AddUniqueID",
+      "type": "function",
+      "name": "UniqueIDWriter::AddUniqueID",
+      "filePath": "source/utils/unique_id_util.hpp",
+      "lineRange": [
+        47,
+        51
+      ],
+      "summary": "UniqueIDWriter::AddUniqueID adds unique id for Cinema 4D object unique IDs. / UniqueIDWriter::AddUniqueID 为Cinema 4D 对象唯一 ID添加 unique id。",
+      "tags": [
+        "serialization",
+        "utility",
+        "unique-id"
+      ],
+      "complexity": "simple"
+    }
+  ],
+  "edges": [
+    {
+      "source": "file:source/utils/morph_ui_data_util.hpp",
+      "target": "class:source/utils/morph_ui_data_util.hpp:MorphUIData",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/utils/morph_ui_data_util.hpp",
+      "target": "class:source/utils/morph_ui_data_util.hpp:MorphUIData",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/utils/morph_ui_data_util.hpp",
+      "target": "function:source/utils/morph_ui_data_util.hpp:MorphUIData::MorphUIData",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/utils/morph_ui_data_util.hpp",
+      "target": "function:source/utils/morph_ui_data_util.hpp:MorphUIData::MorphUIData",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/utils/morph_ui_data_util.hpp",
+      "target": "function:source/utils/morph_ui_data_util.hpp:MorphUIData::Write",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/utils/morph_ui_data_util.hpp",
+      "target": "function:source/utils/morph_ui_data_util.hpp:MorphUIData::Write",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/utils/morph_ui_data_util.hpp",
+      "target": "function:source/utils/morph_ui_data_util.hpp:MorphUIData::Read",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/utils/morph_ui_data_util.hpp",
+      "target": "function:source/utils/morph_ui_data_util.hpp:MorphUIData::Read",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/utils/morph_ui_data_util.hpp",
+      "target": "function:source/utils/morph_ui_data_util.hpp:MorphUIData::Compare",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/utils/morph_ui_data_util.hpp",
+      "target": "function:source/utils/morph_ui_data_util.hpp:MorphUIData::Compare",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/utils/morph_ui_data_util.hpp",
+      "target": "function:source/utils/morph_ui_data_util.hpp:MorphUIData::SetStrength",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/utils/morph_ui_data_util.hpp",
+      "target": "function:source/utils/morph_ui_data_util.hpp:MorphUIData::SetStrength",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/utils/morph_ui_data_util.hpp",
+      "target": "function:source/utils/morph_ui_data_util.hpp:MorphUIData::GetStrength",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/utils/morph_ui_data_util.hpp",
+      "target": "function:source/utils/morph_ui_data_util.hpp:MorphUIData::GetStrength",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/utils/pmx_util.hpp",
+      "target": "class:source/utils/pmx_util.hpp:PMXTextReader",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/utils/pmx_util.hpp",
+      "target": "class:source/utils/pmx_util.hpp:PMXTextReader",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/utils/pmx_util.hpp",
+      "target": "class:source/utils/pmx_util.hpp:PMXIndexReader",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/utils/pmx_util.hpp",
+      "target": "class:source/utils/pmx_util.hpp:PMXIndexReader",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/utils/pmx_util.hpp",
+      "target": "class:source/utils/pmx_util.hpp:PMXUIndexReader",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/utils/pmx_util.hpp",
+      "target": "class:source/utils/pmx_util.hpp:PMXUIndexReader",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/utils/pmx_util.hpp",
+      "target": "function:source/utils/pmx_util.hpp:PMXTextReader::PMXTextReader",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/utils/pmx_util.hpp",
+      "target": "function:source/utils/pmx_util.hpp:PMXTextReader::PMXTextReader",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/utils/pmx_util.hpp",
+      "target": "function:source/utils/pmx_util.hpp:PMXTextReader::SetTextEncoding",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/utils/pmx_util.hpp",
+      "target": "function:source/utils/pmx_util.hpp:PMXTextReader::SetTextEncoding",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/utils/pmx_util.hpp",
+      "target": "function:source/utils/pmx_util.hpp:PMXTextReader::operator()",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/utils/pmx_util.hpp",
+      "target": "function:source/utils/pmx_util.hpp:PMXTextReader::operator()",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/utils/pmx_util.hpp",
+      "target": "function:source/utils/pmx_util.hpp:PMXTextReader::operator()@38",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/utils/pmx_util.hpp",
+      "target": "function:source/utils/pmx_util.hpp:PMXTextReader::operator()@38",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/utils/pmx_util.hpp",
+      "target": "function:source/utils/pmx_util.hpp:PMXIndexReader::PMXIndexReader",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/utils/pmx_util.hpp",
+      "target": "function:source/utils/pmx_util.hpp:PMXIndexReader::PMXIndexReader",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/utils/pmx_util.hpp",
+      "target": "function:source/utils/pmx_util.hpp:PMXIndexReader::SetIndexSize",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/utils/pmx_util.hpp",
+      "target": "function:source/utils/pmx_util.hpp:PMXIndexReader::SetIndexSize",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/utils/pmx_util.hpp",
+      "target": "function:source/utils/pmx_util.hpp:PMXIndexReader::operator()",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/utils/pmx_util.hpp",
+      "target": "function:source/utils/pmx_util.hpp:PMXIndexReader::operator()",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/utils/pmx_util.hpp",
+      "target": "function:source/utils/pmx_util.hpp:PMXIndexReader::operator()@85",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/utils/pmx_util.hpp",
+      "target": "function:source/utils/pmx_util.hpp:PMXIndexReader::operator()@85",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/utils/pmx_util.hpp",
+      "target": "function:source/utils/pmx_util.hpp:PMXUIndexReader::PMXUIndexReader",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/utils/pmx_util.hpp",
+      "target": "function:source/utils/pmx_util.hpp:PMXUIndexReader::PMXUIndexReader",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/utils/pmx_util.hpp",
+      "target": "function:source/utils/pmx_util.hpp:PMXUIndexReader::SetIndexSize",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/utils/pmx_util.hpp",
+      "target": "function:source/utils/pmx_util.hpp:PMXUIndexReader::SetIndexSize",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/utils/pmx_util.hpp",
+      "target": "function:source/utils/pmx_util.hpp:PMXUIndexReader::operator()",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/utils/pmx_util.hpp",
+      "target": "function:source/utils/pmx_util.hpp:PMXUIndexReader::operator()",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/utils/pmx_util.hpp",
+      "target": "function:source/utils/pmx_util.hpp:PMXUIndexReader::operator()@136",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/utils/pmx_util.hpp",
+      "target": "function:source/utils/pmx_util.hpp:PMXUIndexReader::operator()@136",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/utils/time_util.hpp",
+      "target": "class:source/utils/time_util.hpp:HashTime",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/utils/time_util.hpp",
+      "target": "class:source/utils/time_util.hpp:HashTime",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/utils/time_util.hpp",
+      "target": "function:source/utils/time_util.hpp:HashTime::GetHashCode",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/utils/time_util.hpp",
+      "target": "function:source/utils/time_util.hpp:HashTime::GetHashCode",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/utils/unique_id_util.hpp",
+      "target": "class:source/utils/unique_id_util.hpp:UniqueIDReader",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/utils/unique_id_util.hpp",
+      "target": "class:source/utils/unique_id_util.hpp:UniqueIDReader",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/utils/unique_id_util.hpp",
+      "target": "class:source/utils/unique_id_util.hpp:UniqueIDWriter",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/utils/unique_id_util.hpp",
+      "target": "class:source/utils/unique_id_util.hpp:UniqueIDWriter",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/utils/unique_id_util.hpp",
+      "target": "function:source/utils/unique_id_util.hpp:UniqueIDReader::GetUniqueIDString",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/utils/unique_id_util.hpp",
+      "target": "function:source/utils/unique_id_util.hpp:UniqueIDReader::GetUniqueIDString",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/utils/unique_id_util.hpp",
+      "target": "function:source/utils/unique_id_util.hpp:UniqueIDReader::FindUniqueID",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/utils/unique_id_util.hpp",
+      "target": "function:source/utils/unique_id_util.hpp:UniqueIDReader::FindUniqueID",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/utils/unique_id_util.hpp",
+      "target": "function:source/utils/unique_id_util.hpp:UniqueIDWriter::AddUniqueID",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/utils/unique_id_util.hpp",
+      "target": "function:source/utils/unique_id_util.hpp:UniqueIDWriter::AddUniqueID",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    }
+  ]
+}

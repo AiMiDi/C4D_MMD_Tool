@@ -1,0 +1,35 @@
+{
+  "projectRoot": "E:/code/C4D_MMD_Tool",
+  "batchFiles": [
+    {
+      "path": ".github/prompts/opsx-apply.prompt.md",
+      "language": "markdown",
+      "sizeLines": 149,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".github/prompts/opsx-archive.prompt.md",
+      "language": "markdown",
+      "sizeLines": 154,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".github/prompts/opsx-explore.prompt.md",
+      "language": "markdown",
+      "sizeLines": 170,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".github/prompts/opsx-propose.prompt.md",
+      "language": "markdown",
+      "sizeLines": 103,
+      "fileCategory": "docs"
+    }
+  ],
+  "batchImportData": {
+    ".github/prompts/opsx-apply.prompt.md": [],
+    ".github/prompts/opsx-archive.prompt.md": [],
+    ".github/prompts/opsx-explore.prompt.md": [],
+    ".github/prompts/opsx-propose.prompt.md": []
+  }
+}

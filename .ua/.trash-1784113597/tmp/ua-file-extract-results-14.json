@@ -1,0 +1,247 @@
+{
+  "scriptCompleted": true,
+  "filesAnalyzed": 25,
+  "filesSkipped": [],
+  "results": [
+    {
+      "path": "cmake/sdk/base_settings/warnings.clang.cmake",
+      "language": "cmake",
+      "fileCategory": "code",
+      "totalLines": 143,
+      "nonEmptyLines": 136,
+      "metrics": {}
+    },
+    {
+      "path": "cmake/sdk/base_settings/warnings.gcc.cmake",
+      "language": "cmake",
+      "fileCategory": "code",
+      "totalLines": 23,
+      "nonEmptyLines": 20,
+      "metrics": {}
+    },
+    {
+      "path": "cmake/sdk/base_settings/warnings.msvc.cmake",
+      "language": "cmake",
+      "fileCategory": "code",
+      "totalLines": 83,
+      "nonEmptyLines": 81,
+      "metrics": {}
+    },
+    {
+      "path": "cmake/sdk/commands/create_directory_symlink.cmake",
+      "language": "cmake",
+      "fileCategory": "code",
+      "totalLines": 11,
+      "nonEmptyLines": 8,
+      "metrics": {}
+    },
+    {
+      "path": "cmake/sdk/commands/update_filelist.cmake",
+      "language": "cmake",
+      "fileCategory": "code",
+      "totalLines": 20,
+      "nonEmptyLines": 16,
+      "metrics": {}
+    },
+    {
+      "path": "cmake/sdk/sdk_compiler_helper.cmake",
+      "language": "cmake",
+      "fileCategory": "code",
+      "totalLines": 458,
+      "nonEmptyLines": 375,
+      "metrics": {}
+    },
+    {
+      "path": "cmake/sdk/sdk_library_template.cmake",
+      "language": "cmake",
+      "fileCategory": "code",
+      "totalLines": 100,
+      "nonEmptyLines": 86,
+      "metrics": {}
+    },
+    {
+      "path": "cmake/sdk/sdk_targets.cmake",
+      "language": "cmake",
+      "fileCategory": "code",
+      "totalLines": 1214,
+      "nonEmptyLines": 978,
+      "metrics": {}
+    },
+    {
+      "path": "cmake/sdk/sdk_update_projects.cmake",
+      "language": "cmake",
+      "fileCategory": "code",
+      "totalLines": 1151,
+      "nonEmptyLines": 943,
+      "metrics": {}
+    },
+    {
+      "path": "dependency/CMakeLists.txt",
+      "language": "txt",
+      "fileCategory": "docs",
+      "totalLines": 44,
+      "nonEmptyLines": 38,
+      "metrics": {}
+    },
+    {
+      "path": "res/R20-S24/c4d_symbols.h",
+      "language": "c",
+      "fileCategory": "code",
+      "totalLines": 335,
+      "nonEmptyLines": 308,
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "res/R20-S24/description/OMMDBoneManager.h",
+      "language": "c",
+      "fileCategory": "code",
+      "totalLines": 22,
+      "nonEmptyLines": 21,
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "res/R20-S24/description/OMMDBoneManager.res",
+      "language": "res",
+      "fileCategory": "code",
+      "totalLines": 45,
+      "nonEmptyLines": 38,
+      "metrics": {}
+    },
+    {
+      "path": "res/R20-S24/description/OMMDCamera.h",
+      "language": "c",
+      "fileCategory": "code",
+      "totalLines": 8,
+      "nonEmptyLines": 6,
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "res/R20-S24/description/OMMDCamera.res",
+      "language": "res",
+      "fileCategory": "code",
+      "totalLines": 4,
+      "nonEmptyLines": 4,
+      "metrics": {}
+    },
+    {
+      "path": "res/R20-S24/description/OMMDJoint.h",
+      "language": "c",
+      "fileCategory": "code",
+      "totalLines": 71,
+      "nonEmptyLines": 63,
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "res/R20-S24/description/OMMDJoint.res",
+      "language": "res",
+      "fileCategory": "code",
+      "totalLines": 352,
+      "nonEmptyLines": 289,
+      "metrics": {}
+    },
+    {
+      "path": "res/R20-S24/description/OMMDJointManager.h",
+      "language": "c",
+      "fileCategory": "code",
+      "totalLines": 17,
+      "nonEmptyLines": 15,
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "res/R20-S24/description/OMMDJointManager.res",
+      "language": "res",
+      "fileCategory": "code",
+      "totalLines": 37,
+      "nonEmptyLines": 31,
+      "metrics": {}
+    },
+    {
+      "path": "res/R20-S24/description/OMMDMeshManager.h",
+      "language": "c",
+      "fileCategory": "code",
+      "totalLines": 19,
+      "nonEmptyLines": 18,
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "res/R20-S24/description/OMMDMeshManager.res",
+      "language": "res",
+      "fileCategory": "code",
+      "totalLines": 37,
+      "nonEmptyLines": 31,
+      "metrics": {}
+    },
+    {
+      "path": "res/R20-S24/description/OMMDModelManager.h",
+      "language": "c",
+      "fileCategory": "code",
+      "totalLines": 158,
+      "nonEmptyLines": 156,
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "res/R20-S24/description/OMMDModelManager.res",
+      "language": "res",
+      "fileCategory": "code",
+      "totalLines": 594,
+      "nonEmptyLines": 486,
+      "metrics": {}
+    },
+    {
+      "path": "res/R20-S24/description/OMMDRigid.h",
+      "language": "c",
+      "fileCategory": "code",
+      "totalLines": 85,
+      "nonEmptyLines": 76,
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "res/R20-S24/description/OMMDRigid.res",
+      "language": "res",
+      "fileCategory": "code",
+      "totalLines": 290,
+      "nonEmptyLines": 237,
+      "metrics": {}
+    }
+  ]
+}

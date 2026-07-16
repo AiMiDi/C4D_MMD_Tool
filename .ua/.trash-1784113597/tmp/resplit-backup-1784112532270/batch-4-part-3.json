@@ -1,0 +1,4271 @@
+{
+  "nodes": [
+    {
+      "id": "file:source/module/tools/tag/mmd_bone.cpp",
+      "type": "file",
+      "name": "mmd_bone.cpp",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "summary": "Implements the MMD bone tag runtime, including bind-state persistence, append transforms, layered IK evaluation, animation interpolation, and physics handoff. / 实现 MMD 骨骼标签运行时，包括绑定状态持久化、附加变换、分层 IK 求解、动画插值与物理交接。",
+      "tags": [
+        "tag-plugin",
+        "bone-animation",
+        "ik",
+        "physics",
+        "runtime"
+      ],
+      "complexity": "complex",
+      "languageNotes": "C++ integrates Cinema 4D SDK lifecycle hooks with explicit PMX/VMD conversion and runtime state management. / C++ 将 Cinema 4D SDK 生命周期钩子与显式 PMX/VMD 转换及运行时状态管理结合。"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:NormalizeBoneMode",
+      "type": "function",
+      "name": "NormalizeBoneMode",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        39,
+        43
+      ],
+      "summary": "NormalizeBoneMode normalizes bone mode for bone-tag animation, IK, and physics runtime. / NormalizeBoneMode 为骨骼标签动画、IK 与物理运行时规范化 bone mode。",
+      "tags": [
+        "tag-plugin",
+        "bone-animation",
+        "ik"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:ClampSplineCoordinate",
+      "type": "function",
+      "name": "ClampSplineCoordinate",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        84,
+        87
+      ],
+      "summary": "ClampSplineCoordinate implements a focused operation in bone-tag animation, IK, and physics runtime. / ClampSplineCoordinate 实现骨骼标签动画、IK 与物理运行时中的专用操作。",
+      "tags": [
+        "tag-plugin",
+        "bone-animation",
+        "ik"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:NormalizeQuaternion",
+      "type": "function",
+      "name": "NormalizeQuaternion",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        89,
+        102
+      ],
+      "summary": "NormalizeQuaternion normalizes quaternion for bone-tag animation, IK, and physics runtime. / NormalizeQuaternion 为骨骼标签动画、IK 与物理运行时规范化 quaternion。",
+      "tags": [
+        "tag-plugin",
+        "bone-animation",
+        "ik"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:EulerToQuaternionArray",
+      "type": "function",
+      "name": "EulerToQuaternionArray",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        104,
+        113
+      ],
+      "summary": "EulerToQuaternionArray implements a focused operation in bone-tag animation, IK, and physics runtime. / EulerToQuaternionArray 实现骨骼标签动画、IK 与物理运行时中的专用操作。",
+      "tags": [
+        "tag-plugin",
+        "bone-animation",
+        "ik"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:QuaternionToEulerVector",
+      "type": "function",
+      "name": "QuaternionToEulerVector",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        115,
+        119
+      ],
+      "summary": "QuaternionToEulerVector implements a focused operation in bone-tag animation, IK, and physics runtime. / QuaternionToEulerVector 实现骨骼标签动画、IK 与物理运行时中的专用操作。",
+      "tags": [
+        "tag-plugin",
+        "bone-animation",
+        "ik"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:ToEigenQuaternion",
+      "type": "function",
+      "name": "ToEigenQuaternion",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        121,
+        124
+      ],
+      "summary": "ToEigenQuaternion implements a focused operation in bone-tag animation, IK, and physics runtime. / ToEigenQuaternion 实现骨骼标签动画、IK 与物理运行时中的专用操作。",
+      "tags": [
+        "tag-plugin",
+        "bone-animation",
+        "ik"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:ToQuaternionArray",
+      "type": "function",
+      "name": "ToQuaternionArray",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        126,
+        135
+      ],
+      "summary": "ToQuaternionArray implements a focused operation in bone-tag animation, IK, and physics runtime. / ToQuaternionArray 实现骨骼标签动画、IK 与物理运行时中的专用操作。",
+      "tags": [
+        "tag-plugin",
+        "bone-animation",
+        "ik"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:MarkBoneTransformDirty",
+      "type": "function",
+      "name": "MarkBoneTransformDirty",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        137,
+        145
+      ],
+      "summary": "MarkBoneTransformDirty marks bone transform dirty for bone-tag animation, IK, and physics runtime. / MarkBoneTransformDirty 为骨骼标签动画、IK 与物理运行时标记 bone transform dirty。",
+      "tags": [
+        "tag-plugin",
+        "bone-animation",
+        "ik"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:SetObjectDisplay",
+      "type": "function",
+      "name": "SetObjectDisplay",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        188,
+        196
+      ],
+      "summary": "SetObjectDisplay sets object display for bone-tag animation, IK, and physics runtime. / SetObjectDisplay 为骨骼标签动画、IK 与物理运行时设置 object display。",
+      "tags": [
+        "tag-plugin",
+        "bone-animation",
+        "ik"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:SetJointVisualDisplay",
+      "type": "function",
+      "name": "SetJointVisualDisplay",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        198,
+        212
+      ],
+      "summary": "SetJointVisualDisplay sets joint visual display for bone-tag animation, IK, and physics runtime. / SetJointVisualDisplay 为骨骼标签动画、IK 与物理运行时设置 joint visual display。",
+      "tags": [
+        "physics",
+        "tag-plugin",
+        "bone-animation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:DescItemHasParent",
+      "type": "function",
+      "name": "DescItemHasParent",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        223,
+        227
+      ],
+      "summary": "DescItemHasParent implements a focused operation in bone-tag animation, IK, and physics runtime. / DescItemHasParent 实现骨骼标签动画、IK 与物理运行时中的专用操作。",
+      "tags": [
+        "tag-plugin",
+        "bone-animation",
+        "ik"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:CollectStandaloneIKChainEntries",
+      "type": "function",
+      "name": "CollectStandaloneIKChainEntries",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        229,
+        439
+      ],
+      "summary": "CollectStandaloneIKChainEntries collects standalone ik chain entries for bone-tag animation, IK, and physics runtime. / CollectStandaloneIKChainEntries 为骨骼标签动画、IK 与物理运行时收集 standalone ik chain entries。",
+      "tags": [
+        "ik",
+        "tag-plugin",
+        "bone-animation"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:ComputeBoneExecutionPriorityValue",
+      "type": "function",
+      "name": "ComputeBoneExecutionPriorityValue",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        441,
+        446
+      ],
+      "summary": "ComputeBoneExecutionPriorityValue computes bone execution priority value for bone-tag animation, IK, and physics runtime. / ComputeBoneExecutionPriorityValue 为骨骼标签动画、IK 与物理运行时计算 bone execution priority value。",
+      "tags": [
+        "tag-plugin",
+        "bone-animation",
+        "ik"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:CreateDefaultAnimationSplineData",
+      "type": "function",
+      "name": "CreateDefaultAnimationSplineData",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        448,
+        469
+      ],
+      "summary": "CreateDefaultAnimationSplineData creates default animation spline data for bone-tag animation, IK, and physics runtime. / CreateDefaultAnimationSplineData 为骨骼标签动画、IK 与物理运行时创建 default animation spline data。",
+      "tags": [
+        "vmd-animation",
+        "tag-plugin",
+        "bone-animation"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:ReadBezierFromSpline",
+      "type": "function",
+      "name": "ReadBezierFromSpline",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        471,
+        489
+      ],
+      "summary": "ReadBezierFromSpline reads bezier from spline for bone-tag animation, IK, and physics runtime. / ReadBezierFromSpline 为骨骼标签动画、IK 与物理运行时读取 bezier from spline。",
+      "tags": [
+        "serialization",
+        "tag-plugin",
+        "bone-animation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:WriteBezierToSpline",
+      "type": "function",
+      "name": "WriteBezierToSpline",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        491,
+        512
+      ],
+      "summary": "WriteBezierToSpline writes bezier to spline for bone-tag animation, IK, and physics runtime. / WriteBezierToSpline 为骨骼标签动画、IK 与物理运行时写入 bezier to spline。",
+      "tags": [
+        "serialization",
+        "tag-plugin",
+        "bone-animation"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:AssignBezierChannel",
+      "type": "function",
+      "name": "AssignBezierChannel",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        531,
+        555
+      ],
+      "summary": "AssignBezierChannel implements a focused operation in bone-tag animation, IK, and physics runtime. / AssignBezierChannel 实现骨骼标签动画、IK 与物理运行时中的专用操作。",
+      "tags": [
+        "tag-plugin",
+        "bone-animation",
+        "ik"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:ToLibMMDBezier",
+      "type": "function",
+      "name": "ToLibMMDBezier",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        557,
+        563
+      ],
+      "summary": "ToLibMMDBezier implements a focused operation in bone-tag animation, IK, and physics runtime. / ToLibMMDBezier 实现骨骼标签动画、IK 与物理运行时中的专用操作。",
+      "tags": [
+        "tag-plugin",
+        "bone-animation",
+        "ik"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:ToLibMMDKeyframe",
+      "type": "function",
+      "name": "ToLibMMDKeyframe",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        565,
+        576
+      ],
+      "summary": "ToLibMMDKeyframe implements a focused operation in bone-tag animation, IK, and physics runtime. / ToLibMMDKeyframe 实现骨骼标签动画、IK 与物理运行时中的专用操作。",
+      "tags": [
+        "vmd-animation",
+        "tag-plugin",
+        "bone-animation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:BuildAnimationMatrix",
+      "type": "function",
+      "name": "BuildAnimationMatrix",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        578,
+        587
+      ],
+      "summary": "BuildAnimationMatrix builds animation matrix for bone-tag animation, IK, and physics runtime. / BuildAnimationMatrix 为骨骼标签动画、IK 与物理运行时构建 animation matrix。",
+      "tags": [
+        "vmd-animation",
+        "ui",
+        "tag-plugin"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:GetAnimationFrameFromDocument",
+      "type": "function",
+      "name": "GetAnimationFrameFromDocument",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        589,
+        592
+      ],
+      "summary": "GetAnimationFrameFromDocument retrieves animation frame from document for bone-tag animation, IK, and physics runtime. / GetAnimationFrameFromDocument 为骨骼标签动画、IK 与物理运行时获取 animation frame from document。",
+      "tags": [
+        "vmd-animation",
+        "tag-plugin",
+        "bone-animation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:GetDocumentTimeOrInvalid",
+      "type": "function",
+      "name": "GetDocumentTimeOrInvalid",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        594,
+        597
+      ],
+      "summary": "GetDocumentTimeOrInvalid retrieves document time or invalid for bone-tag animation, IK, and physics runtime. / GetDocumentTimeOrInvalid 为骨骼标签动画、IK 与物理运行时获取 document time or invalid。",
+      "tags": [
+        "tag-plugin",
+        "bone-animation",
+        "ik"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:GetAnimationFrameFromDocumentContinuous",
+      "type": "function",
+      "name": "GetAnimationFrameFromDocumentContinuous",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        599,
+        605
+      ],
+      "summary": "GetAnimationFrameFromDocumentContinuous retrieves animation frame from document continuous for bone-tag animation, IK, and physics runtime. / GetAnimationFrameFromDocumentContinuous 为骨骼标签动画、IK 与物理运行时获取 animation frame from document continuous。",
+      "tags": [
+        "vmd-animation",
+        "tag-plugin",
+        "bone-animation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:GetAnimationFrameTime",
+      "type": "function",
+      "name": "GetAnimationFrameTime",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        607,
+        610
+      ],
+      "summary": "GetAnimationFrameTime retrieves animation frame time for bone-tag animation, IK, and physics runtime. / GetAnimationFrameTime 为骨骼标签动画、IK 与物理运行时获取 animation frame time。",
+      "tags": [
+        "vmd-animation",
+        "tag-plugin",
+        "bone-animation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:MatrixToEigen",
+      "type": "function",
+      "name": "MatrixToEigen",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        612,
+        628
+      ],
+      "summary": "MatrixToEigen implements a focused operation in bone-tag animation, IK, and physics runtime. / MatrixToEigen 实现骨骼标签动画、IK 与物理运行时中的专用操作。",
+      "tags": [
+        "tag-plugin",
+        "bone-animation",
+        "ik"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:NormalizeMatrixBasis",
+      "type": "function",
+      "name": "NormalizeMatrixBasis",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        630,
+        635
+      ],
+      "summary": "NormalizeMatrixBasis normalizes matrix basis for bone-tag animation, IK, and physics runtime. / NormalizeMatrixBasis 为骨骼标签动画、IK 与物理运行时规范化 matrix basis。",
+      "tags": [
+        "tag-plugin",
+        "bone-animation",
+        "ik"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:EigenToMatrix",
+      "type": "function",
+      "name": "EigenToMatrix",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        637,
+        645
+      ],
+      "summary": "EigenToMatrix implements a focused operation in bone-tag animation, IK, and physics runtime. / EigenToMatrix 实现骨骼标签动画、IK 与物理运行时中的专用操作。",
+      "tags": [
+        "tag-plugin",
+        "bone-animation",
+        "ik"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:RelativeMatrixFromTranslationRotation",
+      "type": "function",
+      "name": "RelativeMatrixFromTranslationRotation",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        647,
+        656
+      ],
+      "summary": "RelativeMatrixFromTranslationRotation implements a focused operation in bone-tag animation, IK, and physics runtime. / RelativeMatrixFromTranslationRotation 实现骨骼标签动画、IK 与物理运行时中的专用操作。",
+      "tags": [
+        "tag-plugin",
+        "bone-animation",
+        "ik"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:ExtractRotation",
+      "type": "function",
+      "name": "ExtractRotation",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        658,
+        661
+      ],
+      "summary": "ExtractRotation implements a focused operation in bone-tag animation, IK, and physics runtime. / ExtractRotation 实现骨骼标签动画、IK 与物理运行时中的专用操作。",
+      "tags": [
+        "tag-plugin",
+        "bone-animation",
+        "ik"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:C4DIKChainNodeAdapter::SetupFromBone",
+      "type": "function",
+      "name": "C4DIKChainNodeAdapter::SetupFromBone",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        665,
+        679
+      ],
+      "summary": "C4DIKChainNodeAdapter::SetupFromBone sets up from bone for bone-tag animation, IK, and physics runtime. / C4DIKChainNodeAdapter::SetupFromBone 为骨骼标签动画、IK 与物理运行时设置 up from bone。",
+      "tags": [
+        "tag-plugin",
+        "bone-animation",
+        "ik"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:C4DIKChainNodeAdapter::SetParentAdapter",
+      "type": "function",
+      "name": "C4DIKChainNodeAdapter::SetParentAdapter",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        681,
+        684
+      ],
+      "summary": "C4DIKChainNodeAdapter::SetParentAdapter sets parent adapter for bone-tag animation, IK, and physics runtime. / C4DIKChainNodeAdapter::SetParentAdapter 为骨骼标签动画、IK 与物理运行时设置 parent adapter。",
+      "tags": [
+        "tag-plugin",
+        "bone-animation",
+        "ik"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:C4DIKChainNodeAdapter::ClearChildren",
+      "type": "function",
+      "name": "C4DIKChainNodeAdapter::ClearChildren",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        686,
+        689
+      ],
+      "summary": "C4DIKChainNodeAdapter::ClearChildren clears children for bone-tag animation, IK, and physics runtime. / C4DIKChainNodeAdapter::ClearChildren 为骨骼标签动画、IK 与物理运行时清除 children。",
+      "tags": [
+        "tag-plugin",
+        "bone-animation",
+        "ik"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:C4DIKChainNodeAdapter::AddChildAdapter",
+      "type": "function",
+      "name": "C4DIKChainNodeAdapter::AddChildAdapter",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        691,
+        695
+      ],
+      "summary": "C4DIKChainNodeAdapter::AddChildAdapter adds child adapter for bone-tag animation, IK, and physics runtime. / C4DIKChainNodeAdapter::AddChildAdapter 为骨骼标签动画、IK 与物理运行时添加 child adapter。",
+      "tags": [
+        "tag-plugin",
+        "bone-animation",
+        "ik"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:C4DIKChainNodeAdapter::UpdateInitialGlobalTransform",
+      "type": "function",
+      "name": "C4DIKChainNodeAdapter::UpdateInitialGlobalTransform",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        697,
+        721
+      ],
+      "summary": "C4DIKChainNodeAdapter::UpdateInitialGlobalTransform updates initial global transform for bone-tag animation, IK, and physics runtime. / C4DIKChainNodeAdapter::UpdateInitialGlobalTransform 为骨骼标签动画、IK 与物理运行时更新 initial global transform。",
+      "tags": [
+        "tag-plugin",
+        "bone-animation",
+        "ik"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:C4DIKChainNodeAdapter::ResetCurrentTransformToInitial",
+      "type": "function",
+      "name": "C4DIKChainNodeAdapter::ResetCurrentTransformToInitial",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        723,
+        743
+      ],
+      "summary": "C4DIKChainNodeAdapter::ResetCurrentTransformToInitial resets current transform to initial for bone-tag animation, IK, and physics runtime. / C4DIKChainNodeAdapter::ResetCurrentTransformToInitial 为骨骼标签动画、IK 与物理运行时重置 current transform to initial。",
+      "tags": [
+        "tag-plugin",
+        "bone-animation",
+        "ik"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:C4DIKChainNodeAdapter::SyncCurrentTransformsFromBoneObject",
+      "type": "function",
+      "name": "C4DIKChainNodeAdapter::SyncCurrentTransformsFromBoneObject",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        745,
+        769
+      ],
+      "summary": "C4DIKChainNodeAdapter::SyncCurrentTransformsFromBoneObject synchronizes current transforms from bone object for bone-tag animation, IK, and physics runtime. / C4DIKChainNodeAdapter::SyncCurrentTransformsFromBoneObject 为骨骼标签动画、IK 与物理运行时同步 current transforms from bone object。",
+      "tags": [
+        "tag-plugin",
+        "bone-animation",
+        "ik"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:C4DIKChainNodeAdapter::GetCurrentRelativeState",
+      "type": "function",
+      "name": "C4DIKChainNodeAdapter::GetCurrentRelativeState",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        771,
+        777
+      ],
+      "summary": "C4DIKChainNodeAdapter::GetCurrentRelativeState retrieves current relative state for bone-tag animation, IK, and physics runtime. / C4DIKChainNodeAdapter::GetCurrentRelativeState 为骨骼标签动画、IK 与物理运行时获取 current relative state。",
+      "tags": [
+        "tag-plugin",
+        "bone-animation",
+        "ik"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:C4DIKChainNodeAdapter::ApplyLocalToBoneObject",
+      "type": "function",
+      "name": "C4DIKChainNodeAdapter::ApplyLocalToBoneObject",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        779,
+        790
+      ],
+      "summary": "C4DIKChainNodeAdapter::ApplyLocalToBoneObject applies local to bone object for bone-tag animation, IK, and physics runtime. / C4DIKChainNodeAdapter::ApplyLocalToBoneObject 为骨骼标签动画、IK 与物理运行时应用 local to bone object。",
+      "tags": [
+        "runtime",
+        "tag-plugin",
+        "bone-animation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:C4DIKChainNodeAdapter::GetBoneIndex",
+      "type": "function",
+      "name": "C4DIKChainNodeAdapter::GetBoneIndex",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        792,
+        795
+      ],
+      "summary": "C4DIKChainNodeAdapter::GetBoneIndex retrieves bone index for bone-tag animation, IK, and physics runtime. / C4DIKChainNodeAdapter::GetBoneIndex 为骨骼标签动画、IK 与物理运行时获取 bone index。",
+      "tags": [
+        "tag-plugin",
+        "bone-animation",
+        "ik"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:C4DIKChainNodeAdapter::SetGlobalTransform",
+      "type": "function",
+      "name": "C4DIKChainNodeAdapter::SetGlobalTransform",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        797,
+        804
+      ],
+      "summary": "C4DIKChainNodeAdapter::SetGlobalTransform sets global transform for bone-tag animation, IK, and physics runtime. / C4DIKChainNodeAdapter::SetGlobalTransform 为骨骼标签动画、IK 与物理运行时设置 global transform。",
+      "tags": [
+        "tag-plugin",
+        "bone-animation",
+        "ik"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:C4DIKChainNodeAdapter::SyncLocalTransformFromGlobal",
+      "type": "function",
+      "name": "C4DIKChainNodeAdapter::SyncLocalTransformFromGlobal",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        806,
+        812
+      ],
+      "summary": "C4DIKChainNodeAdapter::SyncLocalTransformFromGlobal synchronizes local transform from global for bone-tag animation, IK, and physics runtime. / C4DIKChainNodeAdapter::SyncLocalTransformFromGlobal 为骨骼标签动画、IK 与物理运行时同步 local transform from global。",
+      "tags": [
+        "tag-plugin",
+        "bone-animation",
+        "ik"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:C4DIKChainNodeAdapter::UpdateLocalTransform",
+      "type": "function",
+      "name": "C4DIKChainNodeAdapter::UpdateLocalTransform",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        814,
+        824
+      ],
+      "summary": "C4DIKChainNodeAdapter::UpdateLocalTransform updates local transform for bone-tag animation, IK, and physics runtime. / C4DIKChainNodeAdapter::UpdateLocalTransform 为骨骼标签动画、IK 与物理运行时更新 local transform。",
+      "tags": [
+        "tag-plugin",
+        "bone-animation",
+        "ik"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:C4DIKChainNodeAdapter::UpdateGlobalTransform",
+      "type": "function",
+      "name": "C4DIKChainNodeAdapter::UpdateGlobalTransform",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        826,
+        845
+      ],
+      "summary": "C4DIKChainNodeAdapter::UpdateGlobalTransform updates global transform for bone-tag animation, IK, and physics runtime. / C4DIKChainNodeAdapter::UpdateGlobalTransform 为骨骼标签动画、IK 与物理运行时更新 global transform。",
+      "tags": [
+        "tag-plugin",
+        "bone-animation",
+        "ik"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:BoneMorphTagData::Write",
+      "type": "function",
+      "name": "BoneMorphTagData::Write",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        847,
+        858
+      ],
+      "summary": "BoneMorphTagData::Write writes persistent state for bone-tag animation, IK, and physics runtime. / BoneMorphTagData::Write 为骨骼标签动画、IK 与物理运行时写入持久状态。",
+      "tags": [
+        "serialization",
+        "tag-plugin",
+        "bone-animation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:BoneMorphTagData::Read",
+      "type": "function",
+      "name": "BoneMorphTagData::Read",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        860,
+        871
+      ],
+      "summary": "BoneMorphTagData::Read reads persistent state for bone-tag animation, IK, and physics runtime. / BoneMorphTagData::Read 为骨骼标签动画、IK 与物理运行时读取持久状态。",
+      "tags": [
+        "serialization",
+        "tag-plugin",
+        "bone-animation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:BoneAnimationBezierData::Write",
+      "type": "function",
+      "name": "BoneAnimationBezierData::Write",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        873,
+        880
+      ],
+      "summary": "BoneAnimationBezierData::Write writes persistent state for bone-tag animation, IK, and physics runtime. / BoneAnimationBezierData::Write 为骨骼标签动画、IK 与物理运行时写入持久状态。",
+      "tags": [
+        "serialization",
+        "tag-plugin",
+        "bone-animation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:BoneAnimationBezierData::Read",
+      "type": "function",
+      "name": "BoneAnimationBezierData::Read",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        882,
+        889
+      ],
+      "summary": "BoneAnimationBezierData::Read reads persistent state for bone-tag animation, IK, and physics runtime. / BoneAnimationBezierData::Read 为骨骼标签动画、IK 与物理运行时读取持久状态。",
+      "tags": [
+        "serialization",
+        "tag-plugin",
+        "bone-animation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:BoneAnimationKeyframeData::Write",
+      "type": "function",
+      "name": "BoneAnimationKeyframeData::Write",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        891,
+        904
+      ],
+      "summary": "BoneAnimationKeyframeData::Write writes persistent state for bone-tag animation, IK, and physics runtime. / BoneAnimationKeyframeData::Write 为骨骼标签动画、IK 与物理运行时写入持久状态。",
+      "tags": [
+        "serialization",
+        "tag-plugin",
+        "bone-animation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:BoneAnimationKeyframeData::Read",
+      "type": "function",
+      "name": "BoneAnimationKeyframeData::Read",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        906,
+        920
+      ],
+      "summary": "BoneAnimationKeyframeData::Read reads persistent state for bone-tag animation, IK, and physics runtime. / BoneAnimationKeyframeData::Read 为骨骼标签动画、IK 与物理运行时读取持久状态。",
+      "tags": [
+        "serialization",
+        "tag-plugin",
+        "bone-animation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:WriteStaticPoseAnimationFrames",
+      "type": "function",
+      "name": "WriteStaticPoseAnimationFrames",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        922,
+        946
+      ],
+      "summary": "WriteStaticPoseAnimationFrames writes static pose animation frames for bone-tag animation, IK, and physics runtime. / WriteStaticPoseAnimationFrames 为骨骼标签动画、IK 与物理运行时写入 static pose animation frames。",
+      "tags": [
+        "serialization",
+        "vmd-animation",
+        "tag-plugin"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:ReadStaticPoseAnimationFrames",
+      "type": "function",
+      "name": "ReadStaticPoseAnimationFrames",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        948,
+        973
+      ],
+      "summary": "ReadStaticPoseAnimationFrames reads static pose animation frames for bone-tag animation, IK, and physics runtime. / ReadStaticPoseAnimationFrames 为骨骼标签动画、IK 与物理运行时读取 static pose animation frames。",
+      "tags": [
+        "serialization",
+        "vmd-animation",
+        "tag-plugin"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:BoneAnimationSlotData::Write",
+      "type": "function",
+      "name": "BoneAnimationSlotData::Write",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        975,
+        978
+      ],
+      "summary": "BoneAnimationSlotData::Write writes persistent state for bone-tag animation, IK, and physics runtime. / BoneAnimationSlotData::Write 为骨骼标签动画、IK 与物理运行时写入持久状态。",
+      "tags": [
+        "serialization",
+        "tag-plugin",
+        "bone-animation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:BoneAnimationSlotData::Read",
+      "type": "function",
+      "name": "BoneAnimationSlotData::Read",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        980,
+        983
+      ],
+      "summary": "BoneAnimationSlotData::Read reads persistent state for bone-tag animation, IK, and physics runtime. / BoneAnimationSlotData::Read 为骨骼标签动画、IK 与物理运行时读取持久状态。",
+      "tags": [
+        "serialization",
+        "tag-plugin",
+        "bone-animation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:BoneAnimationSlotData::BoneAnimationSlotData",
+      "type": "function",
+      "name": "BoneAnimationSlotData::BoneAnimationSlotData",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        985,
+        988
+      ],
+      "summary": "BoneAnimationSlotData::BoneAnimationSlotData initializes an object used by bone-tag animation, IK, and physics runtime. / BoneAnimationSlotData::BoneAnimationSlotData 初始化骨骼标签动画、IK 与物理运行时所使用的对象。",
+      "tags": [
+        "vmd-animation",
+        "tag-plugin",
+        "bone-animation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::AddBoneMorph",
+      "type": "function",
+      "name": "MMDBoneTag::AddBoneMorph",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        1002,
+        1082
+      ],
+      "summary": "MMDBoneTag::AddBoneMorph adds bone morph for bone-tag animation, IK, and physics runtime. / MMDBoneTag::AddBoneMorph 为骨骼标签动画、IK 与物理运行时添加 bone morph。",
+      "tags": [
+        "morph",
+        "tag-plugin",
+        "bone-animation"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::SetBoneMorphTranslationNoCheck",
+      "type": "function",
+      "name": "MMDBoneTag::SetBoneMorphTranslationNoCheck",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        1084,
+        1089
+      ],
+      "summary": "MMDBoneTag::SetBoneMorphTranslationNoCheck sets bone morph translation no check for bone-tag animation, IK, and physics runtime. / MMDBoneTag::SetBoneMorphTranslationNoCheck 为骨骼标签动画、IK 与物理运行时设置 bone morph translation no check。",
+      "tags": [
+        "morph",
+        "tag-plugin",
+        "bone-animation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::SetBoneMorphRotationNoCheck",
+      "type": "function",
+      "name": "MMDBoneTag::SetBoneMorphRotationNoCheck",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        1091,
+        1096
+      ],
+      "summary": "MMDBoneTag::SetBoneMorphRotationNoCheck sets bone morph rotation no check for bone-tag animation, IK, and physics runtime. / MMDBoneTag::SetBoneMorphRotationNoCheck 为骨骼标签动画、IK 与物理运行时设置 bone morph rotation no check。",
+      "tags": [
+        "morph",
+        "tag-plugin",
+        "bone-animation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::CollectBoneMorphPmxExportEntries",
+      "type": "function",
+      "name": "MMDBoneTag::CollectBoneMorphPmxExportEntries",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        1098,
+        1122
+      ],
+      "summary": "MMDBoneTag::CollectBoneMorphPmxExportEntries collects bone morph pmx export entries for bone-tag animation, IK, and physics runtime. / MMDBoneTag::CollectBoneMorphPmxExportEntries 为骨骼标签动画、IK 与物理运行时收集 bone morph pmx export entries。",
+      "tags": [
+        "pmx",
+        "morph",
+        "export",
+        "tag-plugin"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::EnsureAnimationSlotCount",
+      "type": "function",
+      "name": "MMDBoneTag::EnsureAnimationSlotCount",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        1124,
+        1148
+      ],
+      "summary": "MMDBoneTag::EnsureAnimationSlotCount ensures animation slot count for bone-tag animation, IK, and physics runtime. / MMDBoneTag::EnsureAnimationSlotCount 为骨骼标签动画、IK 与物理运行时确保 animation slot count。",
+      "tags": [
+        "vmd-animation",
+        "tag-plugin",
+        "bone-animation"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::FindAnimationKeyframeIndex",
+      "type": "function",
+      "name": "MMDBoneTag::FindAnimationKeyframeIndex",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        1183,
+        1192
+      ],
+      "summary": "MMDBoneTag::FindAnimationKeyframeIndex finds animation keyframe index for bone-tag animation, IK, and physics runtime. / MMDBoneTag::FindAnimationKeyframeIndex 为骨骼标签动画、IK 与物理运行时查找 animation keyframe index。",
+      "tags": [
+        "vmd-animation",
+        "tag-plugin",
+        "bone-animation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::ResetEvaluatedAnimationState",
+      "type": "function",
+      "name": "MMDBoneTag::ResetEvaluatedAnimationState",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        1206,
+        1213
+      ],
+      "summary": "MMDBoneTag::ResetEvaluatedAnimationState resets evaluated animation state for bone-tag animation, IK, and physics runtime. / MMDBoneTag::ResetEvaluatedAnimationState 为骨骼标签动画、IK 与物理运行时重置 evaluated animation state。",
+      "tags": [
+        "vmd-animation",
+        "runtime",
+        "tag-plugin"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::InvalidateAnimationUICache",
+      "type": "function",
+      "name": "MMDBoneTag::InvalidateAnimationUICache",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        1215,
+        1219
+      ],
+      "summary": "MMDBoneTag::InvalidateAnimationUICache invalidates animation ui cache for bone-tag animation, IK, and physics runtime. / MMDBoneTag::InvalidateAnimationUICache 为骨骼标签动画、IK 与物理运行时使失效 animation ui cache。",
+      "tags": [
+        "vmd-animation",
+        "ui",
+        "tag-plugin"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::SetEvaluatedAnimationState",
+      "type": "function",
+      "name": "MMDBoneTag::SetEvaluatedAnimationState",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        1221,
+        1225
+      ],
+      "summary": "MMDBoneTag::SetEvaluatedAnimationState sets evaluated animation state for bone-tag animation, IK, and physics runtime. / MMDBoneTag::SetEvaluatedAnimationState 为骨骼标签动画、IK 与物理运行时设置 evaluated animation state。",
+      "tags": [
+        "vmd-animation",
+        "runtime",
+        "tag-plugin"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::GetEvaluatedAnimatedLocalState",
+      "type": "function",
+      "name": "MMDBoneTag::GetEvaluatedAnimatedLocalState",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        1227,
+        1232
+      ],
+      "summary": "MMDBoneTag::GetEvaluatedAnimatedLocalState retrieves evaluated animated local state for bone-tag animation, IK, and physics runtime. / MMDBoneTag::GetEvaluatedAnimatedLocalState 为骨骼标签动画、IK 与物理运行时获取 evaluated animated local state。",
+      "tags": [
+        "runtime",
+        "tag-plugin",
+        "bone-animation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::BeginPrephysicsFrame",
+      "type": "function",
+      "name": "MMDBoneTag::BeginPrephysicsFrame",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        1234,
+        1243
+      ],
+      "summary": "MMDBoneTag::BeginPrephysicsFrame begins prephysics frame for bone-tag animation, IK, and physics runtime. / MMDBoneTag::BeginPrephysicsFrame 为骨骼标签动画、IK 与物理运行时开始 prephysics frame。",
+      "tags": [
+        "physics",
+        "tag-plugin",
+        "bone-animation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::MarkPrephysicsSceneWriteSkipped",
+      "type": "function",
+      "name": "MMDBoneTag::MarkPrephysicsSceneWriteSkipped",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        1245,
+        1250
+      ],
+      "summary": "MMDBoneTag::MarkPrephysicsSceneWriteSkipped marks prephysics scene write skipped for bone-tag animation, IK, and physics runtime. / MMDBoneTag::MarkPrephysicsSceneWriteSkipped 为骨骼标签动画、IK 与物理运行时标记 prephysics scene write skipped。",
+      "tags": [
+        "serialization",
+        "physics",
+        "tag-plugin"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::ShouldSkipPrephysicsSceneWrite",
+      "type": "function",
+      "name": "MMDBoneTag::ShouldSkipPrephysicsSceneWrite",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        1252,
+        1255
+      ],
+      "summary": "MMDBoneTag::ShouldSkipPrephysicsSceneWrite decides skip prephysics scene write for bone-tag animation, IK, and physics runtime. / MMDBoneTag::ShouldSkipPrephysicsSceneWrite 为骨骼标签动画、IK 与物理运行时判定 skip prephysics scene write。",
+      "tags": [
+        "serialization",
+        "physics",
+        "tag-plugin"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::HasStaticPoseAnimationSegmentAtTime",
+      "type": "function",
+      "name": "MMDBoneTag::HasStaticPoseAnimationSegmentAtTime",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        1257,
+        1284
+      ],
+      "summary": "MMDBoneTag::HasStaticPoseAnimationSegmentAtTime checks static pose animation segment at time for bone-tag animation, IK, and physics runtime. / MMDBoneTag::HasStaticPoseAnimationSegmentAtTime 为骨骼标签动画、IK 与物理运行时检查 static pose animation segment at time。",
+      "tags": [
+        "vmd-animation",
+        "tag-plugin",
+        "bone-animation"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::HasRecentPlaybackRuntimeOverride",
+      "type": "function",
+      "name": "MMDBoneTag::HasRecentPlaybackRuntimeOverride",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        1286,
+        1292
+      ],
+      "summary": "MMDBoneTag::HasRecentPlaybackRuntimeOverride checks recent playback runtime override for bone-tag animation, IK, and physics runtime. / MMDBoneTag::HasRecentPlaybackRuntimeOverride 为骨骼标签动画、IK 与物理运行时检查 recent playback runtime override。",
+      "tags": [
+        "runtime",
+        "tag-plugin",
+        "bone-animation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::HasStaticPoseRuntimeOverride",
+      "type": "function",
+      "name": "MMDBoneTag::HasStaticPoseRuntimeOverride",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        1294,
+        1297
+      ],
+      "summary": "MMDBoneTag::HasStaticPoseRuntimeOverride checks static pose runtime override for bone-tag animation, IK, and physics runtime. / MMDBoneTag::HasStaticPoseRuntimeOverride 为骨骼标签动画、IK 与物理运行时检查 static pose runtime override。",
+      "tags": [
+        "runtime",
+        "tag-plugin",
+        "bone-animation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::ClearPlaybackRuntimeOverride",
+      "type": "function",
+      "name": "MMDBoneTag::ClearPlaybackRuntimeOverride",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        1299,
+        1306
+      ],
+      "summary": "MMDBoneTag::ClearPlaybackRuntimeOverride clears playback runtime override for bone-tag animation, IK, and physics runtime. / MMDBoneTag::ClearPlaybackRuntimeOverride 为骨骼标签动画、IK 与物理运行时清除 playback runtime override。",
+      "tags": [
+        "runtime",
+        "tag-plugin",
+        "bone-animation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::SetPlaybackRuntimeOverride",
+      "type": "function",
+      "name": "MMDBoneTag::SetPlaybackRuntimeOverride",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        1308,
+        1316
+      ],
+      "summary": "MMDBoneTag::SetPlaybackRuntimeOverride sets playback runtime override for bone-tag animation, IK, and physics runtime. / MMDBoneTag::SetPlaybackRuntimeOverride 为骨骼标签动画、IK 与物理运行时设置 playback runtime override。",
+      "tags": [
+        "runtime",
+        "tag-plugin",
+        "bone-animation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::GetPlaybackRuntimeOverride",
+      "type": "function",
+      "name": "MMDBoneTag::GetPlaybackRuntimeOverride",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        1318,
+        1331
+      ],
+      "summary": "MMDBoneTag::GetPlaybackRuntimeOverride retrieves playback runtime override for bone-tag animation, IK, and physics runtime. / MMDBoneTag::GetPlaybackRuntimeOverride 为骨骼标签动画、IK 与物理运行时获取 playback runtime override。",
+      "tags": [
+        "runtime",
+        "tag-plugin",
+        "bone-animation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::HasPostPhysicsIKSolveAtTime",
+      "type": "function",
+      "name": "MMDBoneTag::HasPostPhysicsIKSolveAtTime",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        1333,
+        1336
+      ],
+      "summary": "MMDBoneTag::HasPostPhysicsIKSolveAtTime checks post physics ik solve at time for bone-tag animation, IK, and physics runtime. / MMDBoneTag::HasPostPhysicsIKSolveAtTime 为骨骼标签动画、IK 与物理运行时检查 post physics ik solve at time。",
+      "tags": [
+        "ik",
+        "physics",
+        "tag-plugin"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::MarkPostPhysicsIKSolvedAtTime",
+      "type": "function",
+      "name": "MMDBoneTag::MarkPostPhysicsIKSolvedAtTime",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        1338,
+        1341
+      ],
+      "summary": "MMDBoneTag::MarkPostPhysicsIKSolvedAtTime marks post physics ik solved at time for bone-tag animation, IK, and physics runtime. / MMDBoneTag::MarkPostPhysicsIKSolvedAtTime 为骨骼标签动画、IK 与物理运行时标记 post physics ik solved at time。",
+      "tags": [
+        "ik",
+        "physics",
+        "tag-plugin"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::SetAppendRecursionDepth",
+      "type": "function",
+      "name": "MMDBoneTag::SetAppendRecursionDepth",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        1343,
+        1346
+      ],
+      "summary": "MMDBoneTag::SetAppendRecursionDepth sets append recursion depth for bone-tag animation, IK, and physics runtime. / MMDBoneTag::SetAppendRecursionDepth 为骨骼标签动画、IK 与物理运行时设置 append recursion depth。",
+      "tags": [
+        "tag-plugin",
+        "bone-animation",
+        "ik"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::RefreshExecutionPriority",
+      "type": "function",
+      "name": "MMDBoneTag::RefreshExecutionPriority",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        1348,
+        1368
+      ],
+      "summary": "MMDBoneTag::RefreshExecutionPriority refreshes execution priority for bone-tag animation, IK, and physics runtime. / MMDBoneTag::RefreshExecutionPriority 为骨骼标签动画、IK 与物理运行时刷新 execution priority。",
+      "tags": [
+        "tag-plugin",
+        "bone-animation",
+        "ik"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::SyncInheritSourceIndexFromLink",
+      "type": "function",
+      "name": "MMDBoneTag::SyncInheritSourceIndexFromLink",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        1407,
+        1429
+      ],
+      "summary": "MMDBoneTag::SyncInheritSourceIndexFromLink synchronizes inherit source index from link for bone-tag animation, IK, and physics runtime. / MMDBoneTag::SyncInheritSourceIndexFromLink 为骨骼标签动画、IK 与物理运行时同步 inherit source index from link。",
+      "tags": [
+        "tag-plugin",
+        "bone-animation",
+        "ik"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::SyncInheritSourceLinkFromIndex",
+      "type": "function",
+      "name": "MMDBoneTag::SyncInheritSourceLinkFromIndex",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        1431,
+        1462
+      ],
+      "summary": "MMDBoneTag::SyncInheritSourceLinkFromIndex synchronizes inherit source link from index for bone-tag animation, IK, and physics runtime. / MMDBoneTag::SyncInheritSourceLinkFromIndex 为骨骼标签动画、IK 与物理运行时同步 inherit source link from index。",
+      "tags": [
+        "tag-plugin",
+        "bone-animation",
+        "ik"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::RequestAppendExecutionOrderRefresh",
+      "type": "function",
+      "name": "MMDBoneTag::RequestAppendExecutionOrderRefresh",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        1464,
+        1475
+      ],
+      "summary": "MMDBoneTag::RequestAppendExecutionOrderRefresh implements a focused operation in bone-tag animation, IK, and physics runtime. / MMDBoneTag::RequestAppendExecutionOrderRefresh 实现骨骼标签动画、IK 与物理运行时中的专用操作。",
+      "tags": [
+        "tag-plugin",
+        "bone-animation",
+        "ik"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::InvalidateStandaloneIKChainCache",
+      "type": "function",
+      "name": "MMDBoneTag::InvalidateStandaloneIKChainCache",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        1477,
+        1481
+      ],
+      "summary": "MMDBoneTag::InvalidateStandaloneIKChainCache invalidates standalone ik chain cache for bone-tag animation, IK, and physics runtime. / MMDBoneTag::InvalidateStandaloneIKChainCache 为骨骼标签动画、IK 与物理运行时使失效 standalone ik chain cache。",
+      "tags": [
+        "ik",
+        "tag-plugin",
+        "bone-animation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::ReplaceAnimationSlot",
+      "type": "function",
+      "name": "MMDBoneTag::ReplaceAnimationSlot",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        1483,
+        1511
+      ],
+      "summary": "MMDBoneTag::ReplaceAnimationSlot implements a focused operation in bone-tag animation, IK, and physics runtime. / MMDBoneTag::ReplaceAnimationSlot 实现骨骼标签动画、IK 与物理运行时中的专用操作。",
+      "tags": [
+        "vmd-animation",
+        "tag-plugin",
+        "bone-animation"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::ClearAnimationSlot",
+      "type": "function",
+      "name": "MMDBoneTag::ClearAnimationSlot",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        1513,
+        1525
+      ],
+      "summary": "MMDBoneTag::ClearAnimationSlot clears animation slot for bone-tag animation, IK, and physics runtime. / MMDBoneTag::ClearAnimationSlot 为骨骼标签动画、IK 与物理运行时清除 animation slot。",
+      "tags": [
+        "vmd-animation",
+        "tag-plugin",
+        "bone-animation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::ClearAllAnimationSlots",
+      "type": "function",
+      "name": "MMDBoneTag::ClearAllAnimationSlots",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        1527,
+        1537
+      ],
+      "summary": "MMDBoneTag::ClearAllAnimationSlots clears all animation slots for bone-tag animation, IK, and physics runtime. / MMDBoneTag::ClearAllAnimationSlots 为骨骼标签动画、IK 与物理运行时清除 all animation slots。",
+      "tags": [
+        "vmd-animation",
+        "tag-plugin",
+        "bone-animation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::CopyAnimationSlot",
+      "type": "function",
+      "name": "MMDBoneTag::CopyAnimationSlot",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        1539,
+        1552
+      ],
+      "summary": "MMDBoneTag::CopyAnimationSlot copies animation slot for bone-tag animation, IK, and physics runtime. / MMDBoneTag::CopyAnimationSlot 为骨骼标签动画、IK 与物理运行时复制 animation slot。",
+      "tags": [
+        "serialization",
+        "vmd-animation",
+        "tag-plugin"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::SetActiveAnimationSlot",
+      "type": "function",
+      "name": "MMDBoneTag::SetActiveAnimationSlot",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        1554,
+        1576
+      ],
+      "summary": "MMDBoneTag::SetActiveAnimationSlot sets active animation slot for bone-tag animation, IK, and physics runtime. / MMDBoneTag::SetActiveAnimationSlot 为骨骼标签动画、IK 与物理运行时设置 active animation slot。",
+      "tags": [
+        "vmd-animation",
+        "tag-plugin",
+        "bone-animation"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::GetMaxAnimationFrame",
+      "type": "function",
+      "name": "MMDBoneTag::GetMaxAnimationFrame",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        1578,
+        1584
+      ],
+      "summary": "MMDBoneTag::GetMaxAnimationFrame retrieves max animation frame for bone-tag animation, IK, and physics runtime. / MMDBoneTag::GetMaxAnimationFrame 为骨骼标签动画、IK 与物理运行时获取 max animation frame。",
+      "tags": [
+        "vmd-animation",
+        "tag-plugin",
+        "bone-animation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::HandleBoneMorphButtonCommand",
+      "type": "function",
+      "name": "MMDBoneTag::HandleBoneMorphButtonCommand",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        1586,
+        1665
+      ],
+      "summary": "MMDBoneTag::HandleBoneMorphButtonCommand handles bone morph button command for bone-tag animation, IK, and physics runtime. / MMDBoneTag::HandleBoneMorphButtonCommand 为骨骼标签动画、IK 与物理运行时处理 bone morph button command。",
+      "tags": [
+        "morph",
+        "ui",
+        "tag-plugin"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::SplineDataCallBack",
+      "type": "function",
+      "name": "MMDBoneTag::SplineDataCallBack",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        1667,
+        1691
+      ],
+      "summary": "MMDBoneTag::SplineDataCallBack implements a focused operation in bone-tag animation, IK, and physics runtime. / MMDBoneTag::SplineDataCallBack 实现骨骼标签动画、IK 与物理运行时中的专用操作。",
+      "tags": [
+        "tag-plugin",
+        "bone-animation",
+        "ik"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::InitAnimationSpline",
+      "type": "function",
+      "name": "MMDBoneTag::InitAnimationSpline",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        1693,
+        1707
+      ],
+      "summary": "MMDBoneTag::InitAnimationSpline initializes animation spline for bone-tag animation, IK, and physics runtime. / MMDBoneTag::InitAnimationSpline 为骨骼标签动画、IK 与物理运行时初始化 animation spline。",
+      "tags": [
+        "vmd-animation",
+        "tag-plugin",
+        "bone-animation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::SyncSplineFromSelection",
+      "type": "function",
+      "name": "MMDBoneTag::SyncSplineFromSelection",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        1709,
+        1735
+      ],
+      "summary": "MMDBoneTag::SyncSplineFromSelection synchronizes spline from selection for bone-tag animation, IK, and physics runtime. / MMDBoneTag::SyncSplineFromSelection 为骨骼标签动画、IK 与物理运行时同步 spline from selection。",
+      "tags": [
+        "tag-plugin",
+        "bone-animation",
+        "ik"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::SyncSplineFromCurrentParametersIfNeeded",
+      "type": "function",
+      "name": "MMDBoneTag::SyncSplineFromCurrentParametersIfNeeded",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        1737,
+        1754
+      ],
+      "summary": "MMDBoneTag::SyncSplineFromCurrentParametersIfNeeded synchronizes spline from current parameters if needed for bone-tag animation, IK, and physics runtime. / MMDBoneTag::SyncSplineFromCurrentParametersIfNeeded 为骨骼标签动画、IK 与物理运行时同步 spline from current parameters if needed。",
+      "tags": [
+        "tag-plugin",
+        "bone-animation",
+        "ik"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::StoreSplineToSelection",
+      "type": "function",
+      "name": "MMDBoneTag::StoreSplineToSelection",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        1756,
+        1786
+      ],
+      "summary": "MMDBoneTag::StoreSplineToSelection implements a focused operation in bone-tag animation, IK, and physics runtime. / MMDBoneTag::StoreSplineToSelection 实现骨骼标签动画、IK 与物理运行时中的专用操作。",
+      "tags": [
+        "tag-plugin",
+        "bone-animation",
+        "ik"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::NavigateAnimationKeyframe",
+      "type": "function",
+      "name": "MMDBoneTag::NavigateAnimationKeyframe",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        1788,
+        1836
+      ],
+      "summary": "MMDBoneTag::NavigateAnimationKeyframe implements a focused operation in bone-tag animation, IK, and physics runtime. / MMDBoneTag::NavigateAnimationKeyframe 实现骨骼标签动画、IK 与物理运行时中的专用操作。",
+      "tags": [
+        "vmd-animation",
+        "tag-plugin",
+        "bone-animation"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::RefreshAnimationMarkerTracks",
+      "type": "function",
+      "name": "MMDBoneTag::RefreshAnimationMarkerTracks",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        1838,
+        1880
+      ],
+      "summary": "MMDBoneTag::RefreshAnimationMarkerTracks refreshes animation marker tracks for bone-tag animation, IK, and physics runtime. / MMDBoneTag::RefreshAnimationMarkerTracks 为骨骼标签动画、IK 与物理运行时刷新 animation marker tracks。",
+      "tags": [
+        "vmd-animation",
+        "tag-plugin",
+        "bone-animation"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::AddAnimationKeyframeFromCurrentPose",
+      "type": "function",
+      "name": "MMDBoneTag::AddAnimationKeyframeFromCurrentPose",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        1882,
+        1941
+      ],
+      "summary": "MMDBoneTag::AddAnimationKeyframeFromCurrentPose adds animation keyframe from current pose for bone-tag animation, IK, and physics runtime. / MMDBoneTag::AddAnimationKeyframeFromCurrentPose 为骨骼标签动画、IK 与物理运行时添加 animation keyframe from current pose。",
+      "tags": [
+        "vmd-animation",
+        "tag-plugin",
+        "bone-animation"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::DeleteAnimationKeyframeAtCurrentFrame",
+      "type": "function",
+      "name": "MMDBoneTag::DeleteAnimationKeyframeAtCurrentFrame",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        1943,
+        1981
+      ],
+      "summary": "MMDBoneTag::DeleteAnimationKeyframeAtCurrentFrame deletes animation keyframe at current frame for bone-tag animation, IK, and physics runtime. / MMDBoneTag::DeleteAnimationKeyframeAtCurrentFrame 为骨骼标签动画、IK 与物理运行时删除 animation keyframe at current frame。",
+      "tags": [
+        "vmd-animation",
+        "tag-plugin",
+        "bone-animation"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::RefreshColor",
+      "type": "function",
+      "name": "MMDBoneTag::RefreshColor",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        1983,
+        2039
+      ],
+      "summary": "MMDBoneTag::RefreshColor refreshes color for bone-tag animation, IK, and physics runtime. / MMDBoneTag::RefreshColor 为骨骼标签动画、IK 与物理运行时刷新 color。",
+      "tags": [
+        "tag-plugin",
+        "bone-animation",
+        "ik"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::UpdateHierarchyTopologyCache",
+      "type": "function",
+      "name": "MMDBoneTag::UpdateHierarchyTopologyCache",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        2077,
+        2114
+      ],
+      "summary": "MMDBoneTag::UpdateHierarchyTopologyCache updates hierarchy topology cache for bone-tag animation, IK, and physics runtime. / MMDBoneTag::UpdateHierarchyTopologyCache 为骨骼标签动画、IK 与物理运行时更新 hierarchy topology cache。",
+      "tags": [
+        "tag-plugin",
+        "bone-animation",
+        "ik"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::NotifyHierarchyDirty",
+      "type": "function",
+      "name": "MMDBoneTag::NotifyHierarchyDirty",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        2116,
+        2132
+      ],
+      "summary": "MMDBoneTag::NotifyHierarchyDirty implements a focused operation in bone-tag animation, IK, and physics runtime. / MMDBoneTag::NotifyHierarchyDirty 实现骨骼标签动画、IK 与物理运行时中的专用操作。",
+      "tags": [
+        "tag-plugin",
+        "bone-animation",
+        "ik"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:SDK2024_CopyTo",
+      "type": "function",
+      "name": "SDK2024_CopyTo",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        2139,
+        2204
+      ],
+      "summary": "SDK2024_CopyTo implements the Cinema 4D SDK lifecycle hook for copy to in bone-tag animation, IK, and physics runtime. / SDK2024_CopyTo 实现骨骼标签动画、IK 与物理运行时中用于 copy to 的 Cinema 4D SDK 生命周期钩子。",
+      "tags": [
+        "serialization",
+        "tag-plugin",
+        "bone-animation"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:SDK2024_Init",
+      "type": "function",
+      "name": "SDK2024_Init",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        2206,
+        2244
+      ],
+      "summary": "SDK2024_Init implements the Cinema 4D SDK lifecycle hook for init in bone-tag animation, IK, and physics runtime. / SDK2024_Init 实现骨骼标签动画、IK 与物理运行时中用于 init 的 Cinema 4D SDK 生命周期钩子。",
+      "tags": [
+        "tag-plugin",
+        "bone-animation",
+        "ik"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::HandleDescriptionUpdate",
+      "type": "function",
+      "name": "MMDBoneTag::HandleDescriptionUpdate",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        2246,
+        2413
+      ],
+      "summary": "MMDBoneTag::HandleDescriptionUpdate handles description update for bone-tag animation, IK, and physics runtime. / MMDBoneTag::HandleDescriptionUpdate 为骨骼标签动画、IK 与物理运行时处理 description update。",
+      "tags": [
+        "ui",
+        "tag-plugin",
+        "bone-animation"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::BuildStandaloneIKChains",
+      "type": "function",
+      "name": "MMDBoneTag::BuildStandaloneIKChains",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        2415,
+        2508
+      ],
+      "summary": "MMDBoneTag::BuildStandaloneIKChains builds standalone ik chains for bone-tag animation, IK, and physics runtime. / MMDBoneTag::BuildStandaloneIKChains 为骨骼标签动画、IK 与物理运行时构建 standalone ik chains。",
+      "tags": [
+        "ik",
+        "ui",
+        "tag-plugin"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::MarkPrephysicsIKChainUpdated",
+      "type": "function",
+      "name": "MMDBoneTag::MarkPrephysicsIKChainUpdated",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        2510,
+        2527
+      ],
+      "summary": "MMDBoneTag::MarkPrephysicsIKChainUpdated marks prephysics ik chain updated for bone-tag animation, IK, and physics runtime. / MMDBoneTag::MarkPrephysicsIKChainUpdated 为骨骼标签动画、IK 与物理运行时标记 prephysics ik chain updated。",
+      "tags": [
+        "ik",
+        "physics",
+        "tag-plugin"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::CollectIKAffectedBoneIndices",
+      "type": "function",
+      "name": "MMDBoneTag::CollectIKAffectedBoneIndices",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        2529,
+        2601
+      ],
+      "summary": "MMDBoneTag::CollectIKAffectedBoneIndices collects ik affected bone indices for bone-tag animation, IK, and physics runtime. / MMDBoneTag::CollectIKAffectedBoneIndices 为骨骼标签动画、IK 与物理运行时收集 ik affected bone indices。",
+      "tags": [
+        "ik",
+        "tag-plugin",
+        "bone-animation"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::CacheIKSolveRuntimeOverrides",
+      "type": "function",
+      "name": "MMDBoneTag::CacheIKSolveRuntimeOverrides",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        2603,
+        2629
+      ],
+      "summary": "MMDBoneTag::CacheIKSolveRuntimeOverrides implements a focused operation in bone-tag animation, IK, and physics runtime. / MMDBoneTag::CacheIKSolveRuntimeOverrides 实现骨骼标签动画、IK 与物理运行时中的专用操作。",
+      "tags": [
+        "ik",
+        "runtime",
+        "tag-plugin"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::RunIKSolveAnimMode",
+      "type": "function",
+      "name": "MMDBoneTag::RunIKSolveAnimMode",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        2631,
+        2658
+      ],
+      "summary": "MMDBoneTag::RunIKSolveAnimMode implements a focused operation in bone-tag animation, IK, and physics runtime. / MMDBoneTag::RunIKSolveAnimMode 实现骨骼标签动画、IK 与物理运行时中的专用操作。",
+      "tags": [
+        "ik",
+        "tag-plugin",
+        "bone-animation"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::HandleBoneModeChange",
+      "type": "function",
+      "name": "MMDBoneTag::HandleBoneModeChange",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        2660,
+        2700
+      ],
+      "summary": "MMDBoneTag::HandleBoneModeChange handles bone mode change for bone-tag animation, IK, and physics runtime. / MMDBoneTag::HandleBoneModeChange 为骨骼标签动画、IK 与物理运行时处理 bone mode change。",
+      "tags": [
+        "tag-plugin",
+        "bone-animation",
+        "ik"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::SetBoneDisplay",
+      "type": "function",
+      "name": "MMDBoneTag::SetBoneDisplay",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        2702,
+        2791
+      ],
+      "summary": "MMDBoneTag::SetBoneDisplay sets bone display for bone-tag animation, IK, and physics runtime. / MMDBoneTag::SetBoneDisplay 为骨骼标签动画、IK 与物理运行时设置 bone display。",
+      "tags": [
+        "tag-plugin",
+        "bone-animation",
+        "ik"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::Message",
+      "type": "function",
+      "name": "MMDBoneTag::Message",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        2793,
+        2897
+      ],
+      "summary": "MMDBoneTag::Message dispatches Cinema 4D messages and state transitions for bone-tag animation, IK, and physics runtime. / MMDBoneTag::Message 为骨骼标签动画、IK 与物理运行时分发 Cinema 4D 消息与状态切换。",
+      "tags": [
+        "tag-plugin",
+        "bone-animation",
+        "ik"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::SetDParameter",
+      "type": "function",
+      "name": "MMDBoneTag::SetDParameter",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        2899,
+        3180
+      ],
+      "summary": "MMDBoneTag::SetDParameter applies parameter changes and their runtime side effects for bone-tag animation, IK, and physics runtime. / MMDBoneTag::SetDParameter 为骨骼标签动画、IK 与物理运行时应用参数变更及其运行时副作用。",
+      "tags": [
+        "tag-plugin",
+        "bone-animation",
+        "ik"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:SDK2024_GetDEnabling",
+      "type": "function",
+      "name": "SDK2024_GetDEnabling",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        3182,
+        3253
+      ],
+      "summary": "SDK2024_GetDEnabling implements the Cinema 4D SDK lifecycle hook for get d enabling in bone-tag animation, IK, and physics runtime. / SDK2024_GetDEnabling 实现骨骼标签动画、IK 与物理运行时中用于 get d enabling 的 Cinema 4D SDK 生命周期钩子。",
+      "tags": [
+        "tag-plugin",
+        "bone-animation",
+        "ik"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::ApplyStaticPose",
+      "type": "function",
+      "name": "MMDBoneTag::ApplyStaticPose",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        3255,
+        3344
+      ],
+      "summary": "MMDBoneTag::ApplyStaticPose applies static pose for bone-tag animation, IK, and physics runtime. / MMDBoneTag::ApplyStaticPose 为骨骼标签动画、IK 与物理运行时应用 static pose。",
+      "tags": [
+        "runtime",
+        "tag-plugin",
+        "bone-animation"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::ApplyActiveAnimation",
+      "type": "function",
+      "name": "MMDBoneTag::ApplyActiveAnimation",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        3346,
+        3510
+      ],
+      "summary": "MMDBoneTag::ApplyActiveAnimation applies active animation for bone-tag animation, IK, and physics runtime. / MMDBoneTag::ApplyActiveAnimation 为骨骼标签动画、IK 与物理运行时应用 active animation。",
+      "tags": [
+        "vmd-animation",
+        "runtime",
+        "tag-plugin"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::FindOrCreateBoneLockTag",
+      "type": "function",
+      "name": "MMDBoneTag::FindOrCreateBoneLockTag",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        3529,
+        3554
+      ],
+      "summary": "MMDBoneTag::FindOrCreateBoneLockTag finds or create bone lock tag for bone-tag animation, IK, and physics runtime. / MMDBoneTag::FindOrCreateBoneLockTag 为骨骼标签动画、IK 与物理运行时查找 or create bone lock tag。",
+      "tags": [
+        "tag-plugin",
+        "bone-animation",
+        "ik"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::CreateBoneLockTag",
+      "type": "function",
+      "name": "MMDBoneTag::CreateBoneLockTag",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        3556,
+        3568
+      ],
+      "summary": "MMDBoneTag::CreateBoneLockTag creates bone lock tag for bone-tag animation, IK, and physics runtime. / MMDBoneTag::CreateBoneLockTag 为骨骼标签动画、IK 与物理运行时创建 bone lock tag。",
+      "tags": [
+        "tag-plugin",
+        "bone-animation",
+        "ik"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::SetRotationLock",
+      "type": "function",
+      "name": "MMDBoneTag::SetRotationLock",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        3570,
+        3578
+      ],
+      "summary": "MMDBoneTag::SetRotationLock sets rotation lock for bone-tag animation, IK, and physics runtime. / MMDBoneTag::SetRotationLock 为骨骼标签动画、IK 与物理运行时设置 rotation lock。",
+      "tags": [
+        "tag-plugin",
+        "bone-animation",
+        "ik"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::SetPositionLock",
+      "type": "function",
+      "name": "MMDBoneTag::SetPositionLock",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        3580,
+        3588
+      ],
+      "summary": "MMDBoneTag::SetPositionLock sets position lock for bone-tag animation, IK, and physics runtime. / MMDBoneTag::SetPositionLock 为骨骼标签动画、IK 与物理运行时设置 position lock。",
+      "tags": [
+        "tag-plugin",
+        "bone-animation",
+        "ik"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::Execute",
+      "type": "function",
+      "name": "MMDBoneTag::Execute",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        3590,
+        3628
+      ],
+      "summary": "MMDBoneTag::Execute runs the Cinema 4D evaluation-stage behavior for bone-tag animation, IK, and physics runtime. / MMDBoneTag::Execute 为骨骼标签动画、IK 与物理运行时执行 Cinema 4D 求值阶段行为。",
+      "tags": [
+        "runtime",
+        "tag-plugin",
+        "bone-animation"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::Read",
+      "type": "function",
+      "name": "MMDBoneTag::Read",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        3630,
+        3686
+      ],
+      "summary": "MMDBoneTag::Read reads persistent state for bone-tag animation, IK, and physics runtime. / MMDBoneTag::Read 为骨骼标签动画、IK 与物理运行时读取持久状态。",
+      "tags": [
+        "serialization",
+        "tag-plugin",
+        "bone-animation"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:SDK2024_Write",
+      "type": "function",
+      "name": "SDK2024_Write",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        3688,
+        3703
+      ],
+      "summary": "SDK2024_Write implements the Cinema 4D SDK lifecycle hook for write in bone-tag animation, IK, and physics runtime. / SDK2024_Write 实现骨骼标签动画、IK 与物理运行时中用于 write 的 Cinema 4D SDK 生命周期钩子。",
+      "tags": [
+        "serialization",
+        "tag-plugin",
+        "bone-animation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::GetBoneIndex",
+      "type": "function",
+      "name": "MMDBoneTag::GetBoneIndex",
+      "filePath": "source/module/tools/tag/mmd_bone.cpp",
+      "lineRange": [
+        3705,
+        3720
+      ],
+      "summary": "MMDBoneTag::GetBoneIndex retrieves bone index for bone-tag animation, IK, and physics runtime. / MMDBoneTag::GetBoneIndex 为骨骼标签动画、IK 与物理运行时获取 bone index。",
+      "tags": [
+        "tag-plugin",
+        "bone-animation",
+        "ik"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:source/module/tools/tag/mmd_bone.h",
+      "type": "file",
+      "name": "mmd_bone.h",
+      "filePath": "source/module/tools/tag/mmd_bone.h",
+      "summary": "Declares bone-tag state, animation keyframes, IK-chain adapters and solvers, append-transform data, and runtime evaluation interfaces. / 声明骨骼标签状态、动画关键帧、IK 链适配器与求解器、附加变换数据及运行时求值接口。",
+      "tags": [
+        "tag-plugin",
+        "api",
+        "bone-animation",
+        "ik",
+        "data-model"
+      ],
+      "complexity": "complex",
+      "languageNotes": "C++ integrates Cinema 4D SDK lifecycle hooks with explicit PMX/VMD conversion and runtime state management. / C++ 将 Cinema 4D SDK 生命周期钩子与显式 PMX/VMD 转换及运行时状态管理结合。"
+    },
+    {
+      "id": "class:source/module/tools/tag/mmd_bone.h:BoneMorphTagData",
+      "type": "class",
+      "name": "BoneMorphTagData",
+      "filePath": "source/module/tools/tag/mmd_bone.h",
+      "lineRange": [
+        37,
+        56
+      ],
+      "summary": "BoneMorphTagData represents a concrete MMD morph type and its editing/runtime state for bone-tag runtime API and data model. / BoneMorphTagData 为骨骼标签运行时 API 与数据模型表示具体 MMD 变形类型及其编辑与运行时状态。",
+      "tags": [
+        "morph",
+        "data-model",
+        "tag-plugin"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:source/module/tools/tag/mmd_bone.h:BoneAnimationBezierData",
+      "type": "class",
+      "name": "BoneAnimationBezierData",
+      "filePath": "source/module/tools/tag/mmd_bone.h",
+      "lineRange": [
+        58,
+        67
+      ],
+      "summary": "BoneAnimationBezierData stores structured persistent and runtime data for bone-tag runtime API and data model. / BoneAnimationBezierData 为骨骼标签运行时 API 与数据模型保存结构化持久数据与运行时数据。",
+      "tags": [
+        "data-model",
+        "tag-plugin",
+        "api"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:source/module/tools/tag/mmd_bone.h:BoneAnimationKeyframeData",
+      "type": "class",
+      "name": "BoneAnimationKeyframeData",
+      "filePath": "source/module/tools/tag/mmd_bone.h",
+      "lineRange": [
+        69,
+        85
+      ],
+      "summary": "BoneAnimationKeyframeData stores structured persistent and runtime data for bone-tag runtime API and data model. / BoneAnimationKeyframeData 为骨骼标签运行时 API 与数据模型保存结构化持久数据与运行时数据。",
+      "tags": [
+        "data-model",
+        "tag-plugin",
+        "api"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:source/module/tools/tag/mmd_bone.h:BoneAnimationSlotData",
+      "type": "class",
+      "name": "BoneAnimationSlotData",
+      "filePath": "source/module/tools/tag/mmd_bone.h",
+      "lineRange": [
+        87,
+        99
+      ],
+      "summary": "BoneAnimationSlotData stores structured persistent and runtime data for bone-tag runtime API and data model. / BoneAnimationSlotData 为骨骼标签运行时 API 与数据模型保存结构化持久数据与运行时数据。",
+      "tags": [
+        "data-model",
+        "tag-plugin",
+        "api"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:source/module/tools/tag/mmd_bone.h:MMDBoneTagMsg",
+      "type": "class",
+      "name": "MMDBoneTagMsg",
+      "filePath": "source/module/tools/tag/mmd_bone.h",
+      "lineRange": [
+        110,
+        127
+      ],
+      "summary": "MMDBoneTagMsg encapsulates a major runtime responsibility for bone-tag runtime API and data model. / MMDBoneTagMsg 为骨骼标签运行时 API 与数据模型封装主要运行时职责。",
+      "tags": [
+        "tag-plugin",
+        "api",
+        "bone-animation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:source/module/tools/tag/mmd_bone.h:C4DIKChainNodeAdapter",
+      "type": "class",
+      "name": "C4DIKChainNodeAdapter",
+      "filePath": "source/module/tools/tag/mmd_bone.h",
+      "lineRange": [
+        129,
+        171
+      ],
+      "summary": "C4DIKChainNodeAdapter adapts Cinema 4D scene data to the runtime solver interface for bone-tag runtime API and data model. / C4DIKChainNodeAdapter 为骨骼标签运行时 API 与数据模型将 Cinema 4D 场景数据适配到运行时求解器接口。",
+      "tags": [
+        "adapter",
+        "tag-plugin",
+        "api"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "class:source/module/tools/tag/mmd_bone.h:MMDBoneTag",
+      "type": "class",
+      "name": "MMDBoneTag",
+      "filePath": "source/module/tools/tag/mmd_bone.h",
+      "lineRange": [
+        181,
+        461
+      ],
+      "summary": "MMDBoneTag encapsulates a major runtime responsibility for bone-tag runtime API and data model. / MMDBoneTag 为骨骼标签运行时 API 与数据模型封装主要运行时职责。",
+      "tags": [
+        "tag-plugin",
+        "api",
+        "bone-animation"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:source/module/ui/cmt_tools_dialog.cpp",
+      "type": "file",
+      "name": "cmt_tools_dialog.cpp",
+      "filePath": "source/module/ui/cmt_tools_dialog.cpp",
+      "summary": "Implements the main MMD tool dialog layout and command routing for PMX, VMD, VPD, camera, and model operations. / 实现 MMD 工具主对话框布局，以及 PMX、VMD、VPD、相机与模型操作的命令路由。",
+      "tags": [
+        "ui",
+        "dialog",
+        "command-routing",
+        "import",
+        "export"
+      ],
+      "complexity": "complex",
+      "languageNotes": "C++ integrates Cinema 4D SDK lifecycle hooks with explicit PMX/VMD conversion and runtime state management. / C++ 将 Cinema 4D SDK 生命周期钩子与显式 PMX/VMD 转换及运行时状态管理结合。"
+    },
+    {
+      "id": "function:source/module/ui/cmt_tools_dialog.cpp:CMTToolDialog::GetItem",
+      "type": "function",
+      "name": "CMTToolDialog::GetItem",
+      "filePath": "source/module/ui/cmt_tools_dialog.cpp",
+      "lineRange": [
+        18,
+        22
+      ],
+      "summary": "CMTToolDialog::GetItem retrieves item for main tool dialog and command routing. / CMTToolDialog::GetItem 为主工具对话框与命令路由获取 item。",
+      "tags": [
+        "ui",
+        "dialog",
+        "command-routing"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/ui/cmt_tools_dialog.cpp:CMTToolDialog::GetItem@24",
+      "type": "function",
+      "name": "CMTToolDialog::GetItem",
+      "filePath": "source/module/ui/cmt_tools_dialog.cpp",
+      "lineRange": [
+        24,
+        28
+      ],
+      "summary": "CMTToolDialog::GetItem retrieves item for main tool dialog and command routing. / CMTToolDialog::GetItem 为主工具对话框与命令路由获取 item。",
+      "tags": [
+        "ui",
+        "dialog",
+        "command-routing"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/ui/cmt_tools_dialog.cpp:CMTToolDialog::GetItem@30",
+      "type": "function",
+      "name": "CMTToolDialog::GetItem",
+      "filePath": "source/module/ui/cmt_tools_dialog.cpp",
+      "lineRange": [
+        30,
+        34
+      ],
+      "summary": "CMTToolDialog::GetItem retrieves item for main tool dialog and command routing. / CMTToolDialog::GetItem 为主工具对话框与命令路由获取 item。",
+      "tags": [
+        "ui",
+        "dialog",
+        "command-routing"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/ui/cmt_tools_dialog.cpp:CMTToolDialog::CreateLayout",
+      "type": "function",
+      "name": "CMTToolDialog::CreateLayout",
+      "filePath": "source/module/ui/cmt_tools_dialog.cpp",
+      "lineRange": [
+        36,
+        49
+      ],
+      "summary": "CMTToolDialog::CreateLayout builds the interactive dialog layout for main tool dialog and command routing. / CMTToolDialog::CreateLayout 为主工具对话框与命令路由构建交互式对话框布局。",
+      "tags": [
+        "ui",
+        "dialog",
+        "command-routing"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/ui/cmt_tools_dialog.cpp:CMTToolDialog::InitValues",
+      "type": "function",
+      "name": "CMTToolDialog::InitValues",
+      "filePath": "source/module/ui/cmt_tools_dialog.cpp",
+      "lineRange": [
+        51,
+        55
+      ],
+      "summary": "CMTToolDialog::InitValues initializes dialog values from current scene state for main tool dialog and command routing. / CMTToolDialog::InitValues 为主工具对话框与命令路由根据当前场景状态初始化对话框数值。",
+      "tags": [
+        "ui",
+        "dialog",
+        "command-routing"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/ui/cmt_tools_dialog.cpp:CMTToolDialog::Command",
+      "type": "function",
+      "name": "CMTToolDialog::Command",
+      "filePath": "source/module/ui/cmt_tools_dialog.cpp",
+      "lineRange": [
+        57,
+        379
+      ],
+      "summary": "CMTToolDialog::Command routes user commands to MMD import and export workflows for main tool dialog and command routing. / CMTToolDialog::Command 为主工具对话框与命令路由将用户命令路由到 MMD 导入导出流程。",
+      "tags": [
+        "ui",
+        "dialog",
+        "command-routing"
+      ],
+      "complexity": "complex"
+    }
+  ],
+  "edges": [
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:NormalizeBoneMode",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:NormalizeBoneMode",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:ClampSplineCoordinate",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:ClampSplineCoordinate",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:NormalizeQuaternion",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:NormalizeQuaternion",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:EulerToQuaternionArray",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:EulerToQuaternionArray",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:QuaternionToEulerVector",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:QuaternionToEulerVector",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:ToEigenQuaternion",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:ToEigenQuaternion",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:ToQuaternionArray",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:ToQuaternionArray",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MarkBoneTransformDirty",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MarkBoneTransformDirty",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:SetObjectDisplay",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:SetObjectDisplay",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:SetJointVisualDisplay",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:SetJointVisualDisplay",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:DescItemHasParent",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:DescItemHasParent",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:CollectStandaloneIKChainEntries",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:CollectStandaloneIKChainEntries",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:ComputeBoneExecutionPriorityValue",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:ComputeBoneExecutionPriorityValue",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:CreateDefaultAnimationSplineData",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:CreateDefaultAnimationSplineData",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:ReadBezierFromSpline",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:ReadBezierFromSpline",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:WriteBezierToSpline",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:WriteBezierToSpline",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:AssignBezierChannel",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:AssignBezierChannel",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:ToLibMMDBezier",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:ToLibMMDBezier",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:ToLibMMDKeyframe",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:ToLibMMDKeyframe",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:BuildAnimationMatrix",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:BuildAnimationMatrix",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:GetAnimationFrameFromDocument",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:GetAnimationFrameFromDocument",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:GetDocumentTimeOrInvalid",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:GetDocumentTimeOrInvalid",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:GetAnimationFrameFromDocumentContinuous",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:GetAnimationFrameFromDocumentContinuous",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:GetAnimationFrameTime",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:GetAnimationFrameTime",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MatrixToEigen",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MatrixToEigen",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:NormalizeMatrixBasis",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:NormalizeMatrixBasis",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:EigenToMatrix",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:EigenToMatrix",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:RelativeMatrixFromTranslationRotation",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:RelativeMatrixFromTranslationRotation",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:ExtractRotation",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:ExtractRotation",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:C4DIKChainNodeAdapter::SetupFromBone",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:C4DIKChainNodeAdapter::SetupFromBone",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:C4DIKChainNodeAdapter::SetParentAdapter",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:C4DIKChainNodeAdapter::SetParentAdapter",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:C4DIKChainNodeAdapter::ClearChildren",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:C4DIKChainNodeAdapter::ClearChildren",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:C4DIKChainNodeAdapter::AddChildAdapter",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:C4DIKChainNodeAdapter::AddChildAdapter",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:C4DIKChainNodeAdapter::UpdateInitialGlobalTransform",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:C4DIKChainNodeAdapter::UpdateInitialGlobalTransform",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:C4DIKChainNodeAdapter::ResetCurrentTransformToInitial",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:C4DIKChainNodeAdapter::ResetCurrentTransformToInitial",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:C4DIKChainNodeAdapter::SyncCurrentTransformsFromBoneObject",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:C4DIKChainNodeAdapter::SyncCurrentTransformsFromBoneObject",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:C4DIKChainNodeAdapter::GetCurrentRelativeState",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:C4DIKChainNodeAdapter::GetCurrentRelativeState",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:C4DIKChainNodeAdapter::ApplyLocalToBoneObject",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:C4DIKChainNodeAdapter::ApplyLocalToBoneObject",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:C4DIKChainNodeAdapter::GetBoneIndex",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:C4DIKChainNodeAdapter::GetBoneIndex",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:C4DIKChainNodeAdapter::SetGlobalTransform",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:C4DIKChainNodeAdapter::SetGlobalTransform",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:C4DIKChainNodeAdapter::SyncLocalTransformFromGlobal",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:C4DIKChainNodeAdapter::SyncLocalTransformFromGlobal",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:C4DIKChainNodeAdapter::UpdateLocalTransform",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:C4DIKChainNodeAdapter::UpdateLocalTransform",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:C4DIKChainNodeAdapter::UpdateGlobalTransform",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:C4DIKChainNodeAdapter::UpdateGlobalTransform",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:BoneMorphTagData::Write",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:BoneMorphTagData::Write",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:BoneMorphTagData::Read",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:BoneMorphTagData::Read",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:BoneAnimationBezierData::Write",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:BoneAnimationBezierData::Write",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:BoneAnimationBezierData::Read",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:BoneAnimationBezierData::Read",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:BoneAnimationKeyframeData::Write",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:BoneAnimationKeyframeData::Write",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:BoneAnimationKeyframeData::Read",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:BoneAnimationKeyframeData::Read",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:WriteStaticPoseAnimationFrames",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:ReadStaticPoseAnimationFrames",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:BoneAnimationSlotData::Write",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:BoneAnimationSlotData::Write",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:BoneAnimationSlotData::Read",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:BoneAnimationSlotData::Read",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:BoneAnimationSlotData::BoneAnimationSlotData",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:BoneAnimationSlotData::BoneAnimationSlotData",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::AddBoneMorph",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::AddBoneMorph",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::SetBoneMorphTranslationNoCheck",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::SetBoneMorphTranslationNoCheck",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::SetBoneMorphRotationNoCheck",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::SetBoneMorphRotationNoCheck",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::CollectBoneMorphPmxExportEntries",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::CollectBoneMorphPmxExportEntries",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::EnsureAnimationSlotCount",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::EnsureAnimationSlotCount",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::FindAnimationKeyframeIndex",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::FindAnimationKeyframeIndex",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::ResetEvaluatedAnimationState",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::ResetEvaluatedAnimationState",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::InvalidateAnimationUICache",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::InvalidateAnimationUICache",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::SetEvaluatedAnimationState",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::SetEvaluatedAnimationState",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::GetEvaluatedAnimatedLocalState",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::GetEvaluatedAnimatedLocalState",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::BeginPrephysicsFrame",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::BeginPrephysicsFrame",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::MarkPrephysicsSceneWriteSkipped",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::MarkPrephysicsSceneWriteSkipped",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::ShouldSkipPrephysicsSceneWrite",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::ShouldSkipPrephysicsSceneWrite",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::HasStaticPoseAnimationSegmentAtTime",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::HasStaticPoseAnimationSegmentAtTime",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::HasRecentPlaybackRuntimeOverride",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::HasRecentPlaybackRuntimeOverride",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::HasStaticPoseRuntimeOverride",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::HasStaticPoseRuntimeOverride",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::ClearPlaybackRuntimeOverride",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::ClearPlaybackRuntimeOverride",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::SetPlaybackRuntimeOverride",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::SetPlaybackRuntimeOverride",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::GetPlaybackRuntimeOverride",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::GetPlaybackRuntimeOverride",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::HasPostPhysicsIKSolveAtTime",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::HasPostPhysicsIKSolveAtTime",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::MarkPostPhysicsIKSolvedAtTime",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::MarkPostPhysicsIKSolvedAtTime",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::SetAppendRecursionDepth",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::SetAppendRecursionDepth",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::RefreshExecutionPriority",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::RefreshExecutionPriority",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::SyncInheritSourceIndexFromLink",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::SyncInheritSourceIndexFromLink",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::SyncInheritSourceLinkFromIndex",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::SyncInheritSourceLinkFromIndex",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::RequestAppendExecutionOrderRefresh",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::RequestAppendExecutionOrderRefresh",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::InvalidateStandaloneIKChainCache",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::InvalidateStandaloneIKChainCache",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::ReplaceAnimationSlot",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::ReplaceAnimationSlot",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::ClearAnimationSlot",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::ClearAnimationSlot",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::ClearAllAnimationSlots",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::ClearAllAnimationSlots",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::CopyAnimationSlot",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::CopyAnimationSlot",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::SetActiveAnimationSlot",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::SetActiveAnimationSlot",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::GetMaxAnimationFrame",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::GetMaxAnimationFrame",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::HandleBoneMorphButtonCommand",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::HandleBoneMorphButtonCommand",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::SplineDataCallBack",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::SplineDataCallBack",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::InitAnimationSpline",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::InitAnimationSpline",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::SyncSplineFromSelection",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::SyncSplineFromSelection",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::SyncSplineFromCurrentParametersIfNeeded",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::SyncSplineFromCurrentParametersIfNeeded",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::StoreSplineToSelection",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::StoreSplineToSelection",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::NavigateAnimationKeyframe",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::NavigateAnimationKeyframe",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::RefreshAnimationMarkerTracks",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::RefreshAnimationMarkerTracks",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::AddAnimationKeyframeFromCurrentPose",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::AddAnimationKeyframeFromCurrentPose",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::DeleteAnimationKeyframeAtCurrentFrame",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::DeleteAnimationKeyframeAtCurrentFrame",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::RefreshColor",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::RefreshColor",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::UpdateHierarchyTopologyCache",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::UpdateHierarchyTopologyCache",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::NotifyHierarchyDirty",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::NotifyHierarchyDirty",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:SDK2024_CopyTo",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:SDK2024_CopyTo",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:SDK2024_Init",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:SDK2024_Init",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::HandleDescriptionUpdate",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::HandleDescriptionUpdate",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::BuildStandaloneIKChains",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::BuildStandaloneIKChains",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::MarkPrephysicsIKChainUpdated",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::MarkPrephysicsIKChainUpdated",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::CollectIKAffectedBoneIndices",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::CollectIKAffectedBoneIndices",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::CacheIKSolveRuntimeOverrides",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::CacheIKSolveRuntimeOverrides",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::RunIKSolveAnimMode",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::RunIKSolveAnimMode",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::HandleBoneModeChange",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::HandleBoneModeChange",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::SetBoneDisplay",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::SetBoneDisplay",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::Message",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::Message",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::SetDParameter",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::SetDParameter",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:SDK2024_GetDEnabling",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:SDK2024_GetDEnabling",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::ApplyStaticPose",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::ApplyStaticPose",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::ApplyActiveAnimation",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::ApplyActiveAnimation",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::FindOrCreateBoneLockTag",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::FindOrCreateBoneLockTag",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::CreateBoneLockTag",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::CreateBoneLockTag",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::SetRotationLock",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::SetRotationLock",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::SetPositionLock",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::SetPositionLock",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::Execute",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::Execute",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::Read",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::Read",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:SDK2024_Write",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:SDK2024_Write",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::GetBoneIndex",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "function:source/module/tools/tag/mmd_bone.cpp:MMDBoneTag::GetBoneIndex",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.h",
+      "target": "class:source/module/tools/tag/mmd_bone.h:BoneMorphTagData",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.h",
+      "target": "class:source/module/tools/tag/mmd_bone.h:BoneMorphTagData",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.h",
+      "target": "class:source/module/tools/tag/mmd_bone.h:BoneAnimationBezierData",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.h",
+      "target": "class:source/module/tools/tag/mmd_bone.h:BoneAnimationBezierData",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.h",
+      "target": "class:source/module/tools/tag/mmd_bone.h:BoneAnimationKeyframeData",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.h",
+      "target": "class:source/module/tools/tag/mmd_bone.h:BoneAnimationKeyframeData",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.h",
+      "target": "class:source/module/tools/tag/mmd_bone.h:BoneAnimationSlotData",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.h",
+      "target": "class:source/module/tools/tag/mmd_bone.h:BoneAnimationSlotData",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.h",
+      "target": "class:source/module/tools/tag/mmd_bone.h:MMDBoneTagMsg",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.h",
+      "target": "class:source/module/tools/tag/mmd_bone.h:MMDBoneTagMsg",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.h",
+      "target": "class:source/module/tools/tag/mmd_bone.h:C4DIKChainNodeAdapter",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.h",
+      "target": "class:source/module/tools/tag/mmd_bone.h:C4DIKChainNodeAdapter",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.h",
+      "target": "class:source/module/tools/tag/mmd_bone.h:MMDBoneTag",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.h",
+      "target": "class:source/module/tools/tag/mmd_bone.h:MMDBoneTag",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/ui/cmt_tools_dialog.cpp",
+      "target": "function:source/module/ui/cmt_tools_dialog.cpp:CMTToolDialog::GetItem",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/ui/cmt_tools_dialog.cpp",
+      "target": "function:source/module/ui/cmt_tools_dialog.cpp:CMTToolDialog::GetItem",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/ui/cmt_tools_dialog.cpp",
+      "target": "function:source/module/ui/cmt_tools_dialog.cpp:CMTToolDialog::GetItem@24",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/ui/cmt_tools_dialog.cpp",
+      "target": "function:source/module/ui/cmt_tools_dialog.cpp:CMTToolDialog::GetItem@24",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/ui/cmt_tools_dialog.cpp",
+      "target": "function:source/module/ui/cmt_tools_dialog.cpp:CMTToolDialog::GetItem@30",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/ui/cmt_tools_dialog.cpp",
+      "target": "function:source/module/ui/cmt_tools_dialog.cpp:CMTToolDialog::GetItem@30",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/ui/cmt_tools_dialog.cpp",
+      "target": "function:source/module/ui/cmt_tools_dialog.cpp:CMTToolDialog::CreateLayout",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/ui/cmt_tools_dialog.cpp",
+      "target": "function:source/module/ui/cmt_tools_dialog.cpp:CMTToolDialog::CreateLayout",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/ui/cmt_tools_dialog.cpp",
+      "target": "function:source/module/ui/cmt_tools_dialog.cpp:CMTToolDialog::InitValues",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/ui/cmt_tools_dialog.cpp",
+      "target": "function:source/module/ui/cmt_tools_dialog.cpp:CMTToolDialog::InitValues",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/ui/cmt_tools_dialog.cpp",
+      "target": "function:source/module/ui/cmt_tools_dialog.cpp:CMTToolDialog::Command",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/ui/cmt_tools_dialog.cpp",
+      "target": "function:source/module/ui/cmt_tools_dialog.cpp:CMTToolDialog::Command",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/tag/mmd_bone.cpp",
+      "target": "file:source/module/tools/tag/mmd_bone.h",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:source/module/ui/cmt_tools_dialog.cpp",
+      "target": "file:source/module/ui/cmt_tools_dialog.h",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    }
+  ]
+}

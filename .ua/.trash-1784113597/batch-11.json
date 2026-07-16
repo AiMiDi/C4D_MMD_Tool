@@ -1,0 +1,63 @@
+{
+  "nodes": [
+    {
+      "id": "document:sdk_2025/CMakeLists.txt",
+      "type": "document",
+      "name": "CMakeLists.txt",
+      "filePath": "sdk_2025/CMakeLists.txt",
+      "summary": "Cinema 4D 2025 SDK root build configuration that initializes compiler settings, discovers plugin modules, loads frameworks, and defines output directories. / Cinema 4D 2025 SDK 根构建配置，负责初始化编译器设置、发现插件模块、加载框架并定义输出目录。",
+      "tags": [
+        "build-system",
+        "cmake",
+        "sdk",
+        "module-discovery"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "Uses Maxon SDK helper modules and custom-path parsing rather than compiling the shared plugin source directly at the root. / 使用 Maxon SDK 辅助模块与自定义路径解析，而不是在根目录直接编译共享插件源码。"
+    },
+    {
+      "id": "config:sdk_2025/CMakePresets.json",
+      "type": "config",
+      "name": "CMakePresets.json",
+      "filePath": "sdk_2025/CMakePresets.json",
+      "summary": "Cross-platform configure presets for building the Cinema 4D 2025 SDK tree with Ninja, Xcode, Visual Studio v143, or ClangCL. / 用于通过 Ninja、Xcode、Visual Studio v143 或 ClangCL 构建 Cinema 4D 2025 SDK 树的跨平台配置预设。",
+      "tags": [
+        "configuration",
+        "cmake",
+        "cross-platform",
+        "sdk"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:sdk_2025/custom_paths.txt",
+      "type": "document",
+      "name": "custom_paths.txt",
+      "filePath": "sdk_2025/custom_paths.txt",
+      "summary": "Documented Cinema 4D SDK custom-path template describing ROOT, MODULE, and ALIAS commands for optional module discovery and path aliases. / 带说明的 Cinema 4D SDK 自定义路径模板，描述用于可选模块发现与路径别名的 ROOT、MODULE 和 ALIAS 命令。",
+      "tags": [
+        "configuration",
+        "module-discovery",
+        "path-alias",
+        "sdk"
+      ],
+      "complexity": "moderate"
+    }
+  ],
+  "edges": [
+    {
+      "source": "config:sdk_2025/CMakePresets.json",
+      "target": "document:sdk_2025/CMakeLists.txt",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "document:sdk_2025/CMakeLists.txt",
+      "target": "document:sdk_2025/custom_paths.txt",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "projectRoot": "E:/code/C4D_MMD_Tool",
+  "batchFiles": [
+    {
+      "path": ".cursor/commands/opsx-apply.md",
+      "language": "markdown",
+      "sizeLines": 152,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".cursor/commands/opsx-archive.md",
+      "language": "markdown",
+      "sizeLines": 157,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".cursor/commands/opsx-explore.md",
+      "language": "markdown",
+      "sizeLines": 173,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".cursor/commands/opsx-propose.md",
+      "language": "markdown",
+      "sizeLines": 106,
+      "fileCategory": "docs"
+    }
+  ],
+  "batchImportData": {
+    ".cursor/commands/opsx-apply.md": [],
+    ".cursor/commands/opsx-archive.md": [],
+    ".cursor/commands/opsx-explore.md": [],
+    ".cursor/commands/opsx-propose.md": []
+  }
+}

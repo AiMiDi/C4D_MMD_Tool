@@ -1,0 +1,666 @@
+{
+  "nodes": [
+    {
+      "id": "file:source/module/ui/cmt_tools_dialog.h",
+      "type": "file",
+      "name": "cmt_tools_dialog.h",
+      "filePath": "source/module/ui/cmt_tools_dialog.h",
+      "summary": "Declares the tool dialog and command plugin used to expose MMD import/export workflows in Cinema 4D. / 声明在 Cinema 4D 中提供 MMD 导入导出流程的工具对话框与命令插件。",
+      "tags": [
+        "ui",
+        "dialog",
+        "api",
+        "command-plugin"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "class:source/module/ui/cmt_tools_dialog.h:CMTToolDialog",
+      "type": "class",
+      "name": "CMTToolDialog",
+      "filePath": "source/module/ui/cmt_tools_dialog.h",
+      "lineRange": [
+        19,
+        37
+      ],
+      "summary": "CMTToolDialog implements a user-facing editing dialog for tool-dialog API. / CMTToolDialog 为工具对话框 API实现面向用户的编辑对话框。",
+      "tags": [
+        "ui",
+        "dialog",
+        "api"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:source/module/ui/cmt_tools_dialog.h:CMTToolCommand",
+      "type": "class",
+      "name": "CMTToolCommand",
+      "filePath": "source/module/ui/cmt_tools_dialog.h",
+      "lineRange": [
+        39,
+        67
+      ],
+      "summary": "CMTToolCommand encapsulates a major runtime responsibility for tool-dialog API. / CMTToolCommand 为工具对话框 API封装主要运行时职责。",
+      "tags": [
+        "ui",
+        "dialog",
+        "api"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/ui/cmt_tools_dialog.h:CMTToolDialog::~CMTToolDialog",
+      "type": "function",
+      "name": "CMTToolDialog::~CMTToolDialog",
+      "filePath": "source/module/ui/cmt_tools_dialog.h",
+      "lineRange": [
+        24,
+        27
+      ],
+      "summary": "CMTToolDialog::~CMTToolDialog releases scoped state for tool-dialog API. / CMTToolDialog::~CMTToolDialog 释放工具对话框 API中的作用域状态。",
+      "tags": [
+        "ui",
+        "dialog",
+        "api"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/ui/cmt_tools_dialog.h:CMTToolCommand::RestoreLayout",
+      "type": "function",
+      "name": "CMTToolCommand::RestoreLayout",
+      "filePath": "source/module/ui/cmt_tools_dialog.h",
+      "lineRange": [
+        44,
+        47
+      ],
+      "summary": "CMTToolCommand::RestoreLayout restores layout for tool-dialog API. / CMTToolCommand::RestoreLayout 为工具对话框 API恢复 layout。",
+      "tags": [
+        "ui",
+        "dialog",
+        "api"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:source/register_entity.cpp",
+      "type": "file",
+      "name": "register_entity.cpp",
+      "filePath": "source/register_entity.cpp",
+      "summary": "Registers the scene manager, loaders, object and tag plugins, and the user-facing MMD tool command with Cinema 4D. / 向 Cinema 4D 注册场景管理器、加载器、对象与标签插件，以及面向用户的 MMD 工具命令。",
+      "tags": [
+        "plugin-registration",
+        "entry-point",
+        "cinema-4d",
+        "factory"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/register_entity.cpp:RegisterCMTTool",
+      "type": "function",
+      "name": "RegisterCMTTool",
+      "filePath": "source/register_entity.cpp",
+      "lineRange": [
+        19,
+        22
+      ],
+      "summary": "RegisterCMTTool registers cmt tool for Cinema 4D plugin registration. / RegisterCMTTool 为Cinema 4D 插件注册注册 cmt tool。",
+      "tags": [
+        "plugin-registration",
+        "entry-point",
+        "cinema-4d"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/register_entity.cpp:RegisterCMTSceneManager",
+      "type": "function",
+      "name": "RegisterCMTSceneManager",
+      "filePath": "source/register_entity.cpp",
+      "lineRange": [
+        24,
+        27
+      ],
+      "summary": "RegisterCMTSceneManager registers cmt scene manager for Cinema 4D plugin registration. / RegisterCMTSceneManager 为Cinema 4D 插件注册注册 cmt scene manager。",
+      "tags": [
+        "plugin-registration",
+        "entry-point",
+        "cinema-4d"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/register_entity.cpp:RegisterVMDLoader",
+      "type": "function",
+      "name": "RegisterVMDLoader",
+      "filePath": "source/register_entity.cpp",
+      "lineRange": [
+        29,
+        32
+      ],
+      "summary": "RegisterVMDLoader registers vmd loader for Cinema 4D plugin registration. / RegisterVMDLoader 为Cinema 4D 插件注册注册 vmd loader。",
+      "tags": [
+        "vmd-animation",
+        "import",
+        "plugin-registration"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/register_entity.cpp:RegisterMMDCamera",
+      "type": "function",
+      "name": "RegisterMMDCamera",
+      "filePath": "source/register_entity.cpp",
+      "lineRange": [
+        34,
+        37
+      ],
+      "summary": "RegisterMMDCamera registers mmd camera for Cinema 4D plugin registration. / RegisterMMDCamera 为Cinema 4D 插件注册注册 mmd camera。",
+      "tags": [
+        "plugin-registration",
+        "entry-point",
+        "cinema-4d"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/register_entity.cpp:RegisterMMDRigid",
+      "type": "function",
+      "name": "RegisterMMDRigid",
+      "filePath": "source/register_entity.cpp",
+      "lineRange": [
+        39,
+        42
+      ],
+      "summary": "RegisterMMDRigid registers mmd rigid for Cinema 4D plugin registration. / RegisterMMDRigid 为Cinema 4D 插件注册注册 mmd rigid。",
+      "tags": [
+        "physics",
+        "plugin-registration",
+        "entry-point"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/register_entity.cpp:RegisterMMDJoint",
+      "type": "function",
+      "name": "RegisterMMDJoint",
+      "filePath": "source/register_entity.cpp",
+      "lineRange": [
+        44,
+        47
+      ],
+      "summary": "RegisterMMDJoint registers mmd joint for Cinema 4D plugin registration. / RegisterMMDJoint 为Cinema 4D 插件注册注册 mmd joint。",
+      "tags": [
+        "physics",
+        "plugin-registration",
+        "entry-point"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/register_entity.cpp:RegisterMMDModelManager",
+      "type": "function",
+      "name": "RegisterMMDModelManager",
+      "filePath": "source/register_entity.cpp",
+      "lineRange": [
+        49,
+        52
+      ],
+      "summary": "RegisterMMDModelManager registers mmd model manager for Cinema 4D plugin registration. / RegisterMMDModelManager 为Cinema 4D 插件注册注册 mmd model manager。",
+      "tags": [
+        "plugin-registration",
+        "entry-point",
+        "cinema-4d"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/register_entity.cpp:RegisterMMDBoneManager",
+      "type": "function",
+      "name": "RegisterMMDBoneManager",
+      "filePath": "source/register_entity.cpp",
+      "lineRange": [
+        54,
+        57
+      ],
+      "summary": "RegisterMMDBoneManager registers mmd bone manager for Cinema 4D plugin registration. / RegisterMMDBoneManager 为Cinema 4D 插件注册注册 mmd bone manager。",
+      "tags": [
+        "plugin-registration",
+        "entry-point",
+        "cinema-4d"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/register_entity.cpp:RegisterMMDMeshManager",
+      "type": "function",
+      "name": "RegisterMMDMeshManager",
+      "filePath": "source/register_entity.cpp",
+      "lineRange": [
+        59,
+        62
+      ],
+      "summary": "RegisterMMDMeshManager registers mmd mesh manager for Cinema 4D plugin registration. / RegisterMMDMeshManager 为Cinema 4D 插件注册注册 mmd mesh manager。",
+      "tags": [
+        "plugin-registration",
+        "entry-point",
+        "cinema-4d"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/register_entity.cpp:RegisterMMDRigidManager",
+      "type": "function",
+      "name": "RegisterMMDRigidManager",
+      "filePath": "source/register_entity.cpp",
+      "lineRange": [
+        64,
+        67
+      ],
+      "summary": "RegisterMMDRigidManager registers mmd rigid manager for Cinema 4D plugin registration. / RegisterMMDRigidManager 为Cinema 4D 插件注册注册 mmd rigid manager。",
+      "tags": [
+        "physics",
+        "plugin-registration",
+        "entry-point"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/register_entity.cpp:RegisterMMDJointManager",
+      "type": "function",
+      "name": "RegisterMMDJointManager",
+      "filePath": "source/register_entity.cpp",
+      "lineRange": [
+        69,
+        72
+      ],
+      "summary": "RegisterMMDJointManager registers mmd joint manager for Cinema 4D plugin registration. / RegisterMMDJointManager 为Cinema 4D 插件注册注册 mmd joint manager。",
+      "tags": [
+        "physics",
+        "plugin-registration",
+        "entry-point"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/register_entity.cpp:RegisterMMDBoneTag",
+      "type": "function",
+      "name": "RegisterMMDBoneTag",
+      "filePath": "source/register_entity.cpp",
+      "lineRange": [
+        74,
+        77
+      ],
+      "summary": "RegisterMMDBoneTag registers mmd bone tag for Cinema 4D plugin registration. / RegisterMMDBoneTag 为Cinema 4D 插件注册注册 mmd bone tag。",
+      "tags": [
+        "plugin-registration",
+        "entry-point",
+        "cinema-4d"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/register_entity.cpp:cmt_register::RegisterPlugin",
+      "type": "function",
+      "name": "cmt_register::RegisterPlugin",
+      "filePath": "source/register_entity.cpp",
+      "lineRange": [
+        80,
+        110
+      ],
+      "summary": "cmt_register::RegisterPlugin registers plugin for Cinema 4D plugin registration. / cmt_register::RegisterPlugin 为Cinema 4D 插件注册注册 plugin。",
+      "tags": [
+        "plugin-registration",
+        "entry-point",
+        "cinema-4d"
+      ],
+      "complexity": "moderate"
+    }
+  ],
+  "edges": [
+    {
+      "source": "file:source/module/ui/cmt_tools_dialog.h",
+      "target": "class:source/module/ui/cmt_tools_dialog.h:CMTToolDialog",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/ui/cmt_tools_dialog.h",
+      "target": "class:source/module/ui/cmt_tools_dialog.h:CMTToolDialog",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/ui/cmt_tools_dialog.h",
+      "target": "class:source/module/ui/cmt_tools_dialog.h:CMTToolCommand",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/ui/cmt_tools_dialog.h",
+      "target": "class:source/module/ui/cmt_tools_dialog.h:CMTToolCommand",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/ui/cmt_tools_dialog.h",
+      "target": "function:source/module/ui/cmt_tools_dialog.h:CMTToolDialog::~CMTToolDialog",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/ui/cmt_tools_dialog.h",
+      "target": "function:source/module/ui/cmt_tools_dialog.h:CMTToolDialog::~CMTToolDialog",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/ui/cmt_tools_dialog.h",
+      "target": "function:source/module/ui/cmt_tools_dialog.h:CMTToolCommand::RestoreLayout",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/ui/cmt_tools_dialog.h",
+      "target": "function:source/module/ui/cmt_tools_dialog.h:CMTToolCommand::RestoreLayout",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/register_entity.cpp",
+      "target": "function:source/register_entity.cpp:RegisterCMTTool",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/register_entity.cpp",
+      "target": "function:source/register_entity.cpp:RegisterCMTTool",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/register_entity.cpp",
+      "target": "function:source/register_entity.cpp:RegisterCMTSceneManager",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/register_entity.cpp",
+      "target": "function:source/register_entity.cpp:RegisterCMTSceneManager",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/register_entity.cpp",
+      "target": "function:source/register_entity.cpp:RegisterVMDLoader",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/register_entity.cpp",
+      "target": "function:source/register_entity.cpp:RegisterVMDLoader",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/register_entity.cpp",
+      "target": "function:source/register_entity.cpp:RegisterMMDCamera",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/register_entity.cpp",
+      "target": "function:source/register_entity.cpp:RegisterMMDCamera",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/register_entity.cpp",
+      "target": "function:source/register_entity.cpp:RegisterMMDRigid",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/register_entity.cpp",
+      "target": "function:source/register_entity.cpp:RegisterMMDRigid",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/register_entity.cpp",
+      "target": "function:source/register_entity.cpp:RegisterMMDJoint",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/register_entity.cpp",
+      "target": "function:source/register_entity.cpp:RegisterMMDJoint",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/register_entity.cpp",
+      "target": "function:source/register_entity.cpp:RegisterMMDModelManager",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/register_entity.cpp",
+      "target": "function:source/register_entity.cpp:RegisterMMDModelManager",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/register_entity.cpp",
+      "target": "function:source/register_entity.cpp:RegisterMMDBoneManager",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/register_entity.cpp",
+      "target": "function:source/register_entity.cpp:RegisterMMDBoneManager",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/register_entity.cpp",
+      "target": "function:source/register_entity.cpp:RegisterMMDMeshManager",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/register_entity.cpp",
+      "target": "function:source/register_entity.cpp:RegisterMMDMeshManager",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/register_entity.cpp",
+      "target": "function:source/register_entity.cpp:RegisterMMDRigidManager",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/register_entity.cpp",
+      "target": "function:source/register_entity.cpp:RegisterMMDRigidManager",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/register_entity.cpp",
+      "target": "function:source/register_entity.cpp:RegisterMMDJointManager",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/register_entity.cpp",
+      "target": "function:source/register_entity.cpp:RegisterMMDJointManager",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/register_entity.cpp",
+      "target": "function:source/register_entity.cpp:RegisterMMDBoneTag",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/register_entity.cpp",
+      "target": "function:source/register_entity.cpp:RegisterMMDBoneTag",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/register_entity.cpp",
+      "target": "function:source/register_entity.cpp:cmt_register::RegisterPlugin",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/register_entity.cpp",
+      "target": "function:source/register_entity.cpp:cmt_register::RegisterPlugin",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/register_entity.cpp",
+      "target": "file:source/CMTSceneManager.h",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:source/register_entity.cpp",
+      "target": "file:source/module/tools/loader/vmd_loader.h",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:source/register_entity.cpp",
+      "target": "file:source/module/tools/material/mmd_material_morph_shader.h",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:source/register_entity.cpp",
+      "target": "file:source/module/tools/object/mmd_bone_manager.h",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:source/register_entity.cpp",
+      "target": "file:source/module/tools/object/mmd_camera.h",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:source/register_entity.cpp",
+      "target": "file:source/module/tools/object/mmd_joint_manager.h",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:source/register_entity.cpp",
+      "target": "file:source/module/tools/object/mmd_joint.h",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:source/register_entity.cpp",
+      "target": "file:source/module/tools/object/mmd_mesh_manager.h",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:source/register_entity.cpp",
+      "target": "file:source/module/tools/object/mmd_model_manager.h",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:source/register_entity.cpp",
+      "target": "file:source/module/tools/object/mmd_rigid_manager.h",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:source/register_entity.cpp",
+      "target": "file:source/module/tools/object/mmd_rigid.h",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:source/register_entity.cpp",
+      "target": "file:source/module/tools/tag/mmd_bone.h",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:source/register_entity.cpp",
+      "target": "file:source/module/ui/cmt_tools_dialog.h",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:source/register_entity.cpp",
+      "target": "file:source/plugin_resource.h",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:source/register_entity.cpp",
+      "target": "file:source/register_entity.h",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    }
+  ]
+}

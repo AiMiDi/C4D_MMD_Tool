@@ -1,0 +1,453 @@
+{
+  "nodes": [
+    {
+      "id": "document:.codex/skills/openspec-apply-change/SKILL.md",
+      "type": "document",
+      "name": "SKILL.md",
+      "filePath": ".codex/skills/openspec-apply-change/SKILL.md",
+      "summary": "Guides an agent through selecting an OpenSpec change, reading schema-driven context, implementing pending tasks, and updating progress until completion or a blocker. / 指导智能体选择 OpenSpec 变更、读取由 schema 驱动的上下文、逐项实现待办任务，并持续更新进度直至完成或遇到阻塞。",
+      "tags": ["documentation / 文档", "openspec / OpenSpec", "implementation-workflow / 实施工作流", "task-tracking / 任务跟踪"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "document:.codex/skills/openspec-archive-change/SKILL.md",
+      "type": "document",
+      "name": "SKILL.md",
+      "filePath": ".codex/skills/openspec-archive-change/SKILL.md",
+      "summary": "Defines the guarded OpenSpec archival procedure, including status checks, incomplete-task warnings, delta-spec synchronization assessment, and dated relocation. / 定义受约束的 OpenSpec 归档流程，包括状态检查、未完成任务警告、delta spec 同步评估以及按日期迁移目录。",
+      "tags": ["documentation / 文档", "openspec / OpenSpec", "archival-workflow / 归档工作流", "spec-synchronization / 规格同步"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "document:.codex/skills/openspec-explore/SKILL.md",
+      "type": "document",
+      "name": "SKILL.md",
+      "filePath": ".codex/skills/openspec-explore/SKILL.md",
+      "summary": "Defines a read-only, code-grounded exploration stance for clarifying requirements, comparing options, visualizing systems, and optionally capturing decisions in OpenSpec artifacts. / 定义一种只读且以代码为依据的探索方式，用于澄清需求、比较方案、可视化系统，并可选择将决策记录到 OpenSpec 工件中。",
+      "tags": ["documentation / 文档", "openspec / OpenSpec", "exploration / 探索", "read-only / 只读"],
+      "complexity": "complex"
+    },
+    {
+      "id": "document:.codex/skills/openspec-propose/SKILL.md",
+      "type": "document",
+      "name": "SKILL.md",
+      "filePath": ".codex/skills/openspec-propose/SKILL.md",
+      "summary": "Defines a one-step OpenSpec proposal workflow that creates a change, follows artifact dependency order, and produces every artifact required before implementation. / 定义一步式 OpenSpec 提案工作流：创建变更、按工件依赖顺序推进，并生成实施前所需的全部工件。",
+      "tags": ["documentation / 文档", "openspec / OpenSpec", "proposal-workflow / 提案工作流", "artifact-generation / 工件生成"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:.cursor/rules/c4d-cpp-style-guide.mdc",
+      "type": "file",
+      "name": "c4d-cpp-style-guide.mdc",
+      "filePath": ".cursor/rules/c4d-cpp-style-guide.mdc",
+      "summary": "Defines Cursor guidance for Cinema 4D C++20 code, covering Maxon-specific types and APIs, naming, formatting, class design, error handling, and threading constraints. / 定义面向 Cinema 4D C++20 代码的 Cursor 指南，涵盖 Maxon 专用类型与 API、命名、格式、类设计、错误处理和线程约束。",
+      "tags": ["configuration / 配置", "cpp-style / C++ 风格", "cinema-4d-sdk / Cinema 4D SDK", "development-guidance / 开发指导"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:.cursor/rules/project-structure.mdc",
+      "type": "file",
+      "name": "project-structure.mdc",
+      "filePath": ".cursor/rules/project-structure.mdc",
+      "summary": "Documents the repository layout, supported Cinema 4D SDK wrappers, dependency ownership, shared CMake modules, build commands, junction-based source sharing, and include conventions. / 记录仓库布局、受支持的 Cinema 4D SDK 包装层、依赖归属、共享 CMake 模块、构建命令、基于 junction 的源码共享及 include 约定。",
+      "tags": ["documentation / 文档", "project-structure / 项目结构", "build-system / 构建系统", "cinema-4d-sdk / Cinema 4D SDK"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "document:.cursor/skills/openspec-apply-change/SKILL.md",
+      "type": "document",
+      "name": "SKILL.md",
+      "filePath": ".cursor/skills/openspec-apply-change/SKILL.md",
+      "summary": "Guides an agent through selecting an OpenSpec change, reading schema-driven context, implementing pending tasks, and updating progress until completion or a blocker. / 指导智能体选择 OpenSpec 变更、读取由 schema 驱动的上下文、逐项实现待办任务，并持续更新进度直至完成或遇到阻塞。",
+      "tags": ["documentation / 文档", "openspec / OpenSpec", "implementation-workflow / 实施工作流", "task-tracking / 任务跟踪"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "document:.cursor/skills/openspec-archive-change/SKILL.md",
+      "type": "document",
+      "name": "SKILL.md",
+      "filePath": ".cursor/skills/openspec-archive-change/SKILL.md",
+      "summary": "Defines the guarded OpenSpec archival procedure, including status checks, incomplete-task warnings, delta-spec synchronization assessment, and dated relocation. / 定义受约束的 OpenSpec 归档流程，包括状态检查、未完成任务警告、delta spec 同步评估以及按日期迁移目录。",
+      "tags": ["documentation / 文档", "openspec / OpenSpec", "archival-workflow / 归档工作流", "spec-synchronization / 规格同步"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "document:.cursor/skills/openspec-explore/SKILL.md",
+      "type": "document",
+      "name": "SKILL.md",
+      "filePath": ".cursor/skills/openspec-explore/SKILL.md",
+      "summary": "Defines a read-only, code-grounded exploration stance for clarifying requirements, comparing options, visualizing systems, and optionally capturing decisions in OpenSpec artifacts. / 定义一种只读且以代码为依据的探索方式，用于澄清需求、比较方案、可视化系统，并可选择将决策记录到 OpenSpec 工件中。",
+      "tags": ["documentation / 文档", "openspec / OpenSpec", "exploration / 探索", "read-only / 只读"],
+      "complexity": "complex"
+    },
+    {
+      "id": "document:.cursor/skills/openspec-propose/SKILL.md",
+      "type": "document",
+      "name": "SKILL.md",
+      "filePath": ".cursor/skills/openspec-propose/SKILL.md",
+      "summary": "Defines a one-step OpenSpec proposal workflow that creates a change, follows artifact dependency order, and produces every artifact required before implementation. / 定义一步式 OpenSpec 提案工作流：创建变更、按工件依赖顺序推进，并生成实施前所需的全部工件。",
+      "tags": ["documentation / 文档", "openspec / OpenSpec", "proposal-workflow / 提案工作流", "artifact-generation / 工件生成"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:.cursorignore",
+      "type": "file",
+      "name": ".cursorignore",
+      "filePath": ".cursorignore",
+      "summary": "Excludes generated CMake outputs, build trees, IDE metadata, and object directories from Cursor indexing. / 将生成的 CMake 输出、构建目录、IDE 元数据和对象目录排除在 Cursor 索引之外。",
+      "tags": ["configuration / 配置", "indexing / 索引", "build-artifacts / 构建产物", "tooling / 工具"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:.gitattributes",
+      "type": "file",
+      "name": ".gitattributes",
+      "filePath": ".gitattributes",
+      "summary": "Overrides GitHub Linguist classification so Python and header files are counted as C++. / 覆盖 GitHub Linguist 分类规则，使 Python 文件和头文件按 C++ 统计。",
+      "tags": ["configuration / 配置", "git / Git", "language-classification / 语言分类"],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:.github/skills/openspec-apply-change/SKILL.md",
+      "type": "document",
+      "name": "SKILL.md",
+      "filePath": ".github/skills/openspec-apply-change/SKILL.md",
+      "summary": "Guides an agent through selecting an OpenSpec change, reading schema-driven context, implementing pending tasks, and updating progress until completion or a blocker. / 指导智能体选择 OpenSpec 变更、读取由 schema 驱动的上下文、逐项实现待办任务，并持续更新进度直至完成或遇到阻塞。",
+      "tags": ["documentation / 文档", "openspec / OpenSpec", "implementation-workflow / 实施工作流", "task-tracking / 任务跟踪"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "document:.github/skills/openspec-archive-change/SKILL.md",
+      "type": "document",
+      "name": "SKILL.md",
+      "filePath": ".github/skills/openspec-archive-change/SKILL.md",
+      "summary": "Defines the guarded OpenSpec archival procedure, including status checks, incomplete-task warnings, delta-spec synchronization assessment, and dated relocation. / 定义受约束的 OpenSpec 归档流程，包括状态检查、未完成任务警告、delta spec 同步评估以及按日期迁移目录。",
+      "tags": ["documentation / 文档", "openspec / OpenSpec", "archival-workflow / 归档工作流", "spec-synchronization / 规格同步"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "document:.github/skills/openspec-explore/SKILL.md",
+      "type": "document",
+      "name": "SKILL.md",
+      "filePath": ".github/skills/openspec-explore/SKILL.md",
+      "summary": "Defines a read-only, code-grounded exploration stance for clarifying requirements, comparing options, visualizing systems, and optionally capturing decisions in OpenSpec artifacts. / 定义一种只读且以代码为依据的探索方式，用于澄清需求、比较方案、可视化系统，并可选择将决策记录到 OpenSpec 工件中。",
+      "tags": ["documentation / 文档", "openspec / OpenSpec", "exploration / 探索", "read-only / 只读"],
+      "complexity": "complex"
+    },
+    {
+      "id": "document:.github/skills/openspec-propose/SKILL.md",
+      "type": "document",
+      "name": "SKILL.md",
+      "filePath": ".github/skills/openspec-propose/SKILL.md",
+      "summary": "Defines a one-step OpenSpec proposal workflow that creates a change, follows artifact dependency order, and produces every artifact required before implementation. / 定义一步式 OpenSpec 提案工作流：创建变更、按工件依赖顺序推进，并生成实施前所需的全部工件。",
+      "tags": ["documentation / 文档", "openspec / OpenSpec", "proposal-workflow / 提案工作流", "artifact-generation / 工件生成"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:.gitmodules",
+      "type": "file",
+      "name": ".gitmodules",
+      "filePath": ".gitmodules",
+      "summary": "Registers Bullet3, libMMD, and the installer setup as Git submodules with their repository paths and upstream URLs. / 将 Bullet3、libMMD 和安装程序 setup 注册为 Git submodule，并记录其仓库路径与上游 URL。",
+      "tags": ["configuration / 配置", "git-submodules / Git 子模块", "dependencies / 依赖"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:cmake/initial_cache/dev.example.cmake",
+      "type": "file",
+      "name": "dev.example.cmake",
+      "filePath": "cmake/initial_cache/dev.example.cmake",
+      "summary": "Provides a portable Debug-oriented initial cache example targeting sdk_2026, with optional libMMD tests and no packaging tool registration. / 提供面向 sdk_2026 的可移植 Debug 初始缓存示例，可选启用 libMMD 测试且不注册打包工具。",
+      "tags": ["build-system / 构建系统", "cmake / CMake", "configuration / 配置", "development / 开发"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:cmake/initial_cache/package.example.cmake",
+      "type": "file",
+      "name": "package.example.cmake",
+      "filePath": "cmake/initial_cache/package.example.cmake",
+      "summary": "Provides a Release packaging initial cache for sdk_2026, including an editable Inno Setup compiler path and optional version arguments. / 提供面向 sdk_2026 的 Release 打包初始缓存，其中包含可编辑的 Inno Setup 编译器路径和可选版本参数。",
+      "tags": ["build-system / 构建系统", "cmake / CMake", "packaging / 打包", "inno-setup / Inno Setup"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:cmake/mmdtool_plugin_common.cmake",
+      "type": "file",
+      "name": "mmdtool_plugin_common.cmake",
+      "filePath": "cmake/mmdtool_plugin_common.cmake",
+      "summary": "Centralizes shared Cinema 4D plugin setup across SDK wrappers: dependency modes, source and resource junctions, Maxon target variables, platform-specific includes and linking, and third-party attachment. / 集中管理各 SDK 包装层共享的 Cinema 4D 插件配置，包括依赖模式、源码与资源 junction、Maxon target 变量、平台专用 include 与链接，以及第三方库接入。",
+      "tags": ["build-system / 构建系统", "cmake / CMake", "plugin-configuration / 插件配置", "cross-platform / 跨平台"],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:cmake/mmdtool_plugin_common.cmake:cmt_collect_dependency_libs",
+      "type": "function",
+      "name": "cmt_collect_dependency_libs",
+      "filePath": "cmake/mmdtool_plugin_common.cmake",
+      "lineRange": [5, 69],
+      "summary": "Scans installed .lib and .a artifacts, separates debug from release variants, sorts them, and returns four platform-specific library lists to the caller. / 扫描已安装的 .lib 与 .a 产物，区分 Debug 和 Release 变体、执行排序，并向调用方返回四组平台专用库列表。",
+      "tags": ["utility / 工具函数", "dependency-discovery / 依赖发现", "library-classification / 库分类", "cmake / CMake"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:cmake/mmdtool_plugin_common.cmake:_cmt_link_subdir_third_party_to_plugin",
+      "type": "function",
+      "name": "_cmt_link_subdir_third_party_to_plugin",
+      "filePath": "cmake/mmdtool_plugin_common.cmake",
+      "lineRange": [82, 97],
+      "summary": "Links libMMD and Bullet CMake targets privately into the plugin after Maxon target processing when subdirectory targets are present. / 当 subdirectory target 存在时，在 Maxon target 处理完成后将 libMMD 与 Bullet CMake target 私有链接到插件。",
+      "tags": ["build-system / 构建系统", "linking / 链接", "third-party / 第三方依赖", "cmake-macro / CMake 宏"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:cmake/mmdtool_plugin_common.cmake:cmt_setup_mmdtool_plugin",
+      "type": "function",
+      "name": "cmt_setup_mmdtool_plugin",
+      "filePath": "cmake/mmdtool_plugin_common.cmake",
+      "lineRange": [99, 427],
+      "summary": "Parses shared plugin parameters, selects SUBDIR, INSTALL, or PREBUILT dependency behavior, creates source and resource junctions, configures Maxon targets per platform, and finalizes linking and debugger settings. / 解析共享插件参数，选择 SUBDIR、INSTALL 或 PREBUILT 依赖模式，创建源码与资源 junction，按平台配置 Maxon target，并完成链接和调试器设置。",
+      "tags": ["build-system / 构建系统", "plugin-configuration / 插件配置", "dependency-mode / 依赖模式", "cross-platform / 跨平台", "cmake-macro / CMake 宏"],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:cmake/mmdtool_plugin_dependencies.cmake",
+      "type": "file",
+      "name": "mmdtool_plugin_dependencies.cmake",
+      "filePath": "cmake/mmdtool_plugin_dependencies.cmake",
+      "summary": "Adds Bullet3 and libMMD to the SDK build graph unless prebuilt libraries are selected, validating source roots and forcing compatible static-build and test options. / 在未选择预构建库时将 Bullet3 与 libMMD 加入 SDK 构建图，同时验证源码根目录并强制使用兼容的静态构建与测试选项。",
+      "tags": ["build-system / 构建系统", "cmake / CMake", "dependency-management / 依赖管理", "static-linking / 静态链接"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:cmake/mmdtool_plugin_dependencies.cmake:mmdtool_plugin_dependencies_add",
+      "type": "function",
+      "name": "mmdtool_plugin_dependencies_add",
+      "filePath": "cmake/mmdtool_plugin_dependencies.cmake",
+      "lineRange": [16, 76],
+      "summary": "Validates configurable Bullet3 and libMMD source roots, applies ABI-compatible static-build options, and adds both dependencies under per-build cmt_deps directories unless prebuilt artifacts are selected. / 验证可配置的 Bullet3 与 libMMD 源码根目录，应用 ABI 兼容的静态构建选项，并在未选择预构建产物时将两项依赖加入各构建目录下的 cmt_deps。",
+      "tags": ["dependency-management / 依赖管理", "build-configuration / 构建配置", "validation / 校验", "cmake / CMake"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:cmake/sdk/base_settings/compile_definitions.cmake",
+      "type": "file",
+      "name": "compile_definitions.cmake",
+      "filePath": "cmake/sdk/base_settings/compile_definitions.cmake",
+      "summary": "Defines guarded Maxon target macros for 64-bit, Debug, Release, and Windows builds, including Unicode and platform compatibility flags. / 定义带 include guard 的 Maxon target 宏，覆盖 64 位、Debug、Release 和 Windows 构建，并包含 Unicode 与平台兼容标志。",
+      "tags": ["build-system / 构建系统", "compile-definitions / 编译定义", "platform-configuration / 平台配置", "cmake / CMake"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:cmake/sdk/base_settings/compile_options.cmake",
+      "type": "file",
+      "name": "compile_options.cmake",
+      "filePath": "cmake/sdk/base_settings/compile_options.cmake",
+      "summary": "Defines guarded compiler and ISA option sets for MSVC, ClangCL, Clang, GCC, Objective-C, and platform-specific Debug and Release builds. / 定义带 include guard 的编译器与 ISA 选项集，覆盖 MSVC、ClangCL、Clang、GCC、Objective-C 以及各平台的 Debug 与 Release 构建。",
+      "tags": ["build-system / 构建系统", "compiler-options / 编译器选项", "cross-platform / 跨平台", "performance / 性能"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:cmake/sdk/base_settings/link_options.cmake",
+      "type": "file",
+      "name": "link_options.cmake",
+      "filePath": "cmake/sdk/base_settings/link_options.cmake",
+      "summary": "Defines guarded linker flags for ClangCL with MSVC semantics and Linux Clang or GCC, while retaining full debug information in Release builds. / 定义带 include guard 的 ClangCL/MSVC 语义与 Linux Clang/GCC 链接选项，并在 Release 构建中保留完整调试信息。",
+      "tags": ["build-system / 构建系统", "linker-options / 链接器选项", "cross-platform / 跨平台", "debugging / 调试"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:cmake/sdk/base_settings/sanitize.cmake",
+      "type": "file",
+      "name": "sanitize.cmake",
+      "filePath": "cmake/sdk/base_settings/sanitize.cmake",
+      "summary": "Defines guarded AddressSanitizer compile definitions and link options for supported Release configurations. / 为受支持的 Release 配置定义带 include guard 的 AddressSanitizer 编译定义与链接选项。",
+      "tags": ["build-system / 构建系统", "address-sanitizer / 地址消毒器", "security / 安全", "debugging / 调试"],
+      "complexity": "simple"
+    }
+  ],
+  "edges": [
+    {
+      "source": "document:.codex/skills/openspec-apply-change/SKILL.md",
+      "target": "document:.cursor/skills/openspec-apply-change/SKILL.md",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.codex/skills/openspec-apply-change/SKILL.md",
+      "target": "document:.github/skills/openspec-apply-change/SKILL.md",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.codex/skills/openspec-archive-change/SKILL.md",
+      "target": "document:.cursor/skills/openspec-archive-change/SKILL.md",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.codex/skills/openspec-archive-change/SKILL.md",
+      "target": "document:.github/skills/openspec-archive-change/SKILL.md",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.codex/skills/openspec-explore/SKILL.md",
+      "target": "document:.cursor/skills/openspec-explore/SKILL.md",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.codex/skills/openspec-explore/SKILL.md",
+      "target": "document:.github/skills/openspec-explore/SKILL.md",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.codex/skills/openspec-propose/SKILL.md",
+      "target": "document:.cursor/skills/openspec-propose/SKILL.md",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.codex/skills/openspec-propose/SKILL.md",
+      "target": "document:.github/skills/openspec-propose/SKILL.md",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.codex/skills/openspec-propose/SKILL.md",
+      "target": "document:.codex/skills/openspec-apply-change/SKILL.md",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.codex/skills/openspec-apply-change/SKILL.md",
+      "target": "document:.codex/skills/openspec-archive-change/SKILL.md",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.codex/skills/openspec-explore/SKILL.md",
+      "target": "document:.codex/skills/openspec-propose/SKILL.md",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.cursor/skills/openspec-propose/SKILL.md",
+      "target": "document:.cursor/skills/openspec-apply-change/SKILL.md",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.cursor/skills/openspec-apply-change/SKILL.md",
+      "target": "document:.cursor/skills/openspec-archive-change/SKILL.md",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.cursor/skills/openspec-explore/SKILL.md",
+      "target": "document:.cursor/skills/openspec-propose/SKILL.md",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.github/skills/openspec-propose/SKILL.md",
+      "target": "document:.github/skills/openspec-apply-change/SKILL.md",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.github/skills/openspec-apply-change/SKILL.md",
+      "target": "document:.github/skills/openspec-archive-change/SKILL.md",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:.github/skills/openspec-explore/SKILL.md",
+      "target": "document:.github/skills/openspec-propose/SKILL.md",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "file:cmake/mmdtool_plugin_common.cmake",
+      "target": "function:cmake/mmdtool_plugin_common.cmake:cmt_collect_dependency_libs",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:cmake/mmdtool_plugin_common.cmake",
+      "target": "function:cmake/mmdtool_plugin_common.cmake:_cmt_link_subdir_third_party_to_plugin",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:cmake/mmdtool_plugin_common.cmake",
+      "target": "function:cmake/mmdtool_plugin_common.cmake:cmt_setup_mmdtool_plugin",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:cmake/mmdtool_plugin_common.cmake",
+      "target": "function:cmake/mmdtool_plugin_common.cmake:cmt_collect_dependency_libs",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:cmake/mmdtool_plugin_common.cmake",
+      "target": "function:cmake/mmdtool_plugin_common.cmake:cmt_setup_mmdtool_plugin",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:cmake/mmdtool_plugin_common.cmake:cmt_setup_mmdtool_plugin",
+      "target": "function:cmake/mmdtool_plugin_common.cmake:cmt_collect_dependency_libs",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:cmake/mmdtool_plugin_common.cmake:cmt_setup_mmdtool_plugin",
+      "target": "function:cmake/mmdtool_plugin_common.cmake:_cmt_link_subdir_third_party_to_plugin",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:cmake/mmdtool_plugin_dependencies.cmake",
+      "target": "function:cmake/mmdtool_plugin_dependencies.cmake:mmdtool_plugin_dependencies_add",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:cmake/mmdtool_plugin_dependencies.cmake",
+      "target": "function:cmake/mmdtool_plugin_dependencies.cmake:mmdtool_plugin_dependencies_add",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    }
+  ]
+}

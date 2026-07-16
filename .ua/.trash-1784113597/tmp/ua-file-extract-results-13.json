@@ -1,0 +1,435 @@
+{
+  "scriptCompleted": true,
+  "filesAnalyzed": 25,
+  "filesSkipped": [],
+  "results": [
+    {
+      "path": ".codex/skills/openspec-apply-change/SKILL.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 156,
+      "nonEmptyLines": 117,
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 0
+      }
+    },
+    {
+      "path": ".codex/skills/openspec-archive-change/SKILL.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 114,
+      "nonEmptyLines": 81,
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 0
+      }
+    },
+    {
+      "path": ".codex/skills/openspec-explore/SKILL.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 288,
+      "nonEmptyLines": 214,
+      "sections": [
+        {
+          "heading": "The Stance",
+          "level": 2,
+          "line": 20
+        },
+        {
+          "heading": "What You Might Do",
+          "level": 2,
+          "line": 31
+        },
+        {
+          "heading": "OpenSpec Awareness",
+          "level": 2,
+          "line": 78
+        },
+        {
+          "heading": "Check for context",
+          "level": 3,
+          "line": 82
+        },
+        {
+          "heading": "When no change exists",
+          "level": 3,
+          "line": 94
+        },
+        {
+          "heading": "When a change exists",
+          "level": 3,
+          "line": 101
+        },
+        {
+          "heading": "What You Don't Have To Do",
+          "level": 2,
+          "line": 135
+        },
+        {
+          "heading": "Handling Different Entry Points",
+          "level": 2,
+          "line": 146
+        },
+        {
+          "heading": "Ending Discovery",
+          "level": 2,
+          "line": 250
+        },
+        {
+          "heading": "Guardrails",
+          "level": 2,
+          "line": 279
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 10
+      }
+    },
+    {
+      "path": ".codex/skills/openspec-propose/SKILL.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 110,
+      "nonEmptyLines": 86,
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 0
+      }
+    },
+    {
+      "path": ".cursor/rules/c4d-cpp-style-guide.mdc",
+      "language": "mdc",
+      "fileCategory": "code",
+      "totalLines": 70,
+      "nonEmptyLines": 54,
+      "metrics": {}
+    },
+    {
+      "path": ".cursor/rules/project-structure.mdc",
+      "language": "mdc",
+      "fileCategory": "code",
+      "totalLines": 71,
+      "nonEmptyLines": 54,
+      "metrics": {}
+    },
+    {
+      "path": ".cursor/skills/openspec-apply-change/SKILL.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 156,
+      "nonEmptyLines": 117,
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 0
+      }
+    },
+    {
+      "path": ".cursor/skills/openspec-archive-change/SKILL.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 114,
+      "nonEmptyLines": 81,
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 0
+      }
+    },
+    {
+      "path": ".cursor/skills/openspec-explore/SKILL.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 288,
+      "nonEmptyLines": 214,
+      "sections": [
+        {
+          "heading": "The Stance",
+          "level": 2,
+          "line": 20
+        },
+        {
+          "heading": "What You Might Do",
+          "level": 2,
+          "line": 31
+        },
+        {
+          "heading": "OpenSpec Awareness",
+          "level": 2,
+          "line": 78
+        },
+        {
+          "heading": "Check for context",
+          "level": 3,
+          "line": 82
+        },
+        {
+          "heading": "When no change exists",
+          "level": 3,
+          "line": 94
+        },
+        {
+          "heading": "When a change exists",
+          "level": 3,
+          "line": 101
+        },
+        {
+          "heading": "What You Don't Have To Do",
+          "level": 2,
+          "line": 135
+        },
+        {
+          "heading": "Handling Different Entry Points",
+          "level": 2,
+          "line": 146
+        },
+        {
+          "heading": "Ending Discovery",
+          "level": 2,
+          "line": 250
+        },
+        {
+          "heading": "Guardrails",
+          "level": 2,
+          "line": 279
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 10
+      }
+    },
+    {
+      "path": ".cursor/skills/openspec-propose/SKILL.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 110,
+      "nonEmptyLines": 86,
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 0
+      }
+    },
+    {
+      "path": ".cursorignore",
+      "language": "unknown",
+      "fileCategory": "code",
+      "totalLines": 9,
+      "nonEmptyLines": 8,
+      "metrics": {}
+    },
+    {
+      "path": ".gitattributes",
+      "language": "unknown",
+      "fileCategory": "code",
+      "totalLines": 2,
+      "nonEmptyLines": 2,
+      "metrics": {}
+    },
+    {
+      "path": ".github/skills/openspec-apply-change/SKILL.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 156,
+      "nonEmptyLines": 117,
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 0
+      }
+    },
+    {
+      "path": ".github/skills/openspec-archive-change/SKILL.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 114,
+      "nonEmptyLines": 81,
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 0
+      }
+    },
+    {
+      "path": ".github/skills/openspec-explore/SKILL.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 288,
+      "nonEmptyLines": 214,
+      "sections": [
+        {
+          "heading": "The Stance",
+          "level": 2,
+          "line": 20
+        },
+        {
+          "heading": "What You Might Do",
+          "level": 2,
+          "line": 31
+        },
+        {
+          "heading": "OpenSpec Awareness",
+          "level": 2,
+          "line": 78
+        },
+        {
+          "heading": "Check for context",
+          "level": 3,
+          "line": 82
+        },
+        {
+          "heading": "When no change exists",
+          "level": 3,
+          "line": 94
+        },
+        {
+          "heading": "When a change exists",
+          "level": 3,
+          "line": 101
+        },
+        {
+          "heading": "What You Don't Have To Do",
+          "level": 2,
+          "line": 135
+        },
+        {
+          "heading": "Handling Different Entry Points",
+          "level": 2,
+          "line": 146
+        },
+        {
+          "heading": "Ending Discovery",
+          "level": 2,
+          "line": 250
+        },
+        {
+          "heading": "Guardrails",
+          "level": 2,
+          "line": 279
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 10
+      }
+    },
+    {
+      "path": ".github/skills/openspec-propose/SKILL.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 110,
+      "nonEmptyLines": 86,
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 0
+      }
+    },
+    {
+      "path": ".gitmodules",
+      "language": "unknown",
+      "fileCategory": "code",
+      "totalLines": 9,
+      "nonEmptyLines": 9,
+      "metrics": {}
+    },
+    {
+      "path": "cmake/initial_cache/dev.example.cmake",
+      "language": "cmake",
+      "fileCategory": "code",
+      "totalLines": 22,
+      "nonEmptyLines": 11,
+      "metrics": {}
+    },
+    {
+      "path": "cmake/initial_cache/package.example.cmake",
+      "language": "cmake",
+      "fileCategory": "code",
+      "totalLines": 26,
+      "nonEmptyLines": 13,
+      "metrics": {}
+    },
+    {
+      "path": "cmake/mmdtool_plugin_common.cmake",
+      "language": "cmake",
+      "fileCategory": "code",
+      "totalLines": 427,
+      "nonEmptyLines": 221,
+      "metrics": {}
+    },
+    {
+      "path": "cmake/mmdtool_plugin_dependencies.cmake",
+      "language": "cmake",
+      "fileCategory": "code",
+      "totalLines": 76,
+      "nonEmptyLines": 69,
+      "metrics": {}
+    },
+    {
+      "path": "cmake/sdk/base_settings/compile_definitions.cmake",
+      "language": "cmake",
+      "fileCategory": "code",
+      "totalLines": 42,
+      "nonEmptyLines": 35,
+      "metrics": {}
+    },
+    {
+      "path": "cmake/sdk/base_settings/compile_options.cmake",
+      "language": "cmake",
+      "fileCategory": "code",
+      "totalLines": 97,
+      "nonEmptyLines": 80,
+      "metrics": {}
+    },
+    {
+      "path": "cmake/sdk/base_settings/link_options.cmake",
+      "language": "cmake",
+      "fileCategory": "code",
+      "totalLines": 29,
+      "nonEmptyLines": 23,
+      "metrics": {}
+    },
+    {
+      "path": "cmake/sdk/base_settings/sanitize.cmake",
+      "language": "cmake",
+      "fileCategory": "code",
+      "totalLines": 26,
+      "nonEmptyLines": 21,
+      "metrics": {}
+    }
+  ]
+}

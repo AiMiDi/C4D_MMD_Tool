@@ -1,0 +1,2673 @@
+{
+  "scriptCompleted": true,
+  "filesAnalyzed": 25,
+  "filesSkipped": [],
+  "results": [
+    {
+      "path": "res/S24_up/mikumikudance_data/toon04.bmp",
+      "language": "bmp",
+      "fileCategory": "code",
+      "totalLines": 1,
+      "nonEmptyLines": 1,
+      "metrics": {}
+    },
+    {
+      "path": "res/S24_up/mikumikudance_data/toon05.bmp",
+      "language": "bmp",
+      "fileCategory": "code",
+      "totalLines": 1,
+      "nonEmptyLines": 1,
+      "metrics": {}
+    },
+    {
+      "path": "res/S24_up/mikumikudance_data/toon06.bmp",
+      "language": "bmp",
+      "fileCategory": "code",
+      "totalLines": 1,
+      "nonEmptyLines": 1,
+      "metrics": {}
+    },
+    {
+      "path": "res/S24_up/mikumikudance_data/toon07.bmp",
+      "language": "bmp",
+      "fileCategory": "code",
+      "totalLines": 1,
+      "nonEmptyLines": 1,
+      "metrics": {}
+    },
+    {
+      "path": "res/S24_up/mikumikudance_data/toon08.bmp",
+      "language": "bmp",
+      "fileCategory": "code",
+      "totalLines": 1,
+      "nonEmptyLines": 1,
+      "metrics": {}
+    },
+    {
+      "path": "res/S24_up/mikumikudance_data/toon09.bmp",
+      "language": "bmp",
+      "fileCategory": "code",
+      "totalLines": 1,
+      "nonEmptyLines": 1,
+      "metrics": {}
+    },
+    {
+      "path": "res/S24_up/mikumikudance_data/toon10.bmp",
+      "language": "bmp",
+      "fileCategory": "code",
+      "totalLines": 1,
+      "nonEmptyLines": 1,
+      "metrics": {}
+    },
+    {
+      "path": "res/S24_up/name_conversion/default.json",
+      "language": "json",
+      "fileCategory": "config",
+      "totalLines": 248,
+      "nonEmptyLines": 248,
+      "sections": [
+        {
+          "heading": "センター",
+          "level": 1,
+          "line": 2
+        },
+        {
+          "heading": "上半身",
+          "level": 1,
+          "line": 3
+        },
+        {
+          "heading": "首",
+          "level": 1,
+          "line": 4
+        },
+        {
+          "heading": "頭",
+          "level": 1,
+          "line": 5
+        },
+        {
+          "heading": "左目",
+          "level": 1,
+          "line": 6
+        },
+        {
+          "heading": "右目",
+          "level": 1,
+          "line": 7
+        },
+        {
+          "heading": "前髪３",
+          "level": 1,
+          "line": 8
+        },
+        {
+          "heading": "前髪２",
+          "level": 1,
+          "line": 9
+        },
+        {
+          "heading": "前髪１",
+          "level": 1,
+          "line": 10
+        },
+        {
+          "heading": "後髪",
+          "level": 1,
+          "line": 11
+        },
+        {
+          "heading": "下半身",
+          "level": 1,
+          "line": 12
+        },
+        {
+          "heading": "左肩",
+          "level": 1,
+          "line": 13
+        },
+        {
+          "heading": "左腕",
+          "level": 1,
+          "line": 14
+        },
+        {
+          "heading": "左ひじ",
+          "level": 1,
+          "line": 15
+        },
+        {
+          "heading": "左手首",
+          "level": 1,
+          "line": 16
+        },
+        {
+          "heading": "左親指１",
+          "level": 1,
+          "line": 17
+        },
+        {
+          "heading": "左親指２",
+          "level": 1,
+          "line": 18
+        },
+        {
+          "heading": "左人指１",
+          "level": 1,
+          "line": 19
+        },
+        {
+          "heading": "左人指２",
+          "level": 1,
+          "line": 20
+        },
+        {
+          "heading": "左人指３",
+          "level": 1,
+          "line": 21
+        },
+        {
+          "heading": "左中指１",
+          "level": 1,
+          "line": 22
+        },
+        {
+          "heading": "左中指２",
+          "level": 1,
+          "line": 23
+        },
+        {
+          "heading": "左中指３",
+          "level": 1,
+          "line": 24
+        },
+        {
+          "heading": "左薬指１",
+          "level": 1,
+          "line": 25
+        },
+        {
+          "heading": "左薬指２",
+          "level": 1,
+          "line": 26
+        },
+        {
+          "heading": "左薬指３",
+          "level": 1,
+          "line": 27
+        },
+        {
+          "heading": "左小指１",
+          "level": 1,
+          "line": 28
+        },
+        {
+          "heading": "左小指２",
+          "level": 1,
+          "line": 29
+        },
+        {
+          "heading": "左小指３",
+          "level": 1,
+          "line": 30
+        },
+        {
+          "heading": "右肩",
+          "level": 1,
+          "line": 31
+        },
+        {
+          "heading": "右腕",
+          "level": 1,
+          "line": 32
+        },
+        {
+          "heading": "右ひじ",
+          "level": 1,
+          "line": 33
+        },
+        {
+          "heading": "右手首",
+          "level": 1,
+          "line": 34
+        },
+        {
+          "heading": "右親指１",
+          "level": 1,
+          "line": 35
+        },
+        {
+          "heading": "右親指２",
+          "level": 1,
+          "line": 36
+        },
+        {
+          "heading": "右人指１",
+          "level": 1,
+          "line": 37
+        },
+        {
+          "heading": "右人指２",
+          "level": 1,
+          "line": 38
+        },
+        {
+          "heading": "右人指３",
+          "level": 1,
+          "line": 39
+        },
+        {
+          "heading": "右中指１",
+          "level": 1,
+          "line": 40
+        },
+        {
+          "heading": "右中指２",
+          "level": 1,
+          "line": 41
+        },
+        {
+          "heading": "右中指３",
+          "level": 1,
+          "line": 42
+        },
+        {
+          "heading": "右薬指１",
+          "level": 1,
+          "line": 43
+        },
+        {
+          "heading": "右薬指２",
+          "level": 1,
+          "line": 44
+        },
+        {
+          "heading": "右薬指３",
+          "level": 1,
+          "line": 45
+        },
+        {
+          "heading": "右小指１",
+          "level": 1,
+          "line": 46
+        },
+        {
+          "heading": "右小指２",
+          "level": 1,
+          "line": 47
+        },
+        {
+          "heading": "右小指３",
+          "level": 1,
+          "line": 48
+        },
+        {
+          "heading": "左ﾏﾌﾗｰ１",
+          "level": 1,
+          "line": 49
+        },
+        {
+          "heading": "左ﾏﾌﾗｰ２",
+          "level": 1,
+          "line": 50
+        },
+        {
+          "heading": "左ﾏﾌﾗｰ３",
+          "level": 1,
+          "line": 51
+        },
+        {
+          "heading": "左ﾏﾌﾗｰ４",
+          "level": 1,
+          "line": 52
+        },
+        {
+          "heading": "右ﾏﾌﾗｰ１",
+          "level": 1,
+          "line": 53
+        },
+        {
+          "heading": "右ﾏﾌﾗｰ２",
+          "level": 1,
+          "line": 54
+        },
+        {
+          "heading": "右ﾏﾌﾗｰ３",
+          "level": 1,
+          "line": 55
+        },
+        {
+          "heading": "右ﾏﾌﾗｰ４",
+          "level": 1,
+          "line": 56
+        },
+        {
+          "heading": "左裾１",
+          "level": 1,
+          "line": 57
+        },
+        {
+          "heading": "左裾２",
+          "level": 1,
+          "line": 58
+        },
+        {
+          "heading": "右裾１",
+          "level": 1,
+          "line": 59
+        },
+        {
+          "heading": "右裾２",
+          "level": 1,
+          "line": 60
+        },
+        {
+          "heading": "左足",
+          "level": 1,
+          "line": 61
+        },
+        {
+          "heading": "左ひざ",
+          "level": 1,
+          "line": 62
+        },
+        {
+          "heading": "左足首",
+          "level": 1,
+          "line": 63
+        },
+        {
+          "heading": "右足",
+          "level": 1,
+          "line": 64
+        },
+        {
+          "heading": "右ひざ",
+          "level": 1,
+          "line": 65
+        },
+        {
+          "heading": "右足首",
+          "level": 1,
+          "line": 66
+        },
+        {
+          "heading": "両目",
+          "level": 1,
+          "line": 67
+        },
+        {
+          "heading": "左ﾏﾌﾗｰ５",
+          "level": 1,
+          "line": 68
+        },
+        {
+          "heading": "右ﾏﾌﾗｰ５",
+          "level": 1,
+          "line": 69
+        },
+        {
+          "heading": "左つま先",
+          "level": 1,
+          "line": 70
+        },
+        {
+          "heading": "右つま先",
+          "level": 1,
+          "line": 71
+        },
+        {
+          "heading": "左ﾏﾌﾗｰＩＫ",
+          "level": 1,
+          "line": 72
+        },
+        {
+          "heading": "右ﾏﾌﾗｰＩＫ",
+          "level": 1,
+          "line": 73
+        },
+        {
+          "heading": "左足ＩＫ",
+          "level": 1,
+          "line": 74
+        },
+        {
+          "heading": "右足ＩＫ",
+          "level": 1,
+          "line": 75
+        },
+        {
+          "heading": "左つま先ＩＫ",
+          "level": 1,
+          "line": 76
+        },
+        {
+          "heading": "右つま先ＩＫ",
+          "level": 1,
+          "line": 77
+        },
+        {
+          "heading": "真面目",
+          "level": 1,
+          "line": 78
+        },
+        {
+          "heading": "困る",
+          "level": 1,
+          "line": 79
+        },
+        {
+          "heading": "にこり",
+          "level": 1,
+          "line": 80
+        },
+        {
+          "heading": "怒り",
+          "level": 1,
+          "line": 81
+        },
+        {
+          "heading": "上",
+          "level": 1,
+          "line": 82
+        },
+        {
+          "heading": "下",
+          "level": 1,
+          "line": 83
+        },
+        {
+          "heading": "まばたき",
+          "level": 1,
+          "line": 84
+        },
+        {
+          "heading": "笑い",
+          "level": 1,
+          "line": 85
+        },
+        {
+          "heading": "ウィンク",
+          "level": 1,
+          "line": 86
+        },
+        {
+          "heading": "ウィンク２",
+          "level": 1,
+          "line": 87
+        },
+        {
+          "heading": "ウィンク右",
+          "level": 1,
+          "line": 88
+        },
+        {
+          "heading": "ｳｨﾝｸ２右",
+          "level": 1,
+          "line": 89
+        },
+        {
+          "heading": "はぅ",
+          "level": 1,
+          "line": 90
+        },
+        {
+          "heading": "なごみ",
+          "level": 1,
+          "line": 91
+        },
+        {
+          "heading": "びっくり",
+          "level": 1,
+          "line": 92
+        },
+        {
+          "heading": "瞳小",
+          "level": 1,
+          "line": 93
+        },
+        {
+          "heading": "あ",
+          "level": 1,
+          "line": 94
+        },
+        {
+          "heading": "い",
+          "level": 1,
+          "line": 95
+        },
+        {
+          "heading": "う",
+          "level": 1,
+          "line": 96
+        },
+        {
+          "heading": "お",
+          "level": 1,
+          "line": 97
+        },
+        {
+          "heading": "▲",
+          "level": 1,
+          "line": 98
+        },
+        {
+          "heading": "∞",
+          "level": 1,
+          "line": 99
+        },
+        {
+          "heading": "歯上下",
+          "level": 1,
+          "line": 100
+        },
+        {
+          "heading": "にやり",
+          "level": 1,
+          "line": 101
+        },
+        {
+          "heading": "ＩＫ",
+          "level": 1,
+          "line": 102
+        },
+        {
+          "heading": "体(上)",
+          "level": 1,
+          "line": 103
+        },
+        {
+          "heading": "髪",
+          "level": 1,
+          "line": 104
+        },
+        {
+          "heading": "腕",
+          "level": 1,
+          "line": 105
+        },
+        {
+          "heading": "指",
+          "level": 1,
+          "line": 106
+        },
+        {
+          "heading": "体(下)",
+          "level": 1,
+          "line": 107
+        },
+        {
+          "heading": "足",
+          "level": 1,
+          "line": 108
+        },
+        {
+          "heading": "ﾎﾞｰﾝ01",
+          "level": 1,
+          "line": 109
+        },
+        {
+          "heading": "ﾎﾞｰﾝ02",
+          "level": 1,
+          "line": 110
+        },
+        {
+          "heading": "ﾎﾞｰﾝ03",
+          "level": 1,
+          "line": 111
+        },
+        {
+          "heading": "ﾎﾞｰﾝ04",
+          "level": 1,
+          "line": 112
+        },
+        {
+          "heading": "ﾎﾞｰﾝ05",
+          "level": 1,
+          "line": 113
+        },
+        {
+          "heading": "ﾎﾞｰﾝ06",
+          "level": 1,
+          "line": 114
+        },
+        {
+          "heading": "ﾎﾞｰﾝ07",
+          "level": 1,
+          "line": 115
+        },
+        {
+          "heading": "ﾎﾞｰﾝ08",
+          "level": 1,
+          "line": 116
+        },
+        {
+          "heading": "ﾎﾞｰﾝ09",
+          "level": 1,
+          "line": 117
+        },
+        {
+          "heading": "ﾎﾞｰﾝ10",
+          "level": 1,
+          "line": 118
+        },
+        {
+          "heading": "ﾎﾞｰﾝ11",
+          "level": 1,
+          "line": 119
+        },
+        {
+          "heading": "ﾎﾞｰﾝ12",
+          "level": 1,
+          "line": 120
+        },
+        {
+          "heading": "ﾎﾞｰﾝ13",
+          "level": 1,
+          "line": 121
+        },
+        {
+          "heading": "ﾎﾞｰﾝ14",
+          "level": 1,
+          "line": 122
+        },
+        {
+          "heading": "ﾎﾞｰﾝ15",
+          "level": 1,
+          "line": 123
+        },
+        {
+          "heading": "胸リボン",
+          "level": 1,
+          "line": 124
+        },
+        {
+          "heading": "左リボン",
+          "level": 1,
+          "line": 125
+        },
+        {
+          "heading": "右リボン",
+          "level": 1,
+          "line": 126
+        },
+        {
+          "heading": "腰飾り",
+          "level": 1,
+          "line": 127
+        },
+        {
+          "heading": "左髪",
+          "level": 1,
+          "line": 128
+        },
+        {
+          "heading": "右髪",
+          "level": 1,
+          "line": 129
+        },
+        {
+          "heading": "前髪",
+          "level": 1,
+          "line": 130
+        },
+        {
+          "heading": "左セーラ",
+          "level": 1,
+          "line": 131
+        },
+        {
+          "heading": "右セーラ",
+          "level": 1,
+          "line": 132
+        },
+        {
+          "heading": "左袖",
+          "level": 1,
+          "line": 133
+        },
+        {
+          "heading": "右袖",
+          "level": 1,
+          "line": 134
+        },
+        {
+          "heading": "ﾈｸﾀｲ１",
+          "level": 1,
+          "line": 135
+        },
+        {
+          "heading": "ﾈｸﾀｲ２",
+          "level": 1,
+          "line": 136
+        },
+        {
+          "heading": "ﾈｸﾀｲ３",
+          "level": 1,
+          "line": 137
+        },
+        {
+          "heading": "左セーラー",
+          "level": 1,
+          "line": 138
+        },
+        {
+          "heading": "右セーラー",
+          "level": 1,
+          "line": 139
+        },
+        {
+          "heading": "ﾈｸﾀｲ先",
+          "level": 1,
+          "line": 140
+        },
+        {
+          "heading": "ﾈｸﾀｲＩＫ",
+          "level": 1,
+          "line": 141
+        },
+        {
+          "heading": "左ｽｶｰﾄ前",
+          "level": 1,
+          "line": 142
+        },
+        {
+          "heading": "左ｽｶｰﾄ後",
+          "level": 1,
+          "line": 143
+        },
+        {
+          "heading": "右ｽｶｰﾄ前",
+          "level": 1,
+          "line": 144
+        },
+        {
+          "heading": "右ｽｶｰﾄ後",
+          "level": 1,
+          "line": 145
+        },
+        {
+          "heading": "ウィンクＬ",
+          "level": 1,
+          "line": 146
+        },
+        {
+          "heading": "え",
+          "level": 1,
+          "line": 147
+        },
+        {
+          "heading": "べー",
+          "level": 1,
+          "line": 148
+        },
+        {
+          "heading": "アホ毛１",
+          "level": 1,
+          "line": 149
+        },
+        {
+          "heading": "アホ毛２",
+          "level": 1,
+          "line": 150
+        },
+        {
+          "heading": "ポニテ１",
+          "level": 1,
+          "line": 151
+        },
+        {
+          "heading": "ポニテ２",
+          "level": 1,
+          "line": 152
+        },
+        {
+          "heading": "ポニテ３",
+          "level": 1,
+          "line": 153
+        },
+        {
+          "heading": "ポニテ４",
+          "level": 1,
+          "line": 154
+        },
+        {
+          "heading": "ポニテ５",
+          "level": 1,
+          "line": 155
+        },
+        {
+          "heading": "左胸",
+          "level": 1,
+          "line": 156
+        },
+        {
+          "heading": "右胸",
+          "level": 1,
+          "line": 157
+        },
+        {
+          "heading": "ポニテ６",
+          "level": 1,
+          "line": 158
+        },
+        {
+          "heading": "ポニテＩＫ",
+          "level": 1,
+          "line": 159
+        },
+        {
+          "heading": "左髪１",
+          "level": 1,
+          "line": 160
+        },
+        {
+          "heading": "左髪２",
+          "level": 1,
+          "line": 161
+        },
+        {
+          "heading": "左髪３",
+          "level": 1,
+          "line": 162
+        },
+        {
+          "heading": "左髪４",
+          "level": 1,
+          "line": 163
+        },
+        {
+          "heading": "左髪５",
+          "level": 1,
+          "line": 164
+        },
+        {
+          "heading": "左髪６",
+          "level": 1,
+          "line": 165
+        },
+        {
+          "heading": "左腕捩",
+          "level": 1,
+          "line": 166
+        },
+        {
+          "heading": "左手捩",
+          "level": 1,
+          "line": 167
+        },
+        {
+          "heading": "右髪１",
+          "level": 1,
+          "line": 168
+        },
+        {
+          "heading": "右髪２",
+          "level": 1,
+          "line": 169
+        },
+        {
+          "heading": "右髪３",
+          "level": 1,
+          "line": 170
+        },
+        {
+          "heading": "右髪４",
+          "level": 1,
+          "line": 171
+        },
+        {
+          "heading": "右髪５",
+          "level": 1,
+          "line": 172
+        },
+        {
+          "heading": "右髪６",
+          "level": 1,
+          "line": 173
+        },
+        {
+          "heading": "右腕捩",
+          "level": 1,
+          "line": 174
+        },
+        {
+          "heading": "右手捩",
+          "level": 1,
+          "line": 175
+        },
+        {
+          "heading": "左目光",
+          "level": 1,
+          "line": 176
+        },
+        {
+          "heading": "右目光",
+          "level": 1,
+          "line": 177
+        },
+        {
+          "heading": "ﾈｸﾀｲ４",
+          "level": 1,
+          "line": 178
+        },
+        {
+          "heading": "左髪７",
+          "level": 1,
+          "line": 179
+        },
+        {
+          "heading": "右髪７",
+          "level": 1,
+          "line": 180
+        },
+        {
+          "heading": "左髪ＩＫ",
+          "level": 1,
+          "line": 181
+        },
+        {
+          "heading": "右髪ＩＫ",
+          "level": 1,
+          "line": 182
+        },
+        {
+          "heading": "じと目",
+          "level": 1,
+          "line": 183
+        },
+        {
+          "heading": "なぬ！",
+          "level": 1,
+          "line": 184
+        },
+        {
+          "heading": "∧",
+          "level": 1,
+          "line": 185
+        },
+        {
+          "heading": "ω",
+          "level": 1,
+          "line": 186
+        },
+        {
+          "heading": "ω□",
+          "level": 1,
+          "line": 187
+        },
+        {
+          "heading": "はんっ！",
+          "level": 1,
+          "line": 188
+        },
+        {
+          "heading": "ぺろっ",
+          "level": 1,
+          "line": 189
+        },
+        {
+          "heading": "えー",
+          "level": 1,
+          "line": 190
+        },
+        {
+          "heading": "ハネ毛",
+          "level": 1,
+          "line": 191
+        },
+        {
+          "heading": "携帯",
+          "level": 1,
+          "line": 192
+        },
+        {
+          "heading": "への字",
+          "level": 1,
+          "line": 193
+        },
+        {
+          "heading": "全ての親",
+          "level": 1,
+          "line": 194
+        },
+        {
+          "heading": "グルーブ",
+          "level": 1,
+          "line": 195
+        },
+        {
+          "heading": "腰",
+          "level": 1,
+          "line": 196
+        },
+        {
+          "heading": "上半身1",
+          "level": 1,
+          "line": 197
+        },
+        {
+          "heading": "上半身2",
+          "level": 1,
+          "line": 198
+        },
+        {
+          "heading": "上半身3",
+          "level": 1,
+          "line": 199
+        },
+        {
+          "heading": "左肩P",
+          "level": 1,
+          "line": 200
+        },
+        {
+          "heading": "左肩C",
+          "level": 1,
+          "line": 201
+        },
+        {
+          "heading": "左腕捩1",
+          "level": 1,
+          "line": 202
+        },
+        {
+          "heading": "左腕捩2",
+          "level": 1,
+          "line": 203
+        },
+        {
+          "heading": "左腕捩3",
+          "level": 1,
+          "line": 204
+        },
+        {
+          "heading": "左手捩1",
+          "level": 1,
+          "line": 205
+        },
+        {
+          "heading": "左手捩2",
+          "level": 1,
+          "line": 206
+        },
+        {
+          "heading": "左手捩3",
+          "level": 1,
+          "line": 207
+        },
+        {
+          "heading": "左ダミー",
+          "level": 1,
+          "line": 208
+        },
+        {
+          "heading": "左親指０",
+          "level": 1,
+          "line": 209
+        },
+        {
+          "heading": "右親指０",
+          "level": 1,
+          "line": 210
+        },
+        {
+          "heading": "操作中心",
+          "level": 1,
+          "line": 211
+        },
+        {
+          "heading": "おっぱい調整",
+          "level": 1,
+          "line": 212
+        },
+        {
+          "heading": "右肩P",
+          "level": 1,
+          "line": 213
+        },
+        {
+          "heading": "右肩C",
+          "level": 1,
+          "line": 214
+        },
+        {
+          "heading": "右ダミー",
+          "level": 1,
+          "line": 215
+        },
+        {
+          "heading": "左胸上",
+          "level": 1,
+          "line": 216
+        },
+        {
+          "heading": "左胸上2",
+          "level": 1,
+          "line": 217
+        },
+        {
+          "heading": "左胸下",
+          "level": 1,
+          "line": 218
+        },
+        {
+          "heading": "左胸先",
+          "level": 1,
+          "line": 219
+        },
+        {
+          "heading": "右胸上",
+          "level": 1,
+          "line": 220
+        },
+        {
+          "heading": "右胸上2",
+          "level": 1,
+          "line": 221
+        },
+        {
+          "heading": "右胸下",
+          "level": 1,
+          "line": 222
+        },
+        {
+          "heading": "右胸先",
+          "level": 1,
+          "line": 223
+        },
+        {
+          "heading": "右腕捩1",
+          "level": 1,
+          "line": 224
+        },
+        {
+          "heading": "右腕捩2",
+          "level": 1,
+          "line": 225
+        },
+        {
+          "heading": "右腕捩3",
+          "level": 1,
+          "line": 226
+        },
+        {
+          "heading": "右手捩1",
+          "level": 1,
+          "line": 227
+        },
+        {
+          "heading": "右手捩2",
+          "level": 1,
+          "line": 228
+        },
+        {
+          "heading": "右手捩3",
+          "level": 1,
+          "line": 229
+        },
+        {
+          "heading": "腰キャンセル左",
+          "level": 1,
+          "line": 230
+        },
+        {
+          "heading": "左足IK親",
+          "level": 1,
+          "line": 231
+        },
+        {
+          "heading": "左足D",
+          "level": 1,
+          "line": 232
+        },
+        {
+          "heading": "左ひざD",
+          "level": 1,
+          "line": 233
+        },
+        {
+          "heading": "左足首D",
+          "level": 1,
+          "line": 234
+        },
+        {
+          "heading": "左足先EX",
+          "level": 1,
+          "line": 235
+        },
+        {
+          "heading": "腰キャンセル右",
+          "level": 1,
+          "line": 236
+        },
+        {
+          "heading": "右足IK親",
+          "level": 1,
+          "line": 237
+        },
+        {
+          "heading": "右足D",
+          "level": 1,
+          "line": 238
+        },
+        {
+          "heading": "右ひざD",
+          "level": 1,
+          "line": 239
+        },
+        {
+          "heading": "右足首D",
+          "level": 1,
+          "line": 240
+        },
+        {
+          "heading": "右足先EX",
+          "level": 1,
+          "line": 241
+        },
+        {
+          "heading": "両目先",
+          "level": 1,
+          "line": 242
+        },
+        {
+          "heading": "両胸調整",
+          "level": 1,
+          "line": 243
+        },
+        {
+          "heading": "右胸調整",
+          "level": 1,
+          "line": 244
+        },
+        {
+          "heading": "左胸調整",
+          "level": 1,
+          "line": 245
+        },
+        {
+          "heading": "右胸調整先",
+          "level": 1,
+          "line": 246
+        },
+        {
+          "heading": "左胸調整先",
+          "level": 1,
+          "line": 247
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 246
+      }
+    },
+    {
+      "path": "res/S24_up/name_conversion/UE5.json",
+      "language": "json",
+      "fileCategory": "config",
+      "totalLines": 246,
+      "nonEmptyLines": 246,
+      "sections": [
+        {
+          "heading": "センター",
+          "level": 1,
+          "line": 2
+        },
+        {
+          "heading": "首",
+          "level": 1,
+          "line": 3
+        },
+        {
+          "heading": "頭",
+          "level": 1,
+          "line": 4
+        },
+        {
+          "heading": "左目",
+          "level": 1,
+          "line": 5
+        },
+        {
+          "heading": "右目",
+          "level": 1,
+          "line": 6
+        },
+        {
+          "heading": "上半身",
+          "level": 1,
+          "line": 7
+        },
+        {
+          "heading": "上半身1",
+          "level": 1,
+          "line": 8
+        },
+        {
+          "heading": "上半身2",
+          "level": 1,
+          "line": 9
+        },
+        {
+          "heading": "上半身3",
+          "level": 1,
+          "line": 10
+        },
+        {
+          "heading": "下半身",
+          "level": 1,
+          "line": 11
+        },
+        {
+          "heading": "左肩",
+          "level": 1,
+          "line": 12
+        },
+        {
+          "heading": "左腕",
+          "level": 1,
+          "line": 13
+        },
+        {
+          "heading": "左ひじ",
+          "level": 1,
+          "line": 14
+        },
+        {
+          "heading": "左手首",
+          "level": 1,
+          "line": 15
+        },
+        {
+          "heading": "左親指０",
+          "level": 1,
+          "line": 16
+        },
+        {
+          "heading": "左親指１",
+          "level": 1,
+          "line": 17
+        },
+        {
+          "heading": "左親指２",
+          "level": 1,
+          "line": 18
+        },
+        {
+          "heading": "左人指１",
+          "level": 1,
+          "line": 19
+        },
+        {
+          "heading": "左人指２",
+          "level": 1,
+          "line": 20
+        },
+        {
+          "heading": "左人指３",
+          "level": 1,
+          "line": 21
+        },
+        {
+          "heading": "左中指１",
+          "level": 1,
+          "line": 22
+        },
+        {
+          "heading": "左中指２",
+          "level": 1,
+          "line": 23
+        },
+        {
+          "heading": "左中指３",
+          "level": 1,
+          "line": 24
+        },
+        {
+          "heading": "左薬指１",
+          "level": 1,
+          "line": 25
+        },
+        {
+          "heading": "左薬指２",
+          "level": 1,
+          "line": 26
+        },
+        {
+          "heading": "左薬指３",
+          "level": 1,
+          "line": 27
+        },
+        {
+          "heading": "左小指１",
+          "level": 1,
+          "line": 28
+        },
+        {
+          "heading": "左小指２",
+          "level": 1,
+          "line": 29
+        },
+        {
+          "heading": "左小指３",
+          "level": 1,
+          "line": 30
+        },
+        {
+          "heading": "右肩",
+          "level": 1,
+          "line": 31
+        },
+        {
+          "heading": "右腕",
+          "level": 1,
+          "line": 32
+        },
+        {
+          "heading": "右ひじ",
+          "level": 1,
+          "line": 33
+        },
+        {
+          "heading": "右手首",
+          "level": 1,
+          "line": 34
+        },
+        {
+          "heading": "右親指０",
+          "level": 1,
+          "line": 35
+        },
+        {
+          "heading": "右親指１",
+          "level": 1,
+          "line": 36
+        },
+        {
+          "heading": "右親指２",
+          "level": 1,
+          "line": 37
+        },
+        {
+          "heading": "右人指１",
+          "level": 1,
+          "line": 38
+        },
+        {
+          "heading": "右人指２",
+          "level": 1,
+          "line": 39
+        },
+        {
+          "heading": "右人指３",
+          "level": 1,
+          "line": 40
+        },
+        {
+          "heading": "右中指１",
+          "level": 1,
+          "line": 41
+        },
+        {
+          "heading": "右中指２",
+          "level": 1,
+          "line": 42
+        },
+        {
+          "heading": "右中指３",
+          "level": 1,
+          "line": 43
+        },
+        {
+          "heading": "右薬指１",
+          "level": 1,
+          "line": 44
+        },
+        {
+          "heading": "右薬指２",
+          "level": 1,
+          "line": 45
+        },
+        {
+          "heading": "右薬指３",
+          "level": 1,
+          "line": 46
+        },
+        {
+          "heading": "右小指１",
+          "level": 1,
+          "line": 47
+        },
+        {
+          "heading": "右小指２",
+          "level": 1,
+          "line": 48
+        },
+        {
+          "heading": "右小指３",
+          "level": 1,
+          "line": 49
+        },
+        {
+          "heading": "左ﾏﾌﾗｰ１",
+          "level": 1,
+          "line": 50
+        },
+        {
+          "heading": "左ﾏﾌﾗｰ２",
+          "level": 1,
+          "line": 51
+        },
+        {
+          "heading": "左ﾏﾌﾗｰ３",
+          "level": 1,
+          "line": 52
+        },
+        {
+          "heading": "左ﾏﾌﾗｰ４",
+          "level": 1,
+          "line": 53
+        },
+        {
+          "heading": "右ﾏﾌﾗｰ１",
+          "level": 1,
+          "line": 54
+        },
+        {
+          "heading": "右ﾏﾌﾗｰ２",
+          "level": 1,
+          "line": 55
+        },
+        {
+          "heading": "右ﾏﾌﾗｰ３",
+          "level": 1,
+          "line": 56
+        },
+        {
+          "heading": "右ﾏﾌﾗｰ４",
+          "level": 1,
+          "line": 57
+        },
+        {
+          "heading": "左裾１",
+          "level": 1,
+          "line": 58
+        },
+        {
+          "heading": "左裾２",
+          "level": 1,
+          "line": 59
+        },
+        {
+          "heading": "右裾１",
+          "level": 1,
+          "line": 60
+        },
+        {
+          "heading": "右裾２",
+          "level": 1,
+          "line": 61
+        },
+        {
+          "heading": "左足",
+          "level": 1,
+          "line": 62
+        },
+        {
+          "heading": "左ひざ",
+          "level": 1,
+          "line": 63
+        },
+        {
+          "heading": "左足首",
+          "level": 1,
+          "line": 64
+        },
+        {
+          "heading": "右足",
+          "level": 1,
+          "line": 65
+        },
+        {
+          "heading": "右ひざ",
+          "level": 1,
+          "line": 66
+        },
+        {
+          "heading": "右足首",
+          "level": 1,
+          "line": 67
+        },
+        {
+          "heading": "左足IK親",
+          "level": 1,
+          "line": 68
+        },
+        {
+          "heading": "左足D",
+          "level": 1,
+          "line": 69
+        },
+        {
+          "heading": "左ひざD",
+          "level": 1,
+          "line": 70
+        },
+        {
+          "heading": "左足首D",
+          "level": 1,
+          "line": 71
+        },
+        {
+          "heading": "左足先EX",
+          "level": 1,
+          "line": 72
+        },
+        {
+          "heading": "右足IK親",
+          "level": 1,
+          "line": 73
+        },
+        {
+          "heading": "右足D",
+          "level": 1,
+          "line": 74
+        },
+        {
+          "heading": "右ひざD",
+          "level": 1,
+          "line": 75
+        },
+        {
+          "heading": "右足首D",
+          "level": 1,
+          "line": 76
+        },
+        {
+          "heading": "右足先EX",
+          "level": 1,
+          "line": 77
+        },
+        {
+          "heading": "両目",
+          "level": 1,
+          "line": 78
+        },
+        {
+          "heading": "左ﾏﾌﾗｰ５",
+          "level": 1,
+          "line": 79
+        },
+        {
+          "heading": "右ﾏﾌﾗｰ５",
+          "level": 1,
+          "line": 80
+        },
+        {
+          "heading": "左つま先",
+          "level": 1,
+          "line": 81
+        },
+        {
+          "heading": "右つま先",
+          "level": 1,
+          "line": 82
+        },
+        {
+          "heading": "左ﾏﾌﾗｰＩＫ",
+          "level": 1,
+          "line": 83
+        },
+        {
+          "heading": "右ﾏﾌﾗｰＩＫ",
+          "level": 1,
+          "line": 84
+        },
+        {
+          "heading": "左足ＩＫ",
+          "level": 1,
+          "line": 85
+        },
+        {
+          "heading": "右足ＩＫ",
+          "level": 1,
+          "line": 86
+        },
+        {
+          "heading": "左つま先ＩＫ",
+          "level": 1,
+          "line": 87
+        },
+        {
+          "heading": "右つま先ＩＫ",
+          "level": 1,
+          "line": 88
+        },
+        {
+          "heading": "真面目",
+          "level": 1,
+          "line": 89
+        },
+        {
+          "heading": "困る",
+          "level": 1,
+          "line": 90
+        },
+        {
+          "heading": "にこり",
+          "level": 1,
+          "line": 91
+        },
+        {
+          "heading": "怒り",
+          "level": 1,
+          "line": 92
+        },
+        {
+          "heading": "上",
+          "level": 1,
+          "line": 93
+        },
+        {
+          "heading": "下",
+          "level": 1,
+          "line": 94
+        },
+        {
+          "heading": "まばたき",
+          "level": 1,
+          "line": 95
+        },
+        {
+          "heading": "笑い",
+          "level": 1,
+          "line": 96
+        },
+        {
+          "heading": "ウィンク",
+          "level": 1,
+          "line": 97
+        },
+        {
+          "heading": "ウィンク２",
+          "level": 1,
+          "line": 98
+        },
+        {
+          "heading": "ウィンク右",
+          "level": 1,
+          "line": 99
+        },
+        {
+          "heading": "ｳｨﾝｸ２右",
+          "level": 1,
+          "line": 100
+        },
+        {
+          "heading": "はぅ",
+          "level": 1,
+          "line": 101
+        },
+        {
+          "heading": "なごみ",
+          "level": 1,
+          "line": 102
+        },
+        {
+          "heading": "びっくり",
+          "level": 1,
+          "line": 103
+        },
+        {
+          "heading": "瞳小",
+          "level": 1,
+          "line": 104
+        },
+        {
+          "heading": "あ",
+          "level": 1,
+          "line": 105
+        },
+        {
+          "heading": "い",
+          "level": 1,
+          "line": 106
+        },
+        {
+          "heading": "う",
+          "level": 1,
+          "line": 107
+        },
+        {
+          "heading": "お",
+          "level": 1,
+          "line": 108
+        },
+        {
+          "heading": "▲",
+          "level": 1,
+          "line": 109
+        },
+        {
+          "heading": "∞",
+          "level": 1,
+          "line": 110
+        },
+        {
+          "heading": "歯上下",
+          "level": 1,
+          "line": 111
+        },
+        {
+          "heading": "にやり",
+          "level": 1,
+          "line": 112
+        },
+        {
+          "heading": "ＩＫ",
+          "level": 1,
+          "line": 113
+        },
+        {
+          "heading": "体(上)",
+          "level": 1,
+          "line": 114
+        },
+        {
+          "heading": "髪",
+          "level": 1,
+          "line": 115
+        },
+        {
+          "heading": "腕",
+          "level": 1,
+          "line": 116
+        },
+        {
+          "heading": "指",
+          "level": 1,
+          "line": 117
+        },
+        {
+          "heading": "体(下)",
+          "level": 1,
+          "line": 118
+        },
+        {
+          "heading": "足",
+          "level": 1,
+          "line": 119
+        },
+        {
+          "heading": "ﾎﾞｰﾝ01",
+          "level": 1,
+          "line": 120
+        },
+        {
+          "heading": "ﾎﾞｰﾝ02",
+          "level": 1,
+          "line": 121
+        },
+        {
+          "heading": "ﾎﾞｰﾝ03",
+          "level": 1,
+          "line": 122
+        },
+        {
+          "heading": "ﾎﾞｰﾝ04",
+          "level": 1,
+          "line": 123
+        },
+        {
+          "heading": "ﾎﾞｰﾝ05",
+          "level": 1,
+          "line": 124
+        },
+        {
+          "heading": "ﾎﾞｰﾝ06",
+          "level": 1,
+          "line": 125
+        },
+        {
+          "heading": "ﾎﾞｰﾝ07",
+          "level": 1,
+          "line": 126
+        },
+        {
+          "heading": "ﾎﾞｰﾝ08",
+          "level": 1,
+          "line": 127
+        },
+        {
+          "heading": "ﾎﾞｰﾝ09",
+          "level": 1,
+          "line": 128
+        },
+        {
+          "heading": "ﾎﾞｰﾝ10",
+          "level": 1,
+          "line": 129
+        },
+        {
+          "heading": "ﾎﾞｰﾝ11",
+          "level": 1,
+          "line": 130
+        },
+        {
+          "heading": "ﾎﾞｰﾝ12",
+          "level": 1,
+          "line": 131
+        },
+        {
+          "heading": "ﾎﾞｰﾝ13",
+          "level": 1,
+          "line": 132
+        },
+        {
+          "heading": "ﾎﾞｰﾝ14",
+          "level": 1,
+          "line": 133
+        },
+        {
+          "heading": "ﾎﾞｰﾝ15",
+          "level": 1,
+          "line": 134
+        },
+        {
+          "heading": "胸リボン",
+          "level": 1,
+          "line": 135
+        },
+        {
+          "heading": "左リボン",
+          "level": 1,
+          "line": 136
+        },
+        {
+          "heading": "右リボン",
+          "level": 1,
+          "line": 137
+        },
+        {
+          "heading": "腰飾り",
+          "level": 1,
+          "line": 138
+        },
+        {
+          "heading": "左髪",
+          "level": 1,
+          "line": 139
+        },
+        {
+          "heading": "右髪",
+          "level": 1,
+          "line": 140
+        },
+        {
+          "heading": "前髪",
+          "level": 1,
+          "line": 141
+        },
+        {
+          "heading": "左セーラ",
+          "level": 1,
+          "line": 142
+        },
+        {
+          "heading": "右セーラ",
+          "level": 1,
+          "line": 143
+        },
+        {
+          "heading": "左袖",
+          "level": 1,
+          "line": 144
+        },
+        {
+          "heading": "右袖",
+          "level": 1,
+          "line": 145
+        },
+        {
+          "heading": "ﾈｸﾀｲ１",
+          "level": 1,
+          "line": 146
+        },
+        {
+          "heading": "ﾈｸﾀｲ２",
+          "level": 1,
+          "line": 147
+        },
+        {
+          "heading": "ﾈｸﾀｲ３",
+          "level": 1,
+          "line": 148
+        },
+        {
+          "heading": "左セーラー",
+          "level": 1,
+          "line": 149
+        },
+        {
+          "heading": "右セーラー",
+          "level": 1,
+          "line": 150
+        },
+        {
+          "heading": "ﾈｸﾀｲ先",
+          "level": 1,
+          "line": 151
+        },
+        {
+          "heading": "ﾈｸﾀｲＩＫ",
+          "level": 1,
+          "line": 152
+        },
+        {
+          "heading": "左ｽｶｰﾄ前",
+          "level": 1,
+          "line": 153
+        },
+        {
+          "heading": "左ｽｶｰﾄ後",
+          "level": 1,
+          "line": 154
+        },
+        {
+          "heading": "右ｽｶｰﾄ前",
+          "level": 1,
+          "line": 155
+        },
+        {
+          "heading": "右ｽｶｰﾄ後",
+          "level": 1,
+          "line": 156
+        },
+        {
+          "heading": "ウィンクＬ",
+          "level": 1,
+          "line": 157
+        },
+        {
+          "heading": "え",
+          "level": 1,
+          "line": 158
+        },
+        {
+          "heading": "べー",
+          "level": 1,
+          "line": 159
+        },
+        {
+          "heading": "アホ毛１",
+          "level": 1,
+          "line": 160
+        },
+        {
+          "heading": "アホ毛２",
+          "level": 1,
+          "line": 161
+        },
+        {
+          "heading": "ポニテ１",
+          "level": 1,
+          "line": 162
+        },
+        {
+          "heading": "ポニテ２",
+          "level": 1,
+          "line": 163
+        },
+        {
+          "heading": "ポニテ３",
+          "level": 1,
+          "line": 164
+        },
+        {
+          "heading": "ポニテ４",
+          "level": 1,
+          "line": 165
+        },
+        {
+          "heading": "ポニテ５",
+          "level": 1,
+          "line": 166
+        },
+        {
+          "heading": "左胸",
+          "level": 1,
+          "line": 167
+        },
+        {
+          "heading": "右胸",
+          "level": 1,
+          "line": 168
+        },
+        {
+          "heading": "ポニテ６",
+          "level": 1,
+          "line": 169
+        },
+        {
+          "heading": "ポニテＩＫ",
+          "level": 1,
+          "line": 170
+        },
+        {
+          "heading": "左髪１",
+          "level": 1,
+          "line": 171
+        },
+        {
+          "heading": "左髪２",
+          "level": 1,
+          "line": 172
+        },
+        {
+          "heading": "左髪３",
+          "level": 1,
+          "line": 173
+        },
+        {
+          "heading": "左髪４",
+          "level": 1,
+          "line": 174
+        },
+        {
+          "heading": "左髪５",
+          "level": 1,
+          "line": 175
+        },
+        {
+          "heading": "左髪６",
+          "level": 1,
+          "line": 176
+        },
+        {
+          "heading": "左腕捩",
+          "level": 1,
+          "line": 177
+        },
+        {
+          "heading": "左手捩",
+          "level": 1,
+          "line": 178
+        },
+        {
+          "heading": "右髪１",
+          "level": 1,
+          "line": 179
+        },
+        {
+          "heading": "右髪２",
+          "level": 1,
+          "line": 180
+        },
+        {
+          "heading": "右髪３",
+          "level": 1,
+          "line": 181
+        },
+        {
+          "heading": "右髪４",
+          "level": 1,
+          "line": 182
+        },
+        {
+          "heading": "右髪５",
+          "level": 1,
+          "line": 183
+        },
+        {
+          "heading": "右髪６",
+          "level": 1,
+          "line": 184
+        },
+        {
+          "heading": "右腕捩",
+          "level": 1,
+          "line": 185
+        },
+        {
+          "heading": "右手捩",
+          "level": 1,
+          "line": 186
+        },
+        {
+          "heading": "左目光",
+          "level": 1,
+          "line": 187
+        },
+        {
+          "heading": "右目光",
+          "level": 1,
+          "line": 188
+        },
+        {
+          "heading": "ﾈｸﾀｲ４",
+          "level": 1,
+          "line": 189
+        },
+        {
+          "heading": "左髪７",
+          "level": 1,
+          "line": 190
+        },
+        {
+          "heading": "右髪７",
+          "level": 1,
+          "line": 191
+        },
+        {
+          "heading": "左髪ＩＫ",
+          "level": 1,
+          "line": 192
+        },
+        {
+          "heading": "右髪ＩＫ",
+          "level": 1,
+          "line": 193
+        },
+        {
+          "heading": "じと目",
+          "level": 1,
+          "line": 194
+        },
+        {
+          "heading": "なぬ！",
+          "level": 1,
+          "line": 195
+        },
+        {
+          "heading": "∧",
+          "level": 1,
+          "line": 196
+        },
+        {
+          "heading": "ω",
+          "level": 1,
+          "line": 197
+        },
+        {
+          "heading": "ω□",
+          "level": 1,
+          "line": 198
+        },
+        {
+          "heading": "はんっ！",
+          "level": 1,
+          "line": 199
+        },
+        {
+          "heading": "ぺろっ",
+          "level": 1,
+          "line": 200
+        },
+        {
+          "heading": "えー",
+          "level": 1,
+          "line": 201
+        },
+        {
+          "heading": "ハネ毛",
+          "level": 1,
+          "line": 202
+        },
+        {
+          "heading": "携帯",
+          "level": 1,
+          "line": 203
+        },
+        {
+          "heading": "への字",
+          "level": 1,
+          "line": 204
+        },
+        {
+          "heading": "全ての親",
+          "level": 1,
+          "line": 205
+        },
+        {
+          "heading": "グルーブ",
+          "level": 1,
+          "line": 206
+        },
+        {
+          "heading": "腰",
+          "level": 1,
+          "line": 207
+        },
+        {
+          "heading": "左肩P",
+          "level": 1,
+          "line": 208
+        },
+        {
+          "heading": "左肩C",
+          "level": 1,
+          "line": 209
+        },
+        {
+          "heading": "左腕捩1",
+          "level": 1,
+          "line": 210
+        },
+        {
+          "heading": "左腕捩2",
+          "level": 1,
+          "line": 211
+        },
+        {
+          "heading": "左腕捩3",
+          "level": 1,
+          "line": 212
+        },
+        {
+          "heading": "左手捩1",
+          "level": 1,
+          "line": 213
+        },
+        {
+          "heading": "左手捩2",
+          "level": 1,
+          "line": 214
+        },
+        {
+          "heading": "左手捩3",
+          "level": 1,
+          "line": 215
+        },
+        {
+          "heading": "左ダミー",
+          "level": 1,
+          "line": 216
+        },
+        {
+          "heading": "操作中心",
+          "level": 1,
+          "line": 217
+        },
+        {
+          "heading": "おっぱい調整",
+          "level": 1,
+          "line": 218
+        },
+        {
+          "heading": "右肩P",
+          "level": 1,
+          "line": 219
+        },
+        {
+          "heading": "右肩C",
+          "level": 1,
+          "line": 220
+        },
+        {
+          "heading": "右ダミー",
+          "level": 1,
+          "line": 221
+        },
+        {
+          "heading": "左胸上",
+          "level": 1,
+          "line": 222
+        },
+        {
+          "heading": "左胸上2",
+          "level": 1,
+          "line": 223
+        },
+        {
+          "heading": "左胸下",
+          "level": 1,
+          "line": 224
+        },
+        {
+          "heading": "左胸先",
+          "level": 1,
+          "line": 225
+        },
+        {
+          "heading": "右胸上",
+          "level": 1,
+          "line": 226
+        },
+        {
+          "heading": "右胸上2",
+          "level": 1,
+          "line": 227
+        },
+        {
+          "heading": "右胸下",
+          "level": 1,
+          "line": 228
+        },
+        {
+          "heading": "右胸先",
+          "level": 1,
+          "line": 229
+        },
+        {
+          "heading": "右腕捩1",
+          "level": 1,
+          "line": 230
+        },
+        {
+          "heading": "右腕捩2",
+          "level": 1,
+          "line": 231
+        },
+        {
+          "heading": "右腕捩3",
+          "level": 1,
+          "line": 232
+        },
+        {
+          "heading": "右手捩1",
+          "level": 1,
+          "line": 233
+        },
+        {
+          "heading": "右手捩2",
+          "level": 1,
+          "line": 234
+        },
+        {
+          "heading": "右手捩3",
+          "level": 1,
+          "line": 235
+        },
+        {
+          "heading": "腰キャンセル左",
+          "level": 1,
+          "line": 236
+        },
+        {
+          "heading": "腰キャンセル右",
+          "level": 1,
+          "line": 237
+        },
+        {
+          "heading": "両目先",
+          "level": 1,
+          "line": 238
+        },
+        {
+          "heading": "両胸調整",
+          "level": 1,
+          "line": 239
+        },
+        {
+          "heading": "右胸調整",
+          "level": 1,
+          "line": 240
+        },
+        {
+          "heading": "左胸調整",
+          "level": 1,
+          "line": 241
+        },
+        {
+          "heading": "右胸調整先",
+          "level": 1,
+          "line": 242
+        },
+        {
+          "heading": "左胸調整先",
+          "level": 1,
+          "line": 243
+        },
+        {
+          "heading": "左足首先",
+          "level": 1,
+          "line": 244
+        },
+        {
+          "heading": "右足首先",
+          "level": 1,
+          "line": 245
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 244
+      }
+    },
+    {
+      "path": "res/S24_up/strings_en-US/c4d_strings.str",
+      "language": "str",
+      "fileCategory": "code",
+      "totalLines": 104,
+      "nonEmptyLines": 90,
+      "metrics": {}
+    },
+    {
+      "path": "res/S24_up/strings_en-US/description/OMMDBoneManager.str",
+      "language": "str",
+      "fileCategory": "code",
+      "totalLines": 21,
+      "nonEmptyLines": 19,
+      "metrics": {}
+    },
+    {
+      "path": "res/S24_up/strings_en-US/description/OMMDCamera.str",
+      "language": "str",
+      "fileCategory": "code",
+      "totalLines": 5,
+      "nonEmptyLines": 4,
+      "metrics": {}
+    },
+    {
+      "path": "res/S24_up/strings_en-US/description/OMMDJoint.str",
+      "language": "str",
+      "fileCategory": "code",
+      "totalLines": 65,
+      "nonEmptyLines": 59,
+      "metrics": {}
+    },
+    {
+      "path": "res/S24_up/strings_en-US/description/OMMDJointManager.str",
+      "language": "str",
+      "fileCategory": "code",
+      "totalLines": 15,
+      "nonEmptyLines": 13,
+      "metrics": {}
+    },
+    {
+      "path": "res/S24_up/strings_en-US/description/OMMDMeshManager.str",
+      "language": "str",
+      "fileCategory": "code",
+      "totalLines": 18,
+      "nonEmptyLines": 16,
+      "metrics": {}
+    },
+    {
+      "path": "res/S24_up/strings_en-US/description/OMMDModelManager.str",
+      "language": "str",
+      "fileCategory": "code",
+      "totalLines": 152,
+      "nonEmptyLines": 152,
+      "metrics": {}
+    },
+    {
+      "path": "res/S24_up/strings_en-US/description/OMMDRigid.str",
+      "language": "str",
+      "fileCategory": "code",
+      "totalLines": 80,
+      "nonEmptyLines": 73,
+      "metrics": {}
+    },
+    {
+      "path": "res/S24_up/strings_en-US/description/OMMDRigidManager.str",
+      "language": "str",
+      "fileCategory": "code",
+      "totalLines": 15,
+      "nonEmptyLines": 13,
+      "metrics": {}
+    },
+    {
+      "path": "res/S24_up/strings_en-US/description/TMMDBone.str",
+      "language": "str",
+      "fileCategory": "code",
+      "totalLines": 83,
+      "nonEmptyLines": 72,
+      "metrics": {}
+    },
+    {
+      "path": "res/S24_up/strings_en-US/description/Xmmdmaterialmorphshader.str",
+      "language": "str",
+      "fileCategory": "code",
+      "totalLines": 6,
+      "nonEmptyLines": 6,
+      "metrics": {}
+    },
+    {
+      "path": "res/S24_up/strings_en-US/dialogs/DLG_CMT_TOOL.str",
+      "language": "str",
+      "fileCategory": "code",
+      "totalLines": 56,
+      "nonEmptyLines": 56,
+      "metrics": {}
+    },
+    {
+      "path": "res/S24_up/strings_en-US/dialogs/DLG_CMT_VMD_IMPORT.str",
+      "language": "str",
+      "fileCategory": "code",
+      "totalLines": 9,
+      "nonEmptyLines": 9,
+      "metrics": {}
+    },
+    {
+      "path": "res/S24_up/strings_zh-CN/c4d_strings.str",
+      "language": "str",
+      "fileCategory": "code",
+      "totalLines": 104,
+      "nonEmptyLines": 90,
+      "metrics": {}
+    },
+    {
+      "path": "res/S24_up/strings_zh-CN/description/OMMDBoneManager.str",
+      "language": "str",
+      "fileCategory": "code",
+      "totalLines": 21,
+      "nonEmptyLines": 19,
+      "metrics": {}
+    },
+    {
+      "path": "res/S24_up/strings_zh-CN/description/OMMDCamera.str",
+      "language": "str",
+      "fileCategory": "code",
+      "totalLines": 4,
+      "nonEmptyLines": 4,
+      "metrics": {}
+    }
+  ]
+}

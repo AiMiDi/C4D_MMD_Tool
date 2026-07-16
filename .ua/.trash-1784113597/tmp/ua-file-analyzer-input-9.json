@@ -1,0 +1,77 @@
+{
+  "projectRoot": "E:/code/C4D_MMD_Tool",
+  "batchFiles": [
+    {
+      "path": "AGENTS.md",
+      "language": "markdown",
+      "sizeLines": 113,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "CMakeLists.txt",
+      "language": "txt",
+      "sizeLines": 337,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "CMakePresets.json",
+      "language": "json",
+      "sizeLines": 170,
+      "fileCategory": "config"
+    },
+    {
+      "path": "CMakeUserPresets.SAMPLE.json",
+      "language": "json",
+      "sizeLines": 27,
+      "fileCategory": "config"
+    },
+    {
+      "path": "DEVELOPMENT.md",
+      "language": "markdown",
+      "sizeLines": 256,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "DEVELOPMENT_zh.md",
+      "language": "markdown",
+      "sizeLines": 406,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "LICENSE.md",
+      "language": "markdown",
+      "sizeLines": 675,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "README.md",
+      "language": "markdown",
+      "sizeLines": 380,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "README_zh.md",
+      "language": "markdown",
+      "sizeLines": 408,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "configure_sdk.bat",
+      "language": "batch",
+      "sizeLines": 45,
+      "fileCategory": "script"
+    }
+  ],
+  "batchImportData": {
+    "AGENTS.md": [],
+    "CMakeLists.txt": [],
+    "CMakePresets.json": [],
+    "CMakeUserPresets.SAMPLE.json": [],
+    "DEVELOPMENT.md": [],
+    "DEVELOPMENT_zh.md": [],
+    "LICENSE.md": [],
+    "README.md": [],
+    "README_zh.md": [],
+    "configure_sdk.bat": []
+  }
+}

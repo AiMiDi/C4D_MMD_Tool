@@ -1,0 +1,251 @@
+{
+  "nodes": [
+    {
+      "id": "file:source/module/tools/object/mmd_display_frame.cpp",
+      "type": "file",
+      "name": "mmd_display_frame.cpp",
+      "filePath": "source/module/tools/object/mmd_display_frame.cpp",
+      "summary": "Converts PMX display-frame records to persistent Cinema 4D data and implements HyperFile serialization and copying. / 将 PMX 显示框记录转换为 Cinema 4D 持久数据，并实现 HyperFile 序列化与复制。",
+      "tags": [
+        "serialization",
+        "pmx",
+        "display-frame",
+        "data-model"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_display_frame.cpp:DisplayFrameData::FromPMX",
+      "type": "function",
+      "name": "DisplayFrameData::FromPMX",
+      "filePath": "source/module/tools/object/mmd_display_frame.cpp",
+      "lineRange": [
+        18,
+        32
+      ],
+      "summary": "DisplayFrameData::FromPMX implements a focused operation in PMX display-frame persistence. / DisplayFrameData::FromPMX 实现PMX 显示框持久化中的专用操作。",
+      "tags": [
+        "pmx",
+        "import",
+        "serialization"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_display_frame.cpp:DisplayFrameData::ToPMX",
+      "type": "function",
+      "name": "DisplayFrameData::ToPMX",
+      "filePath": "source/module/tools/object/mmd_display_frame.cpp",
+      "lineRange": [
+        34,
+        51
+      ],
+      "summary": "DisplayFrameData::ToPMX implements a focused operation in PMX display-frame persistence. / DisplayFrameData::ToPMX 实现PMX 显示框持久化中的专用操作。",
+      "tags": [
+        "pmx",
+        "export",
+        "serialization"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_display_frame.cpp:DisplayFrameData::Read",
+      "type": "function",
+      "name": "DisplayFrameData::Read",
+      "filePath": "source/module/tools/object/mmd_display_frame.cpp",
+      "lineRange": [
+        53,
+        73
+      ],
+      "summary": "DisplayFrameData::Read reads persistent state for PMX display-frame persistence. / DisplayFrameData::Read 为PMX 显示框持久化读取持久状态。",
+      "tags": [
+        "serialization",
+        "pmx",
+        "display-frame"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_display_frame.cpp:DisplayFrameData::Write",
+      "type": "function",
+      "name": "DisplayFrameData::Write",
+      "filePath": "source/module/tools/object/mmd_display_frame.cpp",
+      "lineRange": [
+        75,
+        92
+      ],
+      "summary": "DisplayFrameData::Write writes persistent state for PMX display-frame persistence. / DisplayFrameData::Write 为PMX 显示框持久化写入持久状态。",
+      "tags": [
+        "serialization",
+        "pmx",
+        "display-frame"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_display_frame.cpp:DisplayFrameData::CopyTo",
+      "type": "function",
+      "name": "DisplayFrameData::CopyTo",
+      "filePath": "source/module/tools/object/mmd_display_frame.cpp",
+      "lineRange": [
+        94,
+        105
+      ],
+      "summary": "DisplayFrameData::CopyTo copies persistent state to another instance for PMX display-frame persistence. / DisplayFrameData::CopyTo 为PMX 显示框持久化将持久状态复制到另一实例。",
+      "tags": [
+        "serialization",
+        "pmx",
+        "display-frame"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:source/module/tools/object/mmd_manager.hpp",
+      "type": "file",
+      "name": "mmd_manager.hpp",
+      "filePath": "source/module/tools/object/mmd_manager.hpp",
+      "summary": "Defines the shared base for MMD manager objects, including protection/display tag creation and common persisted links. / 定义 MMD 管理器对象的共享基类，包括保护与显示标签创建以及通用持久链接。",
+      "tags": [
+        "object-manager",
+        "base-class",
+        "serialization",
+        "cinema-4d"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "class:source/module/tools/object/mmd_manager.hpp:MMDManagerObject",
+      "type": "class",
+      "name": "MMDManagerObject",
+      "filePath": "source/module/tools/object/mmd_manager.hpp",
+      "lineRange": [
+        17,
+        74
+      ],
+      "summary": "MMDManagerObject coordinates owned objects, persistent state, and lifecycle operations for shared MMD manager behavior. / MMDManagerObject 为共享 MMD 管理器行为协调所管理对象、持久状态与生命周期操作。",
+      "tags": [
+        "object-manager",
+        "base-class",
+        "serialization"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_manager.hpp:MMDManagerObject::CreateDisplayTag",
+      "type": "function",
+      "name": "MMDManagerObject::CreateDisplayTag",
+      "filePath": "source/module/tools/object/mmd_manager.hpp",
+      "lineRange": [
+        40,
+        49
+      ],
+      "summary": "MMDManagerObject::CreateDisplayTag creates display tag for shared MMD manager behavior. / MMDManagerObject::CreateDisplayTag 为共享 MMD 管理器行为创建 display tag。",
+      "tags": [
+        "object-manager",
+        "base-class",
+        "serialization"
+      ],
+      "complexity": "simple"
+    }
+  ],
+  "edges": [
+    {
+      "source": "file:source/module/tools/object/mmd_display_frame.cpp",
+      "target": "function:source/module/tools/object/mmd_display_frame.cpp:DisplayFrameData::FromPMX",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_display_frame.cpp",
+      "target": "function:source/module/tools/object/mmd_display_frame.cpp:DisplayFrameData::FromPMX",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_display_frame.cpp",
+      "target": "function:source/module/tools/object/mmd_display_frame.cpp:DisplayFrameData::ToPMX",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_display_frame.cpp",
+      "target": "function:source/module/tools/object/mmd_display_frame.cpp:DisplayFrameData::ToPMX",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_display_frame.cpp",
+      "target": "function:source/module/tools/object/mmd_display_frame.cpp:DisplayFrameData::Read",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_display_frame.cpp",
+      "target": "function:source/module/tools/object/mmd_display_frame.cpp:DisplayFrameData::Read",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_display_frame.cpp",
+      "target": "function:source/module/tools/object/mmd_display_frame.cpp:DisplayFrameData::Write",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_display_frame.cpp",
+      "target": "function:source/module/tools/object/mmd_display_frame.cpp:DisplayFrameData::Write",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_display_frame.cpp",
+      "target": "function:source/module/tools/object/mmd_display_frame.cpp:DisplayFrameData::CopyTo",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_display_frame.cpp",
+      "target": "function:source/module/tools/object/mmd_display_frame.cpp:DisplayFrameData::CopyTo",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_manager.hpp",
+      "target": "class:source/module/tools/object/mmd_manager.hpp:MMDManagerObject",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_manager.hpp",
+      "target": "class:source/module/tools/object/mmd_manager.hpp:MMDManagerObject",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_manager.hpp",
+      "target": "function:source/module/tools/object/mmd_manager.hpp:MMDManagerObject::CreateDisplayTag",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_display_frame.cpp",
+      "target": "file:source/module/tools/object/mmd_model_manager.h",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    }
+  ]
+}

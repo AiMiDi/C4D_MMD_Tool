@@ -1,0 +1,182 @@
+{
+  "projectRoot": "E:/code/C4D_MMD_Tool",
+  "batchFiles": [
+    {
+      "path": "sdk_2024/cmake/sdk_compiler_helper.cmake",
+      "language": "cmake",
+      "sizeLines": 4,
+      "fileCategory": "code"
+    },
+    {
+      "path": "sdk_2024/cmake/sdk_library_template.cmake",
+      "language": "cmake",
+      "sizeLines": 100,
+      "fileCategory": "code"
+    },
+    {
+      "path": "sdk_2024/cmake/sdk_targets.cmake",
+      "language": "cmake",
+      "sizeLines": 4,
+      "fileCategory": "code"
+    },
+    {
+      "path": "sdk_2024/cmake/sdk_update_projects.cmake",
+      "language": "cmake",
+      "sizeLines": 4,
+      "fileCategory": "code"
+    },
+    {
+      "path": "sdk_2024/CMakeLists.txt",
+      "language": "txt",
+      "sizeLines": 65,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "sdk_2024/CMakePresets.json",
+      "language": "json",
+      "sizeLines": 39,
+      "fileCategory": "config"
+    },
+    {
+      "path": "sdk_2024/plugins/mmdtool/mmdtool.xdl64.manifest",
+      "language": "manifest",
+      "sizeLines": 1,
+      "fileCategory": "code"
+    },
+    {
+      "path": "sdk_2024/plugins/mmdtool/project/CMakeLists.txt",
+      "language": "txt",
+      "sizeLines": 28,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "sdk_2024/plugins/mmdtool/project/mmdtool.vcxproj",
+      "language": "vcxproj",
+      "sizeLines": 308,
+      "fileCategory": "code"
+    },
+    {
+      "path": "sdk_2024/plugins/mmdtool/project/mmdtool.vcxproj.filters",
+      "language": "filters",
+      "sizeLines": 269,
+      "fileCategory": "code"
+    },
+    {
+      "path": "sdk_2024/plugins/mmdtool/project/mmdtool.vcxproj.user",
+      "language": "user",
+      "sizeLines": 7,
+      "fileCategory": "code"
+    },
+    {
+      "path": "sdk_2024/plugins/mmdtool/project/mmdtool.xcodeproj/project.pbxproj",
+      "language": "pbxproj",
+      "sizeLines": 907,
+      "fileCategory": "code"
+    },
+    {
+      "path": "sdk_2024/plugins/mmdtool/project/projectdefinition.txt",
+      "language": "txt",
+      "sizeLines": 19,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "sdk_2024/plugins/mmdtool/project/projectsettings.props",
+      "language": "props",
+      "sizeLines": 19,
+      "fileCategory": "code"
+    },
+    {
+      "path": "sdk_2024/plugins/project/projectdefinition.txt",
+      "language": "txt",
+      "sizeLines": 2,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "sdk_2025/cmake/base_settings/compile_definitions.cmake",
+      "language": "cmake",
+      "sizeLines": 42,
+      "fileCategory": "code"
+    },
+    {
+      "path": "sdk_2025/cmake/base_settings/compile_options.cmake",
+      "language": "cmake",
+      "sizeLines": 95,
+      "fileCategory": "code"
+    },
+    {
+      "path": "sdk_2025/cmake/base_settings/link_options.cmake",
+      "language": "cmake",
+      "sizeLines": 29,
+      "fileCategory": "code"
+    },
+    {
+      "path": "sdk_2025/cmake/base_settings/sanitize.cmake",
+      "language": "cmake",
+      "sizeLines": 25,
+      "fileCategory": "code"
+    },
+    {
+      "path": "sdk_2025/cmake/base_settings/warnings.clang.cmake",
+      "language": "cmake",
+      "sizeLines": 143,
+      "fileCategory": "code"
+    },
+    {
+      "path": "sdk_2025/cmake/base_settings/warnings.gcc.cmake",
+      "language": "cmake",
+      "sizeLines": 23,
+      "fileCategory": "code"
+    },
+    {
+      "path": "sdk_2025/cmake/base_settings/warnings.msvc.cmake",
+      "language": "cmake",
+      "sizeLines": 83,
+      "fileCategory": "code"
+    },
+    {
+      "path": "sdk_2025/cmake/commands/create_directory_symlink.cmake",
+      "language": "cmake",
+      "sizeLines": 10,
+      "fileCategory": "code"
+    },
+    {
+      "path": "sdk_2025/cmake/commands/update_filelist.cmake",
+      "language": "cmake",
+      "sizeLines": 20,
+      "fileCategory": "code"
+    },
+    {
+      "path": "sdk_2025/cmake/sdk_compiler_helper.cmake",
+      "language": "cmake",
+      "sizeLines": 458,
+      "fileCategory": "code"
+    }
+  ],
+  "batchImportData": {
+    "sdk_2024/cmake/sdk_compiler_helper.cmake": [],
+    "sdk_2024/cmake/sdk_library_template.cmake": [],
+    "sdk_2024/cmake/sdk_targets.cmake": [],
+    "sdk_2024/cmake/sdk_update_projects.cmake": [],
+    "sdk_2024/CMakeLists.txt": [],
+    "sdk_2024/CMakePresets.json": [],
+    "sdk_2024/plugins/mmdtool/mmdtool.xdl64.manifest": [],
+    "sdk_2024/plugins/mmdtool/project/CMakeLists.txt": [],
+    "sdk_2024/plugins/mmdtool/project/mmdtool.vcxproj": [],
+    "sdk_2024/plugins/mmdtool/project/mmdtool.vcxproj.filters": [],
+    "sdk_2024/plugins/mmdtool/project/mmdtool.vcxproj.user": [],
+    "sdk_2024/plugins/mmdtool/project/mmdtool.xcodeproj/project.pbxproj": [],
+    "sdk_2024/plugins/mmdtool/project/projectdefinition.txt": [],
+    "sdk_2024/plugins/mmdtool/project/projectsettings.props": [],
+    "sdk_2024/plugins/project/projectdefinition.txt": [],
+    "sdk_2025/cmake/base_settings/compile_definitions.cmake": [],
+    "sdk_2025/cmake/base_settings/compile_options.cmake": [],
+    "sdk_2025/cmake/base_settings/link_options.cmake": [],
+    "sdk_2025/cmake/base_settings/sanitize.cmake": [],
+    "sdk_2025/cmake/base_settings/warnings.clang.cmake": [],
+    "sdk_2025/cmake/base_settings/warnings.gcc.cmake": [],
+    "sdk_2025/cmake/base_settings/warnings.msvc.cmake": [],
+    "sdk_2025/cmake/commands/create_directory_symlink.cmake": [],
+    "sdk_2025/cmake/commands/update_filelist.cmake": [],
+    "sdk_2025/cmake/sdk_compiler_helper.cmake": []
+  }
+}

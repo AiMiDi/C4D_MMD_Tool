@@ -1,0 +1,295 @@
+{
+  "nodes": [
+    {
+      "id": "file:sdk_2025/cmake/sdk_library_template.cmake",
+      "type": "file",
+      "name": "sdk_library_template.cmake",
+      "filePath": "sdk_2025/cmake/sdk_library_template.cmake",
+      "summary": "Template for generated SDK 2025 library projects, exposing platform, compiler, linker, source, framework, and prebuild placeholders before target configuration. / SDK 2025 库项目生成模板，在配置目标前提供平台、编译器、链接器、源码、框架与预构建占位符。",
+      "tags": [
+        "cmake",
+        "sdk-2025",
+        "template",
+        "target-configuration"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "document:sdk_2025/plugins/mmdtool/project/CMakeLists.txt",
+      "type": "document",
+      "name": "CMakeLists.txt",
+      "filePath": "sdk_2025/plugins/mmdtool/project/CMakeLists.txt",
+      "summary": "Thin SDK 2025 mmdtool wrapper that adds shared dependencies and plugin setup, resolves the project/module roots, and uses the shared source and S24+ resource trees. / 精简的 SDK 2025 mmdtool 包装层，引入共享依赖与插件设置，解析项目及模块根目录，并使用共享源码树与 S24+ 资源树。",
+      "tags": [
+        "documentation",
+        "cmake",
+        "sdk-2025",
+        "plugin-build",
+        "thin-wrapper"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:sdk_2025/plugins/mmdtool/project/projectdefinition.txt",
+      "type": "document",
+      "name": "projectdefinition.txt",
+      "filePath": "sdk_2025/plugins/mmdtool/project/projectdefinition.txt",
+      "summary": "Maxon project metadata for the SDK 2025 mmdtool DLL, declaring supported platforms, Cinema 4D framework dependencies, component status, module ID, and style-check policy. / SDK 2025 mmdtool DLL 的 Maxon 项目元数据，声明支持平台、Cinema 4D 框架依赖、组件状态、模块 ID 与样式检查策略。",
+      "tags": [
+        "documentation",
+        "sdk-2025",
+        "project-metadata",
+        "frameworks",
+        "plugin-build"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:sdk_2026/cmake/base_settings/compile_definitions.cmake",
+      "type": "file",
+      "name": "compile_definitions.cmake",
+      "filePath": "sdk_2026/cmake/base_settings/compile_definitions.cmake",
+      "summary": "Defines shared SDK 2026 preprocessor symbols for 64-bit, debug/release, and Windows plugin builds. / 定义 SDK 2026 的共享预处理符号，用于 64 位、调试/发布及 Windows 插件构建。",
+      "tags": [
+        "cmake",
+        "sdk-2026",
+        "compiler-configuration",
+        "preprocessor"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:sdk_2026/cmake/base_settings/compile_options.cmake",
+      "type": "file",
+      "name": "compile_options.cmake",
+      "filePath": "sdk_2026/cmake/base_settings/compile_options.cmake",
+      "summary": "Defines SDK 2026 compiler and ISA options for MSVC, ClangCL, Apple Clang, GCC, Objective-C, debug/release modes, x64, and ARM64. / 定义 SDK 2026 面向 MSVC、ClangCL、Apple Clang、GCC、Objective-C、调试/发布模式、x64 与 ARM64 的编译器和 ISA 选项。",
+      "tags": [
+        "cmake",
+        "sdk-2026",
+        "compiler-configuration",
+        "toolchain",
+        "isa"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:sdk_2026/cmake/base_settings/link_options.cmake",
+      "type": "file",
+      "name": "link_options.cmake",
+      "filePath": "sdk_2026/cmake/base_settings/link_options.cmake",
+      "summary": "Defines SDK 2026 platform and configuration-specific linker options, debug information policy, and Linux linker selection. / 定义 SDK 2026 的平台与配置特定链接器选项、调试信息策略及 Linux 链接器选择。",
+      "tags": [
+        "cmake",
+        "sdk-2026",
+        "linking",
+        "toolchain"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:sdk_2026/cmake/base_settings/sanitize.cmake",
+      "type": "file",
+      "name": "sanitize.cmake",
+      "filePath": "sdk_2026/cmake/base_settings/sanitize.cmake",
+      "summary": "Defines SDK 2026 AddressSanitizer compile definitions, compiler flags, and linker options for supported release-mode toolchains. / 定义 SDK 2026 在受支持发布模式工具链中的 AddressSanitizer 编译定义、编译器标志与链接器选项。",
+      "tags": [
+        "cmake",
+        "sdk-2026",
+        "sanitizer",
+        "security",
+        "toolchain"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:sdk_2026/cmake/base_settings/warnings.clang.cmake",
+      "type": "file",
+      "name": "warnings.clang.cmake",
+      "filePath": "sdk_2026/cmake/base_settings/warnings.clang.cmake",
+      "summary": "Defines the SDK 2026 Clang warning policy, separating enabled diagnostics from explicitly muted compatibility warnings. / 定义 SDK 2026 的 Clang 警告策略，将启用的诊断与显式屏蔽的兼容性警告分开。",
+      "tags": [
+        "cmake",
+        "sdk-2026",
+        "clang",
+        "compiler-warnings"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:sdk_2026/cmake/base_settings/warnings.gcc.cmake",
+      "type": "file",
+      "name": "warnings.gcc.cmake",
+      "filePath": "sdk_2026/cmake/base_settings/warnings.gcc.cmake",
+      "summary": "Defines the SDK 2026 GCC warning flags and targeted suppressions used by shared plugin targets. / 定义 SDK 2026 的 GCC 警告标志与定向抑制项，供共享插件目标使用。",
+      "tags": [
+        "cmake",
+        "sdk-2026",
+        "gcc",
+        "compiler-warnings"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:sdk_2026/cmake/base_settings/warnings.msvc.cmake",
+      "type": "file",
+      "name": "warnings.msvc.cmake",
+      "filePath": "sdk_2026/cmake/base_settings/warnings.msvc.cmake",
+      "summary": "Defines the SDK 2026 MSVC warning level, conformance diagnostics, and compatibility suppressions for Windows builds. / 定义 SDK 2026 的 MSVC 警告级别、标准一致性诊断与 Windows 构建兼容性抑制项。",
+      "tags": [
+        "cmake",
+        "sdk-2026",
+        "msvc",
+        "compiler-warnings"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:sdk_2026/cmake/commands/create_directory_symlink.cmake",
+      "type": "file",
+      "name": "create_directory_symlink.cmake",
+      "filePath": "sdk_2026/cmake/commands/create_directory_symlink.cmake",
+      "summary": "Provides a SDK 2026 CMake script-mode entry point that validates arguments and delegates directory-link creation to shared target helpers. / 提供 SDK 2026 CMake 脚本模式入口，校验参数后将目录链接创建委托给共享目标辅助函数。",
+      "tags": [
+        "cmake",
+        "sdk-2026",
+        "script-entry-point",
+        "filesystem"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:sdk_2026/cmake/commands/update_filelist.cmake",
+      "type": "file",
+      "name": "update_filelist.cmake",
+      "filePath": "sdk_2026/cmake/commands/update_filelist.cmake",
+      "summary": "Provides a SDK 2026 CMake script-mode entry point that normalizes search directories and refreshes generated source file lists. / 提供 SDK 2026 CMake 脚本模式入口，规范化搜索目录并刷新生成的源文件列表。",
+      "tags": [
+        "cmake",
+        "sdk-2026",
+        "script-entry-point",
+        "source-discovery"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:sdk_2026/cmake/sdk_library_template.cmake",
+      "type": "file",
+      "name": "sdk_library_template.cmake",
+      "filePath": "sdk_2026/cmake/sdk_library_template.cmake",
+      "summary": "Template for generated SDK 2026 library projects, exposing platform, compiler, linker, source, framework, and prebuild placeholders before target configuration. / SDK 2026 库项目生成模板，在配置目标前提供平台、编译器、链接器、源码、框架与预构建占位符。",
+      "tags": [
+        "cmake",
+        "sdk-2026",
+        "template",
+        "target-configuration"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "document:sdk_2026/plugins/mmdtool/project/CMakeLists.txt",
+      "type": "document",
+      "name": "CMakeLists.txt",
+      "filePath": "sdk_2026/plugins/mmdtool/project/CMakeLists.txt",
+      "summary": "Thin SDK 2026 mmdtool wrapper that adds shared dependencies and plugin setup, resolves the project/module roots, and uses the shared source and S24+ resource trees. / 精简的 SDK 2026 mmdtool 包装层，引入共享依赖与插件设置，解析项目及模块根目录，并使用共享源码树与 S24+ 资源树。",
+      "tags": [
+        "documentation",
+        "cmake",
+        "sdk-2026",
+        "plugin-build",
+        "thin-wrapper"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:sdk_2026/plugins/mmdtool/project/projectdefinition.txt",
+      "type": "document",
+      "name": "projectdefinition.txt",
+      "filePath": "sdk_2026/plugins/mmdtool/project/projectdefinition.txt",
+      "summary": "Maxon project metadata for the SDK 2026 mmdtool DLL, declaring supported platforms, Cinema 4D framework dependencies, component status, module ID, and style-check policy. / SDK 2026 mmdtool DLL 的 Maxon 项目元数据，声明支持平台、Cinema 4D 框架依赖、组件状态、模块 ID 与样式检查策略。",
+      "tags": [
+        "documentation",
+        "sdk-2026",
+        "project-metadata",
+        "frameworks",
+        "plugin-build"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:sdk_r20/cmake/sdk_compat_r20.cmake",
+      "type": "file",
+      "name": "sdk_compat_r20.cmake",
+      "filePath": "sdk_r20/cmake/sdk_compat_r20.cmake",
+      "summary": "Defines conservative R20 compatibility defaults: C++17, parallel and permissive MSVC compilation, AVX baseline instructions, and reduced warning noise. / 定义保守的 R20 兼容默认值：C++17、MSVC 并行与宽松编译、AVX 基线指令以及降低警告噪声。",
+      "tags": [
+        "cmake",
+        "sdk-r20",
+        "compatibility",
+        "msvc",
+        "toolchain"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:sdk_r20/CMakeLists.txt",
+      "type": "document",
+      "name": "CMakeLists.txt",
+      "filePath": "sdk_r20/CMakeLists.txt",
+      "summary": "R20 bridge build definition that reuses shared Maxon tooling, discovers plugin module paths, configures output directories, and loads only frameworks required by participating modules. / R20 桥接构建定义，复用共享 Maxon 工具链，发现插件模块路径，配置输出目录，并仅加载参与模块所需框架。",
+      "tags": [
+        "documentation",
+        "cmake",
+        "sdk-r20",
+        "build-system",
+        "frameworks"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "config:sdk_r20/CMakePresets.json",
+      "type": "config",
+      "name": "CMakePresets.json",
+      "filePath": "sdk_r20/CMakePresets.json",
+      "summary": "Defines R20 configure presets for Linux Ninja, x86_64 macOS Xcode, Visual Studio 2022 v143, and Visual Studio ClangCL builds. / 定义 R20 的 Linux Ninja、x86_64 macOS Xcode、Visual Studio 2022 v143 与 Visual Studio ClangCL 配置预设。",
+      "tags": [
+        "configuration",
+        "cmake-presets",
+        "sdk-r20",
+        "cross-platform"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:sdk_r20/plugins/mmdtool/project/CMakeLists.txt",
+      "type": "document",
+      "name": "CMakeLists.txt",
+      "filePath": "sdk_r20/plugins/mmdtool/project/CMakeLists.txt",
+      "summary": "Thin Cinema 4D R20 SDK mmdtool wrapper that adds shared dependencies and plugin setup, resolves the project/module roots, and selects the R20-S24 resource tree, narrows generated registration sources, and adds legacy framework headers. / 精简的 Cinema 4D R20 SDK mmdtool 包装层，引入共享依赖与插件设置，解析项目及模块根目录，并选择 R20-S24 资源树，收窄生成的注册源码，并加入旧版框架头文件。",
+      "tags": [
+        "documentation",
+        "cmake",
+        "sdk-r20",
+        "plugin-build",
+        "thin-wrapper"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:sdk_r20/plugins/mmdtool/project/projectdefinition.txt",
+      "type": "document",
+      "name": "projectdefinition.txt",
+      "filePath": "sdk_r20/plugins/mmdtool/project/projectdefinition.txt",
+      "summary": "Maxon project metadata for the Cinema 4D R20 SDK mmdtool DLL, declaring supported platforms, Cinema 4D framework dependencies, component status, module ID, and style-check policy. / Cinema 4D R20 SDK mmdtool DLL 的 Maxon 项目元数据，声明支持平台、Cinema 4D 框架依赖、组件状态、模块 ID 与样式检查策略。",
+      "tags": [
+        "documentation",
+        "sdk-r20",
+        "project-metadata",
+        "frameworks",
+        "plugin-build"
+      ],
+      "complexity": "simple"
+    }
+  ],
+  "edges": []
+}

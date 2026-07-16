@@ -1,0 +1,907 @@
+{
+  "nodes": [
+    {
+      "id": "file:source/module/tools/object/mmd_joint.h",
+      "type": "file",
+      "name": "mmd_joint.h",
+      "filePath": "source/module/tools/object/mmd_joint.h",
+      "summary": "Declares the MMD joint object plugin and its parameter, drawing, execution, serialization, and mode-transition hooks. / 声明 MMD 关节对象插件及其参数、绘制、执行、序列化与模式切换钩子。",
+      "tags": [
+        "joint",
+        "physics",
+        "api",
+        "object-plugin",
+        "serialization"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:source/module/tools/object/mmd_joint.h:MMDJointObject",
+      "type": "class",
+      "name": "MMDJointObject",
+      "filePath": "source/module/tools/object/mmd_joint.h",
+      "lineRange": [
+        18,
+        54
+      ],
+      "summary": "MMDJointObject encapsulates a major runtime responsibility for joint object API. / MMDJointObject 为关节对象 API封装主要运行时职责。",
+      "tags": [
+        "joint",
+        "physics",
+        "api"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:source/module/tools/object/mmd_joint_manager.cpp",
+      "type": "file",
+      "name": "mmd_joint_manager.cpp",
+      "filePath": "source/module/tools/object/mmd_joint_manager.cpp",
+      "summary": "Implements joint collection management, PMX import/export, editor-transform transitions, rigid-index remapping, and standalone physics-constraint construction. / 实现关节集合管理、PMX 导入导出、编辑器变换切换、刚体索引重映射与独立物理约束构建。",
+      "tags": [
+        "object-manager",
+        "joint",
+        "pmx",
+        "physics",
+        "serialization"
+      ],
+      "complexity": "complex",
+      "languageNotes": "C++ integrates Cinema 4D SDK lifecycle hooks with explicit PMX/VMD conversion and runtime state management. / C++ 将 Cinema 4D SDK 生命周期钩子与显式 PMX/VMD 转换及运行时状态管理结合。"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_joint_manager.cpp:NormalizeJointMode",
+      "type": "function",
+      "name": "NormalizeJointMode",
+      "filePath": "source/module/tools/object/mmd_joint_manager.cpp",
+      "lineRange": [
+        25,
+        29
+      ],
+      "summary": "NormalizeJointMode normalizes joint mode for joint collection and physics-constraint setup. / NormalizeJointMode 为关节集合与物理约束设置规范化 joint mode。",
+      "tags": [
+        "physics",
+        "object-manager",
+        "joint"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_joint_manager.cpp:NormalizeMatrixBasis",
+      "type": "function",
+      "name": "NormalizeMatrixBasis",
+      "filePath": "source/module/tools/object/mmd_joint_manager.cpp",
+      "lineRange": [
+        31,
+        36
+      ],
+      "summary": "NormalizeMatrixBasis normalizes matrix basis for joint collection and physics-constraint setup. / NormalizeMatrixBasis 为关节集合与物理约束设置规范化 matrix basis。",
+      "tags": [
+        "object-manager",
+        "joint",
+        "pmx"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_joint_manager.cpp:GetObjectRotationOrder",
+      "type": "function",
+      "name": "GetObjectRotationOrder",
+      "filePath": "source/module/tools/object/mmd_joint_manager.cpp",
+      "lineRange": [
+        38,
+        44
+      ],
+      "summary": "GetObjectRotationOrder retrieves object rotation order for joint collection and physics-constraint setup. / GetObjectRotationOrder 为关节集合与物理约束设置获取 object rotation order。",
+      "tags": [
+        "object-manager",
+        "joint",
+        "pmx"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_joint_manager.cpp:MarkSceneNodeDirty",
+      "type": "function",
+      "name": "MarkSceneNodeDirty",
+      "filePath": "source/module/tools/object/mmd_joint_manager.cpp",
+      "lineRange": [
+        46,
+        53
+      ],
+      "summary": "MarkSceneNodeDirty marks scene node dirty for joint collection and physics-constraint setup. / MarkSceneNodeDirty 为关节集合与物理约束设置标记 scene node dirty。",
+      "tags": [
+        "object-manager",
+        "joint",
+        "pmx"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_joint_manager.cpp:SetFloatParameter",
+      "type": "function",
+      "name": "SetFloatParameter",
+      "filePath": "source/module/tools/object/mmd_joint_manager.cpp",
+      "lineRange": [
+        55,
+        59
+      ],
+      "summary": "SetFloatParameter sets float parameter for joint collection and physics-constraint setup. / SetFloatParameter 为关节集合与物理约束设置设置 float parameter。",
+      "tags": [
+        "object-manager",
+        "joint",
+        "pmx"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_joint_manager.cpp:SetVectorXYZParameters",
+      "type": "function",
+      "name": "SetVectorXYZParameters",
+      "filePath": "source/module/tools/object/mmd_joint_manager.cpp",
+      "lineRange": [
+        61,
+        66
+      ],
+      "summary": "SetVectorXYZParameters sets vector xyz parameters for joint collection and physics-constraint setup. / SetVectorXYZParameters 为关节集合与物理约束设置设置 vector xyz parameters。",
+      "tags": [
+        "object-manager",
+        "joint",
+        "pmx"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_joint_manager.cpp:ReadObjectStoredString",
+      "type": "function",
+      "name": "ReadObjectStoredString",
+      "filePath": "source/module/tools/object/mmd_joint_manager.cpp",
+      "lineRange": [
+        68,
+        80
+      ],
+      "summary": "ReadObjectStoredString reads object stored string for joint collection and physics-constraint setup. / ReadObjectStoredString 为关节集合与物理约束设置读取 object stored string。",
+      "tags": [
+        "serialization",
+        "object-manager",
+        "joint"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_joint_manager.cpp:ReadObjectStoredIndex",
+      "type": "function",
+      "name": "ReadObjectStoredIndex",
+      "filePath": "source/module/tools/object/mmd_joint_manager.cpp",
+      "lineRange": [
+        82,
+        98
+      ],
+      "summary": "ReadObjectStoredIndex reads object stored index for joint collection and physics-constraint setup. / ReadObjectStoredIndex 为关节集合与物理约束设置读取 object stored index。",
+      "tags": [
+        "serialization",
+        "object-manager",
+        "joint"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_joint_manager.cpp:BuildPRSMatrix",
+      "type": "function",
+      "name": "BuildPRSMatrix",
+      "filePath": "source/module/tools/object/mmd_joint_manager.cpp",
+      "lineRange": [
+        100,
+        105
+      ],
+      "summary": "BuildPRSMatrix builds prs matrix for joint collection and physics-constraint setup. / BuildPRSMatrix 为关节集合与物理约束设置构建 prs matrix。",
+      "tags": [
+        "ui",
+        "object-manager",
+        "joint"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_joint_manager.cpp:MMDJointManagerObject::Read",
+      "type": "function",
+      "name": "MMDJointManagerObject::Read",
+      "filePath": "source/module/tools/object/mmd_joint_manager.cpp",
+      "lineRange": [
+        113,
+        121
+      ],
+      "summary": "MMDJointManagerObject::Read reads persistent state for joint collection and physics-constraint setup. / MMDJointManagerObject::Read 为关节集合与物理约束设置读取持久状态。",
+      "tags": [
+        "serialization",
+        "object-manager",
+        "joint"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_joint_manager.cpp:SDK2024_Write",
+      "type": "function",
+      "name": "SDK2024_Write",
+      "filePath": "source/module/tools/object/mmd_joint_manager.cpp",
+      "lineRange": [
+        123,
+        127
+      ],
+      "summary": "SDK2024_Write implements the Cinema 4D SDK lifecycle hook for write in joint collection and physics-constraint setup. / SDK2024_Write 实现关节集合与物理约束设置中用于 write 的 Cinema 4D SDK 生命周期钩子。",
+      "tags": [
+        "serialization",
+        "object-manager",
+        "joint"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_joint_manager.cpp:SDK2024_CopyTo",
+      "type": "function",
+      "name": "SDK2024_CopyTo",
+      "filePath": "source/module/tools/object/mmd_joint_manager.cpp",
+      "lineRange": [
+        129,
+        132
+      ],
+      "summary": "SDK2024_CopyTo implements the Cinema 4D SDK lifecycle hook for copy to in joint collection and physics-constraint setup. / SDK2024_CopyTo 实现关节集合与物理约束设置中用于 copy to 的 Cinema 4D SDK 生命周期钩子。",
+      "tags": [
+        "serialization",
+        "object-manager",
+        "joint"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_joint_manager.cpp:MMDJointManagerObject::Message",
+      "type": "function",
+      "name": "MMDJointManagerObject::Message",
+      "filePath": "source/module/tools/object/mmd_joint_manager.cpp",
+      "lineRange": [
+        166,
+        200
+      ],
+      "summary": "MMDJointManagerObject::Message dispatches Cinema 4D messages and state transitions for joint collection and physics-constraint setup. / MMDJointManagerObject::Message 为关节集合与物理约束设置分发 Cinema 4D 消息与状态切换。",
+      "tags": [
+        "object-manager",
+        "joint",
+        "pmx"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_joint_manager.cpp:MMDJointManagerObject::SetDParameter",
+      "type": "function",
+      "name": "MMDJointManagerObject::SetDParameter",
+      "filePath": "source/module/tools/object/mmd_joint_manager.cpp",
+      "lineRange": [
+        202,
+        223
+      ],
+      "summary": "MMDJointManagerObject::SetDParameter applies parameter changes and their runtime side effects for joint collection and physics-constraint setup. / MMDJointManagerObject::SetDParameter 为关节集合与物理约束设置应用参数变更及其运行时副作用。",
+      "tags": [
+        "object-manager",
+        "joint",
+        "pmx"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_joint_manager.cpp:MMDJointManagerObject::SetAllJointMode",
+      "type": "function",
+      "name": "MMDJointManagerObject::SetAllJointMode",
+      "filePath": "source/module/tools/object/mmd_joint_manager.cpp",
+      "lineRange": [
+        225,
+        250
+      ],
+      "summary": "MMDJointManagerObject::SetAllJointMode sets all joint mode for joint collection and physics-constraint setup. / MMDJointManagerObject::SetAllJointMode 为关节集合与物理约束设置设置 all joint mode。",
+      "tags": [
+        "physics",
+        "object-manager",
+        "joint"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_joint_manager.cpp:MMDJointManagerObject::CommitEditorTransforms",
+      "type": "function",
+      "name": "MMDJointManagerObject::CommitEditorTransforms",
+      "filePath": "source/module/tools/object/mmd_joint_manager.cpp",
+      "lineRange": [
+        252,
+        268
+      ],
+      "summary": "MMDJointManagerObject::CommitEditorTransforms commits editor transforms for joint collection and physics-constraint setup. / MMDJointManagerObject::CommitEditorTransforms 为关节集合与物理约束设置提交 editor transforms。",
+      "tags": [
+        "object-manager",
+        "joint",
+        "pmx"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_joint_manager.cpp:MMDJointManagerObject::RestoreEditorTransforms",
+      "type": "function",
+      "name": "MMDJointManagerObject::RestoreEditorTransforms",
+      "filePath": "source/module/tools/object/mmd_joint_manager.cpp",
+      "lineRange": [
+        270,
+        295
+      ],
+      "summary": "MMDJointManagerObject::RestoreEditorTransforms restores editor transforms for joint collection and physics-constraint setup. / MMDJointManagerObject::RestoreEditorTransforms 为关节集合与物理约束设置恢复 editor transforms。",
+      "tags": [
+        "object-manager",
+        "joint",
+        "pmx"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_joint_manager.cpp:MMDJointManagerObject::LoadPMX",
+      "type": "function",
+      "name": "MMDJointManagerObject::LoadPMX",
+      "filePath": "source/module/tools/object/mmd_joint_manager.cpp",
+      "lineRange": [
+        325,
+        384
+      ],
+      "summary": "MMDJointManagerObject::LoadPMX loads pmx for joint collection and physics-constraint setup. / MMDJointManagerObject::LoadPMX 为关节集合与物理约束设置加载 pmx。",
+      "tags": [
+        "pmx",
+        "import",
+        "object-manager"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_joint_manager.cpp:RemapRigidIndex",
+      "type": "function",
+      "name": "RemapRigidIndex",
+      "filePath": "source/module/tools/object/mmd_joint_manager.cpp",
+      "lineRange": [
+        397,
+        405
+      ],
+      "summary": "RemapRigidIndex remaps rigid index for joint collection and physics-constraint setup. / RemapRigidIndex 为关节集合与物理约束设置重映射 rigid index。",
+      "tags": [
+        "physics",
+        "object-manager",
+        "joint"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_joint_manager.cpp:MMDJointManagerObject::SavePMX",
+      "type": "function",
+      "name": "MMDJointManagerObject::SavePMX",
+      "filePath": "source/module/tools/object/mmd_joint_manager.cpp",
+      "lineRange": [
+        408,
+        479
+      ],
+      "summary": "MMDJointManagerObject::SavePMX saves pmx for joint collection and physics-constraint setup. / MMDJointManagerObject::SavePMX 为关节集合与物理约束设置保存 pmx。",
+      "tags": [
+        "pmx",
+        "export",
+        "object-manager"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_joint_manager.cpp:MMDJointManagerObject::BuildStandaloneJoints",
+      "type": "function",
+      "name": "MMDJointManagerObject::BuildStandaloneJoints",
+      "filePath": "source/module/tools/object/mmd_joint_manager.cpp",
+      "lineRange": [
+        500,
+        628
+      ],
+      "summary": "MMDJointManagerObject::BuildStandaloneJoints builds standalone joints for joint collection and physics-constraint setup. / MMDJointManagerObject::BuildStandaloneJoints 为关节集合与物理约束设置构建 standalone joints。",
+      "tags": [
+        "physics",
+        "ui",
+        "object-manager"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_joint_manager.cpp:MMDJointManagerObject::ReconnectJointPointers",
+      "type": "function",
+      "name": "MMDJointManagerObject::ReconnectJointPointers",
+      "filePath": "source/module/tools/object/mmd_joint_manager.cpp",
+      "lineRange": [
+        630,
+        671
+      ],
+      "summary": "MMDJointManagerObject::ReconnectJointPointers reconnects joint pointers for joint collection and physics-constraint setup. / MMDJointManagerObject::ReconnectJointPointers 为关节集合与物理约束设置重新连接 joint pointers。",
+      "tags": [
+        "physics",
+        "object-manager",
+        "joint"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:source/module/tools/object/mmd_joint_manager.h",
+      "type": "file",
+      "name": "mmd_joint_manager.h",
+      "filePath": "source/module/tools/object/mmd_joint_manager.h",
+      "summary": "Declares the joint manager, scene message contract, PMX conversion API, and standalone constraint lifecycle. / 声明关节管理器、场景消息协议、PMX 转换 API 与独立约束生命周期。",
+      "tags": [
+        "object-manager",
+        "joint",
+        "api",
+        "physics",
+        "pmx"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "class:source/module/tools/object/mmd_joint_manager.h:MMDJointRootObjectMsg",
+      "type": "class",
+      "name": "MMDJointRootObjectMsg",
+      "filePath": "source/module/tools/object/mmd_joint_manager.h",
+      "lineRange": [
+        40,
+        52
+      ],
+      "summary": "MMDJointRootObjectMsg encapsulates a major runtime responsibility for joint-manager API. / MMDJointRootObjectMsg 为关节管理器 API封装主要运行时职责。",
+      "tags": [
+        "object-manager",
+        "joint",
+        "api"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:source/module/tools/object/mmd_joint_manager.h:MMDJointManagerObject",
+      "type": "class",
+      "name": "MMDJointManagerObject",
+      "filePath": "source/module/tools/object/mmd_joint_manager.h",
+      "lineRange": [
+        54,
+        88
+      ],
+      "summary": "MMDJointManagerObject coordinates owned objects, persistent state, and lifecycle operations for joint-manager API. / MMDJointManagerObject 为关节管理器 API协调所管理对象、持久状态与生命周期操作。",
+      "tags": [
+        "object-manager",
+        "joint",
+        "api"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_joint_manager.h:MMDJointRootObjectMsg::MMDJointRootObjectMsg",
+      "type": "function",
+      "name": "MMDJointRootObjectMsg::MMDJointRootObjectMsg",
+      "filePath": "source/module/tools/object/mmd_joint_manager.h",
+      "lineRange": [
+        46,
+        49
+      ],
+      "summary": "MMDJointRootObjectMsg::MMDJointRootObjectMsg initializes an object used by joint-manager API. / MMDJointRootObjectMsg::MMDJointRootObjectMsg 初始化关节管理器 API所使用的对象。",
+      "tags": [
+        "physics",
+        "object-manager",
+        "joint"
+      ],
+      "complexity": "simple"
+    }
+  ],
+  "edges": [
+    {
+      "source": "file:source/module/tools/object/mmd_joint.h",
+      "target": "class:source/module/tools/object/mmd_joint.h:MMDJointObject",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_joint.h",
+      "target": "class:source/module/tools/object/mmd_joint.h:MMDJointObject",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_joint_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_joint_manager.cpp:NormalizeJointMode",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_joint_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_joint_manager.cpp:NormalizeJointMode",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_joint_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_joint_manager.cpp:NormalizeMatrixBasis",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_joint_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_joint_manager.cpp:NormalizeMatrixBasis",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_joint_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_joint_manager.cpp:GetObjectRotationOrder",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_joint_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_joint_manager.cpp:GetObjectRotationOrder",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_joint_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_joint_manager.cpp:MarkSceneNodeDirty",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_joint_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_joint_manager.cpp:MarkSceneNodeDirty",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_joint_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_joint_manager.cpp:SetFloatParameter",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_joint_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_joint_manager.cpp:SetFloatParameter",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_joint_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_joint_manager.cpp:SetVectorXYZParameters",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_joint_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_joint_manager.cpp:SetVectorXYZParameters",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_joint_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_joint_manager.cpp:ReadObjectStoredString",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_joint_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_joint_manager.cpp:ReadObjectStoredString",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_joint_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_joint_manager.cpp:ReadObjectStoredIndex",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_joint_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_joint_manager.cpp:ReadObjectStoredIndex",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_joint_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_joint_manager.cpp:BuildPRSMatrix",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_joint_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_joint_manager.cpp:BuildPRSMatrix",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_joint_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_joint_manager.cpp:MMDJointManagerObject::Read",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_joint_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_joint_manager.cpp:MMDJointManagerObject::Read",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_joint_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_joint_manager.cpp:SDK2024_Write",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_joint_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_joint_manager.cpp:SDK2024_Write",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_joint_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_joint_manager.cpp:SDK2024_CopyTo",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_joint_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_joint_manager.cpp:SDK2024_CopyTo",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_joint_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_joint_manager.cpp:MMDJointManagerObject::Message",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_joint_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_joint_manager.cpp:MMDJointManagerObject::Message",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_joint_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_joint_manager.cpp:MMDJointManagerObject::SetDParameter",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_joint_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_joint_manager.cpp:MMDJointManagerObject::SetDParameter",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_joint_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_joint_manager.cpp:MMDJointManagerObject::SetAllJointMode",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_joint_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_joint_manager.cpp:MMDJointManagerObject::SetAllJointMode",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_joint_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_joint_manager.cpp:MMDJointManagerObject::CommitEditorTransforms",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_joint_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_joint_manager.cpp:MMDJointManagerObject::CommitEditorTransforms",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_joint_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_joint_manager.cpp:MMDJointManagerObject::RestoreEditorTransforms",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_joint_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_joint_manager.cpp:MMDJointManagerObject::RestoreEditorTransforms",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_joint_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_joint_manager.cpp:MMDJointManagerObject::LoadPMX",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_joint_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_joint_manager.cpp:MMDJointManagerObject::LoadPMX",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_joint_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_joint_manager.cpp:RemapRigidIndex",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_joint_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_joint_manager.cpp:RemapRigidIndex",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_joint_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_joint_manager.cpp:MMDJointManagerObject::SavePMX",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_joint_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_joint_manager.cpp:MMDJointManagerObject::SavePMX",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_joint_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_joint_manager.cpp:MMDJointManagerObject::BuildStandaloneJoints",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_joint_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_joint_manager.cpp:MMDJointManagerObject::BuildStandaloneJoints",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_joint_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_joint_manager.cpp:MMDJointManagerObject::ReconnectJointPointers",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_joint_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_joint_manager.cpp:MMDJointManagerObject::ReconnectJointPointers",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_joint_manager.h",
+      "target": "class:source/module/tools/object/mmd_joint_manager.h:MMDJointRootObjectMsg",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_joint_manager.h",
+      "target": "class:source/module/tools/object/mmd_joint_manager.h:MMDJointRootObjectMsg",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_joint_manager.h",
+      "target": "class:source/module/tools/object/mmd_joint_manager.h:MMDJointManagerObject",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_joint_manager.h",
+      "target": "class:source/module/tools/object/mmd_joint_manager.h:MMDJointManagerObject",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_joint_manager.h",
+      "target": "function:source/module/tools/object/mmd_joint_manager.h:MMDJointRootObjectMsg::MMDJointRootObjectMsg",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_joint_manager.h",
+      "target": "function:source/module/tools/object/mmd_joint_manager.h:MMDJointRootObjectMsg::MMDJointRootObjectMsg",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_joint.h",
+      "target": "file:source/module/tools/object/mmd_joint_manager.h",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_joint_manager.cpp",
+      "target": "file:source/module/tools/object/mmd_bone_manager.h",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_joint_manager.cpp",
+      "target": "file:source/module/tools/object/mmd_joint_manager.h",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_joint_manager.cpp",
+      "target": "file:source/module/tools/object/mmd_joint.h",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_joint_manager.cpp",
+      "target": "file:source/module/tools/object/mmd_model_manager.h",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_joint_manager.cpp",
+      "target": "file:source/module/tools/object/mmd_rigid_manager.h",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_joint_manager.h",
+      "target": "file:source/module/tools/object/mmd_manager.hpp",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    }
+  ]
+}

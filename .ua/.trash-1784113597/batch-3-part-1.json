@@ -1,0 +1,1261 @@
+{
+  "nodes": [
+    {
+      "id": "file:source/module/tools/material/mmd_corona_material.cpp",
+      "type": "file",
+      "name": "mmd_corona_material.cpp",
+      "filePath": "source/module/tools/material/mmd_corona_material.cpp",
+      "summary": "Implements conversion between persistent MMD material data and Corona materials, including renderer-specific texture and channel wiring. / 实现持久化 MMD 材质数据与 Corona 材质之间的转换，包括渲染器专用的贴图与通道连接。",
+      "tags": [
+        "renderer-adapter / 渲染器适配器",
+        "corona / Corona",
+        "material-sync / 材质同步",
+        "cinema-4d / Cinema 4D"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/material/mmd_corona_material.cpp:SyncTo",
+      "type": "function",
+      "name": "SyncTo",
+      "filePath": "source/module/tools/material/mmd_corona_material.cpp",
+      "lineRange": [
+        102,
+        109
+      ],
+      "summary": "Writes common MMD material values into a Corona material using renderer-specific parameters. / 使用渲染器专用参数将通用 MMD 材质值写入 Corona 材质。",
+      "tags": [
+        "material-sync / 材质同步",
+        "renderer-adapter / 渲染器适配器",
+        "forward-mapping / 正向映射"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/material/mmd_corona_material.cpp:ReadFrom",
+      "type": "function",
+      "name": "ReadFrom",
+      "filePath": "source/module/tools/material/mmd_corona_material.cpp",
+      "lineRange": [
+        111,
+        121
+      ],
+      "summary": "Reads a Corona material back into the common MMD material data model. / 将 Corona 材质反向读取到通用 MMD 材质数据模型。",
+      "tags": [
+        "material-sync / 材质同步",
+        "renderer-adapter / 渲染器适配器",
+        "reverse-mapping / 反向映射"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:source/module/tools/material/mmd_corona_material.h",
+      "type": "file",
+      "name": "mmd_corona_material.h",
+      "filePath": "source/module/tools/material/mmd_corona_material.h",
+      "summary": "Declares the final Corona material adapter that creates, synchronizes, and reads Corona materials through the shared MMD adapter interface. / 声明最终的 Corona 材质适配器，通过共享 MMD 适配器接口创建、同步并读取 Corona 材质。",
+      "tags": [
+        "renderer-adapter / 渲染器适配器",
+        "corona / Corona",
+        "interface / 接口",
+        "type-definition / 类型定义"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:source/module/tools/material/mmd_corona_material.h:MMDCoronaMaterialAdapter",
+      "type": "class",
+      "name": "MMDCoronaMaterialAdapter",
+      "filePath": "source/module/tools/material/mmd_corona_material.h",
+      "lineRange": [
+        6,
+        14
+      ],
+      "summary": "Adapts Corona materials to the shared MMD material creation and synchronization contract. / 将 Corona 材质适配到共享的 MMD 材质创建与同步契约。",
+      "tags": [
+        "renderer-adapter / 渲染器适配器",
+        "corona / Corona",
+        "material-sync / 材质同步"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:source/module/tools/material/mmd_material.cpp",
+      "type": "file",
+      "name": "mmd_material.cpp",
+      "filePath": "source/module/tools/material/mmd_material.cpp",
+      "summary": "Implements the renderer-agnostic MMD material data model, adapter factory and dispatch, PMX conversion, persistence, runtime-state checksums, and texture loading. / 实现与渲染器无关的 MMD 材质数据模型、适配器工厂与分发、PMX 转换、持久化、运行时状态校验和及贴图加载。",
+      "tags": [
+        "material-system / 材质系统",
+        "adapter-factory / 适配器工厂",
+        "serialization / 序列化",
+        "pmx-conversion / PMX 转换",
+        "runtime-state / 运行时状态"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:source/module/tools/material/mmd_material.cpp:DetectType",
+      "type": "function",
+      "name": "DetectType",
+      "filePath": "source/module/tools/material/mmd_material.cpp",
+      "lineRange": [
+        23,
+        50
+      ],
+      "summary": "Detects which supported renderer material type a Cinema 4D material uses. / 检测 Cinema 4D 材质所属的受支持渲染器材质类型。",
+      "tags": [
+        "type-detection / 类型检测",
+        "renderer-dispatch / 渲染器分发",
+        "validation / 验证"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/material/mmd_material.cpp:DetectTextureFromPMX",
+      "type": "function",
+      "name": "DetectTextureFromPMX",
+      "filePath": "source/module/tools/material/mmd_material.cpp",
+      "lineRange": [
+        52,
+        72
+      ],
+      "summary": "Resolves PMX texture metadata and determines whether the referenced texture provides alpha. / 解析 PMX 贴图元数据，并判断引用贴图是否提供 Alpha。",
+      "tags": [
+        "texture-detection / 贴图检测",
+        "pmx-import / PMX 导入",
+        "alpha-detection / Alpha 检测"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/material/mmd_material.cpp:DetectTextureFromData",
+      "type": "function",
+      "name": "DetectTextureFromData",
+      "filePath": "source/module/tools/material/mmd_material.cpp",
+      "lineRange": [
+        74,
+        90
+      ],
+      "summary": "Inspects stored MMD material texture data to derive texture and alpha availability. / 检查已存储的 MMD 材质贴图数据，以确定贴图与 Alpha 可用性。",
+      "tags": [
+        "texture-detection / 贴图检测",
+        "material-data / 材质数据",
+        "alpha-detection / Alpha 检测"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/material/mmd_material.cpp:Create",
+      "type": "function",
+      "name": "Create",
+      "filePath": "source/module/tools/material/mmd_material.cpp",
+      "lineRange": [
+        92,
+        102
+      ],
+      "summary": "Constructs the concrete material adapter for a requested renderer type. / 为请求的渲染器类型构造具体材质适配器。",
+      "tags": [
+        "factory / 工厂",
+        "renderer-adapter / 渲染器适配器",
+        "object-creation / 对象创建"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/material/mmd_material.cpp:CreateFor",
+      "type": "function",
+      "name": "CreateFor",
+      "filePath": "source/module/tools/material/mmd_material.cpp",
+      "lineRange": [
+        104,
+        108
+      ],
+      "summary": "Detects a material renderer and returns the matching concrete adapter. / 检测材质渲染器并返回匹配的具体适配器。",
+      "tags": [
+        "factory / 工厂",
+        "renderer-dispatch / 渲染器分发",
+        "material-detection / 材质检测"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/material/mmd_material.cpp:SyncToMaterial",
+      "type": "function",
+      "name": "SyncToMaterial",
+      "filePath": "source/module/tools/material/mmd_material.cpp",
+      "lineRange": [
+        110,
+        115
+      ],
+      "summary": "Dispatches persistent MMD material data to the renderer adapter matching the target material. / 将持久化 MMD 材质数据分发给与目标材质匹配的渲染器适配器。",
+      "tags": [
+        "material-sync / 材质同步",
+        "renderer-dispatch / 渲染器分发",
+        "adapter / 适配器"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/material/mmd_material.cpp:ReadFromMaterial",
+      "type": "function",
+      "name": "ReadFromMaterial",
+      "filePath": "source/module/tools/material/mmd_material.cpp",
+      "lineRange": [
+        117,
+        122
+      ],
+      "summary": "Dispatches reverse synchronization from a Cinema 4D material into the common MMD data model. / 将 Cinema 4D 材质的反向同步分发到通用 MMD 数据模型。",
+      "tags": [
+        "material-sync / 材质同步",
+        "reverse-mapping / 反向映射",
+        "adapter / 适配器"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/material/mmd_material.cpp:SyncRuntimeStateToMaterial",
+      "type": "function",
+      "name": "SyncRuntimeStateToMaterial",
+      "filePath": "source/module/tools/material/mmd_material.cpp",
+      "lineRange": [
+        130,
+        135
+      ],
+      "summary": "Dispatches composed runtime material-morph state to the adapter for the target material. / 将合成后的运行时材质表情状态分发给目标材质的适配器。",
+      "tags": [
+        "runtime-sync / 运行时同步",
+        "material-morph / 材质表情",
+        "renderer-dispatch / 渲染器分发"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/material/mmd_material.cpp:FromPMX",
+      "type": "function",
+      "name": "FromPMX",
+      "filePath": "source/module/tools/material/mmd_material.cpp",
+      "lineRange": [
+        137,
+        170
+      ],
+      "summary": "Populates the persistent material data model from a PMX material record. / 从 PMX 材质记录填充持久化材质数据模型。",
+      "tags": [
+        "pmx-import / PMX 导入",
+        "data-mapping / 数据映射",
+        "material-data / 材质数据"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/material/mmd_material.cpp:ToPMX",
+      "type": "function",
+      "name": "ToPMX",
+      "filePath": "source/module/tools/material/mmd_material.cpp",
+      "lineRange": [
+        172,
+        208
+      ],
+      "summary": "Writes persistent material data back to PMX fields and resolved texture indices. / 将持久化材质数据写回 PMX 字段及解析后的贴图索引。",
+      "tags": [
+        "pmx-export / PMX 导出",
+        "data-mapping / 数据映射",
+        "round-trip / 往返转换"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/material/mmd_material.cpp:Read",
+      "type": "function",
+      "name": "Read",
+      "filePath": "source/module/tools/material/mmd_material.cpp",
+      "lineRange": [
+        210,
+        257
+      ],
+      "summary": "Deserializes persistent MMD material fields and links from a Cinema 4D HyperFile. / 从 Cinema 4D HyperFile 反序列化持久化 MMD 材质字段与链接。",
+      "tags": [
+        "deserialization / 反序列化",
+        "persistence / 持久化",
+        "material-data / 材质数据"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/material/mmd_material.cpp:Write",
+      "type": "function",
+      "name": "Write",
+      "filePath": "source/module/tools/material/mmd_material.cpp",
+      "lineRange": [
+        259,
+        296
+      ],
+      "summary": "Serializes persistent MMD material fields and links to a Cinema 4D HyperFile. / 将持久化 MMD 材质字段与链接序列化到 Cinema 4D HyperFile。",
+      "tags": [
+        "serialization / 序列化",
+        "persistence / 持久化",
+        "material-data / 材质数据"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/material/mmd_material.cpp:CopyTo",
+      "type": "function",
+      "name": "CopyTo",
+      "filePath": "source/module/tools/material/mmd_material.cpp",
+      "lineRange": [
+        298,
+        345
+      ],
+      "summary": "Copies the full persistent material record, preserving managed Cinema 4D links. / 复制完整持久化材质记录，并保留受管理的 Cinema 4D 链接。",
+      "tags": [
+        "copying / 复制",
+        "material-data / 材质数据",
+        "resource-management / 资源管理"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/material/mmd_material.cpp:FromBase",
+      "type": "function",
+      "name": "FromBase",
+      "filePath": "source/module/tools/material/mmd_material.cpp",
+      "lineRange": [
+        347,
+        360
+      ],
+      "summary": "Initializes a fresh non-accumulating runtime state from base material values. / 从基础材质值初始化新的非累积运行时状态。",
+      "tags": [
+        "runtime-state / 运行时状态",
+        "material-morph / 材质表情",
+        "initialization / 初始化"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/material/mmd_material.cpp:WriteSupportedFieldsTo",
+      "type": "function",
+      "name": "WriteSupportedFieldsTo",
+      "filePath": "source/module/tools/material/mmd_material.cpp",
+      "lineRange": [
+        362,
+        372
+      ],
+      "summary": "Projects runtime-composed fields supported by the material system into a material-data copy. / 将材质系统支持的运行时合成字段投影到材质数据副本。",
+      "tags": [
+        "runtime-state / 运行时状态",
+        "data-mapping / 数据映射",
+        "material-sync / 材质同步"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/material/mmd_material.cpp:Checksum",
+      "type": "function",
+      "name": "Checksum",
+      "filePath": "source/module/tools/material/mmd_material.cpp",
+      "lineRange": [
+        374,
+        398
+      ],
+      "summary": "Hashes the effective runtime material state so unchanged frames can skip renderer synchronization. / 哈希有效运行时材质状态，使未变化帧可跳过渲染器同步。",
+      "tags": [
+        "checksum / 校验和",
+        "dirty-detection / 脏状态检测",
+        "performance / 性能"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/material/mmd_material.cpp:SetTextureRelativePath",
+      "type": "function",
+      "name": "SetTextureRelativePath",
+      "filePath": "source/module/tools/material/mmd_material.cpp",
+      "lineRange": [
+        400,
+        403
+      ],
+      "summary": "Sets the base path used to resolve PMX texture references during import. / 设置导入期间用于解析 PMX 贴图引用的基础路径。",
+      "tags": [
+        "path-resolution / 路径解析",
+        "texture-loading / 贴图加载",
+        "configuration / 配置"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/material/mmd_material.cpp:LoadPMXTextures",
+      "type": "function",
+      "name": "LoadPMXTextures",
+      "filePath": "source/module/tools/material/mmd_material.cpp",
+      "lineRange": [
+        405,
+        426
+      ],
+      "summary": "Resolves and stores the PMX texture table as Cinema 4D filenames for later material creation. / 将 PMX 贴图表解析并保存为 Cinema 4D 文件名，供后续材质创建使用。",
+      "tags": [
+        "texture-loading / 贴图加载",
+        "pmx-import / PMX 导入",
+        "resource-management / 资源管理"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:source/module/tools/material/mmd_material.h",
+      "type": "file",
+      "name": "mmd_material.h",
+      "filePath": "source/module/tools/material/mmd_material.h",
+      "summary": "Defines persistent and runtime MMD material state, the renderer adapter abstraction and factory surface, and the texture-aware material manager. / 定义持久化与运行时 MMD 材质状态、渲染器适配器抽象与工厂接口，以及感知贴图的材质管理器。",
+      "tags": [
+        "material-model / 材质模型",
+        "renderer-abstraction / 渲染器抽象",
+        "runtime-state / 运行时状态",
+        "type-definition / 类型定义"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/material/mmd_material.h:~MMDMaterialAdapter",
+      "type": "function",
+      "name": "~MMDMaterialAdapter",
+      "filePath": "source/module/tools/material/mmd_material.h",
+      "lineRange": [
+        92,
+        92
+      ],
+      "summary": "Provides a virtual default destructor for polymorphic renderer adapters. / 为多态渲染器适配器提供虚默认析构函数。",
+      "tags": [
+        "lifecycle / 生命周期",
+        "interface / 接口",
+        "renderer-adapter / 渲染器适配器"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/material/mmd_material.h:SyncRuntimeState",
+      "type": "function",
+      "name": "SyncRuntimeState",
+      "filePath": "source/module/tools/material/mmd_material.h",
+      "lineRange": [
+        106,
+        106
+      ],
+      "summary": "Provides the base adapter no-op hook for renderer-specific runtime material state. / 提供基础适配器的空操作钩子，用于渲染器专用运行时材质状态。",
+      "tags": [
+        "extension-point / 扩展点",
+        "runtime-state / 运行时状态",
+        "renderer-adapter / 渲染器适配器"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/material/mmd_material.h:MMDMaterialManager",
+      "type": "function",
+      "name": "MMDMaterialManager",
+      "filePath": "source/module/tools/material/mmd_material.h",
+      "lineRange": [
+        144,
+        144
+      ],
+      "summary": "Default-constructs the texture-aware MMD material manager. / 默认构造感知贴图的 MMD 材质管理器。",
+      "tags": [
+        "constructor / 构造函数",
+        "material-manager / 材质管理器",
+        "lifecycle / 生命周期"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/material/mmd_material.h:~MMDMaterialManager",
+      "type": "function",
+      "name": "~MMDMaterialManager",
+      "filePath": "source/module/tools/material/mmd_material.h",
+      "lineRange": [
+        145,
+        145
+      ],
+      "summary": "Default-destroys the MMD material manager and its managed texture-path storage. / 默认析构 MMD 材质管理器及其受管理的贴图路径存储。",
+      "tags": [
+        "destructor / 析构函数",
+        "material-manager / 材质管理器",
+        "lifecycle / 生命周期"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:source/module/tools/material/mmd_material.h:ModelImport",
+      "type": "class",
+      "name": "ModelImport",
+      "filePath": "source/module/tools/material/mmd_material.h",
+      "lineRange": [
+        10,
+        10
+      ],
+      "summary": "Forward declaration for the model-import settings consumed by material loading. / 模型导入设置的前置声明，供材质加载流程使用。",
+      "tags": [
+        "type-definition / 类型定义",
+        "import-settings / 导入设置",
+        "forward-declaration / 前置声明"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:source/module/tools/material/mmd_material.h:MMDMaterialData",
+      "type": "class",
+      "name": "MMDMaterialData",
+      "filePath": "source/module/tools/material/mmd_material.h",
+      "lineRange": [
+        14,
+        50
+      ],
+      "summary": "Stores the complete PMX material fields plus Cinema 4D material and mesh links for persistence, editing, and round-trip export. / 保存完整 PMX 材质字段以及 Cinema 4D 材质与网格链接，用于持久化、编辑和往返导出。",
+      "tags": [
+        "data-model / 数据模型",
+        "pmx-material / PMX 材质",
+        "serialization / 序列化",
+        "round-trip / 往返转换"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:source/module/tools/material/mmd_material.h:MMDMaterialRuntimeState",
+      "type": "class",
+      "name": "MMDMaterialRuntimeState",
+      "filePath": "source/module/tools/material/mmd_material.h",
+      "lineRange": [
+        59,
+        84
+      ],
+      "summary": "Represents a per-frame material-morph composition rebuilt from base data, with texture factors and a checksum for dirty-state suppression. / 表示每帧由基础数据重新合成的材质表情状态，包含贴图系数与用于抑制无效更新的校验和。",
+      "tags": [
+        "runtime-state / 运行时状态",
+        "material-morph / 材质表情",
+        "checksum / 校验和",
+        "non-accumulating / 非累积"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:source/module/tools/material/mmd_material.h:MMDMaterialAdapter",
+      "type": "class",
+      "name": "MMDMaterialAdapter",
+      "filePath": "source/module/tools/material/mmd_material.h",
+      "lineRange": [
+        89,
+        121
+      ],
+      "summary": "Defines the polymorphic renderer adapter contract and factories used to create, synchronize, and inspect Cinema 4D materials. / 定义多态渲染器适配器契约与工厂，用于创建、同步和检查 Cinema 4D 材质。",
+      "tags": [
+        "interface / 接口",
+        "factory / 工厂",
+        "renderer-abstraction / 渲染器抽象",
+        "material-sync / 材质同步"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:source/module/tools/material/mmd_material.h:MMDMaterialManager",
+      "type": "class",
+      "name": "MMDMaterialManager",
+      "filePath": "source/module/tools/material/mmd_material.h",
+      "lineRange": [
+        136,
+        152
+      ],
+      "summary": "Owns resolved PMX texture paths and creates imported materials using the selected renderer adapter. / 持有解析后的 PMX 贴图路径，并通过所选渲染器适配器创建导入材质。",
+      "tags": [
+        "service / 服务",
+        "texture-loading / 贴图加载",
+        "material-import / 材质导入",
+        "resource-management / 资源管理"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:source/module/tools/material/mmd_material_morph_shader.cpp",
+      "type": "file",
+      "name": "mmd_material_morph_shader.cpp",
+      "filePath": "source/module/tools/material/mmd_material_morph_shader.cpp",
+      "summary": "Implements a Cinema 4D wrapper shader that applies precomputed PMX texture-morph factors to a child shader without reading mutable scene state during rendering. / 实现 Cinema 4D 包装 Shader，将预计算的 PMX 贴图表情系数应用于子 Shader，并在渲染期间避免读取可变场景状态。",
+      "tags": [
+        "shader / 着色器",
+        "material-morph / 材质表情",
+        "render-runtime / 渲染运行时",
+        "plugin-registration / 插件注册"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/material/mmd_material_morph_shader.cpp:SDK2024_Init",
+      "type": "function",
+      "name": "SDK2024_Init",
+      "filePath": "source/module/tools/material/mmd_material_morph_shader.cpp",
+      "lineRange": [
+        14,
+        24
+      ],
+      "summary": "Initializes the ShaderData instance using the SDK-appropriate initialization contract. / 使用适配当前 SDK 的初始化契约初始化 ShaderData 实例。",
+      "tags": [
+        "initialization / 初始化",
+        "shader / 着色器",
+        "sdk-compatibility / SDK 兼容"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/material/mmd_material_morph_shader.cpp:InitRender",
+      "type": "function",
+      "name": "InitRender",
+      "filePath": "source/module/tools/material/mmd_material_morph_shader.cpp",
+      "lineRange": [
+        26,
+        40
+      ],
+      "summary": "Snapshots morph factors and initializes the wrapped child shader for a render session. / 为渲染会话快照表情系数并初始化被包装的子 Shader。",
+      "tags": [
+        "render-lifecycle / 渲染生命周期",
+        "shader / 着色器",
+        "material-morph / 材质表情"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/material/mmd_material_morph_shader.cpp:FreeRender",
+      "type": "function",
+      "name": "FreeRender",
+      "filePath": "source/module/tools/material/mmd_material_morph_shader.cpp",
+      "lineRange": [
+        42,
+        49
+      ],
+      "summary": "Releases render-session state held by the wrapped child shader. / 释放被包装子 Shader 持有的渲染会话状态。",
+      "tags": [
+        "render-lifecycle / 渲染生命周期",
+        "shader / 着色器",
+        "resource-management / 资源管理"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/material/mmd_material_morph_shader.cpp:Output",
+      "type": "function",
+      "name": "Output",
+      "filePath": "source/module/tools/material/mmd_material_morph_shader.cpp",
+      "lineRange": [
+        51,
+        64
+      ],
+      "summary": "Samples the child shader and applies the immutable RGB and alpha morph factors to its result. / 采样子 Shader，并将不可变的 RGB 与 Alpha 表情系数应用于结果。",
+      "tags": [
+        "shader-evaluation / 着色器求值",
+        "material-morph / 材质表情",
+        "render-runtime / 渲染运行时"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/material/mmd_material_morph_shader.cpp:RegisterMMDMaterialTextureMorphShader",
+      "type": "function",
+      "name": "RegisterMMDMaterialTextureMorphShader",
+      "filePath": "source/module/tools/material/mmd_material_morph_shader.cpp",
+      "lineRange": [
+        66,
+        71
+      ],
+      "summary": "Registers the MMD texture-morph ShaderData plugin with Cinema 4D. / 向 Cinema 4D 注册 MMD 贴图表情 ShaderData 插件。",
+      "tags": [
+        "plugin-registration / 插件注册",
+        "shader / 着色器",
+        "entry-point / 入口点"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:source/module/tools/material/mmd_material_morph_shader.h",
+      "type": "file",
+      "name": "mmd_material_morph_shader.h",
+      "filePath": "source/module/tools/material/mmd_material_morph_shader.h",
+      "summary": "Declares the texture-morph ShaderData plugin, its render-time factor snapshot, child-shader sampling hooks, and registration entry point. / 声明贴图表情 ShaderData 插件、渲染时系数快照、子 Shader 采样钩子及注册入口。",
+      "tags": [
+        "shader / 着色器",
+        "material-morph / 材质表情",
+        "type-definition / 类型定义",
+        "plugin-api / 插件接口"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:source/module/tools/material/mmd_material_morph_shader.h:MMDMaterialTextureMorphShader",
+      "type": "class",
+      "name": "MMDMaterialTextureMorphShader",
+      "filePath": "source/module/tools/material/mmd_material_morph_shader.h",
+      "lineRange": [
+        24,
+        35
+      ],
+      "summary": "Wraps a child shader and applies immutable render-time RGB and alpha morph factors to its sampled output. / 包装子 Shader，并将不可变的渲染时 RGB 与 Alpha 表情系数应用于其采样输出。",
+      "tags": [
+        "shader / 着色器",
+        "material-morph / 材质表情",
+        "render-runtime / 渲染运行时",
+        "wrapper / 包装器"
+      ],
+      "complexity": "simple"
+    }
+  ],
+  "edges": [
+    {
+      "source": "file:source/module/tools/material/mmd_corona_material.cpp",
+      "target": "function:source/module/tools/material/mmd_corona_material.cpp:SyncTo",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_corona_material.cpp",
+      "target": "function:source/module/tools/material/mmd_corona_material.cpp:SyncTo",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_corona_material.cpp",
+      "target": "function:source/module/tools/material/mmd_corona_material.cpp:ReadFrom",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_corona_material.cpp",
+      "target": "function:source/module/tools/material/mmd_corona_material.cpp:ReadFrom",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_corona_material.cpp",
+      "target": "file:source/module/tools/material/mmd_corona_material.h",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_corona_material.h",
+      "target": "class:source/module/tools/material/mmd_corona_material.h:MMDCoronaMaterialAdapter",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_corona_material.h",
+      "target": "class:source/module/tools/material/mmd_corona_material.h:MMDCoronaMaterialAdapter",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_material.cpp",
+      "target": "function:source/module/tools/material/mmd_material.cpp:DetectType",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_material.cpp",
+      "target": "function:source/module/tools/material/mmd_material.cpp:DetectType",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_material.cpp",
+      "target": "function:source/module/tools/material/mmd_material.cpp:DetectTextureFromPMX",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_material.cpp",
+      "target": "function:source/module/tools/material/mmd_material.cpp:DetectTextureFromPMX",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_material.cpp",
+      "target": "function:source/module/tools/material/mmd_material.cpp:DetectTextureFromData",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_material.cpp",
+      "target": "function:source/module/tools/material/mmd_material.cpp:DetectTextureFromData",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_material.cpp",
+      "target": "function:source/module/tools/material/mmd_material.cpp:Create",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_material.cpp",
+      "target": "function:source/module/tools/material/mmd_material.cpp:Create",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_material.cpp",
+      "target": "function:source/module/tools/material/mmd_material.cpp:CreateFor",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_material.cpp",
+      "target": "function:source/module/tools/material/mmd_material.cpp:CreateFor",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_material.cpp",
+      "target": "function:source/module/tools/material/mmd_material.cpp:SyncToMaterial",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_material.cpp",
+      "target": "function:source/module/tools/material/mmd_material.cpp:SyncToMaterial",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_material.cpp",
+      "target": "function:source/module/tools/material/mmd_material.cpp:ReadFromMaterial",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_material.cpp",
+      "target": "function:source/module/tools/material/mmd_material.cpp:ReadFromMaterial",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_material.cpp",
+      "target": "function:source/module/tools/material/mmd_material.cpp:SyncRuntimeStateToMaterial",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_material.cpp",
+      "target": "function:source/module/tools/material/mmd_material.cpp:SyncRuntimeStateToMaterial",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_material.cpp",
+      "target": "function:source/module/tools/material/mmd_material.cpp:FromPMX",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_material.cpp",
+      "target": "function:source/module/tools/material/mmd_material.cpp:FromPMX",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_material.cpp",
+      "target": "function:source/module/tools/material/mmd_material.cpp:ToPMX",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_material.cpp",
+      "target": "function:source/module/tools/material/mmd_material.cpp:ToPMX",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_material.cpp",
+      "target": "function:source/module/tools/material/mmd_material.cpp:Read",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_material.cpp",
+      "target": "function:source/module/tools/material/mmd_material.cpp:Read",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_material.cpp",
+      "target": "function:source/module/tools/material/mmd_material.cpp:Write",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_material.cpp",
+      "target": "function:source/module/tools/material/mmd_material.cpp:Write",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_material.cpp",
+      "target": "function:source/module/tools/material/mmd_material.cpp:CopyTo",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_material.cpp",
+      "target": "function:source/module/tools/material/mmd_material.cpp:CopyTo",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_material.cpp",
+      "target": "function:source/module/tools/material/mmd_material.cpp:FromBase",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_material.cpp",
+      "target": "function:source/module/tools/material/mmd_material.cpp:FromBase",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_material.cpp",
+      "target": "function:source/module/tools/material/mmd_material.cpp:WriteSupportedFieldsTo",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_material.cpp",
+      "target": "function:source/module/tools/material/mmd_material.cpp:WriteSupportedFieldsTo",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_material.cpp",
+      "target": "function:source/module/tools/material/mmd_material.cpp:Checksum",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_material.cpp",
+      "target": "function:source/module/tools/material/mmd_material.cpp:Checksum",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_material.cpp",
+      "target": "function:source/module/tools/material/mmd_material.cpp:SetTextureRelativePath",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_material.cpp",
+      "target": "function:source/module/tools/material/mmd_material.cpp:SetTextureRelativePath",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_material.cpp",
+      "target": "function:source/module/tools/material/mmd_material.cpp:LoadPMXTextures",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_material.cpp",
+      "target": "function:source/module/tools/material/mmd_material.cpp:LoadPMXTextures",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_material.cpp",
+      "target": "file:source/module/tools/material/mmd_corona_material.h",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_material.cpp",
+      "target": "file:source/module/tools/material/mmd_material.h",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_material.cpp",
+      "target": "file:source/module/tools/material/mmd_octane_material.h",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_material.cpp",
+      "target": "file:source/module/tools/material/mmd_redshift_material.h",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_material.cpp",
+      "target": "file:source/module/tools/material/mmd_standard_material.h",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_material.h",
+      "target": "function:source/module/tools/material/mmd_material.h:~MMDMaterialAdapter",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_material.h",
+      "target": "function:source/module/tools/material/mmd_material.h:~MMDMaterialAdapter",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_material.h",
+      "target": "function:source/module/tools/material/mmd_material.h:SyncRuntimeState",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_material.h",
+      "target": "function:source/module/tools/material/mmd_material.h:SyncRuntimeState",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_material.h",
+      "target": "function:source/module/tools/material/mmd_material.h:MMDMaterialManager",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_material.h",
+      "target": "function:source/module/tools/material/mmd_material.h:MMDMaterialManager",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_material.h",
+      "target": "function:source/module/tools/material/mmd_material.h:~MMDMaterialManager",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_material.h",
+      "target": "function:source/module/tools/material/mmd_material.h:~MMDMaterialManager",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_material.h",
+      "target": "class:source/module/tools/material/mmd_material.h:ModelImport",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_material.h",
+      "target": "class:source/module/tools/material/mmd_material.h:ModelImport",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_material.h",
+      "target": "class:source/module/tools/material/mmd_material.h:MMDMaterialData",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_material.h",
+      "target": "class:source/module/tools/material/mmd_material.h:MMDMaterialData",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_material.h",
+      "target": "class:source/module/tools/material/mmd_material.h:MMDMaterialRuntimeState",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_material.h",
+      "target": "class:source/module/tools/material/mmd_material.h:MMDMaterialRuntimeState",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_material.h",
+      "target": "class:source/module/tools/material/mmd_material.h:MMDMaterialAdapter",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_material.h",
+      "target": "class:source/module/tools/material/mmd_material.h:MMDMaterialAdapter",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_material.h",
+      "target": "class:source/module/tools/material/mmd_material.h:MMDMaterialManager",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_material.h",
+      "target": "class:source/module/tools/material/mmd_material.h:MMDMaterialManager",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_material_morph_shader.cpp",
+      "target": "function:source/module/tools/material/mmd_material_morph_shader.cpp:SDK2024_Init",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_material_morph_shader.cpp",
+      "target": "function:source/module/tools/material/mmd_material_morph_shader.cpp:SDK2024_Init",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_material_morph_shader.cpp",
+      "target": "function:source/module/tools/material/mmd_material_morph_shader.cpp:InitRender",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_material_morph_shader.cpp",
+      "target": "function:source/module/tools/material/mmd_material_morph_shader.cpp:InitRender",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_material_morph_shader.cpp",
+      "target": "function:source/module/tools/material/mmd_material_morph_shader.cpp:FreeRender",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_material_morph_shader.cpp",
+      "target": "function:source/module/tools/material/mmd_material_morph_shader.cpp:FreeRender",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_material_morph_shader.cpp",
+      "target": "function:source/module/tools/material/mmd_material_morph_shader.cpp:Output",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_material_morph_shader.cpp",
+      "target": "function:source/module/tools/material/mmd_material_morph_shader.cpp:Output",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_material_morph_shader.cpp",
+      "target": "function:source/module/tools/material/mmd_material_morph_shader.cpp:RegisterMMDMaterialTextureMorphShader",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_material_morph_shader.cpp",
+      "target": "function:source/module/tools/material/mmd_material_morph_shader.cpp:RegisterMMDMaterialTextureMorphShader",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_material_morph_shader.cpp",
+      "target": "file:source/module/tools/material/mmd_material_morph_shader.h",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_material_morph_shader.h",
+      "target": "class:source/module/tools/material/mmd_material_morph_shader.h:MMDMaterialTextureMorphShader",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/material/mmd_material_morph_shader.h",
+      "target": "class:source/module/tools/material/mmd_material_morph_shader.h:MMDMaterialTextureMorphShader",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    }
+  ]
+}

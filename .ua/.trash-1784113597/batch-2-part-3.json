@@ -1,0 +1,1851 @@
+{
+  "nodes": [
+    {
+      "id": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "type": "file",
+      "name": "mmd_model_manager.cpp",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "summary": "Implements the central model workflow for PMX, VMD, and VPD import/export, dynamic morph and material UI, animation slots, standalone IK, and physics playback. / 实现 PMX、VMD 与 VPD 导入导出的核心模型流程，以及动态变形和材质 UI、动画槽、独立 IK 与物理播放。",
+      "tags": [
+        "object-manager",
+        "pmx",
+        "vmd-animation",
+        "morph",
+        "physics"
+      ],
+      "complexity": "complex",
+      "languageNotes": "C++ integrates Cinema 4D SDK lifecycle hooks with explicit PMX/VMD conversion and runtime state management. / C++ 将 Cinema 4D SDK 生命周期钩子与显式 PMX/VMD 转换及运行时状态管理结合。"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:ExportMorphStubs",
+      "type": "function",
+      "name": "ExportMorphStubs",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        137,
+        194
+      ],
+      "summary": "ExportMorphStubs exports morph stubs for central model, animation, IK, and physics orchestration. / ExportMorphStubs 为核心模型、动画、IK 与物理编排导出 morph stubs。",
+      "tags": [
+        "morph",
+        "export",
+        "object-manager"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:BuildPmxTextureTable",
+      "type": "function",
+      "name": "BuildPmxTextureTable",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        196,
+        225
+      ],
+      "summary": "BuildPmxTextureTable builds pmx texture table for central model, animation, IK, and physics orchestration. / BuildPmxTextureTable 为核心模型、动画、IK 与物理编排构建 pmx texture table。",
+      "tags": [
+        "pmx",
+        "ui",
+        "object-manager"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:ResolveTextureIndex",
+      "type": "function",
+      "name": "ResolveTextureIndex",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        227,
+        233
+      ],
+      "summary": "ResolveTextureIndex resolves texture index for central model, animation, IK, and physics orchestration. / ResolveTextureIndex 为核心模型、动画、IK 与物理编排解析 texture index。",
+      "tags": [
+        "object-manager",
+        "pmx",
+        "vmd-animation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:ResolveToonTextureIndex",
+      "type": "function",
+      "name": "ResolveToonTextureIndex",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        235,
+        241
+      ],
+      "summary": "ResolveToonTextureIndex resolves toon texture index for central model, animation, IK, and physics orchestration. / ResolveToonTextureIndex 为核心模型、动画、IK 与物理编排解析 toon texture index。",
+      "tags": [
+        "object-manager",
+        "pmx",
+        "vmd-animation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:AppendDefaultPmxMaterialForMesh",
+      "type": "function",
+      "name": "AppendDefaultPmxMaterialForMesh",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        243,
+        261
+      ],
+      "summary": "AppendDefaultPmxMaterialForMesh appends default pmx material for mesh for central model, animation, IK, and physics orchestration. / AppendDefaultPmxMaterialForMesh 为核心模型、动画、IK 与物理编排追加 default pmx material for mesh。",
+      "tags": [
+        "pmx",
+        "object-manager",
+        "vmd-animation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:MaterialExportStateGuard::MaterialExportStateGuard",
+      "type": "function",
+      "name": "MaterialExportStateGuard::MaterialExportStateGuard",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        266,
+        272
+      ],
+      "summary": "MaterialExportStateGuard::MaterialExportStateGuard initializes an object used by central model, animation, IK, and physics orchestration. / MaterialExportStateGuard::MaterialExportStateGuard 初始化核心模型、动画、IK 与物理编排所使用的对象。",
+      "tags": [
+        "export",
+        "object-manager",
+        "pmx"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:MaterialExportStateGuard::~MaterialExportStateGuard",
+      "type": "function",
+      "name": "MaterialExportStateGuard::~MaterialExportStateGuard",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        274,
+        280
+      ],
+      "summary": "MaterialExportStateGuard::~MaterialExportStateGuard releases scoped state for central model, animation, IK, and physics orchestration. / MaterialExportStateGuard::~MaterialExportStateGuard 释放核心模型、动画、IK 与物理编排中的作用域状态。",
+      "tags": [
+        "export",
+        "object-manager",
+        "pmx"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:RemoveEmptyBoneMorphStubs",
+      "type": "function",
+      "name": "RemoveEmptyBoneMorphStubs",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        288,
+        316
+      ],
+      "summary": "RemoveEmptyBoneMorphStubs removes empty bone morph stubs for central model, animation, IK, and physics orchestration. / RemoveEmptyBoneMorphStubs 为核心模型、动画、IK 与物理编排移除 empty bone morph stubs。",
+      "tags": [
+        "morph",
+        "object-manager",
+        "pmx"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:ExportDisplayFrames",
+      "type": "function",
+      "name": "ExportDisplayFrames",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        318,
+        352
+      ],
+      "summary": "ExportDisplayFrames exports display frames for central model, animation, IK, and physics orchestration. / ExportDisplayFrames 为核心模型、动画、IK 与物理编排导出 display frames。",
+      "tags": [
+        "export",
+        "object-manager",
+        "pmx"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:ClearUnsupportedPmxSections",
+      "type": "function",
+      "name": "ClearUnsupportedPmxSections",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        354,
+        358
+      ],
+      "summary": "ClearUnsupportedPmxSections clears unsupported pmx sections for central model, animation, IK, and physics orchestration. / ClearUnsupportedPmxSections 为核心模型、动画、IK 与物理编排清除 unsupported pmx sections。",
+      "tags": [
+        "pmx",
+        "object-manager",
+        "vmd-animation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:ToAnimationFrame",
+      "type": "function",
+      "name": "ToAnimationFrame",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        360,
+        363
+      ],
+      "summary": "ToAnimationFrame implements a focused operation in central model, animation, IK, and physics orchestration. / ToAnimationFrame 实现核心模型、动画、IK 与物理编排中的专用操作。",
+      "tags": [
+        "vmd-animation",
+        "object-manager",
+        "pmx"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:GetBoneTagName",
+      "type": "function",
+      "name": "GetBoneTagName",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        365,
+        383
+      ],
+      "summary": "GetBoneTagName retrieves bone tag name for central model, animation, IK, and physics orchestration. / GetBoneTagName 为核心模型、动画、IK 与物理编排获取 bone tag name。",
+      "tags": [
+        "object-manager",
+        "pmx",
+        "vmd-animation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:GetModelManagerName",
+      "type": "function",
+      "name": "GetModelManagerName",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        385,
+        402
+      ],
+      "summary": "GetModelManagerName retrieves model manager name for central model, animation, IK, and physics orchestration. / GetModelManagerName 为核心模型、动画、IK 与物理编排获取 model manager name。",
+      "tags": [
+        "object-manager",
+        "pmx",
+        "vmd-animation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:MarkSceneNodeDirty",
+      "type": "function",
+      "name": "MarkSceneNodeDirty",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        404,
+        411
+      ],
+      "summary": "MarkSceneNodeDirty marks scene node dirty for central model, animation, IK, and physics orchestration. / MarkSceneNodeDirty 为核心模型、动画、IK 与物理编排标记 scene node dirty。",
+      "tags": [
+        "object-manager",
+        "pmx",
+        "vmd-animation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:MarkMeshHierarchyDirty",
+      "type": "function",
+      "name": "MarkMeshHierarchyDirty",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        413,
+        431
+      ],
+      "summary": "MarkMeshHierarchyDirty marks mesh hierarchy dirty for central model, animation, IK, and physics orchestration. / MarkMeshHierarchyDirty 为核心模型、动画、IK 与物理编排标记 mesh hierarchy dirty。",
+      "tags": [
+        "object-manager",
+        "pmx",
+        "vmd-animation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:RemoveParameterTrack",
+      "type": "function",
+      "name": "RemoveParameterTrack",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        433,
+        445
+      ],
+      "summary": "RemoveParameterTrack removes parameter track for central model, animation, IK, and physics orchestration. / RemoveParameterTrack 为核心模型、动画、IK 与物理编排移除 parameter track。",
+      "tags": [
+        "object-manager",
+        "pmx",
+        "vmd-animation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:ConvertUtf8ToSjis",
+      "type": "function",
+      "name": "ConvertUtf8ToSjis",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        475,
+        489
+      ],
+      "summary": "ConvertUtf8ToSjis converts utf 8 to sjis for central model, animation, IK, and physics orchestration. / ConvertUtf8ToSjis 为核心模型、动画、IK 与物理编排转换 utf 8 to sjis。",
+      "tags": [
+        "object-manager",
+        "pmx",
+        "vmd-animation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:ConvertStringToSjis",
+      "type": "function",
+      "name": "ConvertStringToSjis",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        491,
+        494
+      ],
+      "summary": "ConvertStringToSjis converts string to sjis for central model, animation, IK, and physics orchestration. / ConvertStringToSjis 为核心模型、动画、IK 与物理编排转换 string to sjis。",
+      "tags": [
+        "object-manager",
+        "pmx",
+        "vmd-animation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:ReadInterpolationChannel",
+      "type": "function",
+      "name": "ReadInterpolationChannel",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        496,
+        505
+      ],
+      "summary": "ReadInterpolationChannel reads interpolation channel for central model, animation, IK, and physics orchestration. / ReadInterpolationChannel 为核心模型、动画、IK 与物理编排读取 interpolation channel。",
+      "tags": [
+        "serialization",
+        "object-manager",
+        "pmx"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:WriteInterpolationChannel",
+      "type": "function",
+      "name": "WriteInterpolationChannel",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        507,
+        514
+      ],
+      "summary": "WriteInterpolationChannel writes interpolation channel for central model, animation, IK, and physics orchestration. / WriteInterpolationChannel 为核心模型、动画、IK 与物理编排写入 interpolation channel。",
+      "tags": [
+        "serialization",
+        "object-manager",
+        "pmx"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:ConvertMotionToBoneKeyframe",
+      "type": "function",
+      "name": "ConvertMotionToBoneKeyframe",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        516,
+        534
+      ],
+      "summary": "ConvertMotionToBoneKeyframe converts motion to bone keyframe for central model, animation, IK, and physics orchestration. / ConvertMotionToBoneKeyframe 为核心模型、动画、IK 与物理编排转换 motion to bone keyframe。",
+      "tags": [
+        "vmd-animation",
+        "object-manager",
+        "pmx"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:ConvertBoneKeyframeToMotion",
+      "type": "function",
+      "name": "ConvertBoneKeyframeToMotion",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        536,
+        557
+      ],
+      "summary": "ConvertBoneKeyframeToMotion converts bone keyframe to motion for central model, animation, IK, and physics orchestration. / ConvertBoneKeyframeToMotion 为核心模型、动画、IK 与物理编排转换 bone keyframe to motion。",
+      "tags": [
+        "vmd-animation",
+        "object-manager",
+        "pmx"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:ToVpdVector",
+      "type": "function",
+      "name": "ToVpdVector",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        559,
+        565
+      ],
+      "summary": "ToVpdVector implements a focused operation in central model, animation, IK, and physics orchestration. / ToVpdVector 实现核心模型、动画、IK 与物理编排中的专用操作。",
+      "tags": [
+        "object-manager",
+        "pmx",
+        "vmd-animation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:ToVpdQuaternion",
+      "type": "function",
+      "name": "ToVpdQuaternion",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        567,
+        570
+      ],
+      "summary": "ToVpdQuaternion implements a focused operation in central model, animation, IK, and physics orchestration. / ToVpdQuaternion 实现核心模型、动画、IK 与物理编排中的专用操作。",
+      "tags": [
+        "object-manager",
+        "pmx",
+        "vmd-animation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:ExtractVpdQuaternion",
+      "type": "function",
+      "name": "ExtractVpdQuaternion",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        572,
+        588
+      ],
+      "summary": "ExtractVpdQuaternion implements a focused operation in central model, animation, IK, and physics orchestration. / ExtractVpdQuaternion 实现核心模型、动画、IK 与物理编排中的专用操作。",
+      "tags": [
+        "object-manager",
+        "pmx",
+        "vmd-animation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:ToBoneRotationArray",
+      "type": "function",
+      "name": "ToBoneRotationArray",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        590,
+        599
+      ],
+      "summary": "ToBoneRotationArray implements a focused operation in central model, animation, IK, and physics orchestration. / ToBoneRotationArray 实现核心模型、动画、IK 与物理编排中的专用操作。",
+      "tags": [
+        "object-manager",
+        "pmx",
+        "vmd-animation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:IsTranslationDifferent",
+      "type": "function",
+      "name": "IsTranslationDifferent",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        603,
+        606
+      ],
+      "summary": "IsTranslationDifferent checks translation different for central model, animation, IK, and physics orchestration. / IsTranslationDifferent 为核心模型、动画、IK 与物理编排检查 translation different。",
+      "tags": [
+        "object-manager",
+        "pmx",
+        "vmd-animation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:IsQuaternionDifferent",
+      "type": "function",
+      "name": "IsQuaternionDifferent",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        608,
+        614
+      ],
+      "summary": "IsQuaternionDifferent checks quaternion different for central model, animation, IK, and physics orchestration. / IsQuaternionDifferent 为核心模型、动画、IK 与物理编排检查 quaternion different。",
+      "tags": [
+        "object-manager",
+        "pmx",
+        "vmd-animation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:IsPoseDifferent",
+      "type": "function",
+      "name": "IsPoseDifferent",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        616,
+        623
+      ],
+      "summary": "IsPoseDifferent checks pose different for central model, animation, IK, and physics orchestration. / IsPoseDifferent 为核心模型、动画、IK 与物理编排检查 pose different。",
+      "tags": [
+        "object-manager",
+        "pmx",
+        "vmd-animation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:ToLibMMDBezierForSampling",
+      "type": "function",
+      "name": "ToLibMMDBezierForSampling",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        625,
+        631
+      ],
+      "summary": "ToLibMMDBezierForSampling implements a focused operation in central model, animation, IK, and physics orchestration. / ToLibMMDBezierForSampling 实现核心模型、动画、IK 与物理编排中的专用操作。",
+      "tags": [
+        "object-manager",
+        "pmx",
+        "vmd-animation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:ToLibMMDKeyframeForSampling",
+      "type": "function",
+      "name": "ToLibMMDKeyframeForSampling",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        633,
+        644
+      ],
+      "summary": "ToLibMMDKeyframeForSampling implements a focused operation in central model, animation, IK, and physics orchestration. / ToLibMMDKeyframeForSampling 实现核心模型、动画、IK 与物理编排中的专用操作。",
+      "tags": [
+        "vmd-animation",
+        "object-manager",
+        "pmx"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:EvaluateBoneAnimationKeyframes",
+      "type": "function",
+      "name": "EvaluateBoneAnimationKeyframes",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        646,
+        683
+      ],
+      "summary": "EvaluateBoneAnimationKeyframes evaluates bone animation keyframes for central model, animation, IK, and physics orchestration. / EvaluateBoneAnimationKeyframes 为核心模型、动画、IK 与物理编排求值 bone animation keyframes。",
+      "tags": [
+        "vmd-animation",
+        "runtime",
+        "object-manager"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:ContainsBoneIndex",
+      "type": "function",
+      "name": "ContainsBoneIndex",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        685,
+        688
+      ],
+      "summary": "ContainsBoneIndex implements a focused operation in central model, animation, IK, and physics orchestration. / ContainsBoneIndex 实现核心模型、动画、IK 与物理编排中的专用操作。",
+      "tags": [
+        "object-manager",
+        "pmx",
+        "vmd-animation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:ContainsMorphName",
+      "type": "function",
+      "name": "ContainsMorphName",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        690,
+        693
+      ],
+      "summary": "ContainsMorphName implements a focused operation in central model, animation, IK, and physics orchestration. / ContainsMorphName 实现核心模型、动画、IK 与物理编排中的专用操作。",
+      "tags": [
+        "morph",
+        "object-manager",
+        "pmx"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:AppendUniqueBoneIndex",
+      "type": "function",
+      "name": "AppendUniqueBoneIndex",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        695,
+        699
+      ],
+      "summary": "AppendUniqueBoneIndex appends unique bone index for central model, animation, IK, and physics orchestration. / AppendUniqueBoneIndex 为核心模型、动画、IK 与物理编排追加 unique bone index。",
+      "tags": [
+        "object-manager",
+        "pmx",
+        "vmd-animation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:AppendUniqueMorphName",
+      "type": "function",
+      "name": "AppendUniqueMorphName",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        701,
+        705
+      ],
+      "summary": "AppendUniqueMorphName appends unique morph name for central model, animation, IK, and physics orchestration. / AppendUniqueMorphName 为核心模型、动画、IK 与物理编排追加 unique morph name。",
+      "tags": [
+        "morph",
+        "object-manager",
+        "pmx"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:FindKeyframeIndex",
+      "type": "function",
+      "name": "FindKeyframeIndex",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        707,
+        715
+      ],
+      "summary": "FindKeyframeIndex finds keyframe index for central model, animation, IK, and physics orchestration. / FindKeyframeIndex 为核心模型、动画、IK 与物理编排查找 keyframe index。",
+      "tags": [
+        "vmd-animation",
+        "object-manager",
+        "pmx"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:MakeBoneKeyframe",
+      "type": "function",
+      "name": "MakeBoneKeyframe",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        717,
+        735
+      ],
+      "summary": "MakeBoneKeyframe creates bone keyframe for central model, animation, IK, and physics orchestration. / MakeBoneKeyframe 为核心模型、动画、IK 与物理编排创建 bone keyframe。",
+      "tags": [
+        "vmd-animation",
+        "object-manager",
+        "pmx"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:ConvertCurrentBoneToVpd",
+      "type": "function",
+      "name": "ConvertCurrentBoneToVpd",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        737,
+        760
+      ],
+      "summary": "ConvertCurrentBoneToVpd converts current bone to vpd for central model, animation, IK, and physics orchestration. / ConvertCurrentBoneToVpd 为核心模型、动画、IK 与物理编排转换 current bone to vpd。",
+      "tags": [
+        "object-manager",
+        "pmx",
+        "vmd-animation"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:GetVmdFileMaxFrame",
+      "type": "function",
+      "name": "GetVmdFileMaxFrame",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        762,
+        778
+      ],
+      "summary": "GetVmdFileMaxFrame retrieves vmd file max frame for central model, animation, IK, and physics orchestration. / GetVmdFileMaxFrame 为核心模型、动画、IK 与物理编排获取 vmd file max frame。",
+      "tags": [
+        "vmd-animation",
+        "object-manager",
+        "pmx"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:IsBoneDrivenByDynamicPhysics",
+      "type": "function",
+      "name": "IsBoneDrivenByDynamicPhysics",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        780,
+        803
+      ],
+      "summary": "IsBoneDrivenByDynamicPhysics checks bone driven by dynamic physics for central model, animation, IK, and physics orchestration. / IsBoneDrivenByDynamicPhysics 为核心模型、动画、IK 与物理编排检查 bone driven by dynamic physics。",
+      "tags": [
+        "physics",
+        "object-manager",
+        "pmx"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:AppendMorphTracksToVmd",
+      "type": "function",
+      "name": "AppendMorphTracksToVmd",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        805,
+        846
+      ],
+      "summary": "AppendMorphTracksToVmd appends morph tracks to vmd for central model, animation, IK, and physics orchestration. / AppendMorphTracksToVmd 为核心模型、动画、IK 与物理编排追加 morph tracks to vmd。",
+      "tags": [
+        "vmd-animation",
+        "morph",
+        "object-manager"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:AppendMorphSlotToVmd",
+      "type": "function",
+      "name": "AppendMorphSlotToVmd",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        848,
+        874
+      ],
+      "summary": "AppendMorphSlotToVmd appends morph slot to vmd for central model, animation, IK, and physics orchestration. / AppendMorphSlotToVmd 为核心模型、动画、IK 与物理编排追加 morph slot to vmd。",
+      "tags": [
+        "vmd-animation",
+        "morph",
+        "object-manager"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:AppendIKTracksToVmd",
+      "type": "function",
+      "name": "AppendIKTracksToVmd",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        876,
+        927
+      ],
+      "summary": "AppendIKTracksToVmd appends ik tracks to vmd for central model, animation, IK, and physics orchestration. / AppendIKTracksToVmd 为核心模型、动画、IK 与物理编排追加 ik tracks to vmd。",
+      "tags": [
+        "vmd-animation",
+        "ik",
+        "object-manager"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:AnimationSlotMetadata::Read",
+      "type": "function",
+      "name": "AnimationSlotMetadata::Read",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        930,
+        933
+      ],
+      "summary": "AnimationSlotMetadata::Read reads persistent state for central model, animation, IK, and physics orchestration. / AnimationSlotMetadata::Read 为核心模型、动画、IK 与物理编排读取持久状态。",
+      "tags": [
+        "serialization",
+        "object-manager",
+        "pmx"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:AnimationSlotMetadata::Write",
+      "type": "function",
+      "name": "AnimationSlotMetadata::Write",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        935,
+        938
+      ],
+      "summary": "AnimationSlotMetadata::Write writes persistent state for central model, animation, IK, and physics orchestration. / AnimationSlotMetadata::Write 为核心模型、动画、IK 与物理编排写入持久状态。",
+      "tags": [
+        "serialization",
+        "object-manager",
+        "pmx"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:AnimationSlotMetadata::CopyTo",
+      "type": "function",
+      "name": "AnimationSlotMetadata::CopyTo",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        940,
+        945
+      ],
+      "summary": "AnimationSlotMetadata::CopyTo copies persistent state to another instance for central model, animation, IK, and physics orchestration. / AnimationSlotMetadata::CopyTo 为核心模型、动画、IK 与物理编排将持久状态复制到另一实例。",
+      "tags": [
+        "serialization",
+        "object-manager",
+        "pmx"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:MorphAnimationKeyframeData::Read",
+      "type": "function",
+      "name": "MorphAnimationKeyframeData::Read",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        947,
+        953
+      ],
+      "summary": "MorphAnimationKeyframeData::Read reads persistent state for central model, animation, IK, and physics orchestration. / MorphAnimationKeyframeData::Read 为核心模型、动画、IK 与物理编排读取持久状态。",
+      "tags": [
+        "serialization",
+        "object-manager",
+        "pmx"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:MorphAnimationKeyframeData::Write",
+      "type": "function",
+      "name": "MorphAnimationKeyframeData::Write",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        955,
+        961
+      ],
+      "summary": "MorphAnimationKeyframeData::Write writes persistent state for central model, animation, IK, and physics orchestration. / MorphAnimationKeyframeData::Write 为核心模型、动画、IK 与物理编排写入持久状态。",
+      "tags": [
+        "serialization",
+        "object-manager",
+        "pmx"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:MorphAnimationSlotData::Read",
+      "type": "function",
+      "name": "MorphAnimationSlotData::Read",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        963,
+        966
+      ],
+      "summary": "MorphAnimationSlotData::Read reads persistent state for central model, animation, IK, and physics orchestration. / MorphAnimationSlotData::Read 为核心模型、动画、IK 与物理编排读取持久状态。",
+      "tags": [
+        "serialization",
+        "object-manager",
+        "pmx"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:MorphAnimationSlotData::Write",
+      "type": "function",
+      "name": "MorphAnimationSlotData::Write",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        968,
+        971
+      ],
+      "summary": "MorphAnimationSlotData::Write writes persistent state for central model, animation, IK, and physics orchestration. / MorphAnimationSlotData::Write 为核心模型、动画、IK 与物理编排写入持久状态。",
+      "tags": [
+        "serialization",
+        "object-manager",
+        "pmx"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:MorphAnimationSlotData::MorphAnimationSlotData",
+      "type": "function",
+      "name": "MorphAnimationSlotData::MorphAnimationSlotData",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        973,
+        976
+      ],
+      "summary": "MorphAnimationSlotData::MorphAnimationSlotData initializes an object used by central model, animation, IK, and physics orchestration. / MorphAnimationSlotData::MorphAnimationSlotData 初始化核心模型、动画、IK 与物理编排所使用的对象。",
+      "tags": [
+        "vmd-animation",
+        "morph",
+        "object-manager"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:EditorSubMorphDialog::CreateLayout",
+      "type": "function",
+      "name": "EditorSubMorphDialog::CreateLayout",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        990,
+        1037
+      ],
+      "summary": "EditorSubMorphDialog::CreateLayout builds the interactive dialog layout for central model, animation, IK, and physics orchestration. / EditorSubMorphDialog::CreateLayout 为核心模型、动画、IK 与物理编排构建交互式对话框布局。",
+      "tags": [
+        "ui",
+        "object-manager",
+        "pmx"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:EditorSubMorphDialog::InitValues",
+      "type": "function",
+      "name": "EditorSubMorphDialog::InitValues",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        1039,
+        1057
+      ],
+      "summary": "EditorSubMorphDialog::InitValues initializes dialog values from current scene state for central model, animation, IK, and physics orchestration. / EditorSubMorphDialog::InitValues 为核心模型、动画、IK 与物理编排根据当前场景状态初始化对话框数值。",
+      "tags": [
+        "object-manager",
+        "pmx",
+        "vmd-animation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:EditorSubMorphDialog::Command",
+      "type": "function",
+      "name": "EditorSubMorphDialog::Command",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        1059,
+        1166
+      ],
+      "summary": "EditorSubMorphDialog::Command routes user commands to MMD import and export workflows for central model, animation, IK, and physics orchestration. / EditorSubMorphDialog::Command 为核心模型、动画、IK 与物理编排将用户命令路由到 MMD 导入导出流程。",
+      "tags": [
+        "ui",
+        "object-manager",
+        "pmx"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:AddMorphHelper::AddMorphHelper",
+      "type": "function",
+      "name": "AddMorphHelper::AddMorphHelper",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        1168,
+        1172
+      ],
+      "summary": "AddMorphHelper::AddMorphHelper initializes an object used by central model, animation, IK, and physics orchestration. / AddMorphHelper::AddMorphHelper 初始化核心模型、动画、IK 与物理编排所使用的对象。",
+      "tags": [
+        "morph",
+        "object-manager",
+        "pmx"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:AddMorphHelper::~AddMorphHelper",
+      "type": "function",
+      "name": "AddMorphHelper::~AddMorphHelper",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        1174,
+        1177
+      ],
+      "summary": "AddMorphHelper::~AddMorphHelper releases scoped state for central model, animation, IK, and physics orchestration. / AddMorphHelper::~AddMorphHelper 释放核心模型、动画、IK 与物理编排中的作用域状态。",
+      "tags": [
+        "morph",
+        "object-manager",
+        "pmx"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:SDK2024_Init",
+      "type": "function",
+      "name": "SDK2024_Init",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        1179,
+        1205
+      ],
+      "summary": "SDK2024_Init implements the Cinema 4D SDK lifecycle hook for init in central model, animation, IK, and physics orchestration. / SDK2024_Init 实现核心模型、动画、IK 与物理编排中用于 init 的 Cinema 4D SDK 生命周期钩子。",
+      "tags": [
+        "object-manager",
+        "pmx",
+        "vmd-animation"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::Read",
+      "type": "function",
+      "name": "MMDModelManagerObject::Read",
+      "filePath": "source/module/tools/object/mmd_model_manager.cpp",
+      "lineRange": [
+        1230,
+        1444
+      ],
+      "summary": "MMDModelManagerObject::Read reads persistent state for central model, animation, IK, and physics orchestration. / MMDModelManagerObject::Read 为核心模型、动画、IK 与物理编排读取持久状态。",
+      "tags": [
+        "serialization",
+        "object-manager",
+        "pmx"
+      ],
+      "complexity": "complex"
+    }
+  ],
+  "edges": [
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:ExportMorphStubs",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:ExportMorphStubs",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:BuildPmxTextureTable",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:BuildPmxTextureTable",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:ResolveTextureIndex",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:ResolveTextureIndex",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:ResolveToonTextureIndex",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:ResolveToonTextureIndex",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:AppendDefaultPmxMaterialForMesh",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:AppendDefaultPmxMaterialForMesh",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MaterialExportStateGuard::MaterialExportStateGuard",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MaterialExportStateGuard::MaterialExportStateGuard",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MaterialExportStateGuard::~MaterialExportStateGuard",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MaterialExportStateGuard::~MaterialExportStateGuard",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:RemoveEmptyBoneMorphStubs",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:RemoveEmptyBoneMorphStubs",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:ExportDisplayFrames",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:ExportDisplayFrames",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:ClearUnsupportedPmxSections",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:ClearUnsupportedPmxSections",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:ToAnimationFrame",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:ToAnimationFrame",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:GetBoneTagName",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:GetBoneTagName",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:GetModelManagerName",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:GetModelManagerName",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MarkSceneNodeDirty",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MarkSceneNodeDirty",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MarkMeshHierarchyDirty",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MarkMeshHierarchyDirty",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:RemoveParameterTrack",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:RemoveParameterTrack",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:ConvertUtf8ToSjis",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:ConvertUtf8ToSjis",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:ConvertStringToSjis",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:ConvertStringToSjis",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:ReadInterpolationChannel",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:ReadInterpolationChannel",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:WriteInterpolationChannel",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:WriteInterpolationChannel",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:ConvertMotionToBoneKeyframe",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:ConvertMotionToBoneKeyframe",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:ConvertBoneKeyframeToMotion",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:ConvertBoneKeyframeToMotion",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:ToVpdVector",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:ToVpdVector",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:ToVpdQuaternion",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:ToVpdQuaternion",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:ExtractVpdQuaternion",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:ExtractVpdQuaternion",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:ToBoneRotationArray",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:ToBoneRotationArray",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:IsTranslationDifferent",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:IsTranslationDifferent",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:IsQuaternionDifferent",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:IsQuaternionDifferent",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:IsPoseDifferent",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:IsPoseDifferent",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:ToLibMMDBezierForSampling",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:ToLibMMDBezierForSampling",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:ToLibMMDKeyframeForSampling",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:ToLibMMDKeyframeForSampling",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:EvaluateBoneAnimationKeyframes",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:EvaluateBoneAnimationKeyframes",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:ContainsBoneIndex",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:ContainsBoneIndex",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:ContainsMorphName",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:ContainsMorphName",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:AppendUniqueBoneIndex",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:AppendUniqueBoneIndex",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:AppendUniqueMorphName",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:AppendUniqueMorphName",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:FindKeyframeIndex",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:FindKeyframeIndex",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MakeBoneKeyframe",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MakeBoneKeyframe",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:ConvertCurrentBoneToVpd",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:ConvertCurrentBoneToVpd",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:GetVmdFileMaxFrame",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:GetVmdFileMaxFrame",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:IsBoneDrivenByDynamicPhysics",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:IsBoneDrivenByDynamicPhysics",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:AppendMorphTracksToVmd",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:AppendMorphTracksToVmd",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:AppendMorphSlotToVmd",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:AppendMorphSlotToVmd",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:AppendIKTracksToVmd",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:AppendIKTracksToVmd",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:AnimationSlotMetadata::Read",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:AnimationSlotMetadata::Read",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:AnimationSlotMetadata::Write",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:AnimationSlotMetadata::Write",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:AnimationSlotMetadata::CopyTo",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:AnimationSlotMetadata::CopyTo",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MorphAnimationKeyframeData::Read",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MorphAnimationKeyframeData::Read",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MorphAnimationKeyframeData::Write",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MorphAnimationKeyframeData::Write",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MorphAnimationSlotData::Read",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MorphAnimationSlotData::Read",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MorphAnimationSlotData::Write",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MorphAnimationSlotData::Write",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MorphAnimationSlotData::MorphAnimationSlotData",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MorphAnimationSlotData::MorphAnimationSlotData",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:EditorSubMorphDialog::CreateLayout",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:EditorSubMorphDialog::CreateLayout",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:EditorSubMorphDialog::InitValues",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:EditorSubMorphDialog::InitValues",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:EditorSubMorphDialog::Command",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:EditorSubMorphDialog::Command",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:AddMorphHelper::AddMorphHelper",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:AddMorphHelper::AddMorphHelper",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:AddMorphHelper::~AddMorphHelper",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:AddMorphHelper::~AddMorphHelper",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:SDK2024_Init",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:SDK2024_Init",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::Read",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_model_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_model_manager.cpp:MMDModelManagerObject::Read",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    }
+  ]
+}

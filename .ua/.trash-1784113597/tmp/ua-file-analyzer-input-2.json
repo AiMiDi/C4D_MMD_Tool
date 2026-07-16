@@ -1,0 +1,153 @@
+{
+    "projectRoot":  "E:\\code\\C4D_MMD_Tool",
+    "batchFiles":  [
+                       {
+                           "path":  "source/module/tools/object/mmd_bone_manager.cpp",
+                           "language":  "cpp",
+                           "sizeLines":  2397,
+                           "fileCategory":  "code"
+                       },
+                       {
+                           "path":  "source/module/tools/object/mmd_bone_manager.h",
+                           "language":  "c",
+                           "sizeLines":  161,
+                           "fileCategory":  "code"
+                       },
+                       {
+                           "path":  "source/module/tools/object/mmd_display_frame.cpp",
+                           "language":  "cpp",
+                           "sizeLines":  105,
+                           "fileCategory":  "code"
+                       },
+                       {
+                           "path":  "source/module/tools/object/mmd_manager.hpp",
+                           "language":  "cpp",
+                           "sizeLines":  74,
+                           "fileCategory":  "code"
+                       },
+                       {
+                           "path":  "source/module/tools/object/mmd_mesh_manager.cpp",
+                           "language":  "cpp",
+                           "sizeLines":  2318,
+                           "fileCategory":  "code"
+                       },
+                       {
+                           "path":  "source/module/tools/object/mmd_mesh_manager.h",
+                           "language":  "c",
+                           "sizeLines":  90,
+                           "fileCategory":  "code"
+                       },
+                       {
+                           "path":  "source/module/tools/object/mmd_model_manager.cpp",
+                           "language":  "cpp",
+                           "sizeLines":  6799,
+                           "fileCategory":  "code"
+                       },
+                       {
+                           "path":  "source/module/tools/object/mmd_model_manager.h",
+                           "language":  "c",
+                           "sizeLines":  430,
+                           "fileCategory":  "code"
+                       },
+                       {
+                           "path":  "source/module/tools/object/mmd_morph.cpp",
+                           "language":  "cpp",
+                           "sizeLines":  758,
+                           "fileCategory":  "code"
+                       },
+                       {
+                           "path":  "source/module/tools/object/mmd_morph.h",
+                           "language":  "c",
+                           "sizeLines":  277,
+                           "fileCategory":  "code"
+                       },
+                       {
+                           "path":  "source/module/tools/object/mmd_rigid.cpp",
+                           "language":  "cpp",
+                           "sizeLines":  790,
+                           "fileCategory":  "code"
+                       },
+                       {
+                           "path":  "source/module/tools/object/mmd_rigid.h",
+                           "language":  "c",
+                           "sizeLines":  73,
+                           "fileCategory":  "code"
+                       },
+                       {
+                           "path":  "source/module/tools/object/mmd_rigid_manager.cpp",
+                           "language":  "cpp",
+                           "sizeLines":  709,
+                           "fileCategory":  "code"
+                       },
+                       {
+                           "path":  "source/module/tools/object/mmd_rigid_manager.h",
+                           "language":  "c",
+                           "sizeLines":  89,
+                           "fileCategory":  "code"
+                       }
+                   ],
+    "batchImportData":  {
+                            "source/module/tools/object/mmd_bone_manager.cpp":  [
+                                                                                    "source/module/tools/object/mmd_bone_manager.h",
+                                                                                    "source/module/tools/object/mmd_mesh_manager.h",
+                                                                                    "source/module/tools/object/mmd_model_manager.h",
+                                                                                    "source/module/tools/object/mmd_rigid_manager.h",
+                                                                                    "source/module/tools/object/mmd_rigid.h"
+                                                                                ],
+                            "source/module/tools/object/mmd_bone_manager.h":  [
+                                                                                  "source/module/tools/object/mmd_manager.hpp"
+                                                                              ],
+                            "source/module/tools/object/mmd_display_frame.cpp":  [
+                                                                                     "source/module/tools/object/mmd_model_manager.h"
+                                                                                 ],
+                            "source/module/tools/object/mmd_manager.hpp":  [
+
+                                                                           ],
+                            "source/module/tools/object/mmd_mesh_manager.cpp":  [
+                                                                                    "source/module/tools/object/mmd_bone_manager.h",
+                                                                                    "source/module/tools/object/mmd_mesh_manager.h",
+                                                                                    "source/module/tools/object/mmd_model_manager.h"
+                                                                                ],
+                            "source/module/tools/object/mmd_mesh_manager.h":  [
+                                                                                  "source/module/tools/object/mmd_manager.hpp"
+                                                                              ],
+                            "source/module/tools/object/mmd_model_manager.cpp":  [
+                                                                                     "source/module/tools/object/mmd_bone_manager.h",
+                                                                                     "source/module/tools/object/mmd_joint_manager.h",
+                                                                                     "source/module/tools/object/mmd_mesh_manager.h",
+                                                                                     "source/module/tools/object/mmd_model_manager.h",
+                                                                                     "source/module/tools/object/mmd_morph.h",
+                                                                                     "source/module/tools/object/mmd_rigid_manager.h"
+                                                                                 ],
+                            "source/module/tools/object/mmd_model_manager.h":  [
+
+                                                                               ],
+                            "source/module/tools/object/mmd_morph.cpp":  [
+                                                                             "source/module/tools/object/mmd_bone_manager.h",
+                                                                             "source/module/tools/object/mmd_mesh_manager.h",
+                                                                             "source/module/tools/object/mmd_model_manager.h",
+                                                                             "source/module/tools/object/mmd_morph.h"
+                                                                         ],
+                            "source/module/tools/object/mmd_morph.h":  [
+
+                                                                       ],
+                            "source/module/tools/object/mmd_rigid.cpp":  [
+                                                                             "source/module/tools/object/mmd_bone_manager.h",
+                                                                             "source/module/tools/object/mmd_model_manager.h",
+                                                                             "source/module/tools/object/mmd_rigid_manager.h",
+                                                                             "source/module/tools/object/mmd_rigid.h"
+                                                                         ],
+                            "source/module/tools/object/mmd_rigid.h":  [
+
+                                                                       ],
+                            "source/module/tools/object/mmd_rigid_manager.cpp":  [
+                                                                                     "source/module/tools/object/mmd_bone_manager.h",
+                                                                                     "source/module/tools/object/mmd_model_manager.h",
+                                                                                     "source/module/tools/object/mmd_rigid_manager.h",
+                                                                                     "source/module/tools/object/mmd_rigid.h"
+                                                                                 ],
+                            "source/module/tools/object/mmd_rigid_manager.h":  [
+                                                                                   "source/module/tools/object/mmd_manager.hpp"
+                                                                               ]
+                        }
+}

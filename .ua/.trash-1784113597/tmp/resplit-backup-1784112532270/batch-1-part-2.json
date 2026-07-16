@@ -1,0 +1,1233 @@
+{
+  "nodes": [
+    {
+      "id": "file:source/module/core/cmt_marco.h",
+      "type": "file",
+      "name": "cmt_marco.h",
+      "filePath": "source/module/core/cmt_marco.h",
+      "summary": "Collects cross-SDK compatibility macros, constants, type helpers, parameter accessors, and Cinema 4D utility functions. / 汇集跨 SDK 兼容宏、常量、类型辅助、参数访问器与 Cinema 4D 工具函数。",
+      "tags": [
+        "compatibility",
+        "utility",
+        "macros",
+        "cinema-4d"
+      ],
+      "complexity": "complex",
+      "languageNotes": "Centralizes Cinema 4D SDK-version conditionals so the maintained source can compile across multiple SDK trees. / 集中封装 Cinema 4D SDK 版本条件，使同一套维护源码可在多个 SDK 树中编译。"
+    },
+    {
+      "id": "function:source/module/core/cmt_marco.h:MakeObjectColorProperties",
+      "type": "function",
+      "name": "MakeObjectColorProperties",
+      "filePath": "source/module/core/cmt_marco.h",
+      "lineRange": [
+        247,
+        255
+      ],
+      "summary": "Builds a color-property bundle used to apply display color, color mode, and X-ray state together. / 构建颜色属性组合，用于统一应用显示颜色、颜色模式与 X-ray 状态。",
+      "tags": [
+        "utility",
+        "cinema-4d",
+        "plugin-runtime"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/core/cmt_marco.h:MakeDescIDGeData",
+      "type": "function",
+      "name": "MakeDescIDGeData",
+      "filePath": "source/module/core/cmt_marco.h",
+      "lineRange": [
+        259,
+        266
+      ],
+      "summary": "Wraps a description ID as GeData for Cinema 4D parameter APIs. / 将描述 ID 封装为 GeData，供 Cinema 4D 参数 API 使用。",
+      "tags": [
+        "utility",
+        "cinema-4d",
+        "plugin-runtime"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/core/cmt_marco.h:GetDocumentTime",
+      "type": "function",
+      "name": "GetDocumentTime",
+      "filePath": "source/module/core/cmt_marco.h",
+      "lineRange": [
+        307,
+        316
+      ],
+      "summary": "Returns the active document time with a zero-time fallback for null documents. / 返回活动文档时间，并在文档为空时回退到零时间。",
+      "tags": [
+        "utility",
+        "cinema-4d",
+        "plugin-runtime"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:source/module/ui/cmt_name_conversion_dialog.cpp",
+      "type": "file",
+      "name": "cmt_name_conversion_dialog.cpp",
+      "filePath": "source/module/ui/cmt_name_conversion_dialog.cpp",
+      "summary": "Implements the name-conversion dialog, mapping-file discovery, editable mappings, conversion lookup, and automatic scene-name updates. / 实现名称转换对话框、映射文件发现、可编辑映射、转换查询与场景名称自动更新。",
+      "tags": [
+        "ui",
+        "name-conversion",
+        "configuration",
+        "event-handler"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:source/module/ui/cmt_name_conversion_dialog.cpp:UpdateNameConversionDialog",
+      "type": "function",
+      "name": "UpdateNameConversionDialog",
+      "filePath": "source/module/ui/cmt_name_conversion_dialog.cpp",
+      "lineRange": [
+        24,
+        41
+      ],
+      "summary": "Discovers mapping files, initializes the dialog state, and selects the requested conversion table. / 发现映射文件、初始化对话框状态，并选择请求的转换表。",
+      "tags": [
+        "ui",
+        "name-conversion",
+        "event-handler"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/ui/cmt_name_conversion_dialog.cpp:CreateLayout",
+      "type": "function",
+      "name": "CreateLayout",
+      "filePath": "source/module/ui/cmt_name_conversion_dialog.cpp",
+      "lineRange": [
+        43,
+        108
+      ],
+      "summary": "Constructs the scrollable mapping editor, controls, and conversion actions in the Cinema 4D dialog. / 在 Cinema 4D 对话框中构建可滚动映射编辑器、控件与转换操作。",
+      "tags": [
+        "ui",
+        "name-conversion",
+        "event-handler"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/ui/cmt_name_conversion_dialog.cpp:InitValues",
+      "type": "function",
+      "name": "InitValues",
+      "filePath": "source/module/ui/cmt_name_conversion_dialog.cpp",
+      "lineRange": [
+        111,
+        117
+      ],
+      "summary": "Populates initial control values after the dialog layout has been created. / 在对话框布局创建后填充控件初始值。",
+      "tags": [
+        "ui",
+        "name-conversion",
+        "event-handler"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/ui/cmt_name_conversion_dialog.cpp:LoadNameMappingConfig",
+      "type": "function",
+      "name": "LoadNameMappingConfig",
+      "filePath": "source/module/ui/cmt_name_conversion_dialog.cpp",
+      "lineRange": [
+        120,
+        150
+      ],
+      "summary": "Loads the selected mapping configuration and refreshes editable name pairs. / 加载选定的映射配置并刷新可编辑名称对。",
+      "tags": [
+        "ui",
+        "name-conversion",
+        "event-handler"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/ui/cmt_name_conversion_dialog.cpp:Command",
+      "type": "function",
+      "name": "Command",
+      "filePath": "source/module/ui/cmt_name_conversion_dialog.cpp",
+      "lineRange": [
+        152,
+        390
+      ],
+      "summary": "Dispatches dialog commands for editing mappings, selecting presets, converting names, and saving changes. / 分派对话框命令，处理映射编辑、预设选择、名称转换与更改保存。",
+      "tags": [
+        "ui",
+        "name-conversion",
+        "event-handler"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:source/module/ui/cmt_name_conversion_dialog.cpp:Init",
+      "type": "function",
+      "name": "Init",
+      "filePath": "source/module/ui/cmt_name_conversion_dialog.cpp",
+      "lineRange": [
+        392,
+        397
+      ],
+      "summary": "Initializes the shared name-conversion service from available mapping data. / 使用可用映射数据初始化共享名称转换服务。",
+      "tags": [
+        "ui",
+        "name-conversion",
+        "event-handler"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/ui/cmt_name_conversion_dialog.cpp:~NameConversion",
+      "type": "function",
+      "name": "~NameConversion",
+      "filePath": "source/module/ui/cmt_name_conversion_dialog.cpp",
+      "lineRange": [
+        399,
+        404
+      ],
+      "summary": "Implements the ~NameConversion operation within this file's primary responsibility. / 在该文件的主要职责范围内实现 ~NameConversion 操作。",
+      "tags": [
+        "ui",
+        "name-conversion",
+        "event-handler"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/ui/cmt_name_conversion_dialog.cpp:LoadConfig",
+      "type": "function",
+      "name": "LoadConfig",
+      "filePath": "source/module/ui/cmt_name_conversion_dialog.cpp",
+      "lineRange": [
+        406,
+        430
+      ],
+      "summary": "Reads a name-mapping file and rebuilds the local and universal lookup tables. / 读取名称映射文件，并重建本地名与通用名查询表。",
+      "tags": [
+        "ui",
+        "name-conversion",
+        "event-handler"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/ui/cmt_name_conversion_dialog.cpp:InitConver",
+      "type": "function",
+      "name": "InitConver",
+      "filePath": "source/module/ui/cmt_name_conversion_dialog.cpp",
+      "lineRange": [
+        433,
+        458
+      ],
+      "summary": "Traverses a scene hierarchy and prepares object names for conversion. / 遍历场景层级并准备待转换的对象名称。",
+      "tags": [
+        "ui",
+        "name-conversion",
+        "event-handler"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/ui/cmt_name_conversion_dialog.cpp:Conver",
+      "type": "function",
+      "name": "Conver",
+      "filePath": "source/module/ui/cmt_name_conversion_dialog.cpp",
+      "lineRange": [
+        461,
+        469
+      ],
+      "summary": "Looks up a source name in the selected conversion direction and returns the mapped result. / 按选定转换方向查找源名称并返回映射结果。",
+      "tags": [
+        "ui",
+        "name-conversion",
+        "event-handler"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/ui/cmt_name_conversion_dialog.cpp:CheckUpdate",
+      "type": "function",
+      "name": "CheckUpdate",
+      "filePath": "source/module/ui/cmt_name_conversion_dialog.cpp",
+      "lineRange": [
+        472,
+        477
+      ],
+      "summary": "Checks whether automatic name conversion should run for the current scene state. / 检查当前场景状态是否应执行自动名称转换。",
+      "tags": [
+        "ui",
+        "name-conversion",
+        "event-handler"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/ui/cmt_name_conversion_dialog.cpp:AutoUpdate",
+      "type": "function",
+      "name": "AutoUpdate",
+      "filePath": "source/module/ui/cmt_name_conversion_dialog.cpp",
+      "lineRange": [
+        480,
+        492
+      ],
+      "summary": "Applies configured automatic name conversion when the tracked scene state changes. / 在被跟踪的场景状态变化时应用已配置的自动名称转换。",
+      "tags": [
+        "ui",
+        "name-conversion",
+        "event-handler"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:source/module/ui/cmt_name_conversion_dialog.h",
+      "type": "file",
+      "name": "cmt_name_conversion_dialog.h",
+      "filePath": "source/module/ui/cmt_name_conversion_dialog.h",
+      "summary": "Declares the reusable name-mapping engine and Cinema 4D dialog used to edit and apply local-to-universal name conversions. / 声明可复用的名称映射引擎及 Cinema 4D 对话框，用于编辑并应用本地名到通用名的转换。",
+      "tags": [
+        "ui",
+        "name-conversion",
+        "data-model",
+        "type-definition"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/ui/cmt_name_conversion_dialog.h:NameConversion",
+      "type": "function",
+      "name": "NameConversion",
+      "filePath": "source/module/ui/cmt_name_conversion_dialog.h",
+      "lineRange": [
+        20,
+        20
+      ],
+      "summary": "Constructs the name-conversion mapping engine from the selected data source. / 从选定数据源构造名称转换映射引擎。",
+      "tags": [
+        "ui",
+        "name-conversion",
+        "event-handler"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/ui/cmt_name_conversion_dialog.h:~UpdateNameConversionDialog",
+      "type": "function",
+      "name": "~UpdateNameConversionDialog",
+      "filePath": "source/module/ui/cmt_name_conversion_dialog.h",
+      "lineRange": [
+        50,
+        50
+      ],
+      "summary": "Closes the name-conversion dialog and releases dialog-owned state. / 关闭名称转换对话框并释放对话框持有的状态。",
+      "tags": [
+        "ui",
+        "name-conversion",
+        "event-handler"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:source/module/ui/cmt_name_conversion_dialog.h:UpdateNameConversionDialog",
+      "type": "class",
+      "name": "UpdateNameConversionDialog",
+      "filePath": "source/module/ui/cmt_name_conversion_dialog.h",
+      "lineRange": [
+        28,
+        51
+      ],
+      "summary": "Cinema 4D dialog for selecting, editing, saving, and applying name-conversion mappings. / 用于选择、编辑、保存并应用名称转换映射的 Cinema 4D 对话框。",
+      "tags": [
+        "ui",
+        "name-conversion",
+        "data-model"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:source/module/ui/cmt_name_conversion_dialog.h:NameConversion",
+      "type": "class",
+      "name": "NameConversion",
+      "filePath": "source/module/ui/cmt_name_conversion_dialog.h",
+      "lineRange": [
+        9,
+        26
+      ],
+      "summary": "Owns bidirectional local and universal name maps and applies them to scene object hierarchies. / 维护本地名与通用名的双向映射，并将其应用到场景对象层级。",
+      "tags": [
+        "ui",
+        "name-conversion",
+        "data-model"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:source/register_entity.h",
+      "type": "file",
+      "name": "register_entity.h",
+      "filePath": "source/register_entity.h",
+      "summary": "Declares the central registration routine that exposes all MMD Tool plugins to Cinema 4D. / 声明中央注册例程，将所有 MMD Tool 插件注册到 Cinema 4D。",
+      "tags": [
+        "registration",
+        "entry-point",
+        "api"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:source/utils/filename_util.hpp",
+      "type": "file",
+      "name": "filename_util.hpp",
+      "filePath": "source/utils/filename_util.hpp",
+      "summary": "Provides binary file reading, suffix validation, and Cinema 4D import/export file-selection helpers. / 提供二进制文件读取、后缀校验及 Cinema 4D 导入导出文件选择辅助。",
+      "tags": [
+        "utility",
+        "file-io",
+        "validation"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/utils/filename_util.hpp:ReadFileData",
+      "type": "function",
+      "name": "ReadFileData",
+      "filePath": "source/utils/filename_util.hpp",
+      "lineRange": [
+        30,
+        45
+      ],
+      "summary": "Reads an entire binary file into a byte buffer with explicit failure reporting. / 将完整二进制文件读入字节缓冲区，并显式报告失败。",
+      "tags": [
+        "file-io",
+        "utility",
+        "validation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/utils/filename_util.hpp:CheckSuffix",
+      "type": "function",
+      "name": "CheckSuffix",
+      "filePath": "source/utils/filename_util.hpp",
+      "lineRange": [
+        52,
+        59
+      ],
+      "summary": "Checks a filename against an expected extension without changing the path. / 检查文件名是否匹配预期扩展名且不修改路径。",
+      "tags": [
+        "file-io",
+        "utility",
+        "validation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/utils/filename_util.hpp:SelectSuffixImportFile",
+      "type": "function",
+      "name": "SelectSuffixImportFile",
+      "filePath": "source/utils/filename_util.hpp",
+      "lineRange": [
+        66,
+        77
+      ],
+      "summary": "Opens a Cinema 4D import selector constrained to the requested suffix. / 打开受指定后缀约束的 Cinema 4D 导入文件选择器。",
+      "tags": [
+        "file-io",
+        "utility",
+        "validation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/utils/filename_util.hpp:SelectSuffixExportFile",
+      "type": "function",
+      "name": "SelectSuffixExportFile",
+      "filePath": "source/utils/filename_util.hpp",
+      "lineRange": [
+        84,
+        90
+      ],
+      "summary": "Opens a Cinema 4D export selector constrained to the requested suffix. / 打开受指定后缀约束的 Cinema 4D 导出文件选择器。",
+      "tags": [
+        "file-io",
+        "utility",
+        "validation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:source/utils/json_util.hpp",
+      "type": "file",
+      "name": "json_util.hpp",
+      "filePath": "source/utils/json_util.hpp",
+      "summary": "Implements a compact JSON parser, serializer, and file I/O layer for the plugin configuration variant model. / 为插件配置的变体数据模型实现轻量 JSON 解析、序列化与文件读写层。",
+      "tags": [
+        "serialization",
+        "parser",
+        "file-io",
+        "utility"
+      ],
+      "complexity": "complex",
+      "languageNotes": "A header-only recursive-descent parser serializes the project-specific variant model without an external JSON dependency. / 采用仅头文件的递归下降解析器，在不依赖外部 JSON 库的情况下序列化项目专用变体模型。"
+    },
+    {
+      "id": "function:source/utils/json_util.hpp:SkipWhitespace",
+      "type": "function",
+      "name": "SkipWhitespace",
+      "filePath": "source/utils/json_util.hpp",
+      "lineRange": [
+        34,
+        38
+      ],
+      "summary": "Advances the parser cursor past JSON whitespace. / 将解析游标推进到 JSON 空白之后。",
+      "tags": [
+        "serialization",
+        "parser",
+        "utility"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/utils/json_util.hpp:Peek",
+      "type": "function",
+      "name": "Peek",
+      "filePath": "source/utils/json_util.hpp",
+      "lineRange": [
+        40,
+        45
+      ],
+      "summary": "Returns the next non-whitespace JSON character without consuming a value. / 返回下一个非空白 JSON 字符，但不消费值。",
+      "tags": [
+        "serialization",
+        "parser",
+        "utility"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/utils/json_util.hpp:Expect",
+      "type": "function",
+      "name": "Expect",
+      "filePath": "source/utils/json_util.hpp",
+      "lineRange": [
+        47,
+        53
+      ],
+      "summary": "Consumes a required JSON token and raises a parse error when it is absent. / 消费必需的 JSON 标记，并在缺失时抛出解析错误。",
+      "tags": [
+        "serialization",
+        "parser",
+        "utility"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/utils/json_util.hpp:ParseString",
+      "type": "function",
+      "name": "ParseString",
+      "filePath": "source/utils/json_util.hpp",
+      "lineRange": [
+        55,
+        124
+      ],
+      "summary": "Parses a quoted JSON string including supported escape sequences. / 解析带引号的 JSON 字符串及其支持的转义序列。",
+      "tags": [
+        "serialization",
+        "parser",
+        "utility"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/utils/json_util.hpp:ParseValue",
+      "type": "function",
+      "name": "ParseValue",
+      "filePath": "source/utils/json_util.hpp",
+      "lineRange": [
+        126,
+        199
+      ],
+      "summary": "Dispatches recursive parsing for JSON strings, numbers, booleans, nulls, and objects. / 递归分派 JSON 字符串、数字、布尔值、null 与对象的解析。",
+      "tags": [
+        "serialization",
+        "parser",
+        "utility"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/utils/json_util.hpp:ParseObject",
+      "type": "function",
+      "name": "ParseObject",
+      "filePath": "source/utils/json_util.hpp",
+      "lineRange": [
+        201,
+        232
+      ],
+      "summary": "Parses a JSON object into the configuration object representation. / 将 JSON 对象解析为配置对象表示。",
+      "tags": [
+        "serialization",
+        "parser",
+        "utility"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/utils/json_util.hpp:EscapeString",
+      "type": "function",
+      "name": "EscapeString",
+      "filePath": "source/utils/json_util.hpp",
+      "lineRange": [
+        234,
+        266
+      ],
+      "summary": "Escapes control characters and quotes for valid JSON string output. / 转义控制字符与引号以生成合法 JSON 字符串。",
+      "tags": [
+        "serialization",
+        "parser",
+        "utility"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/utils/json_util.hpp:SerializeValue",
+      "type": "function",
+      "name": "SerializeValue",
+      "filePath": "source/utils/json_util.hpp",
+      "lineRange": [
+        268,
+        286
+      ],
+      "summary": "Serializes one variant-held configuration value to JSON. / 将一个由 variant 保存的配置值序列化为 JSON。",
+      "tags": [
+        "serialization",
+        "parser",
+        "utility"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/utils/json_util.hpp:Parse",
+      "type": "function",
+      "name": "Parse",
+      "filePath": "source/utils/json_util.hpp",
+      "lineRange": [
+        291,
+        295
+      ],
+      "summary": "Parses a complete JSON string and rejects trailing content. / 解析完整 JSON 字符串并拒绝尾随内容。",
+      "tags": [
+        "serialization",
+        "parser",
+        "utility"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/utils/json_util.hpp:Serialize",
+      "type": "function",
+      "name": "Serialize",
+      "filePath": "source/utils/json_util.hpp",
+      "lineRange": [
+        298,
+        327
+      ],
+      "summary": "Serializes a complete configuration object to JSON text. / 将完整配置对象序列化为 JSON 文本。",
+      "tags": [
+        "serialization",
+        "parser",
+        "utility"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/utils/json_util.hpp:ReadJsonFile",
+      "type": "function",
+      "name": "ReadJsonFile",
+      "filePath": "source/utils/json_util.hpp",
+      "lineRange": [
+        330,
+        359
+      ],
+      "summary": "Reads and parses a JSON configuration file with safe fallback behavior. / 读取并解析 JSON 配置文件，并提供安全回退行为。",
+      "tags": [
+        "serialization",
+        "parser",
+        "utility"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/utils/json_util.hpp:WriteJsonFile",
+      "type": "function",
+      "name": "WriteJsonFile",
+      "filePath": "source/utils/json_util.hpp",
+      "lineRange": [
+        362,
+        372
+      ],
+      "summary": "Serializes and writes a configuration object to disk. / 将配置对象序列化并写入磁盘。",
+      "tags": [
+        "serialization",
+        "parser",
+        "utility"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:source/utils/string_util.hpp",
+      "type": "file",
+      "name": "string_util.hpp",
+      "filePath": "source/utils/string_util.hpp",
+      "summary": "Converts Cinema 4D strings to UTF-8 standard strings for library and filesystem boundaries. / 将 Cinema 4D 字符串转换为 UTF-8 标准字符串，用于库与文件系统边界。",
+      "tags": [
+        "utility",
+        "string-conversion",
+        "utf-8"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/utils/string_util.hpp:GetStdString",
+      "type": "function",
+      "name": "GetStdString",
+      "filePath": "source/utils/string_util.hpp",
+      "lineRange": [
+        19,
+        34
+      ],
+      "summary": "Encodes a Cinema 4D String as a UTF-8 std::string. / 将 Cinema 4D String 编码为 UTF-8 std::string。",
+      "tags": [
+        "string-conversion",
+        "utf-8",
+        "utility"
+      ],
+      "complexity": "simple"
+    }
+  ],
+  "edges": [
+    {
+      "source": "file:source/module/core/cmt_marco.h",
+      "target": "function:source/module/core/cmt_marco.h:MakeObjectColorProperties",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/core/cmt_marco.h",
+      "target": "function:source/module/core/cmt_marco.h:MakeObjectColorProperties",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/core/cmt_marco.h",
+      "target": "function:source/module/core/cmt_marco.h:MakeDescIDGeData",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/core/cmt_marco.h",
+      "target": "function:source/module/core/cmt_marco.h:MakeDescIDGeData",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/core/cmt_marco.h",
+      "target": "function:source/module/core/cmt_marco.h:GetDocumentTime",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/core/cmt_marco.h",
+      "target": "function:source/module/core/cmt_marco.h:GetDocumentTime",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/ui/cmt_name_conversion_dialog.cpp",
+      "target": "function:source/module/ui/cmt_name_conversion_dialog.cpp:UpdateNameConversionDialog",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/ui/cmt_name_conversion_dialog.cpp",
+      "target": "function:source/module/ui/cmt_name_conversion_dialog.cpp:UpdateNameConversionDialog",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/ui/cmt_name_conversion_dialog.cpp",
+      "target": "function:source/module/ui/cmt_name_conversion_dialog.cpp:CreateLayout",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/ui/cmt_name_conversion_dialog.cpp",
+      "target": "function:source/module/ui/cmt_name_conversion_dialog.cpp:CreateLayout",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/ui/cmt_name_conversion_dialog.cpp",
+      "target": "function:source/module/ui/cmt_name_conversion_dialog.cpp:InitValues",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/ui/cmt_name_conversion_dialog.cpp",
+      "target": "function:source/module/ui/cmt_name_conversion_dialog.cpp:InitValues",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/ui/cmt_name_conversion_dialog.cpp",
+      "target": "function:source/module/ui/cmt_name_conversion_dialog.cpp:LoadNameMappingConfig",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/ui/cmt_name_conversion_dialog.cpp",
+      "target": "function:source/module/ui/cmt_name_conversion_dialog.cpp:LoadNameMappingConfig",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/ui/cmt_name_conversion_dialog.cpp",
+      "target": "function:source/module/ui/cmt_name_conversion_dialog.cpp:Command",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/ui/cmt_name_conversion_dialog.cpp",
+      "target": "function:source/module/ui/cmt_name_conversion_dialog.cpp:Command",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/ui/cmt_name_conversion_dialog.cpp",
+      "target": "function:source/module/ui/cmt_name_conversion_dialog.cpp:Init",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/ui/cmt_name_conversion_dialog.cpp",
+      "target": "function:source/module/ui/cmt_name_conversion_dialog.cpp:Init",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/ui/cmt_name_conversion_dialog.cpp",
+      "target": "function:source/module/ui/cmt_name_conversion_dialog.cpp:~NameConversion",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/ui/cmt_name_conversion_dialog.cpp",
+      "target": "function:source/module/ui/cmt_name_conversion_dialog.cpp:~NameConversion",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/ui/cmt_name_conversion_dialog.cpp",
+      "target": "function:source/module/ui/cmt_name_conversion_dialog.cpp:LoadConfig",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/ui/cmt_name_conversion_dialog.cpp",
+      "target": "function:source/module/ui/cmt_name_conversion_dialog.cpp:LoadConfig",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/ui/cmt_name_conversion_dialog.cpp",
+      "target": "function:source/module/ui/cmt_name_conversion_dialog.cpp:InitConver",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/ui/cmt_name_conversion_dialog.cpp",
+      "target": "function:source/module/ui/cmt_name_conversion_dialog.cpp:InitConver",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/ui/cmt_name_conversion_dialog.cpp",
+      "target": "function:source/module/ui/cmt_name_conversion_dialog.cpp:Conver",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/ui/cmt_name_conversion_dialog.cpp",
+      "target": "function:source/module/ui/cmt_name_conversion_dialog.cpp:Conver",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/ui/cmt_name_conversion_dialog.cpp",
+      "target": "function:source/module/ui/cmt_name_conversion_dialog.cpp:CheckUpdate",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/ui/cmt_name_conversion_dialog.cpp",
+      "target": "function:source/module/ui/cmt_name_conversion_dialog.cpp:CheckUpdate",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/ui/cmt_name_conversion_dialog.cpp",
+      "target": "function:source/module/ui/cmt_name_conversion_dialog.cpp:AutoUpdate",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/ui/cmt_name_conversion_dialog.cpp",
+      "target": "function:source/module/ui/cmt_name_conversion_dialog.cpp:AutoUpdate",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/ui/cmt_name_conversion_dialog.cpp",
+      "target": "file:source/module/ui/cmt_name_conversion_dialog.h",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:source/module/ui/cmt_name_conversion_dialog.h",
+      "target": "function:source/module/ui/cmt_name_conversion_dialog.h:NameConversion",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/ui/cmt_name_conversion_dialog.h",
+      "target": "function:source/module/ui/cmt_name_conversion_dialog.h:NameConversion",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/ui/cmt_name_conversion_dialog.h",
+      "target": "function:source/module/ui/cmt_name_conversion_dialog.h:~UpdateNameConversionDialog",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/ui/cmt_name_conversion_dialog.h",
+      "target": "function:source/module/ui/cmt_name_conversion_dialog.h:~UpdateNameConversionDialog",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/ui/cmt_name_conversion_dialog.h",
+      "target": "class:source/module/ui/cmt_name_conversion_dialog.h:UpdateNameConversionDialog",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/ui/cmt_name_conversion_dialog.h",
+      "target": "class:source/module/ui/cmt_name_conversion_dialog.h:UpdateNameConversionDialog",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/ui/cmt_name_conversion_dialog.h",
+      "target": "class:source/module/ui/cmt_name_conversion_dialog.h:NameConversion",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/ui/cmt_name_conversion_dialog.h",
+      "target": "class:source/module/ui/cmt_name_conversion_dialog.h:NameConversion",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/register_entity.h",
+      "target": "file:source/module/core/cmt_marco.h",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:source/utils/filename_util.hpp",
+      "target": "function:source/utils/filename_util.hpp:ReadFileData",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/utils/filename_util.hpp",
+      "target": "function:source/utils/filename_util.hpp:ReadFileData",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/utils/filename_util.hpp",
+      "target": "function:source/utils/filename_util.hpp:CheckSuffix",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/utils/filename_util.hpp",
+      "target": "function:source/utils/filename_util.hpp:CheckSuffix",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/utils/filename_util.hpp",
+      "target": "function:source/utils/filename_util.hpp:SelectSuffixImportFile",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/utils/filename_util.hpp",
+      "target": "function:source/utils/filename_util.hpp:SelectSuffixImportFile",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/utils/filename_util.hpp",
+      "target": "function:source/utils/filename_util.hpp:SelectSuffixExportFile",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/utils/filename_util.hpp",
+      "target": "function:source/utils/filename_util.hpp:SelectSuffixExportFile",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/utils/json_util.hpp",
+      "target": "function:source/utils/json_util.hpp:SkipWhitespace",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/utils/json_util.hpp",
+      "target": "function:source/utils/json_util.hpp:SkipWhitespace",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/utils/json_util.hpp",
+      "target": "function:source/utils/json_util.hpp:Peek",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/utils/json_util.hpp",
+      "target": "function:source/utils/json_util.hpp:Peek",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/utils/json_util.hpp",
+      "target": "function:source/utils/json_util.hpp:Expect",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/utils/json_util.hpp",
+      "target": "function:source/utils/json_util.hpp:Expect",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/utils/json_util.hpp",
+      "target": "function:source/utils/json_util.hpp:ParseString",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/utils/json_util.hpp",
+      "target": "function:source/utils/json_util.hpp:ParseString",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/utils/json_util.hpp",
+      "target": "function:source/utils/json_util.hpp:ParseValue",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/utils/json_util.hpp",
+      "target": "function:source/utils/json_util.hpp:ParseValue",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/utils/json_util.hpp",
+      "target": "function:source/utils/json_util.hpp:ParseObject",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/utils/json_util.hpp",
+      "target": "function:source/utils/json_util.hpp:ParseObject",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/utils/json_util.hpp",
+      "target": "function:source/utils/json_util.hpp:EscapeString",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/utils/json_util.hpp",
+      "target": "function:source/utils/json_util.hpp:EscapeString",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/utils/json_util.hpp",
+      "target": "function:source/utils/json_util.hpp:SerializeValue",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/utils/json_util.hpp",
+      "target": "function:source/utils/json_util.hpp:SerializeValue",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/utils/json_util.hpp",
+      "target": "function:source/utils/json_util.hpp:Parse",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/utils/json_util.hpp",
+      "target": "function:source/utils/json_util.hpp:Parse",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/utils/json_util.hpp",
+      "target": "function:source/utils/json_util.hpp:Serialize",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/utils/json_util.hpp",
+      "target": "function:source/utils/json_util.hpp:Serialize",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/utils/json_util.hpp",
+      "target": "function:source/utils/json_util.hpp:ReadJsonFile",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/utils/json_util.hpp",
+      "target": "function:source/utils/json_util.hpp:ReadJsonFile",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/utils/json_util.hpp",
+      "target": "function:source/utils/json_util.hpp:WriteJsonFile",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/utils/json_util.hpp",
+      "target": "function:source/utils/json_util.hpp:WriteJsonFile",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/utils/string_util.hpp",
+      "target": "function:source/utils/string_util.hpp:GetStdString",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/utils/string_util.hpp",
+      "target": "function:source/utils/string_util.hpp:GetStdString",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    }
+  ]
+}

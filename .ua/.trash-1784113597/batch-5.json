@@ -1,0 +1,1089 @@
+{
+  "nodes": [
+    {
+      "id": "file:source/CMTSceneManager.cpp",
+      "type": "file",
+      "name": "CMTSceneManager.cpp",
+      "filePath": "source/CMTSceneManager.cpp",
+      "summary": "Implements scene orchestration for MMD cameras, model managers, VMD motion, VPD poses, and localized operation reports. / 实现场景中的 MMD 相机、模型管理器、VMD 动作、VPD 姿势编排以及本地化操作报告。",
+      "tags": [
+        "scene-management",
+        "import-export",
+        "diagnostics",
+        "orchestration"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:source/CMTSceneManager.cpp:AppendVpdUnmatchedNames",
+      "type": "function",
+      "name": "AppendVpdUnmatchedNames",
+      "filePath": "source/CMTSceneManager.cpp",
+      "lineRange": [
+        19,
+        28
+      ],
+      "summary": "Appends labeled unmatched VPD bone or morph names to an operation report. / 把带标签的未匹配 VPD 骨骼或变形名称追加到操作报告。",
+      "tags": [
+        "diagnostics",
+        "localization",
+        "error-handling"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/CMTSceneManager.cpp:LogOutMem",
+      "type": "function",
+      "name": "LogOutMem",
+      "filePath": "source/CMTSceneManager.cpp",
+      "lineRange": [
+        31,
+        34
+      ],
+      "summary": "Reports an out-of-memory failure through a localized Cinema 4D dialog. / 通过本地化 Cinema 4D 对话框报告内存不足。",
+      "tags": [
+        "diagnostics",
+        "localization",
+        "error-handling"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/CMTSceneManager.cpp:LogReadFileErr",
+      "type": "function",
+      "name": "LogReadFileErr",
+      "filePath": "source/CMTSceneManager.cpp",
+      "lineRange": [
+        36,
+        39
+      ],
+      "summary": "Reports a file-read failure through a localized Cinema 4D dialog. / 通过本地化 Cinema 4D 对话框报告文件读取失败。",
+      "tags": [
+        "diagnostics",
+        "localization",
+        "error-handling"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/CMTSceneManager.cpp:LogWriteFileErr",
+      "type": "function",
+      "name": "LogWriteFileErr",
+      "filePath": "source/CMTSceneManager.cpp",
+      "lineRange": [
+        41,
+        44
+      ],
+      "summary": "Reports a file-write failure through a localized Cinema 4D dialog. / 通过本地化 Cinema 4D 对话框报告文件写入失败。",
+      "tags": [
+        "diagnostics",
+        "localization",
+        "error-handling"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/CMTSceneManager.cpp:LogOK",
+      "type": "function",
+      "name": "LogOK",
+      "filePath": "source/CMTSceneManager.cpp",
+      "lineRange": [
+        89,
+        111
+      ],
+      "summary": "Formats operation-specific success dialogs with counts, model metadata, and elapsed timing. / 使用数量、模型元数据与耗时格式化各类操作成功对话框。",
+      "tags": [
+        "diagnostics",
+        "localization",
+        "error-handling"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/CMTSceneManager.cpp:LogNotCameraError",
+      "type": "function",
+      "name": "LogNotCameraError",
+      "filePath": "source/CMTSceneManager.cpp",
+      "lineRange": [
+        52,
+        55
+      ],
+      "summary": "Reports an operation-specific validation failure through a localized dialog. / 通过本地化对话框报告特定操作的校验失败。",
+      "tags": [
+        "diagnostics",
+        "localization",
+        "error-handling"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/CMTSceneManager.cpp:LogNotMMDModelError",
+      "type": "function",
+      "name": "LogNotMMDModelError",
+      "filePath": "source/CMTSceneManager.cpp",
+      "lineRange": [
+        113,
+        116
+      ],
+      "summary": "Reports an operation-specific validation failure through a localized dialog. / 通过本地化对话框报告特定操作的校验失败。",
+      "tags": [
+        "diagnostics",
+        "localization",
+        "error-handling"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/CMTSceneManager.cpp:LogNotMotionError",
+      "type": "function",
+      "name": "LogNotMotionError",
+      "filePath": "source/CMTSceneManager.cpp",
+      "lineRange": [
+        118,
+        121
+      ],
+      "summary": "Reports an operation-specific validation failure through a localized dialog. / 通过本地化对话框报告特定操作的校验失败。",
+      "tags": [
+        "diagnostics",
+        "localization",
+        "error-handling"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/CMTSceneManager.cpp:LogSelectError",
+      "type": "function",
+      "name": "LogSelectError",
+      "filePath": "source/CMTSceneManager.cpp",
+      "lineRange": [
+        123,
+        126
+      ],
+      "summary": "Reports that the required scene object selection is missing or invalid. / 报告所需场景对象选择缺失或无效。",
+      "tags": [
+        "diagnostics",
+        "localization",
+        "error-handling"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/CMTSceneManager.cpp:LogNoAnimationError",
+      "type": "function",
+      "name": "LogNoAnimationError",
+      "filePath": "source/CMTSceneManager.cpp",
+      "lineRange": [
+        148,
+        151
+      ],
+      "summary": "Reports that no exportable animation was found. / 报告未找到可导出的动画。",
+      "tags": [
+        "diagnostics",
+        "localization",
+        "error-handling"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/CMTSceneManager.cpp:Set",
+      "type": "function",
+      "name": "Set",
+      "filePath": "source/CMTSceneManager.cpp",
+      "lineRange": [
+        198,
+        210
+      ],
+      "summary": "Copies PMX metadata and enabled element counts into model import or export log state. / 将 PMX 元数据与已启用元素数量复制到模型导入或导出日志状态。",
+      "tags": [
+        "utility",
+        "cinema-4d",
+        "plugin-runtime"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/CMTSceneManager.cpp:LoadVMDMotion",
+      "type": "function",
+      "name": "LoadVMDMotion",
+      "filePath": "source/CMTSceneManager.cpp",
+      "lineRange": [
+        336,
+        364
+      ],
+      "summary": "Delegates VMDMotion import to the selected MMD model manager and records detailed results. / 把 VMDMotion 导入委托给选定的 MMD 模型管理器并记录详细结果。",
+      "tags": [
+        "import-export",
+        "orchestration",
+        "serialization"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/CMTSceneManager.cpp:LoadVPDPose",
+      "type": "function",
+      "name": "LoadVPDPose",
+      "filePath": "source/CMTSceneManager.cpp",
+      "lineRange": [
+        366,
+        391
+      ],
+      "summary": "Delegates VPDPose import to the selected MMD model manager and records detailed results. / 把 VPDPose 导入委托给选定的 MMD 模型管理器并记录详细结果。",
+      "tags": [
+        "import-export",
+        "orchestration",
+        "serialization"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/CMTSceneManager.cpp:SaveVPDPose",
+      "type": "function",
+      "name": "SaveVPDPose",
+      "filePath": "source/CMTSceneManager.cpp",
+      "lineRange": [
+        393,
+        419
+      ],
+      "summary": "Collects VPDPose export data from the selected MMD model manager. / 从选定的 MMD 模型管理器收集 VPDPose 导出数据。",
+      "tags": [
+        "import-export",
+        "orchestration",
+        "serialization"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/CMTSceneManager.cpp:SaveVMDMotion",
+      "type": "function",
+      "name": "SaveVMDMotion",
+      "filePath": "source/CMTSceneManager.cpp",
+      "lineRange": [
+        421,
+        444
+      ],
+      "summary": "Collects VMDMotion export data from the selected MMD model manager. / 从选定的 MMD 模型管理器收集 VMDMotion 导出数据。",
+      "tags": [
+        "import-export",
+        "orchestration",
+        "serialization"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/CMTSceneManager.cpp:AddMMDCamera",
+      "type": "function",
+      "name": "AddMMDCamera",
+      "filePath": "source/CMTSceneManager.cpp",
+      "lineRange": [
+        520,
+        529
+      ],
+      "summary": "Adds an MMD camera object to the scene manager tracking set. / 将 MMD 相机对象加入场景管理器跟踪集合。",
+      "tags": [
+        "utility",
+        "cinema-4d",
+        "plugin-runtime"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:source/module/tools/object/mmd_camera.cpp",
+      "type": "file",
+      "name": "mmd_camera.cpp",
+      "filePath": "source/module/tools/object/mmd_camera.cpp",
+      "summary": "Implements the MMD camera object, translating VMD camera samples to and from Cinema 4D animation tracks with optional baking. / 实现 MMD 相机对象，在 VMD 相机采样与 Cinema 4D 动画轨道之间双向转换，并支持可选烘焙。",
+      "tags": [
+        "camera-animation",
+        "serialization",
+        "cinema-4d",
+        "object-plugin"
+      ],
+      "complexity": "complex",
+      "languageNotes": "Uses Cinema 4D CTrack/CCurve APIs and frame-domain VMD evaluation, with separate baked and sparse export paths. / 使用 Cinema 4D 的 CTrack/CCurve API 与 VMD 帧域求值，并区分烘焙和稀疏导出路径。"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_camera.cpp:MMDCamera",
+      "type": "function",
+      "name": "MMDCamera",
+      "filePath": "source/module/tools/object/mmd_camera.cpp",
+      "lineRange": [
+        28,
+        35
+      ],
+      "summary": "Copies MMD camera object state while retaining Cinema 4D object ownership rules. / 在遵守 Cinema 4D 对象所有权规则的同时复制 MMD 相机对象状态。",
+      "tags": [
+        "camera-animation",
+        "cinema-4d",
+        "object-plugin"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_camera.cpp:InitCamera",
+      "type": "function",
+      "name": "InitCamera",
+      "filePath": "source/module/tools/object/mmd_camera.cpp",
+      "lineRange": [
+        54,
+        88
+      ],
+      "summary": "Finds or creates the managed camera child and protection tag for an MMD camera object. / 为 MMD 相机对象查找或创建受管理的相机子对象与保护标签。",
+      "tags": [
+        "camera-animation",
+        "cinema-4d",
+        "object-plugin"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_camera.cpp:LoadVMDCamera",
+      "type": "function",
+      "name": "LoadVMDCamera",
+      "filePath": "source/module/tools/object/mmd_camera.cpp",
+      "lineRange": [
+        90,
+        164
+      ],
+      "summary": "Evaluates VMD camera frames and writes position, rotation, distance, and field-of-view tracks into Cinema 4D. / 求值 VMD 相机帧，并将位置、旋转、距离与视野轨道写入 Cinema 4D。",
+      "tags": [
+        "camera-animation",
+        "cinema-4d",
+        "object-plugin"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_camera.cpp:SaveVMDCamera",
+      "type": "function",
+      "name": "SaveVMDCamera",
+      "filePath": "source/module/tools/object/mmd_camera.cpp",
+      "lineRange": [
+        166,
+        309
+      ],
+      "summary": "Samples Cinema 4D camera tracks into VMD camera keyframes using baked or sparse export. / 通过烘焙或稀疏导出将 Cinema 4D 相机轨道采样为 VMD 相机关键帧。",
+      "tags": [
+        "camera-animation",
+        "cinema-4d",
+        "object-plugin"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_camera.cpp:ConversionCamera",
+      "type": "function",
+      "name": "ConversionCamera",
+      "filePath": "source/module/tools/object/mmd_camera.cpp",
+      "lineRange": [
+        311,
+        316
+      ],
+      "summary": "Runs camera conversion and reports unsupported or invalid conversion state. / 执行相机转换并报告不支持或无效的转换状态。",
+      "tags": [
+        "camera-animation",
+        "cinema-4d",
+        "object-plugin"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_camera.cpp:SDK2024_Init",
+      "type": "function",
+      "name": "SDK2024_Init",
+      "filePath": "source/module/tools/object/mmd_camera.cpp",
+      "lineRange": [
+        445,
+        451
+      ],
+      "summary": "Initializes SDK-specific object state through the compatible superclass path. / 通过兼容的父类路径初始化特定 SDK 的对象状态。",
+      "tags": [
+        "camera-animation",
+        "cinema-4d",
+        "object-plugin"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_camera.cpp:SDK2024_CopyTo",
+      "type": "function",
+      "name": "SDK2024_CopyTo",
+      "filePath": "source/module/tools/object/mmd_camera.cpp",
+      "lineRange": [
+        453,
+        470
+      ],
+      "summary": "Clones managed camera children and tags when copying the object on newer SDKs. / 在较新 SDK 中复制对象时克隆受管理的相机子对象与标签。",
+      "tags": [
+        "camera-animation",
+        "cinema-4d",
+        "object-plugin"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_camera.cpp:Message",
+      "type": "function",
+      "name": "Message",
+      "filePath": "source/module/tools/object/mmd_camera.cpp",
+      "lineRange": [
+        472,
+        477
+      ],
+      "summary": "Handles Cinema 4D object messages and reports unsupported operations. / 处理 Cinema 4D 对象消息并报告不支持的操作。",
+      "tags": [
+        "camera-animation",
+        "cinema-4d",
+        "object-plugin"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_camera.cpp:Execute",
+      "type": "function",
+      "name": "Execute",
+      "filePath": "source/module/tools/object/mmd_camera.cpp",
+      "lineRange": [
+        490,
+        499
+      ],
+      "summary": "Ensures camera initialization during scene evaluation before delegating execution. / 在场景求值期间确保相机完成初始化，然后委托执行。",
+      "tags": [
+        "camera-animation",
+        "cinema-4d",
+        "object-plugin"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_camera.cpp:AddToExecution",
+      "type": "function",
+      "name": "AddToExecution",
+      "filePath": "source/module/tools/object/mmd_camera.cpp",
+      "lineRange": [
+        501,
+        507
+      ],
+      "summary": "Adds the camera object to Cinema 4D execution ordering. / 将相机对象加入 Cinema 4D 执行顺序。",
+      "tags": [
+        "camera-animation",
+        "cinema-4d",
+        "object-plugin"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_camera.cpp:GetTrackDescIDs",
+      "type": "function",
+      "name": "GetTrackDescIDs",
+      "filePath": "source/module/tools/object/mmd_camera.cpp",
+      "lineRange": [
+        509,
+        523
+      ],
+      "summary": "Returns the description IDs for all camera animation channels managed by the object. / 返回该对象管理的全部相机动画通道描述 ID。",
+      "tags": [
+        "camera-animation",
+        "cinema-4d",
+        "object-plugin"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_camera.cpp:AddToSceneManager",
+      "type": "function",
+      "name": "AddToSceneManager",
+      "filePath": "source/module/tools/object/mmd_camera.cpp",
+      "lineRange": [
+        525,
+        529
+      ],
+      "summary": "Registers an MMD camera object with the document scene manager. / 将 MMD 相机对象注册到文档场景管理器。",
+      "tags": [
+        "camera-animation",
+        "cinema-4d",
+        "object-plugin"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_camera.cpp:GetTrackObjects",
+      "type": "function",
+      "name": "GetTrackObjects",
+      "filePath": "source/module/tools/object/mmd_camera.cpp",
+      "lineRange": [
+        531,
+        546
+      ],
+      "summary": "Maps managed animation channels to their owning Cinema 4D objects. / 把受管理的动画通道映射到其所属的 Cinema 4D 对象。",
+      "tags": [
+        "camera-animation",
+        "cinema-4d",
+        "object-plugin"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:source/module/tools/object/mmd_camera.h",
+      "type": "file",
+      "name": "mmd_camera.h",
+      "filePath": "source/module/tools/object/mmd_camera.h",
+      "summary": "Declares the Cinema 4D MMD camera object, its animation conversion API, execution hooks, and managed child objects. / 声明 Cinema 4D MMD 相机对象、动画转换 API、执行钩子与受管理子对象。",
+      "tags": [
+        "camera-animation",
+        "object-plugin",
+        "api",
+        "type-definition"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_camera.h:MMDCamera",
+      "type": "function",
+      "name": "MMDCamera",
+      "filePath": "source/module/tools/object/mmd_camera.h",
+      "lineRange": [
+        42,
+        42
+      ],
+      "summary": "Constructs or copies an MMD camera object wrapper. / 构造或复制 MMD 相机对象包装。",
+      "tags": [
+        "camera-animation",
+        "cinema-4d",
+        "object-plugin"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_camera.h:~MMDCamera",
+      "type": "function",
+      "name": "~MMDCamera",
+      "filePath": "source/module/tools/object/mmd_camera.h",
+      "lineRange": [
+        45,
+        45
+      ],
+      "summary": "Releases the MMD camera object and its managed runtime references. / 释放 MMD 相机对象及其管理的运行时引用。",
+      "tags": [
+        "camera-animation",
+        "cinema-4d",
+        "object-plugin"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:source/module/tools/object/mmd_camera.h:MMDCamera",
+      "type": "class",
+      "name": "MMDCamera",
+      "filePath": "source/module/tools/object/mmd_camera.h",
+      "lineRange": [
+        16,
+        111
+      ],
+      "summary": "Cinema 4D object plugin that owns a camera rig and converts animation between VMD frames and C4D tracks. / Cinema 4D 对象插件，拥有相机装配并在 VMD 帧与 C4D 轨道之间转换动画。",
+      "tags": [
+        "object-plugin",
+        "camera-animation",
+        "cinema-4d"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:source/plugin_resource.h",
+      "type": "file",
+      "name": "plugin_resource.h",
+      "filePath": "source/plugin_resource.h",
+      "summary": "Aggregates generated Cinema 4D description IDs and resource symbols used when registering and operating plugin entities. / 聚合注册和运行插件实体时使用的 Cinema 4D 描述 ID 与资源符号。",
+      "tags": [
+        "resources",
+        "descriptions",
+        "registration"
+      ],
+      "complexity": "simple"
+    }
+  ],
+  "edges": [
+    {
+      "source": "file:source/CMTSceneManager.cpp",
+      "target": "function:source/CMTSceneManager.cpp:AppendVpdUnmatchedNames",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/CMTSceneManager.cpp",
+      "target": "function:source/CMTSceneManager.cpp:AppendVpdUnmatchedNames",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/CMTSceneManager.cpp",
+      "target": "function:source/CMTSceneManager.cpp:LogOutMem",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/CMTSceneManager.cpp",
+      "target": "function:source/CMTSceneManager.cpp:LogOutMem",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/CMTSceneManager.cpp",
+      "target": "function:source/CMTSceneManager.cpp:LogReadFileErr",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/CMTSceneManager.cpp",
+      "target": "function:source/CMTSceneManager.cpp:LogReadFileErr",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/CMTSceneManager.cpp",
+      "target": "function:source/CMTSceneManager.cpp:LogWriteFileErr",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/CMTSceneManager.cpp",
+      "target": "function:source/CMTSceneManager.cpp:LogWriteFileErr",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/CMTSceneManager.cpp",
+      "target": "function:source/CMTSceneManager.cpp:LogOK",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/CMTSceneManager.cpp",
+      "target": "function:source/CMTSceneManager.cpp:LogOK",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/CMTSceneManager.cpp",
+      "target": "function:source/CMTSceneManager.cpp:LogNotCameraError",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/CMTSceneManager.cpp",
+      "target": "function:source/CMTSceneManager.cpp:LogNotCameraError",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/CMTSceneManager.cpp",
+      "target": "function:source/CMTSceneManager.cpp:LogNotMMDModelError",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/CMTSceneManager.cpp",
+      "target": "function:source/CMTSceneManager.cpp:LogNotMMDModelError",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/CMTSceneManager.cpp",
+      "target": "function:source/CMTSceneManager.cpp:LogNotMotionError",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/CMTSceneManager.cpp",
+      "target": "function:source/CMTSceneManager.cpp:LogNotMotionError",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/CMTSceneManager.cpp",
+      "target": "function:source/CMTSceneManager.cpp:LogSelectError",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/CMTSceneManager.cpp",
+      "target": "function:source/CMTSceneManager.cpp:LogSelectError",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/CMTSceneManager.cpp",
+      "target": "function:source/CMTSceneManager.cpp:LogNoAnimationError",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/CMTSceneManager.cpp",
+      "target": "function:source/CMTSceneManager.cpp:LogNoAnimationError",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/CMTSceneManager.cpp",
+      "target": "function:source/CMTSceneManager.cpp:Set",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/CMTSceneManager.cpp",
+      "target": "function:source/CMTSceneManager.cpp:Set",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/CMTSceneManager.cpp",
+      "target": "function:source/CMTSceneManager.cpp:LoadVMDMotion",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/CMTSceneManager.cpp",
+      "target": "function:source/CMTSceneManager.cpp:LoadVMDMotion",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/CMTSceneManager.cpp",
+      "target": "function:source/CMTSceneManager.cpp:LoadVPDPose",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/CMTSceneManager.cpp",
+      "target": "function:source/CMTSceneManager.cpp:LoadVPDPose",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/CMTSceneManager.cpp",
+      "target": "function:source/CMTSceneManager.cpp:SaveVPDPose",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/CMTSceneManager.cpp",
+      "target": "function:source/CMTSceneManager.cpp:SaveVPDPose",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/CMTSceneManager.cpp",
+      "target": "function:source/CMTSceneManager.cpp:SaveVMDMotion",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/CMTSceneManager.cpp",
+      "target": "function:source/CMTSceneManager.cpp:SaveVMDMotion",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/CMTSceneManager.cpp",
+      "target": "function:source/CMTSceneManager.cpp:AddMMDCamera",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/CMTSceneManager.cpp",
+      "target": "function:source/CMTSceneManager.cpp:AddMMDCamera",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/CMTSceneManager.cpp",
+      "target": "file:source/CMTSceneManager.h",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:source/CMTSceneManager.cpp",
+      "target": "file:source/module/tools/object/mmd_camera.h",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:source/CMTSceneManager.cpp",
+      "target": "file:source/module/tools/object/mmd_model_manager.h",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:source/CMTSceneManager.cpp",
+      "target": "file:source/plugin_resource.h",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_camera.cpp",
+      "target": "function:source/module/tools/object/mmd_camera.cpp:MMDCamera",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_camera.cpp",
+      "target": "function:source/module/tools/object/mmd_camera.cpp:MMDCamera",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_camera.cpp",
+      "target": "function:source/module/tools/object/mmd_camera.cpp:InitCamera",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_camera.cpp",
+      "target": "function:source/module/tools/object/mmd_camera.cpp:InitCamera",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_camera.cpp",
+      "target": "function:source/module/tools/object/mmd_camera.cpp:LoadVMDCamera",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_camera.cpp",
+      "target": "function:source/module/tools/object/mmd_camera.cpp:LoadVMDCamera",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_camera.cpp",
+      "target": "function:source/module/tools/object/mmd_camera.cpp:SaveVMDCamera",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_camera.cpp",
+      "target": "function:source/module/tools/object/mmd_camera.cpp:SaveVMDCamera",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_camera.cpp",
+      "target": "function:source/module/tools/object/mmd_camera.cpp:ConversionCamera",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_camera.cpp",
+      "target": "function:source/module/tools/object/mmd_camera.cpp:ConversionCamera",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_camera.cpp",
+      "target": "function:source/module/tools/object/mmd_camera.cpp:SDK2024_Init",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_camera.cpp",
+      "target": "function:source/module/tools/object/mmd_camera.cpp:SDK2024_Init",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_camera.cpp",
+      "target": "function:source/module/tools/object/mmd_camera.cpp:SDK2024_CopyTo",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_camera.cpp",
+      "target": "function:source/module/tools/object/mmd_camera.cpp:SDK2024_CopyTo",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_camera.cpp",
+      "target": "function:source/module/tools/object/mmd_camera.cpp:Message",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_camera.cpp",
+      "target": "function:source/module/tools/object/mmd_camera.cpp:Message",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_camera.cpp",
+      "target": "function:source/module/tools/object/mmd_camera.cpp:Execute",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_camera.cpp",
+      "target": "function:source/module/tools/object/mmd_camera.cpp:Execute",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_camera.cpp",
+      "target": "function:source/module/tools/object/mmd_camera.cpp:AddToExecution",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_camera.cpp",
+      "target": "function:source/module/tools/object/mmd_camera.cpp:AddToExecution",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_camera.cpp",
+      "target": "function:source/module/tools/object/mmd_camera.cpp:GetTrackDescIDs",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_camera.cpp",
+      "target": "function:source/module/tools/object/mmd_camera.cpp:GetTrackDescIDs",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_camera.cpp",
+      "target": "function:source/module/tools/object/mmd_camera.cpp:AddToSceneManager",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_camera.cpp",
+      "target": "function:source/module/tools/object/mmd_camera.cpp:AddToSceneManager",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_camera.cpp",
+      "target": "function:source/module/tools/object/mmd_camera.cpp:GetTrackObjects",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_camera.cpp",
+      "target": "function:source/module/tools/object/mmd_camera.cpp:GetTrackObjects",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_camera.cpp",
+      "target": "file:source/module/tools/object/mmd_camera.h",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_camera.h",
+      "target": "function:source/module/tools/object/mmd_camera.h:MMDCamera",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_camera.h",
+      "target": "function:source/module/tools/object/mmd_camera.h:MMDCamera",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_camera.h",
+      "target": "function:source/module/tools/object/mmd_camera.h:~MMDCamera",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_camera.h",
+      "target": "function:source/module/tools/object/mmd_camera.h:~MMDCamera",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_camera.h",
+      "target": "class:source/module/tools/object/mmd_camera.h:MMDCamera",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_camera.h",
+      "target": "class:source/module/tools/object/mmd_camera.h:MMDCamera",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    }
+  ]
+}

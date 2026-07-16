@@ -1,0 +1,15 @@
+{
+  "projectRoot": "E:\\code\\C4D_MMD_Tool",
+  "batchFiles": [
+    {"path": "docs/dev/anim-flow-debug.md", "language": "markdown", "sizeLines": 249, "fileCategory": "docs"},
+    {"path": "docs/dev/export-flow.md", "language": "markdown", "sizeLines": 261, "fileCategory": "docs"},
+    {"path": "docs/dev/import-flow.md", "language": "markdown", "sizeLines": 328, "fileCategory": "docs"},
+    {"path": "docs/dev/runtime-flow.md", "language": "markdown", "sizeLines": 267, "fileCategory": "docs"}
+  ],
+  "batchImportData": {
+    "docs/dev/anim-flow-debug.md": [],
+    "docs/dev/export-flow.md": [],
+    "docs/dev/import-flow.md": [],
+    "docs/dev/runtime-flow.md": []
+  }
+}

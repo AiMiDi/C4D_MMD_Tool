@@ -1,0 +1,2474 @@
+{
+  "scriptCompleted": true,
+  "filesAnalyzed": 4,
+  "filesSkipped": [],
+  "results": [
+    {
+      "path": "source/CMTSceneManager.cpp",
+      "language": "cpp",
+      "fileCategory": "code",
+      "totalLines": 534,
+      "nonEmptyLines": 460,
+      "functions": [
+        {
+          "name": "AppendVpdUnmatchedNames",
+          "startLine": 19,
+          "endLine": 28,
+          "params": [
+            "report",
+            "label",
+            "names"
+          ]
+        },
+        {
+          "name": "LogOutMem",
+          "startLine": 31,
+          "endLine": 34,
+          "params": []
+        },
+        {
+          "name": "LogReadFileErr",
+          "startLine": 36,
+          "endLine": 39,
+          "params": []
+        },
+        {
+          "name": "LogWriteFileErr",
+          "startLine": 41,
+          "endLine": 44,
+          "params": []
+        },
+        {
+          "name": "LogOK",
+          "startLine": 46,
+          "endLine": 50,
+          "params": []
+        },
+        {
+          "name": "LogNotCameraError",
+          "startLine": 52,
+          "endLine": 55,
+          "params": []
+        },
+        {
+          "name": "LogOK",
+          "startLine": 57,
+          "endLine": 61,
+          "params": []
+        },
+        {
+          "name": "LogOK",
+          "startLine": 63,
+          "endLine": 81,
+          "params": []
+        },
+        {
+          "name": "LogOK",
+          "startLine": 83,
+          "endLine": 87,
+          "params": []
+        },
+        {
+          "name": "LogOK",
+          "startLine": 89,
+          "endLine": 111,
+          "params": [
+            "detail"
+          ]
+        },
+        {
+          "name": "LogNotMMDModelError",
+          "startLine": 113,
+          "endLine": 116,
+          "params": []
+        },
+        {
+          "name": "LogNotMotionError",
+          "startLine": 118,
+          "endLine": 121,
+          "params": []
+        },
+        {
+          "name": "LogSelectError",
+          "startLine": 123,
+          "endLine": 126,
+          "params": []
+        },
+        {
+          "name": "LogOK",
+          "startLine": 128,
+          "endLine": 136,
+          "params": []
+        },
+        {
+          "name": "LogNotMMDModelError",
+          "startLine": 138,
+          "endLine": 141,
+          "params": []
+        },
+        {
+          "name": "LogSelectError",
+          "startLine": 143,
+          "endLine": 146,
+          "params": []
+        },
+        {
+          "name": "LogNoAnimationError",
+          "startLine": 148,
+          "endLine": 151,
+          "params": []
+        },
+        {
+          "name": "LogOK",
+          "startLine": 153,
+          "endLine": 167,
+          "params": []
+        },
+        {
+          "name": "LogNotMMDModelError",
+          "startLine": 169,
+          "endLine": 172,
+          "params": []
+        },
+        {
+          "name": "LogSelectError",
+          "startLine": 174,
+          "endLine": 177,
+          "params": []
+        },
+        {
+          "name": "LogOK",
+          "startLine": 179,
+          "endLine": 186,
+          "params": []
+        },
+        {
+          "name": "LogNotMMDModelError",
+          "startLine": 188,
+          "endLine": 191,
+          "params": []
+        },
+        {
+          "name": "LogSelectError",
+          "startLine": 193,
+          "endLine": 196,
+          "params": []
+        },
+        {
+          "name": "Set",
+          "startLine": 198,
+          "endLine": 210,
+          "params": [
+            "file",
+            "setting"
+          ]
+        },
+        {
+          "name": "Set",
+          "startLine": 212,
+          "endLine": 224,
+          "params": [
+            "file",
+            "setting"
+          ]
+        },
+        {
+          "name": "LogOK",
+          "startLine": 226,
+          "endLine": 244,
+          "params": []
+        },
+        {
+          "name": "LoadVMDMotion",
+          "startLine": 336,
+          "endLine": 364,
+          "params": [
+            "setting",
+            "vmd_file",
+            "log",
+            "select_object"
+          ]
+        },
+        {
+          "name": "LoadVPDPose",
+          "startLine": 366,
+          "endLine": 391,
+          "params": [
+            "setting",
+            "vpd_file",
+            "log",
+            "select_object"
+          ]
+        },
+        {
+          "name": "SaveVPDPose",
+          "startLine": 393,
+          "endLine": 419,
+          "params": [
+            "setting",
+            "data",
+            "log",
+            "select_object"
+          ]
+        },
+        {
+          "name": "SaveVMDMotion",
+          "startLine": 421,
+          "endLine": 444,
+          "params": [
+            "setting",
+            "data",
+            "log"
+          ]
+        },
+        {
+          "name": "AddMMDCamera",
+          "startLine": 520,
+          "endLine": 529,
+          "params": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "AppendVpdUnmatchedNames",
+          "line": 19,
+          "isDefault": false
+        },
+        {
+          "name": "LogOutMem",
+          "line": 31,
+          "isDefault": false
+        },
+        {
+          "name": "LogReadFileErr",
+          "line": 36,
+          "isDefault": false
+        },
+        {
+          "name": "LogWriteFileErr",
+          "line": 41,
+          "isDefault": false
+        },
+        {
+          "name": "LogOK",
+          "line": 46,
+          "isDefault": false
+        },
+        {
+          "name": "LogNotCameraError",
+          "line": 52,
+          "isDefault": false
+        },
+        {
+          "name": "LogOK",
+          "line": 57,
+          "isDefault": false
+        },
+        {
+          "name": "LogOK",
+          "line": 63,
+          "isDefault": false
+        },
+        {
+          "name": "LogOK",
+          "line": 83,
+          "isDefault": false
+        },
+        {
+          "name": "LogOK",
+          "line": 89,
+          "isDefault": false
+        },
+        {
+          "name": "LogNotMMDModelError",
+          "line": 113,
+          "isDefault": false
+        },
+        {
+          "name": "LogNotMotionError",
+          "line": 118,
+          "isDefault": false
+        },
+        {
+          "name": "LogSelectError",
+          "line": 123,
+          "isDefault": false
+        },
+        {
+          "name": "LogOK",
+          "line": 128,
+          "isDefault": false
+        },
+        {
+          "name": "LogNotMMDModelError",
+          "line": 138,
+          "isDefault": false
+        },
+        {
+          "name": "LogSelectError",
+          "line": 143,
+          "isDefault": false
+        },
+        {
+          "name": "LogNoAnimationError",
+          "line": 148,
+          "isDefault": false
+        },
+        {
+          "name": "LogOK",
+          "line": 153,
+          "isDefault": false
+        },
+        {
+          "name": "LogNotMMDModelError",
+          "line": 169,
+          "isDefault": false
+        },
+        {
+          "name": "LogSelectError",
+          "line": 174,
+          "isDefault": false
+        },
+        {
+          "name": "LogOK",
+          "line": 179,
+          "isDefault": false
+        },
+        {
+          "name": "LogNotMMDModelError",
+          "line": 188,
+          "isDefault": false
+        },
+        {
+          "name": "LogSelectError",
+          "line": 193,
+          "isDefault": false
+        },
+        {
+          "name": "Set",
+          "line": 198,
+          "isDefault": false
+        },
+        {
+          "name": "Set",
+          "line": 212,
+          "isDefault": false
+        },
+        {
+          "name": "LogOK",
+          "line": 226,
+          "isDefault": false
+        },
+        {
+          "name": "LoadVMDMotion",
+          "line": 336,
+          "isDefault": false
+        },
+        {
+          "name": "LoadVPDPose",
+          "line": 366,
+          "isDefault": false
+        },
+        {
+          "name": "SaveVPDPose",
+          "line": 393,
+          "isDefault": false
+        },
+        {
+          "name": "SaveVMDMotion",
+          "line": 421,
+          "isDefault": false
+        },
+        {
+          "name": "AddMMDCamera",
+          "line": 520,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "AppendVpdUnmatchedNames",
+          "callee": "GetCount",
+          "lineNumber": 21
+        },
+        {
+          "caller": "AppendVpdUnmatchedNames",
+          "callee": "FormatString",
+          "lineNumber": 24
+        },
+        {
+          "caller": "AppendVpdUnmatchedNames",
+          "callee": "String::IntToString",
+          "lineNumber": 24
+        },
+        {
+          "caller": "AppendVpdUnmatchedNames",
+          "callee": "GetCount",
+          "lineNumber": 24
+        },
+        {
+          "caller": "AppendVpdUnmatchedNames",
+          "callee": "FormatString",
+          "lineNumber": 26
+        },
+        {
+          "caller": "LogOutMem",
+          "callee": "MessageDialog",
+          "lineNumber": 33
+        },
+        {
+          "caller": "LogOutMem",
+          "callee": "GeLoadString",
+          "lineNumber": 33
+        },
+        {
+          "caller": "LogOutMem",
+          "callee": "GeLoadString",
+          "lineNumber": 33
+        },
+        {
+          "caller": "LogReadFileErr",
+          "callee": "MessageDialog",
+          "lineNumber": 38
+        },
+        {
+          "caller": "LogReadFileErr",
+          "callee": "GeLoadString",
+          "lineNumber": 38
+        },
+        {
+          "caller": "LogReadFileErr",
+          "callee": "GeLoadString",
+          "lineNumber": 38
+        },
+        {
+          "caller": "LogWriteFileErr",
+          "callee": "MessageDialog",
+          "lineNumber": 43
+        },
+        {
+          "caller": "LogWriteFileErr",
+          "callee": "GeLoadString",
+          "lineNumber": 43
+        },
+        {
+          "caller": "LogWriteFileErr",
+          "callee": "GeLoadString",
+          "lineNumber": 43
+        },
+        {
+          "caller": "LogOK",
+          "callee": "Stop",
+          "lineNumber": 48
+        },
+        {
+          "caller": "LogOK",
+          "callee": "MessageDialog",
+          "lineNumber": 49
+        },
+        {
+          "caller": "LogOK",
+          "callee": "GeLoadString",
+          "lineNumber": 49
+        },
+        {
+          "caller": "LogOK",
+          "callee": "maxon::String::UIntToString",
+          "lineNumber": 49
+        },
+        {
+          "caller": "LogOK",
+          "callee": "String::FloatToString",
+          "lineNumber": 49
+        },
+        {
+          "caller": "LogOK",
+          "callee": "GetMilliseconds",
+          "lineNumber": 49
+        },
+        {
+          "caller": "LogNotCameraError",
+          "callee": "MessageDialog",
+          "lineNumber": 54
+        },
+        {
+          "caller": "LogNotCameraError",
+          "callee": "GeLoadString",
+          "lineNumber": 54
+        },
+        {
+          "caller": "LogNotCameraError",
+          "callee": "GeLoadString",
+          "lineNumber": 54
+        },
+        {
+          "caller": "LogOK",
+          "callee": "Stop",
+          "lineNumber": 59
+        },
+        {
+          "caller": "LogOK",
+          "callee": "MessageDialog",
+          "lineNumber": 60
+        },
+        {
+          "caller": "LogOK",
+          "callee": "GeLoadString",
+          "lineNumber": 60
+        },
+        {
+          "caller": "LogOK",
+          "callee": "String::FloatToString",
+          "lineNumber": 60
+        },
+        {
+          "caller": "LogOK",
+          "callee": "GetMilliseconds",
+          "lineNumber": 60
+        },
+        {
+          "caller": "LogOK",
+          "callee": "Stop",
+          "lineNumber": 65
+        },
+        {
+          "caller": "LogOK",
+          "callee": "MessageDialog",
+          "lineNumber": 66
+        },
+        {
+          "caller": "LogOK",
+          "callee": "GeLoadString",
+          "lineNumber": 66
+        },
+        {
+          "caller": "LogOK",
+          "callee": "GeLoadString",
+          "lineNumber": 71
+        },
+        {
+          "caller": "LogOK",
+          "callee": "String::UIntToString",
+          "lineNumber": 72
+        },
+        {
+          "caller": "LogOK",
+          "callee": "String::UIntToString",
+          "lineNumber": 73
+        },
+        {
+          "caller": "LogOK",
+          "callee": "String::UIntToString",
+          "lineNumber": 74
+        },
+        {
+          "caller": "LogOK",
+          "callee": "String::UIntToString",
+          "lineNumber": 75
+        },
+        {
+          "caller": "LogOK",
+          "callee": "GeLoadString",
+          "lineNumber": 77
+        },
+        {
+          "caller": "LogOK",
+          "callee": "String::UIntToString",
+          "lineNumber": 78
+        },
+        {
+          "caller": "LogOK",
+          "callee": "String::UIntToString",
+          "lineNumber": 79
+        },
+        {
+          "caller": "LogOK",
+          "callee": "String::FloatToString",
+          "lineNumber": 80
+        },
+        {
+          "caller": "LogOK",
+          "callee": "GetMilliseconds",
+          "lineNumber": 80
+        },
+        {
+          "caller": "LogOK",
+          "callee": "Stop",
+          "lineNumber": 85
+        },
+        {
+          "caller": "LogOK",
+          "callee": "Stop",
+          "lineNumber": 91
+        },
+        {
+          "caller": "LogOK",
+          "callee": "GeLoadString",
+          "lineNumber": 92
+        },
+        {
+          "caller": "LogOK",
+          "callee": "String::UIntToString",
+          "lineNumber": 93
+        },
+        {
+          "caller": "LogOK",
+          "callee": "String::UIntToString",
+          "lineNumber": 94
+        },
+        {
+          "caller": "LogOK",
+          "callee": "String::UIntToString",
+          "lineNumber": 95
+        },
+        {
+          "caller": "LogOK",
+          "callee": "String::FloatToString",
+          "lineNumber": 96
+        },
+        {
+          "caller": "LogOK",
+          "callee": "GetMilliseconds",
+          "lineNumber": 96
+        },
+        {
+          "caller": "LogOK",
+          "callee": "GeLoadString",
+          "lineNumber": 99
+        },
+        {
+          "caller": "LogOK",
+          "callee": "String::IntToString",
+          "lineNumber": 99
+        },
+        {
+          "caller": "LogOK",
+          "callee": "GetCount",
+          "lineNumber": 99
+        },
+        {
+          "caller": "LogOK",
+          "callee": "FormatString",
+          "lineNumber": 102
+        },
+        {
+          "caller": "LogOK",
+          "callee": "GeLoadString",
+          "lineNumber": 104
+        },
+        {
+          "caller": "LogOK",
+          "callee": "String::IntToString",
+          "lineNumber": 104
+        },
+        {
+          "caller": "LogOK",
+          "callee": "GetCount",
+          "lineNumber": 104
+        },
+        {
+          "caller": "LogOK",
+          "callee": "FormatString",
+          "lineNumber": 107
+        },
+        {
+          "caller": "LogOK",
+          "callee": "MessageDialog",
+          "lineNumber": 110
+        },
+        {
+          "caller": "LogNotMMDModelError",
+          "callee": "MessageDialog",
+          "lineNumber": 115
+        },
+        {
+          "caller": "LogNotMMDModelError",
+          "callee": "GeLoadString",
+          "lineNumber": 115
+        },
+        {
+          "caller": "LogNotMotionError",
+          "callee": "MessageDialog",
+          "lineNumber": 120
+        },
+        {
+          "caller": "LogNotMotionError",
+          "callee": "GeLoadString",
+          "lineNumber": 120
+        },
+        {
+          "caller": "LogNotMotionError",
+          "callee": "GeLoadString",
+          "lineNumber": 120
+        },
+        {
+          "caller": "LogSelectError",
+          "callee": "MessageDialog",
+          "lineNumber": 125
+        },
+        {
+          "caller": "LogSelectError",
+          "callee": "GeLoadString",
+          "lineNumber": 125
+        },
+        {
+          "caller": "LogSelectError",
+          "callee": "GeLoadString",
+          "lineNumber": 125
+        },
+        {
+          "caller": "LogOK",
+          "callee": "Stop",
+          "lineNumber": 130
+        },
+        {
+          "caller": "LogOK",
+          "callee": "MessageDialog",
+          "lineNumber": 131
+        },
+        {
+          "caller": "LogOK",
+          "callee": "GeLoadString",
+          "lineNumber": 131
+        },
+        {
+          "caller": "LogOK",
+          "callee": "String::UIntToString",
+          "lineNumber": 132
+        },
+        {
+          "caller": "LogOK",
+          "callee": "String::UIntToString",
+          "lineNumber": 133
+        },
+        {
+          "caller": "LogOK",
+          "callee": "String::UIntToString",
+          "lineNumber": 134
+        },
+        {
+          "caller": "LogOK",
+          "callee": "String::FloatToString",
+          "lineNumber": 135
+        },
+        {
+          "caller": "LogOK",
+          "callee": "GetMilliseconds",
+          "lineNumber": 135
+        },
+        {
+          "caller": "LogNotMMDModelError",
+          "callee": "MessageDialog",
+          "lineNumber": 140
+        },
+        {
+          "caller": "LogNotMMDModelError",
+          "callee": "GeLoadString",
+          "lineNumber": 140
+        },
+        {
+          "caller": "LogNotMMDModelError",
+          "callee": "GeLoadString",
+          "lineNumber": 140
+        },
+        {
+          "caller": "LogSelectError",
+          "callee": "MessageDialog",
+          "lineNumber": 145
+        },
+        {
+          "caller": "LogSelectError",
+          "callee": "GeLoadString",
+          "lineNumber": 145
+        },
+        {
+          "caller": "LogSelectError",
+          "callee": "GeLoadString",
+          "lineNumber": 145
+        },
+        {
+          "caller": "LogNoAnimationError",
+          "callee": "MessageDialog",
+          "lineNumber": 150
+        },
+        {
+          "caller": "LogNoAnimationError",
+          "callee": "GeLoadString",
+          "lineNumber": 150
+        },
+        {
+          "caller": "LogNoAnimationError",
+          "callee": "GeLoadString",
+          "lineNumber": 150
+        },
+        {
+          "caller": "LogOK",
+          "callee": "Stop",
+          "lineNumber": 155
+        },
+        {
+          "caller": "LogOK",
+          "callee": "FormatString",
+          "lineNumber": 157
+        },
+        {
+          "caller": "LogOK",
+          "callee": "String::UIntToString",
+          "lineNumber": 158
+        },
+        {
+          "caller": "LogOK",
+          "callee": "String::UIntToString",
+          "lineNumber": 159
+        },
+        {
+          "caller": "LogOK",
+          "callee": "FormatString",
+          "lineNumber": 160
+        },
+        {
+          "caller": "LogOK",
+          "callee": "String::UIntToString",
+          "lineNumber": 161
+        },
+        {
+          "caller": "LogOK",
+          "callee": "String::UIntToString",
+          "lineNumber": 162
+        },
+        {
+          "caller": "LogOK",
+          "callee": "FormatString",
+          "lineNumber": 163
+        },
+        {
+          "caller": "LogOK",
+          "callee": "String::FloatToString",
+          "lineNumber": 163
+        },
+        {
+          "caller": "LogOK",
+          "callee": "GetMilliseconds",
+          "lineNumber": 163
+        },
+        {
+          "caller": "LogOK",
+          "callee": "AppendVpdUnmatchedNames",
+          "lineNumber": 164
+        },
+        {
+          "caller": "LogOK",
+          "callee": "AppendVpdUnmatchedNames",
+          "lineNumber": 165
+        },
+        {
+          "caller": "LogOK",
+          "callee": "MessageDialog",
+          "lineNumber": 166
+        },
+        {
+          "caller": "LogNotMMDModelError",
+          "callee": "MessageDialog",
+          "lineNumber": 171
+        },
+        {
+          "caller": "LogNotMMDModelError",
+          "callee": "GeLoadString",
+          "lineNumber": 171
+        },
+        {
+          "caller": "LogSelectError",
+          "callee": "MessageDialog",
+          "lineNumber": 176
+        },
+        {
+          "caller": "LogSelectError",
+          "callee": "GeLoadString",
+          "lineNumber": 176
+        },
+        {
+          "caller": "LogSelectError",
+          "callee": "GeLoadString",
+          "lineNumber": 176
+        },
+        {
+          "caller": "LogOK",
+          "callee": "Stop",
+          "lineNumber": 181
+        },
+        {
+          "caller": "LogOK",
+          "callee": "MessageDialog",
+          "lineNumber": 182
+        },
+        {
+          "caller": "LogOK",
+          "callee": "GeLoadString",
+          "lineNumber": 182
+        },
+        {
+          "caller": "LogOK",
+          "callee": "String::UIntToString",
+          "lineNumber": 183
+        },
+        {
+          "caller": "LogOK",
+          "callee": "String::UIntToString",
+          "lineNumber": 184
+        },
+        {
+          "caller": "LogOK",
+          "callee": "String::FloatToString",
+          "lineNumber": 185
+        },
+        {
+          "caller": "LogOK",
+          "callee": "GetMilliseconds",
+          "lineNumber": 185
+        },
+        {
+          "caller": "LogNotMMDModelError",
+          "callee": "MessageDialog",
+          "lineNumber": 190
+        },
+        {
+          "caller": "LogNotMMDModelError",
+          "callee": "GeLoadString",
+          "lineNumber": 190
+        },
+        {
+          "caller": "LogNotMMDModelError",
+          "callee": "GeLoadString",
+          "lineNumber": 190
+        },
+        {
+          "caller": "LogSelectError",
+          "callee": "MessageDialog",
+          "lineNumber": 195
+        },
+        {
+          "caller": "LogSelectError",
+          "callee": "GeLoadString",
+          "lineNumber": 195
+        },
+        {
+          "caller": "LogSelectError",
+          "callee": "GeLoadString",
+          "lineNumber": 195
+        },
+        {
+          "caller": "Set",
+          "callee": "c_str",
+          "lineNumber": 200
+        },
+        {
+          "caller": "Set",
+          "callee": "c_str",
+          "lineNumber": 201
+        },
+        {
+          "caller": "Set",
+          "callee": "c_str",
+          "lineNumber": 202
+        },
+        {
+          "caller": "Set",
+          "callee": "c_str",
+          "lineNumber": 203
+        },
+        {
+          "caller": "Set",
+          "callee": "size",
+          "lineNumber": 204
+        },
+        {
+          "caller": "Set",
+          "callee": "size",
+          "lineNumber": 205
+        },
+        {
+          "caller": "Set",
+          "callee": "size",
+          "lineNumber": 206
+        },
+        {
+          "caller": "Set",
+          "callee": "size",
+          "lineNumber": 207
+        },
+        {
+          "caller": "Set",
+          "callee": "size",
+          "lineNumber": 208
+        },
+        {
+          "caller": "Set",
+          "callee": "size",
+          "lineNumber": 209
+        },
+        {
+          "caller": "Set",
+          "callee": "c_str",
+          "lineNumber": 214
+        },
+        {
+          "caller": "Set",
+          "callee": "c_str",
+          "lineNumber": 215
+        },
+        {
+          "caller": "Set",
+          "callee": "c_str",
+          "lineNumber": 216
+        },
+        {
+          "caller": "Set",
+          "callee": "c_str",
+          "lineNumber": 217
+        },
+        {
+          "caller": "Set",
+          "callee": "size",
+          "lineNumber": 218
+        },
+        {
+          "caller": "Set",
+          "callee": "size",
+          "lineNumber": 219
+        },
+        {
+          "caller": "Set",
+          "callee": "size",
+          "lineNumber": 220
+        },
+        {
+          "caller": "Set",
+          "callee": "size",
+          "lineNumber": 221
+        },
+        {
+          "caller": "Set",
+          "callee": "size",
+          "lineNumber": 222
+        },
+        {
+          "caller": "Set",
+          "callee": "size",
+          "lineNumber": 223
+        },
+        {
+          "caller": "LogOK",
+          "callee": "Stop",
+          "lineNumber": 228
+        },
+        {
+          "caller": "LogOK",
+          "callee": "MessageDialog",
+          "lineNumber": 229
+        },
+        {
+          "caller": "LogOK",
+          "callee": "GeLoadString",
+          "lineNumber": 229
+        },
+        {
+          "caller": "LogOK",
+          "callee": "GeLoadString",
+          "lineNumber": 234
+        },
+        {
+          "caller": "LogOK",
+          "callee": "String::UIntToString",
+          "lineNumber": 235
+        },
+        {
+          "caller": "LogOK",
+          "callee": "String::UIntToString",
+          "lineNumber": 236
+        },
+        {
+          "caller": "LogOK",
+          "callee": "String::UIntToString",
+          "lineNumber": 237
+        },
+        {
+          "caller": "LogOK",
+          "callee": "String::UIntToString",
+          "lineNumber": 238
+        },
+        {
+          "caller": "LogOK",
+          "callee": "GeLoadString",
+          "lineNumber": 240
+        },
+        {
+          "caller": "LogOK",
+          "callee": "String::UIntToString",
+          "lineNumber": 241
+        },
+        {
+          "caller": "LogOK",
+          "callee": "String::UIntToString",
+          "lineNumber": 242
+        },
+        {
+          "caller": "LogOK",
+          "callee": "String::FloatToString",
+          "lineNumber": 243
+        },
+        {
+          "caller": "LogOK",
+          "callee": "GetMilliseconds",
+          "lineNumber": 243
+        },
+        {
+          "caller": "LoadVMDMotion",
+          "callee": "GetActiveObject",
+          "lineNumber": 340
+        },
+        {
+          "caller": "LoadVMDMotion",
+          "callee": "LoadVmdMotionLog::LogSelectError",
+          "lineNumber": 344
+        },
+        {
+          "caller": "LoadVMDMotion",
+          "callee": "IsInstanceOf",
+          "lineNumber": 348
+        },
+        {
+          "caller": "LoadVMDMotion",
+          "callee": "LoadVmdMotionLog::LogNotMMDModelError",
+          "lineNumber": 350
+        },
+        {
+          "caller": "LoadVMDMotion",
+          "callee": "LoadVMDMotion",
+          "lineNumber": 354
+        },
+        {
+          "caller": "LoadVMDMotion",
+          "callee": "GetNodeData<MMDModelManagerObject>",
+          "lineNumber": 354
+        },
+        {
+          "caller": "LoadVMDMotion",
+          "callee": "SetTime",
+          "lineNumber": 359
+        },
+        {
+          "caller": "LoadVMDMotion",
+          "callee": "BaseTime",
+          "lineNumber": 359
+        },
+        {
+          "caller": "LoadVMDMotion",
+          "callee": "SetTime",
+          "lineNumber": 360
+        },
+        {
+          "caller": "LoadVMDMotion",
+          "callee": "BaseTime",
+          "lineNumber": 360
+        },
+        {
+          "caller": "LoadVMDMotion",
+          "callee": "EventAdd",
+          "lineNumber": 361
+        },
+        {
+          "caller": "LoadVPDPose",
+          "callee": "GetActiveObject",
+          "lineNumber": 370
+        },
+        {
+          "caller": "LoadVPDPose",
+          "callee": "LoadVpdPoseLog::LogSelectError",
+          "lineNumber": 374
+        },
+        {
+          "caller": "LoadVPDPose",
+          "callee": "IsInstanceOf",
+          "lineNumber": 378
+        },
+        {
+          "caller": "LoadVPDPose",
+          "callee": "LoadVpdPoseLog::LogNotMMDModelError",
+          "lineNumber": 380
+        },
+        {
+          "caller": "LoadVPDPose",
+          "callee": "LoadVPDPose",
+          "lineNumber": 384
+        },
+        {
+          "caller": "LoadVPDPose",
+          "callee": "GetNodeData<MMDModelManagerObject>",
+          "lineNumber": 384
+        },
+        {
+          "caller": "LoadVPDPose",
+          "callee": "EventAdd",
+          "lineNumber": 389
+        },
+        {
+          "caller": "SaveVPDPose",
+          "callee": "GetActiveObject",
+          "lineNumber": 397
+        },
+        {
+          "caller": "SaveVPDPose",
+          "callee": "SaveVpdPoseLog::LogSelectError",
+          "lineNumber": 400
+        },
+        {
+          "caller": "SaveVPDPose",
+          "callee": "IsInstanceOf",
+          "lineNumber": 404
+        },
+        {
+          "caller": "SaveVPDPose",
+          "callee": "SaveVpdPoseLog::LogNotMMDModelError",
+          "lineNumber": 406
+        },
+        {
+          "caller": "SaveVPDPose",
+          "callee": "GetNodeData<MMDModelManagerObject>",
+          "lineNumber": 410
+        },
+        {
+          "caller": "SaveVPDPose",
+          "callee": "SaveVPDPose",
+          "lineNumber": 411
+        },
+        {
+          "caller": "SaveVPDPose",
+          "callee": "size",
+          "lineNumber": 416
+        },
+        {
+          "caller": "SaveVPDPose",
+          "callee": "size",
+          "lineNumber": 417
+        },
+        {
+          "caller": "SaveVMDMotion",
+          "callee": "GetActiveObject",
+          "lineNumber": 424
+        },
+        {
+          "caller": "SaveVMDMotion",
+          "callee": "SaveVmdMotionLog::LogSelectError",
+          "lineNumber": 427
+        },
+        {
+          "caller": "SaveVMDMotion",
+          "callee": "IsInstanceOf",
+          "lineNumber": 431
+        },
+        {
+          "caller": "SaveVMDMotion",
+          "callee": "SaveVmdMotionLog::LogNotMMDModelError",
+          "lineNumber": 433
+        },
+        {
+          "caller": "SaveVMDMotion",
+          "callee": "SaveVMDMotion",
+          "lineNumber": 437
+        },
+        {
+          "caller": "SaveVMDMotion",
+          "callee": "GetNodeData<MMDModelManagerObject>",
+          "lineNumber": 437
+        },
+        {
+          "caller": "SaveVMDMotion",
+          "callee": "SaveVmdMotionLog::LogNoAnimationError",
+          "lineNumber": 439
+        },
+        {
+          "caller": "AddMMDCamera",
+          "callee": "GetDocument",
+          "lineNumber": 522
+        },
+        {
+          "caller": "AddMMDCamera",
+          "callee": "Get",
+          "lineNumber": 522
+        },
+        {
+          "caller": "AddMMDCamera",
+          "callee": "Find",
+          "lineNumber": 524
+        },
+        {
+          "caller": "AddMMDCamera",
+          "callee": "Append",
+          "lineNumber": 526
+        }
+      ],
+      "metrics": {
+        "importCount": 4,
+        "exportCount": 31,
+        "functionCount": 31,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "source/module/tools/object/mmd_camera.cpp",
+      "language": "cpp",
+      "fileCategory": "code",
+      "totalLines": 546,
+      "nonEmptyLines": 476,
+      "functions": [
+        {
+          "name": "MMDCamera",
+          "startLine": 28,
+          "endLine": 35,
+          "params": [
+            "other"
+          ]
+        },
+        {
+          "name": "InitCamera",
+          "startLine": 54,
+          "endLine": 88,
+          "params": [
+            "node"
+          ]
+        },
+        {
+          "name": "LoadVMDCamera",
+          "startLine": 90,
+          "endLine": 164,
+          "params": [
+            "animation",
+            "setting"
+          ]
+        },
+        {
+          "name": "SaveVMDCamera",
+          "startLine": 166,
+          "endLine": 309,
+          "params": [
+            "vmd_data",
+            "setting"
+          ]
+        },
+        {
+          "name": "ConversionCamera",
+          "startLine": 311,
+          "endLine": 316,
+          "params": [
+            "setting"
+          ]
+        },
+        {
+          "name": "SDK2024_Init",
+          "startLine": 445,
+          "endLine": 451,
+          "params": []
+        },
+        {
+          "name": "SDK2024_CopyTo",
+          "startLine": 453,
+          "endLine": 470,
+          "params": []
+        },
+        {
+          "name": "Message",
+          "startLine": 472,
+          "endLine": 477,
+          "params": [
+            "node",
+            "type",
+            "data"
+          ]
+        },
+        {
+          "name": "Execute",
+          "startLine": 490,
+          "endLine": 499,
+          "params": [
+            "op",
+            "doc",
+            "bt",
+            "priority",
+            "flags"
+          ]
+        },
+        {
+          "name": "AddToExecution",
+          "startLine": 501,
+          "endLine": 507,
+          "params": [
+            "op",
+            "list"
+          ]
+        },
+        {
+          "name": "GetTrackDescIDs",
+          "startLine": 509,
+          "endLine": 523,
+          "params": []
+        },
+        {
+          "name": "AddToSceneManager",
+          "startLine": 525,
+          "endLine": 529,
+          "params": [
+            "object"
+          ]
+        },
+        {
+          "name": "GetTrackObjects",
+          "startLine": 531,
+          "endLine": 546,
+          "params": [
+            "node"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "MMDCamera",
+          "line": 28,
+          "isDefault": false
+        },
+        {
+          "name": "InitCamera",
+          "line": 54,
+          "isDefault": false
+        },
+        {
+          "name": "LoadVMDCamera",
+          "line": 90,
+          "isDefault": false
+        },
+        {
+          "name": "SaveVMDCamera",
+          "line": 166,
+          "isDefault": false
+        },
+        {
+          "name": "ConversionCamera",
+          "line": 311,
+          "isDefault": false
+        },
+        {
+          "name": "SDK2024_Init",
+          "line": 445,
+          "isDefault": false
+        },
+        {
+          "name": "SDK2024_CopyTo",
+          "line": 453,
+          "isDefault": false
+        },
+        {
+          "name": "Message",
+          "line": 472,
+          "isDefault": false
+        },
+        {
+          "name": "Execute",
+          "line": 490,
+          "isDefault": false
+        },
+        {
+          "name": "AddToExecution",
+          "line": 501,
+          "isDefault": false
+        },
+        {
+          "name": "GetTrackDescIDs",
+          "line": 509,
+          "isDefault": false
+        },
+        {
+          "name": "AddToSceneManager",
+          "line": 525,
+          "isDefault": false
+        },
+        {
+          "name": "GetTrackObjects",
+          "line": 531,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "InitCamera",
+          "callee": "Get",
+          "lineNumber": 60
+        },
+        {
+          "caller": "InitCamera",
+          "callee": "reinterpret_cast<BaseObject*>",
+          "lineNumber": 66
+        },
+        {
+          "caller": "InitCamera",
+          "callee": "GetDown",
+          "lineNumber": 66
+        },
+        {
+          "caller": "InitCamera",
+          "callee": "GetType",
+          "lineNumber": 69
+        },
+        {
+          "caller": "InitCamera",
+          "callee": "UniqueIDReader::FindUniqueID",
+          "lineNumber": 69
+        },
+        {
+          "caller": "InitCamera",
+          "callee": "GetNext",
+          "lineNumber": 74
+        },
+        {
+          "caller": "InitCamera",
+          "callee": "BaseObject::Alloc",
+          "lineNumber": 77
+        },
+        {
+          "caller": "InitCamera",
+          "callee": "SetName",
+          "lineNumber": 78
+        },
+        {
+          "caller": "InitCamera",
+          "callee": "UniqueIDWriter::AddUniqueID",
+          "lineNumber": 79
+        },
+        {
+          "caller": "InitCamera",
+          "callee": "BaseTag::Alloc",
+          "lineNumber": 80
+        },
+        {
+          "caller": "InitCamera",
+          "callee": "SetParameter",
+          "lineNumber": 81
+        },
+        {
+          "caller": "InitCamera",
+          "callee": "ConstDescID",
+          "lineNumber": 81
+        },
+        {
+          "caller": "InitCamera",
+          "callee": "DescLevel",
+          "lineNumber": 81
+        },
+        {
+          "caller": "InitCamera",
+          "callee": "ChangeNBit",
+          "lineNumber": 82
+        },
+        {
+          "caller": "InitCamera",
+          "callee": "ChangeNBit",
+          "lineNumber": 83
+        },
+        {
+          "caller": "InitCamera",
+          "callee": "InsertTag",
+          "lineNumber": 84
+        },
+        {
+          "caller": "InitCamera",
+          "callee": "InsertUnder",
+          "lineNumber": 85
+        },
+        {
+          "caller": "LoadVMDCamera",
+          "callee": "reinterpret_cast<BaseObject*>",
+          "lineNumber": 95
+        },
+        {
+          "caller": "LoadVMDCamera",
+          "callee": "Get",
+          "lineNumber": 95
+        },
+        {
+          "caller": "LoadVMDCamera",
+          "callee": "GetMaxKeyTime",
+          "lineNumber": 96
+        },
+        {
+          "caller": "LoadVMDCamera",
+          "callee": "static_cast<Float>",
+          "lineNumber": 99
+        },
+        {
+          "caller": "LoadVMDCamera",
+          "callee": "Evaluate",
+          "lineNumber": 100
+        },
+        {
+          "caller": "LoadVMDCamera",
+          "callee": "static_cast<float>",
+          "lineNumber": 100
+        },
+        {
+          "caller": "LoadVMDCamera",
+          "callee": "GetCamera",
+          "lineNumber": 101
+        },
+        {
+          "caller": "LoadVMDCamera",
+          "callee": "GetTrackObjects",
+          "lineNumber": 105
+        },
+        {
+          "caller": "LoadVMDCamera",
+          "callee": "GetTrackDescIDs",
+          "lineNumber": 106
+        },
+        {
+          "caller": "LoadVMDCamera",
+          "callee": "FindCTrack",
+          "lineNumber": 112
+        },
+        {
+          "caller": "LoadVMDCamera",
+          "callee": "CTrack::Alloc",
+          "lineNumber": 115
+        },
+        {
+          "caller": "LoadVMDCamera",
+          "callee": "InsertTrackSorted",
+          "lineNumber": 120
+        },
+        {
+          "caller": "LoadVMDCamera",
+          "callee": "GetCurve",
+          "lineNumber": 124
+        },
+        {
+          "caller": "LoadVMDCamera",
+          "callee": "AddKey",
+          "lineNumber": 134
+        },
+        {
+          "caller": "LoadVMDCamera",
+          "callee": "SetValue",
+          "lineNumber": 136
+        },
+        {
+          "caller": "LoadVMDCamera",
+          "callee": "SetInterpolation",
+          "lineNumber": 137
+        },
+        {
+          "caller": "LoadVMDCamera",
+          "callee": "set_curve_value",
+          "lineNumber": 144
+        },
+        {
+          "caller": "LoadVMDCamera",
+          "callee": "maxon::SafeConvert<Float>",
+          "lineNumber": 144
+        },
+        {
+          "caller": "LoadVMDCamera",
+          "callee": "set_curve_value",
+          "lineNumber": 146
+        },
+        {
+          "caller": "LoadVMDCamera",
+          "callee": "maxon::SafeConvert<Float>",
+          "lineNumber": 146
+        },
+        {
+          "caller": "LoadVMDCamera",
+          "callee": "set_curve_value",
+          "lineNumber": 148
+        },
+        {
+          "caller": "LoadVMDCamera",
+          "callee": "maxon::SafeConvert<Float>",
+          "lineNumber": 148
+        },
+        {
+          "caller": "LoadVMDCamera",
+          "callee": "set_curve_value",
+          "lineNumber": 151
+        },
+        {
+          "caller": "LoadVMDCamera",
+          "callee": "maxon::SafeConvert<Float>",
+          "lineNumber": 151
+        },
+        {
+          "caller": "LoadVMDCamera",
+          "callee": "set_curve_value",
+          "lineNumber": 153
+        },
+        {
+          "caller": "LoadVMDCamera",
+          "callee": "maxon::SafeConvert<Float>",
+          "lineNumber": 153
+        },
+        {
+          "caller": "LoadVMDCamera",
+          "callee": "set_curve_value",
+          "lineNumber": 155
+        },
+        {
+          "caller": "LoadVMDCamera",
+          "callee": "maxon::SafeConvert<Float>",
+          "lineNumber": 155
+        },
+        {
+          "caller": "LoadVMDCamera",
+          "callee": "set_curve_value",
+          "lineNumber": 157
+        },
+        {
+          "caller": "LoadVMDCamera",
+          "callee": "maxon::SafeConvert<Float>",
+          "lineNumber": 157
+        },
+        {
+          "caller": "LoadVMDCamera",
+          "callee": "set_curve_value",
+          "lineNumber": 159
+        },
+        {
+          "caller": "LoadVMDCamera",
+          "callee": "maxon::SafeConvert<Float>",
+          "lineNumber": 159
+        },
+        {
+          "caller": "LoadVMDCamera",
+          "callee": "CMT_RAD_TO_DEG",
+          "lineNumber": 159
+        },
+        {
+          "caller": "LoadVMDCamera",
+          "callee": "maxon::SafeConvert<Float32>",
+          "lineNumber": 159
+        },
+        {
+          "caller": "LoadVMDCamera",
+          "callee": "EventAdd",
+          "lineNumber": 162
+        },
+        {
+          "caller": "SaveVMDCamera",
+          "callee": "reinterpret_cast<BaseObject*>",
+          "lineNumber": 172
+        },
+        {
+          "caller": "SaveVMDCamera",
+          "callee": "Get",
+          "lineNumber": 172
+        },
+        {
+          "caller": "SaveVMDCamera",
+          "callee": "GetTrackObjects",
+          "lineNumber": 176
+        },
+        {
+          "caller": "SaveVMDCamera",
+          "callee": "GetTrackDescIDs",
+          "lineNumber": 177
+        },
+        {
+          "caller": "SaveVMDCamera",
+          "callee": "FindCTrack",
+          "lineNumber": 191
+        },
+        {
+          "caller": "SaveVMDCamera",
+          "callee": "CTrack::Alloc",
+          "lineNumber": 194
+        },
+        {
+          "caller": "SaveVMDCamera",
+          "callee": "InsertTrackSorted",
+          "lineNumber": 199
+        },
+        {
+          "caller": "SaveVMDCamera",
+          "callee": "GetCurve",
+          "lineNumber": 203
+        },
+        {
+          "caller": "SaveVMDCamera",
+          "callee": "GetKeyCount",
+          "lineNumber": 209
+        },
+        {
+          "caller": "SaveVMDCamera",
+          "callee": "Insert",
+          "lineNumber": 212
+        },
+        {
+          "caller": "SaveVMDCamera",
+          "callee": "GetTime",
+          "lineNumber": 212
+        },
+        {
+          "caller": "SaveVMDCamera",
+          "callee": "GetKey",
+          "lineNumber": 212
+        },
+        {
+          "caller": "SaveVMDCamera",
+          "callee": "Append",
+          "lineNumber": 218
+        },
+        {
+          "caller": "SaveVMDCamera",
+          "callee": "GetCount",
+          "lineNumber": 225
+        },
+        {
+          "caller": "SaveVMDCamera",
+          "callee": "reserve",
+          "lineNumber": 226
+        },
+        {
+          "caller": "SaveVMDCamera",
+          "callee": "GetFrame",
+          "lineNumber": 229
+        },
+        {
+          "caller": "SaveVMDCamera",
+          "callee": "FindKey",
+          "lineNumber": 233
+        },
+        {
+          "caller": "SaveVMDCamera",
+          "callee": "GetValue",
+          "lineNumber": 235
+        },
+        {
+          "caller": "SaveVMDCamera",
+          "callee": "GetValue",
+          "lineNumber": 237
+        },
+        {
+          "caller": "SaveVMDCamera",
+          "callee": "emplace_back",
+          "lineNumber": 240
+        },
+        {
+          "caller": "SaveVMDCamera",
+          "callee": "static_cast<uint32_t>",
+          "lineNumber": 241
+        },
+        {
+          "caller": "SaveVMDCamera",
+          "callee": "maxon::SafeConvert<float>",
+          "lineNumber": 242
+        },
+        {
+          "caller": "SaveVMDCamera",
+          "callee": "get_curve_value",
+          "lineNumber": 242
+        },
+        {
+          "caller": "SaveVMDCamera",
+          "callee": "Eigen::Vector3f",
+          "lineNumber": 243
+        },
+        {
+          "caller": "SaveVMDCamera",
+          "callee": "maxon::SafeConvert<float>",
+          "lineNumber": 243
+        },
+        {
+          "caller": "SaveVMDCamera",
+          "callee": "get_curve_value",
+          "lineNumber": 243
+        },
+        {
+          "caller": "SaveVMDCamera",
+          "callee": "maxon::SafeConvert<float>",
+          "lineNumber": 244
+        },
+        {
+          "caller": "SaveVMDCamera",
+          "callee": "get_curve_value",
+          "lineNumber": 244
+        },
+        {
+          "caller": "SaveVMDCamera",
+          "callee": "maxon::SafeConvert<float>",
+          "lineNumber": 245
+        },
+        {
+          "caller": "SaveVMDCamera",
+          "callee": "get_curve_value",
+          "lineNumber": 245
+        },
+        {
+          "caller": "SaveVMDCamera",
+          "callee": "Eigen::Vector3f",
+          "lineNumber": 246
+        },
+        {
+          "caller": "SaveVMDCamera",
+          "callee": "maxon::SafeConvert<float>",
+          "lineNumber": 246
+        },
+        {
+          "caller": "SaveVMDCamera",
+          "callee": "get_curve_value",
+          "lineNumber": 246
+        },
+        {
+          "caller": "SaveVMDCamera",
+          "callee": "maxon::SafeConvert<float>",
+          "lineNumber": 247
+        },
+        {
+          "caller": "SaveVMDCamera",
+          "callee": "get_curve_value",
+          "lineNumber": 247
+        },
+        {
+          "caller": "SaveVMDCamera",
+          "callee": "maxon::SafeConvert<float>",
+          "lineNumber": 248
+        },
+        {
+          "caller": "SaveVMDCamera",
+          "callee": "get_curve_value",
+          "lineNumber": 248
+        },
+        {
+          "caller": "SaveVMDCamera",
+          "callee": "static_cast<uint32_t>",
+          "lineNumber": 249
+        },
+        {
+          "caller": "SaveVMDCamera",
+          "callee": "get_curve_value",
+          "lineNumber": 249
+        },
+        {
+          "caller": "SaveVMDCamera",
+          "callee": "std::transform",
+          "lineNumber": 257
+        },
+        {
+          "caller": "SaveVMDCamera",
+          "callee": "begin",
+          "lineNumber": 257
+        },
+        {
+          "caller": "SaveVMDCamera",
+          "callee": "end",
+          "lineNumber": 257
+        },
+        {
+          "caller": "SaveVMDCamera",
+          "callee": "begin",
+          "lineNumber": 257
+        },
+        {
+          "caller": "SaveVMDCamera",
+          "callee": "GetEndTime",
+          "lineNumber": 257
+        },
+        {
+          "caller": "SaveVMDCamera",
+          "callee": "std::max_element",
+          "lineNumber": 258
+        },
+        {
+          "caller": "SaveVMDCamera",
+          "callee": "begin",
+          "lineNumber": 258
+        },
+        {
+          "caller": "SaveVMDCamera",
+          "callee": "end",
+          "lineNumber": 258
+        },
+        {
+          "caller": "SaveVMDCamera",
+          "callee": "GetFrame",
+          "lineNumber": 260
+        },
+        {
+          "caller": "SaveVMDCamera",
+          "callee": "resize",
+          "lineNumber": 261
+        },
+        {
+          "caller": "SaveVMDCamera",
+          "callee": "GetValue",
+          "lineNumber": 268
+        },
+        {
+          "caller": "SaveVMDCamera",
+          "callee": "GetFrame",
+          "lineNumber": 273
+        },
+        {
+          "caller": "SaveVMDCamera",
+          "callee": "static_cast<uint32_t>",
+          "lineNumber": 273
+        },
+        {
+          "caller": "SaveVMDCamera",
+          "callee": "Eigen::Vector3f",
+          "lineNumber": 276
+        },
+        {
+          "caller": "SaveVMDCamera",
+          "callee": "maxon::SafeConvert<float>",
+          "lineNumber": 276
+        },
+        {
+          "caller": "SaveVMDCamera",
+          "callee": "get_curve_value",
+          "lineNumber": 276
+        },
+        {
+          "caller": "SaveVMDCamera",
+          "callee": "maxon::SafeConvert<float>",
+          "lineNumber": 277
+        },
+        {
+          "caller": "SaveVMDCamera",
+          "callee": "get_curve_value",
+          "lineNumber": 277
+        },
+        {
+          "caller": "SaveVMDCamera",
+          "callee": "maxon::SafeConvert<float>",
+          "lineNumber": 278
+        },
+        {
+          "caller": "SaveVMDCamera",
+          "callee": "get_curve_value",
+          "lineNumber": 278
+        },
+        {
+          "caller": "SaveVMDCamera",
+          "callee": "Eigen::Vector3f",
+          "lineNumber": 280
+        },
+        {
+          "caller": "SaveVMDCamera",
+          "callee": "maxon::SafeConvert<float>",
+          "lineNumber": 280
+        },
+        {
+          "caller": "SaveVMDCamera",
+          "callee": "get_curve_value",
+          "lineNumber": 280
+        },
+        {
+          "caller": "SaveVMDCamera",
+          "callee": "maxon::SafeConvert<float>",
+          "lineNumber": 281
+        },
+        {
+          "caller": "SaveVMDCamera",
+          "callee": "get_curve_value",
+          "lineNumber": 281
+        },
+        {
+          "caller": "SaveVMDCamera",
+          "callee": "maxon::SafeConvert<float>",
+          "lineNumber": 282
+        },
+        {
+          "caller": "SaveVMDCamera",
+          "callee": "get_curve_value",
+          "lineNumber": 282
+        },
+        {
+          "caller": "SaveVMDCamera",
+          "callee": "maxon::SafeConvert<float>",
+          "lineNumber": 284
+        },
+        {
+          "caller": "SaveVMDCamera",
+          "callee": "get_curve_value",
+          "lineNumber": 284
+        },
+        {
+          "caller": "SaveVMDCamera",
+          "callee": "static_cast<uint32_t>",
+          "lineNumber": 287
+        },
+        {
+          "caller": "SaveVMDCamera",
+          "callee": "get_curve_value",
+          "lineNumber": 287
+        },
+        {
+          "caller": "SaveVMDCamera",
+          "callee": "bake_func",
+          "lineNumber": 303
+        },
+        {
+          "caller": "SaveVMDCamera",
+          "callee": "not_bake_func",
+          "lineNumber": 303
+        },
+        {
+          "caller": "ConversionCamera",
+          "callee": "MessageDialog",
+          "lineNumber": 314
+        },
+        {
+          "caller": "ConversionCamera",
+          "callee": "ToString",
+          "lineNumber": 314
+        },
+        {
+          "caller": "SDK2024_CopyTo",
+          "callee": "reinterpret_cast<MMDCamera*>",
+          "lineNumber": 457
+        },
+        {
+          "caller": "SDK2024_CopyTo",
+          "callee": "reinterpret_cast<BaseObject*>",
+          "lineNumber": 458
+        },
+        {
+          "caller": "SDK2024_CopyTo",
+          "callee": "GetClone",
+          "lineNumber": 458
+        },
+        {
+          "caller": "SDK2024_CopyTo",
+          "callee": "reinterpret_cast<BaseTag*>",
+          "lineNumber": 461
+        },
+        {
+          "caller": "SDK2024_CopyTo",
+          "callee": "GetClone",
+          "lineNumber": 461
+        },
+        {
+          "caller": "SDK2024_CopyTo",
+          "callee": "InsertTag",
+          "lineNumber": 464
+        },
+        {
+          "caller": "SDK2024_CopyTo",
+          "callee": "SUPER::CopyTo",
+          "lineNumber": 469
+        },
+        {
+          "caller": "Message",
+          "callee": "MessageDialog",
+          "lineNumber": 475
+        },
+        {
+          "caller": "Message",
+          "callee": "ToString",
+          "lineNumber": 475
+        },
+        {
+          "caller": "Execute",
+          "callee": "InitCamera",
+          "lineNumber": 496
+        },
+        {
+          "caller": "Execute",
+          "callee": "std::call_once",
+          "lineNumber": 497
+        },
+        {
+          "caller": "Execute",
+          "callee": "SUPER::Execute",
+          "lineNumber": 498
+        },
+        {
+          "caller": "AddToExecution",
+          "callee": "Add",
+          "lineNumber": 505
+        },
+        {
+          "caller": "GetTrackDescIDs",
+          "callee": "ConstDescID",
+          "lineNumber": 513
+        },
+        {
+          "caller": "GetTrackDescIDs",
+          "callee": "DescLevel",
+          "lineNumber": 513
+        },
+        {
+          "caller": "GetTrackDescIDs",
+          "callee": "DescLevel",
+          "lineNumber": 513
+        },
+        {
+          "caller": "GetTrackDescIDs",
+          "callee": "ConstDescID",
+          "lineNumber": 514
+        },
+        {
+          "caller": "GetTrackDescIDs",
+          "callee": "DescLevel",
+          "lineNumber": 514
+        },
+        {
+          "caller": "GetTrackDescIDs",
+          "callee": "DescLevel",
+          "lineNumber": 514
+        },
+        {
+          "caller": "GetTrackDescIDs",
+          "callee": "ConstDescID",
+          "lineNumber": 515
+        },
+        {
+          "caller": "GetTrackDescIDs",
+          "callee": "DescLevel",
+          "lineNumber": 515
+        },
+        {
+          "caller": "GetTrackDescIDs",
+          "callee": "DescLevel",
+          "lineNumber": 515
+        },
+        {
+          "caller": "GetTrackDescIDs",
+          "callee": "ConstDescID",
+          "lineNumber": 516
+        },
+        {
+          "caller": "GetTrackDescIDs",
+          "callee": "DescLevel",
+          "lineNumber": 516
+        },
+        {
+          "caller": "GetTrackDescIDs",
+          "callee": "DescLevel",
+          "lineNumber": 516
+        },
+        {
+          "caller": "GetTrackDescIDs",
+          "callee": "ConstDescID",
+          "lineNumber": 517
+        },
+        {
+          "caller": "GetTrackDescIDs",
+          "callee": "DescLevel",
+          "lineNumber": 517
+        },
+        {
+          "caller": "GetTrackDescIDs",
+          "callee": "DescLevel",
+          "lineNumber": 517
+        },
+        {
+          "caller": "GetTrackDescIDs",
+          "callee": "ConstDescID",
+          "lineNumber": 518
+        },
+        {
+          "caller": "GetTrackDescIDs",
+          "callee": "DescLevel",
+          "lineNumber": 518
+        },
+        {
+          "caller": "GetTrackDescIDs",
+          "callee": "DescLevel",
+          "lineNumber": 518
+        },
+        {
+          "caller": "GetTrackDescIDs",
+          "callee": "ConstDescID",
+          "lineNumber": 519
+        },
+        {
+          "caller": "GetTrackDescIDs",
+          "callee": "DescLevel",
+          "lineNumber": 519
+        },
+        {
+          "caller": "GetTrackDescIDs",
+          "callee": "DescLevel",
+          "lineNumber": 519
+        },
+        {
+          "caller": "GetTrackDescIDs",
+          "callee": "ConstDescID",
+          "lineNumber": 520
+        },
+        {
+          "caller": "GetTrackDescIDs",
+          "callee": "DescLevel",
+          "lineNumber": 520
+        },
+        {
+          "caller": "AddToSceneManager",
+          "callee": "CMTSceneManager::GetSceneManager",
+          "lineNumber": 527
+        },
+        {
+          "caller": "AddToSceneManager",
+          "callee": "GetDocument",
+          "lineNumber": 527
+        },
+        {
+          "caller": "AddToSceneManager",
+          "callee": "AddMMDCamera",
+          "lineNumber": 528
+        },
+        {
+          "caller": "GetTrackObjects",
+          "callee": "reinterpret_cast<BaseObject*>",
+          "lineNumber": 533
+        }
+      ],
+      "metrics": {
+        "importCount": 1,
+        "exportCount": 13,
+        "functionCount": 13,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "source/module/tools/object/mmd_camera.h",
+      "language": "c",
+      "fileCategory": "code",
+      "totalLines": 111,
+      "nonEmptyLines": 81,
+      "functions": [
+        {
+          "name": "MMDCamera",
+          "startLine": 42,
+          "endLine": 42,
+          "params": []
+        },
+        {
+          "name": "~MMDCamera",
+          "startLine": 45,
+          "endLine": 45,
+          "params": []
+        },
+        {
+          "name": "MMDCamera",
+          "startLine": 51,
+          "endLine": 51,
+          "params": [
+            "other"
+          ]
+        }
+      ],
+      "classes": [
+        {
+          "name": "MMDCamera",
+          "startLine": 16,
+          "endLine": 111,
+          "methods": [
+            "MMDCamera",
+            "~MMDCamera",
+            "MMDCamera",
+            "InitCamera",
+            "LoadVMDCamera",
+            "SaveVMDCamera",
+            "ConversionCamera",
+            "Message",
+            "Execute",
+            "AddToExecution",
+            "AddToSceneManager",
+            "GetTrackDescIDs",
+            "GetTrackObjects"
+          ],
+          "properties": [
+            "track_count",
+            "camera_",
+            "protection_tag_",
+            "added_to_manager_flag_",
+            "GetCamera",
+            "Alloc"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "MMDCamera",
+          "line": 42,
+          "isDefault": false
+        },
+        {
+          "name": "~MMDCamera",
+          "line": 45,
+          "isDefault": false
+        },
+        {
+          "name": "MMDCamera",
+          "line": 51,
+          "isDefault": false
+        },
+        {
+          "name": "InitCamera",
+          "line": 77,
+          "isDefault": false
+        },
+        {
+          "name": "LoadVMDCamera",
+          "line": 79,
+          "isDefault": false
+        },
+        {
+          "name": "SaveVMDCamera",
+          "line": 81,
+          "isDefault": false
+        },
+        {
+          "name": "ConversionCamera",
+          "line": 84,
+          "isDefault": false
+        },
+        {
+          "name": "Message",
+          "line": 95,
+          "isDefault": false
+        },
+        {
+          "name": "Execute",
+          "line": 98,
+          "isDefault": false
+        },
+        {
+          "name": "AddToExecution",
+          "line": 100,
+          "isDefault": false
+        },
+        {
+          "name": "MMDCamera",
+          "line": 16,
+          "isDefault": false
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 11,
+        "functionCount": 3,
+        "classCount": 1
+      }
+    },
+    {
+      "path": "source/plugin_resource.h",
+      "language": "c",
+      "fileCategory": "code",
+      "totalLines": 37,
+      "nonEmptyLines": 29,
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    }
+  ]
+}

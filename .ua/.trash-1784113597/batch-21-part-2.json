@@ -1,0 +1,1846 @@
+{
+  "nodes": [
+    {
+      "id": "file:sdk_2026/cmake/sdk_compiler_helper.cmake",
+      "type": "file",
+      "name": "sdk_compiler_helper.cmake",
+      "filePath": "sdk_2026/cmake/sdk_compiler_helper.cmake",
+      "summary": "Centralizes compiler detection, warning policies, ISA flags, compile definitions, RTTI and exception settings, link options, and framework linkage for SDK 2026 targets. / 集中管理 SDK 2026 目标的编译器检测、警告策略、ISA 标志、编译定义、RTTI 与异常设置、链接选项及框架链接。",
+      "tags": [
+        "cmake",
+        "sdk-2026",
+        "compiler-configuration",
+        "toolchain",
+        "linking"
+      ],
+      "complexity": "complex",
+      "languageNotes": "CMake functions pass results through scoped variables and PARENT_SCOPE while coordinating generator-, platform-, and configuration-specific behavior. / CMake 函数通过作用域变量与 PARENT_SCOPE 传递结果，并协调生成器、平台与配置特定行为。"
+    },
+    {
+      "id": "function:sdk_2026/cmake/sdk_compiler_helper.cmake:MaxonCompilerHelper_SetCompileDefinitions",
+      "type": "function",
+      "name": "MaxonCompilerHelper_SetCompileDefinitions",
+      "filePath": "sdk_2026/cmake/sdk_compiler_helper.cmake",
+      "lineRange": [
+        328,
+        342
+      ],
+      "summary": "MaxonCompilerHelper_SetCompileDefinitions sets compile definitions for SDK 2026 compiler and linker configuration. / MaxonCompilerHelper_SetCompileDefinitions 为SDK 2026 编译器与链接器配置设置 compile definitions。",
+      "tags": [
+        "cmake",
+        "sdk-2026",
+        "function",
+        "compiler-configuration"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:sdk_2026/cmake/sdk_compiler_helper.cmake:MaxonCompilerHelper_SetCompileOptionsRTTI",
+      "type": "function",
+      "name": "MaxonCompilerHelper_SetCompileOptionsRTTI",
+      "filePath": "sdk_2026/cmake/sdk_compiler_helper.cmake",
+      "lineRange": [
+        345,
+        362
+      ],
+      "summary": "MaxonCompilerHelper_SetCompileOptionsRTTI sets compile options rtti for SDK 2026 compiler and linker configuration. / MaxonCompilerHelper_SetCompileOptionsRTTI 为SDK 2026 编译器与链接器配置设置 compile options rtti。",
+      "tags": [
+        "cmake",
+        "sdk-2026",
+        "function",
+        "compiler-configuration"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:sdk_2026/cmake/sdk_compiler_helper.cmake:MaxonCompilerHelper_SetCompileOptionsExceptions",
+      "type": "function",
+      "name": "MaxonCompilerHelper_SetCompileOptionsExceptions",
+      "filePath": "sdk_2026/cmake/sdk_compiler_helper.cmake",
+      "lineRange": [
+        364,
+        385
+      ],
+      "summary": "MaxonCompilerHelper_SetCompileOptionsExceptions sets compile options exceptions for SDK 2026 compiler and linker configuration. / MaxonCompilerHelper_SetCompileOptionsExceptions 为SDK 2026 编译器与链接器配置设置 compile options exceptions。",
+      "tags": [
+        "cmake",
+        "sdk-2026",
+        "function",
+        "compiler-configuration"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:sdk_2026/cmake/sdk_compiler_helper.cmake:MaxonCompilerHelper_SetConfigurations",
+      "type": "function",
+      "name": "MaxonCompilerHelper_SetConfigurations",
+      "filePath": "sdk_2026/cmake/sdk_compiler_helper.cmake",
+      "lineRange": [
+        389,
+        405
+      ],
+      "summary": "MaxonCompilerHelper_SetConfigurations sets configurations for SDK 2026 compiler and linker configuration. / MaxonCompilerHelper_SetConfigurations 为SDK 2026 编译器与链接器配置设置 configurations。",
+      "tags": [
+        "cmake",
+        "sdk-2026",
+        "macro",
+        "compiler-configuration"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:sdk_2026/cmake/sdk_compiler_helper.cmake:MaxonCompilerHelper_ComposeClangWarningStrings",
+      "type": "function",
+      "name": "MaxonCompilerHelper_ComposeClangWarningStrings",
+      "filePath": "sdk_2026/cmake/sdk_compiler_helper.cmake",
+      "lineRange": [
+        408,
+        435
+      ],
+      "summary": "MaxonCompilerHelper_ComposeClangWarningStrings composes clang warning strings for SDK 2026 compiler and linker configuration. / MaxonCompilerHelper_ComposeClangWarningStrings 为SDK 2026 编译器与链接器配置组合 clang warning strings。",
+      "tags": [
+        "cmake",
+        "sdk-2026",
+        "function",
+        "compiler-configuration"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:sdk_2026/cmake/sdk_compiler_helper.cmake:MaxonCompilerHelper_LinkFrameworks",
+      "type": "function",
+      "name": "MaxonCompilerHelper_LinkFrameworks",
+      "filePath": "sdk_2026/cmake/sdk_compiler_helper.cmake",
+      "lineRange": [
+        437,
+        451
+      ],
+      "summary": "MaxonCompilerHelper_LinkFrameworks links frameworks for SDK 2026 compiler and linker configuration. / MaxonCompilerHelper_LinkFrameworks 为SDK 2026 编译器与链接器配置链接 frameworks。",
+      "tags": [
+        "cmake",
+        "sdk-2026",
+        "function",
+        "compiler-configuration"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:sdk_2026/cmake/sdk_compiler_helper.cmake:MaxonCompilerHelper_EnableParallelBuildsForTarget",
+      "type": "function",
+      "name": "MaxonCompilerHelper_EnableParallelBuildsForTarget",
+      "filePath": "sdk_2026/cmake/sdk_compiler_helper.cmake",
+      "lineRange": [
+        454,
+        458
+      ],
+      "summary": "MaxonCompilerHelper_EnableParallelBuildsForTarget enables parallel builds for target for SDK 2026 compiler and linker configuration. / MaxonCompilerHelper_EnableParallelBuildsForTarget 为SDK 2026 编译器与链接器配置启用 parallel builds for target。",
+      "tags": [
+        "cmake",
+        "sdk-2026",
+        "function",
+        "compiler-configuration"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:sdk_2026/cmake/sdk_targets.cmake",
+      "type": "file",
+      "name": "sdk_targets.cmake",
+      "filePath": "sdk_2026/cmake/sdk_targets.cmake",
+      "summary": "Implements SDK 2026 target construction, source discovery and filtering, generated file lists, prebuild events, platform paths, framework/module targets, and output rules. / 实现 SDK 2026 的目标构建、源码发现与过滤、生成文件列表、预构建事件、平台路径、框架与模块目标及输出规则。",
+      "tags": [
+        "cmake",
+        "sdk-2026",
+        "target-configuration",
+        "source-discovery",
+        "prebuild"
+      ],
+      "complexity": "complex",
+      "languageNotes": "CMake functions pass results through scoped variables and PARENT_SCOPE while coordinating generator-, platform-, and configuration-specific behavior. / CMake 函数通过作用域变量与 PARENT_SCOPE 传递结果，并协调生成器、平台与配置特定行为。"
+    },
+    {
+      "id": "function:sdk_2026/cmake/sdk_targets.cmake:MaxonTargets_HasGeneratorPrebuildEvents",
+      "type": "function",
+      "name": "MaxonTargets_HasGeneratorPrebuildEvents",
+      "filePath": "sdk_2026/cmake/sdk_targets.cmake",
+      "lineRange": [
+        6,
+        24
+      ],
+      "summary": "MaxonTargets_HasGeneratorPrebuildEvents checks generator prebuild events for SDK 2026 target and source orchestration. / MaxonTargets_HasGeneratorPrebuildEvents 为SDK 2026 目标与源码编排检查 generator prebuild events。",
+      "tags": [
+        "cmake",
+        "sdk-2026",
+        "function",
+        "target-configuration"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:sdk_2026/cmake/sdk_targets.cmake:MaxonTargets_GetVersionAPIBase",
+      "type": "function",
+      "name": "MaxonTargets_GetVersionAPIBase",
+      "filePath": "sdk_2026/cmake/sdk_targets.cmake",
+      "lineRange": [
+        27,
+        63
+      ],
+      "summary": "MaxonTargets_GetVersionAPIBase retrieves version api base for SDK 2026 target and source orchestration. / MaxonTargets_GetVersionAPIBase 为SDK 2026 目标与源码编排获取 version api base。",
+      "tags": [
+        "cmake",
+        "sdk-2026",
+        "function",
+        "target-configuration"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:sdk_2026/cmake/sdk_targets.cmake:MaxonTargets_CreateDirectoryLink",
+      "type": "function",
+      "name": "MaxonTargets_CreateDirectoryLink",
+      "filePath": "sdk_2026/cmake/sdk_targets.cmake",
+      "lineRange": [
+        66,
+        137
+      ],
+      "summary": "MaxonTargets_CreateDirectoryLink creates directory link for SDK 2026 target and source orchestration. / MaxonTargets_CreateDirectoryLink 为SDK 2026 目标与源码编排创建 directory link。",
+      "tags": [
+        "cmake",
+        "sdk-2026",
+        "function",
+        "linking"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:sdk_2026/cmake/sdk_targets.cmake:MaxonTargets_CreateFile",
+      "type": "function",
+      "name": "MaxonTargets_CreateFile",
+      "filePath": "sdk_2026/cmake/sdk_targets.cmake",
+      "lineRange": [
+        140,
+        159
+      ],
+      "summary": "MaxonTargets_CreateFile creates file for SDK 2026 target and source orchestration. / MaxonTargets_CreateFile 为SDK 2026 目标与源码编排创建 file。",
+      "tags": [
+        "cmake",
+        "sdk-2026",
+        "function",
+        "source-discovery"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:sdk_2026/cmake/sdk_targets.cmake:MaxonTargets_CreateFileList",
+      "type": "function",
+      "name": "MaxonTargets_CreateFileList",
+      "filePath": "sdk_2026/cmake/sdk_targets.cmake",
+      "lineRange": [
+        162,
+        182
+      ],
+      "summary": "MaxonTargets_CreateFileList creates file list for SDK 2026 target and source orchestration. / MaxonTargets_CreateFileList 为SDK 2026 目标与源码编排创建 file list。",
+      "tags": [
+        "cmake",
+        "sdk-2026",
+        "function",
+        "source-discovery"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:sdk_2026/cmake/sdk_targets.cmake:MaxonTargets_SaveFileList",
+      "type": "function",
+      "name": "MaxonTargets_SaveFileList",
+      "filePath": "sdk_2026/cmake/sdk_targets.cmake",
+      "lineRange": [
+        185,
+        213
+      ],
+      "summary": "MaxonTargets_SaveFileList saves file list for SDK 2026 target and source orchestration. / MaxonTargets_SaveFileList 为SDK 2026 目标与源码编排保存 file list。",
+      "tags": [
+        "cmake",
+        "sdk-2026",
+        "function",
+        "source-discovery"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:sdk_2026/cmake/sdk_targets.cmake:MaxonTargets_UpdateFileList",
+      "type": "function",
+      "name": "MaxonTargets_UpdateFileList",
+      "filePath": "sdk_2026/cmake/sdk_targets.cmake",
+      "lineRange": [
+        216,
+        231
+      ],
+      "summary": "MaxonTargets_UpdateFileList updates file list for SDK 2026 target and source orchestration. / MaxonTargets_UpdateFileList 为SDK 2026 目标与源码编排更新 file list。",
+      "tags": [
+        "cmake",
+        "sdk-2026",
+        "function",
+        "source-discovery"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:sdk_2026/cmake/sdk_targets.cmake:MaxonTargets_LoadFileList",
+      "type": "function",
+      "name": "MaxonTargets_LoadFileList",
+      "filePath": "sdk_2026/cmake/sdk_targets.cmake",
+      "lineRange": [
+        234,
+        248
+      ],
+      "summary": "MaxonTargets_LoadFileList loads file list for SDK 2026 target and source orchestration. / MaxonTargets_LoadFileList 为SDK 2026 目标与源码编排加载 file list。",
+      "tags": [
+        "cmake",
+        "sdk-2026",
+        "function",
+        "source-discovery"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:sdk_2026/cmake/sdk_targets.cmake:MaxonTargets_CollectIncludeDirectories",
+      "type": "function",
+      "name": "MaxonTargets_CollectIncludeDirectories",
+      "filePath": "sdk_2026/cmake/sdk_targets.cmake",
+      "lineRange": [
+        251,
+        296
+      ],
+      "summary": "MaxonTargets_CollectIncludeDirectories collects include directories for SDK 2026 target and source orchestration. / MaxonTargets_CollectIncludeDirectories 为SDK 2026 目标与源码编排收集 include directories。",
+      "tags": [
+        "cmake",
+        "sdk-2026",
+        "function",
+        "target-configuration"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:sdk_2026/cmake/sdk_targets.cmake:MaxonTargets_FilterFile",
+      "type": "function",
+      "name": "MaxonTargets_FilterFile",
+      "filePath": "sdk_2026/cmake/sdk_targets.cmake",
+      "lineRange": [
+        299,
+        350
+      ],
+      "summary": "MaxonTargets_FilterFile filters file for SDK 2026 target and source orchestration. / MaxonTargets_FilterFile 为SDK 2026 目标与源码编排过滤 file。",
+      "tags": [
+        "cmake",
+        "sdk-2026",
+        "function",
+        "source-discovery"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:sdk_2026/cmake/sdk_targets.cmake:MaxonTargets_IgnoreFile",
+      "type": "function",
+      "name": "MaxonTargets_IgnoreFile",
+      "filePath": "sdk_2026/cmake/sdk_targets.cmake",
+      "lineRange": [
+        353,
+        387
+      ],
+      "summary": "MaxonTargets_IgnoreFile excludes file for SDK 2026 target and source orchestration. / MaxonTargets_IgnoreFile 为SDK 2026 目标与源码编排排除 file。",
+      "tags": [
+        "cmake",
+        "sdk-2026",
+        "function",
+        "source-discovery"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:sdk_2026/cmake/sdk_targets.cmake:MaxonTargets_FilterFiles",
+      "type": "function",
+      "name": "MaxonTargets_FilterFiles",
+      "filePath": "sdk_2026/cmake/sdk_targets.cmake",
+      "lineRange": [
+        390,
+        429
+      ],
+      "summary": "MaxonTargets_FilterFiles filters files for SDK 2026 target and source orchestration. / MaxonTargets_FilterFiles 为SDK 2026 目标与源码编排过滤 files。",
+      "tags": [
+        "cmake",
+        "sdk-2026",
+        "function",
+        "source-discovery"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:sdk_2026/cmake/sdk_targets.cmake:MaxonTargets_MakeRelativePathsAbsolute",
+      "type": "function",
+      "name": "MaxonTargets_MakeRelativePathsAbsolute",
+      "filePath": "sdk_2026/cmake/sdk_targets.cmake",
+      "lineRange": [
+        432,
+        456
+      ],
+      "summary": "MaxonTargets_MakeRelativePathsAbsolute makes relative paths absolute for SDK 2026 target and source orchestration. / MaxonTargets_MakeRelativePathsAbsolute 为SDK 2026 目标与源码编排生成 relative paths absolute。",
+      "tags": [
+        "cmake",
+        "sdk-2026",
+        "function",
+        "target-configuration"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:sdk_2026/cmake/sdk_targets.cmake:MaxonTargets_AddProjectionDefinitionFile",
+      "type": "function",
+      "name": "MaxonTargets_AddProjectionDefinitionFile",
+      "filePath": "sdk_2026/cmake/sdk_targets.cmake",
+      "lineRange": [
+        459,
+        472
+      ],
+      "summary": "MaxonTargets_AddProjectionDefinitionFile adds projection definition file for SDK 2026 target and source orchestration. / MaxonTargets_AddProjectionDefinitionFile 为SDK 2026 目标与源码编排添加 projection definition file。",
+      "tags": [
+        "cmake",
+        "sdk-2026",
+        "function",
+        "source-discovery"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:sdk_2026/cmake/sdk_targets.cmake:MaxonTargets_SetupPrebuildEvents",
+      "type": "function",
+      "name": "MaxonTargets_SetupPrebuildEvents",
+      "filePath": "sdk_2026/cmake/sdk_targets.cmake",
+      "lineRange": [
+        475,
+        589
+      ],
+      "summary": "MaxonTargets_SetupPrebuildEvents sets up prebuild events for SDK 2026 target and source orchestration. / MaxonTargets_SetupPrebuildEvents 为SDK 2026 目标与源码编排设置 prebuild events。",
+      "tags": [
+        "cmake",
+        "sdk-2026",
+        "function",
+        "target-configuration"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:sdk_2026/cmake/sdk_targets.cmake:MaxonTargets_ConfigureLibrary",
+      "type": "function",
+      "name": "MaxonTargets_ConfigureLibrary",
+      "filePath": "sdk_2026/cmake/sdk_targets.cmake",
+      "lineRange": [
+        592,
+        922
+      ],
+      "summary": "MaxonTargets_ConfigureLibrary configures library for SDK 2026 target and source orchestration. / MaxonTargets_ConfigureLibrary 为SDK 2026 目标与源码编排配置 library。",
+      "tags": [
+        "cmake",
+        "sdk-2026",
+        "function",
+        "target-configuration"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:sdk_2026/cmake/sdk_targets.cmake:MaxonTargets_ConfigureSourceProcessor",
+      "type": "function",
+      "name": "MaxonTargets_ConfigureSourceProcessor",
+      "filePath": "sdk_2026/cmake/sdk_targets.cmake",
+      "lineRange": [
+        924,
+        956
+      ],
+      "summary": "MaxonTargets_ConfigureSourceProcessor configures source processor for SDK 2026 target and source orchestration. / MaxonTargets_ConfigureSourceProcessor 为SDK 2026 目标与源码编排配置 source processor。",
+      "tags": [
+        "cmake",
+        "sdk-2026",
+        "function",
+        "source-discovery"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:sdk_2026/cmake/sdk_targets.cmake:MaxonTargets_ConfigurePythonPaths",
+      "type": "function",
+      "name": "MaxonTargets_ConfigurePythonPaths",
+      "filePath": "sdk_2026/cmake/sdk_targets.cmake",
+      "lineRange": [
+        958,
+        984
+      ],
+      "summary": "MaxonTargets_ConfigurePythonPaths configures python paths for SDK 2026 target and source orchestration. / MaxonTargets_ConfigurePythonPaths 为SDK 2026 目标与源码编排配置 python paths。",
+      "tags": [
+        "cmake",
+        "sdk-2026",
+        "macro",
+        "target-configuration"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:sdk_2026/cmake/sdk_targets.cmake:MaxonTargets_SetupOSIdentifierGlobals",
+      "type": "function",
+      "name": "MaxonTargets_SetupOSIdentifierGlobals",
+      "filePath": "sdk_2026/cmake/sdk_targets.cmake",
+      "lineRange": [
+        986,
+        997
+      ],
+      "summary": "MaxonTargets_SetupOSIdentifierGlobals sets up os identifier globals for SDK 2026 target and source orchestration. / MaxonTargets_SetupOSIdentifierGlobals 为SDK 2026 目标与源码编排设置 os identifier globals。",
+      "tags": [
+        "cmake",
+        "sdk-2026",
+        "macro",
+        "target-configuration"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:sdk_2026/cmake/sdk_targets.cmake:MaxonTargets_SetCustomOutputDirectory",
+      "type": "function",
+      "name": "MaxonTargets_SetCustomOutputDirectory",
+      "filePath": "sdk_2026/cmake/sdk_targets.cmake",
+      "lineRange": [
+        999,
+        1004
+      ],
+      "summary": "MaxonTargets_SetCustomOutputDirectory sets custom output directory for SDK 2026 target and source orchestration. / MaxonTargets_SetCustomOutputDirectory 为SDK 2026 目标与源码编排设置 custom output directory。",
+      "tags": [
+        "cmake",
+        "sdk-2026",
+        "function",
+        "target-configuration"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:sdk_2026/cmake/sdk_targets.cmake:MaxonTargets_AddMaxonFrameworkTarget",
+      "type": "function",
+      "name": "MaxonTargets_AddMaxonFrameworkTarget",
+      "filePath": "sdk_2026/cmake/sdk_targets.cmake",
+      "lineRange": [
+        1007,
+        1016
+      ],
+      "summary": "MaxonTargets_AddMaxonFrameworkTarget adds maxon framework target for SDK 2026 target and source orchestration. / MaxonTargets_AddMaxonFrameworkTarget 为SDK 2026 目标与源码编排添加 maxon framework target。",
+      "tags": [
+        "cmake",
+        "sdk-2026",
+        "function",
+        "linking"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:sdk_2026/cmake/sdk_targets.cmake:MaxonTargets_AddMaxonModuleTarget",
+      "type": "function",
+      "name": "MaxonTargets_AddMaxonModuleTarget",
+      "filePath": "sdk_2026/cmake/sdk_targets.cmake",
+      "lineRange": [
+        1018,
+        1057
+      ],
+      "summary": "MaxonTargets_AddMaxonModuleTarget adds maxon module target for SDK 2026 target and source orchestration. / MaxonTargets_AddMaxonModuleTarget 为SDK 2026 目标与源码编排添加 maxon module target。",
+      "tags": [
+        "cmake",
+        "sdk-2026",
+        "function",
+        "target-configuration"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:sdk_2026/cmake/sdk_targets.cmake:MaxonTargets_EnableDebugSymbolStripping",
+      "type": "function",
+      "name": "MaxonTargets_EnableDebugSymbolStripping",
+      "filePath": "sdk_2026/cmake/sdk_targets.cmake",
+      "lineRange": [
+        1059,
+        1063
+      ],
+      "summary": "MaxonTargets_EnableDebugSymbolStripping enables debug symbol stripping for SDK 2026 target and source orchestration. / MaxonTargets_EnableDebugSymbolStripping 为SDK 2026 目标与源码编排启用 debug symbol stripping。",
+      "tags": [
+        "cmake",
+        "sdk-2026",
+        "function",
+        "target-configuration"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:sdk_2026/cmake/sdk_targets.cmake:MaxonTargets_IsPluginModulePath",
+      "type": "function",
+      "name": "MaxonTargets_IsPluginModulePath",
+      "filePath": "sdk_2026/cmake/sdk_targets.cmake",
+      "lineRange": [
+        1066,
+        1075
+      ],
+      "summary": "MaxonTargets_IsPluginModulePath checks plugin module path for SDK 2026 target and source orchestration. / MaxonTargets_IsPluginModulePath 为SDK 2026 目标与源码编排检查 plugin module path。",
+      "tags": [
+        "cmake",
+        "sdk-2026",
+        "function",
+        "target-configuration"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:sdk_2026/cmake/sdk_targets.cmake:MaxonTargets_ProcessCinemaTargetVars",
+      "type": "function",
+      "name": "MaxonTargets_ProcessCinemaTargetVars",
+      "filePath": "sdk_2026/cmake/sdk_targets.cmake",
+      "lineRange": [
+        1077,
+        1212
+      ],
+      "summary": "MaxonTargets_ProcessCinemaTargetVars processes cinema target vars for SDK 2026 target and source orchestration. / MaxonTargets_ProcessCinemaTargetVars 为SDK 2026 目标与源码编排处理 cinema target vars。",
+      "tags": [
+        "cmake",
+        "sdk-2026",
+        "macro",
+        "target-configuration"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:sdk_2026/cmake/sdk_update_projects.cmake",
+      "type": "file",
+      "name": "sdk_update_projects.cmake",
+      "filePath": "sdk_2026/cmake/sdk_update_projects.cmake",
+      "summary": "Parses SDK 2026 project definitions and templates, resolves framework and custom paths, substitutes platform/configuration values, and generates or updates CMake projects. / 解析 SDK 2026 项目定义与模板，解析框架及自定义路径，替换平台与配置值，并生成或更新 CMake 项目。",
+      "tags": [
+        "cmake",
+        "sdk-2026",
+        "project-generation",
+        "template-processing",
+        "frameworks"
+      ],
+      "complexity": "complex",
+      "languageNotes": "CMake functions pass results through scoped variables and PARENT_SCOPE while coordinating generator-, platform-, and configuration-specific behavior. / CMake 函数通过作用域变量与 PARENT_SCOPE 传递结果，并协调生成器、平台与配置特定行为。"
+    },
+    {
+      "id": "function:sdk_2026/cmake/sdk_update_projects.cmake:Combine2Variables",
+      "type": "function",
+      "name": "Combine2Variables",
+      "filePath": "sdk_2026/cmake/sdk_update_projects.cmake",
+      "lineRange": [
+        16,
+        34
+      ],
+      "summary": "Combine2Variables combines 2 variables for SDK 2026 project parsing and CMake generation. / Combine2Variables 为SDK 2026 项目解析与 CMake 生成组合 2 variables。",
+      "tags": [
+        "cmake",
+        "sdk-2026",
+        "function",
+        "target-configuration"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:sdk_2026/cmake/sdk_update_projects.cmake:CombineVariables",
+      "type": "function",
+      "name": "CombineVariables",
+      "filePath": "sdk_2026/cmake/sdk_update_projects.cmake",
+      "lineRange": [
+        36,
+        44
+      ],
+      "summary": "CombineVariables combines variables for SDK 2026 project parsing and CMake generation. / CombineVariables 为SDK 2026 项目解析与 CMake 生成组合 variables。",
+      "tags": [
+        "cmake",
+        "sdk-2026",
+        "function",
+        "target-configuration"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:sdk_2026/cmake/sdk_update_projects.cmake:MaxonUpdateProjects_Initialize",
+      "type": "function",
+      "name": "MaxonUpdateProjects_Initialize",
+      "filePath": "sdk_2026/cmake/sdk_update_projects.cmake",
+      "lineRange": [
+        46,
+        53
+      ],
+      "summary": "MaxonUpdateProjects_Initialize initializes shared state for SDK 2026 project parsing and CMake generation. / MaxonUpdateProjects_Initialize 为SDK 2026 项目解析与 CMake 生成初始化 shared state。",
+      "tags": [
+        "cmake",
+        "sdk-2026",
+        "function",
+        "project-generation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:sdk_2026/cmake/sdk_update_projects.cmake:MaxonUpdateProjects_CollectProjectDefinitionFiles",
+      "type": "function",
+      "name": "MaxonUpdateProjects_CollectProjectDefinitionFiles",
+      "filePath": "sdk_2026/cmake/sdk_update_projects.cmake",
+      "lineRange": [
+        55,
+        101
+      ],
+      "summary": "MaxonUpdateProjects_CollectProjectDefinitionFiles collects project definition files for SDK 2026 project parsing and CMake generation. / MaxonUpdateProjects_CollectProjectDefinitionFiles 为SDK 2026 项目解析与 CMake 生成收集 project definition files。",
+      "tags": [
+        "cmake",
+        "sdk-2026",
+        "function",
+        "source-discovery"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:sdk_2026/cmake/sdk_update_projects.cmake:MaxonUpdateProjects_StripStrings",
+      "type": "function",
+      "name": "MaxonUpdateProjects_StripStrings",
+      "filePath": "sdk_2026/cmake/sdk_update_projects.cmake",
+      "lineRange": [
+        103,
+        113
+      ],
+      "summary": "MaxonUpdateProjects_StripStrings strips strings for SDK 2026 project parsing and CMake generation. / MaxonUpdateProjects_StripStrings 为SDK 2026 项目解析与 CMake 生成清理 strings。",
+      "tags": [
+        "cmake",
+        "sdk-2026",
+        "function",
+        "project-generation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:sdk_2026/cmake/sdk_update_projects.cmake:MaxonUpdateProjects_ParseProjectDefinitionFile",
+      "type": "function",
+      "name": "MaxonUpdateProjects_ParseProjectDefinitionFile",
+      "filePath": "sdk_2026/cmake/sdk_update_projects.cmake",
+      "lineRange": [
+        115,
+        209
+      ],
+      "summary": "MaxonUpdateProjects_ParseProjectDefinitionFile parses project definition file for SDK 2026 project parsing and CMake generation. / MaxonUpdateProjects_ParseProjectDefinitionFile 为SDK 2026 项目解析与 CMake 生成解析 project definition file。",
+      "tags": [
+        "cmake",
+        "sdk-2026",
+        "function",
+        "source-discovery"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:sdk_2026/cmake/sdk_update_projects.cmake:MaxonUpdateProjects_SetBool",
+      "type": "function",
+      "name": "MaxonUpdateProjects_SetBool",
+      "filePath": "sdk_2026/cmake/sdk_update_projects.cmake",
+      "lineRange": [
+        211,
+        219
+      ],
+      "summary": "MaxonUpdateProjects_SetBool sets bool for SDK 2026 project parsing and CMake generation. / MaxonUpdateProjects_SetBool 为SDK 2026 项目解析与 CMake 生成设置 bool。",
+      "tags": [
+        "cmake",
+        "sdk-2026",
+        "function",
+        "project-generation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:sdk_2026/cmake/sdk_update_projects.cmake:MaxonUpdateProjects_SetValues",
+      "type": "function",
+      "name": "MaxonUpdateProjects_SetValues",
+      "filePath": "sdk_2026/cmake/sdk_update_projects.cmake",
+      "lineRange": [
+        221,
+        231
+      ],
+      "summary": "MaxonUpdateProjects_SetValues sets values for SDK 2026 project parsing and CMake generation. / MaxonUpdateProjects_SetValues 为SDK 2026 项目解析与 CMake 生成设置 values。",
+      "tags": [
+        "cmake",
+        "sdk-2026",
+        "function",
+        "project-generation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:sdk_2026/cmake/sdk_update_projects.cmake:MaxonUpdateProjects_ReplacePathPlaceholders",
+      "type": "function",
+      "name": "MaxonUpdateProjects_ReplacePathPlaceholders",
+      "filePath": "sdk_2026/cmake/sdk_update_projects.cmake",
+      "lineRange": [
+        234,
+        261
+      ],
+      "summary": "MaxonUpdateProjects_ReplacePathPlaceholders replaces path placeholders for SDK 2026 project parsing and CMake generation. / MaxonUpdateProjects_ReplacePathPlaceholders 为SDK 2026 项目解析与 CMake 生成替换 path placeholders。",
+      "tags": [
+        "cmake",
+        "sdk-2026",
+        "function",
+        "project-generation"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:sdk_2026/cmake/sdk_update_projects.cmake:MaxonUpdateProjects_FixRPaths",
+      "type": "function",
+      "name": "MaxonUpdateProjects_FixRPaths",
+      "filePath": "sdk_2026/cmake/sdk_update_projects.cmake",
+      "lineRange": [
+        263,
+        282
+      ],
+      "summary": "MaxonUpdateProjects_FixRPaths fixes r paths for SDK 2026 project parsing and CMake generation. / MaxonUpdateProjects_FixRPaths 为SDK 2026 项目解析与 CMake 生成修正 r paths。",
+      "tags": [
+        "cmake",
+        "sdk-2026",
+        "function",
+        "project-generation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:sdk_2026/cmake/sdk_update_projects.cmake:MaxonUpdateProjects_SetPaths",
+      "type": "function",
+      "name": "MaxonUpdateProjects_SetPaths",
+      "filePath": "sdk_2026/cmake/sdk_update_projects.cmake",
+      "lineRange": [
+        284,
+        313
+      ],
+      "summary": "MaxonUpdateProjects_SetPaths sets paths for SDK 2026 project parsing and CMake generation. / MaxonUpdateProjects_SetPaths 为SDK 2026 项目解析与 CMake 生成设置 paths。",
+      "tags": [
+        "cmake",
+        "sdk-2026",
+        "function",
+        "project-generation"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:sdk_2026/cmake/sdk_update_projects.cmake:MaxonUpdateProjects_SetSpecializedPaths",
+      "type": "function",
+      "name": "MaxonUpdateProjects_SetSpecializedPaths",
+      "filePath": "sdk_2026/cmake/sdk_update_projects.cmake",
+      "lineRange": [
+        315,
+        324
+      ],
+      "summary": "MaxonUpdateProjects_SetSpecializedPaths sets specialized paths for SDK 2026 project parsing and CMake generation. / MaxonUpdateProjects_SetSpecializedPaths 为SDK 2026 项目解析与 CMake 生成设置 specialized paths。",
+      "tags": [
+        "cmake",
+        "sdk-2026",
+        "function",
+        "project-generation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:sdk_2026/cmake/sdk_update_projects.cmake:MaxonUpdateProjects_ReplaceConfigurationSpecificTokens",
+      "type": "function",
+      "name": "MaxonUpdateProjects_ReplaceConfigurationSpecificTokens",
+      "filePath": "sdk_2026/cmake/sdk_update_projects.cmake",
+      "lineRange": [
+        326,
+        331
+      ],
+      "summary": "MaxonUpdateProjects_ReplaceConfigurationSpecificTokens replaces configuration specific tokens for SDK 2026 project parsing and CMake generation. / MaxonUpdateProjects_ReplaceConfigurationSpecificTokens 为SDK 2026 项目解析与 CMake 生成替换 configuration specific tokens。",
+      "tags": [
+        "cmake",
+        "sdk-2026",
+        "function",
+        "project-generation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:sdk_2026/cmake/sdk_update_projects.cmake:MaxonUpdateProjects_SetSpecializedPaths2",
+      "type": "function",
+      "name": "MaxonUpdateProjects_SetSpecializedPaths2",
+      "filePath": "sdk_2026/cmake/sdk_update_projects.cmake",
+      "lineRange": [
+        333,
+        371
+      ],
+      "summary": "MaxonUpdateProjects_SetSpecializedPaths2 sets specialized paths 2 for SDK 2026 project parsing and CMake generation. / MaxonUpdateProjects_SetSpecializedPaths2 为SDK 2026 项目解析与 CMake 生成设置 specialized paths 2。",
+      "tags": [
+        "cmake",
+        "sdk-2026",
+        "function",
+        "project-generation"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:sdk_2026/cmake/sdk_update_projects.cmake:MaxonUpdateProjects_SetFrameworks",
+      "type": "function",
+      "name": "MaxonUpdateProjects_SetFrameworks",
+      "filePath": "sdk_2026/cmake/sdk_update_projects.cmake",
+      "lineRange": [
+        373,
+        397
+      ],
+      "summary": "MaxonUpdateProjects_SetFrameworks sets frameworks for SDK 2026 project parsing and CMake generation. / MaxonUpdateProjects_SetFrameworks 为SDK 2026 项目解析与 CMake 生成设置 frameworks。",
+      "tags": [
+        "cmake",
+        "sdk-2026",
+        "function",
+        "linking"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:sdk_2026/cmake/sdk_update_projects.cmake:MaxonUpdateProjects_TransformAdditionalSourcePaths",
+      "type": "function",
+      "name": "MaxonUpdateProjects_TransformAdditionalSourcePaths",
+      "filePath": "sdk_2026/cmake/sdk_update_projects.cmake",
+      "lineRange": [
+        399,
+        420
+      ],
+      "summary": "MaxonUpdateProjects_TransformAdditionalSourcePaths transforms additional source paths for SDK 2026 project parsing and CMake generation. / MaxonUpdateProjects_TransformAdditionalSourcePaths 为SDK 2026 项目解析与 CMake 生成转换 additional source paths。",
+      "tags": [
+        "cmake",
+        "sdk-2026",
+        "function",
+        "source-discovery"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:sdk_2026/cmake/sdk_update_projects.cmake:MaxonUpdateProjects_ParseBazelTemplateFileForWarnings",
+      "type": "function",
+      "name": "MaxonUpdateProjects_ParseBazelTemplateFileForWarnings",
+      "filePath": "sdk_2026/cmake/sdk_update_projects.cmake",
+      "lineRange": [
+        423,
+        502
+      ],
+      "summary": "MaxonUpdateProjects_ParseBazelTemplateFileForWarnings parses bazel template file for warnings for SDK 2026 project parsing and CMake generation. / MaxonUpdateProjects_ParseBazelTemplateFileForWarnings 为SDK 2026 项目解析与 CMake 生成解析 bazel template file for warnings。",
+      "tags": [
+        "cmake",
+        "sdk-2026",
+        "function",
+        "source-discovery"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:sdk_2026/cmake/sdk_update_projects.cmake:MaxonUpdateProjects_UpdateCMake",
+      "type": "function",
+      "name": "MaxonUpdateProjects_UpdateCMake",
+      "filePath": "sdk_2026/cmake/sdk_update_projects.cmake",
+      "lineRange": [
+        505,
+        935
+      ],
+      "summary": "MaxonUpdateProjects_UpdateCMake updates c make for SDK 2026 project parsing and CMake generation. / MaxonUpdateProjects_UpdateCMake 为SDK 2026 项目解析与 CMake 生成更新 c make。",
+      "tags": [
+        "cmake",
+        "sdk-2026",
+        "function",
+        "project-generation"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:sdk_2026/cmake/sdk_update_projects.cmake:MaxonUpdateProjects_Execute",
+      "type": "function",
+      "name": "MaxonUpdateProjects_Execute",
+      "filePath": "sdk_2026/cmake/sdk_update_projects.cmake",
+      "lineRange": [
+        937,
+        993
+      ],
+      "summary": "MaxonUpdateProjects_Execute executes shared state for SDK 2026 project parsing and CMake generation. / MaxonUpdateProjects_Execute 为SDK 2026 项目解析与 CMake 生成执行 shared state。",
+      "tags": [
+        "cmake",
+        "sdk-2026",
+        "function",
+        "project-generation"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:sdk_2026/cmake/sdk_update_projects.cmake:MaxonUpdateProjects_GetUsedFrameworks",
+      "type": "function",
+      "name": "MaxonUpdateProjects_GetUsedFrameworks",
+      "filePath": "sdk_2026/cmake/sdk_update_projects.cmake",
+      "lineRange": [
+        995,
+        1026
+      ],
+      "summary": "MaxonUpdateProjects_GetUsedFrameworks retrieves used frameworks for SDK 2026 project parsing and CMake generation. / MaxonUpdateProjects_GetUsedFrameworks 为SDK 2026 项目解析与 CMake 生成获取 used frameworks。",
+      "tags": [
+        "cmake",
+        "sdk-2026",
+        "function",
+        "linking"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:sdk_2026/cmake/sdk_update_projects.cmake:MaxonUpdateProjects_LoadFrameworks",
+      "type": "function",
+      "name": "MaxonUpdateProjects_LoadFrameworks",
+      "filePath": "sdk_2026/cmake/sdk_update_projects.cmake",
+      "lineRange": [
+        1029,
+        1032
+      ],
+      "summary": "MaxonUpdateProjects_LoadFrameworks loads frameworks for SDK 2026 project parsing and CMake generation. / MaxonUpdateProjects_LoadFrameworks 为SDK 2026 项目解析与 CMake 生成加载 frameworks。",
+      "tags": [
+        "cmake",
+        "sdk-2026",
+        "function",
+        "linking"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:sdk_2026/cmake/sdk_update_projects.cmake:MaxonUpdateProjects_GetProjectFrameworks",
+      "type": "function",
+      "name": "MaxonUpdateProjects_GetProjectFrameworks",
+      "filePath": "sdk_2026/cmake/sdk_update_projects.cmake",
+      "lineRange": [
+        1035,
+        1048
+      ],
+      "summary": "MaxonUpdateProjects_GetProjectFrameworks retrieves project frameworks for SDK 2026 project parsing and CMake generation. / MaxonUpdateProjects_GetProjectFrameworks 为SDK 2026 项目解析与 CMake 生成获取 project frameworks。",
+      "tags": [
+        "cmake",
+        "sdk-2026",
+        "function",
+        "linking"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:sdk_2026/cmake/sdk_update_projects.cmake:NormalizeDirectoryPath",
+      "type": "function",
+      "name": "NormalizeDirectoryPath",
+      "filePath": "sdk_2026/cmake/sdk_update_projects.cmake",
+      "lineRange": [
+        1052,
+        1076
+      ],
+      "summary": "NormalizeDirectoryPath normalizes directory path for SDK 2026 project parsing and CMake generation. / NormalizeDirectoryPath 为SDK 2026 项目解析与 CMake 生成规范化 directory path。",
+      "tags": [
+        "cmake",
+        "sdk-2026",
+        "function",
+        "target-configuration"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:sdk_2026/cmake/sdk_update_projects.cmake:ReadCustomPaths",
+      "type": "function",
+      "name": "ReadCustomPaths",
+      "filePath": "sdk_2026/cmake/sdk_update_projects.cmake",
+      "lineRange": [
+        1079,
+        1147
+      ],
+      "summary": "ReadCustomPaths reads custom paths for SDK 2026 project parsing and CMake generation. / ReadCustomPaths 为SDK 2026 项目解析与 CMake 生成读取 custom paths。",
+      "tags": [
+        "cmake",
+        "sdk-2026",
+        "function",
+        "target-configuration"
+      ],
+      "complexity": "moderate"
+    }
+  ],
+  "edges": [
+    {
+      "source": "file:sdk_2026/cmake/sdk_compiler_helper.cmake",
+      "target": "function:sdk_2026/cmake/sdk_compiler_helper.cmake:MaxonCompilerHelper_SetCompileDefinitions",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_compiler_helper.cmake",
+      "target": "function:sdk_2026/cmake/sdk_compiler_helper.cmake:MaxonCompilerHelper_SetCompileDefinitions",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_compiler_helper.cmake",
+      "target": "function:sdk_2026/cmake/sdk_compiler_helper.cmake:MaxonCompilerHelper_SetCompileOptionsRTTI",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_compiler_helper.cmake",
+      "target": "function:sdk_2026/cmake/sdk_compiler_helper.cmake:MaxonCompilerHelper_SetCompileOptionsRTTI",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_compiler_helper.cmake",
+      "target": "function:sdk_2026/cmake/sdk_compiler_helper.cmake:MaxonCompilerHelper_SetCompileOptionsExceptions",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_compiler_helper.cmake",
+      "target": "function:sdk_2026/cmake/sdk_compiler_helper.cmake:MaxonCompilerHelper_SetCompileOptionsExceptions",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_compiler_helper.cmake",
+      "target": "function:sdk_2026/cmake/sdk_compiler_helper.cmake:MaxonCompilerHelper_SetConfigurations",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_compiler_helper.cmake",
+      "target": "function:sdk_2026/cmake/sdk_compiler_helper.cmake:MaxonCompilerHelper_SetConfigurations",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_compiler_helper.cmake",
+      "target": "function:sdk_2026/cmake/sdk_compiler_helper.cmake:MaxonCompilerHelper_ComposeClangWarningStrings",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_compiler_helper.cmake",
+      "target": "function:sdk_2026/cmake/sdk_compiler_helper.cmake:MaxonCompilerHelper_ComposeClangWarningStrings",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_compiler_helper.cmake",
+      "target": "function:sdk_2026/cmake/sdk_compiler_helper.cmake:MaxonCompilerHelper_LinkFrameworks",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_compiler_helper.cmake",
+      "target": "function:sdk_2026/cmake/sdk_compiler_helper.cmake:MaxonCompilerHelper_LinkFrameworks",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_compiler_helper.cmake",
+      "target": "function:sdk_2026/cmake/sdk_compiler_helper.cmake:MaxonCompilerHelper_EnableParallelBuildsForTarget",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_compiler_helper.cmake",
+      "target": "function:sdk_2026/cmake/sdk_compiler_helper.cmake:MaxonCompilerHelper_EnableParallelBuildsForTarget",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_targets.cmake",
+      "target": "function:sdk_2026/cmake/sdk_targets.cmake:MaxonTargets_HasGeneratorPrebuildEvents",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_targets.cmake",
+      "target": "function:sdk_2026/cmake/sdk_targets.cmake:MaxonTargets_HasGeneratorPrebuildEvents",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_targets.cmake",
+      "target": "function:sdk_2026/cmake/sdk_targets.cmake:MaxonTargets_GetVersionAPIBase",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_targets.cmake",
+      "target": "function:sdk_2026/cmake/sdk_targets.cmake:MaxonTargets_GetVersionAPIBase",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_targets.cmake",
+      "target": "function:sdk_2026/cmake/sdk_targets.cmake:MaxonTargets_CreateDirectoryLink",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_targets.cmake",
+      "target": "function:sdk_2026/cmake/sdk_targets.cmake:MaxonTargets_CreateDirectoryLink",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_targets.cmake",
+      "target": "function:sdk_2026/cmake/sdk_targets.cmake:MaxonTargets_CreateFile",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_targets.cmake",
+      "target": "function:sdk_2026/cmake/sdk_targets.cmake:MaxonTargets_CreateFile",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_targets.cmake",
+      "target": "function:sdk_2026/cmake/sdk_targets.cmake:MaxonTargets_CreateFileList",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_targets.cmake",
+      "target": "function:sdk_2026/cmake/sdk_targets.cmake:MaxonTargets_CreateFileList",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_targets.cmake",
+      "target": "function:sdk_2026/cmake/sdk_targets.cmake:MaxonTargets_SaveFileList",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_targets.cmake",
+      "target": "function:sdk_2026/cmake/sdk_targets.cmake:MaxonTargets_SaveFileList",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_targets.cmake",
+      "target": "function:sdk_2026/cmake/sdk_targets.cmake:MaxonTargets_UpdateFileList",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_targets.cmake",
+      "target": "function:sdk_2026/cmake/sdk_targets.cmake:MaxonTargets_UpdateFileList",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_targets.cmake",
+      "target": "function:sdk_2026/cmake/sdk_targets.cmake:MaxonTargets_LoadFileList",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_targets.cmake",
+      "target": "function:sdk_2026/cmake/sdk_targets.cmake:MaxonTargets_LoadFileList",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_targets.cmake",
+      "target": "function:sdk_2026/cmake/sdk_targets.cmake:MaxonTargets_CollectIncludeDirectories",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_targets.cmake",
+      "target": "function:sdk_2026/cmake/sdk_targets.cmake:MaxonTargets_CollectIncludeDirectories",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_targets.cmake",
+      "target": "function:sdk_2026/cmake/sdk_targets.cmake:MaxonTargets_FilterFile",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_targets.cmake",
+      "target": "function:sdk_2026/cmake/sdk_targets.cmake:MaxonTargets_FilterFile",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_targets.cmake",
+      "target": "function:sdk_2026/cmake/sdk_targets.cmake:MaxonTargets_IgnoreFile",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_targets.cmake",
+      "target": "function:sdk_2026/cmake/sdk_targets.cmake:MaxonTargets_IgnoreFile",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_targets.cmake",
+      "target": "function:sdk_2026/cmake/sdk_targets.cmake:MaxonTargets_FilterFiles",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_targets.cmake",
+      "target": "function:sdk_2026/cmake/sdk_targets.cmake:MaxonTargets_FilterFiles",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_targets.cmake",
+      "target": "function:sdk_2026/cmake/sdk_targets.cmake:MaxonTargets_MakeRelativePathsAbsolute",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_targets.cmake",
+      "target": "function:sdk_2026/cmake/sdk_targets.cmake:MaxonTargets_MakeRelativePathsAbsolute",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_targets.cmake",
+      "target": "function:sdk_2026/cmake/sdk_targets.cmake:MaxonTargets_AddProjectionDefinitionFile",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_targets.cmake",
+      "target": "function:sdk_2026/cmake/sdk_targets.cmake:MaxonTargets_AddProjectionDefinitionFile",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_targets.cmake",
+      "target": "function:sdk_2026/cmake/sdk_targets.cmake:MaxonTargets_SetupPrebuildEvents",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_targets.cmake",
+      "target": "function:sdk_2026/cmake/sdk_targets.cmake:MaxonTargets_SetupPrebuildEvents",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_targets.cmake",
+      "target": "function:sdk_2026/cmake/sdk_targets.cmake:MaxonTargets_ConfigureLibrary",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_targets.cmake",
+      "target": "function:sdk_2026/cmake/sdk_targets.cmake:MaxonTargets_ConfigureLibrary",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_targets.cmake",
+      "target": "function:sdk_2026/cmake/sdk_targets.cmake:MaxonTargets_ConfigureSourceProcessor",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_targets.cmake",
+      "target": "function:sdk_2026/cmake/sdk_targets.cmake:MaxonTargets_ConfigureSourceProcessor",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_targets.cmake",
+      "target": "function:sdk_2026/cmake/sdk_targets.cmake:MaxonTargets_ConfigurePythonPaths",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_targets.cmake",
+      "target": "function:sdk_2026/cmake/sdk_targets.cmake:MaxonTargets_ConfigurePythonPaths",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_targets.cmake",
+      "target": "function:sdk_2026/cmake/sdk_targets.cmake:MaxonTargets_SetupOSIdentifierGlobals",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_targets.cmake",
+      "target": "function:sdk_2026/cmake/sdk_targets.cmake:MaxonTargets_SetupOSIdentifierGlobals",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_targets.cmake",
+      "target": "function:sdk_2026/cmake/sdk_targets.cmake:MaxonTargets_SetCustomOutputDirectory",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_targets.cmake",
+      "target": "function:sdk_2026/cmake/sdk_targets.cmake:MaxonTargets_SetCustomOutputDirectory",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_targets.cmake",
+      "target": "function:sdk_2026/cmake/sdk_targets.cmake:MaxonTargets_AddMaxonFrameworkTarget",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_targets.cmake",
+      "target": "function:sdk_2026/cmake/sdk_targets.cmake:MaxonTargets_AddMaxonFrameworkTarget",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_targets.cmake",
+      "target": "function:sdk_2026/cmake/sdk_targets.cmake:MaxonTargets_AddMaxonModuleTarget",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_targets.cmake",
+      "target": "function:sdk_2026/cmake/sdk_targets.cmake:MaxonTargets_AddMaxonModuleTarget",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_targets.cmake",
+      "target": "function:sdk_2026/cmake/sdk_targets.cmake:MaxonTargets_EnableDebugSymbolStripping",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_targets.cmake",
+      "target": "function:sdk_2026/cmake/sdk_targets.cmake:MaxonTargets_EnableDebugSymbolStripping",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_targets.cmake",
+      "target": "function:sdk_2026/cmake/sdk_targets.cmake:MaxonTargets_IsPluginModulePath",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_targets.cmake",
+      "target": "function:sdk_2026/cmake/sdk_targets.cmake:MaxonTargets_IsPluginModulePath",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_targets.cmake",
+      "target": "function:sdk_2026/cmake/sdk_targets.cmake:MaxonTargets_ProcessCinemaTargetVars",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_targets.cmake",
+      "target": "function:sdk_2026/cmake/sdk_targets.cmake:MaxonTargets_ProcessCinemaTargetVars",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_update_projects.cmake",
+      "target": "function:sdk_2026/cmake/sdk_update_projects.cmake:Combine2Variables",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_update_projects.cmake",
+      "target": "function:sdk_2026/cmake/sdk_update_projects.cmake:Combine2Variables",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_update_projects.cmake",
+      "target": "function:sdk_2026/cmake/sdk_update_projects.cmake:CombineVariables",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_update_projects.cmake",
+      "target": "function:sdk_2026/cmake/sdk_update_projects.cmake:CombineVariables",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_update_projects.cmake",
+      "target": "function:sdk_2026/cmake/sdk_update_projects.cmake:MaxonUpdateProjects_Initialize",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_update_projects.cmake",
+      "target": "function:sdk_2026/cmake/sdk_update_projects.cmake:MaxonUpdateProjects_Initialize",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_update_projects.cmake",
+      "target": "function:sdk_2026/cmake/sdk_update_projects.cmake:MaxonUpdateProjects_CollectProjectDefinitionFiles",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_update_projects.cmake",
+      "target": "function:sdk_2026/cmake/sdk_update_projects.cmake:MaxonUpdateProjects_CollectProjectDefinitionFiles",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_update_projects.cmake",
+      "target": "function:sdk_2026/cmake/sdk_update_projects.cmake:MaxonUpdateProjects_StripStrings",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_update_projects.cmake",
+      "target": "function:sdk_2026/cmake/sdk_update_projects.cmake:MaxonUpdateProjects_StripStrings",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_update_projects.cmake",
+      "target": "function:sdk_2026/cmake/sdk_update_projects.cmake:MaxonUpdateProjects_ParseProjectDefinitionFile",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_update_projects.cmake",
+      "target": "function:sdk_2026/cmake/sdk_update_projects.cmake:MaxonUpdateProjects_ParseProjectDefinitionFile",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_update_projects.cmake",
+      "target": "function:sdk_2026/cmake/sdk_update_projects.cmake:MaxonUpdateProjects_SetBool",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_update_projects.cmake",
+      "target": "function:sdk_2026/cmake/sdk_update_projects.cmake:MaxonUpdateProjects_SetBool",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_update_projects.cmake",
+      "target": "function:sdk_2026/cmake/sdk_update_projects.cmake:MaxonUpdateProjects_SetValues",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_update_projects.cmake",
+      "target": "function:sdk_2026/cmake/sdk_update_projects.cmake:MaxonUpdateProjects_SetValues",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_update_projects.cmake",
+      "target": "function:sdk_2026/cmake/sdk_update_projects.cmake:MaxonUpdateProjects_ReplacePathPlaceholders",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_update_projects.cmake",
+      "target": "function:sdk_2026/cmake/sdk_update_projects.cmake:MaxonUpdateProjects_ReplacePathPlaceholders",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_update_projects.cmake",
+      "target": "function:sdk_2026/cmake/sdk_update_projects.cmake:MaxonUpdateProjects_FixRPaths",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_update_projects.cmake",
+      "target": "function:sdk_2026/cmake/sdk_update_projects.cmake:MaxonUpdateProjects_FixRPaths",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_update_projects.cmake",
+      "target": "function:sdk_2026/cmake/sdk_update_projects.cmake:MaxonUpdateProjects_SetPaths",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_update_projects.cmake",
+      "target": "function:sdk_2026/cmake/sdk_update_projects.cmake:MaxonUpdateProjects_SetPaths",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_update_projects.cmake",
+      "target": "function:sdk_2026/cmake/sdk_update_projects.cmake:MaxonUpdateProjects_SetSpecializedPaths",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_update_projects.cmake",
+      "target": "function:sdk_2026/cmake/sdk_update_projects.cmake:MaxonUpdateProjects_SetSpecializedPaths",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_update_projects.cmake",
+      "target": "function:sdk_2026/cmake/sdk_update_projects.cmake:MaxonUpdateProjects_ReplaceConfigurationSpecificTokens",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_update_projects.cmake",
+      "target": "function:sdk_2026/cmake/sdk_update_projects.cmake:MaxonUpdateProjects_ReplaceConfigurationSpecificTokens",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_update_projects.cmake",
+      "target": "function:sdk_2026/cmake/sdk_update_projects.cmake:MaxonUpdateProjects_SetSpecializedPaths2",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_update_projects.cmake",
+      "target": "function:sdk_2026/cmake/sdk_update_projects.cmake:MaxonUpdateProjects_SetSpecializedPaths2",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_update_projects.cmake",
+      "target": "function:sdk_2026/cmake/sdk_update_projects.cmake:MaxonUpdateProjects_SetFrameworks",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_update_projects.cmake",
+      "target": "function:sdk_2026/cmake/sdk_update_projects.cmake:MaxonUpdateProjects_SetFrameworks",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_update_projects.cmake",
+      "target": "function:sdk_2026/cmake/sdk_update_projects.cmake:MaxonUpdateProjects_TransformAdditionalSourcePaths",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_update_projects.cmake",
+      "target": "function:sdk_2026/cmake/sdk_update_projects.cmake:MaxonUpdateProjects_TransformAdditionalSourcePaths",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_update_projects.cmake",
+      "target": "function:sdk_2026/cmake/sdk_update_projects.cmake:MaxonUpdateProjects_ParseBazelTemplateFileForWarnings",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_update_projects.cmake",
+      "target": "function:sdk_2026/cmake/sdk_update_projects.cmake:MaxonUpdateProjects_ParseBazelTemplateFileForWarnings",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_update_projects.cmake",
+      "target": "function:sdk_2026/cmake/sdk_update_projects.cmake:MaxonUpdateProjects_UpdateCMake",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_update_projects.cmake",
+      "target": "function:sdk_2026/cmake/sdk_update_projects.cmake:MaxonUpdateProjects_UpdateCMake",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_update_projects.cmake",
+      "target": "function:sdk_2026/cmake/sdk_update_projects.cmake:MaxonUpdateProjects_Execute",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_update_projects.cmake",
+      "target": "function:sdk_2026/cmake/sdk_update_projects.cmake:MaxonUpdateProjects_Execute",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_update_projects.cmake",
+      "target": "function:sdk_2026/cmake/sdk_update_projects.cmake:MaxonUpdateProjects_GetUsedFrameworks",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_update_projects.cmake",
+      "target": "function:sdk_2026/cmake/sdk_update_projects.cmake:MaxonUpdateProjects_GetUsedFrameworks",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_update_projects.cmake",
+      "target": "function:sdk_2026/cmake/sdk_update_projects.cmake:MaxonUpdateProjects_LoadFrameworks",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_update_projects.cmake",
+      "target": "function:sdk_2026/cmake/sdk_update_projects.cmake:MaxonUpdateProjects_LoadFrameworks",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_update_projects.cmake",
+      "target": "function:sdk_2026/cmake/sdk_update_projects.cmake:MaxonUpdateProjects_GetProjectFrameworks",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_update_projects.cmake",
+      "target": "function:sdk_2026/cmake/sdk_update_projects.cmake:MaxonUpdateProjects_GetProjectFrameworks",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_update_projects.cmake",
+      "target": "function:sdk_2026/cmake/sdk_update_projects.cmake:NormalizeDirectoryPath",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_update_projects.cmake",
+      "target": "function:sdk_2026/cmake/sdk_update_projects.cmake:NormalizeDirectoryPath",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_update_projects.cmake",
+      "target": "function:sdk_2026/cmake/sdk_update_projects.cmake:ReadCustomPaths",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:sdk_2026/cmake/sdk_update_projects.cmake",
+      "target": "function:sdk_2026/cmake/sdk_update_projects.cmake:ReadCustomPaths",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    }
+  ]
+}

@@ -1,0 +1,246 @@
+{
+  "nodes": [
+    {
+      "id": "file:cmake/sdk/sdk_update_projects.cmake",
+      "type": "file",
+      "name": "sdk_update_projects.cmake",
+      "filePath": "cmake/sdk/sdk_update_projects.cmake",
+      "summary": "Parses Maxon project definitions and Bazel templates, resolves framework and custom paths, substitutes platform/configuration values, and generates or updates CMake projects. / 解析 Maxon 项目定义与 Bazel 模板，解析框架及自定义路径，替换平台与配置值，并生成或更新 CMake 项目。",
+      "tags": [
+        "cmake",
+        "build-system",
+        "project-generation",
+        "template-processing",
+        "frameworks"
+      ],
+      "complexity": "complex",
+      "languageNotes": "CMake functions pass results through scoped variables and PARENT_SCOPE while coordinating generator- and platform-specific behavior. / CMake 函数通过作用域变量与 PARENT_SCOPE 传递结果，并协调生成器及平台特定行为。"
+    },
+    {
+      "id": "function:cmake/sdk/sdk_update_projects.cmake:MaxonUpdateProjects_UpdateCMake",
+      "type": "function",
+      "name": "MaxonUpdateProjects_UpdateCMake",
+      "filePath": "cmake/sdk/sdk_update_projects.cmake",
+      "lineRange": [
+        505,
+        935
+      ],
+      "summary": "MaxonUpdateProjects_UpdateCMake updates c make for Maxon project parsing and CMake generation. / MaxonUpdateProjects_UpdateCMake 为Maxon 项目解析与 CMake 生成更新 c make。",
+      "tags": [
+        "cmake",
+        "build-system",
+        "function",
+        "project-generation"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:cmake/sdk/sdk_update_projects.cmake:MaxonUpdateProjects_Execute",
+      "type": "function",
+      "name": "MaxonUpdateProjects_Execute",
+      "filePath": "cmake/sdk/sdk_update_projects.cmake",
+      "lineRange": [
+        937,
+        993
+      ],
+      "summary": "MaxonUpdateProjects_Execute executes shared state for Maxon project parsing and CMake generation. / MaxonUpdateProjects_Execute 为Maxon 项目解析与 CMake 生成执行 shared state。",
+      "tags": [
+        "cmake",
+        "build-system",
+        "function",
+        "project-generation"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:cmake/sdk/sdk_update_projects.cmake:MaxonUpdateProjects_GetUsedFrameworks",
+      "type": "function",
+      "name": "MaxonUpdateProjects_GetUsedFrameworks",
+      "filePath": "cmake/sdk/sdk_update_projects.cmake",
+      "lineRange": [
+        995,
+        1026
+      ],
+      "summary": "MaxonUpdateProjects_GetUsedFrameworks retrieves used frameworks for Maxon project parsing and CMake generation. / MaxonUpdateProjects_GetUsedFrameworks 为Maxon 项目解析与 CMake 生成获取 used frameworks。",
+      "tags": [
+        "cmake",
+        "build-system",
+        "function",
+        "linking"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:cmake/sdk/sdk_update_projects.cmake:MaxonUpdateProjects_LoadFrameworks",
+      "type": "function",
+      "name": "MaxonUpdateProjects_LoadFrameworks",
+      "filePath": "cmake/sdk/sdk_update_projects.cmake",
+      "lineRange": [
+        1029,
+        1032
+      ],
+      "summary": "MaxonUpdateProjects_LoadFrameworks loads frameworks for Maxon project parsing and CMake generation. / MaxonUpdateProjects_LoadFrameworks 为Maxon 项目解析与 CMake 生成加载 frameworks。",
+      "tags": [
+        "cmake",
+        "build-system",
+        "function",
+        "linking"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:cmake/sdk/sdk_update_projects.cmake:MaxonUpdateProjects_GetProjectFrameworks",
+      "type": "function",
+      "name": "MaxonUpdateProjects_GetProjectFrameworks",
+      "filePath": "cmake/sdk/sdk_update_projects.cmake",
+      "lineRange": [
+        1035,
+        1048
+      ],
+      "summary": "MaxonUpdateProjects_GetProjectFrameworks retrieves project frameworks for Maxon project parsing and CMake generation. / MaxonUpdateProjects_GetProjectFrameworks 为Maxon 项目解析与 CMake 生成获取 project frameworks。",
+      "tags": [
+        "cmake",
+        "build-system",
+        "function",
+        "linking"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:cmake/sdk/sdk_update_projects.cmake:NormalizeDirectoryPath",
+      "type": "function",
+      "name": "NormalizeDirectoryPath",
+      "filePath": "cmake/sdk/sdk_update_projects.cmake",
+      "lineRange": [
+        1052,
+        1076
+      ],
+      "summary": "NormalizeDirectoryPath normalizes directory path for Maxon project parsing and CMake generation. / NormalizeDirectoryPath 为Maxon 项目解析与 CMake 生成规范化 directory path。",
+      "tags": [
+        "cmake",
+        "build-system",
+        "function",
+        "target-configuration"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:cmake/sdk/sdk_update_projects.cmake:ReadCustomPaths",
+      "type": "function",
+      "name": "ReadCustomPaths",
+      "filePath": "cmake/sdk/sdk_update_projects.cmake",
+      "lineRange": [
+        1079,
+        1147
+      ],
+      "summary": "ReadCustomPaths reads custom paths for Maxon project parsing and CMake generation. / ReadCustomPaths 为Maxon 项目解析与 CMake 生成读取 custom paths。",
+      "tags": [
+        "cmake",
+        "build-system",
+        "function",
+        "target-configuration"
+      ],
+      "complexity": "moderate"
+    }
+  ],
+  "edges": [
+    {
+      "source": "file:cmake/sdk/sdk_update_projects.cmake",
+      "target": "function:cmake/sdk/sdk_update_projects.cmake:MaxonUpdateProjects_UpdateCMake",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:cmake/sdk/sdk_update_projects.cmake",
+      "target": "function:cmake/sdk/sdk_update_projects.cmake:MaxonUpdateProjects_UpdateCMake",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:cmake/sdk/sdk_update_projects.cmake",
+      "target": "function:cmake/sdk/sdk_update_projects.cmake:MaxonUpdateProjects_Execute",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:cmake/sdk/sdk_update_projects.cmake",
+      "target": "function:cmake/sdk/sdk_update_projects.cmake:MaxonUpdateProjects_Execute",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:cmake/sdk/sdk_update_projects.cmake",
+      "target": "function:cmake/sdk/sdk_update_projects.cmake:MaxonUpdateProjects_GetUsedFrameworks",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:cmake/sdk/sdk_update_projects.cmake",
+      "target": "function:cmake/sdk/sdk_update_projects.cmake:MaxonUpdateProjects_GetUsedFrameworks",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:cmake/sdk/sdk_update_projects.cmake",
+      "target": "function:cmake/sdk/sdk_update_projects.cmake:MaxonUpdateProjects_LoadFrameworks",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:cmake/sdk/sdk_update_projects.cmake",
+      "target": "function:cmake/sdk/sdk_update_projects.cmake:MaxonUpdateProjects_LoadFrameworks",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:cmake/sdk/sdk_update_projects.cmake",
+      "target": "function:cmake/sdk/sdk_update_projects.cmake:MaxonUpdateProjects_GetProjectFrameworks",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:cmake/sdk/sdk_update_projects.cmake",
+      "target": "function:cmake/sdk/sdk_update_projects.cmake:MaxonUpdateProjects_GetProjectFrameworks",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:cmake/sdk/sdk_update_projects.cmake",
+      "target": "function:cmake/sdk/sdk_update_projects.cmake:NormalizeDirectoryPath",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:cmake/sdk/sdk_update_projects.cmake",
+      "target": "function:cmake/sdk/sdk_update_projects.cmake:NormalizeDirectoryPath",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:cmake/sdk/sdk_update_projects.cmake",
+      "target": "function:cmake/sdk/sdk_update_projects.cmake:ReadCustomPaths",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:cmake/sdk/sdk_update_projects.cmake",
+      "target": "function:cmake/sdk/sdk_update_projects.cmake:ReadCustomPaths",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    }
+  ]
+}

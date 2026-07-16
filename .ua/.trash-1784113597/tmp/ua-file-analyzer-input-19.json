@@ -1,0 +1,232 @@
+{
+    "projectRoot":  "E:\\code\\C4D_MMD_Tool",
+    "batchFiles":  [
+                       {
+                           "path":  "res/S24_up/strings_zh-CN/description/OMMDJoint.str",
+                           "language":  "str",
+                           "sizeLines":  67,
+                           "fileCategory":  "code"
+                       },
+                       {
+                           "path":  "res/S24_up/strings_zh-CN/description/OMMDJointManager.str",
+                           "language":  "str",
+                           "sizeLines":  15,
+                           "fileCategory":  "code"
+                       },
+                       {
+                           "path":  "res/S24_up/strings_zh-CN/description/OMMDMeshManager.str",
+                           "language":  "str",
+                           "sizeLines":  18,
+                           "fileCategory":  "code"
+                       },
+                       {
+                           "path":  "res/S24_up/strings_zh-CN/description/OMMDModelManager.str",
+                           "language":  "str",
+                           "sizeLines":  152,
+                           "fileCategory":  "code"
+                       },
+                       {
+                           "path":  "res/S24_up/strings_zh-CN/description/OMMDRigid.str",
+                           "language":  "str",
+                           "sizeLines":  79,
+                           "fileCategory":  "code"
+                       },
+                       {
+                           "path":  "res/S24_up/strings_zh-CN/description/OMMDRigidManager.str",
+                           "language":  "str",
+                           "sizeLines":  15,
+                           "fileCategory":  "code"
+                       },
+                       {
+                           "path":  "res/S24_up/strings_zh-CN/description/TMMDBone.str",
+                           "language":  "str",
+                           "sizeLines":  83,
+                           "fileCategory":  "code"
+                       },
+                       {
+                           "path":  "res/S24_up/strings_zh-CN/description/Xmmdmaterialmorphshader.str",
+                           "language":  "str",
+                           "sizeLines":  6,
+                           "fileCategory":  "code"
+                       },
+                       {
+                           "path":  "res/S24_up/strings_zh-CN/dialogs/DLG_CMT_TOOL.str",
+                           "language":  "str",
+                           "sizeLines":  56,
+                           "fileCategory":  "code"
+                       },
+                       {
+                           "path":  "res/S24_up/strings_zh-CN/dialogs/DLG_CMT_VMD_IMPORT.str",
+                           "language":  "str",
+                           "sizeLines":  8,
+                           "fileCategory":  "code"
+                       },
+                       {
+                           "path":  "scripts/build_macos.sh",
+                           "language":  "shell",
+                           "sizeLines":  264,
+                           "fileCategory":  "script"
+                       },
+                       {
+                           "path":  "sdk_2023/cmake/sdk_compat_2023.cmake",
+                           "language":  "cmake",
+                           "sizeLines":  8,
+                           "fileCategory":  "code"
+                       },
+                       {
+                           "path":  "sdk_2023/CMakeLists.txt",
+                           "language":  "txt",
+                           "sizeLines":  65,
+                           "fileCategory":  "docs"
+                       },
+                       {
+                           "path":  "sdk_2023/CMakePresets.json",
+                           "language":  "json",
+                           "sizeLines":  39,
+                           "fileCategory":  "config"
+                       },
+                       {
+                           "path":  "sdk_2023/plugins/mmdtool/project/CMakeLists.txt",
+                           "language":  "txt",
+                           "sizeLines":  38,
+                           "fileCategory":  "docs"
+                       },
+                       {
+                           "path":  "sdk_2023/plugins/mmdtool/project/mmdtool.vcxproj",
+                           "language":  "vcxproj",
+                           "sizeLines":  216,
+                           "fileCategory":  "code"
+                       },
+                       {
+                           "path":  "sdk_2023/plugins/mmdtool/project/mmdtool.vcxproj.filters",
+                           "language":  "filters",
+                           "sizeLines":  80,
+                           "fileCategory":  "code"
+                       },
+                       {
+                           "path":  "sdk_2023/plugins/mmdtool/project/mmdtool.vcxproj.user",
+                           "language":  "user",
+                           "sizeLines":  3,
+                           "fileCategory":  "code"
+                       },
+                       {
+                           "path":  "sdk_2023/plugins/mmdtool/project/mmdtool.xcodeproj/project.pbxproj",
+                           "language":  "pbxproj",
+                           "sizeLines":  789,
+                           "fileCategory":  "code"
+                       },
+                       {
+                           "path":  "sdk_2023/plugins/mmdtool/project/projectdefinition.txt",
+                           "language":  "txt",
+                           "sizeLines":  17,
+                           "fileCategory":  "docs"
+                       },
+                       {
+                           "path":  "sdk_2023/plugins/mmdtool/project/projectsettings.props",
+                           "language":  "props",
+                           "sizeLines":  19,
+                           "fileCategory":  "code"
+                       },
+                       {
+                           "path":  "sdk_2023/plugins/project/projectdefinition.txt",
+                           "language":  "txt",
+                           "sizeLines":  6,
+                           "fileCategory":  "docs"
+                       },
+                       {
+                           "path":  "sdk_2024/cmake/commands/create_directory_symlink.cmake",
+                           "language":  "cmake",
+                           "sizeLines":  1,
+                           "fileCategory":  "code"
+                       },
+                       {
+                           "path":  "sdk_2024/cmake/commands/update_filelist.cmake",
+                           "language":  "cmake",
+                           "sizeLines":  1,
+                           "fileCategory":  "code"
+                       },
+                       {
+                           "path":  "sdk_2024/cmake/sdk_compat_2024.cmake",
+                           "language":  "cmake",
+                           "sizeLines":  15,
+                           "fileCategory":  "code"
+                       }
+                   ],
+    "batchImportData":  {
+                            "res/S24_up/strings_zh-CN/description/OMMDJoint.str":  [
+
+                                                                                   ],
+                            "res/S24_up/strings_zh-CN/description/OMMDJointManager.str":  [
+
+                                                                                          ],
+                            "res/S24_up/strings_zh-CN/description/OMMDMeshManager.str":  [
+
+                                                                                         ],
+                            "res/S24_up/strings_zh-CN/description/OMMDModelManager.str":  [
+
+                                                                                          ],
+                            "res/S24_up/strings_zh-CN/description/OMMDRigid.str":  [
+
+                                                                                   ],
+                            "res/S24_up/strings_zh-CN/description/OMMDRigidManager.str":  [
+
+                                                                                          ],
+                            "res/S24_up/strings_zh-CN/description/TMMDBone.str":  [
+
+                                                                                  ],
+                            "res/S24_up/strings_zh-CN/description/Xmmdmaterialmorphshader.str":  [
+
+                                                                                                 ],
+                            "res/S24_up/strings_zh-CN/dialogs/DLG_CMT_TOOL.str":  [
+
+                                                                                  ],
+                            "res/S24_up/strings_zh-CN/dialogs/DLG_CMT_VMD_IMPORT.str":  [
+
+                                                                                        ],
+                            "scripts/build_macos.sh":  [
+
+                                                       ],
+                            "sdk_2023/cmake/sdk_compat_2023.cmake":  [
+
+                                                                     ],
+                            "sdk_2023/CMakeLists.txt":  [
+
+                                                        ],
+                            "sdk_2023/CMakePresets.json":  [
+
+                                                           ],
+                            "sdk_2023/plugins/mmdtool/project/CMakeLists.txt":  [
+
+                                                                                ],
+                            "sdk_2023/plugins/mmdtool/project/mmdtool.vcxproj":  [
+
+                                                                                 ],
+                            "sdk_2023/plugins/mmdtool/project/mmdtool.vcxproj.filters":  [
+
+                                                                                         ],
+                            "sdk_2023/plugins/mmdtool/project/mmdtool.vcxproj.user":  [
+
+                                                                                      ],
+                            "sdk_2023/plugins/mmdtool/project/mmdtool.xcodeproj/project.pbxproj":  [
+
+                                                                                                   ],
+                            "sdk_2023/plugins/mmdtool/project/projectdefinition.txt":  [
+
+                                                                                       ],
+                            "sdk_2023/plugins/mmdtool/project/projectsettings.props":  [
+
+                                                                                       ],
+                            "sdk_2023/plugins/project/projectdefinition.txt":  [
+
+                                                                               ],
+                            "sdk_2024/cmake/commands/create_directory_symlink.cmake":  [
+
+                                                                                       ],
+                            "sdk_2024/cmake/commands/update_filelist.cmake":  [
+
+                                                                              ],
+                            "sdk_2024/cmake/sdk_compat_2024.cmake":  [
+
+                                                                     ]
+                        }
+}

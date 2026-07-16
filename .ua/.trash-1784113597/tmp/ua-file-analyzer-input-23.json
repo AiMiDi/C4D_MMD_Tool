@@ -1,0 +1,63 @@
+{
+  "projectRoot": "E:\\code\\C4D_MMD_Tool",
+  "batchFiles": [
+    {
+      "path": "source/utils/io_util.hpp",
+      "language": "cpp",
+      "sizeLines": 300,
+      "fileCategory": "code"
+    },
+    {
+      "path": "source/utils/math_util.hpp",
+      "language": "cpp",
+      "sizeLines": 101,
+      "fileCategory": "code"
+    },
+    {
+      "path": "source/utils/mmd_bone_control_util.cpp",
+      "language": "cpp",
+      "sizeLines": 979,
+      "fileCategory": "code"
+    },
+    {
+      "path": "source/utils/mmd_bone_control_util.hpp",
+      "language": "cpp",
+      "sizeLines": 28,
+      "fileCategory": "code"
+    },
+    {
+      "path": "source/utils/morph_ui_data_util.hpp",
+      "language": "cpp",
+      "sizeLines": 68,
+      "fileCategory": "code"
+    },
+    {
+      "path": "source/utils/pmx_util.hpp",
+      "language": "cpp",
+      "sizeLines": 170,
+      "fileCategory": "code"
+    },
+    {
+      "path": "source/utils/time_util.hpp",
+      "language": "cpp",
+      "sizeLines": 35,
+      "fileCategory": "code"
+    },
+    {
+      "path": "source/utils/unique_id_util.hpp",
+      "language": "cpp",
+      "sizeLines": 52,
+      "fileCategory": "code"
+    }
+  ],
+  "batchImportData": {
+    "source/utils/io_util.hpp": [],
+    "source/utils/math_util.hpp": [],
+    "source/utils/mmd_bone_control_util.cpp": [],
+    "source/utils/mmd_bone_control_util.hpp": [],
+    "source/utils/morph_ui_data_util.hpp": [],
+    "source/utils/pmx_util.hpp": [],
+    "source/utils/time_util.hpp": [],
+    "source/utils/unique_id_util.hpp": []
+  }
+}

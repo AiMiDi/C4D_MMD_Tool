@@ -1,0 +1,232 @@
+{
+    "projectRoot":  "E:\\code\\C4D_MMD_Tool",
+    "batchFiles":  [
+                       {
+                           "path":  "sdk_2025/cmake/sdk_library_template.cmake",
+                           "language":  "cmake",
+                           "sizeLines":  100,
+                           "fileCategory":  "code"
+                       },
+                       {
+                           "path":  "sdk_2025/cmake/sdk_targets.cmake",
+                           "language":  "cmake",
+                           "sizeLines":  1214,
+                           "fileCategory":  "code"
+                       },
+                       {
+                           "path":  "sdk_2025/cmake/sdk_update_projects.cmake",
+                           "language":  "cmake",
+                           "sizeLines":  1149,
+                           "fileCategory":  "code"
+                       },
+                       {
+                           "path":  "sdk_2025/plugins/mmdtool/project/CMakeLists.txt",
+                           "language":  "txt",
+                           "sizeLines":  25,
+                           "fileCategory":  "docs"
+                       },
+                       {
+                           "path":  "sdk_2025/plugins/mmdtool/project/projectdefinition.txt",
+                           "language":  "txt",
+                           "sizeLines":  18,
+                           "fileCategory":  "docs"
+                       },
+                       {
+                           "path":  "sdk_2026/cmake/base_settings/compile_definitions.cmake",
+                           "language":  "cmake",
+                           "sizeLines":  41,
+                           "fileCategory":  "code"
+                       },
+                       {
+                           "path":  "sdk_2026/cmake/base_settings/compile_options.cmake",
+                           "language":  "cmake",
+                           "sizeLines":  97,
+                           "fileCategory":  "code"
+                       },
+                       {
+                           "path":  "sdk_2026/cmake/base_settings/link_options.cmake",
+                           "language":  "cmake",
+                           "sizeLines":  29,
+                           "fileCategory":  "code"
+                       },
+                       {
+                           "path":  "sdk_2026/cmake/base_settings/sanitize.cmake",
+                           "language":  "cmake",
+                           "sizeLines":  25,
+                           "fileCategory":  "code"
+                       },
+                       {
+                           "path":  "sdk_2026/cmake/base_settings/warnings.clang.cmake",
+                           "language":  "cmake",
+                           "sizeLines":  143,
+                           "fileCategory":  "code"
+                       },
+                       {
+                           "path":  "sdk_2026/cmake/base_settings/warnings.gcc.cmake",
+                           "language":  "cmake",
+                           "sizeLines":  23,
+                           "fileCategory":  "code"
+                       },
+                       {
+                           "path":  "sdk_2026/cmake/base_settings/warnings.msvc.cmake",
+                           "language":  "cmake",
+                           "sizeLines":  83,
+                           "fileCategory":  "code"
+                       },
+                       {
+                           "path":  "sdk_2026/cmake/commands/create_directory_symlink.cmake",
+                           "language":  "cmake",
+                           "sizeLines":  10,
+                           "fileCategory":  "code"
+                       },
+                       {
+                           "path":  "sdk_2026/cmake/commands/update_filelist.cmake",
+                           "language":  "cmake",
+                           "sizeLines":  20,
+                           "fileCategory":  "code"
+                       },
+                       {
+                           "path":  "sdk_2026/cmake/sdk_compiler_helper.cmake",
+                           "language":  "cmake",
+                           "sizeLines":  458,
+                           "fileCategory":  "code"
+                       },
+                       {
+                           "path":  "sdk_2026/cmake/sdk_library_template.cmake",
+                           "language":  "cmake",
+                           "sizeLines":  100,
+                           "fileCategory":  "code"
+                       },
+                       {
+                           "path":  "sdk_2026/cmake/sdk_targets.cmake",
+                           "language":  "cmake",
+                           "sizeLines":  1214,
+                           "fileCategory":  "code"
+                       },
+                       {
+                           "path":  "sdk_2026/cmake/sdk_update_projects.cmake",
+                           "language":  "cmake",
+                           "sizeLines":  1151,
+                           "fileCategory":  "code"
+                       },
+                       {
+                           "path":  "sdk_2026/plugins/mmdtool/project/CMakeLists.txt",
+                           "language":  "txt",
+                           "sizeLines":  25,
+                           "fileCategory":  "docs"
+                       },
+                       {
+                           "path":  "sdk_2026/plugins/mmdtool/project/projectdefinition.txt",
+                           "language":  "txt",
+                           "sizeLines":  18,
+                           "fileCategory":  "docs"
+                       },
+                       {
+                           "path":  "sdk_r20/cmake/sdk_compat_r20.cmake",
+                           "language":  "cmake",
+                           "sizeLines":  7,
+                           "fileCategory":  "code"
+                       },
+                       {
+                           "path":  "sdk_r20/CMakeLists.txt",
+                           "language":  "txt",
+                           "sizeLines":  64,
+                           "fileCategory":  "docs"
+                       },
+                       {
+                           "path":  "sdk_r20/CMakePresets.json",
+                           "language":  "json",
+                           "sizeLines":  39,
+                           "fileCategory":  "config"
+                       },
+                       {
+                           "path":  "sdk_r20/plugins/mmdtool/project/CMakeLists.txt",
+                           "language":  "txt",
+                           "sizeLines":  41,
+                           "fileCategory":  "docs"
+                       },
+                       {
+                           "path":  "sdk_r20/plugins/mmdtool/project/projectdefinition.txt",
+                           "language":  "txt",
+                           "sizeLines":  17,
+                           "fileCategory":  "docs"
+                       }
+                   ],
+    "batchImportData":  {
+                            "sdk_2025/cmake/sdk_library_template.cmake":  [
+
+                                                                          ],
+                            "sdk_2025/cmake/sdk_targets.cmake":  [
+
+                                                                 ],
+                            "sdk_2025/cmake/sdk_update_projects.cmake":  [
+
+                                                                         ],
+                            "sdk_2025/plugins/mmdtool/project/CMakeLists.txt":  [
+
+                                                                                ],
+                            "sdk_2025/plugins/mmdtool/project/projectdefinition.txt":  [
+
+                                                                                       ],
+                            "sdk_2026/cmake/base_settings/compile_definitions.cmake":  [
+
+                                                                                       ],
+                            "sdk_2026/cmake/base_settings/compile_options.cmake":  [
+
+                                                                                   ],
+                            "sdk_2026/cmake/base_settings/link_options.cmake":  [
+
+                                                                                ],
+                            "sdk_2026/cmake/base_settings/sanitize.cmake":  [
+
+                                                                            ],
+                            "sdk_2026/cmake/base_settings/warnings.clang.cmake":  [
+
+                                                                                  ],
+                            "sdk_2026/cmake/base_settings/warnings.gcc.cmake":  [
+
+                                                                                ],
+                            "sdk_2026/cmake/base_settings/warnings.msvc.cmake":  [
+
+                                                                                 ],
+                            "sdk_2026/cmake/commands/create_directory_symlink.cmake":  [
+
+                                                                                       ],
+                            "sdk_2026/cmake/commands/update_filelist.cmake":  [
+
+                                                                              ],
+                            "sdk_2026/cmake/sdk_compiler_helper.cmake":  [
+
+                                                                         ],
+                            "sdk_2026/cmake/sdk_library_template.cmake":  [
+
+                                                                          ],
+                            "sdk_2026/cmake/sdk_targets.cmake":  [
+
+                                                                 ],
+                            "sdk_2026/cmake/sdk_update_projects.cmake":  [
+
+                                                                         ],
+                            "sdk_2026/plugins/mmdtool/project/CMakeLists.txt":  [
+
+                                                                                ],
+                            "sdk_2026/plugins/mmdtool/project/projectdefinition.txt":  [
+
+                                                                                       ],
+                            "sdk_r20/cmake/sdk_compat_r20.cmake":  [
+
+                                                                   ],
+                            "sdk_r20/CMakeLists.txt":  [
+
+                                                       ],
+                            "sdk_r20/CMakePresets.json":  [
+
+                                                          ],
+                            "sdk_r20/plugins/mmdtool/project/CMakeLists.txt":  [
+
+                                                                               ],
+                            "sdk_r20/plugins/mmdtool/project/projectdefinition.txt":  [
+
+                                                                                      ]
+                        }
+}

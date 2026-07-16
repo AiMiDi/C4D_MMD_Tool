@@ -1,0 +1,2126 @@
+{
+  "nodes": [
+    {
+      "id": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "type": "file",
+      "name": "mmd_bone_manager.cpp",
+      "filePath": "source/module/tools/object/mmd_bone_manager.cpp",
+      "summary": "Implements bone hierarchy import/export, append and IK execution ordering, bind-state transitions, animation slots, and physics-playback coordination. / 实现骨骼层级导入导出、附加变换与 IK 执行排序、绑定状态切换、动画槽以及物理播放协调。",
+      "tags": [
+        "object-manager",
+        "pmx-import",
+        "pmx-export",
+        "ik",
+        "physics"
+      ],
+      "complexity": "complex",
+      "languageNotes": "C++ integrates Cinema 4D SDK lifecycle hooks with explicit PMX/VMD conversion and runtime state management. / C++ 将 Cinema 4D SDK 生命周期钩子与显式 PMX/VMD 转换及运行时状态管理结合。"
+    },
+    {
+      "id": "class:source/module/tools/object/mmd_bone_manager.cpp:BoolResetGuard",
+      "type": "class",
+      "name": "BoolResetGuard",
+      "filePath": "source/module/tools/object/mmd_bone_manager.cpp",
+      "lineRange": [
+        712,
+        724
+      ],
+      "summary": "BoolResetGuard provides scoped state restoration through RAII for bone hierarchy and runtime coordination. / BoolResetGuard 为骨骼层级与运行时协调通过 RAII 提供作用域状态恢复。",
+      "tags": [
+        "raii",
+        "object-manager",
+        "pmx-import"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_bone_manager.cpp:NormalizeBoneMode",
+      "type": "function",
+      "name": "NormalizeBoneMode",
+      "filePath": "source/module/tools/object/mmd_bone_manager.cpp",
+      "lineRange": [
+        41,
+        45
+      ],
+      "summary": "NormalizeBoneMode normalizes bone mode for bone hierarchy and runtime coordination. / NormalizeBoneMode 为骨骼层级与运行时协调规范化 bone mode。",
+      "tags": [
+        "object-manager",
+        "pmx-import",
+        "pmx-export"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_bone_manager.cpp:GetBoneTagName",
+      "type": "function",
+      "name": "GetBoneTagName",
+      "filePath": "source/module/tools/object/mmd_bone_manager.cpp",
+      "lineRange": [
+        47,
+        65
+      ],
+      "summary": "GetBoneTagName retrieves bone tag name for bone hierarchy and runtime coordination. / GetBoneTagName 为骨骼层级与运行时协调获取 bone tag name。",
+      "tags": [
+        "object-manager",
+        "pmx-import",
+        "pmx-export"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_bone_manager.cpp:GetDocumentTimeOrInvalid",
+      "type": "function",
+      "name": "GetDocumentTimeOrInvalid",
+      "filePath": "source/module/tools/object/mmd_bone_manager.cpp",
+      "lineRange": [
+        67,
+        72
+      ],
+      "summary": "GetDocumentTimeOrInvalid retrieves document time or invalid for bone hierarchy and runtime coordination. / GetDocumentTimeOrInvalid 为骨骼层级与运行时协调获取 document time or invalid。",
+      "tags": [
+        "object-manager",
+        "pmx-import",
+        "pmx-export"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_bone_manager.cpp:ReadBoneIndexParameter",
+      "type": "function",
+      "name": "ReadBoneIndexParameter",
+      "filePath": "source/module/tools/object/mmd_bone_manager.cpp",
+      "lineRange": [
+        127,
+        140
+      ],
+      "summary": "ReadBoneIndexParameter reads bone index parameter for bone hierarchy and runtime coordination. / ReadBoneIndexParameter 为骨骼层级与运行时协调读取 bone index parameter。",
+      "tags": [
+        "serialization",
+        "object-manager",
+        "pmx-import"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_bone_manager.cpp:ResolveBoneLinkIndex",
+      "type": "function",
+      "name": "ResolveBoneLinkIndex",
+      "filePath": "source/module/tools/object/mmd_bone_manager.cpp",
+      "lineRange": [
+        142,
+        166
+      ],
+      "summary": "ResolveBoneLinkIndex resolves bone link index for bone hierarchy and runtime coordination. / ResolveBoneLinkIndex 为骨骼层级与运行时协调解析 bone link index。",
+      "tags": [
+        "object-manager",
+        "pmx-import",
+        "pmx-export"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_bone_manager.cpp:ReadIndexFromStringParameter",
+      "type": "function",
+      "name": "ReadIndexFromStringParameter",
+      "filePath": "source/module/tools/object/mmd_bone_manager.cpp",
+      "lineRange": [
+        168,
+        177
+      ],
+      "summary": "ReadIndexFromStringParameter reads index from string parameter for bone hierarchy and runtime coordination. / ReadIndexFromStringParameter 为骨骼层级与运行时协调读取 index from string parameter。",
+      "tags": [
+        "serialization",
+        "object-manager",
+        "pmx-import"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_bone_manager.cpp:ToEigenVector3f",
+      "type": "function",
+      "name": "ToEigenVector3f",
+      "filePath": "source/module/tools/object/mmd_bone_manager.cpp",
+      "lineRange": [
+        179,
+        185
+      ],
+      "summary": "ToEigenVector3f implements a focused operation in bone hierarchy and runtime coordination. / ToEigenVector3f 实现骨骼层级与运行时协调中的专用操作。",
+      "tags": [
+        "object-manager",
+        "pmx-import",
+        "pmx-export"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_bone_manager.cpp:InitDefaultPmxBone",
+      "type": "function",
+      "name": "InitDefaultPmxBone",
+      "filePath": "source/module/tools/object/mmd_bone_manager.cpp",
+      "lineRange": [
+        187,
+        207
+      ],
+      "summary": "InitDefaultPmxBone initializes default pmx bone for bone hierarchy and runtime coordination. / InitDefaultPmxBone 为骨骼层级与运行时协调初始化 default pmx bone。",
+      "tags": [
+        "pmx",
+        "object-manager",
+        "pmx-import"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_bone_manager.cpp:ClearBoneFlag",
+      "type": "function",
+      "name": "ClearBoneFlag",
+      "filePath": "source/module/tools/object/mmd_bone_manager.cpp",
+      "lineRange": [
+        209,
+        213
+      ],
+      "summary": "ClearBoneFlag clears bone flag for bone hierarchy and runtime coordination. / ClearBoneFlag 为骨骼层级与运行时协调清除 bone flag。",
+      "tags": [
+        "object-manager",
+        "pmx-import",
+        "pmx-export"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_bone_manager.cpp:BuildBoneFlags",
+      "type": "function",
+      "name": "BuildBoneFlags",
+      "filePath": "source/module/tools/object/mmd_bone_manager.cpp",
+      "lineRange": [
+        215,
+        247
+      ],
+      "summary": "BuildBoneFlags builds bone flags for bone hierarchy and runtime coordination. / BuildBoneFlags 为骨骼层级与运行时协调构建 bone flags。",
+      "tags": [
+        "ui",
+        "object-manager",
+        "pmx-import"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_bone_manager.cpp:DescItemHasParent",
+      "type": "function",
+      "name": "DescItemHasParent",
+      "filePath": "source/module/tools/object/mmd_bone_manager.cpp",
+      "lineRange": [
+        249,
+        253
+      ],
+      "summary": "DescItemHasParent implements a focused operation in bone hierarchy and runtime coordination. / DescItemHasParent 实现骨骼层级与运行时协调中的专用操作。",
+      "tags": [
+        "object-manager",
+        "pmx-import",
+        "pmx-export"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_bone_manager.cpp:CollectPmxIkLinks",
+      "type": "function",
+      "name": "CollectPmxIkLinks",
+      "filePath": "source/module/tools/object/mmd_bone_manager.cpp",
+      "lineRange": [
+        263,
+        474
+      ],
+      "summary": "CollectPmxIkLinks collects pmx ik links for bone hierarchy and runtime coordination. / CollectPmxIkLinks 为骨骼层级与运行时协调收集 pmx ik links。",
+      "tags": [
+        "pmx",
+        "ik",
+        "object-manager"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_bone_manager.cpp:ResolveIkTargetBoneIndex",
+      "type": "function",
+      "name": "ResolveIkTargetBoneIndex",
+      "filePath": "source/module/tools/object/mmd_bone_manager.cpp",
+      "lineRange": [
+        476,
+        494
+      ],
+      "summary": "ResolveIkTargetBoneIndex resolves ik target bone index for bone hierarchy and runtime coordination. / ResolveIkTargetBoneIndex 为骨骼层级与运行时协调解析 ik target bone index。",
+      "tags": [
+        "ik",
+        "object-manager",
+        "pmx-import"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_bone_manager.cpp:RemapRigidRelatedBoneIndices",
+      "type": "function",
+      "name": "RemapRigidRelatedBoneIndices",
+      "filePath": "source/module/tools/object/mmd_bone_manager.cpp",
+      "lineRange": [
+        496,
+        524
+      ],
+      "summary": "RemapRigidRelatedBoneIndices remaps rigid related bone indices for bone hierarchy and runtime coordination. / RemapRigidRelatedBoneIndices 为骨骼层级与运行时协调重映射 rigid related bone indices。",
+      "tags": [
+        "physics",
+        "object-manager",
+        "pmx-import"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_bone_manager.cpp:BoneNeedsPrephysicsPlayback",
+      "type": "function",
+      "name": "BoneNeedsPrephysicsPlayback",
+      "filePath": "source/module/tools/object/mmd_bone_manager.cpp",
+      "lineRange": [
+        526,
+        557
+      ],
+      "summary": "BoneNeedsPrephysicsPlayback implements a focused operation in bone hierarchy and runtime coordination. / BoneNeedsPrephysicsPlayback 实现骨骼层级与运行时协调中的专用操作。",
+      "tags": [
+        "physics",
+        "object-manager",
+        "pmx-import"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_bone_manager.cpp:ConfigureBoneManagerExecutionPriority",
+      "type": "function",
+      "name": "ConfigureBoneManagerExecutionPriority",
+      "filePath": "source/module/tools/object/mmd_bone_manager.cpp",
+      "lineRange": [
+        559,
+        577
+      ],
+      "summary": "ConfigureBoneManagerExecutionPriority configures bone manager execution priority for bone hierarchy and runtime coordination. / ConfigureBoneManagerExecutionPriority 为骨骼层级与运行时协调配置 bone manager execution priority。",
+      "tags": [
+        "object-manager",
+        "pmx-import",
+        "pmx-export"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_bone_manager.cpp:BuildBoneRelativeMatrix",
+      "type": "function",
+      "name": "BuildBoneRelativeMatrix",
+      "filePath": "source/module/tools/object/mmd_bone_manager.cpp",
+      "lineRange": [
+        579,
+        588
+      ],
+      "summary": "BuildBoneRelativeMatrix builds bone relative matrix for bone hierarchy and runtime coordination. / BuildBoneRelativeMatrix 为骨骼层级与运行时协调构建 bone relative matrix。",
+      "tags": [
+        "ui",
+        "object-manager",
+        "pmx-import"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_bone_manager.cpp:MarkBoneTransformDirty",
+      "type": "function",
+      "name": "MarkBoneTransformDirty",
+      "filePath": "source/module/tools/object/mmd_bone_manager.cpp",
+      "lineRange": [
+        590,
+        614
+      ],
+      "summary": "MarkBoneTransformDirty marks bone transform dirty for bone hierarchy and runtime coordination. / MarkBoneTransformDirty 为骨骼层级与运行时协调标记 bone transform dirty。",
+      "tags": [
+        "object-manager",
+        "pmx-import",
+        "pmx-export"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_bone_manager.cpp:MarkSceneNodeDirty",
+      "type": "function",
+      "name": "MarkSceneNodeDirty",
+      "filePath": "source/module/tools/object/mmd_bone_manager.cpp",
+      "lineRange": [
+        616,
+        623
+      ],
+      "summary": "MarkSceneNodeDirty marks scene node dirty for bone hierarchy and runtime coordination. / MarkSceneNodeDirty 为骨骼层级与运行时协调标记 scene node dirty。",
+      "tags": [
+        "object-manager",
+        "pmx-import",
+        "pmx-export"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_bone_manager.cpp:MarkMeshHierarchyDirty",
+      "type": "function",
+      "name": "MarkMeshHierarchyDirty",
+      "filePath": "source/module/tools/object/mmd_bone_manager.cpp",
+      "lineRange": [
+        625,
+        643
+      ],
+      "summary": "MarkMeshHierarchyDirty marks mesh hierarchy dirty for bone hierarchy and runtime coordination. / MarkMeshHierarchyDirty 为骨骼层级与运行时协调标记 mesh hierarchy dirty。",
+      "tags": [
+        "object-manager",
+        "pmx-import",
+        "pmx-export"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_bone_manager.cpp:MakeIdentityMatrix",
+      "type": "function",
+      "name": "MakeIdentityMatrix",
+      "filePath": "source/module/tools/object/mmd_bone_manager.cpp",
+      "lineRange": [
+        645,
+        653
+      ],
+      "summary": "MakeIdentityMatrix creates identity matrix for bone hierarchy and runtime coordination. / MakeIdentityMatrix 为骨骼层级与运行时协调创建 identity matrix。",
+      "tags": [
+        "object-manager",
+        "pmx-import",
+        "pmx-export"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_bone_manager.cpp:NormalizeMatrixBasis",
+      "type": "function",
+      "name": "NormalizeMatrixBasis",
+      "filePath": "source/module/tools/object/mmd_bone_manager.cpp",
+      "lineRange": [
+        655,
+        660
+      ],
+      "summary": "NormalizeMatrixBasis normalizes matrix basis for bone hierarchy and runtime coordination. / NormalizeMatrixBasis 为骨骼层级与运行时协调规范化 matrix basis。",
+      "tags": [
+        "object-manager",
+        "pmx-import",
+        "pmx-export"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_bone_manager.cpp:GetMatrixScale",
+      "type": "function",
+      "name": "GetMatrixScale",
+      "filePath": "source/module/tools/object/mmd_bone_manager.cpp",
+      "lineRange": [
+        662,
+        672
+      ],
+      "summary": "GetMatrixScale retrieves matrix scale for bone hierarchy and runtime coordination. / GetMatrixScale 为骨骼层级与运行时协调获取 matrix scale。",
+      "tags": [
+        "object-manager",
+        "pmx-import",
+        "pmx-export"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_bone_manager.cpp:GetObjectRotationOrder",
+      "type": "function",
+      "name": "GetObjectRotationOrder",
+      "filePath": "source/module/tools/object/mmd_bone_manager.cpp",
+      "lineRange": [
+        674,
+        680
+      ],
+      "summary": "GetObjectRotationOrder retrieves object rotation order for bone hierarchy and runtime coordination. / GetObjectRotationOrder 为骨骼层级与运行时协调获取 object rotation order。",
+      "tags": [
+        "object-manager",
+        "pmx-import",
+        "pmx-export"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_bone_manager.cpp:BuildFrozenBoneGlobalMatrix",
+      "type": "function",
+      "name": "BuildFrozenBoneGlobalMatrix",
+      "filePath": "source/module/tools/object/mmd_bone_manager.cpp",
+      "lineRange": [
+        682,
+        696
+      ],
+      "summary": "BuildFrozenBoneGlobalMatrix builds frozen bone global matrix for bone hierarchy and runtime coordination. / BuildFrozenBoneGlobalMatrix 为骨骼层级与运行时协调构建 frozen bone global matrix。",
+      "tags": [
+        "ui",
+        "object-manager",
+        "pmx-import"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_bone_manager.cpp:CommitObjectLocalToFrozen",
+      "type": "function",
+      "name": "CommitObjectLocalToFrozen",
+      "filePath": "source/module/tools/object/mmd_bone_manager.cpp",
+      "lineRange": [
+        698,
+        710
+      ],
+      "summary": "CommitObjectLocalToFrozen commits object local to frozen for bone hierarchy and runtime coordination. / CommitObjectLocalToFrozen 为骨骼层级与运行时协调提交 object local to frozen。",
+      "tags": [
+        "object-manager",
+        "pmx-import",
+        "pmx-export"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_bone_manager.cpp:BoolResetGuard::~BoolResetGuard",
+      "type": "function",
+      "name": "BoolResetGuard::~BoolResetGuard",
+      "filePath": "source/module/tools/object/mmd_bone_manager.cpp",
+      "lineRange": [
+        716,
+        720
+      ],
+      "summary": "BoolResetGuard::~BoolResetGuard releases scoped state for bone hierarchy and runtime coordination. / BoolResetGuard::~BoolResetGuard 释放骨骼层级与运行时协调中的作用域状态。",
+      "tags": [
+        "object-manager",
+        "pmx-import",
+        "pmx-export"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_bone_manager.cpp:SDK2024_Init",
+      "type": "function",
+      "name": "SDK2024_Init",
+      "filePath": "source/module/tools/object/mmd_bone_manager.cpp",
+      "lineRange": [
+        732,
+        748
+      ],
+      "summary": "SDK2024_Init implements the Cinema 4D SDK lifecycle hook for init in bone hierarchy and runtime coordination. / SDK2024_Init 实现骨骼层级与运行时协调中用于 init 的 Cinema 4D SDK 生命周期钩子。",
+      "tags": [
+        "object-manager",
+        "pmx-import",
+        "pmx-export"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_bone_manager.cpp:SDK2024_CopyTo",
+      "type": "function",
+      "name": "SDK2024_CopyTo",
+      "filePath": "source/module/tools/object/mmd_bone_manager.cpp",
+      "lineRange": [
+        750,
+        769
+      ],
+      "summary": "SDK2024_CopyTo implements the Cinema 4D SDK lifecycle hook for copy to in bone hierarchy and runtime coordination. / SDK2024_CopyTo 实现骨骼层级与运行时协调中用于 copy to 的 Cinema 4D SDK 生命周期钩子。",
+      "tags": [
+        "serialization",
+        "object-manager",
+        "pmx-import"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_bone_manager.cpp:MMDBoneManagerObject::Read",
+      "type": "function",
+      "name": "MMDBoneManagerObject::Read",
+      "filePath": "source/module/tools/object/mmd_bone_manager.cpp",
+      "lineRange": [
+        771,
+        800
+      ],
+      "summary": "MMDBoneManagerObject::Read reads persistent state for bone hierarchy and runtime coordination. / MMDBoneManagerObject::Read 为骨骼层级与运行时协调读取持久状态。",
+      "tags": [
+        "serialization",
+        "object-manager",
+        "pmx-import"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_bone_manager.cpp:SDK2024_Write",
+      "type": "function",
+      "name": "SDK2024_Write",
+      "filePath": "source/module/tools/object/mmd_bone_manager.cpp",
+      "lineRange": [
+        802,
+        809
+      ],
+      "summary": "SDK2024_Write implements the Cinema 4D SDK lifecycle hook for write in bone hierarchy and runtime coordination. / SDK2024_Write 实现骨骼层级与运行时协调中用于 write 的 Cinema 4D SDK 生命周期钩子。",
+      "tags": [
+        "serialization",
+        "object-manager",
+        "pmx-import"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_bone_manager.cpp:MMDBoneManagerObject::SetDParameter",
+      "type": "function",
+      "name": "MMDBoneManagerObject::SetDParameter",
+      "filePath": "source/module/tools/object/mmd_bone_manager.cpp",
+      "lineRange": [
+        811,
+        925
+      ],
+      "summary": "MMDBoneManagerObject::SetDParameter applies parameter changes and their runtime side effects for bone hierarchy and runtime coordination. / MMDBoneManagerObject::SetDParameter 为骨骼层级与运行时协调应用参数变更及其运行时副作用。",
+      "tags": [
+        "object-manager",
+        "pmx-import",
+        "pmx-export"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_bone_manager.cpp:MMDBoneManagerObject::HandleDescriptionCommandMessage",
+      "type": "function",
+      "name": "MMDBoneManagerObject::HandleDescriptionCommandMessage",
+      "filePath": "source/module/tools/object/mmd_bone_manager.cpp",
+      "lineRange": [
+        927,
+        969
+      ],
+      "summary": "MMDBoneManagerObject::HandleDescriptionCommandMessage handles description command message for bone hierarchy and runtime coordination. / MMDBoneManagerObject::HandleDescriptionCommandMessage 为骨骼层级与运行时协调处理 description command message。",
+      "tags": [
+        "ui",
+        "object-manager",
+        "pmx-import"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_bone_manager.cpp:MMDBoneManagerObject::CreateOrRefreshControls",
+      "type": "function",
+      "name": "MMDBoneManagerObject::CreateOrRefreshControls",
+      "filePath": "source/module/tools/object/mmd_bone_manager.cpp",
+      "lineRange": [
+        971,
+        974
+      ],
+      "summary": "MMDBoneManagerObject::CreateOrRefreshControls creates or refresh controls for bone hierarchy and runtime coordination. / MMDBoneManagerObject::CreateOrRefreshControls 为骨骼层级与运行时协调创建 or refresh controls。",
+      "tags": [
+        "object-manager",
+        "pmx-import",
+        "pmx-export"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_bone_manager.cpp:MMDBoneManagerObject::HandleMMDBoneTagMessage",
+      "type": "function",
+      "name": "MMDBoneManagerObject::HandleMMDBoneTagMessage",
+      "filePath": "source/module/tools/object/mmd_bone_manager.cpp",
+      "lineRange": [
+        976,
+        1086
+      ],
+      "summary": "MMDBoneManagerObject::HandleMMDBoneTagMessage handles mmd bone tag message for bone hierarchy and runtime coordination. / MMDBoneManagerObject::HandleMMDBoneTagMessage 为骨骼层级与运行时协调处理 mmd bone tag message。",
+      "tags": [
+        "object-manager",
+        "pmx-import",
+        "pmx-export"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_bone_manager.cpp:MMDBoneManagerObject::HandleBoneIndexChangeMessage",
+      "type": "function",
+      "name": "MMDBoneManagerObject::HandleBoneIndexChangeMessage",
+      "filePath": "source/module/tools/object/mmd_bone_manager.cpp",
+      "lineRange": [
+        1088,
+        1091
+      ],
+      "summary": "MMDBoneManagerObject::HandleBoneIndexChangeMessage handles bone index change message for bone hierarchy and runtime coordination. / MMDBoneManagerObject::HandleBoneIndexChangeMessage 为骨骼层级与运行时协调处理 bone index change message。",
+      "tags": [
+        "object-manager",
+        "pmx-import",
+        "pmx-export"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_bone_manager.cpp:MMDBoneManagerObject::CollectBoneHierarchyDFS",
+      "type": "function",
+      "name": "MMDBoneManagerObject::CollectBoneHierarchyDFS",
+      "filePath": "source/module/tools/object/mmd_bone_manager.cpp",
+      "lineRange": [
+        1093,
+        1115
+      ],
+      "summary": "MMDBoneManagerObject::CollectBoneHierarchyDFS collects bone hierarchy dfs for bone hierarchy and runtime coordination. / MMDBoneManagerObject::CollectBoneHierarchyDFS 为骨骼层级与运行时协调收集 bone hierarchy dfs。",
+      "tags": [
+        "object-manager",
+        "pmx-import",
+        "pmx-export"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_bone_manager.cpp:MMDBoneManagerObject::RefreshBoneHierarchyUI",
+      "type": "function",
+      "name": "MMDBoneManagerObject::RefreshBoneHierarchyUI",
+      "filePath": "source/module/tools/object/mmd_bone_manager.cpp",
+      "lineRange": [
+        1117,
+        1125
+      ],
+      "summary": "MMDBoneManagerObject::RefreshBoneHierarchyUI refreshes bone hierarchy ui for bone hierarchy and runtime coordination. / MMDBoneManagerObject::RefreshBoneHierarchyUI 为骨骼层级与运行时协调刷新 bone hierarchy ui。",
+      "tags": [
+        "ui",
+        "object-manager",
+        "pmx-import"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_bone_manager.cpp:MMDBoneManagerObject::SynchronizeBoneHierarchy",
+      "type": "function",
+      "name": "MMDBoneManagerObject::SynchronizeBoneHierarchy",
+      "filePath": "source/module/tools/object/mmd_bone_manager.cpp",
+      "lineRange": [
+        1127,
+        1236
+      ],
+      "summary": "MMDBoneManagerObject::SynchronizeBoneHierarchy synchronizes bone hierarchy for bone hierarchy and runtime coordination. / MMDBoneManagerObject::SynchronizeBoneHierarchy 为骨骼层级与运行时协调同步 bone hierarchy。",
+      "tags": [
+        "object-manager",
+        "pmx-import",
+        "pmx-export"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_bone_manager.cpp:MMDBoneManagerObject::MarkAppendExecutionOrderDirty",
+      "type": "function",
+      "name": "MMDBoneManagerObject::MarkAppendExecutionOrderDirty",
+      "filePath": "source/module/tools/object/mmd_bone_manager.cpp",
+      "lineRange": [
+        1238,
+        1241
+      ],
+      "summary": "MMDBoneManagerObject::MarkAppendExecutionOrderDirty marks append execution order dirty for bone hierarchy and runtime coordination. / MMDBoneManagerObject::MarkAppendExecutionOrderDirty 为骨骼层级与运行时协调标记 append execution order dirty。",
+      "tags": [
+        "object-manager",
+        "pmx-import",
+        "pmx-export"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_bone_manager.cpp:MMDBoneManagerObject::ComputeAppendRecursionDepth",
+      "type": "function",
+      "name": "MMDBoneManagerObject::ComputeAppendRecursionDepth",
+      "filePath": "source/module/tools/object/mmd_bone_manager.cpp",
+      "lineRange": [
+        1243,
+        1277
+      ],
+      "summary": "MMDBoneManagerObject::ComputeAppendRecursionDepth computes append recursion depth for bone hierarchy and runtime coordination. / MMDBoneManagerObject::ComputeAppendRecursionDepth 为骨骼层级与运行时协调计算 append recursion depth。",
+      "tags": [
+        "object-manager",
+        "pmx-import",
+        "pmx-export"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_bone_manager.cpp:MMDBoneManagerObject::EnsureAppendExecutionOrder",
+      "type": "function",
+      "name": "MMDBoneManagerObject::EnsureAppendExecutionOrder",
+      "filePath": "source/module/tools/object/mmd_bone_manager.cpp",
+      "lineRange": [
+        1279,
+        1333
+      ],
+      "summary": "MMDBoneManagerObject::EnsureAppendExecutionOrder ensures append execution order for bone hierarchy and runtime coordination. / MMDBoneManagerObject::EnsureAppendExecutionOrder 为骨骼层级与运行时协调确保 append execution order。",
+      "tags": [
+        "object-manager",
+        "pmx-import",
+        "pmx-export"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_bone_manager.cpp:MMDBoneManagerObject::Message",
+      "type": "function",
+      "name": "MMDBoneManagerObject::Message",
+      "filePath": "source/module/tools/object/mmd_bone_manager.cpp",
+      "lineRange": [
+        1335,
+        1384
+      ],
+      "summary": "MMDBoneManagerObject::Message dispatches Cinema 4D messages and state transitions for bone hierarchy and runtime coordination. / MMDBoneManagerObject::Message 为骨骼层级与运行时协调分发 Cinema 4D 消息与状态切换。",
+      "tags": [
+        "object-manager",
+        "pmx-import",
+        "pmx-export"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_bone_manager.cpp:MMDBoneManagerObject::FindBoneIndex",
+      "type": "function",
+      "name": "MMDBoneManagerObject::FindBoneIndex",
+      "filePath": "source/module/tools/object/mmd_bone_manager.cpp",
+      "lineRange": [
+        1396,
+        1414
+      ],
+      "summary": "MMDBoneManagerObject::FindBoneIndex finds bone index for bone hierarchy and runtime coordination. / MMDBoneManagerObject::FindBoneIndex 为骨骼层级与运行时协调查找 bone index。",
+      "tags": [
+        "object-manager",
+        "pmx-import",
+        "pmx-export"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_bone_manager.cpp:MMDBoneManagerObject::BuildOrderedBoneObjectList",
+      "type": "function",
+      "name": "MMDBoneManagerObject::BuildOrderedBoneObjectList",
+      "filePath": "source/module/tools/object/mmd_bone_manager.cpp",
+      "lineRange": [
+        1416,
+        1438
+      ],
+      "summary": "MMDBoneManagerObject::BuildOrderedBoneObjectList builds ordered bone object list for bone hierarchy and runtime coordination. / MMDBoneManagerObject::BuildOrderedBoneObjectList 为骨骼层级与运行时协调构建 ordered bone object list。",
+      "tags": [
+        "ui",
+        "object-manager",
+        "pmx-import"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_bone_manager.cpp:MMDBoneManagerObject::LoadPMX",
+      "type": "function",
+      "name": "MMDBoneManagerObject::LoadPMX",
+      "filePath": "source/module/tools/object/mmd_bone_manager.cpp",
+      "lineRange": [
+        1440,
+        1729
+      ],
+      "summary": "MMDBoneManagerObject::LoadPMX loads pmx for bone hierarchy and runtime coordination. / MMDBoneManagerObject::LoadPMX 为骨骼层级与运行时协调加载 pmx。",
+      "tags": [
+        "pmx",
+        "import",
+        "object-manager"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_bone_manager.cpp:MMDBoneManagerObject::SavePMX",
+      "type": "function",
+      "name": "MMDBoneManagerObject::SavePMX",
+      "filePath": "source/module/tools/object/mmd_bone_manager.cpp",
+      "lineRange": [
+        1789,
+        1897
+      ],
+      "summary": "MMDBoneManagerObject::SavePMX saves pmx for bone hierarchy and runtime coordination. / MMDBoneManagerObject::SavePMX 为骨骼层级与运行时协调保存 pmx。",
+      "tags": [
+        "pmx",
+        "export",
+        "object-manager"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_bone_manager.cpp:EulerHpbToQuaternion",
+      "type": "function",
+      "name": "EulerHpbToQuaternion",
+      "filePath": "source/module/tools/object/mmd_bone_manager.cpp",
+      "lineRange": [
+        1901,
+        1906
+      ],
+      "summary": "EulerHpbToQuaternion implements a focused operation in bone hierarchy and runtime coordination. / EulerHpbToQuaternion 实现骨骼层级与运行时协调中的专用操作。",
+      "tags": [
+        "object-manager",
+        "pmx-import",
+        "pmx-export"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_bone_manager.cpp:MMDBoneManagerObject::ExportBoneMorphsToPMX",
+      "type": "function",
+      "name": "MMDBoneManagerObject::ExportBoneMorphsToPMX",
+      "filePath": "source/module/tools/object/mmd_bone_manager.cpp",
+      "lineRange": [
+        1909,
+        1956
+      ],
+      "summary": "MMDBoneManagerObject::ExportBoneMorphsToPMX exports bone morphs to pmx for bone hierarchy and runtime coordination. / MMDBoneManagerObject::ExportBoneMorphsToPMX 为骨骼层级与运行时协调导出 bone morphs to pmx。",
+      "tags": [
+        "pmx",
+        "morph",
+        "export",
+        "object-manager"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_bone_manager.cpp:MMDBoneManagerObject::SetPhysicsOverride",
+      "type": "function",
+      "name": "MMDBoneManagerObject::SetPhysicsOverride",
+      "filePath": "source/module/tools/object/mmd_bone_manager.cpp",
+      "lineRange": [
+        1988,
+        2008
+      ],
+      "summary": "MMDBoneManagerObject::SetPhysicsOverride sets physics override for bone hierarchy and runtime coordination. / MMDBoneManagerObject::SetPhysicsOverride 为骨骼层级与运行时协调设置 physics override。",
+      "tags": [
+        "physics",
+        "object-manager",
+        "pmx-import"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_bone_manager.cpp:MMDBoneManagerObject::Execute",
+      "type": "function",
+      "name": "MMDBoneManagerObject::Execute",
+      "filePath": "source/module/tools/object/mmd_bone_manager.cpp",
+      "lineRange": [
+        2010,
+        2119
+      ],
+      "summary": "MMDBoneManagerObject::Execute runs the Cinema 4D evaluation-stage behavior for bone hierarchy and runtime coordination. / MMDBoneManagerObject::Execute 为骨骼层级与运行时协调执行 Cinema 4D 求值阶段行为。",
+      "tags": [
+        "runtime",
+        "object-manager",
+        "pmx-import"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_bone_manager.cpp:MMDBoneManagerObject::AddToExecution",
+      "type": "function",
+      "name": "MMDBoneManagerObject::AddToExecution",
+      "filePath": "source/module/tools/object/mmd_bone_manager.cpp",
+      "lineRange": [
+        2121,
+        2128
+      ],
+      "summary": "MMDBoneManagerObject::AddToExecution registers the object in Cinema 4D execution order for bone hierarchy and runtime coordination. / MMDBoneManagerObject::AddToExecution 为骨骼层级与运行时协调将对象注册到 Cinema 4D 执行顺序。",
+      "tags": [
+        "object-manager",
+        "pmx-import",
+        "pmx-export"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_bone_manager.cpp:MMDBoneManagerObject::GetMaxBoneLayer",
+      "type": "function",
+      "name": "MMDBoneManagerObject::GetMaxBoneLayer",
+      "filePath": "source/module/tools/object/mmd_bone_manager.cpp",
+      "lineRange": [
+        2130,
+        2142
+      ],
+      "summary": "MMDBoneManagerObject::GetMaxBoneLayer retrieves max bone layer for bone hierarchy and runtime coordination. / MMDBoneManagerObject::GetMaxBoneLayer 为骨骼层级与运行时协调获取 max bone layer。",
+      "tags": [
+        "object-manager",
+        "pmx-import",
+        "pmx-export"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_bone_manager.cpp:MMDBoneManagerObject::PrepareSceneForPhysicsPlayback",
+      "type": "function",
+      "name": "MMDBoneManagerObject::PrepareSceneForPhysicsPlayback",
+      "filePath": "source/module/tools/object/mmd_bone_manager.cpp",
+      "lineRange": [
+        2144,
+        2152
+      ],
+      "summary": "MMDBoneManagerObject::PrepareSceneForPhysicsPlayback prepares scene for physics playback for bone hierarchy and runtime coordination. / MMDBoneManagerObject::PrepareSceneForPhysicsPlayback 为骨骼层级与运行时协调准备 scene for physics playback。",
+      "tags": [
+        "physics",
+        "object-manager",
+        "pmx-import"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_bone_manager.cpp:MMDBoneManagerObject::PrepareSceneForPhysicsPlaybackLayer",
+      "type": "function",
+      "name": "MMDBoneManagerObject::PrepareSceneForPhysicsPlaybackLayer",
+      "filePath": "source/module/tools/object/mmd_bone_manager.cpp",
+      "lineRange": [
+        2154,
+        2221
+      ],
+      "summary": "MMDBoneManagerObject::PrepareSceneForPhysicsPlaybackLayer prepares scene for physics playback layer for bone hierarchy and runtime coordination. / MMDBoneManagerObject::PrepareSceneForPhysicsPlaybackLayer 为骨骼层级与运行时协调准备 scene for physics playback layer。",
+      "tags": [
+        "physics",
+        "object-manager",
+        "pmx-import"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_bone_manager.cpp:MMDBoneManagerObject::SetAllBoneMode",
+      "type": "function",
+      "name": "MMDBoneManagerObject::SetAllBoneMode",
+      "filePath": "source/module/tools/object/mmd_bone_manager.cpp",
+      "lineRange": [
+        2223,
+        2251
+      ],
+      "summary": "MMDBoneManagerObject::SetAllBoneMode sets all bone mode for bone hierarchy and runtime coordination. / MMDBoneManagerObject::SetAllBoneMode 为骨骼层级与运行时协调设置 all bone mode。",
+      "tags": [
+        "object-manager",
+        "pmx-import",
+        "pmx-export"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_bone_manager.cpp:MMDBoneManagerObject::InvalidatePlaybackRuntimeState",
+      "type": "function",
+      "name": "MMDBoneManagerObject::InvalidatePlaybackRuntimeState",
+      "filePath": "source/module/tools/object/mmd_bone_manager.cpp",
+      "lineRange": [
+        2253,
+        2272
+      ],
+      "summary": "MMDBoneManagerObject::InvalidatePlaybackRuntimeState invalidates playback runtime state for bone hierarchy and runtime coordination. / MMDBoneManagerObject::InvalidatePlaybackRuntimeState 为骨骼层级与运行时协调使失效 playback runtime state。",
+      "tags": [
+        "runtime",
+        "object-manager",
+        "pmx-import"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_bone_manager.cpp:MMDBoneManagerObject::SetBoneDisplayType",
+      "type": "function",
+      "name": "MMDBoneManagerObject::SetBoneDisplayType",
+      "filePath": "source/module/tools/object/mmd_bone_manager.cpp",
+      "lineRange": [
+        2274,
+        2286
+      ],
+      "summary": "MMDBoneManagerObject::SetBoneDisplayType sets bone display type for bone hierarchy and runtime coordination. / MMDBoneManagerObject::SetBoneDisplayType 为骨骼层级与运行时协调设置 bone display type。",
+      "tags": [
+        "object-manager",
+        "pmx-import",
+        "pmx-export"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_bone_manager.cpp:MMDBoneManagerObject::CommitEditModeBindState",
+      "type": "function",
+      "name": "MMDBoneManagerObject::CommitEditModeBindState",
+      "filePath": "source/module/tools/object/mmd_bone_manager.cpp",
+      "lineRange": [
+        2288,
+        2317
+      ],
+      "summary": "MMDBoneManagerObject::CommitEditModeBindState commits edit mode bind state for bone hierarchy and runtime coordination. / MMDBoneManagerObject::CommitEditModeBindState 为骨骼层级与运行时协调提交 edit mode bind state。",
+      "tags": [
+        "object-manager",
+        "pmx-import",
+        "pmx-export"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_bone_manager.cpp:MMDBoneManagerObject::RestoreBindStateForEdit",
+      "type": "function",
+      "name": "MMDBoneManagerObject::RestoreBindStateForEdit",
+      "filePath": "source/module/tools/object/mmd_bone_manager.cpp",
+      "lineRange": [
+        2319,
+        2341
+      ],
+      "summary": "MMDBoneManagerObject::RestoreBindStateForEdit restores bind state for edit for bone hierarchy and runtime coordination. / MMDBoneManagerObject::RestoreBindStateForEdit 为骨骼层级与运行时协调恢复 bind state for edit。",
+      "tags": [
+        "object-manager",
+        "pmx-import",
+        "pmx-export"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_bone_manager.cpp:MMDBoneManagerObject::ResetMorphStrengths",
+      "type": "function",
+      "name": "MMDBoneManagerObject::ResetMorphStrengths",
+      "filePath": "source/module/tools/object/mmd_bone_manager.cpp",
+      "lineRange": [
+        2343,
+        2350
+      ],
+      "summary": "MMDBoneManagerObject::ResetMorphStrengths resets morph strengths for bone hierarchy and runtime coordination. / MMDBoneManagerObject::ResetMorphStrengths 为骨骼层级与运行时协调重置 morph strengths。",
+      "tags": [
+        "morph",
+        "object-manager",
+        "pmx-import"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_bone_manager.cpp:MMDBoneManagerObject::EnsureAllAnimationSlotCount",
+      "type": "function",
+      "name": "MMDBoneManagerObject::EnsureAllAnimationSlotCount",
+      "filePath": "source/module/tools/object/mmd_bone_manager.cpp",
+      "lineRange": [
+        2352,
+        2374
+      ],
+      "summary": "MMDBoneManagerObject::EnsureAllAnimationSlotCount ensures all animation slot count for bone hierarchy and runtime coordination. / MMDBoneManagerObject::EnsureAllAnimationSlotCount 为骨骼层级与运行时协调确保 all animation slot count。",
+      "tags": [
+        "vmd-animation",
+        "object-manager",
+        "pmx-import"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_bone_manager.cpp:MMDBoneManagerObject::SetAllActiveAnimationSlot",
+      "type": "function",
+      "name": "MMDBoneManagerObject::SetAllActiveAnimationSlot",
+      "filePath": "source/module/tools/object/mmd_bone_manager.cpp",
+      "lineRange": [
+        2376,
+        2394
+      ],
+      "summary": "MMDBoneManagerObject::SetAllActiveAnimationSlot sets all active animation slot for bone hierarchy and runtime coordination. / MMDBoneManagerObject::SetAllActiveAnimationSlot 为骨骼层级与运行时协调设置 all active animation slot。",
+      "tags": [
+        "vmd-animation",
+        "object-manager",
+        "pmx-import"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:source/module/tools/object/mmd_bone_manager.h",
+      "type": "file",
+      "name": "mmd_bone_manager.h",
+      "filePath": "source/module/tools/object/mmd_bone_manager.h",
+      "summary": "Declares the bone-manager object, its scene message contract, hierarchy indices, animation-slot controls, and physics-override API. / 声明骨骼管理器对象、场景消息协议、层级索引、动画槽控制以及物理覆盖 API。",
+      "tags": [
+        "object-manager",
+        "api",
+        "bone-hierarchy",
+        "animation",
+        "physics"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "class:source/module/tools/object/mmd_bone_manager.h:MMDBoneManagerObject",
+      "type": "class",
+      "name": "MMDBoneManagerObject",
+      "filePath": "source/module/tools/object/mmd_bone_manager.h",
+      "lineRange": [
+        70,
+        161
+      ],
+      "summary": "MMDBoneManagerObject coordinates owned objects, persistent state, and lifecycle operations for bone-manager API. / MMDBoneManagerObject 为骨骼管理器 API协调所管理对象、持久状态与生命周期操作。",
+      "tags": [
+        "object-manager",
+        "api",
+        "bone-hierarchy"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:source/module/tools/object/mmd_bone_manager.h:MMDBoneManagerObjectMsg::MMDBoneManagerObjectMsg",
+      "type": "function",
+      "name": "MMDBoneManagerObjectMsg::MMDBoneManagerObjectMsg",
+      "filePath": "source/module/tools/object/mmd_bone_manager.h",
+      "lineRange": [
+        59,
+        68
+      ],
+      "summary": "MMDBoneManagerObjectMsg::MMDBoneManagerObjectMsg initializes an object used by bone-manager API. / MMDBoneManagerObjectMsg::MMDBoneManagerObjectMsg 初始化骨骼管理器 API所使用的对象。",
+      "tags": [
+        "object-manager",
+        "api",
+        "bone-hierarchy"
+      ],
+      "complexity": "simple"
+    }
+  ],
+  "edges": [
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "class:source/module/tools/object/mmd_bone_manager.cpp:BoolResetGuard",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "class:source/module/tools/object/mmd_bone_manager.cpp:BoolResetGuard",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:NormalizeBoneMode",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:NormalizeBoneMode",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:GetBoneTagName",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:GetBoneTagName",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:GetDocumentTimeOrInvalid",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:GetDocumentTimeOrInvalid",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:ReadBoneIndexParameter",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:ReadBoneIndexParameter",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:ResolveBoneLinkIndex",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:ResolveBoneLinkIndex",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:ReadIndexFromStringParameter",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:ReadIndexFromStringParameter",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:ToEigenVector3f",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:ToEigenVector3f",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:InitDefaultPmxBone",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:InitDefaultPmxBone",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:ClearBoneFlag",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:ClearBoneFlag",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:BuildBoneFlags",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:BuildBoneFlags",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:DescItemHasParent",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:DescItemHasParent",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:CollectPmxIkLinks",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:CollectPmxIkLinks",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:ResolveIkTargetBoneIndex",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:ResolveIkTargetBoneIndex",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:RemapRigidRelatedBoneIndices",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:RemapRigidRelatedBoneIndices",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:BoneNeedsPrephysicsPlayback",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:BoneNeedsPrephysicsPlayback",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:ConfigureBoneManagerExecutionPriority",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:ConfigureBoneManagerExecutionPriority",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:BuildBoneRelativeMatrix",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:BuildBoneRelativeMatrix",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:MarkBoneTransformDirty",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:MarkBoneTransformDirty",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:MarkSceneNodeDirty",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:MarkSceneNodeDirty",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:MarkMeshHierarchyDirty",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:MarkMeshHierarchyDirty",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:MakeIdentityMatrix",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:MakeIdentityMatrix",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:NormalizeMatrixBasis",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:NormalizeMatrixBasis",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:GetMatrixScale",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:GetMatrixScale",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:GetObjectRotationOrder",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:GetObjectRotationOrder",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:BuildFrozenBoneGlobalMatrix",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:BuildFrozenBoneGlobalMatrix",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:CommitObjectLocalToFrozen",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:CommitObjectLocalToFrozen",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:BoolResetGuard::~BoolResetGuard",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:BoolResetGuard::~BoolResetGuard",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:SDK2024_Init",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:SDK2024_Init",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:SDK2024_CopyTo",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:SDK2024_CopyTo",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:MMDBoneManagerObject::Read",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:MMDBoneManagerObject::Read",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:SDK2024_Write",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:SDK2024_Write",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:MMDBoneManagerObject::SetDParameter",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:MMDBoneManagerObject::SetDParameter",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:MMDBoneManagerObject::HandleDescriptionCommandMessage",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:MMDBoneManagerObject::HandleDescriptionCommandMessage",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:MMDBoneManagerObject::CreateOrRefreshControls",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:MMDBoneManagerObject::CreateOrRefreshControls",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:MMDBoneManagerObject::HandleMMDBoneTagMessage",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:MMDBoneManagerObject::HandleMMDBoneTagMessage",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:MMDBoneManagerObject::HandleBoneIndexChangeMessage",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:MMDBoneManagerObject::HandleBoneIndexChangeMessage",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:MMDBoneManagerObject::CollectBoneHierarchyDFS",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:MMDBoneManagerObject::CollectBoneHierarchyDFS",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:MMDBoneManagerObject::RefreshBoneHierarchyUI",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:MMDBoneManagerObject::RefreshBoneHierarchyUI",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:MMDBoneManagerObject::SynchronizeBoneHierarchy",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:MMDBoneManagerObject::SynchronizeBoneHierarchy",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:MMDBoneManagerObject::MarkAppendExecutionOrderDirty",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:MMDBoneManagerObject::MarkAppendExecutionOrderDirty",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:MMDBoneManagerObject::ComputeAppendRecursionDepth",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:MMDBoneManagerObject::ComputeAppendRecursionDepth",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:MMDBoneManagerObject::EnsureAppendExecutionOrder",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:MMDBoneManagerObject::EnsureAppendExecutionOrder",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:MMDBoneManagerObject::Message",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:MMDBoneManagerObject::Message",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:MMDBoneManagerObject::FindBoneIndex",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:MMDBoneManagerObject::FindBoneIndex",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:MMDBoneManagerObject::BuildOrderedBoneObjectList",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:MMDBoneManagerObject::BuildOrderedBoneObjectList",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:MMDBoneManagerObject::LoadPMX",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:MMDBoneManagerObject::LoadPMX",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:MMDBoneManagerObject::SavePMX",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:MMDBoneManagerObject::SavePMX",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:EulerHpbToQuaternion",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:EulerHpbToQuaternion",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:MMDBoneManagerObject::ExportBoneMorphsToPMX",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:MMDBoneManagerObject::ExportBoneMorphsToPMX",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:MMDBoneManagerObject::SetPhysicsOverride",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:MMDBoneManagerObject::SetPhysicsOverride",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:MMDBoneManagerObject::Execute",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:MMDBoneManagerObject::Execute",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:MMDBoneManagerObject::AddToExecution",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:MMDBoneManagerObject::AddToExecution",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:MMDBoneManagerObject::GetMaxBoneLayer",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:MMDBoneManagerObject::GetMaxBoneLayer",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:MMDBoneManagerObject::PrepareSceneForPhysicsPlayback",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:MMDBoneManagerObject::PrepareSceneForPhysicsPlayback",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:MMDBoneManagerObject::PrepareSceneForPhysicsPlaybackLayer",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:MMDBoneManagerObject::PrepareSceneForPhysicsPlaybackLayer",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:MMDBoneManagerObject::SetAllBoneMode",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:MMDBoneManagerObject::SetAllBoneMode",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:MMDBoneManagerObject::InvalidatePlaybackRuntimeState",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:MMDBoneManagerObject::InvalidatePlaybackRuntimeState",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:MMDBoneManagerObject::SetBoneDisplayType",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:MMDBoneManagerObject::SetBoneDisplayType",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:MMDBoneManagerObject::CommitEditModeBindState",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:MMDBoneManagerObject::CommitEditModeBindState",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:MMDBoneManagerObject::RestoreBindStateForEdit",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:MMDBoneManagerObject::RestoreBindStateForEdit",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:MMDBoneManagerObject::ResetMorphStrengths",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:MMDBoneManagerObject::ResetMorphStrengths",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:MMDBoneManagerObject::EnsureAllAnimationSlotCount",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:MMDBoneManagerObject::EnsureAllAnimationSlotCount",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:MMDBoneManagerObject::SetAllActiveAnimationSlot",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "function:source/module/tools/object/mmd_bone_manager.cpp:MMDBoneManagerObject::SetAllActiveAnimationSlot",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.h",
+      "target": "class:source/module/tools/object/mmd_bone_manager.h:MMDBoneManagerObject",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.h",
+      "target": "class:source/module/tools/object/mmd_bone_manager.h:MMDBoneManagerObject",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.h",
+      "target": "function:source/module/tools/object/mmd_bone_manager.h:MMDBoneManagerObjectMsg::MMDBoneManagerObjectMsg",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.h",
+      "target": "function:source/module/tools/object/mmd_bone_manager.h:MMDBoneManagerObjectMsg::MMDBoneManagerObjectMsg",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "file:source/module/tools/object/mmd_bone_manager.h",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "file:source/module/tools/object/mmd_mesh_manager.h",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "file:source/module/tools/object/mmd_model_manager.h",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "file:source/module/tools/object/mmd_rigid_manager.h",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.cpp",
+      "target": "file:source/module/tools/object/mmd_rigid.h",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:source/module/tools/object/mmd_bone_manager.h",
+      "target": "file:source/module/tools/object/mmd_manager.hpp",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    }
+  ]
+}

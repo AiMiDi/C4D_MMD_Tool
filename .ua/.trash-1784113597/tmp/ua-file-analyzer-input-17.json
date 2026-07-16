@@ -1,0 +1,182 @@
+{
+  "projectRoot": "E:/code/C4D_MMD_Tool",
+  "batchFiles": [
+    {
+      "path": "res/S24_up/description/OMMDBoneManager.res",
+      "language": "res",
+      "sizeLines": 45,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/S24_up/description/OMMDCamera.h",
+      "language": "c",
+      "sizeLines": 8,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/S24_up/description/OMMDCamera.res",
+      "language": "res",
+      "sizeLines": 4,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/S24_up/description/OMMDJoint.h",
+      "language": "c",
+      "sizeLines": 71,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/S24_up/description/OMMDJoint.res",
+      "language": "res",
+      "sizeLines": 352,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/S24_up/description/OMMDJointManager.h",
+      "language": "c",
+      "sizeLines": 17,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/S24_up/description/OMMDJointManager.res",
+      "language": "res",
+      "sizeLines": 37,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/S24_up/description/OMMDMeshManager.h",
+      "language": "c",
+      "sizeLines": 19,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/S24_up/description/OMMDMeshManager.res",
+      "language": "res",
+      "sizeLines": 37,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/S24_up/description/OMMDModelManager.h",
+      "language": "c",
+      "sizeLines": 158,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/S24_up/description/OMMDModelManager.res",
+      "language": "res",
+      "sizeLines": 594,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/S24_up/description/OMMDRigid.h",
+      "language": "c",
+      "sizeLines": 85,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/S24_up/description/OMMDRigid.res",
+      "language": "res",
+      "sizeLines": 290,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/S24_up/description/OMMDRigidManager.h",
+      "language": "c",
+      "sizeLines": 17,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/S24_up/description/OMMDRigidManager.res",
+      "language": "res",
+      "sizeLines": 38,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/S24_up/description/TMMDBone.h",
+      "language": "c",
+      "sizeLines": 92,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/S24_up/description/TMMDBone.res",
+      "language": "res",
+      "sizeLines": 319,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/S24_up/description/Xmmdmaterialmorphshader.h",
+      "language": "c",
+      "sizeLines": 8,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/S24_up/description/Xmmdmaterialmorphshader.res",
+      "language": "res",
+      "sizeLines": 11,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/S24_up/dialogs/DLG_CMT_TOOL.res",
+      "language": "res",
+      "sizeLines": 773,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/S24_up/dialogs/DLG_CMT_VMD_IMPORT.res",
+      "language": "res",
+      "sizeLines": 73,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/S24_up/mikumikudance_data/color.txt",
+      "language": "txt",
+      "sizeLines": 76,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "res/S24_up/mikumikudance_data/toon01.bmp",
+      "language": "bmp",
+      "sizeLines": 0,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/S24_up/mikumikudance_data/toon02.bmp",
+      "language": "bmp",
+      "sizeLines": 0,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/S24_up/mikumikudance_data/toon03.bmp",
+      "language": "bmp",
+      "sizeLines": 0,
+      "fileCategory": "code"
+    }
+  ],
+  "batchImportData": {
+    "res/S24_up/description/OMMDBoneManager.res": [],
+    "res/S24_up/description/OMMDCamera.h": [],
+    "res/S24_up/description/OMMDCamera.res": [],
+    "res/S24_up/description/OMMDJoint.h": [],
+    "res/S24_up/description/OMMDJoint.res": [],
+    "res/S24_up/description/OMMDJointManager.h": [],
+    "res/S24_up/description/OMMDJointManager.res": [],
+    "res/S24_up/description/OMMDMeshManager.h": [],
+    "res/S24_up/description/OMMDMeshManager.res": [],
+    "res/S24_up/description/OMMDModelManager.h": [],
+    "res/S24_up/description/OMMDModelManager.res": [],
+    "res/S24_up/description/OMMDRigid.h": [],
+    "res/S24_up/description/OMMDRigid.res": [],
+    "res/S24_up/description/OMMDRigidManager.h": [],
+    "res/S24_up/description/OMMDRigidManager.res": [],
+    "res/S24_up/description/TMMDBone.h": [],
+    "res/S24_up/description/TMMDBone.res": [],
+    "res/S24_up/description/Xmmdmaterialmorphshader.h": [],
+    "res/S24_up/description/Xmmdmaterialmorphshader.res": [],
+    "res/S24_up/dialogs/DLG_CMT_TOOL.res": [],
+    "res/S24_up/dialogs/DLG_CMT_VMD_IMPORT.res": [],
+    "res/S24_up/mikumikudance_data/color.txt": [],
+    "res/S24_up/mikumikudance_data/toon01.bmp": [],
+    "res/S24_up/mikumikudance_data/toon02.bmp": [],
+    "res/S24_up/mikumikudance_data/toon03.bmp": []
+  }
+}

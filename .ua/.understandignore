@@ -1,0 +1,331 @@
+# .understandignore — patterns for files/dirs to exclude from analysis
+# Syntax: same as .gitignore (globs, # comments, ! negation, trailing / for dirs)
+# Lines below are suggestions — uncomment to activate.
+# Use ! prefix to force-include something excluded by defaults.
+#
+# Built-in defaults (always excluded unless negated):
+#   node_modules/, .git/, dist/, build/, obj/, *.lock, *.min.js, etc.
+#
+
+# --- Active project-specific exclusions ---
+
+# Legacy archive; the maintained implementation lives under root source/.
+old/
+
+# OpenSpec proposals and archived change artifacts are outside the runtime graph.
+/openspec/
+
+# Generated and local build outputs.
+_build*/
+cmake-build-*/
+sdk_*/_build*/
+
+# Vendor Maxon SDK framework sources are dependencies, not plugin implementation.
+sdk_*/frameworks/
+
+# SDK projects mirror the maintained root source/ and res/ trees.
+sdk_*/plugins/mmdtool/source/
+sdk_*/plugins/mmdtool/res/
+sdk_*/plugins/mmdtool/generated/
+
+# Do not analyze the generated knowledge-graph workspace itself.
+.ua/
+
+# Keep the canonical root trees in scope explicitly.
+!/source/
+!/res/
+!/cmake/
+!/docs/
+
+# --- From .gitignore (uncomment to exclude) ---
+
+# release/
+# CMakeUserPresets.json
+# dependency/install/
+# setup/Output/
+# *.xdl64
+# .vs/
+# _obj/
+# sdk_*/frameworks/*/generated/
+# *.d
+# *.slo
+# *.lo
+# *.o
+# *.obj
+# *.gch
+# *.pch
+# *.so
+# *.dylib
+# *.dll
+# *.mod
+# *.smod
+# *.lai
+# *.la
+# *.a
+# *.lib
+# *.exe
+# *.out
+# *.app
+# .idea/**/workspace.xml
+# .idea/**/tasks.xml
+# .idea/**/usage.statistics.xml
+# .idea/**/dictionaries
+# .idea/**/shelf
+# .idea/**/aws.xml
+# .idea/**/contentModel.xml
+# .idea/**/dataSources/
+# .idea/**/dataSources.ids
+# .idea/**/dataSources.local.xml
+# .idea/**/sqlDataSources.xml
+# .idea/**/dynamic.xml
+# .idea/**/uiDesigner.xml
+# .idea/**/dbnavigator.xml
+# .idea/**/gradle.xml
+# .idea/**/libraries
+# cmake-build-*/
+# .idea/**/mongoSettings.xml
+# *.iws
+# .idea_modules/
+# atlassian-ide-plugin.xml
+# .idea/replstate.xml
+# .idea/sonarlint/
+# com_crashlytics_export_strings.xml
+# crashlytics.properties
+# crashlytics-build.properties
+# fabric.properties
+# .idea/httpRequests
+# .idea/caches/build_file_checksums.ser
+# *.rsuser
+# *.suo
+# *.user
+# *.userosscache
+# *.sln.docstates
+# *.userprefs
+# mono_crash.*
+# [Dd]ebug/
+# [Dd]ebugPublic/
+# [Rr]elease/
+# [Rr]eleases/
+# x64/
+# x86/
+# [Aa][Rr][Mm]/
+# [Aa][Rr][Mm]64/
+# bld/
+# [Bb]in/
+# [Oo]bj/
+# [Ll]og/
+# [Ll]ogs/
+# .vs/
+# Generated\ Files/
+# [Tt]est[Rr]esult*/
+# [Bb]uild[Ll]og.*
+# *.VisualState.xml
+# TestResult.xml
+# nunit-*.xml
+# [Dd]ebugPS/
+# [Rr]eleasePS/
+# dlldata.c
+# BenchmarkDotNet.Artifacts/
+# project.lock.json
+# project.fragment.lock.json
+# artifacts/
+# StyleCopReport.xml
+# *_i.c
+# *_p.c
+# *_h.h
+# *.ilk
+# *.meta
+# *.iobj
+# *.pdb
+# *.ipdb
+# *.pgc
+# *.pgd
+# *.rsp
+# *.sbr
+# *.tlb
+# *.tli
+# *.tlh
+# *.tmp
+# *.tmp_proj
+# *_wpftmp.csproj
+# *.vspscc
+# *.vssscc
+# .builds
+# *.pidb
+# *.svclog
+# *.scc
+# _Chutzpah*
+# ipch/
+# *.aps
+# *.ncb
+# *.opendb
+# *.opensdf
+# *.sdf
+# *.cachefile
+# *.VC.db
+# *.VC.VC.opendb
+# *.psess
+# *.vsp
+# *.vspx
+# *.sap
+# *.e2e
+# $tf/
+# *.gpState
+# _ReSharper*/
+# *.[Rr]e[Ss]harper
+# *.DotSettings.user
+# _TeamCity*
+# *.dotCover
+# .axoCover/*
+# !.axoCover/settings.json
+# coverage*[.json, .xml, .info]
+# *.coverage
+# *.coveragexml
+# _NCrunch_*
+# .*crunch*.local.xml
+# nCrunchTemp_*
+# *.mm.*
+# AutoTest.Net/
+# .sass-cache/
+# [Ee]xpress/
+# DocProject/buildhelp/
+# DocProject/Help/*.HxT
+# DocProject/Help/*.HxC
+# DocProject/Help/*.hhc
+# DocProject/Help/*.hhk
+# DocProject/Help/*.hhp
+# DocProject/Help/Html2
+# DocProject/Help/html
+# publish/
+# *.[Pp]ublish.xml
+# *.azurePubxml
+# *.pubxml
+# *.publishproj
+# PublishScripts/
+# *.nupkg
+# *.snupkg
+# **/[Pp]ackages/*
+# !**/[Pp]ackages/build/
+# *.nuget.props
+# *.nuget.targets
+# csx/
+# *.build.csdef
+# ecf/
+# rcf/
+# AppPackages/
+# BundleArtifacts/
+# Package.StoreAssociation.xml
+# _pkginfo.txt
+# *.appx
+# *.appxbundle
+# *.appxupload
+# *.[Cc]ache
+# !?*.[Cc]ache/
+# ClientBin/
+# ~$*
+# *~
+# *.dbmdl
+# *.dbproj.schemaview
+# *.jfm
+# *.pfx
+# *.publishsettings
+# orleans.codegen.cs
+# Generated_Code/
+# _UpgradeReport_Files/
+# Backup*/
+# UpgradeLog*.XML
+# UpgradeLog*.htm
+# ServiceFabricBackup/
+# *.rptproj.bak
+# *.mdf
+# *.ldf
+# *.ndf
+# *.rdl.data
+# *.bim.layout
+# *.bim_*.settings
+# *.rptproj.rsuser
+# *- [Bb]ackup.rdl
+# *- [Bb]ackup ([0-9]).rdl
+# *- [Bb]ackup ([0-9][0-9]).rdl
+# FakesAssemblies/
+# *.GhostDoc.xml
+# .ntvs_analysis.dat
+# *.plg
+# *.opt
+# *.vbw
+# **/*.HTMLClient/GeneratedArtifacts
+# **/*.DesktopClient/GeneratedArtifacts
+# **/*.DesktopClient/ModelManifest.xml
+# **/*.Server/GeneratedArtifacts
+# **/*.Server/ModelManifest.xml
+# _Pvt_Extensions
+# .paket/paket.exe
+# paket-files/
+# .fake/
+# .cr/personal
+# *.pyc
+# *.tss
+# *.jmconfig
+# *.btp.cs
+# *.btm.cs
+# *.odx.cs
+# *.xsd.cs
+# OpenCover/
+# ASALocalRun/
+# *.binlog
+# *.nvuser
+# .mfractor/
+# .localhistory/
+# healthchecksdb
+# MigrationBackup/
+# .ionide/
+# sdk_*/plugins/mmdtool/source/
+# sdk_*/plugins/mmdtool/res/
+# sdk_*/plugins/mmdtool/generated/
+# sdk_*/_build*/
+# sdk_*/plugins/mmdtool/*.manifest
+# sdk_*/plugins/mmdtool/project/*.vcxproj.user
+# _build*/
+# CMakeFiles/
+# CMakeCache.txt
+# cmake_install.cmake
+
+# --- Detected directories (uncomment to exclude) ---
+
+# docs/
+# scripts/
+
+# --- Test file patterns (uncomment to exclude) ---
+
+# JS / TS
+# *.test.*
+# *.spec.*
+# *.snap
+# C# / .NET
+# **/*Tests.cs
+# **/*Test.cs
+# **/*Fixture.cs
+# **/*.Tests.csproj
+# Java / Kotlin
+# **/src/test/**
+# **/*Test.java
+# **/*IT.java
+# **/*Spec.kt
+# Go
+# **/*_test.go
+# C++
+# **/*_test.cc
+# **/*_test.cpp
+# **/*_test.cxx
+# **/*Test.cc
+# **/*Test.cpp
+# **/*_unittest.cc
+# **/*_unittest.cpp
+# **/*_browsertest.cc
+# **/*_benchmark.cc
+# **/*Benchmark.cpp
+# Python
+# **/test_*.py
+# **/*_test.py
+# **/tests.py
+# **/conftest.py

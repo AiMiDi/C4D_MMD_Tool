@@ -1,0 +1,4385 @@
+{
+  "scriptCompleted": true,
+  "filesAnalyzed": 8,
+  "filesSkipped": [],
+  "results": [
+    {
+      "path": "source/utils/io_util.hpp",
+      "language": "cpp",
+      "fileCategory": "code",
+      "totalLines": 300,
+      "nonEmptyLines": 281,
+      "callGraph": [
+        {
+          "caller": "ReadData",
+          "callee": "Read",
+          "lineNumber": 19
+        },
+        {
+          "caller": "WriteData",
+          "callee": "Write",
+          "lineNumber": 34
+        },
+        {
+          "caller": "WriteData",
+          "callee": "const_cast<T&>",
+          "lineNumber": 34
+        },
+        {
+          "caller": "WriteData",
+          "callee": "Write",
+          "lineNumber": 36
+        },
+        {
+          "caller": "ReadLinearContainer",
+          "callee": "ReadInt64",
+          "lineNumber": 55
+        },
+        {
+          "caller": "ReadLinearContainer",
+          "callee": "Resize",
+          "lineNumber": 57
+        },
+        {
+          "caller": "ReadLinearContainer",
+          "callee": "ReadData",
+          "lineNumber": 60
+        },
+        {
+          "caller": "WriteLinearContainer",
+          "callee": "WriteInt64",
+          "lineNumber": 80
+        },
+        {
+          "caller": "WriteLinearContainer",
+          "callee": "GetCount",
+          "lineNumber": 80
+        },
+        {
+          "caller": "WriteLinearContainer",
+          "callee": "WriteData",
+          "lineNumber": 84
+        },
+        {
+          "caller": "ReadHashMap",
+          "callee": "ReadInt64",
+          "lineNumber": 107
+        },
+        {
+          "caller": "ReadHashMap",
+          "callee": "SetCapacityHint",
+          "lineNumber": 109
+        },
+        {
+          "caller": "ReadHashMap",
+          "callee": "ReadData",
+          "lineNumber": 113
+        },
+        {
+          "caller": "ReadHashMap",
+          "callee": "InsertKey",
+          "lineNumber": 115
+        },
+        {
+          "caller": "ReadHashMap",
+          "callee": "std::move",
+          "lineNumber": 115
+        },
+        {
+          "caller": "ReadHashMap",
+          "callee": "ReadData",
+          "lineNumber": 116
+        },
+        {
+          "caller": "WriteHashMap",
+          "callee": "WriteInt64",
+          "lineNumber": 137
+        },
+        {
+          "caller": "WriteHashMap",
+          "callee": "GetCount",
+          "lineNumber": 137
+        },
+        {
+          "caller": "WriteHashMap",
+          "callee": "WriteData",
+          "lineNumber": 141
+        },
+        {
+          "caller": "WriteHashMap",
+          "callee": "GetKey",
+          "lineNumber": 141
+        },
+        {
+          "caller": "WriteHashMap",
+          "callee": "WriteData",
+          "lineNumber": 143
+        },
+        {
+          "caller": "WriteHashMap",
+          "callee": "GetValue",
+          "lineNumber": 143
+        },
+        {
+          "caller": "WriteBaseList2D",
+          "callee": "SetLink",
+          "lineNumber": 165
+        },
+        {
+          "caller": "WriteBaseList2D",
+          "callee": "const_cast<T*>",
+          "lineNumber": 165
+        },
+        {
+          "caller": "WriteBaseList2D",
+          "callee": "Write",
+          "lineNumber": 166
+        },
+        {
+          "caller": "ReadBaseList2D",
+          "callee": "Read",
+          "lineNumber": 184
+        },
+        {
+          "caller": "ReadBaseList2D",
+          "callee": "reinterpret_cast<T*>",
+          "lineNumber": 186
+        },
+        {
+          "caller": "ReadBaseList2D",
+          "callee": "ForceGetLink",
+          "lineNumber": 186
+        },
+        {
+          "caller": "ReadData<BaseContainer>",
+          "callee": "ReadContainer",
+          "lineNumber": 223
+        },
+        {
+          "caller": "ReadData<BaseTime>",
+          "callee": "ReadTime",
+          "lineNumber": 224
+        },
+        {
+          "caller": "ReadData<BaseTag*>",
+          "callee": "ReadBaseList2D",
+          "lineNumber": 225
+        },
+        {
+          "caller": "ReadData<BaseObject*>",
+          "callee": "ReadBaseList2D",
+          "lineNumber": 226
+        },
+        {
+          "caller": "ReadData<AutoAlloc<BaseLink>>",
+          "callee": "Read",
+          "lineNumber": 230
+        },
+        {
+          "caller": "ReadData<maxon::StrongRef<AutoAlloc<BaseLink>>>",
+          "callee": "maxon::StrongRef<AutoAlloc<BaseLink>>::Create",
+          "lineNumber": 239
+        },
+        {
+          "caller": "ReadData<maxon::StrongRef<AutoAlloc<BaseLink>>>",
+          "callee": "Read",
+          "lineNumber": 247
+        },
+        {
+          "caller": "WriteData<BaseContainer>",
+          "callee": "WriteContainer",
+          "lineNumber": 270
+        },
+        {
+          "caller": "WriteData<BaseTime>",
+          "callee": "WriteTime",
+          "lineNumber": 271
+        },
+        {
+          "caller": "WriteData<DescID>",
+          "callee": "Write",
+          "lineNumber": 273
+        },
+        {
+          "caller": "WriteData<DescID>",
+          "callee": "const_cast<DescID&>",
+          "lineNumber": 273
+        },
+        {
+          "caller": "WriteData<BaseTag*>",
+          "callee": "WriteBaseList2D",
+          "lineNumber": 275
+        },
+        {
+          "caller": "WriteData<BaseObject*>",
+          "callee": "WriteBaseList2D",
+          "lineNumber": 276
+        },
+        {
+          "caller": "WriteData<AutoAlloc<BaseLink>>",
+          "callee": "Write",
+          "lineNumber": 280
+        },
+        {
+          "caller": "WriteData<maxon::StrongRef<AutoAlloc<BaseLink>>>",
+          "callee": "Write",
+          "lineNumber": 287
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "source/utils/math_util.hpp",
+      "language": "cpp",
+      "fileCategory": "code",
+      "totalLines": 101,
+      "nonEmptyLines": 91,
+      "functions": [
+        {
+          "name": "EulerToQuaternion",
+          "startLine": 24,
+          "endLine": 38,
+          "params": [
+            "euler"
+          ]
+        },
+        {
+          "name": "QuaternionToEuler",
+          "startLine": 45,
+          "endLine": 100,
+          "params": [
+            "quaternion"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "EulerToQuaternion",
+          "line": 24,
+          "isDefault": false
+        },
+        {
+          "name": "QuaternionToEuler",
+          "line": 45,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "EulerToQuaternion",
+          "callee": "sin",
+          "lineNumber": 27
+        },
+        {
+          "caller": "EulerToQuaternion",
+          "callee": "sin",
+          "lineNumber": 28
+        },
+        {
+          "caller": "EulerToQuaternion",
+          "callee": "sin",
+          "lineNumber": 29
+        },
+        {
+          "caller": "EulerToQuaternion",
+          "callee": "cos",
+          "lineNumber": 30
+        },
+        {
+          "caller": "EulerToQuaternion",
+          "callee": "cos",
+          "lineNumber": 31
+        },
+        {
+          "caller": "EulerToQuaternion",
+          "callee": "cos",
+          "lineNumber": 32
+        },
+        {
+          "caller": "EulerToQuaternion",
+          "callee": "maxon::Vector4d32",
+          "lineNumber": 33
+        },
+        {
+          "caller": "EulerToQuaternion",
+          "callee": "maxon::SafeConvert<Float32>",
+          "lineNumber": 34
+        },
+        {
+          "caller": "EulerToQuaternion",
+          "callee": "maxon::SafeConvert<Float32>",
+          "lineNumber": 35
+        },
+        {
+          "caller": "EulerToQuaternion",
+          "callee": "maxon::SafeConvert<Float32>",
+          "lineNumber": 36
+        },
+        {
+          "caller": "EulerToQuaternion",
+          "callee": "maxon::SafeConvert<Float32>",
+          "lineNumber": 37
+        },
+        {
+          "caller": "QuaternionToEuler",
+          "callee": "static_cast<double>",
+          "lineNumber": 48
+        },
+        {
+          "caller": "QuaternionToEuler",
+          "callee": "static_cast<double>",
+          "lineNumber": 49
+        },
+        {
+          "caller": "QuaternionToEuler",
+          "callee": "static_cast<double>",
+          "lineNumber": 50
+        },
+        {
+          "caller": "QuaternionToEuler",
+          "callee": "static_cast<double>",
+          "lineNumber": 51
+        },
+        {
+          "caller": "QuaternionToEuler",
+          "callee": "atan2",
+          "lineNumber": 52
+        },
+        {
+          "caller": "QuaternionToEuler",
+          "callee": "static_cast<double>",
+          "lineNumber": 55
+        },
+        {
+          "caller": "QuaternionToEuler",
+          "callee": "static_cast<double>",
+          "lineNumber": 56
+        },
+        {
+          "caller": "QuaternionToEuler",
+          "callee": "static_cast<double>",
+          "lineNumber": 57
+        },
+        {
+          "caller": "QuaternionToEuler",
+          "callee": "static_cast<double>",
+          "lineNumber": 58
+        },
+        {
+          "caller": "QuaternionToEuler",
+          "callee": "atan2",
+          "lineNumber": 59
+        },
+        {
+          "caller": "QuaternionToEuler",
+          "callee": "static_cast<double>",
+          "lineNumber": 63
+        },
+        {
+          "caller": "QuaternionToEuler",
+          "callee": "static_cast<double>",
+          "lineNumber": 64
+        },
+        {
+          "caller": "QuaternionToEuler",
+          "callee": "asin",
+          "lineNumber": 74
+        },
+        {
+          "caller": "QuaternionToEuler",
+          "callee": "copysign",
+          "lineNumber": 86
+        },
+        {
+          "caller": "QuaternionToEuler",
+          "callee": "maxon::SafeConvert<float>",
+          "lineNumber": 99
+        },
+        {
+          "caller": "QuaternionToEuler",
+          "callee": "maxon::SafeConvert<float>",
+          "lineNumber": 99
+        },
+        {
+          "caller": "QuaternionToEuler",
+          "callee": "maxon::SafeConvert<float>",
+          "lineNumber": 99
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 2,
+        "functionCount": 2,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "source/utils/mmd_bone_control_util.cpp",
+      "language": "cpp",
+      "fileCategory": "code",
+      "totalLines": 979,
+      "nonEmptyLines": 850,
+      "functions": [
+        {
+          "name": "MakeIdentityMatrix",
+          "startLine": 51,
+          "endLine": 59,
+          "params": []
+        },
+        {
+          "name": "NormalizeMatrixBasis",
+          "startLine": 61,
+          "endLine": 66,
+          "params": [
+            "matrix"
+          ]
+        },
+        {
+          "name": "MatrixToEigen",
+          "startLine": 68,
+          "endLine": 84,
+          "params": [
+            "matrix"
+          ]
+        },
+        {
+          "name": "EigenToMatrix",
+          "startLine": 86,
+          "endLine": 94,
+          "params": [
+            "matrix"
+          ]
+        },
+        {
+          "name": "ToQuaternionArray",
+          "startLine": 96,
+          "endLine": 100,
+          "params": [
+            "rotation"
+          ]
+        },
+        {
+          "name": "ExtractRotation",
+          "startLine": 102,
+          "endLine": 105,
+          "params": [
+            "matrix"
+          ]
+        },
+        {
+          "name": "GetObjectRotationOrder",
+          "startLine": 107,
+          "endLine": 113,
+          "params": [
+            "object"
+          ]
+        },
+        {
+          "name": "MarkSceneNodeDirty",
+          "startLine": 115,
+          "endLine": 122,
+          "params": [
+            "node"
+          ]
+        },
+        {
+          "name": "MarkControlTransformDirty",
+          "startLine": 124,
+          "endLine": 134,
+          "params": [
+            "object"
+          ]
+        },
+        {
+          "name": "BuildCurrentBoneGlobalMatrix",
+          "startLine": 136,
+          "endLine": 139,
+          "params": [
+            "bone_object"
+          ]
+        },
+        {
+          "name": "BuildFrozenBoneGlobalMatrix",
+          "startLine": 141,
+          "endLine": 152,
+          "params": [
+            "bone_object"
+          ]
+        },
+        {
+          "name": "TransformRestDirectionToCurrent",
+          "startLine": 154,
+          "endLine": 173,
+          "params": [
+            "rest_matrix",
+            "current_matrix",
+            "direction"
+          ]
+        },
+        {
+          "name": "BuildControlBaseGlobalMatrix",
+          "startLine": 175,
+          "endLine": 183,
+          "params": [
+            "control"
+          ]
+        },
+        {
+          "name": "TryNormalize",
+          "startLine": 191,
+          "endLine": 197,
+          "params": [
+            "vector"
+          ]
+        },
+        {
+          "name": "GetFixedAxis",
+          "startLine": 199,
+          "endLine": 205,
+          "params": [
+            "bc",
+            "axis"
+          ]
+        },
+        {
+          "name": "GetLocalBoneAxis",
+          "startLine": 207,
+          "endLine": 213,
+          "params": [
+            "bc",
+            "axis"
+          ]
+        },
+        {
+          "name": "IsBoneControlEligible",
+          "startLine": 215,
+          "endLine": 218,
+          "params": [
+            "bc"
+          ]
+        },
+        {
+          "name": "ShouldUseTailPosition",
+          "startLine": 220,
+          "endLine": 235,
+          "params": [
+            "bc"
+          ]
+        },
+        {
+          "name": "GetTailBonePoint",
+          "startLine": 237,
+          "endLine": 280,
+          "params": [
+            "bone_manager",
+            "bc",
+            "rest_matrix",
+            "current_matrix",
+            "bone_object",
+            "point"
+          ]
+        },
+        {
+          "name": "GetTailBoneAxis",
+          "startLine": 282,
+          "endLine": 292,
+          "params": [
+            "bone_manager",
+            "bc",
+            "rest_matrix",
+            "current_matrix",
+            "bone_object",
+            "axis"
+          ]
+        },
+        {
+          "name": "GetFallbackReference",
+          "startLine": 294,
+          "endLine": 305,
+          "params": [
+            "rest",
+            "normal"
+          ]
+        },
+        {
+          "name": "BuildBasisFromNormal",
+          "startLine": 307,
+          "endLine": 330,
+          "params": [
+            "fallback",
+            "normal",
+            "reference"
+          ]
+        },
+        {
+          "name": "GetBoneHierarchyDepth",
+          "startLine": 332,
+          "endLine": 342,
+          "params": [
+            "bone_object"
+          ]
+        },
+        {
+          "name": "GetHierarchyRadiusScale",
+          "startLine": 344,
+          "endLine": 347,
+          "params": [
+            "depth"
+          ]
+        },
+        {
+          "name": "GetControlVisualSpec",
+          "startLine": 349,
+          "endLine": 355,
+          "params": [
+            "bc",
+            "bone_object"
+          ]
+        },
+        {
+          "name": "GetControlColor",
+          "startLine": 357,
+          "endLine": 365,
+          "params": [
+            "local_name"
+          ]
+        },
+        {
+          "name": "SetLinkedObjectParameter",
+          "startLine": 385,
+          "endLine": 395,
+          "params": [
+            "owner",
+            "parameter_id",
+            "object"
+          ]
+        },
+        {
+          "name": "ClearLinkedObjectParameter",
+          "startLine": 397,
+          "endLine": 401,
+          "params": [
+            "owner",
+            "parameter_id"
+          ]
+        },
+        {
+          "name": "IsSameOrDescendantOf",
+          "startLine": 417,
+          "endLine": 425,
+          "params": [
+            "object",
+            "ancestor"
+          ]
+        },
+        {
+          "name": "GetControlBaseName",
+          "startLine": 427,
+          "endLine": 451,
+          "params": [
+            "bone_tag",
+            "bone_index"
+          ]
+        },
+        {
+          "name": "GetControlObjectName",
+          "startLine": 453,
+          "endLine": 456,
+          "params": [
+            "bone_tag",
+            "bone_index"
+          ]
+        },
+        {
+          "name": "BuildControlMatrix",
+          "startLine": 458,
+          "endLine": 476,
+          "params": [
+            "bone_manager",
+            "bone_tag",
+            "bone_object"
+          ]
+        },
+        {
+          "name": "BuildControlRestMatrix",
+          "startLine": 478,
+          "endLine": 481,
+          "params": [
+            "bone_manager",
+            "bone_tag",
+            "bone_object"
+          ]
+        },
+        {
+          "name": "BuildControlCurrentMatrix",
+          "startLine": 483,
+          "endLine": 486,
+          "params": [
+            "bone_manager",
+            "bone_tag",
+            "bone_object"
+          ]
+        },
+        {
+          "name": "CommitObjectLocalToFrozen",
+          "startLine": 488,
+          "endLine": 500,
+          "params": [
+            "object"
+          ]
+        },
+        {
+          "name": "ApplyGlobalFrozenMatrix",
+          "startLine": 502,
+          "endLine": 509,
+          "params": [
+            "object",
+            "matrix"
+          ]
+        },
+        {
+          "name": "MoveControlUnder",
+          "startLine": 511,
+          "endLine": 520,
+          "params": [
+            "control",
+            "parent"
+          ]
+        },
+        {
+          "name": "BuildControlShapePoints",
+          "startLine": 522,
+          "endLine": 564,
+          "params": [
+            "spec"
+          ]
+        },
+        {
+          "name": "ApplyControlSplineShape",
+          "startLine": 566,
+          "endLine": 591,
+          "params": [
+            "spline",
+            "spec"
+          ]
+        },
+        {
+          "name": "ApplyControlSplineShape",
+          "startLine": 593,
+          "endLine": 598,
+          "params": [
+            "control",
+            "spec"
+          ]
+        },
+        {
+          "name": "SetControlObjectColor",
+          "startLine": 612,
+          "endLine": 619,
+          "params": [
+            "object",
+            "color"
+          ]
+        },
+        {
+          "name": "IsMatrixIdentityLike",
+          "startLine": 621,
+          "endLine": 628,
+          "params": [
+            "matrix"
+          ]
+        },
+        {
+          "name": "MixHash",
+          "startLine": 630,
+          "endLine": 635,
+          "params": [
+            "hash",
+            "value"
+          ]
+        },
+        {
+          "name": "HashFloat",
+          "startLine": 637,
+          "endLine": 640,
+          "params": [
+            "value"
+          ]
+        },
+        {
+          "name": "HashMatrix",
+          "startLine": 642,
+          "endLine": 657,
+          "params": [
+            "hash",
+            "matrix"
+          ]
+        },
+        {
+          "name": "SetProtectionAxis",
+          "startLine": 671,
+          "endLine": 675,
+          "params": [
+            "tag",
+            "parameter_id",
+            "locked"
+          ]
+        },
+        {
+          "name": "ConfigureControlProtection",
+          "startLine": 677,
+          "endLine": 697,
+          "params": [
+            "control",
+            "bc"
+          ]
+        },
+        {
+          "name": "ProjectRotationToAxis",
+          "startLine": 699,
+          "endLine": 715,
+          "params": [
+            "rotation",
+            "fixed_axis"
+          ]
+        },
+        {
+          "name": "CreateOrRefreshControls",
+          "startLine": 718,
+          "endLine": 841,
+          "params": [
+            "bone_manager",
+            "bone_manager_object"
+          ]
+        },
+        {
+          "name": "HasActiveControlDelta",
+          "startLine": 843,
+          "endLine": 856,
+          "params": [
+            "bone_manager"
+          ]
+        },
+        {
+          "name": "GetControlStateChecksum",
+          "startLine": 858,
+          "endLine": 881,
+          "params": [
+            "bone_manager"
+          ]
+        },
+        {
+          "name": "SyncControlsToCurrentPose",
+          "startLine": 883,
+          "endLine": 938,
+          "params": [
+            "bone_manager"
+          ]
+        },
+        {
+          "name": "GetControlDeltaInBoneSpace",
+          "startLine": 940,
+          "endLine": 969,
+          "params": [
+            "bone_tag",
+            "bone_object",
+            "translation",
+            "rotation"
+          ]
+        },
+        {
+          "name": "ResetControlRelativeTransform",
+          "startLine": 971,
+          "endLine": 979,
+          "params": [
+            "bone_tag"
+          ]
+        }
+      ],
+      "classes": [
+        {
+          "name": "ControlVisualSpec",
+          "startLine": 44,
+          "endLine": 49,
+          "methods": [],
+          "properties": [
+            "shape",
+            "radius",
+            "aspect"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "ControlVisualSpec",
+          "line": 44,
+          "isDefault": false
+        },
+        {
+          "name": "MakeIdentityMatrix",
+          "line": 51,
+          "isDefault": false
+        },
+        {
+          "name": "NormalizeMatrixBasis",
+          "line": 61,
+          "isDefault": false
+        },
+        {
+          "name": "MatrixToEigen",
+          "line": 68,
+          "isDefault": false
+        },
+        {
+          "name": "EigenToMatrix",
+          "line": 86,
+          "isDefault": false
+        },
+        {
+          "name": "ToQuaternionArray",
+          "line": 96,
+          "isDefault": false
+        },
+        {
+          "name": "ExtractRotation",
+          "line": 102,
+          "isDefault": false
+        },
+        {
+          "name": "GetObjectRotationOrder",
+          "line": 107,
+          "isDefault": false
+        },
+        {
+          "name": "MarkSceneNodeDirty",
+          "line": 115,
+          "isDefault": false
+        },
+        {
+          "name": "MarkControlTransformDirty",
+          "line": 124,
+          "isDefault": false
+        },
+        {
+          "name": "BuildCurrentBoneGlobalMatrix",
+          "line": 136,
+          "isDefault": false
+        },
+        {
+          "name": "BuildFrozenBoneGlobalMatrix",
+          "line": 141,
+          "isDefault": false
+        },
+        {
+          "name": "TransformRestDirectionToCurrent",
+          "line": 154,
+          "isDefault": false
+        },
+        {
+          "name": "BuildControlBaseGlobalMatrix",
+          "line": 175,
+          "isDefault": false
+        },
+        {
+          "name": "TryNormalize",
+          "line": 191,
+          "isDefault": false
+        },
+        {
+          "name": "GetFixedAxis",
+          "line": 199,
+          "isDefault": false
+        },
+        {
+          "name": "GetLocalBoneAxis",
+          "line": 207,
+          "isDefault": false
+        },
+        {
+          "name": "IsBoneControlEligible",
+          "line": 215,
+          "isDefault": false
+        },
+        {
+          "name": "ShouldUseTailPosition",
+          "line": 220,
+          "isDefault": false
+        },
+        {
+          "name": "GetTailBonePoint",
+          "line": 237,
+          "isDefault": false
+        },
+        {
+          "name": "GetTailBoneAxis",
+          "line": 282,
+          "isDefault": false
+        },
+        {
+          "name": "GetFallbackReference",
+          "line": 294,
+          "isDefault": false
+        },
+        {
+          "name": "BuildBasisFromNormal",
+          "line": 307,
+          "isDefault": false
+        },
+        {
+          "name": "GetBoneHierarchyDepth",
+          "line": 332,
+          "isDefault": false
+        },
+        {
+          "name": "GetHierarchyRadiusScale",
+          "line": 344,
+          "isDefault": false
+        },
+        {
+          "name": "GetControlVisualSpec",
+          "line": 349,
+          "isDefault": false
+        },
+        {
+          "name": "GetControlColor",
+          "line": 357,
+          "isDefault": false
+        },
+        {
+          "name": "SetLinkedObjectParameter",
+          "line": 385,
+          "isDefault": false
+        },
+        {
+          "name": "ClearLinkedObjectParameter",
+          "line": 397,
+          "isDefault": false
+        },
+        {
+          "name": "IsSameOrDescendantOf",
+          "line": 417,
+          "isDefault": false
+        },
+        {
+          "name": "GetControlBaseName",
+          "line": 427,
+          "isDefault": false
+        },
+        {
+          "name": "GetControlObjectName",
+          "line": 453,
+          "isDefault": false
+        },
+        {
+          "name": "BuildControlMatrix",
+          "line": 458,
+          "isDefault": false
+        },
+        {
+          "name": "BuildControlRestMatrix",
+          "line": 478,
+          "isDefault": false
+        },
+        {
+          "name": "BuildControlCurrentMatrix",
+          "line": 483,
+          "isDefault": false
+        },
+        {
+          "name": "CommitObjectLocalToFrozen",
+          "line": 488,
+          "isDefault": false
+        },
+        {
+          "name": "ApplyGlobalFrozenMatrix",
+          "line": 502,
+          "isDefault": false
+        },
+        {
+          "name": "MoveControlUnder",
+          "line": 511,
+          "isDefault": false
+        },
+        {
+          "name": "BuildControlShapePoints",
+          "line": 522,
+          "isDefault": false
+        },
+        {
+          "name": "ApplyControlSplineShape",
+          "line": 566,
+          "isDefault": false
+        },
+        {
+          "name": "ApplyControlSplineShape",
+          "line": 593,
+          "isDefault": false
+        },
+        {
+          "name": "SetControlObjectColor",
+          "line": 612,
+          "isDefault": false
+        },
+        {
+          "name": "IsMatrixIdentityLike",
+          "line": 621,
+          "isDefault": false
+        },
+        {
+          "name": "MixHash",
+          "line": 630,
+          "isDefault": false
+        },
+        {
+          "name": "HashFloat",
+          "line": 637,
+          "isDefault": false
+        },
+        {
+          "name": "HashMatrix",
+          "line": 642,
+          "isDefault": false
+        },
+        {
+          "name": "SetProtectionAxis",
+          "line": 671,
+          "isDefault": false
+        },
+        {
+          "name": "ConfigureControlProtection",
+          "line": 677,
+          "isDefault": false
+        },
+        {
+          "name": "ProjectRotationToAxis",
+          "line": 699,
+          "isDefault": false
+        },
+        {
+          "name": "CreateOrRefreshControls",
+          "line": 718,
+          "isDefault": false
+        },
+        {
+          "name": "HasActiveControlDelta",
+          "line": 843,
+          "isDefault": false
+        },
+        {
+          "name": "GetControlStateChecksum",
+          "line": 858,
+          "isDefault": false
+        },
+        {
+          "name": "SyncControlsToCurrentPose",
+          "line": 883,
+          "isDefault": false
+        },
+        {
+          "name": "GetControlDeltaInBoneSpace",
+          "line": 940,
+          "isDefault": false
+        },
+        {
+          "name": "ResetControlRelativeTransform",
+          "line": 971,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "MakeIdentityMatrix",
+          "callee": "Vector",
+          "lineNumber": 54
+        },
+        {
+          "caller": "MakeIdentityMatrix",
+          "callee": "Vector",
+          "lineNumber": 55
+        },
+        {
+          "caller": "MakeIdentityMatrix",
+          "callee": "Vector",
+          "lineNumber": 56
+        },
+        {
+          "caller": "MakeIdentityMatrix",
+          "callee": "Vector",
+          "lineNumber": 57
+        },
+        {
+          "caller": "NormalizeMatrixBasis",
+          "callee": "GetNormalized",
+          "lineNumber": 64
+        },
+        {
+          "caller": "MatrixToEigen",
+          "callee": "Eigen::Matrix4f::Identity",
+          "lineNumber": 70
+        },
+        {
+          "caller": "MatrixToEigen",
+          "callee": "result",
+          "lineNumber": 71
+        },
+        {
+          "caller": "MatrixToEigen",
+          "callee": "static_cast<float>",
+          "lineNumber": 71
+        },
+        {
+          "caller": "MatrixToEigen",
+          "callee": "result",
+          "lineNumber": 72
+        },
+        {
+          "caller": "MatrixToEigen",
+          "callee": "static_cast<float>",
+          "lineNumber": 72
+        },
+        {
+          "caller": "MatrixToEigen",
+          "callee": "result",
+          "lineNumber": 73
+        },
+        {
+          "caller": "MatrixToEigen",
+          "callee": "static_cast<float>",
+          "lineNumber": 73
+        },
+        {
+          "caller": "MatrixToEigen",
+          "callee": "result",
+          "lineNumber": 74
+        },
+        {
+          "caller": "MatrixToEigen",
+          "callee": "static_cast<float>",
+          "lineNumber": 74
+        },
+        {
+          "caller": "MatrixToEigen",
+          "callee": "result",
+          "lineNumber": 75
+        },
+        {
+          "caller": "MatrixToEigen",
+          "callee": "static_cast<float>",
+          "lineNumber": 75
+        },
+        {
+          "caller": "MatrixToEigen",
+          "callee": "result",
+          "lineNumber": 76
+        },
+        {
+          "caller": "MatrixToEigen",
+          "callee": "static_cast<float>",
+          "lineNumber": 76
+        },
+        {
+          "caller": "MatrixToEigen",
+          "callee": "result",
+          "lineNumber": 77
+        },
+        {
+          "caller": "MatrixToEigen",
+          "callee": "static_cast<float>",
+          "lineNumber": 77
+        },
+        {
+          "caller": "MatrixToEigen",
+          "callee": "result",
+          "lineNumber": 78
+        },
+        {
+          "caller": "MatrixToEigen",
+          "callee": "static_cast<float>",
+          "lineNumber": 78
+        },
+        {
+          "caller": "MatrixToEigen",
+          "callee": "result",
+          "lineNumber": 79
+        },
+        {
+          "caller": "MatrixToEigen",
+          "callee": "static_cast<float>",
+          "lineNumber": 79
+        },
+        {
+          "caller": "MatrixToEigen",
+          "callee": "result",
+          "lineNumber": 80
+        },
+        {
+          "caller": "MatrixToEigen",
+          "callee": "static_cast<float>",
+          "lineNumber": 80
+        },
+        {
+          "caller": "MatrixToEigen",
+          "callee": "result",
+          "lineNumber": 81
+        },
+        {
+          "caller": "MatrixToEigen",
+          "callee": "static_cast<float>",
+          "lineNumber": 81
+        },
+        {
+          "caller": "MatrixToEigen",
+          "callee": "result",
+          "lineNumber": 82
+        },
+        {
+          "caller": "MatrixToEigen",
+          "callee": "static_cast<float>",
+          "lineNumber": 82
+        },
+        {
+          "caller": "EigenToMatrix",
+          "callee": "Vector",
+          "lineNumber": 89
+        },
+        {
+          "caller": "EigenToMatrix",
+          "callee": "matrix",
+          "lineNumber": 89
+        },
+        {
+          "caller": "EigenToMatrix",
+          "callee": "matrix",
+          "lineNumber": 89
+        },
+        {
+          "caller": "EigenToMatrix",
+          "callee": "matrix",
+          "lineNumber": 89
+        },
+        {
+          "caller": "EigenToMatrix",
+          "callee": "Vector",
+          "lineNumber": 90
+        },
+        {
+          "caller": "EigenToMatrix",
+          "callee": "matrix",
+          "lineNumber": 90
+        },
+        {
+          "caller": "EigenToMatrix",
+          "callee": "matrix",
+          "lineNumber": 90
+        },
+        {
+          "caller": "EigenToMatrix",
+          "callee": "matrix",
+          "lineNumber": 90
+        },
+        {
+          "caller": "EigenToMatrix",
+          "callee": "Vector",
+          "lineNumber": 91
+        },
+        {
+          "caller": "EigenToMatrix",
+          "callee": "matrix",
+          "lineNumber": 91
+        },
+        {
+          "caller": "EigenToMatrix",
+          "callee": "matrix",
+          "lineNumber": 91
+        },
+        {
+          "caller": "EigenToMatrix",
+          "callee": "matrix",
+          "lineNumber": 91
+        },
+        {
+          "caller": "EigenToMatrix",
+          "callee": "Vector",
+          "lineNumber": 92
+        },
+        {
+          "caller": "EigenToMatrix",
+          "callee": "matrix",
+          "lineNumber": 92
+        },
+        {
+          "caller": "EigenToMatrix",
+          "callee": "matrix",
+          "lineNumber": 92
+        },
+        {
+          "caller": "EigenToMatrix",
+          "callee": "matrix",
+          "lineNumber": 92
+        },
+        {
+          "caller": "EigenToMatrix",
+          "callee": "NormalizeMatrixBasis",
+          "lineNumber": 93
+        },
+        {
+          "caller": "ToQuaternionArray",
+          "callee": "normalized",
+          "lineNumber": 98
+        },
+        {
+          "caller": "ToQuaternionArray",
+          "callee": "x",
+          "lineNumber": 99
+        },
+        {
+          "caller": "ToQuaternionArray",
+          "callee": "y",
+          "lineNumber": 99
+        },
+        {
+          "caller": "ToQuaternionArray",
+          "callee": "z",
+          "lineNumber": 99
+        },
+        {
+          "caller": "ToQuaternionArray",
+          "callee": "w",
+          "lineNumber": 99
+        },
+        {
+          "caller": "ExtractRotation",
+          "callee": "normalized",
+          "lineNumber": 104
+        },
+        {
+          "caller": "ExtractRotation",
+          "callee": "Eigen::Quaternionf",
+          "lineNumber": 104
+        },
+        {
+          "caller": "ExtractRotation",
+          "callee": "block<3, 3>",
+          "lineNumber": 104
+        },
+        {
+          "caller": "GetObjectRotationOrder",
+          "callee": "GetParameter",
+          "lineNumber": 110
+        },
+        {
+          "caller": "GetObjectRotationOrder",
+          "callee": "ConstDescID",
+          "lineNumber": 110
+        },
+        {
+          "caller": "GetObjectRotationOrder",
+          "callee": "DescLevel",
+          "lineNumber": 110
+        },
+        {
+          "caller": "GetObjectRotationOrder",
+          "callee": "static_cast<ROTATIONORDER>",
+          "lineNumber": 111
+        },
+        {
+          "caller": "GetObjectRotationOrder",
+          "callee": "GetInt32",
+          "lineNumber": 111
+        },
+        {
+          "caller": "MarkSceneNodeDirty",
+          "callee": "SetDirty",
+          "lineNumber": 120
+        },
+        {
+          "caller": "MarkSceneNodeDirty",
+          "callee": "Message",
+          "lineNumber": 121
+        },
+        {
+          "caller": "MarkControlTransformDirty",
+          "callee": "Touch",
+          "lineNumber": 129
+        },
+        {
+          "caller": "MarkControlTransformDirty",
+          "callee": "SetDirty",
+          "lineNumber": 130
+        },
+        {
+          "caller": "MarkControlTransformDirty",
+          "callee": "Message",
+          "lineNumber": 131
+        },
+        {
+          "caller": "MarkControlTransformDirty",
+          "callee": "GetFirstTag",
+          "lineNumber": 132
+        },
+        {
+          "caller": "MarkControlTransformDirty",
+          "callee": "GetNext",
+          "lineNumber": 132
+        },
+        {
+          "caller": "MarkControlTransformDirty",
+          "callee": "SetDirty",
+          "lineNumber": 133
+        },
+        {
+          "caller": "BuildCurrentBoneGlobalMatrix",
+          "callee": "NormalizeMatrixBasis",
+          "lineNumber": 138
+        },
+        {
+          "caller": "BuildCurrentBoneGlobalMatrix",
+          "callee": "GetMg",
+          "lineNumber": 138
+        },
+        {
+          "caller": "BuildCurrentBoneGlobalMatrix",
+          "callee": "MakeIdentityMatrix",
+          "lineNumber": 138
+        },
+        {
+          "caller": "BuildFrozenBoneGlobalMatrix",
+          "callee": "GetTag",
+          "lineNumber": 145
+        },
+        {
+          "caller": "BuildFrozenBoneGlobalMatrix",
+          "callee": "GetUp",
+          "lineNumber": 145
+        },
+        {
+          "caller": "BuildFrozenBoneGlobalMatrix",
+          "callee": "push_back",
+          "lineNumber": 146
+        },
+        {
+          "caller": "BuildFrozenBoneGlobalMatrix",
+          "callee": "NormalizeMatrixBasis",
+          "lineNumber": 148
+        },
+        {
+          "caller": "BuildFrozenBoneGlobalMatrix",
+          "callee": "GetMg",
+          "lineNumber": 148
+        },
+        {
+          "caller": "BuildFrozenBoneGlobalMatrix",
+          "callee": "MakeIdentityMatrix",
+          "lineNumber": 148
+        },
+        {
+          "caller": "BuildFrozenBoneGlobalMatrix",
+          "callee": "rbegin",
+          "lineNumber": 149
+        },
+        {
+          "caller": "BuildFrozenBoneGlobalMatrix",
+          "callee": "rend",
+          "lineNumber": 149
+        },
+        {
+          "caller": "BuildFrozenBoneGlobalMatrix",
+          "callee": "NormalizeMatrixBasis",
+          "lineNumber": 150
+        },
+        {
+          "caller": "BuildFrozenBoneGlobalMatrix",
+          "callee": "GetFrozenMln",
+          "lineNumber": 150
+        },
+        {
+          "caller": "TransformRestDirectionToCurrent",
+          "callee": "GetLength",
+          "lineNumber": 157
+        },
+        {
+          "caller": "TransformRestDirectionToCurrent",
+          "callee": "Normalize",
+          "lineNumber": 159
+        },
+        {
+          "caller": "TransformRestDirectionToCurrent",
+          "callee": "block<3, 3>",
+          "lineNumber": 161
+        },
+        {
+          "caller": "TransformRestDirectionToCurrent",
+          "callee": "MatrixToEigen",
+          "lineNumber": 161
+        },
+        {
+          "caller": "TransformRestDirectionToCurrent",
+          "callee": "NormalizeMatrixBasis",
+          "lineNumber": 161
+        },
+        {
+          "caller": "TransformRestDirectionToCurrent",
+          "callee": "block<3, 3>",
+          "lineNumber": 162
+        },
+        {
+          "caller": "TransformRestDirectionToCurrent",
+          "callee": "MatrixToEigen",
+          "lineNumber": 162
+        },
+        {
+          "caller": "TransformRestDirectionToCurrent",
+          "callee": "NormalizeMatrixBasis",
+          "lineNumber": 162
+        },
+        {
+          "caller": "TransformRestDirectionToCurrent",
+          "callee": "static_cast<float>",
+          "lineNumber": 164
+        },
+        {
+          "caller": "TransformRestDirectionToCurrent",
+          "callee": "static_cast<float>",
+          "lineNumber": 165
+        },
+        {
+          "caller": "TransformRestDirectionToCurrent",
+          "callee": "static_cast<float>",
+          "lineNumber": 166
+        },
+        {
+          "caller": "TransformRestDirectionToCurrent",
+          "callee": "transpose",
+          "lineNumber": 167
+        },
+        {
+          "caller": "TransformRestDirectionToCurrent",
+          "callee": "x",
+          "lineNumber": 168
+        },
+        {
+          "caller": "TransformRestDirectionToCurrent",
+          "callee": "y",
+          "lineNumber": 168
+        },
+        {
+          "caller": "TransformRestDirectionToCurrent",
+          "callee": "z",
+          "lineNumber": 168
+        },
+        {
+          "caller": "TransformRestDirectionToCurrent",
+          "callee": "GetLength",
+          "lineNumber": 169
+        },
+        {
+          "caller": "TransformRestDirectionToCurrent",
+          "callee": "Normalize",
+          "lineNumber": 171
+        },
+        {
+          "caller": "BuildControlBaseGlobalMatrix",
+          "callee": "MakeIdentityMatrix",
+          "lineNumber": 178
+        },
+        {
+          "caller": "BuildControlBaseGlobalMatrix",
+          "callee": "GetUp",
+          "lineNumber": 180
+        },
+        {
+          "caller": "BuildControlBaseGlobalMatrix",
+          "callee": "NormalizeMatrixBasis",
+          "lineNumber": 181
+        },
+        {
+          "caller": "BuildControlBaseGlobalMatrix",
+          "callee": "GetMg",
+          "lineNumber": 181
+        },
+        {
+          "caller": "BuildControlBaseGlobalMatrix",
+          "callee": "MakeIdentityMatrix",
+          "lineNumber": 181
+        },
+        {
+          "caller": "BuildControlBaseGlobalMatrix",
+          "callee": "NormalizeMatrixBasis",
+          "lineNumber": 182
+        },
+        {
+          "caller": "BuildControlBaseGlobalMatrix",
+          "callee": "GetFrozenMln",
+          "lineNumber": 182
+        },
+        {
+          "caller": "TryNormalize",
+          "callee": "GetLength",
+          "lineNumber": 193
+        },
+        {
+          "caller": "TryNormalize",
+          "callee": "Normalize",
+          "lineNumber": 195
+        },
+        {
+          "caller": "GetFixedAxis",
+          "callee": "GetBool",
+          "lineNumber": 201
+        },
+        {
+          "caller": "GetFixedAxis",
+          "callee": "GetVector",
+          "lineNumber": 203
+        },
+        {
+          "caller": "GetFixedAxis",
+          "callee": "TryNormalize",
+          "lineNumber": 204
+        },
+        {
+          "caller": "GetLocalBoneAxis",
+          "callee": "GetBool",
+          "lineNumber": 209
+        },
+        {
+          "caller": "GetLocalBoneAxis",
+          "callee": "GetVector",
+          "lineNumber": 211
+        },
+        {
+          "caller": "GetLocalBoneAxis",
+          "callee": "TryNormalize",
+          "lineNumber": 212
+        },
+        {
+          "caller": "IsBoneControlEligible",
+          "callee": "GetBool",
+          "lineNumber": 217
+        },
+        {
+          "caller": "IsBoneControlEligible",
+          "callee": "GetBool",
+          "lineNumber": 217
+        },
+        {
+          "caller": "ShouldUseTailPosition",
+          "callee": "GetVector",
+          "lineNumber": 225
+        },
+        {
+          "caller": "ShouldUseTailPosition",
+          "callee": "GetInt32",
+          "lineNumber": 226
+        },
+        {
+          "caller": "ShouldUseTailPosition",
+          "callee": "IsZero",
+          "lineNumber": 228
+        },
+        {
+          "caller": "ShouldUseTailPosition",
+          "callee": "GetInt32",
+          "lineNumber": 233
+        },
+        {
+          "caller": "ShouldUseTailPosition",
+          "callee": "IsZero",
+          "lineNumber": 234
+        },
+        {
+          "caller": "GetTailBonePoint",
+          "callee": "ShouldUseTailPosition",
+          "lineNumber": 241
+        },
+        {
+          "caller": "GetTailBonePoint",
+          "callee": "GetInt32",
+          "lineNumber": 241
+        },
+        {
+          "caller": "GetTailBonePoint",
+          "callee": "GetInt32",
+          "lineNumber": 243
+        },
+        {
+          "caller": "GetTailBonePoint",
+          "callee": "FindBone",
+          "lineNumber": 244
+        },
+        {
+          "caller": "GetTailBonePoint",
+          "callee": "GetObject",
+          "lineNumber": 246
+        },
+        {
+          "caller": "GetTailBonePoint",
+          "callee": "BuildCurrentBoneGlobalMatrix",
+          "lineNumber": 248
+        },
+        {
+          "caller": "GetTailBonePoint",
+          "callee": "GetLength",
+          "lineNumber": 249
+        },
+        {
+          "caller": "GetTailBonePoint",
+          "callee": "ShouldUseTailPosition",
+          "lineNumber": 257
+        },
+        {
+          "caller": "GetTailBonePoint",
+          "callee": "TransformRestDirectionToCurrent",
+          "lineNumber": 259
+        },
+        {
+          "caller": "GetTailBonePoint",
+          "callee": "GetVector",
+          "lineNumber": 259
+        },
+        {
+          "caller": "GetTailBonePoint",
+          "callee": "GetLength",
+          "lineNumber": 260
+        },
+        {
+          "caller": "GetTailBonePoint",
+          "callee": "GetDown",
+          "lineNumber": 268
+        },
+        {
+          "caller": "GetTailBonePoint",
+          "callee": "GetNext",
+          "lineNumber": 268
+        },
+        {
+          "caller": "GetTailBonePoint",
+          "callee": "GetTag",
+          "lineNumber": 270
+        },
+        {
+          "caller": "GetTailBonePoint",
+          "callee": "BuildCurrentBoneGlobalMatrix",
+          "lineNumber": 272
+        },
+        {
+          "caller": "GetTailBonePoint",
+          "callee": "GetLength",
+          "lineNumber": 273
+        },
+        {
+          "caller": "GetTailBoneAxis",
+          "callee": "GetTailBonePoint",
+          "lineNumber": 285
+        },
+        {
+          "caller": "GetTailBoneAxis",
+          "callee": "TryNormalize",
+          "lineNumber": 288
+        },
+        {
+          "caller": "GetFallbackReference",
+          "callee": "GetLength",
+          "lineNumber": 297
+        },
+        {
+          "caller": "GetFallbackReference",
+          "callee": "Dot",
+          "lineNumber": 297
+        },
+        {
+          "caller": "GetFallbackReference",
+          "callee": "GetLength",
+          "lineNumber": 301
+        },
+        {
+          "caller": "GetFallbackReference",
+          "callee": "Dot",
+          "lineNumber": 301
+        },
+        {
+          "caller": "GetFallbackReference",
+          "callee": "std::abs",
+          "lineNumber": 304
+        },
+        {
+          "caller": "GetFallbackReference",
+          "callee": "Vector",
+          "lineNumber": 304
+        },
+        {
+          "caller": "GetFallbackReference",
+          "callee": "Vector",
+          "lineNumber": 304
+        },
+        {
+          "caller": "BuildBasisFromNormal",
+          "callee": "TryNormalize",
+          "lineNumber": 309
+        },
+        {
+          "caller": "BuildBasisFromNormal",
+          "callee": "TryNormalize",
+          "lineNumber": 311
+        },
+        {
+          "caller": "BuildBasisFromNormal",
+          "callee": "Vector",
+          "lineNumber": 312
+        },
+        {
+          "caller": "BuildBasisFromNormal",
+          "callee": "Dot",
+          "lineNumber": 314
+        },
+        {
+          "caller": "BuildBasisFromNormal",
+          "callee": "TryNormalize",
+          "lineNumber": 315
+        },
+        {
+          "caller": "BuildBasisFromNormal",
+          "callee": "GetFallbackReference",
+          "lineNumber": 316
+        },
+        {
+          "caller": "BuildBasisFromNormal",
+          "callee": "Dot",
+          "lineNumber": 317
+        },
+        {
+          "caller": "BuildBasisFromNormal",
+          "callee": "TryNormalize",
+          "lineNumber": 318
+        },
+        {
+          "caller": "BuildBasisFromNormal",
+          "callee": "std::abs",
+          "lineNumber": 319
+        },
+        {
+          "caller": "BuildBasisFromNormal",
+          "callee": "Vector",
+          "lineNumber": 319
+        },
+        {
+          "caller": "BuildBasisFromNormal",
+          "callee": "Vector",
+          "lineNumber": 319
+        },
+        {
+          "caller": "BuildBasisFromNormal",
+          "callee": "Cross",
+          "lineNumber": 321
+        },
+        {
+          "caller": "BuildBasisFromNormal",
+          "callee": "TryNormalize",
+          "lineNumber": 322
+        },
+        {
+          "caller": "BuildBasisFromNormal",
+          "callee": "Vector",
+          "lineNumber": 323
+        },
+        {
+          "caller": "BuildBasisFromNormal",
+          "callee": "NormalizeMatrixBasis",
+          "lineNumber": 329
+        },
+        {
+          "caller": "GetBoneHierarchyDepth",
+          "callee": "GetUp",
+          "lineNumber": 335
+        },
+        {
+          "caller": "GetBoneHierarchyDepth",
+          "callee": "GetTag",
+          "lineNumber": 336
+        },
+        {
+          "caller": "GetBoneHierarchyDepth",
+          "callee": "GetUp",
+          "lineNumber": 337
+        },
+        {
+          "caller": "GetHierarchyRadiusScale",
+          "callee": "std::clamp",
+          "lineNumber": 346
+        },
+        {
+          "caller": "GetHierarchyRadiusScale",
+          "callee": "static_cast<Float>",
+          "lineNumber": 346
+        },
+        {
+          "caller": "GetHierarchyRadiusScale",
+          "callee": "std::min",
+          "lineNumber": 346
+        },
+        {
+          "caller": "GetControlVisualSpec",
+          "callee": "GetHierarchyRadiusScale",
+          "lineNumber": 351
+        },
+        {
+          "caller": "GetControlVisualSpec",
+          "callee": "GetBoneHierarchyDepth",
+          "lineNumber": 351
+        },
+        {
+          "caller": "GetControlVisualSpec",
+          "callee": "GetBool",
+          "lineNumber": 352
+        },
+        {
+          "caller": "GetControlVisualSpec",
+          "callee": "GetBool",
+          "lineNumber": 352
+        },
+        {
+          "caller": "GetControlColor",
+          "callee": "IsPopulated",
+          "lineNumber": 360
+        },
+        {
+          "caller": "GetControlColor",
+          "callee": "Find",
+          "lineNumber": 360
+        },
+        {
+          "caller": "GetControlColor",
+          "callee": "String",
+          "lineNumber": 360
+        },
+        {
+          "caller": "GetControlColor",
+          "callee": "Vector",
+          "lineNumber": 361
+        },
+        {
+          "caller": "GetControlColor",
+          "callee": "IsPopulated",
+          "lineNumber": 362
+        },
+        {
+          "caller": "GetControlColor",
+          "callee": "Find",
+          "lineNumber": 362
+        },
+        {
+          "caller": "GetControlColor",
+          "callee": "String",
+          "lineNumber": 362
+        },
+        {
+          "caller": "GetControlColor",
+          "callee": "Vector",
+          "lineNumber": 363
+        },
+        {
+          "caller": "GetControlColor",
+          "callee": "Vector",
+          "lineNumber": 364
+        },
+        {
+          "caller": "SetLinkedObjectParameter",
+          "callee": "BaseLink::Alloc",
+          "lineNumber": 390
+        },
+        {
+          "caller": "SetLinkedObjectParameter",
+          "callee": "SetLink",
+          "lineNumber": 393
+        },
+        {
+          "caller": "SetLinkedObjectParameter",
+          "callee": "SetParameter",
+          "lineNumber": 394
+        },
+        {
+          "caller": "SetLinkedObjectParameter",
+          "callee": "CreateDescID",
+          "lineNumber": 394
+        },
+        {
+          "caller": "SetLinkedObjectParameter",
+          "callee": "DescLevel",
+          "lineNumber": 394
+        },
+        {
+          "caller": "SetLinkedObjectParameter",
+          "callee": "GeData",
+          "lineNumber": 394
+        },
+        {
+          "caller": "ClearLinkedObjectParameter",
+          "callee": "SetParameter",
+          "lineNumber": 400
+        },
+        {
+          "caller": "ClearLinkedObjectParameter",
+          "callee": "CreateDescID",
+          "lineNumber": 400
+        },
+        {
+          "caller": "ClearLinkedObjectParameter",
+          "callee": "DescLevel",
+          "lineNumber": 400
+        },
+        {
+          "caller": "ClearLinkedObjectParameter",
+          "callee": "GeData",
+          "lineNumber": 400
+        },
+        {
+          "caller": "IsSameOrDescendantOf",
+          "callee": "GetUp",
+          "lineNumber": 419
+        },
+        {
+          "caller": "GetControlBaseName",
+          "callee": "GetDataInstance",
+          "lineNumber": 429
+        },
+        {
+          "caller": "GetControlBaseName",
+          "callee": "GetString",
+          "lineNumber": 430
+        },
+        {
+          "caller": "GetControlBaseName",
+          "callee": "String",
+          "lineNumber": 430
+        },
+        {
+          "caller": "GetControlBaseName",
+          "callee": "GetString",
+          "lineNumber": 431
+        },
+        {
+          "caller": "GetControlBaseName",
+          "callee": "String",
+          "lineNumber": 431
+        },
+        {
+          "caller": "GetControlBaseName",
+          "callee": "GetInt32",
+          "lineNumber": 432
+        },
+        {
+          "caller": "GetControlBaseName",
+          "callee": "IsEmpty",
+          "lineNumber": 438
+        },
+        {
+          "caller": "GetControlBaseName",
+          "callee": "IsEmpty",
+          "lineNumber": 444
+        },
+        {
+          "caller": "GetControlBaseName",
+          "callee": "IsEmpty",
+          "lineNumber": 448
+        },
+        {
+          "caller": "GetControlBaseName",
+          "callee": "FormatString",
+          "lineNumber": 449
+        },
+        {
+          "caller": "GetControlObjectName",
+          "callee": "FormatString",
+          "lineNumber": 455
+        },
+        {
+          "caller": "GetControlObjectName",
+          "callee": "GetControlBaseName",
+          "lineNumber": 455
+        },
+        {
+          "caller": "BuildControlMatrix",
+          "callee": "BuildFrozenBoneGlobalMatrix",
+          "lineNumber": 460
+        },
+        {
+          "caller": "BuildControlMatrix",
+          "callee": "BuildCurrentBoneGlobalMatrix",
+          "lineNumber": 461
+        },
+        {
+          "caller": "BuildControlMatrix",
+          "callee": "GetDataInstance",
+          "lineNumber": 462
+        },
+        {
+          "caller": "BuildControlMatrix",
+          "callee": "GetFixedAxis",
+          "lineNumber": 464
+        },
+        {
+          "caller": "BuildControlMatrix",
+          "callee": "GetLocalBoneAxis",
+          "lineNumber": 464
+        },
+        {
+          "caller": "BuildControlMatrix",
+          "callee": "TransformRestDirectionToCurrent",
+          "lineNumber": 465
+        },
+        {
+          "caller": "BuildControlMatrix",
+          "callee": "GetTailBoneAxis",
+          "lineNumber": 466
+        },
+        {
+          "caller": "BuildControlMatrix",
+          "callee": "GetFallbackReference",
+          "lineNumber": 469
+        },
+        {
+          "caller": "BuildControlMatrix",
+          "callee": "GetBool",
+          "lineNumber": 470
+        },
+        {
+          "caller": "BuildControlMatrix",
+          "callee": "TransformRestDirectionToCurrent",
+          "lineNumber": 471
+        },
+        {
+          "caller": "BuildControlMatrix",
+          "callee": "GetVector",
+          "lineNumber": 471
+        },
+        {
+          "caller": "BuildControlMatrix",
+          "callee": "BuildBasisFromNormal",
+          "lineNumber": 473
+        },
+        {
+          "caller": "BuildControlRestMatrix",
+          "callee": "BuildControlMatrix",
+          "lineNumber": 480
+        },
+        {
+          "caller": "BuildControlCurrentMatrix",
+          "callee": "BuildControlMatrix",
+          "lineNumber": 485
+        },
+        {
+          "caller": "CommitObjectLocalToFrozen",
+          "callee": "GetMl",
+          "lineNumber": 493
+        },
+        {
+          "caller": "CommitObjectLocalToFrozen",
+          "callee": "NormalizeMatrixBasis",
+          "lineNumber": 494
+        },
+        {
+          "caller": "CommitObjectLocalToFrozen",
+          "callee": "SetFrozenPos",
+          "lineNumber": 495
+        },
+        {
+          "caller": "CommitObjectLocalToFrozen",
+          "callee": "SetFrozenScale",
+          "lineNumber": 496
+        },
+        {
+          "caller": "CommitObjectLocalToFrozen",
+          "callee": "Vector",
+          "lineNumber": 496
+        },
+        {
+          "caller": "CommitObjectLocalToFrozen",
+          "callee": "SetFrozenRot",
+          "lineNumber": 497
+        },
+        {
+          "caller": "CommitObjectLocalToFrozen",
+          "callee": "MatrixToHPB",
+          "lineNumber": 497
+        },
+        {
+          "caller": "CommitObjectLocalToFrozen",
+          "callee": "GetObjectRotationOrder",
+          "lineNumber": 497
+        },
+        {
+          "caller": "CommitObjectLocalToFrozen",
+          "callee": "SetRelMl",
+          "lineNumber": 498
+        },
+        {
+          "caller": "CommitObjectLocalToFrozen",
+          "callee": "MakeIdentityMatrix",
+          "lineNumber": 498
+        },
+        {
+          "caller": "CommitObjectLocalToFrozen",
+          "callee": "MarkSceneNodeDirty",
+          "lineNumber": 499
+        },
+        {
+          "caller": "ApplyGlobalFrozenMatrix",
+          "callee": "SetMg",
+          "lineNumber": 507
+        },
+        {
+          "caller": "ApplyGlobalFrozenMatrix",
+          "callee": "NormalizeMatrixBasis",
+          "lineNumber": 507
+        },
+        {
+          "caller": "ApplyGlobalFrozenMatrix",
+          "callee": "CommitObjectLocalToFrozen",
+          "lineNumber": 508
+        },
+        {
+          "caller": "MoveControlUnder",
+          "callee": "GetUp",
+          "lineNumber": 513
+        },
+        {
+          "caller": "MoveControlUnder",
+          "callee": "Remove",
+          "lineNumber": 516
+        },
+        {
+          "caller": "MoveControlUnder",
+          "callee": "InsertUnderLast",
+          "lineNumber": 517
+        },
+        {
+          "caller": "MoveControlUnder",
+          "callee": "MarkSceneNodeDirty",
+          "lineNumber": 518
+        },
+        {
+          "caller": "MoveControlUnder",
+          "callee": "MarkSceneNodeDirty",
+          "lineNumber": 519
+        },
+        {
+          "caller": "BuildControlShapePoints",
+          "callee": "Vector",
+          "lineNumber": 530
+        },
+        {
+          "caller": "BuildControlShapePoints",
+          "callee": "Vector",
+          "lineNumber": 531
+        },
+        {
+          "caller": "BuildControlShapePoints",
+          "callee": "Vector",
+          "lineNumber": 532
+        },
+        {
+          "caller": "BuildControlShapePoints",
+          "callee": "Vector",
+          "lineNumber": 533
+        },
+        {
+          "caller": "BuildControlShapePoints",
+          "callee": "Vector",
+          "lineNumber": 538
+        },
+        {
+          "caller": "BuildControlShapePoints",
+          "callee": "Vector",
+          "lineNumber": 539
+        },
+        {
+          "caller": "BuildControlShapePoints",
+          "callee": "Vector",
+          "lineNumber": 540
+        },
+        {
+          "caller": "BuildControlShapePoints",
+          "callee": "Vector",
+          "lineNumber": 541
+        },
+        {
+          "caller": "BuildControlShapePoints",
+          "callee": "Vector",
+          "lineNumber": 546
+        },
+        {
+          "caller": "BuildControlShapePoints",
+          "callee": "Vector",
+          "lineNumber": 547
+        },
+        {
+          "caller": "BuildControlShapePoints",
+          "callee": "Vector",
+          "lineNumber": 548
+        },
+        {
+          "caller": "BuildControlShapePoints",
+          "callee": "reserve",
+          "lineNumber": 554
+        },
+        {
+          "caller": "BuildControlShapePoints",
+          "callee": "static_cast<Float>",
+          "lineNumber": 557
+        },
+        {
+          "caller": "BuildControlShapePoints",
+          "callee": "static_cast<Float>",
+          "lineNumber": 557
+        },
+        {
+          "caller": "BuildControlShapePoints",
+          "callee": "emplace_back",
+          "lineNumber": 559
+        },
+        {
+          "caller": "BuildControlShapePoints",
+          "callee": "std::cos",
+          "lineNumber": 559
+        },
+        {
+          "caller": "BuildControlShapePoints",
+          "callee": "std::sin",
+          "lineNumber": 559
+        },
+        {
+          "caller": "ApplyControlSplineShape",
+          "callee": "BuildControlShapePoints",
+          "lineNumber": 571
+        },
+        {
+          "caller": "ApplyControlSplineShape",
+          "callee": "static_cast<Int32>",
+          "lineNumber": 572
+        },
+        {
+          "caller": "ApplyControlSplineShape",
+          "callee": "size",
+          "lineNumber": 572
+        },
+        {
+          "caller": "ApplyControlSplineShape",
+          "callee": "GetPointCount",
+          "lineNumber": 576
+        },
+        {
+          "caller": "ApplyControlSplineShape",
+          "callee": "GetSegmentCount",
+          "lineNumber": 576
+        },
+        {
+          "caller": "ApplyControlSplineShape",
+          "callee": "ResizeObject",
+          "lineNumber": 577
+        },
+        {
+          "caller": "ApplyControlSplineShape",
+          "callee": "GetSegmentW",
+          "lineNumber": 578
+        },
+        {
+          "caller": "ApplyControlSplineShape",
+          "callee": "GetPointW",
+          "lineNumber": 583
+        },
+        {
+          "caller": "ApplyControlSplineShape",
+          "callee": "static_cast<std::size_t>",
+          "lineNumber": 586
+        },
+        {
+          "caller": "ApplyControlSplineShape",
+          "callee": "SetParameter",
+          "lineNumber": 588
+        },
+        {
+          "caller": "ApplyControlSplineShape",
+          "callee": "ConstDescID",
+          "lineNumber": 588
+        },
+        {
+          "caller": "ApplyControlSplineShape",
+          "callee": "DescLevel",
+          "lineNumber": 588
+        },
+        {
+          "caller": "ApplyControlSplineShape",
+          "callee": "SetDefaultCoeff",
+          "lineNumber": 589
+        },
+        {
+          "caller": "ApplyControlSplineShape",
+          "callee": "Message",
+          "lineNumber": 590
+        },
+        {
+          "caller": "ApplyControlSplineShape",
+          "callee": "GetInfo",
+          "lineNumber": 595
+        },
+        {
+          "caller": "ApplyControlSplineShape",
+          "callee": "ApplyControlSplineShape",
+          "lineNumber": 597
+        },
+        {
+          "caller": "ApplyControlSplineShape",
+          "callee": "ToSpline",
+          "lineNumber": 597
+        },
+        {
+          "caller": "SetControlObjectColor",
+          "callee": "MakeObjectColorProperties",
+          "lineNumber": 617
+        },
+        {
+          "caller": "SetControlObjectColor",
+          "callee": "SetColorProperties",
+          "lineNumber": 618
+        },
+        {
+          "caller": "IsMatrixIdentityLike",
+          "callee": "MakeIdentityMatrix",
+          "lineNumber": 623
+        },
+        {
+          "caller": "IsMatrixIdentityLike",
+          "callee": "GetLength",
+          "lineNumber": 624
+        },
+        {
+          "caller": "IsMatrixIdentityLike",
+          "callee": "GetLength",
+          "lineNumber": 625
+        },
+        {
+          "caller": "IsMatrixIdentityLike",
+          "callee": "GetLength",
+          "lineNumber": 626
+        },
+        {
+          "caller": "IsMatrixIdentityLike",
+          "callee": "GetLength",
+          "lineNumber": 627
+        },
+        {
+          "caller": "HashFloat",
+          "callee": "static_cast<UInt32>",
+          "lineNumber": 639
+        },
+        {
+          "caller": "HashFloat",
+          "callee": "static_cast<Int32>",
+          "lineNumber": 639
+        },
+        {
+          "caller": "HashFloat",
+          "callee": "std::llround",
+          "lineNumber": 639
+        },
+        {
+          "caller": "HashMatrix",
+          "callee": "MixHash",
+          "lineNumber": 644
+        },
+        {
+          "caller": "HashMatrix",
+          "callee": "HashFloat",
+          "lineNumber": 644
+        },
+        {
+          "caller": "HashMatrix",
+          "callee": "MixHash",
+          "lineNumber": 645
+        },
+        {
+          "caller": "HashMatrix",
+          "callee": "HashFloat",
+          "lineNumber": 645
+        },
+        {
+          "caller": "HashMatrix",
+          "callee": "MixHash",
+          "lineNumber": 646
+        },
+        {
+          "caller": "HashMatrix",
+          "callee": "HashFloat",
+          "lineNumber": 646
+        },
+        {
+          "caller": "HashMatrix",
+          "callee": "MixHash",
+          "lineNumber": 647
+        },
+        {
+          "caller": "HashMatrix",
+          "callee": "HashFloat",
+          "lineNumber": 647
+        },
+        {
+          "caller": "HashMatrix",
+          "callee": "MixHash",
+          "lineNumber": 648
+        },
+        {
+          "caller": "HashMatrix",
+          "callee": "HashFloat",
+          "lineNumber": 648
+        },
+        {
+          "caller": "HashMatrix",
+          "callee": "MixHash",
+          "lineNumber": 649
+        },
+        {
+          "caller": "HashMatrix",
+          "callee": "HashFloat",
+          "lineNumber": 649
+        },
+        {
+          "caller": "HashMatrix",
+          "callee": "MixHash",
+          "lineNumber": 650
+        },
+        {
+          "caller": "HashMatrix",
+          "callee": "HashFloat",
+          "lineNumber": 650
+        },
+        {
+          "caller": "HashMatrix",
+          "callee": "MixHash",
+          "lineNumber": 651
+        },
+        {
+          "caller": "HashMatrix",
+          "callee": "HashFloat",
+          "lineNumber": 651
+        },
+        {
+          "caller": "HashMatrix",
+          "callee": "MixHash",
+          "lineNumber": 652
+        },
+        {
+          "caller": "HashMatrix",
+          "callee": "HashFloat",
+          "lineNumber": 652
+        },
+        {
+          "caller": "HashMatrix",
+          "callee": "MixHash",
+          "lineNumber": 653
+        },
+        {
+          "caller": "HashMatrix",
+          "callee": "HashFloat",
+          "lineNumber": 653
+        },
+        {
+          "caller": "HashMatrix",
+          "callee": "MixHash",
+          "lineNumber": 654
+        },
+        {
+          "caller": "HashMatrix",
+          "callee": "HashFloat",
+          "lineNumber": 654
+        },
+        {
+          "caller": "HashMatrix",
+          "callee": "MixHash",
+          "lineNumber": 655
+        },
+        {
+          "caller": "HashMatrix",
+          "callee": "HashFloat",
+          "lineNumber": 655
+        },
+        {
+          "caller": "SetProtectionAxis",
+          "callee": "SetParameter",
+          "lineNumber": 674
+        },
+        {
+          "caller": "SetProtectionAxis",
+          "callee": "CreateDescID",
+          "lineNumber": 674
+        },
+        {
+          "caller": "SetProtectionAxis",
+          "callee": "DescLevel",
+          "lineNumber": 674
+        },
+        {
+          "caller": "ConfigureControlProtection",
+          "callee": "FindOrCreateControlProtectionTag",
+          "lineNumber": 679
+        },
+        {
+          "caller": "ConfigureControlProtection",
+          "callee": "GetBool",
+          "lineNumber": 683
+        },
+        {
+          "caller": "ConfigureControlProtection",
+          "callee": "GetBool",
+          "lineNumber": 684
+        },
+        {
+          "caller": "ConfigureControlProtection",
+          "callee": "GetBool",
+          "lineNumber": 685
+        },
+        {
+          "caller": "ConfigureControlProtection",
+          "callee": "SetProtectionAxis",
+          "lineNumber": 687
+        },
+        {
+          "caller": "ConfigureControlProtection",
+          "callee": "SetProtectionAxis",
+          "lineNumber": 688
+        },
+        {
+          "caller": "ConfigureControlProtection",
+          "callee": "SetProtectionAxis",
+          "lineNumber": 689
+        },
+        {
+          "caller": "ConfigureControlProtection",
+          "callee": "SetProtectionAxis",
+          "lineNumber": 690
+        },
+        {
+          "caller": "ConfigureControlProtection",
+          "callee": "SetProtectionAxis",
+          "lineNumber": 691
+        },
+        {
+          "caller": "ConfigureControlProtection",
+          "callee": "SetProtectionAxis",
+          "lineNumber": 692
+        },
+        {
+          "caller": "ConfigureControlProtection",
+          "callee": "SetProtectionAxis",
+          "lineNumber": 693
+        },
+        {
+          "caller": "ConfigureControlProtection",
+          "callee": "SetProtectionAxis",
+          "lineNumber": 694
+        },
+        {
+          "caller": "ConfigureControlProtection",
+          "callee": "SetProtectionAxis",
+          "lineNumber": 695
+        },
+        {
+          "caller": "ConfigureControlProtection",
+          "callee": "SetParameter",
+          "lineNumber": 696
+        },
+        {
+          "caller": "ConfigureControlProtection",
+          "callee": "ConstDescID",
+          "lineNumber": 696
+        },
+        {
+          "caller": "ConfigureControlProtection",
+          "callee": "DescLevel",
+          "lineNumber": 696
+        },
+        {
+          "caller": "ProjectRotationToAxis",
+          "callee": "TryNormalize",
+          "lineNumber": 701
+        },
+        {
+          "caller": "ProjectRotationToAxis",
+          "callee": "normalized",
+          "lineNumber": 702
+        },
+        {
+          "caller": "ProjectRotationToAxis",
+          "callee": "static_cast<float>",
+          "lineNumber": 705
+        },
+        {
+          "caller": "ProjectRotationToAxis",
+          "callee": "static_cast<float>",
+          "lineNumber": 706
+        },
+        {
+          "caller": "ProjectRotationToAxis",
+          "callee": "static_cast<float>",
+          "lineNumber": 707
+        },
+        {
+          "caller": "ProjectRotationToAxis",
+          "callee": "normalized",
+          "lineNumber": 708
+        },
+        {
+          "caller": "ProjectRotationToAxis",
+          "callee": "x",
+          "lineNumber": 709
+        },
+        {
+          "caller": "ProjectRotationToAxis",
+          "callee": "y",
+          "lineNumber": 709
+        },
+        {
+          "caller": "ProjectRotationToAxis",
+          "callee": "z",
+          "lineNumber": 709
+        },
+        {
+          "caller": "ProjectRotationToAxis",
+          "callee": "dot",
+          "lineNumber": 710
+        },
+        {
+          "caller": "ProjectRotationToAxis",
+          "callee": "w",
+          "lineNumber": 711
+        },
+        {
+          "caller": "ProjectRotationToAxis",
+          "callee": "x",
+          "lineNumber": 711
+        },
+        {
+          "caller": "ProjectRotationToAxis",
+          "callee": "y",
+          "lineNumber": 711
+        },
+        {
+          "caller": "ProjectRotationToAxis",
+          "callee": "z",
+          "lineNumber": 711
+        },
+        {
+          "caller": "ProjectRotationToAxis",
+          "callee": "norm",
+          "lineNumber": 712
+        },
+        {
+          "caller": "ProjectRotationToAxis",
+          "callee": "Eigen::Quaternionf::Identity",
+          "lineNumber": 713
+        },
+        {
+          "caller": "ProjectRotationToAxis",
+          "callee": "normalized",
+          "lineNumber": 714
+        },
+        {
+          "caller": "CreateOrRefreshControls",
+          "callee": "reinterpret_cast<BaseObject*>",
+          "lineNumber": 726
+        },
+        {
+          "caller": "CreateOrRefreshControls",
+          "callee": "Get",
+          "lineNumber": 726
+        },
+        {
+          "caller": "CreateOrRefreshControls",
+          "callee": "io_util::ResolveObjectLink",
+          "lineNumber": 730
+        },
+        {
+          "caller": "CreateOrRefreshControls",
+          "callee": "GetUp",
+          "lineNumber": 733
+        },
+        {
+          "caller": "CreateOrRefreshControls",
+          "callee": "IsInstanceOf",
+          "lineNumber": 733
+        },
+        {
+          "caller": "CreateOrRefreshControls",
+          "callee": "SetLink",
+          "lineNumber": 735
+        },
+        {
+          "caller": "CreateOrRefreshControls",
+          "callee": "SetLink",
+          "lineNumber": 743
+        },
+        {
+          "caller": "CreateOrRefreshControls",
+          "callee": "reserve",
+          "lineNumber": 746
+        },
+        {
+          "caller": "CreateOrRefreshControls",
+          "callee": "GetCount",
+          "lineNumber": 746
+        },
+        {
+          "caller": "CreateOrRefreshControls",
+          "callee": "emplace_back",
+          "lineNumber": 748
+        },
+        {
+          "caller": "CreateOrRefreshControls",
+          "callee": "static_cast<Int32>",
+          "lineNumber": 748
+        },
+        {
+          "caller": "CreateOrRefreshControls",
+          "callee": "GetKey",
+          "lineNumber": 748
+        },
+        {
+          "caller": "CreateOrRefreshControls",
+          "callee": "std::sort",
+          "lineNumber": 749
+        },
+        {
+          "caller": "CreateOrRefreshControls",
+          "callee": "begin",
+          "lineNumber": 749
+        },
+        {
+          "caller": "CreateOrRefreshControls",
+          "callee": "end",
+          "lineNumber": 749
+        },
+        {
+          "caller": "CreateOrRefreshControls",
+          "callee": "reserve",
+          "lineNumber": 765
+        },
+        {
+          "caller": "CreateOrRefreshControls",
+          "callee": "size",
+          "lineNumber": 765
+        },
+        {
+          "caller": "CreateOrRefreshControls",
+          "callee": "FindBone",
+          "lineNumber": 769
+        },
+        {
+          "caller": "CreateOrRefreshControls",
+          "callee": "GetObject",
+          "lineNumber": 770
+        },
+        {
+          "caller": "CreateOrRefreshControls",
+          "callee": "GetDataInstance",
+          "lineNumber": 771
+        },
+        {
+          "caller": "CreateOrRefreshControls",
+          "callee": "GetString",
+          "lineNumber": 775
+        },
+        {
+          "caller": "CreateOrRefreshControls",
+          "callee": "IsBoneControlEligible",
+          "lineNumber": 776
+        },
+        {
+          "caller": "CreateOrRefreshControls",
+          "callee": "ClearLinkedObjectParameter",
+          "lineNumber": 778
+        },
+        {
+          "caller": "CreateOrRefreshControls",
+          "callee": "GetControlObjectName",
+          "lineNumber": 782
+        },
+        {
+          "caller": "CreateOrRefreshControls",
+          "callee": "GetControlVisualSpec",
+          "lineNumber": 783
+        },
+        {
+          "caller": "CreateOrRefreshControls",
+          "callee": "ResolveLinkedObjectParameter",
+          "lineNumber": 784
+        },
+        {
+          "caller": "CreateOrRefreshControls",
+          "callee": "FindDescendantByName",
+          "lineNumber": 786
+        },
+        {
+          "caller": "CreateOrRefreshControls",
+          "callee": "BuildControlRestMatrix",
+          "lineNumber": 789
+        },
+        {
+          "caller": "CreateOrRefreshControls",
+          "callee": "CreateControlSpline",
+          "lineNumber": 792
+        },
+        {
+          "caller": "CreateOrRefreshControls",
+          "callee": "InsertUnderLast",
+          "lineNumber": 795
+        },
+        {
+          "caller": "CreateOrRefreshControls",
+          "callee": "SetControlObjectColor",
+          "lineNumber": 796
+        },
+        {
+          "caller": "CreateOrRefreshControls",
+          "callee": "GetControlColor",
+          "lineNumber": 796
+        },
+        {
+          "caller": "CreateOrRefreshControls",
+          "callee": "IsSameOrDescendantOf",
+          "lineNumber": 799
+        },
+        {
+          "caller": "CreateOrRefreshControls",
+          "callee": "SetName",
+          "lineNumber": 801
+        },
+        {
+          "caller": "CreateOrRefreshControls",
+          "callee": "ApplyControlSplineShape",
+          "lineNumber": 803
+        },
+        {
+          "caller": "CreateOrRefreshControls",
+          "callee": "ConfigureControlProtection",
+          "lineNumber": 804
+        },
+        {
+          "caller": "CreateOrRefreshControls",
+          "callee": "SetLinkedObjectParameter",
+          "lineNumber": 805
+        },
+        {
+          "caller": "CreateOrRefreshControls",
+          "callee": "MarkSceneNodeDirty",
+          "lineNumber": 806
+        },
+        {
+          "caller": "CreateOrRefreshControls",
+          "callee": "emplace_back",
+          "lineNumber": 818
+        },
+        {
+          "caller": "CreateOrRefreshControls",
+          "callee": "GetControlSiblingParent",
+          "lineNumber": 826
+        },
+        {
+          "caller": "CreateOrRefreshControls",
+          "callee": "IsSameOrDescendantOf",
+          "lineNumber": 827
+        },
+        {
+          "caller": "CreateOrRefreshControls",
+          "callee": "MoveControlUnder",
+          "lineNumber": 830
+        },
+        {
+          "caller": "CreateOrRefreshControls",
+          "callee": "GetFirstCTrack",
+          "lineNumber": 831
+        },
+        {
+          "caller": "CreateOrRefreshControls",
+          "callee": "ApplyGlobalFrozenMatrix",
+          "lineNumber": 832
+        },
+        {
+          "caller": "CreateOrRefreshControls",
+          "callee": "MarkSceneNodeDirty",
+          "lineNumber": 833
+        },
+        {
+          "caller": "CreateOrRefreshControls",
+          "callee": "SetDirty",
+          "lineNumber": 836
+        },
+        {
+          "caller": "CreateOrRefreshControls",
+          "callee": "SetDirty",
+          "lineNumber": 837
+        },
+        {
+          "caller": "CreateOrRefreshControls",
+          "callee": "GeIsMainThread",
+          "lineNumber": 838
+        },
+        {
+          "caller": "CreateOrRefreshControls",
+          "callee": "EventAdd",
+          "lineNumber": 839
+        },
+        {
+          "caller": "HasActiveControlDelta",
+          "callee": "FindBone",
+          "lineNumber": 847
+        },
+        {
+          "caller": "HasActiveControlDelta",
+          "callee": "static_cast<Int32>",
+          "lineNumber": 847
+        },
+        {
+          "caller": "HasActiveControlDelta",
+          "callee": "GetKey",
+          "lineNumber": 847
+        },
+        {
+          "caller": "HasActiveControlDelta",
+          "callee": "GetDataInstance",
+          "lineNumber": 848
+        },
+        {
+          "caller": "HasActiveControlDelta",
+          "callee": "IsBoneControlEligible",
+          "lineNumber": 849
+        },
+        {
+          "caller": "HasActiveControlDelta",
+          "callee": "ResolveLinkedObjectParameter",
+          "lineNumber": 851
+        },
+        {
+          "caller": "HasActiveControlDelta",
+          "callee": "IsMatrixIdentityLike",
+          "lineNumber": 852
+        },
+        {
+          "caller": "HasActiveControlDelta",
+          "callee": "GetRelMl",
+          "lineNumber": 852
+        },
+        {
+          "caller": "GetControlStateChecksum",
+          "callee": "reserve",
+          "lineNumber": 862
+        },
+        {
+          "caller": "GetControlStateChecksum",
+          "callee": "GetCount",
+          "lineNumber": 862
+        },
+        {
+          "caller": "GetControlStateChecksum",
+          "callee": "emplace_back",
+          "lineNumber": 864
+        },
+        {
+          "caller": "GetControlStateChecksum",
+          "callee": "static_cast<Int32>",
+          "lineNumber": 864
+        },
+        {
+          "caller": "GetControlStateChecksum",
+          "callee": "GetKey",
+          "lineNumber": 864
+        },
+        {
+          "caller": "GetControlStateChecksum",
+          "callee": "std::sort",
+          "lineNumber": 865
+        },
+        {
+          "caller": "GetControlStateChecksum",
+          "callee": "begin",
+          "lineNumber": 865
+        },
+        {
+          "caller": "GetControlStateChecksum",
+          "callee": "end",
+          "lineNumber": 865
+        },
+        {
+          "caller": "GetControlStateChecksum",
+          "callee": "FindBone",
+          "lineNumber": 869
+        },
+        {
+          "caller": "GetControlStateChecksum",
+          "callee": "GetDataInstance",
+          "lineNumber": 870
+        },
+        {
+          "caller": "GetControlStateChecksum",
+          "callee": "IsBoneControlEligible",
+          "lineNumber": 871
+        },
+        {
+          "caller": "GetControlStateChecksum",
+          "callee": "ResolveLinkedObjectParameter",
+          "lineNumber": 873
+        },
+        {
+          "caller": "GetControlStateChecksum",
+          "callee": "MixHash",
+          "lineNumber": 877
+        },
+        {
+          "caller": "GetControlStateChecksum",
+          "callee": "static_cast<UInt32>",
+          "lineNumber": 877
+        },
+        {
+          "caller": "GetControlStateChecksum",
+          "callee": "HashMatrix",
+          "lineNumber": 878
+        },
+        {
+          "caller": "GetControlStateChecksum",
+          "callee": "NormalizeMatrixBasis",
+          "lineNumber": 878
+        },
+        {
+          "caller": "GetControlStateChecksum",
+          "callee": "GetRelMl",
+          "lineNumber": 878
+        },
+        {
+          "caller": "SyncControlsToCurrentPose",
+          "callee": "io_util::ResolveObjectLink",
+          "lineNumber": 885
+        },
+        {
+          "caller": "SyncControlsToCurrentPose",
+          "callee": "reinterpret_cast<BaseObject*>",
+          "lineNumber": 887
+        },
+        {
+          "caller": "SyncControlsToCurrentPose",
+          "callee": "Get",
+          "lineNumber": 887
+        },
+        {
+          "caller": "SyncControlsToCurrentPose",
+          "callee": "reserve",
+          "lineNumber": 901
+        },
+        {
+          "caller": "SyncControlsToCurrentPose",
+          "callee": "GetCount",
+          "lineNumber": 901
+        },
+        {
+          "caller": "SyncControlsToCurrentPose",
+          "callee": "emplace_back",
+          "lineNumber": 903
+        },
+        {
+          "caller": "SyncControlsToCurrentPose",
+          "callee": "static_cast<Int32>",
+          "lineNumber": 903
+        },
+        {
+          "caller": "SyncControlsToCurrentPose",
+          "callee": "GetKey",
+          "lineNumber": 903
+        },
+        {
+          "caller": "SyncControlsToCurrentPose",
+          "callee": "std::sort",
+          "lineNumber": 904
+        },
+        {
+          "caller": "SyncControlsToCurrentPose",
+          "callee": "begin",
+          "lineNumber": 904
+        },
+        {
+          "caller": "SyncControlsToCurrentPose",
+          "callee": "end",
+          "lineNumber": 904
+        },
+        {
+          "caller": "SyncControlsToCurrentPose",
+          "callee": "reserve",
+          "lineNumber": 907
+        },
+        {
+          "caller": "SyncControlsToCurrentPose",
+          "callee": "size",
+          "lineNumber": 907
+        },
+        {
+          "caller": "SyncControlsToCurrentPose",
+          "callee": "FindBone",
+          "lineNumber": 911
+        },
+        {
+          "caller": "SyncControlsToCurrentPose",
+          "callee": "GetObject",
+          "lineNumber": 912
+        },
+        {
+          "caller": "SyncControlsToCurrentPose",
+          "callee": "ResolveLinkedObjectParameter",
+          "lineNumber": 913
+        },
+        {
+          "caller": "SyncControlsToCurrentPose",
+          "callee": "GetDataInstance",
+          "lineNumber": 914
+        },
+        {
+          "caller": "SyncControlsToCurrentPose",
+          "callee": "IsBoneControlEligible",
+          "lineNumber": 915
+        },
+        {
+          "caller": "SyncControlsToCurrentPose",
+          "callee": "BuildControlCurrentMatrix",
+          "lineNumber": 922
+        },
+        {
+          "caller": "SyncControlsToCurrentPose",
+          "callee": "IsSameOrDescendantOf",
+          "lineNumber": 923
+        },
+        {
+          "caller": "SyncControlsToCurrentPose",
+          "callee": "emplace_back",
+          "lineNumber": 924
+        },
+        {
+          "caller": "SyncControlsToCurrentPose",
+          "callee": "IsMatrixIdentityLike",
+          "lineNumber": 929
+        },
+        {
+          "caller": "SyncControlsToCurrentPose",
+          "callee": "GetRelMl",
+          "lineNumber": 929
+        },
+        {
+          "caller": "SyncControlsToCurrentPose",
+          "callee": "GetControlSiblingParent",
+          "lineNumber": 932
+        },
+        {
+          "caller": "SyncControlsToCurrentPose",
+          "callee": "IsSameOrDescendantOf",
+          "lineNumber": 933
+        },
+        {
+          "caller": "SyncControlsToCurrentPose",
+          "callee": "MoveControlUnder",
+          "lineNumber": 935
+        },
+        {
+          "caller": "SyncControlsToCurrentPose",
+          "callee": "ApplyGlobalFrozenMatrix",
+          "lineNumber": 936
+        },
+        {
+          "caller": "GetControlDeltaInBoneSpace",
+          "callee": "GetDataInstance",
+          "lineNumber": 942
+        },
+        {
+          "caller": "GetControlDeltaInBoneSpace",
+          "callee": "IsBoneControlEligible",
+          "lineNumber": 943
+        },
+        {
+          "caller": "GetControlDeltaInBoneSpace",
+          "callee": "ResolveLinkedObjectParameter",
+          "lineNumber": 946
+        },
+        {
+          "caller": "GetControlDeltaInBoneSpace",
+          "callee": "MatrixToEigen",
+          "lineNumber": 950
+        },
+        {
+          "caller": "GetControlDeltaInBoneSpace",
+          "callee": "BuildControlBaseGlobalMatrix",
+          "lineNumber": 950
+        },
+        {
+          "caller": "GetControlDeltaInBoneSpace",
+          "callee": "MatrixToEigen",
+          "lineNumber": 951
+        },
+        {
+          "caller": "GetControlDeltaInBoneSpace",
+          "callee": "BuildCurrentBoneGlobalMatrix",
+          "lineNumber": 951
+        },
+        {
+          "caller": "GetControlDeltaInBoneSpace",
+          "callee": "MatrixToEigen",
+          "lineNumber": 952
+        },
+        {
+          "caller": "GetControlDeltaInBoneSpace",
+          "callee": "NormalizeMatrixBasis",
+          "lineNumber": 952
+        },
+        {
+          "caller": "GetControlDeltaInBoneSpace",
+          "callee": "GetRelMl",
+          "lineNumber": 952
+        },
+        {
+          "caller": "GetControlDeltaInBoneSpace",
+          "callee": "block<3, 3>",
+          "lineNumber": 954
+        },
+        {
+          "caller": "GetControlDeltaInBoneSpace",
+          "callee": "block<3, 3>",
+          "lineNumber": 955
+        },
+        {
+          "caller": "GetControlDeltaInBoneSpace",
+          "callee": "block<3, 1>",
+          "lineNumber": 956
+        },
+        {
+          "caller": "GetControlDeltaInBoneSpace",
+          "callee": "transpose",
+          "lineNumber": 957
+        },
+        {
+          "caller": "GetControlDeltaInBoneSpace",
+          "callee": "ExtractRotation",
+          "lineNumber": 959
+        },
+        {
+          "caller": "GetControlDeltaInBoneSpace",
+          "callee": "toRotationMatrix",
+          "lineNumber": 960
+        },
+        {
+          "caller": "GetControlDeltaInBoneSpace",
+          "callee": "transpose",
+          "lineNumber": 960
+        },
+        {
+          "caller": "GetControlDeltaInBoneSpace",
+          "callee": "transpose",
+          "lineNumber": 961
+        },
+        {
+          "caller": "GetControlDeltaInBoneSpace",
+          "callee": "Vector",
+          "lineNumber": 963
+        },
+        {
+          "caller": "GetControlDeltaInBoneSpace",
+          "callee": "x",
+          "lineNumber": 963
+        },
+        {
+          "caller": "GetControlDeltaInBoneSpace",
+          "callee": "y",
+          "lineNumber": 963
+        },
+        {
+          "caller": "GetControlDeltaInBoneSpace",
+          "callee": "z",
+          "lineNumber": 963
+        },
+        {
+          "caller": "GetControlDeltaInBoneSpace",
+          "callee": "normalized",
+          "lineNumber": 964
+        },
+        {
+          "caller": "GetControlDeltaInBoneSpace",
+          "callee": "Eigen::Quaternionf",
+          "lineNumber": 964
+        },
+        {
+          "caller": "GetControlDeltaInBoneSpace",
+          "callee": "GetBool",
+          "lineNumber": 965
+        },
+        {
+          "caller": "GetControlDeltaInBoneSpace",
+          "callee": "ProjectRotationToAxis",
+          "lineNumber": 966
+        },
+        {
+          "caller": "GetControlDeltaInBoneSpace",
+          "callee": "GetVector",
+          "lineNumber": 966
+        },
+        {
+          "caller": "GetControlDeltaInBoneSpace",
+          "callee": "ToQuaternionArray",
+          "lineNumber": 967
+        },
+        {
+          "caller": "ResetControlRelativeTransform",
+          "callee": "ResolveLinkedObjectParameter",
+          "lineNumber": 973
+        },
+        {
+          "caller": "ResetControlRelativeTransform",
+          "callee": "SetRelMl",
+          "lineNumber": 977
+        },
+        {
+          "caller": "ResetControlRelativeTransform",
+          "callee": "MakeIdentityMatrix",
+          "lineNumber": 977
+        },
+        {
+          "caller": "ResetControlRelativeTransform",
+          "callee": "MarkControlTransformDirty",
+          "lineNumber": 978
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 55,
+        "functionCount": 54,
+        "classCount": 1
+      }
+    },
+    {
+      "path": "source/utils/mmd_bone_control_util.hpp",
+      "language": "cpp",
+      "fileCategory": "code",
+      "totalLines": 28,
+      "nonEmptyLines": 21,
+      "classes": [
+        {
+          "name": "MMDBoneManagerObject",
+          "startLine": 18,
+          "endLine": 18,
+          "methods": [],
+          "properties": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "MMDBoneManagerObject",
+          "line": 18,
+          "isDefault": false
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 1,
+        "functionCount": 0,
+        "classCount": 1
+      }
+    },
+    {
+      "path": "source/utils/morph_ui_data_util.hpp",
+      "language": "cpp",
+      "fileCategory": "code",
+      "totalLines": 68,
+      "nonEmptyLines": 56,
+      "functions": [
+        {
+          "name": "MorphUIData",
+          "startLine": 23,
+          "endLine": 25,
+          "params": []
+        },
+        {
+          "name": "~MorphUIData",
+          "startLine": 27,
+          "endLine": 27,
+          "params": []
+        },
+        {
+          "name": "MorphUIData",
+          "startLine": 28,
+          "endLine": 28,
+          "params": [
+            "other"
+          ]
+        },
+        {
+          "name": "MorphUIData",
+          "startLine": 30,
+          "endLine": 30,
+          "params": [
+            "other"
+          ]
+        },
+        {
+          "name": "Write",
+          "startLine": 33,
+          "endLine": 38,
+          "params": [
+            "hf"
+          ]
+        },
+        {
+          "name": "Read",
+          "startLine": 40,
+          "endLine": 45,
+          "params": [
+            "hf"
+          ]
+        },
+        {
+          "name": "Compare",
+          "startLine": 46,
+          "endLine": 49,
+          "params": [
+            "tag",
+            "id"
+          ]
+        },
+        {
+          "name": "SetStrength",
+          "startLine": 51,
+          "endLine": 56,
+          "params": [
+            "strength"
+          ]
+        },
+        {
+          "name": "GetStrength",
+          "startLine": 58,
+          "endLine": 66,
+          "params": []
+        }
+      ],
+      "classes": [
+        {
+          "name": "MorphUIData",
+          "startLine": 18,
+          "endLine": 67,
+          "methods": [
+            "MorphUIData",
+            "~MorphUIData",
+            "MorphUIData",
+            "MorphUIData",
+            "Write",
+            "Read",
+            "Compare",
+            "SetStrength",
+            "GetStrength"
+          ],
+          "properties": [
+            "strength_id",
+            "morph_tag"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "MorphUIData",
+          "line": 23,
+          "isDefault": false
+        },
+        {
+          "name": "~MorphUIData",
+          "line": 27,
+          "isDefault": false
+        },
+        {
+          "name": "MorphUIData",
+          "line": 28,
+          "isDefault": false
+        },
+        {
+          "name": "MorphUIData",
+          "line": 30,
+          "isDefault": false
+        },
+        {
+          "name": "Write",
+          "line": 33,
+          "isDefault": false
+        },
+        {
+          "name": "Read",
+          "line": 40,
+          "isDefault": false
+        },
+        {
+          "name": "Compare",
+          "line": 46,
+          "isDefault": false
+        },
+        {
+          "name": "SetStrength",
+          "line": 51,
+          "isDefault": false
+        },
+        {
+          "name": "GetStrength",
+          "line": 58,
+          "isDefault": false
+        },
+        {
+          "name": "MorphUIData",
+          "line": 18,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "MorphUIData",
+          "callee": "std::move",
+          "lineNumber": 23
+        },
+        {
+          "caller": "Write",
+          "callee": "IOWriteField",
+          "lineNumber": 35
+        },
+        {
+          "caller": "Write",
+          "callee": "IOWriteField",
+          "lineNumber": 36
+        },
+        {
+          "caller": "Read",
+          "callee": "IOReadField",
+          "lineNumber": 42
+        },
+        {
+          "caller": "Read",
+          "callee": "IOReadField",
+          "lineNumber": 43
+        },
+        {
+          "caller": "SetStrength",
+          "callee": "SetParameter",
+          "lineNumber": 55
+        },
+        {
+          "caller": "GetStrength",
+          "callee": "GetParameter",
+          "lineNumber": 63
+        },
+        {
+          "caller": "GetStrength",
+          "callee": "GetFloat",
+          "lineNumber": 65
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 10,
+        "functionCount": 9,
+        "classCount": 1
+      }
+    },
+    {
+      "path": "source/utils/pmx_util.hpp",
+      "language": "cpp",
+      "fileCategory": "code",
+      "totalLines": 170,
+      "nonEmptyLines": 161,
+      "functions": [
+        {
+          "name": "PMXTextReader",
+          "startLine": 22,
+          "endLine": 25,
+          "params": []
+        },
+        {
+          "name": "SetTextEncoding",
+          "startLine": 26,
+          "endLine": 30,
+          "params": []
+        },
+        {
+          "name": "operator()",
+          "startLine": 31,
+          "endLine": 37,
+          "params": [
+            "file"
+          ]
+        },
+        {
+          "name": "operator()",
+          "startLine": 38,
+          "endLine": 65,
+          "params": [
+            "file",
+            "out_string"
+          ]
+        },
+        {
+          "name": "PMXIndexReader",
+          "startLine": 72,
+          "endLine": 75,
+          "params": []
+        },
+        {
+          "name": "SetIndexSize",
+          "startLine": 76,
+          "endLine": 80,
+          "params": []
+        },
+        {
+          "name": "operator()",
+          "startLine": 81,
+          "endLine": 84,
+          "params": [
+            "file"
+          ]
+        },
+        {
+          "name": "operator()",
+          "startLine": 85,
+          "endLine": 116,
+          "params": [
+            "file",
+            "out_index"
+          ]
+        },
+        {
+          "name": "PMXUIndexReader",
+          "startLine": 123,
+          "endLine": 126,
+          "params": []
+        },
+        {
+          "name": "SetIndexSize",
+          "startLine": 127,
+          "endLine": 131,
+          "params": []
+        },
+        {
+          "name": "operator()",
+          "startLine": 132,
+          "endLine": 135,
+          "params": [
+            "file"
+          ]
+        },
+        {
+          "name": "operator()",
+          "startLine": 136,
+          "endLine": 167,
+          "params": [
+            "file",
+            "out_index"
+          ]
+        }
+      ],
+      "classes": [
+        {
+          "name": "PMXTextReader",
+          "startLine": 18,
+          "endLine": 66,
+          "methods": [
+            "PMXTextReader",
+            "SetTextEncoding",
+            "operator()",
+            "operator()"
+          ],
+          "properties": [
+            "m_text_encoding"
+          ]
+        },
+        {
+          "name": "PMXIndexReader",
+          "startLine": 68,
+          "endLine": 117,
+          "methods": [
+            "PMXIndexReader",
+            "SetIndexSize",
+            "operator()",
+            "operator()"
+          ],
+          "properties": [
+            "m_index_size"
+          ]
+        },
+        {
+          "name": "PMXUIndexReader",
+          "startLine": 119,
+          "endLine": 168,
+          "methods": [
+            "PMXUIndexReader",
+            "SetIndexSize",
+            "operator()",
+            "operator()"
+          ],
+          "properties": [
+            "m_index_size"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "PMXTextReader",
+          "line": 22,
+          "isDefault": false
+        },
+        {
+          "name": "SetTextEncoding",
+          "line": 26,
+          "isDefault": false
+        },
+        {
+          "name": "operator()",
+          "line": 31,
+          "isDefault": false
+        },
+        {
+          "name": "operator()",
+          "line": 38,
+          "isDefault": false
+        },
+        {
+          "name": "PMXTextReader",
+          "line": 18,
+          "isDefault": false
+        },
+        {
+          "name": "PMXIndexReader",
+          "line": 72,
+          "isDefault": false
+        },
+        {
+          "name": "SetIndexSize",
+          "line": 76,
+          "isDefault": false
+        },
+        {
+          "name": "operator()",
+          "line": 81,
+          "isDefault": false
+        },
+        {
+          "name": "operator()",
+          "line": 85,
+          "isDefault": false
+        },
+        {
+          "name": "PMXIndexReader",
+          "line": 68,
+          "isDefault": false
+        },
+        {
+          "name": "PMXUIndexReader",
+          "line": 123,
+          "isDefault": false
+        },
+        {
+          "name": "SetIndexSize",
+          "line": 127,
+          "isDefault": false
+        },
+        {
+          "name": "operator()",
+          "line": 132,
+          "isDefault": false
+        },
+        {
+          "name": "operator()",
+          "line": 136,
+          "isDefault": false
+        },
+        {
+          "name": "PMXUIndexReader",
+          "line": 119,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "PMXTextReader",
+          "callee": "assert",
+          "lineNumber": 24
+        },
+        {
+          "caller": "SetTextEncoding",
+          "callee": "assert",
+          "lineNumber": 28
+        },
+        {
+          "caller": "operator()",
+          "callee": "ReadInt32",
+          "lineNumber": 35
+        },
+        {
+          "caller": "operator()",
+          "callee": "Seek",
+          "lineNumber": 36
+        },
+        {
+          "caller": "operator()",
+          "callee": "ReadInt32",
+          "lineNumber": 42
+        },
+        {
+          "caller": "operator()",
+          "callee": "ReadBytes",
+          "lineNumber": 47
+        },
+        {
+          "caller": "operator()",
+          "callee": "data",
+          "lineNumber": 47
+        },
+        {
+          "caller": "operator()",
+          "callee": "String",
+          "lineNumber": 48
+        },
+        {
+          "caller": "operator()",
+          "callee": "data",
+          "lineNumber": 48
+        },
+        {
+          "caller": "operator()",
+          "callee": "ReadBytes",
+          "lineNumber": 54
+        },
+        {
+          "caller": "operator()",
+          "callee": "data",
+          "lineNumber": 54
+        },
+        {
+          "caller": "operator()",
+          "callee": "SetCString",
+          "lineNumber": 55
+        },
+        {
+          "caller": "operator()",
+          "callee": "data",
+          "lineNumber": 55
+        },
+        {
+          "caller": "PMXIndexReader",
+          "callee": "assert",
+          "lineNumber": 74
+        },
+        {
+          "caller": "SetIndexSize",
+          "callee": "assert",
+          "lineNumber": 78
+        },
+        {
+          "caller": "operator()",
+          "callee": "Seek",
+          "lineNumber": 83
+        },
+        {
+          "caller": "operator()",
+          "callee": "ReadChar",
+          "lineNumber": 93
+        },
+        {
+          "caller": "operator()",
+          "callee": "static_cast<UChar>",
+          "lineNumber": 94
+        },
+        {
+          "caller": "operator()",
+          "callee": "ReadInt16",
+          "lineNumber": 100
+        },
+        {
+          "caller": "operator()",
+          "callee": "ReadInt32",
+          "lineNumber": 107
+        },
+        {
+          "caller": "PMXUIndexReader",
+          "callee": "assert",
+          "lineNumber": 125
+        },
+        {
+          "caller": "SetIndexSize",
+          "callee": "assert",
+          "lineNumber": 129
+        },
+        {
+          "caller": "operator()",
+          "callee": "Seek",
+          "lineNumber": 134
+        },
+        {
+          "caller": "operator()",
+          "callee": "ReadUChar",
+          "lineNumber": 144
+        },
+        {
+          "caller": "operator()",
+          "callee": "ReadUInt16",
+          "lineNumber": 151
+        },
+        {
+          "caller": "operator()",
+          "callee": "ReadUInt32",
+          "lineNumber": 158
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 15,
+        "functionCount": 12,
+        "classCount": 3
+      }
+    },
+    {
+      "path": "source/utils/time_util.hpp",
+      "language": "cpp",
+      "fileCategory": "code",
+      "totalLines": 35,
+      "nonEmptyLines": 26,
+      "functions": [
+        {
+          "name": "GetHashCode",
+          "startLine": 26,
+          "endLine": 29,
+          "params": []
+        },
+        {
+          "name": "HashTime",
+          "startLine": 31,
+          "endLine": 31,
+          "params": []
+        },
+        {
+          "name": "HashTime",
+          "startLine": 33,
+          "endLine": 33,
+          "params": [
+            "time"
+          ]
+        }
+      ],
+      "classes": [
+        {
+          "name": "HashTime",
+          "startLine": 23,
+          "endLine": 34,
+          "methods": [
+            "GetHashCode",
+            "HashTime",
+            "HashTime"
+          ],
+          "properties": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "GetHashCode",
+          "line": 26,
+          "isDefault": false
+        },
+        {
+          "name": "HashTime",
+          "line": 31,
+          "isDefault": false
+        },
+        {
+          "name": "HashTime",
+          "line": 33,
+          "isDefault": false
+        },
+        {
+          "name": "HashTime",
+          "line": 23,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "GetHashCode",
+          "callee": "MAXON_HASHCODE",
+          "lineNumber": 28
+        },
+        {
+          "caller": "GetHashCode",
+          "callee": "GetNumerator",
+          "lineNumber": 28
+        },
+        {
+          "caller": "GetHashCode",
+          "callee": "GetDenominator",
+          "lineNumber": 28
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 4,
+        "functionCount": 3,
+        "classCount": 1
+      }
+    },
+    {
+      "path": "source/utils/unique_id_util.hpp",
+      "language": "cpp",
+      "fileCategory": "code",
+      "totalLines": 52,
+      "nonEmptyLines": 43,
+      "functions": [
+        {
+          "name": "UniqueIDReader",
+          "startLine": 20,
+          "endLine": 20,
+          "params": []
+        },
+        {
+          "name": "GetUniqueIDString",
+          "startLine": 22,
+          "endLine": 30,
+          "params": [
+            "bl",
+            "appid"
+          ]
+        },
+        {
+          "name": "FindUniqueID",
+          "startLine": 32,
+          "endLine": 37,
+          "params": [
+            "bl",
+            "appid"
+          ]
+        },
+        {
+          "name": "UniqueIDWriter",
+          "startLine": 45,
+          "endLine": 45,
+          "params": [
+            "id"
+          ]
+        },
+        {
+          "name": "AddUniqueID",
+          "startLine": 47,
+          "endLine": 51,
+          "params": [
+            "bl",
+            "id",
+            "appid"
+          ]
+        }
+      ],
+      "classes": [
+        {
+          "name": "UniqueIDReader",
+          "startLine": 17,
+          "endLine": 38,
+          "methods": [
+            "UniqueIDReader",
+            "GetUniqueIDString",
+            "FindUniqueID"
+          ],
+          "properties": []
+        },
+        {
+          "name": "UniqueIDWriter",
+          "startLine": 40,
+          "endLine": 52,
+          "methods": [
+            "UniqueIDWriter",
+            "AddUniqueID"
+          ],
+          "properties": [
+            "m_bytes",
+            "m_cstr"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "UniqueIDReader",
+          "line": 20,
+          "isDefault": false
+        },
+        {
+          "name": "GetUniqueIDString",
+          "line": 22,
+          "isDefault": false
+        },
+        {
+          "name": "FindUniqueID",
+          "line": 32,
+          "isDefault": false
+        },
+        {
+          "name": "UniqueIDReader",
+          "line": 17,
+          "isDefault": false
+        },
+        {
+          "name": "UniqueIDWriter",
+          "line": 45,
+          "isDefault": false
+        },
+        {
+          "name": "AddUniqueID",
+          "line": 47,
+          "isDefault": false
+        },
+        {
+          "name": "UniqueIDWriter",
+          "line": 40,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "GetUniqueIDString",
+          "callee": "FindUniqueID",
+          "lineNumber": 26
+        },
+        {
+          "caller": "GetUniqueIDString",
+          "callee": "std::make_tuple",
+          "lineNumber": 29
+        },
+        {
+          "caller": "FindUniqueID",
+          "callee": "FindUniqueID",
+          "lineNumber": 36
+        },
+        {
+          "caller": "UniqueIDWriter",
+          "callee": "GetCStringLen",
+          "lineNumber": 45
+        },
+        {
+          "caller": "UniqueIDWriter",
+          "callee": "GetCStringCopy",
+          "lineNumber": 45
+        },
+        {
+          "caller": "AddUniqueID",
+          "callee": "AddUniqueID",
+          "lineNumber": 50
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 7,
+        "functionCount": 5,
+        "classCount": 2
+      }
+    }
+  ]
+}

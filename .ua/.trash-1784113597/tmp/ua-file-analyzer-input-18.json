@@ -1,0 +1,182 @@
+{
+  "projectRoot": "E:\\code\\C4D_MMD_Tool",
+  "batchFiles": [
+    {
+      "path": "res/S24_up/mikumikudance_data/toon04.bmp",
+      "language": "bmp",
+      "sizeLines": 0,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/S24_up/mikumikudance_data/toon05.bmp",
+      "language": "bmp",
+      "sizeLines": 0,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/S24_up/mikumikudance_data/toon06.bmp",
+      "language": "bmp",
+      "sizeLines": 0,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/S24_up/mikumikudance_data/toon07.bmp",
+      "language": "bmp",
+      "sizeLines": 0,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/S24_up/mikumikudance_data/toon08.bmp",
+      "language": "bmp",
+      "sizeLines": 0,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/S24_up/mikumikudance_data/toon09.bmp",
+      "language": "bmp",
+      "sizeLines": 0,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/S24_up/mikumikudance_data/toon10.bmp",
+      "language": "bmp",
+      "sizeLines": 0,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/S24_up/name_conversion/default.json",
+      "language": "json",
+      "sizeLines": 248,
+      "fileCategory": "config"
+    },
+    {
+      "path": "res/S24_up/name_conversion/UE5.json",
+      "language": "json",
+      "sizeLines": 246,
+      "fileCategory": "config"
+    },
+    {
+      "path": "res/S24_up/strings_en-US/c4d_strings.str",
+      "language": "str",
+      "sizeLines": 104,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/S24_up/strings_en-US/description/OMMDBoneManager.str",
+      "language": "str",
+      "sizeLines": 21,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/S24_up/strings_en-US/description/OMMDCamera.str",
+      "language": "str",
+      "sizeLines": 5,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/S24_up/strings_en-US/description/OMMDJoint.str",
+      "language": "str",
+      "sizeLines": 64,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/S24_up/strings_en-US/description/OMMDJointManager.str",
+      "language": "str",
+      "sizeLines": 15,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/S24_up/strings_en-US/description/OMMDMeshManager.str",
+      "language": "str",
+      "sizeLines": 18,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/S24_up/strings_en-US/description/OMMDModelManager.str",
+      "language": "str",
+      "sizeLines": 152,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/S24_up/strings_en-US/description/OMMDRigid.str",
+      "language": "str",
+      "sizeLines": 79,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/S24_up/strings_en-US/description/OMMDRigidManager.str",
+      "language": "str",
+      "sizeLines": 15,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/S24_up/strings_en-US/description/TMMDBone.str",
+      "language": "str",
+      "sizeLines": 83,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/S24_up/strings_en-US/description/Xmmdmaterialmorphshader.str",
+      "language": "str",
+      "sizeLines": 6,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/S24_up/strings_en-US/dialogs/DLG_CMT_TOOL.str",
+      "language": "str",
+      "sizeLines": 56,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/S24_up/strings_en-US/dialogs/DLG_CMT_VMD_IMPORT.str",
+      "language": "str",
+      "sizeLines": 8,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/S24_up/strings_zh-CN/c4d_strings.str",
+      "language": "str",
+      "sizeLines": 104,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/S24_up/strings_zh-CN/description/OMMDBoneManager.str",
+      "language": "str",
+      "sizeLines": 21,
+      "fileCategory": "code"
+    },
+    {
+      "path": "res/S24_up/strings_zh-CN/description/OMMDCamera.str",
+      "language": "str",
+      "sizeLines": 4,
+      "fileCategory": "code"
+    }
+  ],
+  "batchImportData": {
+    "res/S24_up/mikumikudance_data/toon04.bmp": [],
+    "res/S24_up/mikumikudance_data/toon05.bmp": [],
+    "res/S24_up/mikumikudance_data/toon06.bmp": [],
+    "res/S24_up/mikumikudance_data/toon07.bmp": [],
+    "res/S24_up/mikumikudance_data/toon08.bmp": [],
+    "res/S24_up/mikumikudance_data/toon09.bmp": [],
+    "res/S24_up/mikumikudance_data/toon10.bmp": [],
+    "res/S24_up/name_conversion/default.json": [],
+    "res/S24_up/name_conversion/UE5.json": [],
+    "res/S24_up/strings_en-US/c4d_strings.str": [],
+    "res/S24_up/strings_en-US/description/OMMDBoneManager.str": [],
+    "res/S24_up/strings_en-US/description/OMMDCamera.str": [],
+    "res/S24_up/strings_en-US/description/OMMDJoint.str": [],
+    "res/S24_up/strings_en-US/description/OMMDJointManager.str": [],
+    "res/S24_up/strings_en-US/description/OMMDMeshManager.str": [],
+    "res/S24_up/strings_en-US/description/OMMDModelManager.str": [],
+    "res/S24_up/strings_en-US/description/OMMDRigid.str": [],
+    "res/S24_up/strings_en-US/description/OMMDRigidManager.str": [],
+    "res/S24_up/strings_en-US/description/TMMDBone.str": [],
+    "res/S24_up/strings_en-US/description/Xmmdmaterialmorphshader.str": [],
+    "res/S24_up/strings_en-US/dialogs/DLG_CMT_TOOL.str": [],
+    "res/S24_up/strings_en-US/dialogs/DLG_CMT_VMD_IMPORT.str": [],
+    "res/S24_up/strings_zh-CN/c4d_strings.str": [],
+    "res/S24_up/strings_zh-CN/description/OMMDBoneManager.str": [],
+    "res/S24_up/strings_zh-CN/description/OMMDCamera.str": []
+  }
+}

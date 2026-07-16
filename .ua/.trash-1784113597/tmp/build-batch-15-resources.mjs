@@ -1,0 +1,130 @@
+import fs from 'node:fs';
+import path from 'node:path';
+
+const ROOT = 'E:/code/C4D_MMD_Tool';
+const BASE = path.join(ROOT, '.ua', 'intermediate');
+const TMP = path.join(ROOT, '.ua', 'tmp');
+const data = JSON.parse(fs.readFileSync(path.join(BASE, 'batches.json'), 'utf8'));
+const batch = data.batches.find((entry) => entry.batchIndex === 15);
+if (!batch) throw new Error('Missing current batch 15');
+const extracted = JSON.parse(fs.readFileSync(path.join(TMP, 'ua-file-extract-results-15.json'), 'utf8'));
+if (!extracted.scriptCompleted || extracted.filesSkipped.length || extracted.results.length !== batch.files.length) {
+  throw new Error('Incomplete extraction for batch 15');
+}
+const resultByPath = new Map(extracted.results.map((result) => [result.path, result]));
+const bi = (en, zh) => `${en} / ${zh}`;
+
+const summaries = {
+  'res/R20-S24/description/OMMDRigidManager.h': bi('Declares legacy Cinema 4D description IDs for rigid-manager display modes, edit or animation mode, and rigid-body creation.', '声明旧版 Cinema 4D 刚体管理器描述 ID，覆盖显示模式、编辑或动画模式以及刚体创建。'),
+  'res/R20-S24/description/OMMDRigidManager.res': bi('Defines the legacy rigid-manager Attribute Manager layout with display and mode quick tabs plus an add-rigid-body action.', '定义旧版刚体管理器属性面板布局，包含显示与模式快速选项卡以及添加刚体操作。'),
+  'res/R20-S24/description/TMMDBone.h': bi('Declares legacy PMX bone-tag parameter IDs for metadata, flags, inheritance, axes, IK, morphs, and animation controls.', '声明旧版 PMX 骨骼标签参数 ID，覆盖元数据、标志、继承、坐标轴、IK、变形与动画控件。'),
+  'res/R20-S24/description/TMMDBone.res': bi('Defines the full legacy PMX bone-tag Attribute Manager layout, including bone identity, deform behavior, inheritance, axes, IK links, and keyframe editing.', '定义完整的旧版 PMX 骨骼标签属性面板布局，包括骨骼身份、变形行为、继承、坐标轴、IK 链接与关键帧编辑。'),
+  'res/R20-S24/description/Xmmdmaterialmorphshader.h': bi('Declares legacy description IDs for the material-morph shader color and alpha factors.', '声明旧版材质变形着色器颜色与 Alpha 因子的描述 ID。'),
+  'res/R20-S24/description/Xmmdmaterialmorphshader.res': bi('Defines a legacy Cinema 4D shader description exposing material-morph color and nonnegative alpha factors.', '定义旧版 Cinema 4D 着色器描述，公开材质变形颜色与非负 Alpha 因子。'),
+  'res/R20-S24/dialogs/DLG_CMT_TOOL.res': bi('Defines the large legacy MMD Tool dialog with camera, motion, pose, and PMX model import, export, conversion, and option panels.', '定义大型旧版 MMD Tool 对话框，包含相机、动作、姿势与 PMX 模型的导入、导出、转换及选项面板。'),
+  'res/R20-S24/dialogs/DLG_CMT_VMD_IMPORT.res': bi('Defines a focused legacy VMD camera-import dialog with scale, frame-offset, import, and cancel controls.', '定义精简的旧版 VMD 相机导入对话框，包含缩放、帧偏移、导入与取消控件。'),
+  'res/R20-S24/mikumikudance_data/color.txt': bi('MikuMikuDance palette data listing ordered RGB values for viewport panels, timeline states, selection, and shadow colors.', 'MikuMikuDance 调色板数据，按顺序列出视口面板、时间轴状态、选择与阴影颜色的 RGB 值。'),
+  'res/R20-S24/name_conversion/default.json': bi('Default name-conversion dictionary mapping Japanese MMD bone names to general-purpose English rig names.', '默认名称转换字典，将日文 MMD 骨骼名称映射为通用英文骨架名称。'),
+  'res/R20-S24/name_conversion/UE5.json': bi('Unreal Engine 5 name-conversion dictionary mapping Japanese MMD bone names to UE-style skeleton identifiers.', 'Unreal Engine 5 名称转换字典，将日文 MMD 骨骼名称映射为 UE 风格骨架标识符。'),
+  'res/R20-S24/strings_en-US/c4d_strings.str': bi('Global English string table for file dialogs, import and export reports, validation errors, morph actions, runtime status, and plugin entity names.', '全局英文字符串表，覆盖文件对话框、导入导出报告、校验错误、变形操作、运行时状态与插件实体名称。'),
+  'res/R20-S24/strings_en-US/description/OMMDBoneManager.str': bi('English labels for the MMD Bone Manager description, including display filters, edit or animation mode, bone creation, and control generation.', 'MMD 骨骼管理器描述的英文标签，包含显示筛选、编辑或动画模式、骨骼创建与控制器生成。'),
+  'res/R20-S24/strings_en-US/description/OMMDCamera.str': bi('English display name for the legacy MMD Camera object description.', '旧版 MMD 相机对象描述的英文显示名称。'),
+  'res/R20-S24/strings_en-US/description/OMMDJoint.str': bi('English labels for MMD joint metadata, rigid-body links, transforms, limits, springs, and supported joint types.', 'MMD 关节元数据、刚体链接、变换、限制、弹簧与支持关节类型的英文标签。'),
+};
+
+const tags = {
+  'res/R20-S24/description/OMMDRigidManager.h': ['resource-definition', 'rigid-body', 'type-definition', 'legacy-sdk'],
+  'res/R20-S24/description/OMMDRigidManager.res': ['resource-definition', 'rigid-body', 'ui', 'legacy-sdk'],
+  'res/R20-S24/description/TMMDBone.h': ['resource-definition', 'pmx-bone', 'type-definition', 'legacy-sdk'],
+  'res/R20-S24/description/TMMDBone.res': ['resource-definition', 'pmx-bone', 'ui', 'ik'],
+  'res/R20-S24/description/Xmmdmaterialmorphshader.h': ['resource-definition', 'material-morph', 'shader', 'legacy-sdk'],
+  'res/R20-S24/description/Xmmdmaterialmorphshader.res': ['resource-definition', 'material-morph', 'shader', 'ui'],
+  'res/R20-S24/dialogs/DLG_CMT_TOOL.res': ['resource-definition', 'dialog', 'import-export', 'ui'],
+  'res/R20-S24/dialogs/DLG_CMT_VMD_IMPORT.res': ['resource-definition', 'dialog', 'vmd-camera', 'ui'],
+  'res/R20-S24/mikumikudance_data/color.txt': ['documentation', 'palette', 'mmd-data', 'rgb'],
+  'res/R20-S24/name_conversion/default.json': ['configuration', 'name-conversion', 'bone-mapping', 'localization'],
+  'res/R20-S24/name_conversion/UE5.json': ['configuration', 'name-conversion', 'bone-mapping', 'unreal-engine'],
+  'res/R20-S24/strings_en-US/c4d_strings.str': ['localization', 'english', 'string-table', 'resources'],
+  'res/R20-S24/strings_en-US/description/OMMDBoneManager.str': ['localization', 'english', 'bone-manager', 'ui'],
+  'res/R20-S24/strings_en-US/description/OMMDCamera.str': ['localization', 'english', 'camera', 'resources'],
+  'res/R20-S24/strings_en-US/description/OMMDJoint.str': ['localization', 'english', 'joint', 'ui'],
+};
+
+function identity(file) {
+  if (file.fileCategory === 'config') return ['config', `config:${file.path}`];
+  if (file.fileCategory === 'docs') return ['document', `document:${file.path}`];
+  return ['file', `file:${file.path}`];
+}
+
+function complexity(lines) {
+  if (lines < 50) return 'simple';
+  if (lines <= 200) return 'moderate';
+  return 'complex';
+}
+
+const nodes = [];
+for (const file of batch.files) {
+  const result = resultByPath.get(file.path);
+  if (!result) throw new Error(`Missing extraction result for ${file.path}`);
+  const [type, id] = identity(file);
+  const toonMatch = file.path.match(/\/toon(\d\d)\.bmp$/i);
+  const summary = toonMatch
+    ? bi(`Standard MMD toon-shading texture ${toonMatch[1]}, stored as a 32×32 24-bit RGB bitmap gradient.`, `标准 MMD 卡通着色纹理 ${toonMatch[1]}，以 32×32、24 位 RGB 位图渐变存储。`)
+    : summaries[file.path];
+  const nodeTags = toonMatch ? ['texture', 'toon-shading', 'mmd-data', 'bitmap'] : tags[file.path];
+  if (!summary || !nodeTags) throw new Error(`Missing semantics for ${file.path}`);
+  nodes.push({
+    id,
+    type,
+    name: path.posix.basename(file.path),
+    filePath: file.path,
+    summary,
+    tags: nodeTags,
+    complexity: complexity(result.nonEmptyLines),
+  });
+}
+
+const edges = [
+  {
+    source: 'file:res/R20-S24/description/OMMDRigidManager.res',
+    target: 'file:res/R20-S24/description/OMMDRigidManager.h',
+    type: 'depends_on', direction: 'forward', weight: 0.6,
+  },
+  {
+    source: 'file:res/R20-S24/description/TMMDBone.res',
+    target: 'file:res/R20-S24/description/TMMDBone.h',
+    type: 'depends_on', direction: 'forward', weight: 0.6,
+  },
+  {
+    source: 'file:res/R20-S24/description/Xmmdmaterialmorphshader.res',
+    target: 'file:res/R20-S24/description/Xmmdmaterialmorphshader.h',
+    type: 'depends_on', direction: 'forward', weight: 0.6,
+  },
+  {
+    source: 'config:res/R20-S24/name_conversion/UE5.json',
+    target: 'config:res/R20-S24/name_conversion/default.json',
+    type: 'related', direction: 'forward', weight: 0.5,
+  },
+];
+
+const ids = new Set(nodes.map((node) => node.id));
+if (ids.size !== nodes.length) throw new Error('Duplicate node ID');
+for (const file of batch.files) {
+  if (nodes.filter((node) => node.filePath === file.path).length !== 1) throw new Error(`File coverage failure for ${file.path}`);
+}
+for (const node of nodes) {
+  if (!node.summary.includes(' / ')) throw new Error(`Non-bilingual summary for ${node.id}`);
+  if (!Array.isArray(node.tags) || node.tags.length < 3 || node.tags.length > 5) throw new Error(`Invalid tags for ${node.id}`);
+}
+for (const edge of edges) {
+  if (!ids.has(edge.source) || !ids.has(edge.target)) throw new Error(`Dangling edge ${edge.source} -> ${edge.target}`);
+}
+const expectedImports = batch.files.filter((file) => file.fileCategory === 'code')
+  .reduce((count, file) => count + (batch.batchImportData[file.path] || []).length, 0);
+const actualImports = edges.filter((edge) => edge.type === 'imports').length;
+if (actualImports !== expectedImports) throw new Error(`Import mismatch ${actualImports}/${expectedImports}`);
+
+const output = path.join(BASE, 'batch-15.json');
+fs.writeFileSync(output, `${JSON.stringify({ nodes, edges }, null, 2)}\n`);
+JSON.parse(fs.readFileSync(output, 'utf8'));
+console.log(JSON.stringify({ parts: 1, nodes: nodes.length, edges: edges.length, imports: actualImports, skipped: 0 }, null, 2));
