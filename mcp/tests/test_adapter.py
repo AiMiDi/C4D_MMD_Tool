@@ -72,7 +72,13 @@ def native_result_data(name, arguments=None):
 
 def temporary_directory():
     configured = os.environ.get("CMT_TEST_TEMP_DIR")
-    temporary_root = Path(configured) if configured else Path(r"S:\tmp") if os.name == "nt" else Path(tempfile.gettempdir())
+    local_root = Path(r"S:\tmp")
+    if configured:
+        temporary_root = Path(configured)
+    elif os.name == "nt" and local_root.is_dir():
+        temporary_root = local_root
+    else:
+        temporary_root = Path(tempfile.gettempdir())
     temporary_root.mkdir(parents=True, exist_ok=True)
     result = tempfile.TemporaryDirectory(prefix="cmt-mcp-test-", dir=temporary_root)
     # Verify the resolved recursive-cleanup target is a child of our explicitly

@@ -102,7 +102,14 @@ class FakeDocuments:
 
 class DocumentLifecycleTests(unittest.TestCase):
     def setUp(self):
-        temporary_root = Path(os.environ.get("CMT_TEST_TEMP_DIR", r"S:\tmp")) if os.name == "nt" else Path(tempfile.gettempdir())
+        configured = os.environ.get("CMT_TEST_TEMP_DIR")
+        local_root = Path(r"S:\tmp")
+        if configured:
+            temporary_root = Path(configured)
+        elif os.name == "nt" and local_root.is_dir():
+            temporary_root = local_root
+        else:
+            temporary_root = Path(tempfile.gettempdir())
         temporary_root.mkdir(parents=True, exist_ok=True)
         self.temporary = tempfile.TemporaryDirectory(prefix="cmt-fake-document-lifecycle-", dir=temporary_root)
         self.addCleanup(self.temporary.cleanup)

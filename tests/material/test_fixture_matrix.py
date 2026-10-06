@@ -4,6 +4,7 @@ from pathlib import Path
 from types import SimpleNamespace
 import hashlib
 import json
+import os
 import struct
 import sys
 import tempfile
@@ -22,6 +23,19 @@ from c4d_regression_fixtures import read_pmx_bones, read_pmx_morphs_and_frames
 
 def case(name):
     return next(item for item in matrix.CASES if item["name"] == name)
+
+
+def temporary_directory(prefix):
+    configured = os.environ.get("CMT_TEST_TEMP_DIR")
+    local_root = Path("S:/tmp")
+    if configured:
+        temporary_root = Path(configured)
+    elif os.name == "nt" and local_root.is_dir():
+        temporary_root = local_root
+    else:
+        temporary_root = Path(tempfile.gettempdir())
+    temporary_root.mkdir(parents=True, exist_ok=True)
+    return tempfile.TemporaryDirectory(prefix=prefix, dir=temporary_root)
 
 
 class InputAndOracleTests(unittest.TestCase):
@@ -66,7 +80,7 @@ class InputAndOracleTests(unittest.TestCase):
         self.assertEqual(data[tags[273][2]:tags[273][2] + 4], bytes((128, 128, 128, 0)))
 
     def test_unicode_relative_pmx_and_morph_roundtrip(self):
-        with tempfile.TemporaryDirectory(prefix="cmt-matrix-", dir="S:/tmp") as directory:
+        with temporary_directory(prefix="cmt-matrix-") as directory:
             prepared = matrix.prepare(directory)
             self.assertEqual(len(prepared["cases"]), 9)
             for item in prepared["cases"]:
@@ -195,7 +209,7 @@ class AsyncOwnershipTests(unittest.TestCase):
         self.assertTrue(instance.closed)
 
     def test_prepare_failure_persists_failure_before_cleanup(self):
-        with tempfile.TemporaryDirectory(prefix="cmt-material-failure-", dir="S:/tmp") as directory:
+        with temporary_directory(prefix="cmt-material-failure-") as directory:
             events = []
             class PreparationSuite:
                 output = Path(directory)
@@ -222,7 +236,7 @@ class AsyncOwnershipTests(unittest.TestCase):
             self.assertEqual(final["cleanup"], {"errors": []})
 
     def test_jpeg_codec_uses_optional_data_before_savebits(self):
-        with tempfile.TemporaryDirectory(prefix="cmt-jpeg-signature-", dir="S:/tmp") as directory:
+        with temporary_directory(prefix="cmt-jpeg-signature-") as directory:
             prepared = matrix.prepare(directory)
             calls = []
             class NativeBitmap:
@@ -243,7 +257,7 @@ class AsyncOwnershipTests(unittest.TestCase):
             self.assertEqual(prepared["cases"][-1]["name"], "jpeg_factor_zero")
 
     def test_calibration_failure_preserves_actual_png_and_alpha_diagnostics(self):
-        with tempfile.TemporaryDirectory(prefix="cmt-calibration-evidence-", dir="S:/tmp") as directory:
+        with temporary_directory(prefix="cmt-calibration-evidence-") as directory:
             instance = session(False)
             instance.width = instance.height = 128
             instance.suite.output = Path(directory)
