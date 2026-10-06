@@ -155,7 +155,6 @@ Bool CMTToolDialog::Command(const Int32 id, const BaseContainer& msg)
 	{
 		CMTToolsSetting::MotionExport setting(GetActiveDocument());
 		GetItem(DLG_CMT_TOOL_MOTION_EXPORT_SIZE, setting.position_multiple);
-		setting.position_multiple = 1.0 / setting.position_multiple;
 		GetItem(DLG_CMT_TOOL_MOTION_EXPORT_OFFSET, setting.time_offset);
 		GetItem(DLG_CMT_TOOL_MOTION_EXPORT_ROTATION_TWEEN, setting.use_rotation);
 		GetItem(DLG_CMT_TOOL_MOTION_EXPORT_MOTION, setting.export_motion);

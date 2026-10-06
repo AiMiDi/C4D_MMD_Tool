@@ -73,6 +73,18 @@ void CMTToolConfigManager::InitConfig(Int32 id)
 void CMTToolConfigManager::InitConfigManager()
 {
 	m_config = cmt_json::ReadJsonFile(m_config_path);
+	// Earlier defaults swapped these types. Preserve the saved choice while
+	// normalizing it to the actual combo-box and checkbox types.
+	if (auto item = m_config.find("DLG_CMT_TOOL_MOTION_EXPORT_ROTATION_TWEEN"); item != m_config.end())
+	{
+		if (const bool* value = std::get_if<bool>(&item->second))
+			item->second = *value ? 1 : 0;
+	}
+	if (auto item = m_config.find("DLG_CMT_TOOL_MOTION_EXPORT_USE_BAKE"); item != m_config.end())
+	{
+		if (const int* value = std::get_if<int>(&item->second))
+			item->second = *value != 0;
+	}
 	if (m_config.empty())
 	{
 		ApplicationOutput("Failed to load config file, using defaults."_s);

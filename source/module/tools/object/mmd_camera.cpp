@@ -15,14 +15,44 @@ Description:	C4D MMD camera object
 #include "mmd_camera.h"
 #include "CMTSceneManager.h"
 #include "tprotection.h"
+#include "description/OMMDCamera.h"
 #include "maxon/sortedarray.h"
 #include "utils/unique_id_util.hpp"
 #include "utils/time_util.hpp"
+#include "utils/cmt_camera_fov.hpp"
+#include <cmath>
 #include <functional>
+#include <limits>
 
 namespace
 {
 	constexpr Float32 kVmdCameraFps = 30.0f;
+
+	Bool IsGeneratedCameraChild(SDK2024_Const BaseObject* object)
+	{
+		if (!object || !object->IsInstanceOf(Ocamera))
+			return false;
+		const auto* metadata = object->GetDataInstance();
+		return UniqueIDReader::FindUniqueID(object, g_mmd_camera_object_id) ||
+			(metadata && metadata->GetBool(g_mmd_camera_object_id));
+	}
+
+	Bool MarkGeneratedCameraChild(BaseObject* object)
+	{
+		if (!object || !object->GetDataInstance())
+			return false;
+		// Cinema 4D deliberately drops AddUniqueID data in GetClone(). A role marker
+		// in the generated child's persisted container survives hierarchy cloning.
+		// The plugin's registered ID isolates it from ordinary camera parameters.
+		auto* metadata = object->GetDataInstance();
+		if (!metadata->GetBool(g_mmd_camera_object_id))
+		{
+			metadata->SetBool(g_mmd_camera_object_id, true);
+			object->SetDirty(DIRTYFLAGS::DATA);
+		}
+		return UniqueIDReader::FindUniqueID(object, g_mmd_camera_object_id) ||
+			UniqueIDWriter::AddUniqueID(object, "CMT::MMDCamera"_s, g_mmd_camera_object_id);
+	}
 }
 
 MMDCamera::MMDCamera(MMDCamera&& other) noexcept
@@ -53,37 +83,113 @@ BaseObject* MMDCamera::GetCamera() const
 
 Bool MMDCamera::InitCamera(GeListNode* node)
 {
+	if (!node)
+		node = Get();
+	if (!node)
+		return false;
+
 	if (!camera_)
 	{
-		if (!node)
-		{
-			node = Get();
-			if (!node)
-			{
-				return false;
-			}
-		}
 		auto* down_obj = reinterpret_cast<BaseObject*>(node->GetDown());
 		while (down_obj)
 		{
-			if(down_obj->GetType() == Ocamera && UniqueIDReader::FindUniqueID(down_obj, g_mmd_camera_object_id))
+			if (IsGeneratedCameraChild(down_obj))
 			{
 				camera_ = down_obj;
-				return true;
+				if (!MarkGeneratedCameraChild(camera_))
+					return false;
+				protection_tag_ = camera_->GetTag(Tprotection);
+				return EnsureCameraAnimationSchema(node);
 			}
 			down_obj = down_obj->GetNext();
 		}
 
 		camera_ = BaseObject::Alloc(Ocamera);
+		if (!camera_)
+			return false;
 		camera_->SetName("Camera"_s);
-		UniqueIDWriter::AddUniqueID(camera_, "CMT::MMDCamera"_s, g_mmd_camera_object_id);
+		if (!MarkGeneratedCameraChild(camera_))
+		{
+			BaseObject::Free(camera_);
+			return false;
+		}
 		protection_tag_ = BaseTag::Alloc(Tprotection);
+		if (!protection_tag_)
+		{
+			BaseObject::Free(camera_);
+			return false;
+		}
 		protection_tag_->SetParameter(ConstDescID(DescLevel(PROTECTION_P_Z)), false, DESCFLAGS_SET::NONE);
 		protection_tag_->ChangeNBit(NBIT::OHIDE, NBITCONTROL::SET);
 		protection_tag_->ChangeNBit(NBIT::AHIDE_FOR_HOST, NBITCONTROL::SET);
 		camera_->InsertTag(protection_tag_);
 		camera_->InsertUnder(node);
+		static_cast<BaseObject*>(node)->GetDataInstance()->SetInt32(MMD_CAMERA_ANIMATION_SCHEMA_VERSION,
+			MMD_CAMERA_ANIMATION_SCHEMA_VERTICAL_FOV_RADIANS);
 	}
+	return EnsureCameraAnimationSchema(node);
+}
+
+Bool MMDCamera::EnsureCameraAnimationSchema(GeListNode* node)
+{
+	auto* object = static_cast<BaseObject*>(node);
+	auto* metadata = object ? object->GetDataInstance() : nullptr;
+	if (!metadata || !camera_ || !UniqueIDReader::FindUniqueID(camera_, g_mmd_camera_object_id))
+		return false;
+	if (metadata->GetInt32(MMD_CAMERA_ANIMATION_SCHEMA_VERSION) >= MMD_CAMERA_ANIMATION_SCHEMA_VERTICAL_FOV_RADIANS)
+		return true;
+
+	const DescID aperture_id = ConstDescID(DescLevel(CAMERAOBJECT_APERTURE));
+	const DescID fov_id = ConstDescID(DescLevel(CAMERAOBJECT_FOV_VERTICAL));
+	CTrack* legacy_track = camera_->FindCTrack(aperture_id);
+	const CCurve* legacy_curve = legacy_track ? legacy_track->GetCurve() : nullptr;
+	// Only old generated child cameras without an existing FOV track qualify.
+	// Existing FOV tracks take precedence, and an ordinary artist camera is never
+	// considered for migration because it has no generated-child UniqueID.
+	if (!legacy_curve || legacy_curve->GetKeyCount() == 0 || camera_->FindCTrack(fov_id))
+	{
+		metadata->SetInt32(MMD_CAMERA_ANIMATION_SCHEMA_VERSION, MMD_CAMERA_ANIMATION_SCHEMA_VERTICAL_FOV_RADIANS);
+		return true;
+	}
+
+	for (Int32 index = 0; index < legacy_curve->GetKeyCount(); ++index)
+	{
+		const CKey* key = legacy_curve->GetKey(index);
+		if (!key || !cmt_camera_fov::IsValidRadians(cmt_camera_fov::DegreesToRadians(key->GetValue())) ||
+			!std::isfinite(key->GetValueLeft()) || !std::isfinite(key->GetValueRight()))
+			return false;
+	}
+	// Prepare a complete clone before changing the live scene. Cloning retains
+	// interpolation modes, key flags, time tangents and track loop settings.
+	AutoFree<CTrack> migrated_track;
+	migrated_track.Set(static_cast<CTrack*>(legacy_track->GetClone(COPYFLAGS::NONE, nullptr)));
+	if (!migrated_track || !migrated_track->SetDescriptionID(camera_, fov_id))
+		return false;
+	CCurve* migrated_curve = migrated_track->GetCurve();
+	if (!migrated_curve)
+		return false;
+	for (Int32 index = 0; index < migrated_curve->GetKeyCount(); ++index)
+	{
+		CKey* key = migrated_curve->GetKey(index);
+		const CKey* source_key = legacy_curve->GetKey(index);
+		const Float value = source_key->GetValue();
+		const Float left = source_key->GetValueLeft();
+		const Float right = source_key->GetValueRight();
+		key->SetValue(migrated_curve, cmt_camera_fov::DegreesToRadians(value));
+		key->SetValueLeft(migrated_curve, cmt_camera_fov::DegreesToRadians(left));
+		key->SetValueRight(migrated_curve, cmt_camera_fov::DegreesToRadians(right));
+	}
+	BaseDocument* document = object->GetDocument();
+	const BaseTime time = document ? document->GetTime() : BaseTime{};
+	const Float current_fov = cmt_camera_fov::DegreesToRadians(legacy_curve->GetValue(time));
+	if (!cmt_camera_fov::IsValidRadians(current_fov) || !camera_->SetParameter(fov_id, current_fov, DESCFLAGS_SET::NONE))
+		return false;
+	camera_->InsertTrackSorted(migrated_track.Release());
+	legacy_track->Remove();
+	CTrack::Free(legacy_track);
+	metadata->SetInt32(MMD_CAMERA_ANIMATION_SCHEMA_VERSION, MMD_CAMERA_ANIMATION_SCHEMA_VERTICAL_FOV_RADIANS);
+	camera_->SetDirty(DIRTYFLAGS::DATA);
+	object->SetDirty(DIRTYFLAGS::DATA);
 	return true;
 }
 
@@ -93,6 +199,8 @@ Bool MMDCamera::LoadVMDCamera(const std::unique_ptr<libmmd::VMDCameraAnimation>&
 		return false;
 
 	const auto object = reinterpret_cast<BaseObject*>(Get());
+	if (!object || !InitCamera(object))
+		return false;
 	const Int32 max_vmd_frame = animation->GetMaxKeyTime();
 	for (Int32 vmd_frame = 0; vmd_frame <= max_vmd_frame; ++vmd_frame)
 	{
@@ -156,7 +264,8 @@ Bool MMDCamera::LoadVMDCamera(const std::unique_ptr<libmmd::VMDCameraAnimation>&
 			return false;
 		if (!set_curve_value(DISTANCE, maxon::SafeConvert<Float>(camera_data.m_distance) * setting.position_multiple))
 			return false;
-		if (!set_curve_value(AOV, maxon::SafeConvert<Float>(CMT_RAD_TO_DEG(maxon::SafeConvert<Float32>(camera_data.m_fov)))))
+		if (!cmt_camera_fov::IsValidRadians(camera_data.m_fov) ||
+			!set_curve_value(AOV, maxon::SafeConvert<Float>(camera_data.m_fov)))
 			return false;
 	}
 	EventAdd();
@@ -170,8 +279,12 @@ Bool MMDCamera::SaveVMDCamera(libmmd::VMDFile& vmd_data, const CMTToolsSetting::
 		return false;
 	};
 	const auto object = reinterpret_cast<BaseObject*>(Get());
+	if (!object || !setting.doc || !InitCamera(object) ||
+		!std::isfinite(setting.time_offset) || !std::isfinite(setting.position_multiple))
+		return false;
 
 	std::array<CCurve*, track_count> curves{ nullptr };
+	std::array<Float, track_count> static_values{};
 
 	const auto track_objects = GetTrackObjects(object);
 	const auto track_desc_IDs = GetTrackDescIDs();
@@ -188,23 +301,15 @@ Bool MMDCamera::SaveVMDCamera(libmmd::VMDFile& vmd_data, const CMTToolsSetting::
 		{
 			auto& track_ID = track_desc_IDs[track_index];
 			const auto& track_object = track_objects[track_index];
-			CTrack* track = track_object->FindCTrack(track_ID);
-			if (!track)
-			{
-				track = CTrack::Alloc(track_object, track_ID);
-				if (!track)
-				{
-					return false;
-				}
-				track_object->InsertTrackSorted(track);
-			}
-
-			auto& curve = curves[track_index];
-			curve = track->GetCurve();
-			if (!curve)
-			{
+			GeData value;
+			if (!track_object || !track_object->GetParameter(track_ID, value, DESCFLAGS_GET::NONE))
 				return false;
-			}
+			static_values[track_index] = value.GetFloat();
+			CTrack* track = track_object->FindCTrack(track_ID);
+			CCurve* curve = track ? track->GetCurve() : nullptr;
+			curves[track_index] = curve;
+			if (!curve)
+				continue;
 
 			const auto key_count = curve->GetKeyCount();
 			for (int key_index = 0; key_index < key_count; ++key_index)
@@ -218,92 +323,66 @@ Bool MMDCamera::SaveVMDCamera(libmmd::VMDFile& vmd_data, const CMTToolsSetting::
 			sorted_key.Append(frame_at_time) iferr_return;
 		}
 	}
-
-	auto& vmd_camera_key_frame_array = vmd_data.m_cameras;
-	auto not_bake_func = [&sorted_key, &vmd_camera_key_frame_array, &setting, &curves]()
-		{
-			const auto frame_count = sorted_key.GetCount();
-			vmd_camera_key_frame_array.reserve(frame_count);
-			for (const auto& frame_at_time : sorted_key)
-			{
-				const auto frame_at = frame_at_time.GetFrame(30.);
-				auto get_curve_value = [&frame_at_time, &curves](const uint8_t& curve_index)
-					{
-						const CCurve* curve = curves[curve_index];
-						if (const CKey* key = curve->FindKey(frame_at_time))
-						{
-							return key->GetValue();
-						}
-						return curve->GetValue(frame_at_time);
-					};
-
-				vmd_camera_key_frame_array.emplace_back(
-					frame_at + static_cast<uint32_t>(setting.time_offset),
-					maxon::SafeConvert<float>(get_curve_value(DISTANCE) * setting.position_multiple),
-					Eigen::Vector3f( maxon::SafeConvert<float>(get_curve_value(POSITION_X) * setting.position_multiple),
-					maxon::SafeConvert<float>(get_curve_value(POSITION_Y) * setting.position_multiple),
-					maxon::SafeConvert<float>(get_curve_value(POSITION_Z) * setting.position_multiple) ),
-					Eigen::Vector3f( maxon::SafeConvert<float>(get_curve_value(ROTATION_Y)),
-					maxon::SafeConvert<float>(get_curve_value(ROTATION_X)),
-					maxon::SafeConvert<float>(get_curve_value(ROTATION_Z)) ),
-					static_cast<uint32_t>(get_curve_value(AOV)));
-			}
-			return true;
-		};
-
-	auto bake_func = [&vmd_camera_key_frame_array, &setting, &curves]()
-		{
-			std::vector<BaseTime> time_list{ track_count };
-			std::transform(curves.begin(), curves.end(), time_list.begin(), [](const CCurve* curve) { return curve->GetEndTime(); });
-			const auto max_time = *std::max_element(time_list.begin(), time_list.end());
-			const auto time_step = BaseTime{ 1., 30. };
-			const Int32 frame_count = max_time.GetFrame(30.) + 1;
-			vmd_camera_key_frame_array.resize(frame_count);
-			Int32 frame_index = 0;
-			for (BaseTime time_at = {}; time_at <= max_time; time_at = time_at + time_step)
-			{
-				auto get_curve_value = [&time_at, &curves](const uint8_t& curve_index)
-					{
-						const CCurve* curve = curves[curve_index];
-						return curve->GetValue(time_at);
-					};
-				auto& camera_key_frame = vmd_camera_key_frame_array[frame_index++];
-
-				// frame_at
-				camera_key_frame.m_frame =time_at.GetFrame(30.) + static_cast<uint32_t>(setting.time_offset);
-
-				// position
-			camera_key_frame.m_interest = Eigen::Vector3f( maxon::SafeConvert<float>(get_curve_value(POSITION_X) * setting.position_multiple),
-											maxon::SafeConvert<float>(get_curve_value(POSITION_Y) * setting.position_multiple),
-											maxon::SafeConvert<float>(get_curve_value(POSITION_Z) * setting.position_multiple) );
-
-			camera_key_frame.m_rotate = Eigen::Vector3f( maxon::SafeConvert<float>(get_curve_value(ROTATION_Y)),
-											maxon::SafeConvert<float>(get_curve_value(ROTATION_X)),
-											maxon::SafeConvert<float>(get_curve_value(ROTATION_Z)) );
-				// distance
-				camera_key_frame.m_distance = maxon::SafeConvert<float>(get_curve_value(DISTANCE) * setting.position_multiple);
-
-				// view_angle
-				camera_key_frame.m_viewAngle = static_cast<uint32_t>(get_curve_value(AOV));
-
-				static std::array<unsigned char, 24> linear_interpolation
-				   {20,20,107,107,
-					20,20,107,107,
-					20,20,107,107,
-					20,20,107,107,
-					20,20,107,107,
-					20,20,107,107};
-
-				// LINEAR
-				camera_key_frame.m_interpolation = linear_interpolation;
-			}
-			return true;
-		};
-
-	if(!(setting.use_bake ? bake_func() : not_bake_func()))
+	// Missing tracks retain the object's static parameter. Export must not add
+	// empty tracks to the source scene or replace unanimated values with zero.
+	if (sorted_key.GetCount() == 0)
 	{
-		return false;
+		sorted_key.Append(BaseTime{}) iferr_return;
 	}
+
+	std::vector<libmmd::VMDCamera> camera_keys;
+	const auto append_key = [&](const BaseTime& time) -> Bool
+	{
+		const Float output_frame = static_cast<Float>(time.GetFrame(kVmdCameraFps)) + setting.time_offset;
+		if (output_frame < 0. || output_frame > static_cast<Float>(std::numeric_limits<uint32_t>::max()))
+			return false;
+		const auto value = [&](size_t index)
+		{
+			const auto* curve = curves[index];
+			return curve && curve->GetKeyCount() > 0 ? curve->GetValue(time) : static_values[index];
+		};
+		for (size_t index = 0; index < track_count; ++index)
+			if (!std::isfinite(value(index)))
+				return false;
+		uint32_t angle = 0;
+		if (!cmt_camera_fov::ToVmdDegrees(value(AOV), angle))
+			return false;
+		constexpr std::array<uint8_t, 24> linear_interpolation{
+			20, 107, 20, 107, 20, 107, 20, 107, 20, 107, 20, 107,
+			20, 107, 20, 107, 20, 107, 20, 107, 20, 107, 20, 107};
+		camera_keys.emplace_back(static_cast<uint32_t>(output_frame),
+			maxon::SafeConvert<float>(value(DISTANCE) * setting.position_multiple),
+			Eigen::Vector3f(maxon::SafeConvert<float>(value(POSITION_X) * setting.position_multiple),
+				maxon::SafeConvert<float>(value(POSITION_Y) * setting.position_multiple),
+				maxon::SafeConvert<float>(value(POSITION_Z) * setting.position_multiple)),
+			Eigen::Vector3f(maxon::SafeConvert<float>(value(ROTATION_Y)),
+				maxon::SafeConvert<float>(value(ROTATION_X)), maxon::SafeConvert<float>(value(ROTATION_Z))),
+			angle, 0, linear_interpolation);
+		return true;
+	};
+	if (setting.use_bake)
+	{
+		Int32 last_frame = 0;
+		for (const auto& time : sorted_key)
+			last_frame = maxon::Max(last_frame, time.GetFrame(kVmdCameraFps));
+		for (Int32 frame = 0; ; ++frame)
+		{
+			if (!append_key(BaseTime(frame, kVmdCameraFps)))
+				return false;
+			if (frame == last_frame)
+				break;
+		}
+	}
+	else
+	{
+		for (const auto& time : sorted_key)
+			if (!append_key(time))
+				return false;
+	}
+	vmd_data.m_header.m_header.Set("Vocaloid Motion Data 0002");
+	const auto camera_name = libmmd::ConvertU16ToSjisString(u"\u30ab\u30e1\u30e9\u30fb\u7167\u660e");
+	vmd_data.m_header.m_modelName.Set(camera_name.c_str());
+	vmd_data.m_cameras = std::move(camera_keys);
 
 	return true;
 }
@@ -344,12 +423,12 @@ Bool MMDCamera::ConversionCamera(const CMTToolsSetting::CameraConversion& settin
 		return false;
 	}
 
-	auto* select_object_clone = reinterpret_cast<BaseObject*>(select_object->GetClone(COPYFLAGS::NO_HIERARCHY, nullptr));
-	reinterpret_cast<BaseObject*>(Get())->SetName(select_object_clone->GetName());
-
-	InitCamera();
-
-	setting.doc->SetTime(BaseTime{});
+	AutoFree<BaseObject> select_object_clone;
+	select_object_clone.Set(static_cast<BaseObject*>(select_object->GetClone(COPYFLAGS::NO_HIERARCHY, nullptr)));
+	auto* object = static_cast<BaseObject*>(Get());
+	if (!select_object_clone || !object || !InitCamera())
+		return false;
+	object->SetName(select_object_clone->GetName());
 
 	constexpr auto src_track_count = 7;
 
@@ -361,7 +440,7 @@ Bool MMDCamera::ConversionCamera(const CMTToolsSetting::CameraConversion& settin
 		ConstDescID(DescLevel(ID_BASEOBJECT_REL_ROTATION), DescLevel(VECTOR_X)),
 		ConstDescID(DescLevel(ID_BASEOBJECT_REL_ROTATION), DescLevel(VECTOR_Y)),
 		ConstDescID(DescLevel(ID_BASEOBJECT_REL_ROTATION), DescLevel(VECTOR_Z)),
-		ConstDescID(DescLevel(CAMERAOBJECT_APERTURE))
+		ConstDescID(DescLevel(CAMERAOBJECT_FOV_VERTICAL))
 	};
 
 	std::array<CTrack*, src_track_count> src_tracks{ nullptr };
@@ -424,13 +503,44 @@ Bool MMDCamera::ConversionCamera(const CMTToolsSetting::CameraConversion& settin
 
 		if (track_index != DISTANCE)
 		{
-			const auto& src_curve = src_curves[track_index > DISTANCE ? track_index - 1 : track_index];
-			src_curve->CopyTo(dst_curve, COPYFLAGS::NONE, nullptr);
+			const size_t source_index = track_index > DISTANCE ? track_index - 1 : track_index;
+			auto* src_curve = src_curves[source_index];
+			if (src_curve && src_curve->GetKeyCount() > 0)
+			{
+				if (!src_curve->CopyTo(dst_curve, COPYFLAGS::NONE, nullptr))
+					return false;
+			}
+			else
+			{
+				GeData value;
+				// Vertical FOV is virtual and depends on document render settings.
+				// Read it from the live source, whose document context is intact.
+				SDK2024_Const BaseObject* parameter_source = track_index == AOV
+					? select_object : static_cast<BaseObject*>(select_object_clone);
+				if (!parameter_source->GetParameter(src_track_desc_IDs[source_index], value, DESCFLAGS_GET::NONE))
+					return false;
+				auto* key = dst_curve->AddKey(start_time);
+				if (!key)
+					return false;
+				key->SetValue(dst_curve, value.GetFloat());
+				key->SetInterpolation(dst_curve, CINTERPOLATION::LINEAR);
+			}
 		}
 		else
 		{
-			dst_curve->AddKey(start_time)->SetValue(dst_curve,  setting.distance);
-			dst_curve->AddKey(end_time)->SetValue(dst_curve, setting.distance);
+			auto* first_key = dst_curve->AddKey(start_time);
+			if (!first_key)
+				return false;
+			first_key->SetValue(dst_curve, setting.distance);
+			first_key->SetInterpolation(dst_curve, CINTERPOLATION::LINEAR);
+			if (end_time != start_time)
+			{
+				auto* last_key = dst_curve->AddKey(end_time);
+				if (!last_key)
+					return false;
+				last_key->SetValue(dst_curve, setting.distance);
+				last_key->SetInterpolation(dst_curve, CINTERPOLATION::LINEAR);
+			}
 		}
 	}
 	EventAdd();
@@ -452,19 +562,13 @@ SDK2024_Init(MMDCamera)
 
 SDK2024_CopyTo(MMDCamera)
 {
-	if (camera_)
-	{
-		auto* const destObject = reinterpret_cast<MMDCamera*>(dest);
-		destObject->camera_ = reinterpret_cast<BaseObject*>(camera_->GetClone(COPYFLAGS::NONE, nullptr));
-		if(protection_tag_ && destObject->camera_)
-		{
-			destObject->protection_tag_ = reinterpret_cast<BaseTag*>(protection_tag_->GetClone(COPYFLAGS::NONE, nullptr));
-			if(destObject->protection_tag_)
-			{
-				destObject->camera_->InsertTag(destObject->protection_tag_);
-			}
-		}
-	}
+	auto* const destination = static_cast<MMDCamera*>(dest);
+	if (!destination)
+		return false;
+	// C4D clones the actual child hierarchy. Runtime pointers must reconnect to
+	// those children rather than refer to separately cloned, detached cameras.
+	destination->camera_ = nullptr;
+	destination->protection_tag_ = nullptr;
 
 	return SUPER::CopyTo(dest, snode, dnode, flags, trn);
 }
@@ -477,12 +581,24 @@ Bool MMDCamera::Message(GeListNode* node, Int32 type, void* data)
 	};
 	if (type == MSG_MENUPREPARE)
 	{
+		Bool had_generated_camera = false;
+		for (auto* child = static_cast<BaseObject*>(node->GetDown()); child; child = child->GetNext())
+		{
+			if (IsGeneratedCameraChild(child))
+			{
+				had_generated_camera = true;
+				break;
+			}
+		}
 		if (!InitCamera(node))
 		{
 			return true;
 		}
-		node->SetParameter(ConstDescID(DescLevel(ID_BASEOBJECT_REL_POSITION), DescLevel(VECTOR_Y)), 85.0, DESCFLAGS_SET::NONE);
-		camera_->SetRelPos(Vector(0, 0, -382.5));
+		if (!had_generated_camera)
+		{
+			node->SetParameter(ConstDescID(DescLevel(ID_BASEOBJECT_REL_POSITION), DescLevel(VECTOR_Y)), 85.0, DESCFLAGS_SET::NONE);
+			camera_->SetRelPos(Vector(0, 0, -382.5));
+		}
 	}
 	return true;
 }
@@ -493,7 +609,8 @@ EXECUTIONRESULT MMDCamera::Execute(BaseObject* op, BaseDocument* doc, BaseThread
 	{
 		return EXECUTIONRESULT::OK;
 	}
-	InitCamera(op);
+	if (!InitCamera(op))
+		return EXECUTIONRESULT::OK;
 	std::call_once(added_to_manager_flag_, AddToSceneManager, op);
 	return SUPER::Execute(op, doc, bt, priority, flags);
 }
@@ -517,7 +634,7 @@ MMDCamera::TrackDescIDArray MMDCamera::GetTrackDescIDs()
 		ConstDescID(DescLevel(ID_BASEOBJECT_REL_ROTATION), DescLevel(VECTOR_Y)),
 		ConstDescID(DescLevel(ID_BASEOBJECT_REL_ROTATION), DescLevel(VECTOR_Z)),
 		ConstDescID(DescLevel(ID_BASEOBJECT_REL_POSITION), DescLevel(VECTOR_Z)),
-		ConstDescID(DescLevel(CAMERAOBJECT_APERTURE))
+		ConstDescID(DescLevel(CAMERAOBJECT_FOV_VERTICAL))
 	};
 	return track_desc_IDs;
 }

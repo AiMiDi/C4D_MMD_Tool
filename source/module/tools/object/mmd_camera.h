@@ -106,6 +106,7 @@ private:
 	static void AddToSceneManager(BaseObject* object);
 
 	static TrackDescIDArray GetTrackDescIDs();
+	Bool EnsureCameraAnimationSchema(GeListNode* node);
 
 	TrackObjectArray GetTrackObjects(GeListNode* node) const;
 };
