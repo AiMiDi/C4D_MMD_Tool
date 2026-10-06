@@ -34,6 +34,9 @@ This file applies to the whole repository. Keep deeper workflow details in `DEVE
 - Dependency smoke tests require the dedicated preset:
   - `cmake --preset dev-windows-deps-test`
   - `cmake --build --preset cmt-deps-test`
+  - `cmake --build --preset cmt-plugin-tests`
+  Functional CTest excludes benchmark/performance labels. Run benchmarks explicitly with `cmake --build --preset cmt-deps-benchmark`. `CMT_DEPS_TEST_CONFIG` must match the build configuration (Debug by default).
+- Release plugin builds require the Release configure preset: `cmake --preset release-windows` followed by `cmake --build --preset workflow-release` (macOS: `release-macos` / `workflow-release-macos`). A build preset does not change an existing cache's `CMT_SDK_BUILD_CONFIG`.
 - For VMD interpolation or camera interpolation changes, use the focused libMMD test before a full plugin run:
   - `cmake --build _build_msvc\cmt_deps\libMMD\tests --config Debug --target vmd_interpolation_test`
   - `ctest --test-dir _build_msvc\cmt_deps\libMMD\tests -C Debug -R vmd_interpolation_test --output-on-failure`
@@ -54,6 +57,9 @@ This file applies to the whole repository. Keep deeper workflow details in `DEVE
 ## Runtime Resource Layout
 
 - Windows plugin builds run `cmake/sync_runtime_resources.ps1` as a post-build step. It replaces the output `plugins/mmdtool/res` directory with a real copied resource tree and verifies `cmt_config.json`.
+- The shared layer also synchronizes resources through `mmdtool-runtime-resources` before every plugin build, including resource-only changes. macOS uses `cmake/sync_runtime_resources.cmake`; artifacts contain real resource copies on both platforms.
+- `CMT_RUNTIME_RESOURCE_CONFIG_POLICY=reset` is the reproducible default. `preserve` keeps valid preferences from an existing real output directory. Old SDK resources without `cmt_config.json` receive the default from `res/S24_up`; a stale output junction is removed without following its source target.
+- Run `pwsh -NoProfile -File scripts/check_runtime_resources.ps1` for focused copy, config, and junction-safety fixtures. Temporary evidence is written below `S:\tmp`.
 - If Cinema 4D fails to load the plugin or resources look stale, check the built output under `_build_msvc/<sdk>/bin/<Config>/plugins/mmdtool/res` before debugging runtime code.
 - Do not recreate the old linked-resource output layout unless there is a specific reason; linked `res` trees have caused unreliable plugin startup.
 
@@ -63,7 +69,7 @@ This file applies to the whole repository. Keep deeper workflow details in `DEVE
 - `g_console=true` is not required for debugging and is not the root cause of the false library-corruption dialog. Removing it, extra environment variables, and stdio suppression did not make direct LLDB launch reliable.
 - Reliable live-debug startup sequence:
   1. Start Cinema 4D normally with the built plugin path, for example:
-     `Cinema 4D.exe g_additionalModulePath=D:\code\C4D_MMD_Tool\_build_msvc\sdk_2026\bin\Debug\plugins`
+     `Cinema 4D.exe g_additionalModulePath=C:\code\C4D_MMD_Tool\_build_msvc\sdk_2026\bin\Debug\plugins`
   2. Wait for Cinema 4D to finish startup and for `mmdtool_Debug.xdl64` to load.
   3. Attach with CLI-Anything's `cli-anything-lldb-dap` to the running Cinema 4D process; do not use the old project harness or direct-launch wrapper.
   4. If attach reports an initial `stopped` event, immediately issue DAP `continue` so the C4D UI is usable again.
@@ -71,7 +77,7 @@ This file applies to the whole repository. Keep deeper workflow details in `DEVE
 - For C4D attach sessions, pass auto-continue behavior as DAP arguments instead of relying on generic LLDB defaults. Generic C4D/NVIDIA patterns must stay out of the CLI-Anything LLDB defaults because that tool is shared by other targets. Use this shape:
   ```json
   {
-    "program": "D:\\Program Files\\Maxon Cinema 4D 2026\\Cinema 4D.exe",
+    "program": "C:\\Program Files\\Maxon Cinema 4D 2026\\Cinema 4D.exe",
     "pid": 65108,
     "autoContinueInternalBreakpoints": true,
     "autoContinueStopPatterns": [
@@ -84,10 +90,10 @@ This file applies to the whole repository. Keep deeper workflow details in `DEVE
 - `autoContinueInternalBreakpoints=true` is only for generic trap stops such as `Exception 0x80000003` / `ntdll.dll\`DbgBreakPoint`. Target-specific module or symbol noise belongs in `autoContinueStopPatterns`, whose default should remain empty in the generic LLDB tool.
 - DAP pause should use LLDB's async interrupt path (`SendAsyncInterrupt()`), and the next stop should be reported as `pause`; do not auto-continue explicit user pauses, even if the stopped stack matches an auto-continue pattern.
 - If an explicit pause reports an NVIDIA `nvgpucomp64.dll` thread, do not treat that as the UI thread. On Windows, query the Cinema 4D main window thread with `GetWindowThreadProcessId` and request `stackTrace` for that thread id directly.
-- Use DAP logs/state under `D:\TEMP\c4d_cli_anything_lldb_dap_*` for live-session evidence. The useful files are `*_state.json`, `*_transcript.jsonl`, `*_commands.jsonl`, `*_adapter.log`, and `*_controller.log`.
+- Keep task-owned DAP logs/state below `S:\tmp\c4d_cli_anything_lldb_dap_*`. The useful files are `*_state.json`, `*_transcript.jsonl`, `*_commands.jsonl`, `*_adapter.log`, and `*_controller.log`; inspect the actual session output to locate them.
 - If C4D-specific LLDB ergonomics need more behavior than `autoContinueStopPatterns`, propose a configurable CLI-Anything requirement first instead of hardcoding C4D/NVIDIA rules into the generic LLDB adapter.
 - For source breakpoints in the plugin, prefer the SDK junction source path used by generated projects, for example:
-  `D:\code\C4D_MMD_Tool\sdk_2026\plugins\mmdtool\source\...`
+  `C:\code\C4D_MMD_Tool\sdk_2026\plugins\mmdtool\source\...`
   Root `source\...` paths can remain pending because the PDB records the SDK project path.
 - If a rebuild fails with `LNK1104` on `_build_msvc\sdk_2026\bin\Debug\plugins\mmdtool\mmdtool_Debug.xdl64`, a live Cinema 4D or LLDB session is probably still holding the plugin binary.
 
@@ -95,15 +101,10 @@ This file applies to the whole repository. Keep deeper workflow details in `DEVE
 
 - Plugin code uses `DebugOutput(maxon::OUTPUT::DIAGNOSTIC, ...)` and the `CMT_ANIM_FLOW_LOG` / `CMT_ANIM_FLOW_LOG_BONE` macros from `source/utils/cmt_anim_flow_debug.hpp`. These write to C4D's console, which is only visible when `g_console=true` is passed as a launch argument.
 - Use `docs/dev/anim-flow-debug.md` as the reference for animation/IK/physics diagnostics. It documents `CMT_ANIM_FLOW_DEBUG`, `CMT_ANIM_FLOW_BONE`, `CMT_INITIAL_STATE_DEBUG`, and the expected `[CMT][AnimFlow]` log fields.
-- For quick interactive checks, launch Cinema 4D normally with `g_console=true` and the diagnostic environment variables set. Directly launching C4D via `Start-Process` does not capture console output; for terminal log capture, use the LLDB command script below so stdout/stderr can be read back.
-- The repo keeps a reusable LLDB command script at `_lldb_c4d_run.txt`. Launch with:
-  ```
-  lldb -s D:\code\C4D_MMD_Tool\_lldb_c4d_run.txt -- "D:\Program Files\Maxon Cinema 4D 2026\Cinema 4D.exe" 2>&1
-  ```
-- The script sets `g_additionalModulePath`, `g_console=true`, environment variables (`CMT_ANIM_FLOW_DEBUG`, `CMT_ANIM_FLOW_BONE`), auto-continue breakpoints for common debug traps, and runs the target.
-- Use `block_until_ms: 0` when launching via the Shell tool so the LLDB+C4D session runs in the background. The terminal output file will contain all diagnostic logs after C4D exits.
+- Launch Cinema 4D normally with `g_console=true` and diagnostic environment variables set, then attach as described above. `Start-Process` alone does not capture the C4D console; save or copy the console output into a task-owned log below `S:\tmp` and record the build and scene used.
+- `_lldb_c4d_run.txt` is not a maintained repository entry point. Do not use direct LLDB/DAP launch as a workaround for console capture.
 - To filter IK-specific logs after a run: search the terminal output for `AnimFlow.*IK iter` to find per-frame IK solver stats, or `ExecOrder` for execution priority logs.
-- Always kill any existing Cinema 4D process before launching via LLDB; the plugin DLL will be locked by a running instance and cause `LNK1104` on the next rebuild.
+- Inspect running Cinema 4D sessions before rebuilding. Preserve user-owned sessions; close only a task-owned test session after its evidence has been saved. A process holding the plugin DLL can cause `LNK1104` on the next rebuild.
 
 ## Working Notes
 

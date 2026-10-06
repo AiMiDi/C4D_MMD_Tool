@@ -8,8 +8,8 @@
 
 ### CI（GitHub Actions）
 
-- **`.github/workflows/build.yml`** — 可由 `workflow_dispatch` 触发，或被**可复用工作流**（`workflow_call`）调用。矩阵在 Windows 2022 与 Intel macOS 上构建全部八个 SDK（`sdk_r20` … `sdk_2026`），另在 Apple Silicon 上原生验证 `sdk_r25` 与 2023–2026；共 **21 个 Release job**，`max-parallel: 4`。它复用本地根级预设，覆盖 `CMT_SDK_DIR` 与 `CMT_SDK_BUILD_CONFIG=Release`，再用 `workflow-release` 或 `workflow-release-macos` 构建 `cmt-workflow`。Windows 和 Intel macOS 的 `_build_msvc/<sdk>/bin/Release/plugins/mmdtool/` 会上传为 artifact；Apple Silicon job 仅作验证。
-- **`.github/workflows/package.yml`** — 推送 `v*` 标签时：调用 `build.yml`，将 Windows artifact 铺到 `_build_msvc/` 后跑 Inno（`setup/Common/installer_script.iss`，与本地 `CMT_ISS_EXTRA_ARGS` / `inno-installer` 思路一致），为 macOS 打包每 SDK 的 zip 并携带对应资源树（R20–R23 使用 `R20-S24`，其余使用 `S24_up`），再用 `softprops/action-gh-release` 创建 **GitHub Release**。
+- **`.github/workflows/build.yml`** — PR 和 `main` push 在 Windows 2022 上运行资源复制安全检查、libMMD 功能 CTest、插件算法 CTest，并编译 `sdk_2026` Release。手动触发和 tag 发布调用还执行 **21 个 Release job**（八个 Windows、八个 Intel macOS、五个 Apple Silicon SDK），使用 `release-windows` / `release-macos` configure 预设。Windows 与 Intel macOS 上传完整插件产物，Apple Silicon 仅验证。依赖缓存包含工具链版本、架构、构建选项和嵌套子模块版本。Benchmark 通过手动输入 `run_benchmarks` 单独运行并保留日志。
+- **`.github/workflows/package.yml`** — 推送 `v*` 标签时调用 `build.yml`，将完整 Windows 产物铺到 `_build_msvc/` 后运行 Inno，macOS 直接把每个完整产物（已包含 `res/`）打包一次，再创建 **GitHub Release**。两端打包都消费已构建资源，不额外嵌套第二层资源目录。
 
 本机 Inno 打包仍用下文 `package-windows` + `inno-installer` / `CMakeUserPresets.json`。
 
@@ -18,6 +18,7 @@
 - Visual Studio 2022（v143 工具集）
 - CMake >= 3.30
 - Python 3（用于 Cinema 4D Source Processor）
+- Windows 需要 PowerShell 7（`pwsh`，用于安全同步资源）
 - Cinema 4D 2026 SDK 框架文件（放在 `sdk_2026/frameworks/` 下）
 
 ### 第一步：第三方依赖（可选根工程流程）
@@ -37,9 +38,12 @@ cmake --build --preset cmt-deps-build
 ```bash
 cmake --preset dev-windows-deps-test
 cmake --build --preset cmt-deps-test
+cmake --build --preset cmt-plugin-tests
 ```
 
 或：`cmake -S . -B _build_msvc -D CMT_DEPS_ENABLE_LIBMMD_TESTS=ON`，再 `cmake --build _build_msvc --target cmt-deps-test`。
+
+功能测试排除 `benchmark` / `performance` 标签。性能测试显式运行 `cmake --build --preset cmt-deps-benchmark`。`CMT_DEPS_TEST_CONFIG` 默认为 Debug，必须与编译配置一致。`CMT_ENABLE_PLUGIN_TESTS=ON` 启用不依赖 SDK 的插件算法测试（deps-test 预设默认启用）；也可直接以 `tests/` 为根配置和运行。
 
 **编插件时**：在 `sdk_*/plugins/mmdtool/project/CMakeLists.txt` 中通过 `cmake/mmdtool_plugin_dependencies.cmake`（`mmdtool_plugin_dependencies_add`）加入 `dependency/bullet3` 与 `dependency/libMMD`，头文件来自源码树 `dependency/bullet3/src`、`dependency/libMMD/src`、`dependency/libMMD/external/eigen`，链接使用 CMake 目标 `libMMD` 与各 Bullet 静态库目标。
 
@@ -67,9 +71,13 @@ cmake --preset package-windows
 cmake --build --preset inno-installer
 ```
 
+只构建 Release 插件时运行 `cmake --preset release-windows`，再执行 `cmake --build --preset workflow-release`；macOS 使用 `release-macos` / `workflow-release-macos`。必须先 configure：只切换 build preset 不会更新已有 Debug 缓存中的 `CMT_SDK_BUILD_CONFIG`。
+
 目标 **`cmt-package`**（由 `inno-installer` 构建）会先构建共享的预编译依赖，再对**全部八个** SDK 树执行 configure 和 Release 构建，最后调用 Inno（ISCC）。`workflow-package` 只会按打包预设构建当前 `CMT_SDK_DIR`；需要 Release 插件但不需要安装包时使用它。
 
 `CMT_ISS_EXTRA_ARGS` 会原样拆给 ISCC，便于传 `/DPluginVersion=...` 而无需改 `installer_script.iss`。
+
+默认本地目标和 Windows CI 在 ISCC 前执行 `cmake/prepare_installer_resources.ps1`，将已固定版本的 setup 子模块中旧资源 Source 适配为对应 SDK 的完整构建资源。已适配的 Source 保持不变，歧义布局会失败；发布无需先改变 setup 子模块指针。自定义 `CMT_ISS_MAIN` 不参与适配，由自定义脚本负责完整资源来源。脚本保留默认安装脚本的其他内容和换行；`scripts/check_installer_resources.ps1` 验证固定旧版本、幂等和拒绝规则。
 
 本机可继承 `package-windows` 写 `CMakeUserPresets.json`（如 `package-windows-local`），再 `cmake --build --preset inno-installer-local`。安装程序语言：`setup/Common/common_setup.iss` 中 **简体/繁体** 使用仓库 **`setup/Languages`**；其余仅 [Inno 官方翻译](https://jrsoftware.org/files/istrans/)（Official）中列出的语言，对应 **`compiler:Languages\*.isl`**（需本机 Inno 安装完整、含 `Languages` 目录），不引入 istrans 上 **Unofficial** 条目。完整多版本安装包由 `inno-installer` 自行构建全部 SDK 树，并将生成的 Release 路径交给 `installer_script.iss`。
 
@@ -113,6 +121,16 @@ start ..\_build_msvc\sdk_2026\c4d-sdk.sln
 ```
 
 > 无需手动创建符号链接——`CMakeLists.txt` 在 CMake configure 阶段自动创建 Junction。
+
+### 运行资源与调试
+
+模块目录内的 `source/`、`res/` 链接用于构建输入。产物中的 `plugins/mmdtool/res/` 是经过校验的真实副本，每次插件构建前都会同步（包括仅修改 `.res` / `.str` 的情况），SDK post-build 也执行同步。共享层生成命令 wrapper 转发 SDK 原命令，只替换运行资源链接命令，不修改 Maxon vendor 文件。Windows 使用 `cmake/sync_runtime_resources.ps1`，macOS 使用 `cmake/sync_runtime_resources.cmake`。
+
+默认 `CMT_RUNTIME_RESOURCE_CONFIG_POLICY=reset` 保证产物使用仓库配置；本地开发可指定 `preserve` 保留真实输出目录中有效的 `cmt_config.json` 偏好。旧资源没有配置时从 `res/S24_up` 补默认值。旧输出链接只删除链接本身，不遍历源目录。`pwsh -NoProfile -File scripts/check_runtime_resources.ps1` 验证复制、配置和 Junction 安全，receipt 保存在 `S:\tmp`。
+
+正常启动 Cinema 4D 并通过 `g_additionalModulePath` 指向构建后的 `plugins`，待插件加载完成再 attach LLDB/DAP。直接 debugger launch 在 C4D 2026 中可能触发错误的库损坏提示。需要诊断日志时添加 `g_console=true` 以及 [`docs/dev/anim-flow-debug.md`](docs/dev/anim-flow-debug.md) 中的环境变量，然后保存控制台输出。保留用户现有 C4D 会话，已加载插件的进程可能锁定二进制导致重建失败；attach 和 stop filter 详见 [`AGENTS.md`](AGENTS.md)。
+
+`CMT_ENABLE_RUNTIME_REGRESSION=ON` 启用场景回归测试专用桥接，常规和发布构建默认 OFF。原生 C4D 测试入口及验收证据见 [`docs/dev/regression.md`](docs/dev/regression.md)。
 
 ---
 
@@ -382,7 +400,7 @@ Junction 的创建是幂等的——如果已存在且指向正确目标则跳�
 
 - 插件动态库输出到 `_build_msvc/sdk_2026/bin/{Debug|Release}/plugins/mmdtool/`（相对仓库根；其他 SDK 替换目录名）
 - 输出文件扩展名：Windows 为 `.xdl64`，macOS 为 `.xlib`
-- 输出目录旁的 `res/` 是指向 SDK wrapper 所选资源树的链接：`sdk_r20`、`sdk_r21`、`sdk_r23` 使用 `res/R20-S24`；`sdk_r25` 与 2023–2026 使用 `res/S24_up`
+- 输出目录内的 `res/` 是所选资源树的真实完整副本：`sdk_r20`、`sdk_r21`、`sdk_r23` 使用 `res/R20-S24`；`sdk_r25` 与 2023–2026 使用 `res/S24_up`。旧资源缺少的 `cmt_config.json` 会由公共同步脚本补齐。
 
 ---
 

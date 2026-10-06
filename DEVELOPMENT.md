@@ -8,8 +8,8 @@
 
 ### CI (GitHub Actions)
 
-- **`.github/workflows/build.yml`** — On `workflow_dispatch` or as a **reusable workflow** (`workflow_call`). The matrix runs all eight SDK trees (`sdk_r20` … `sdk_2026`) on Windows 2022 and Intel macOS, plus native Apple Silicon validation for `sdk_r25` and 2023–2026 (**21 Release jobs**, `max-parallel: 4`). It uses the same root presets as local builds, overrides `CMT_SDK_DIR` and `CMT_SDK_BUILD_CONFIG=Release`, and builds `cmt-workflow` through `workflow-release` or `workflow-release-macos`. Windows and Intel macOS outputs at `_build_msvc/<sdk>/bin/Release/plugins/mmdtool/` are uploaded as artifacts; Apple Silicon jobs validate only.
-- **`.github/workflows/package.yml`** — On tag `v*`: calls `build.yml`, lays out Windows artifacts under `_build_msvc/` for Inno Setup, runs **ISCC** on `setup/Common/installer_script.iss` (same idea as `CMT_ISS_EXTRA_ARGS` / `inno-installer`), zips every macOS plugin with its matching resource tree (`R20-S24` for R20–R23; `S24_up` otherwise), then creates a **GitHub Release** with `softprops/action-gh-release`.
+- **`.github/workflows/build.yml`** — PRs and pushes to `main` run resource-copy fixtures, functional libMMD CTest, plugin algorithm CTest, and a `sdk_2026` Release compile on Windows 2022. Manual dispatch and tag release calls also run the complete **21-job Release matrix** (eight Windows, eight Intel macOS, five Apple Silicon SDKs). The matrix uses `release-windows` / `release-macos` configure presets. Windows and Intel macOS upload complete plugin artifacts; Apple Silicon jobs validate only. Dependency caches include toolchain versions, architectures, build options, and nested submodule revisions. Benchmark runs are opt-in through `run_benchmarks`, with separate logs.
+- **`.github/workflows/package.yml`** — On tag `v*`: calls `build.yml`, lays out complete Windows artifacts under `_build_msvc/` for Inno Setup, zips each complete macOS artifact once (including its existing `res/`), and creates a **GitHub Release**. Packaging consumes built resources and does not add a second nested resource directory.
 
 Local packaging with Inno still uses `package-windows` + `inno-installer` / `CMakeUserPresets.json` as described below.
 
@@ -18,6 +18,7 @@ Local packaging with Inno still uses `package-windows` + `inno-installer` / `CMa
 - Visual Studio 2022 (v143 toolset)
 - CMake >= 3.30
 - Python 3 (for the Cinema 4D Source Processor)
+- PowerShell 7 (`pwsh`) on Windows (for safe resource synchronization)
 - Cinema 4D 2026 SDK frameworks under `sdk_2026/frameworks/`
 
 ### Step 1: Third-party dependencies (optional root workflow)
@@ -37,9 +38,12 @@ cmake --build --preset cmt-deps-build
 ```bash
 cmake --preset dev-windows-deps-test
 cmake --build --preset cmt-deps-test
+cmake --build --preset cmt-plugin-tests
 ```
 
 Or: `cmake -S . -B _build_msvc -D CMT_DEPS_ENABLE_LIBMMD_TESTS=ON` then `cmake --build _build_msvc --target cmt-deps-test`.
+
+Functional tests exclude `benchmark` / `performance` labels. Run the independent benchmark target with `cmake --build --preset cmt-deps-benchmark`. `CMT_DEPS_TEST_CONFIG` defaults to Debug and must match the built configuration. SDK-independent plugin algorithm tests are enabled by `CMT_ENABLE_PLUGIN_TESTS=ON` (the dependency-test preset enables it); they can also be configured directly from `tests/`.
 
 Headers/libs for the plugin come from the source tree (`dependency/bullet3/src`, `dependency/libMMD/src`, `dependency/libMMD/external/eigen`) and CMake targets (`libMMD`, Bullet static libs). Legacy **install-prefix** mode remains available as `DEPENDENCY_MODE INSTALL` + `DEPENDENCY_INSTALL_DIR` in `mmdtool_plugin_common.cmake`.
 
@@ -67,11 +71,15 @@ cmake --preset package-windows
 cmake --build --preset inno-installer
 ```
 
+To build a Release plugin without Inno, run `cmake --preset release-windows` then `cmake --build --preset workflow-release`; macOS uses `release-macos` / `workflow-release-macos`. Configure first: selecting a Release build preset does not update `CMT_SDK_BUILD_CONFIG` in an existing Debug cache.
+
 Target **`cmt-package`** (built by **`inno-installer`**) builds shared prebuilt dependencies, then configures and Release-builds **all eight** SDK trees before it invokes Inno (ISCC). `workflow-package` only configures and builds the selected `CMT_SDK_DIR` with the package preset; use it when you need that Release plugin but not an installer.
 
 For a full multi-version installer, let `inno-installer` build all SDK trees; it passes the resulting Release paths to `installer_script.iss`.
 
 `CMT_ISS_EXTRA_ARGS` is split and passed to ISCC so you can pass `/DPluginVersion=...` without editing `installer_script.iss`.
+
+Before ISCC, the default local target and Windows CI run `cmake/prepare_installer_resources.ps1`. It adapts the pinned setup submodule's old resource Source to the matching built SDK resources, accepts an already adapted Source without writing, and rejects ambiguous layouts. This makes packaging portable with the existing submodule pointer. A custom `CMT_ISS_MAIN` is exempt and must manage its own complete resource sources. The preparation script preserves the default installer's other content and line endings; `scripts/check_installer_resources.ps1` exercises the pinned-source, idempotence, and rejection contract.
 
 ### Step 2: Configure and build the SDK project
 
@@ -111,6 +119,16 @@ start ..\_build_msvc\sdk_2026\c4d-sdk.sln
 ```
 
 > Junctions/symlinks for sources are created during CMake configure—no manual link step.
+
+### Runtime resources and debugging
+
+Module-local source/resource links are build inputs. Output `plugins/mmdtool/res/` is a real, verified copy, synchronized both before every plugin build (including resource-only edits) and through the SDK post-build hook. The shared layer forwards SDK commands through generated wrappers and replaces only the runtime resource-link command; Maxon vendor files remain unchanged. Windows runs `cmake/sync_runtime_resources.ps1`; macOS runs `cmake/sync_runtime_resources.cmake`.
+
+`CMT_RUNTIME_RESOURCE_CONFIG_POLICY=reset` copies repository defaults for reproducible artifacts. Set it to `preserve` to retain valid output `cmt_config.json` preferences during local development. R20–R23 resources receive the default config from `res/S24_up` when absent. Existing output links are unlinked without traversing their targets. Test this with `pwsh -NoProfile -File scripts/check_runtime_resources.ps1`; receipts are saved below `S:\tmp`.
+
+Start Cinema 4D normally with `g_additionalModulePath` pointing to the built `plugins` directory, wait for the plugin to load, then attach LLDB/DAP. Direct debugger launch can trigger a false startup library-validation error in C4D 2026. For diagnostic console output add `g_console=true` and the variables documented in [`docs/dev/anim-flow-debug.md`](docs/dev/anim-flow-debug.md), then save the console output. Preserve user-owned C4D processes; a loaded plugin can lock the binary during rebuilds. See [`AGENTS.md`](AGENTS.md) for attach and stop-filter details.
+
+`CMT_ENABLE_RUNTIME_REGRESSION=ON` enables the test-only scene bridge for deterministic C4D scenarios. It defaults to OFF in normal and release builds; follow [`docs/dev/regression.md`](docs/dev/regression.md) for the native harness and acceptance evidence.
 
 ---
 

@@ -8,6 +8,8 @@
 
 **Developer documentation:** [DEVELOPMENT.md](DEVELOPMENT.md) · [中文 DEVELOPMENT_zh.md](DEVELOPMENT_zh.md)
 
+Windows development: `cmake --preset dev-windows` then `cmake --build --preset workflow-dev`. Release: configure `release-windows` then build `workflow-release`. Test preset `dev-windows-deps-test` supports `cmt-deps-test` and `cmt-plugin-tests`; benchmarks use the separate `cmt-deps-benchmark` target. PR/main CI runs functional tests and a latest-SDK compile; releases build the complete SDK matrix. Built plugin folders include copied, verified resources. See the developer guide for packaging and normal-start/attach debugging.
+
 ## About
 
 mmdtool for Cinema 4D.

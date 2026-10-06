@@ -8,6 +8,8 @@
 
 **开发文档：** [DEVELOPMENT_zh.md](DEVELOPMENT_zh.md) · [English DEVELOPMENT.md](DEVELOPMENT.md)
 
+**MCP 接入：** [客户端配置](docs/dev/mcp-client.md) · [实现与验收状态](docs/dev/mcp-support.md)。当前工作树已实现 16 个生产工具和 stdio 适配器，Python 协议 fixture 35/35 通过；Windows 普通 Release 的八阶段原生验收已通过，macOS 和完整发行尚未验收。
+
 ## 关于
 
 Cinema 4D的mmdtool。
@@ -24,7 +26,7 @@ Cinema 4D的mmdtool。
 
 ### 开发者：CMake 构建（多 SDK）
 
-- **基线**：以 `sdk_2026` 根目录的 `CMakePresets.json` 为约定（如 `windows_vs2022_v143`、`linux_ninja`、`macos_universal_xcode`）。公共 Maxon 工具链位于 `sdk_2026/cmake`；各旧版 `sdk_*` 桥接通过 `MAXON_TOOLING_DIR` 指向该目录复用同一套 tooling。
+- **基线**：日常使用根目录 `dev-windows` / `workflow-dev` 预设；直接构建 SDK 时使用各 `sdk_*` 中的预设。2026 SDK 工具链位于 `sdk_2026/cmake`；兼容 SDK 桥接使用 `cmake/sdk`。
 - **依赖**：Bullet3 与 libMMD 通过 `cmake/mmdtool_plugin_dependencies.cmake`（`mmdtool_plugin_dependencies_add`）以 **CMake 子目录 + 目标链接** 并入各 `sdk_*` 工程，**无需**安装到 `dependency/install`。可选根工程：`cmake --preset dev-windows` 后 `cmake --build --preset cmt-deps-build`。libMMD 测试：预设 `dev-windows-deps-test` + `cmake --build --preset cmt-deps-test`，或 `-D CMT_DEPS_ENABLE_LIBMMD_TESTS=ON`。清理：`cmake --build _build_msvc --target cmt-clean-deps`（需已配置根工程；会删除各 `sdk_*` 在 `_build_msvc/<sdk名>/cmt_deps` 下的 Bullet/libMMD 构建树，以及根工程 `dependency/` 子项目产生的 `_build_msvc/cmt_deps`）。若要连插件目标一并清空，可用根目标的 `cmt-clean`。
 - **仅生成某 SDK 的工程文件（Windows）**：`configure_sdk.bat sdk_2026 windows_vs2022_v143`（preset 可省略，默认 `windows_vs2022_v143`）。
 - **根目录预设 `dev-windows`**：只生成仓库**根**工程 `_build_msvc`（含 `dependency/`、`cmt-workflow` 等），**不包含** `mmdtool` 目标。查看/调试插件请在仓库根下的 **`_build_msvc/<sdk名>/`**（在 `sdk_*` 里执行 preset 时同样输出到此路径）打开解决方案，或先执行 `cmake --build --preset workflow-dev` 生成该目录。
@@ -36,7 +38,9 @@ Cinema 4D的mmdtool。
   2. `cmake --preset windows_vs2022_v143`
   3. `cmake --build ..\_build_msvc\sdk_2026 --config Debug`（将 `sdk_2026` 换成当前目录名）
 - **产物**：Debug 下插件一般在 `_build_msvc/sdk_2026/bin/Debug/plugins/mmdtool/`（相对仓库根；SDK 目录名随版本变化）。
-- **Windows 安装包（Inno）**：`setup/Common/installer_script.iss` 直接从各 **`sdk_*\_build_msvc_*\bin\Release\plugins\mmdtool\mmdtool.xdl64`** 与 **`res\R20-S24` / `res\S24_up`** 取文件，**不再使用**根构建目录下的 `release` 收集区。打全量安装包前，请在需要的 **`sdk_r20`～`sdk_r25`、`sdk_2023`～`sdk_2026`** 中分别配置并 **Release** 编译；**不必再编 `sdk_s*`**——旧版 C4D 中 R/S 为同一大版本，S 系与配对 R 系 ABI 兼容，安装程序里 S22/S24/S26 组件复用 **sdk_r21 / sdk_r23 / sdk_r25** 的产物（与 iss 中 `XdlSdkRel` 一致）。若输出目录或配置名不同，可对 ISCC 传 `/DSdkBuildDir=...`、`/DSdkBinConfig=...`（亦可通过 `CMT_ISS_EXTRA_ARGS`）。
+- **Release 与测试**：`cmake --preset release-windows` 后 `cmake --build --preset workflow-release`；测试用 `dev-windows-deps-test` 配置后运行 `cmt-deps-test`、`cmt-plugin-tests`，benchmark 使用独立的 `cmt-deps-benchmark`。PR/main CI 跑功能测试及最新 SDK 编译，发布跑完整 SDK 矩阵。
+- **运行资源**：产物中的 `res/` 是经过校验的真实副本，资源单独修改也会刷新。`CMT_RUNTIME_RESOURCE_CONFIG_POLICY=reset` 默认使用仓库配置；本地 `preserve` 可保留输出目录中的偏好。调试时正常启动 C4D，插件加载后再 attach，详见开发文档。
+- **Windows 安装包（Inno）**：`cmake --preset package-windows` 后 `cmake --build --preset inno-installer`，自动构建八套 SDK 再出包。`setup/Common/installer_script.iss` 消费 `_build_msvc/<sdk>/bin/Release/plugins/mmdtool/` 中的二进制与完整 `res/`。S22/S24/S26 组件分别复用 sdk_r21 / sdk_r23 / sdk_r25 产物；自定义路径可传 `/DSdkBuildDir=...`、`/DSdkBinConfig=...`。
 
 若模型导入时勾选多部分出现问题请不要勾选。
 
