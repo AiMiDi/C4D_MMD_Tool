@@ -304,9 +304,56 @@ Microsoft 的 [C++20 rewritten expressions 说明](https://learn.microsoft.com/e
 预编译依赖身份、完整 cache 参数、退出码及模块身份见同目录的最终 receipt；
 该命令不证明全 SDK Release 发布矩阵、实际安装包或旧宿主 UI 运行完成。
 
-本机 PATH、常见 Program Files 安装目录及用户/系统 Inno 卸载注册记录中未找到 `ISCC.exe`。
-实际 Inno 打包需要一个可用的编译器路径。路径可用后，主任务使用根 `package-windows` 配置和
-`inno-installer` target，并显式校正本机 generator 和 ISCC cache；root build preset 本身不会改既有 SDK config。
-此前资源 adapter fixtures 和打包图配置通过，均不能代替实际 ISCC 成功输出。
+此前未找到 ISCC 的阻塞已解除。2026-10-06 从 [Inno 官方下载页](https://jrsoftware.org/isdl.php)
+取得 6.7.3，Authenticode 验证为 Valid、发布者 Pyrsys B.V.，编译器保存在
+`_build_msvc/tools/inno-6.7.3/ISCC.exe`。临时用户安装已卸载，保留经过校验的独立工具文件。
+
+新增 `scripts/check_inno_package.py` 使用真实 ISCC 编译维护安装器副本。为保证隔离，副本设置私有 AppId、
+私有控制目录及 S:/tmp 下的 11 个 host，并以八个不同的非生产 DLL 标记检查 R/S 对应关系。
+实际编译、安装的 869 项文件身份、重复安装的旧插件内容清理、卸载与无关 host 文件保持均通过。
+原模板、runtime resource adapter、MCP runtime 文件均有 hash 记录。
+
+```powershell
+python scripts/check_inno_package.py `
+  --compiler C:/code/C4D_MMD_Tool/_build_msvc/tools/inno-6.7.3/ISCC.exe `
+  --output S:/tmp/cmt-inno-package-fresh `
+  --exercise-install
+```
+
+该结果是安装器基础流程验证，`test_payloads=true`、`release_installer_accepted=false`，不证明真实 SDK DLL
+的装载或最终发布包。正式包仍需在源码冻结后使用根 `package-windows` / `inno-installer`，
+显式传本机 generator 和 ISCC 路径，生成最终八套 Release 模块。build preset 不会修改既有 SDK config。
+`scripts/check_release_artifacts.py --build-root <目录> --output <收据>` 可提前检查八套输入的
+实际 x64 DLL、回归桥 OFF、真实资源树、配置及五个 MCP 文件身份。此检查不证明源码/二进制历史关联或原生通过。
+2026-10-06 较早 canonical 目录 audit 尚未通过：当时八套 Release 主模块缺失，2026 图为测试桥 ON。
 安装包应记录哈希、大小、包含的各 SDK 模块及真实资源；安装/卸载效果需要独立目录的真实运行，
 不能只看 installer 文件生成或启动窗口。
+
+2026-10-06 最终冻结源码/资源 `4a542f52…` 后，R20、R21、R23、R25、2023、2024、2025、2026
+八套 canonical Release 已编译通过，测试桥全部 OFF。构建使用同一份已核对 hash 的预编译依赖，
+没有重复构建或替换静态库；2024 图使用前述兼容片段。最终输入 audit 全部通过。
+2026 模块 `c7ad243e…` 在 C4D 2026.4.0 重跑普通生产 MCP 八阶段全部通过；
+PMX 倍率 1、2、.5、三格式的 12 个写盘失败、源文档恢复和测试文档清理均通过。
+测试工作树的 SDK-independent CTest 为 15/15，libMMD 格式/往返/material morph 三项 focused tests 为 3/3。
+
+真实 ISCC 已生成候选包
+[CMT_Windows_Candidate_20261006.exe](../../_build_msvc/validation/remaining/windows-release-candidate-20261006/CMT_Windows_Candidate_20261006.exe)。
+候选版本沿用模板 `0.0.0.0`，未作为正式版本发布。另用私有 AppId/安装路径和上述真实 Release 文件
+完成隔离安装、重复安装和卸载，11 个组件共 869 项文件哈希通过，无关 host 文件保持。
+原始候选包未安装到用户 host；ISCC 提示仓库旧中文语言文件缺少部分新消息，相关消息回退为英文。
+
+维护命令也支持真实 Release 文件的隔离安装验证：
+
+```powershell
+python scripts/check_inno_package.py `
+  --compiler C:/code/C4D_MMD_Tool/_build_msvc/tools/inno-6.7.3/ISCC.exe `
+  --output S:/tmp/cmt-inno-real-release-fresh `
+  --release-build-root C:/code/C4D_MMD_Tool/_build_msvc `
+  --exercise-install
+```
+
+[最终归档收据](../../_build_msvc/validation/remaining/windows-release-candidate-20261006/archive-receipt.json)
+保留八套模块/PDB/资源、构建日志、cache、源码快照、原生 run、安装记录和每份文件 hash。
+此前 PMX 2.0 尾部多写 4 字节以及测试端误读状态字段的两个失败 run 另归档，保持原始失败结论。
+严格真实模型物理 seek 重放、UV Morph offset 导出、Impulse offset/运行效果、GPU 渲染、
+真实运输超时/重连/重启身份、旧宿主 UI 和 macOS 仍未全部通过，因此 `release_accepted=false`。

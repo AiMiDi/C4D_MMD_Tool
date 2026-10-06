@@ -100,6 +100,18 @@ sequenceDiagram
 7. rigid bodies → joints
 8. `ClearUnsupportedPmxSections()`（清空 softbody）并 `FinalizePmxHeaderIndexSizes()`
 
+导出倍率 `s` 表示 C4D 单位 / 输出 MMD 单位，设模型保存的倍率为 `M`。
+各 manager 先重建内部 PMX 数据，`SavePMX` 随后统一对长度应用 `M/s`，涵盖顶点/SDEF、骨位置/尾偏移、
+位置和骨 Morph、刚体尺寸/位置及关节平移/线性限制。相同倍率保持原尺寸；倍率增加时输出坐标相应减小。
+换算会先检查所有有效长度的 Float32 可表示性，失败不部分缩放输出；独立测试和 SDK 编译已通过。
+2026-10-06 普通 Release `b21d630a…` 在 C4D 2026.4.0 实际导出倍率 1、2、.5，独立读回的长度、
+非长度数据及源状态保持全部通过。该检查不代表尚未实现的 Impulse offset 导出或 UV Morph 全量保真。
+PMX 2.0 序列化还修复了错误写出 2.1 softbody 计数的问题；2.0 文件现在在 joint section 后结束，
+2.1 保留 softbody section，2.0 携带 softbody 数据时在写 section 前拒绝。
+
+既有 ImpulseMorph 仅保留名称和强度控制器，未保留冲量 offset 或实现其物理应用，导出仍为空 stub。
+长度 helper 中的平移速度结构检查不代表插件具备冲量效果或 torque 等效支持；该旧能力边界需单独实现和验收。
+
 导出完成后的 PMX 结构与导入侧对象树对应：
 
 ```text

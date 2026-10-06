@@ -101,13 +101,18 @@ data 字段；accepted/running、失败和 outcome_unknown 保留空 data 的合
 | Motion import | `K = V × s/M` | 传入 `s`，转换器处理模型倍率 |
 | Motion export，raw 或 bake | `V = K × M/s` | 传入 `s`；共用 `ConvertBoneKeyframeToMotion` 已执行除法，不再次取倒数 |
 | PMX import | 保留内部 PMX 坐标，模型根倍率设为 `s` | 传入 `s` |
-| PMX export | 尚未实现公开倍率换算；目前保存内部 PMX 坐标 | setting 虽有该字段，当前保存链路未读取它 |
+| PMX export | 输出长度 = 内部 PMX 长度 × `M/s` | `SavePMX` 统一换算已组装的数据；独立测试及 SDK 编译通过，普通 Release `b21d630a…` 实际导出验证通过 |
 
 `9d132…` 模块的 typed Camera export 仍直接传 `s`，与公开业务契约和相机 UI 不一致；
-UI Motion export 则仍传倒数，与当前动作转换器不一致。相机入口 `1/s` 与动作 UI 取消倒数是已确定修订，
-新模块原生验证仍待完成。不要通过把测试期望改为相机输出乘 `s` 来掩盖这个映射缺陷。
-PMX 导出倍率应保留为明确缺口；未来实现须一致覆盖位置、骨骼/morph、刚体尺寸/平移和关节线性字段，
-不能只缩放网格顶点就宣称完整支持。
+UI Motion export 则仍传倒数，与当前动作转换器不一致。相机入口 `1/s` 与动作 UI 取消倒数随后已在
+`38c9aa87…` 普通 Release 的原生阶段验证通过，旧失败记录保持其原始身份。
+PMX 倍率实现覆盖顶点/SDEF、骨骼/尾偏移、位置与骨 Morph、刚体尺寸/平移、关节平移及线性限制；
+helper 对已有 PMX 结构中的 Impulse 平移速度按长度/时间单位换算，角字段、UV、法线、权重、颜色和物理系数保持。
+既有插件 ImpulseMorph 目前仅输出空 stub，不保留 offset 或应用物理冲量；此结构检查不代表完整冲量支持。
+所有长度先检查 Float32 可表示性，再统一写入，失败不部分缩放输出。只读取实际序列化的 SDEF/尾偏移等可选字段。
+普通 Release `b21d630a…` 已实际导出倍率 1、2、.5，独立读回检查文件数据和源文档快照通过；冲量效果另属未实现范围。
+三种导出格式另通过 12 个真实写盘失败场景：父目录缺失、目标为目录、临时文件冲突和 Windows 只读目标。
+失败状态查询保持同一 operation ID、`state=failed` 和 `write_failed`；旧文件及源文档保持，临时文件无泄漏。
 
 回归需使用非 1 倍率：Camera import/export 同倍率 2 与默认 8.5，检查位置与距离并分别覆盖 raw/bake；
 Motion 使用不同的模型倍率 `M` 与动作倍率 `s`，检查 `s/M`、`M/s` 及同倍率往返。

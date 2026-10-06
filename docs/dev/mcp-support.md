@@ -39,7 +39,7 @@ VPD 和专用定义编辑工具留作后续扩展。
 关闭材质导入时一次 Redo 可恢复模型。这缩小了单步 Undo/Redo 事务问题的范围，并未使集成用例通过。
 此事务问题修复后已用新模块重跑通过；原失败记录保留用于追溯。
 
-最新通过的普通 Release 模块为
+此前通过的普通 Release 模块为
 `38c9aa87d3de24810568fe3bd1d4dbed71782b195880b00c33a525f1d2d8afeb`，
 源码/资源指纹为 `200335730bcb1effd70a74d2b0da3536c2b4c0cbc4e95a6a74469f45ca88edd1`。
 run ID `34ed5e42-8b56-435a-be92-55d3404e81b4` 的
@@ -110,7 +110,23 @@ MCP 调用使用宿主 Python API。该要求是宿主能力要求，不自动�
 逐阶段记录请求、结果、已加载模块身份和场景/文件证据，并保留用户原始文档。
 运行方法及各阶段的完成条件见 [协议维护说明](mcp-protocol.md#分层验证和原生-runner)。
 
-尚需完成：真实宿主超时/重连集成、宿主重启后的完整身份矩阵、PMX 导出位置倍率的真实实现、
+随后普通 Release 模块 `b21d630a6e78a4cb89a34345e56d2b2fc2aed8d387aa3f3b5905f2107728776a`，
+源码/资源指纹 `4a542f52dc29f97577be75213e1e3eee961ee4530188bdb6a7d5964e0bdf5db2`，
+run ID `b17dcd3c-e551-4e21-88d7-16215654125c` 的
+[八阶段原生收据](../../_build_msvc/validation/remaining/production-pmx-final-b21d630a/native-run/receipt.json)
+为 passed、acceptance_eligible=true，原文档已恢复、测试文档清理完成。PMX 倍率 1/2/.5 和
+三种格式 × 四种写盘失败共 12 例均通过。模块、库、源码与两次新失败运行的原始记录已经归档，
+PMX 2.0 尾部格式失败和测试端状态字段错误的旧收据保持失败状态。
+
+最终 canonical SDK 2026 Release 模块为
+`c7ad243ee135a7135f2e58ff6c99585b4d9ae95b2562b3a1501faac281700478`，源码/资源冻结指纹仍为 `4a542f52…`。
+因构建目录变化后模块哈希不同，另用新 run `743bb4c9-b778-4899-8284-6933d4441f60`
+重跑八阶段，全部通过；回归桥 OFF、PMX 三倍率、12 个实际写盘失败及原文档恢复均通过。
+[最终原生收据](../../_build_msvc/validation/remaining/windows-release-candidate-20261006/native-run/receipt.json)
+与八 SDK Release 构建、实际安装文件身份核对、ISCC 候选包及隔离安装/重复安装/卸载记录一并归档。
+安装测试使用私有 AppId 和目录、真实 Release 文件，869 项文件哈希通过；没有把公开 AppId 的候选包安装到用户 host。
+
+尚需完成：真实宿主超时/重连集成、宿主重启后的完整身份矩阵、UV Morph 导出保真、
 旧宿主 UI 运行、macOS 对应接入与实际发行包验证。当前 Windows 八阶段通过不能代替这些范围。
 真实阿芙 0–60 帧的严格 seek 重放仍失败，另见 [剩余验证](remaining-validation.md)；
 物理开关工具的事务验证不意味着物理模拟重放已经通过。

@@ -1,7 +1,7 @@
 # Tasks
 
 2026-10-06 状态核对：生产 API 与 16 工具已接入，Python fixture 最终 35/35 通过。
-Windows 普通 Release、回归桥 OFF 的真实 HTTP/stdio 八阶段已通过，模块 `38c9aa87…` / 源码 `20033573…`。
+Windows 普通 Release、回归桥 OFF 的真实 HTTP/stdio 八阶段已通过，最新模块 `c7ad243e…` / 源码 `4a542f52…`。
 macOS、宿主重启/超时恢复及完整发行仍待验收。以下组合任务只有全部完成才勾选，部分完成的任务保留未勾。
 当前状态见 [MCP 支持说明](../../../docs/dev/mcp-support.md)。
 
@@ -47,8 +47,13 @@ Schema fixture 还覆盖显式 null 请求 ID 拒绝、completed-success 各工�
 
 4.1 在真实普通 Release 通过模型/槽/模式/物理开关/表情及精确半帧、负帧、秒数检查。
 4.2 的 VMD 动作/相机 append/replace/merge、倍率、offset、频道、model-info 和 bake 已通过；
-PMX 导出位置倍率尚未生效，因此完整选项映射任务保持未勾。
-4.3 已有写入身份、overwrite 拒绝和烘焙源状态原生证据；实际文件写入失败矩阵仍待补齐，保持未勾。
+PMX 导出位置倍率的统一长度换算已实现并通过独立测试及 SDK 2026/2024/R20 编译；
+普通 Release `b21d630a…` 的倍率 1/2/.5 实际原生导出、文件读回和源状态验证通过。
+UV Morph 直接导出的 offset 仍有丢失证据，Impulse offset 尚未实现，因此完整选项映射任务保持未勾。
+4.3 已有写入身份、overwrite 拒绝和烘焙源状态原生证据；同一普通 Release 通过 PMX/动作/相机 ×
+missing-parent、staging-collision、directory-destination、Windows readonly-destination 共 12 个真实失败。
+每例验证 `write_failed`、同 ID 的失败状态、旧文件保持、临时文件清理及源状态恢复；未模拟磁盘耗尽。
+此次结果覆盖所列写入失败矩阵；完整烘焙材质外观保真仍按材质验收范围核对，组合任务保留未勾。
 
 ## 5. 发行与兼容
 
@@ -61,6 +66,9 @@ PMX 导出位置倍率尚未生效，因此完整选项映射任务保持未勾�
 其完成不代替实际安装包、兼容 SDK/旧宿主 UI 矩阵或 Windows/macOS 全量实机验收。
 5.2 的 Windows 八个 SDK Debug 及 SDK 2026 独立普通 Release 候选已编译通过，统一源码/资源冻结指纹 `460e…`；
 旧宿主 transport 不支持时的原 UI 运行尚未验证，因此该组合任务仍未勾。
+随后冻结源码/资源 `4a542f52…` 的八套 canonical Windows Release 也全部编译通过，测试桥全部 OFF，
+输入 audit、真实 ISCC 候选包编译以及私有 AppId/目录的真实文件安装/重复安装/卸载（869 项身份）通过。
+最终 SDK 2026 打包模块 `c7ad243e…` 独立重跑生产 MCP 八阶段通过；旧 host 与 macOS 未由这些结果覆盖。
 
 ## 6. 集成验收
 
