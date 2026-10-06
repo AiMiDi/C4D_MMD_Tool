@@ -14,7 +14,7 @@ mmdtool for Cinema 4D.
 
 A plugin for Cinema 4D written in C++ is used to import MikuMikuDance data into Cinema 4D.
 
-![](https://ftp.bmp.ovh/imgs/2021/05/bac9aa6402d8894d.jpg)
+![MMD Tool](res/S24_up/mmd_tool_title.png)
 
 ## Release
 
@@ -32,248 +32,145 @@ If there is a problem with selecting multiple-parts when the model is imported, 
 
 2. Run Cinema 4D, find `MMDTool` in the menu -> Extension(Plugin) bar and click Run.
 
-### Functions 
+### Interface and features
 
-- MMD Tool
+Captured in Cinema 4D 2026.4.0 on 2026-10-06, these screenshots show the current working-tree plugin with its Chinese UI. Screenshots are cropped to the relevant controls. Scroll within each tab to reach the lower sections. Published releases may have a different interface.
 
-  - Camera
+#### Camera · VMD import, export and conversion
 
-    - Camera Import
+| Import and export | Camera conversion |
+| --- | --- |
+| ![VMD camera import and export panel](docs/images/camera-vmd.png) | ![MMD camera conversion controls](docs/images/camera-conversion.png) |
 
-      [![7KytMj.png](https://s4.ax1x.com/2022/01/12/7KytMj.png)](https://imgtu.com/i/7KytMj) 
+- **Import camera**: Load camera animation from a VMD file, with scale and start-frame offset settings.
+- **Export camera**: Save camera animation as VMD, with scale, start-frame offset, rotation-curve and bake options.
+- **Convert camera**: Convert a regular camera to an MMD camera, with distance and rotation-curve settings.
 
-      Import camera animation from VMD camera data.
+#### Motion and pose · VMD / VPD
 
-      - Size
-        The magnification of the imported camera animation
+| Motion import | Motion export and pose |
+| --- | --- |
+| ![VMD motion import panel with bone, morph and model-information options](docs/images/motion-import.png) | ![VMD motion export and VPD pose import and export panel](docs/images/motion-export-pose.png) |
 
-      - Offset
-        Import the start frame position of the camera animation.
+- **Import motion**: Load VMD bone animation, morph animation and model information onto a model, with scale and start-frame offset settings.
+- **Import options**: Match local names, ignore physics bones, overwrite previous animation and show a detailed report. Model information includes IK switches and model visibility.
+- **Export motion**: Save bone animation, morph animation and model information as VMD, with rotation-curve and bake options.
+- **Pose**: Import a VPD pose, or export the selected MMD model's pose at the current frame as VPD.
 
-      - Import
-        Import a VMD file with camera animation according to the above settings.
+#### Model · PMX import and export
 
-    - Export
-
-      [![7KyHQH.png](https://s4.ax1x.com/2022/01/12/7KyHQH.png)](https://imgtu.com/i/7KyHQH) 
-
-      Export camera animation to VMD.
-
-      - Size
-        Exported camera animation magnification.
-
-      - Offset
-        Export the starting frame position of the camera animation.
-
-      - Use rotate curve
-        Specifies the axis to convert to the entire MMD rotation curve animation, which you don't have to worry about if you choose baking.
-
-      - Export after baking
-        Exporting the baked animation can ensure the integrity of the curve.
-
-      - Export
-        Export a VMD file with camera animation according to the above settings.
-
-    - Conversion camera
-
-      [![7KyXwt.png](https://s4.ax1x.com/2022/01/12/7KyXwt.png)](https://imgtu.com/i/7KyXwt) 
-
-      Convert the default camera to a dedicated MMD camera.
-
-      - Distance
-        MMD dedicated camera distance after conversion.
-
-      - Use rotate curve
-        Specifies the axis to convert to the entire MMD rotation curve animation.
-
-      - Conversion
-        Convert the default camera to an MMD dedicated camera according to the above settings.
-
-  - Motion
-
-    - Motion Import
-
-      [![7K6Pyj.png](https://s4.ax1x.com/2022/01/12/7K6Pyj.png)](https://imgtu.com/i/7K6Pyj) 
-
-      Import VMD action data to the bones of the model.
-      If there is no PMX bone tag, import the action according to the bone name;
-      If there is a PMX bone tag, import the action according to the local bone name on the tag;
-  
-      - Size
-        The magnification of the imported bone animation.
-    - Offset
-        The start frame position of the imported bone animation.
-      -  Import motion
-      Whether to import bone actions.
-      -  Import morph
-        Whether to import emoticons.
-    - Import model info
-        Whether to import the model IK switch, and hide the information of the model.
-      - Delete previous animation
-      Whether to delete the previous animation before import.
-      - Detail report Whether to display specific information about missing bones or expressions.
-      - Import
-      Import VMD action data according to the above parameters
-  
-    - Export Motion
-
-      [![7K6mfU.png](https://s4.ax1x.com/2022/01/12/7K6mfU.png)](https://imgtu.com/i/7K6mfU) 
-  
-    Export the action data on the model to VMD.
-  
-      - Size
-        The magnification of the exported bone animation.
-    - Offset
-      Export the start frame position of the bone animation.
-      - Use rotate curve
-      Specifies the axis to convert to the entire MMD rotation curve animation, which you don't have to worry about if you choose baking.
-      -  Export motion
-      Whether to export bone actions.
-    -  Export morph
-        Whether to export expression actions.
-    - Export after baking
-      Exporting the baked animation can ensure the integrity of the curve.
-      - Export
-      Export a VMD file with bone animation according to the above settings.
-  
-    - Pose Import
+| Model import | Model export |
+| --- | --- |
+| ![PMX model import panel with material-conversion options](docs/images/model-import.png) | ![PMX model export panel](docs/images/model-export.png) |
 
-      
-  
-    [![7K6UpD.png](https://s4.ax1x.com/2022/01/12/7K6UpD.png)](https://imgtu.com/i/7K6UpD)
-  
-      Import VPD data into the model.
+- **Import model**: Set the scale and choose which data to import: polygons, normals, UVs, materials, bones, weights, IK, inherit bones and morphs.
+- **Material conversion**: Choose Standard, RedShift, Octane or Corona materials. The corresponding renderer must be available when required.
+- **Import options**: Use separate meshes, English names and manual confirmation of English names.
+- **Export model**: Save the selected MMD model as PMX, with scale and data-selection options. The source must be an MMD model managed by the plugin.
 
-      - Import
-        Import VPD pose data.
+## Changelog
 
-  - Model
-  
-  - Import Model
-  
-    [![7K629S.png](https://s4.ax1x.com/2022/01/12/7K629S.png)](https://imgtu.com/i/7K629S) 
-  
-    Import the PMX model into the plugin.
-  
-    - Size
-        The scale factor of the imported model.
+### Unreleased · Major architectural refactor (2026-10-06)
 
-      - Polygon
-        Whether to import polygons.
+This work continues the architecture, import/export and development-workflow refactor after `v0.9.1.20`. The entries below describe the current working tree; a new release version has not been assigned.
 
-      - Normal
-      Whether import normals.
-  
-    - UV
-        Whether to import UVs.
+1. Split the model manager's responsibilities into dedicated modules for IK/physics runtime rebuilding, frame evaluation and morph calculation, sharing libMMD's solver and physics interfaces.
+2. Clarify EDIT / ANIM transitions: commit the bind pose when entering animation mode and restore it when returning to editing. Consolidate runtime rebuilding after scene reopening, cloning and animation-slot changes.
+3. Centralize bone hierarchy and index synchronization so reparenting, reordering, insertion and deletion update references and selection lists together. Cache layered bone and IK execution plans to reduce repeated work.
+4. Complete VMD append, replace, merge and channel-option handling. Store morph animation, IK switches and model visibility per animation slot; improve final-pose baking, scale conversion and source-scene state restoration after export.
+5. Correct VMD camera vertical field of view and unit conversion, migrate legacy camera tracks, and improve camera cloning, baked export, failure reporting and temporary-object cleanup.
+6. Consolidate additive/multiplicative material morph calculations and Group/Flip strength evaluation. Improve base-material restoration when strengths return to zero, morphs are deleted or editing resumes, and update Standard and Redshift material adapters.
+7. Add the production MCP API, 16 typed tools and a stdio adapter for model inspection, PMX/VMD import/export, animation slots, modes, physics, morphs and frame evaluation. Host integration requires Cinema 4D 2026.4 or later.
+8. Unify shared source, resources and the common CMake layer across SDKs, with explicit Debug, Release and test presets. Ship real resource copies with plugin outputs and update Windows installer, macOS packaging and CI workflows.
+9. Add algorithm tests, deterministic fixtures, native C4D scene regressions and build-identified validation records. Expand import, export, runtime and debugging documentation, and refresh the feature screenshots in both READMEs.
 
-      - Material
-      Whether to import materials.
-  
-      - Bone
-      Whether to import bones.
-  
-      - Weighs
-      Whether to import weights.
-  
-      - IK
-      Whether to import IK bones.
-  
-      - Inherit
-      Whether to import inherit bone.
-  
-      - Expression
-      Whether to import facial expression deformation.
-  
-      - Multipath
-      Whether to import the model as a separate mesh.
-  
-      - English
-      Whether to add the English name of the bone and display it in English.
-  
-      - Check English
-      Whether to manually confirm the English name of the missing bone.
-  
-      - Import
-      Import PMX model according to the above parameters.
+**Validation status:** Selected algorithm, build and native scene checks have recorded results. Complete production MCP, real-model physics replay and cross-platform release acceptance still require follow-up. This record will be updated as release validation progresses.
 
-## version 
+Existing historical entries are retained below in descending version order. See [GitHub Releases](https://github.com/AiMiDi/C4D_MMD_Tool/releases) for releases not recorded here.
 
-**version 0.2.0** Initial commit
+### 0.4.6.1
 
-**version 0.2.1** Fix the weight import problem and bone import problem
+1. Fixed the crash that caused 0.4.6.
 
-**version 0.2.2** Fix the weight import problem
+   2. Support S26.
 
-**version 0.2.3** Support s22 version
+### 0.4.6
 
-**version 0.2.8**  Optimized for multi-threaded import.
+1. A new expression hub panel is added to manage all expressions.
 
-**version 0.2.8.1** Fix import issues
+2. Added support and editing for group and flip expressions.
 
-**version 0.2.8.3** Fix the action import bug.
+3. Motion import adds the option to ignore physical bones.
 
-**version 0.2.8.5** Add the import expression function for non-multipart model import.
+4. New icon.（The logo icon is temporary and the logo icon may be changed again）
 
-**version 0.2.9.0** Fixed the problem that the imported model may be stuck.
+### 0.4.5.1
 
-**version 0.2.9.1**  Added the function of deleting key frames of camera objects.
+Fixed import model surface error.
 
-**version 0.3.0**  Improve camera action export function, support S24.
+### 0.4.5
 
-**version 0.3.1** Improve the action import and PMX bone objects; fix the situation that the imported model may be stuck.
+1. Fixed an issue where saved documents could not be opened.
+2. Optimize the IK of the imported model.
+3. Add import model report.
+4. Optimize import speed and stability.
+5. Fixed import normal inversion problem for versions below R23.
 
-**version 0.3.2**
+### 0.4.4.1
 
-1. Optimize the processing method of the imported model to ensure the same effect as in MMD.
+Fix import normal inversion issue.
 
-2. Optimize the leg bone problem of the imported model to ensure the same effect as in MMD.
+### 0.4.4
 
-3. Optimized the detection of the alpha channel of the picture, and fixed the problem that the material was incorrectly imported into the transparent channel
+1. Fix the problem of vertex expression loss of partial vertices imported by multiple parts.
+2. Fix the problem that the model cannot be imported when the external parent is opened.
+3. Compatible with projects saved by older versions. (some information may be lost, but it does not affect the opening of the project)
 
-4. Increased code stability and reduced accidental crashes.
+### 0.4.3
 
+1. Fixed multi-part import import weights not initializing bones.
 
-**version 0.3.3** Introduce the YAML configuration file; rewrite and rename the English module.
+2. Improved weight import.
 
-![](https://ftp.bmp.ovh/imgs/2021/05/84376d077a7e0721.jpg)
+3. Fix import failure caused by empty IK list.
 
-**version 0.3.4** Add support for saving settings, save the last used configuration; update the R20 version.
+### 0.4.2
 
-**version 0.3.5** Fix stuck and errors caused by configuration files, increase multi-thread safety, and reduce crashes.
+1. Add import pose.
 
-**version 0.3.6** Fix the problem of multi-part import face error, and add the function of importing multi-part vertex expressions.
+2. Improve the function of PMX Control.
 
-**version 0.3.7** Fixed the problem that the plug-in might not be loaded, and added bone expression import.
+3. Support R25.
 
-**version 0.3.7.5** Fix the problem of non-rotatable bones and import animation of physical bones. Add UV expression import (only multi-part import mode).
+### 0.4.1
 
-**version 0.3.8**
+1. Add camera bake export.
 
-1. Rewrite the bone expression part.
+2. Add motion bake export.
 
-2. Add UV expression import (multi-part import mode).
+3. Improve Ik.
 
-3. Fix some errors of imported models.
+### 0.4
 
-4. Add the function of cleaning up the unconnected vertices of the imported model.
+1. Add the action export function
 
-5. Add drag and drop import of camera animation.
+2. Fix the action confusion problem after importing motion capture to make animation.
 
-6. Pre-loaded physics engine module support.
+3. Change the animation import to multithreaded optimization speed.
 
+4.  Fix some curve problems.
 
-**version 0.3.8.1** Add tool modules.
+5. Fix known bugs
 
-​	~~If the model has a problem similar to the following figure after importing the action, you can try to use the tool to repair it.~~
+6. Fix some possible memory leaks.
 
-1. ~~Select the model.~~
+### 0.3.9.1
 
-2. ~~Click on the fix action tool button.~~
+1. Fixed the problem of stuck animation after import.
 
-(V0.4 has been temporarily removed)
+2. Fix some possible memory leaks.
 
-**version 0.3.9**
+### 0.3.9
 
 1. Added support for rigidbodies and joints. (Currently not implemented in physics)
 
@@ -289,88 +186,115 @@ If there is a problem with selecting multiple-parts when the model is imported, 
 
 7. Fixed some actions importing problems.
 
+### 0.3.8.1
 
-**version 0.3.9.1**
+Add tool modules.
 
-1. Fixed the problem of stuck animation after import.
+​	~~If the model has a problem similar to the following figure after importing the action, you can try to use the tool to repair it.~~
 
-2. Fix some possible memory leaks.
+1. ~~Select the model.~~
 
+2. ~~Click on the fix action tool button.~~
 
-**version 0.4**
+(V0.4 has been temporarily removed)
 
-1. Add the action export function
+### 0.3.8
 
-2. Fix the action confusion problem after importing motion capture to make animation.
+1. Rewrite the bone expression part.
 
-3. Change the animation import to multithreaded optimization speed.
+2. Add UV expression import (multi-part import mode).
 
-4.  Fix some curve problems.
+3. Fix some errors of imported models.
 
-5. Fix known bugs
+4. Add the function of cleaning up the unconnected vertices of the imported model.
 
-6. Fix some possible memory leaks.
+5. Add drag and drop import of camera animation.
 
+6. Pre-loaded physics engine module support.
 
-**version 0.4.1**
+### 0.3.7.5
 
-1. Add camera bake export.
+Fix the problem of non-rotatable bones and import animation of physical bones. Add UV expression import (only multi-part import mode).
 
-2. Add motion bake export. 
+### 0.3.7
 
-3. Improve Ik.
+Fixed the problem that the plug-in might not be loaded, and added bone expression import.
 
+### 0.3.6
 
-**version 0.4.2**
+Fix the problem of multi-part import face error, and add the function of importing multi-part vertex expressions.
 
-1. Add import pose.
+### 0.3.5
 
-2. Improve the function of PMX Control.
+Fix stuck and errors caused by configuration files, increase multi-thread safety, and reduce crashes.
 
-3. Support R25.
+### 0.3.4
 
+Add support for saving settings, save the last used configuration; update the R20 version.
 
-**version 0.4.3**
+### 0.3.3
 
-1. Fixed multi-part import import weights not initializing bones.
+Introduce the YAML configuration file; rewrite and rename the English module.
 
-2. Improved weight import.
+![](https://ftp.bmp.ovh/imgs/2021/05/84376d077a7e0721.jpg)
 
-3. Fix import failure caused by empty IK list.
+### 0.3.2
 
-**version 0.4.4**
+1. Optimize the processing method of the imported model to ensure the same effect as in MMD.
 
-1. Fix the problem of vertex expression loss of partial vertices imported by multiple parts.
-2. Fix the problem that the model cannot be imported when the external parent is opened.
-3. Compatible with projects saved by older versions. (some information may be lost, but it does not affect the opening of the project)
+2. Optimize the leg bone problem of the imported model to ensure the same effect as in MMD.
 
-**version 0.4.4.1** Fix import normal inversion issue.
+3. Optimized the detection of the alpha channel of the picture, and fixed the problem that the material was incorrectly imported into the transparent channel
 
-**version 0.4.5**
+4. Increased code stability and reduced accidental crashes.
 
-1. Fixed an issue where saved documents could not be opened.
-2. Optimize the IK of the imported model.
-3. Add import model report.
-4. Optimize import speed and stability.
-5. Fixed import normal inversion problem for versions below R23.
+### 0.3.1
 
-**version 0.4.5.1** Fixed import model surface error.
+Improve the action import and PMX bone objects; fix the situation that the imported model may be stuck.
 
-**version 0.4.6**
+### 0.3.0
 
-1. A new expression hub panel is added to manage all expressions.
+Improve camera action export function, support S24.
 
-2. Added support and editing for group and flip expressions.
+### 0.2.9.1
 
-3. Motion import adds the option to ignore physical bones.
+Added the function of deleting key frames of camera objects.
 
-4. New icon.（The logo icon is temporary and the logo icon may be changed again）
+### 0.2.9.0
 
-**version 0.4.6.1**
+Fixed the problem that the imported model may be stuck.
 
-   1. Fixed the crash that caused 0.4.6.
+### 0.2.8.5
 
-   2. Support S26.
+Add the import expression function for non-multipart model import.
+
+### 0.2.8.3
+
+Fix the action import bug.
+
+### 0.2.8.1
+
+Fix import issues
+
+### 0.2.8
+
+Optimized for multi-threaded import.
+
+### 0.2.3
+
+Support s22 version
+
+### 0.2.2
+
+Fix the weight import problem
+
+### 0.2.1
+
+Fix the weight import problem and bone import problem
+
+### 0.2.0
+
+Initial commit
 
 ## Author
 
