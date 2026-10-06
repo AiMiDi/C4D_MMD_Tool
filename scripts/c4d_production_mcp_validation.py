@@ -22,6 +22,7 @@ claims an image render, performance comparison, remote CI or another host.
 from __future__ import annotations
 
 import argparse
+import copy
 import base64
 import datetime
 import hashlib
@@ -31,6 +32,7 @@ import os
 from pathlib import Path
 import queue
 import re
+import stat
 import subprocess
 import sys
 import threading
@@ -901,6 +903,19 @@ class ValidationRun:
         parsed = fixtures.read_pmx_bones(path)
         if parsed["vertices"] != 3 or len(parsed["bones"]) != 4 or parsed["materials"] != 1:
             raise AssertionError("Production PMX export differs from fixture topology")
+        baseline = fixtures.read_pmx_morphs_and_frames(path, include_physics=True)
+        source_before_scale = self.native("snapshot")
+        scale_exports = []
+        for export_scale in (2., .5):
+            scaled_path = self.output / ("exports/model-scale-" + str(export_scale) + ".pmx")
+            scaled = self.call("mmdtool_export_pmx", {**target, "path": str(scaled_path),
+                               "position_multiple": export_scale})
+            self.verify_file(scaled)
+            snapshot = fixtures.read_pmx_morphs_and_frames(scaled_path, include_physics=True)
+            assert_pmx_length_ratio(baseline, snapshot, 1. / export_scale)
+            scale_exports.append({"export_scale": export_scale, "length_ratio": 1. / export_scale,
+                                  "file": file_identity(scaled_path)})
+        assert_equal_numeric(source_before_scale["documents"], self.native("snapshot")["documents"])
         before = file_identity(path)
         self.call("mmdtool_export_pmx", {**target, "path": str(path), "position_multiple": 1.}, expected=False)
         if file_identity(path) != before:
@@ -908,6 +923,7 @@ class ValidationRun:
         replaced = self.call("mmdtool_export_pmx", {**target, "path": str(path), "position_multiple": 1., "overwrite": True})
         self.verify_file(replaced)
         return {"summary": summary, "bones": bones, "morphs": morphs, "export": exported,
+                "pmx_scale_exports": scale_exports, "scale_source_snapshot_unchanged": True,
                 "overwrite_rejection_preserved_file": True, "mode_and_physics_undo": True}
 
     def motion(self):
@@ -1070,9 +1086,74 @@ class ValidationRun:
         self.call("mmdtool_import_pmx", {"document": target["document"], "path": self.fixture("motion_a.vmd")}, expected=False)
         self.call("mmdtool_select_animation_slot", {**target, "slot": "not-a-live-slot"}, expected=False)
         self.call("mmdtool_set_morph_strength", {**target, "morph_handle": "not-a-live-morph", "strength": .5}, expected=False)
+        write_failures = self.export_write_failures()
         assert_equal_numeric(before["documents"], self.native("snapshot")["documents"])
         return {"stdio_rejections": rejections, "nonfinite_json_rejected": True,
-                "native_admission_rejected_invalid_values": True, "scene_unchanged": True}
+                "native_admission_rejected_invalid_values": True, "export_write_failures": write_failures,
+                "scene_unchanged": True}
+
+    def export_write_failures(self):
+        """Exercise actual staging/commit errors using only this run's files."""
+        session = self.call("mmdtool_capabilities")["data"]["host_session"]
+        targets = [("mmdtool_export_pmx", self.target(), "pmx"),
+                   ("mmdtool_export_motion", {**self.target(), "bake": False}, "vmd"),
+                   ("mmdtool_export_camera", {"document": self.values["documents"]["A"],
+                                              "camera": self.values["camera"], "bake": False}, "vmd")]
+        before = self.native("snapshot")
+        records = []
+        for tool, target, suffix in targets:
+            kinds = ["missing_parent", "directory_destination", "staging_collision"]
+            if os.name == "nt": kinds.append("readonly_destination")
+            for kind in kinds:
+                case = self.output / "write-failures" / tool / kind
+                case.mkdir(parents=True, exist_ok=False)
+                operation_id = str(uuid.uuid4())
+                path = case / ("destination." + suffix)
+                protected = None
+                original_mode = None
+                if kind == "missing_parent":
+                    path = case / "missing" / path.name
+                elif kind == "directory_destination":
+                    path.mkdir()
+                    protected = path / "preserved.bin"
+                elif kind == "staging_collision":
+                    protected = case / (".cmt-" + session + "-" + operation_id + ".tmp")
+                else:
+                    protected = path
+                if protected:
+                    protected.write_bytes((tool + ": previous private fixture").encode())
+                    previous = file_identity(protected)
+                if kind == "readonly_destination":
+                    original_mode = stat.S_IMODE(path.stat().st_mode)
+                    os.chmod(path, stat.S_IREAD)
+                    if not path.stat().st_file_attributes & stat.FILE_ATTRIBUTE_READONLY:
+                        raise AssertionError("Windows readonly failure fixture was not activated")
+                received = False
+                try:
+                    arguments = {**target, "path": str(path), "position_multiple": 1., "overwrite": True}
+                    result = self.call(tool, arguments, expected=False, operation_id=operation_id,
+                                       expected_codes={"write_failed"})
+                    received = True
+                    status = self.call("mmdtool_operation_status", {"query_operation_id": operation_id})["data"]["operation"]
+                    if (status["state"] != "failed" or status["success"] or status["code"] != "write_failed"
+                            or status["operation_id"] != operation_id):
+                        raise AssertionError("A failed export was not retained as the same finished operation")
+                    if protected and file_identity(protected) != previous:
+                        raise AssertionError("Failed export changed the pre-existing destination/staging fixture")
+                    leftover = sorted(item.name for item in case.glob(".cmt-*.tmp") if item != protected)
+                    if leftover: raise AssertionError("Failed export leaked staging files: " + str(leftover))
+                    if kind in ("missing_parent", "staging_collision") and path.exists():
+                        raise AssertionError("Failed export unexpectedly created its final destination")
+                    records.append({"tool": tool, "case": kind, "result": result, "status": status,
+                                    "preserved_file": previous if protected else None, "staging_leaks": leftover})
+                finally:
+                    # Keep the failure fixture in place if host execution remains
+                    # unknown; do not enable a delayed overwrite by unlocking it.
+                    if original_mode is not None and (received or not self.state.get("pending_operation")):
+                        os.chmod(path, original_mode)
+        assert_equal_numeric(before["documents"], self.native("snapshot")["documents"])
+        return {"cases": records, "source_snapshot_unchanged": True,
+                "scope": "real missing-parent/staging-collision/final-commit failures; not a disk-full simulation"}
 
     def lifecycle(self):
         source_document = self.values["documents"]["A"]
@@ -1267,6 +1348,30 @@ class ValidationRun:
                     raise CleanupPending("Original document restoration is uncertain; scene cleanup remains pending") from restore_error
             self.write_receipt()
         return self.state["stages"][name]
+
+
+def assert_pmx_length_ratio(baseline, actual, ratio):
+    """Compare serialized lengths and independently require all other fields unchanged."""
+    expected = copy.deepcopy(baseline)
+    def scaled(vector):
+        return tuple(value * ratio for value in vector)
+    for vertex in expected["vertex_data"]:
+        vertex["position"] = scaled(vertex["position"])
+        if "sdef" in vertex:
+            vertex["sdef"] = [scaled(vector) for vector in vertex["sdef"]]
+    for bone in expected["bones"]:
+        bone["position"] = scaled(bone["position"])
+        if not bone["flags"] & 1:
+            bone["tail"] = scaled(bone["tail"])
+    for morph in expected["morphs"]:
+        for offset in morph["offsets"]:
+            if morph["kind"] in (1, 2): offset["position"] = scaled(offset["position"])
+            if morph["kind"] == 10: offset["translate"] = scaled(offset["translate"])
+    for rigid in expected["rigidbodies"]:
+        for field in ("size", "position"): rigid[field] = scaled(rigid[field])
+    for joint in expected["joints"]:
+        for field in ("position", "translate_lower", "translate_upper"): joint[field] = scaled(joint[field])
+    assert_equal_numeric(expected, actual, tolerance=1e-6, location="PMX export scale")
 
 
 def assert_equal_numeric(left, right, *, tolerance=1e-5, location="snapshot"):

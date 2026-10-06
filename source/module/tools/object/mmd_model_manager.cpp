@@ -10,6 +10,7 @@ Description:	MMD model object
 
 #include "module/core/cmt_old_sdk_stl_preload.h"
 #include "mmd_model_manager.h"
+#include "utils/cmt_pmx_export_scale.hpp"
 #include <c4d.h>
 #include <c4d_symbols.h>
 #include "plugin_resource.h"
@@ -3606,6 +3607,10 @@ Bool MMDModelManagerObject::SavePMX(libmmd::PMXFile& pmx_file, const CMTToolsSet
 	const BaseContainer* const bc = reinterpret_cast<const BaseList2D*>(Get())->GetDataInstance();
 	if (!bc)
 		return false;
+	double export_length_scale = 1.0;
+	if (!cmt_export::TryPMXLengthScale(bc->GetFloat(MODEL_POSITION_MULTIPLE, 8.5),
+		setting.position_multiple, export_length_scale))
+		return false;
 
 	WritePmxHeaderAndInfo(pmx_file, *bc);
 
@@ -3699,7 +3704,7 @@ Bool MMDModelManagerObject::SavePMX(libmmd::PMXFile& pmx_file, const CMTToolsSet
 
 	ClearUnsupportedPmxSections(pmx_file);
 	FinalizePmxHeaderIndexSizes(pmx_file);
-	return true;
+	return cmt_export::ScalePMXLengths(pmx_file, export_length_scale);
 }
 
 Bool MMDModelManagerObject::AddMorphStrengthKeyframe(const String& morph_name, const BaseTime& key_time, Float weight)

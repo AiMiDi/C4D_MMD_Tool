@@ -21,6 +21,11 @@ cmt_add_logic_test(runtime_profile_test runtime_profile_test.cpp)
 cmt_add_logic_test(mmd_model_info_test mmd_model_info_test.cpp)
 cmt_add_logic_test(mmd_motion_validation_test mmd_motion_validation_test.cpp)
 cmt_add_logic_test(camera_fov_test camera_fov_test.cpp)
+cmt_add_logic_test(pmx_export_scale_test pmx_export_scale_test.cpp)
+target_include_directories(pmx_export_scale_test PRIVATE
+  "${CMAKE_CURRENT_SOURCE_DIR}/../dependency/libMMD/src"
+  "${CMAKE_CURRENT_SOURCE_DIR}/../dependency/libMMD/external/eigen")
+target_compile_options(pmx_export_scale_test PRIVATE "$<$<CXX_COMPILER_ID:MSVC>:/utf-8>")
 
 find_package(Python3 REQUIRED COMPONENTS Interpreter)
 function(cmt_add_python_fixture_test name script)
@@ -30,7 +35,7 @@ function(cmt_add_python_fixture_test name script)
 endfunction()
 
 cmt_add_python_fixture_test(cmt_runtime_receipt_contract runtime/test_regression_contract.py)
-foreach(_cmt_fixture IN ITEMS document_lifecycle production_document_lifecycle dependency_provenance)
+foreach(_cmt_fixture IN ITEMS document_lifecycle production_document_lifecycle dependency_provenance pmx_scale_snapshot)
   cmt_add_python_fixture_test(cmt_${_cmt_fixture} runtime/test_${_cmt_fixture}.py)
 endforeach()
 cmt_add_python_fixture_test(cmt_material_fixture_matrix material/test_fixture_matrix.py)

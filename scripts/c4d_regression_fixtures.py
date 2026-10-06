@@ -220,7 +220,7 @@ def read_vmd(path):
     return result
 
 
-def _read_pmx_prefix(reader):
+def _read_pmx_prefix(reader, capture_geometry=False):
     """Consume the PMX header through bones and return their data/index widths."""
     if reader.take(4) != b"PMX ":
         raise ValueError("Not a PMX file")
@@ -230,7 +230,22 @@ def _read_pmx_prefix(reader):
     additional_uv, vertex_width, texture_width, material_width, bone_width, morph_width, rigid_width = header[1:8]
     names = [reader.name(encoding) for _ in range(4)]
     vertex_count = reader.number()
+    vertices = []
     for _ in range(vertex_count):
+        if capture_geometry:
+            position, normal, uv = reader.unpack("3f"), reader.unpack("3f"), reader.unpack("2f")
+            additional = [reader.unpack("4f") for _ in range(additional_uv)]
+            weight_type = reader.number("B")
+            bone_count = {0: 1, 1: 2, 2: 4, 3: 2, 4: 4}[weight_type]
+            indices = [reader.index(bone_width) for _ in range(bone_count)]
+            weights = reader.unpack("f" if weight_type in (1, 3) else "4f") if weight_type else ()
+            vertex = {"position": position, "normal": normal, "uv": uv, "additional_uv": additional,
+                      "weight_type": weight_type, "bone_indices": indices, "bone_weights": weights}
+            if weight_type == 3:
+                vertex["sdef"] = [reader.unpack("3f") for _ in range(3)]
+            vertex["edge_magnitude"] = reader.number("f")
+            vertices.append(vertex)
+            continue
         reader.take(32 + additional_uv * 16)
         weight_type = reader.number("B")
         sizes = {0: bone_width, 1: 2 * bone_width + 4, 2: 4 * bone_width + 16,
@@ -284,6 +299,8 @@ def _read_pmx_prefix(reader):
                       "layer": layer, "flags": flags, "tail": tail})
     result = {"version": version, "model_name": names[0], "vertices": vertex_count,
               "materials": material_count, "material_data": materials, "textures": textures, "bones": bones}
+    if capture_geometry:
+        result["vertex_data"] = vertices
     widths = {"encoding": encoding, "vertex": vertex_width, "material": material_width,
               "bone": bone_width, "morph": morph_width, "rigid": rigid_width}
     return result, widths
@@ -295,10 +312,10 @@ def read_pmx_bones(path):
     return result
 
 
-def read_pmx_morphs_and_frames(path):
+def read_pmx_morphs_and_frames(path, *, include_physics=False):
     """Inspect morph references and display-frame targets using PMX index widths."""
     reader = Reader(Path(path).read_bytes())
-    prefix, widths = _read_pmx_prefix(reader)
+    prefix, widths = _read_pmx_prefix(reader, capture_geometry=include_physics)
     encoding = widths["encoding"]
     morphs = []
     for index in range(reader.number()):
@@ -336,7 +353,35 @@ def read_pmx_morphs_and_frames(path):
                 raise ValueError("Unsupported PMX display-frame target kind " + str(kind))
             targets.append({"kind": kind, "index": reader.index(widths["bone"] if kind == 0 else widths["morph"])})
         frames.append({"name": name, "english": english, "special": special, "targets": targets})
-    return {"version": prefix["version"], "morphs": morphs, "display_frames": frames}
+    result = {"version": prefix["version"], "morphs": morphs, "display_frames": frames}
+    if not include_physics:
+        return result
+    rigidbodies = []
+    for _ in range(reader.number()):
+        name, english = reader.name(encoding), reader.name(encoding)
+        bone_index = reader.index(widths["bone"])
+        group, mask, shape = reader.unpack("BHB")
+        size, position, rotation = reader.unpack("3f"), reader.unpack("3f"), reader.unpack("3f")
+        coefficients, operation = reader.unpack("5f"), reader.number("B")
+        rigidbodies.append({"name": name, "english": english, "bone_index": bone_index,
+                            "group": group, "mask": mask, "shape": shape, "size": size,
+                            "position": position, "rotation": rotation,
+                            "coefficients": coefficients, "operation": operation})
+    joints = []
+    for _ in range(reader.number()):
+        name, english, kind = reader.name(encoding), reader.name(encoding), reader.number("B")
+        indices = [reader.index(widths["rigid"]) for _ in range(2)]
+        fields = ("position", "rotation", "translate_lower", "translate_upper",
+                  "rotate_lower", "rotate_upper", "spring_translate", "spring_rotate")
+        joint = {"name": name, "english": english, "kind": kind, "rigid_indices": indices}
+        joint.update({field: reader.unpack("3f") for field in fields})
+        joints.append(joint)
+    if prefix["version"] > 2.05:
+        if reader.number() != 0:
+            raise ValueError("Scale snapshot supports the exporter's empty softbody section")
+    if reader.offset != len(reader.data):
+        raise ValueError("Unexpected trailing PMX data in scale snapshot")
+    return {**prefix, **result, "rigidbodies": rigidbodies, "joints": joints}
 
 
 if __name__ == "__main__":
