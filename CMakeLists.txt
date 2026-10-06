@@ -33,11 +33,21 @@ cmake_minimum_required(VERSION 3.23)
 project(CMT_Project_Workflow LANGUAGES NONE)
 
 option(CMT_WITH_DEPENDENCY_SUBDIR "Add dependency/ and register cmt-deps-build and related targets" ON)
+set(CMT_DEPS_PREBUILT_DIR "" CACHE PATH "Pre-built dependency directory containing lib/*.lib or lib/*.a; empty builds dependencies from source")
 option(CMT_DEPS_ENABLE_LIBMMD_TESTS "Enable libMMD CTest in root dependency/ subproject (cache or preset dev-windows-deps-test)" OFF)
+option(CMT_ENABLE_RUNTIME_REGRESSION "Enable the test-only Cinema 4D scene regression bridge" OFF)
+option(CMT_ENABLE_PLUGIN_TESTS "Build SDK-independent plugin algorithm tests" OFF)
+set(CMT_RUNTIME_RESOURCE_CONFIG_POLICY reset CACHE STRING "Runtime config policy: reset or preserve")
+set_property(CACHE CMT_RUNTIME_RESOURCE_CONFIG_POLICY PROPERTY STRINGS reset preserve)
 
 # --- Dependencies (bullet3 + libMMD as CMake subdirectories; no dependency/install) ---
 if(CMT_WITH_DEPENDENCY_SUBDIR)
   add_subdirectory(dependency)
+endif()
+if(CMT_ENABLE_PLUGIN_TESTS)
+  enable_language(CXX)
+  enable_testing()
+  add_subdirectory(tests)
 endif()
 
 # --- Cinema SDK and plugin (no sdk_* --preset; explicit -S/-B/--build) ---
@@ -101,6 +111,8 @@ macro(_cmt_forward_sdk_configure_args _args)
   _cmt_forward_cache_arg(${_args} CMT_PROJECT_ROOT_DIR PATH)
   _cmt_forward_cache_arg(${_args} CMT_BULLET_SOURCE_DIR PATH)
   _cmt_forward_cache_arg(${_args} CMT_LIBMMD_SOURCE_DIR PATH)
+  _cmt_forward_cache_arg(${_args} CMT_RUNTIME_RESOURCE_CONFIG_POLICY STRING)
+  list(APPEND ${_args} "-DCMT_ENABLE_RUNTIME_REGRESSION:BOOL=${CMT_ENABLE_RUNTIME_REGRESSION}")
 endmacro()
 
 _cmt_forward_sdk_configure_args(_CMT_SDK_CONFIGURE_ARGS)
@@ -224,6 +236,13 @@ if(NOT CMT_INNO_SETUP_ISCC STREQUAL "")
   if(NOT EXISTS "${_CMT_ISS_ABS}")
     message(FATAL_ERROR "Installer script not found: ${_CMT_ISS_ABS}")
   endif()
+  set(_CMT_INSTALLER_PREPARE_COMMAND "")
+  cmake_path(ABSOLUTE_PATH CMAKE_SOURCE_DIR NORMALIZE OUTPUT_VARIABLE _CMT_PACKAGE_ROOT)
+  if(_CMT_ISS_ABS STREQUAL "${_CMT_PACKAGE_ROOT}/setup/Common/installer_script.iss")
+    find_program(_CMT_INSTALLER_PWSH NAMES pwsh REQUIRED)
+    set(_CMT_INSTALLER_PREPARE_COMMAND COMMAND "${_CMT_INSTALLER_PWSH}" -NoProfile -File
+      "${CMAKE_SOURCE_DIR}/cmake/prepare_installer_resources.ps1" -ProjectRoot "${CMAKE_SOURCE_DIR}")
+  endif()
   if(NOT CMT_ISS_EXTRA_ARGS STREQUAL "")
     separate_arguments(_CMT_ISS_EXTRA NATIVE_COMMAND "${CMT_ISS_EXTRA_ARGS}")
   endif()
@@ -258,6 +277,8 @@ if(NOT CMT_INNO_SETUP_ISCC STREQUAL "")
     set(_sdk_bin "${CMAKE_SOURCE_DIR}/_build_msvc/${_sdk}")
     set(_sdk_cfg -S "${_sdk_src}" -B "${_sdk_bin}" -G "${CMT_SDK_GENERATOR}"
       "-DCMT_DEPS_PREBUILT_DIR:PATH=${_cmt_deps_prebuilt}"
+      "-DCMT_RUNTIME_RESOURCE_CONFIG_POLICY:STRING=reset"
+      "-DCMT_ENABLE_RUNTIME_REGRESSION:BOOL=OFF"
     )
     if(NOT CMT_SDK_SKIP_VS_A_AND_T)
       if(NOT CMT_SDK_MSVC_ARCH STREQUAL "")
@@ -276,6 +297,7 @@ if(NOT CMT_INNO_SETUP_ISCC STREQUAL "")
   if(CMT_ISS_EXTRA_ARGS STREQUAL "")
     add_custom_target(cmt-package
       ${_CMT_PACKAGE_COMMANDS}
+      ${_CMT_INSTALLER_PREPARE_COMMAND}
       COMMAND "${_CMT_ISCC_ABS}" "${_CMT_ISS_ABS}"
       WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
       USES_TERMINAL
@@ -285,6 +307,7 @@ if(NOT CMT_INNO_SETUP_ISCC STREQUAL "")
   else()
     add_custom_target(cmt-package
       ${_CMT_PACKAGE_COMMANDS}
+      ${_CMT_INSTALLER_PREPARE_COMMAND}
       COMMAND "${_CMT_ISCC_ABS}" ${_CMT_ISS_EXTRA} "${_CMT_ISS_ABS}"
       WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
       USES_TERMINAL

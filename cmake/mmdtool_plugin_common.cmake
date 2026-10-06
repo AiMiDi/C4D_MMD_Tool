@@ -416,7 +416,40 @@ macro(cmt_setup_mmdtool_plugin)
 
   set(maxon_targetFrameworkDependencies ${maxon_targetFrameworkDependencies} PARENT_SCOPE)
 
+  include("${CMT_PROJECT_ROOT_DIR}/cmake/mmdtool_runtime_resources.cmake")
+  cmt_prepare_runtime_resource_commands()
   MaxonTargets_ProcessCinemaTargetVars()
+  cmt_restore_runtime_resource_commands()
+
+  # POST_BUILD alone does not run when only .res/.str/config files changed.
+  # This dependency refreshes the complete tree on every explicit plugin build.
+  add_custom_target(mmdtool-runtime-resources
+    COMMAND "${CMAKE_COMMAND}"
+      "-DSOURCE=${CMT_RESOURCE_ROOT}"
+      "-DDESTINATION=$<TARGET_FILE_DIR:${maxon_targetName}>/res"
+      "-DBUILD_ROOT=${CMAKE_BINARY_DIR}"
+      "-DDEFAULT_CONFIG=${CMT_PROJECT_ROOT_DIR}/res/S24_up/cmt_config.json"
+      "-DCONFIG_POLICY=${CMT_RUNTIME_RESOURCE_CONFIG_POLICY}"
+      -P "${CMT_PROJECT_ROOT_DIR}/cmake/sync_runtime_resources.cmake"
+    VERBATIM
+    COMMENT "Copy and verify mmdtool runtime resources"
+  )
+  add_dependencies(${maxon_targetName} mmdtool-runtime-resources)
+
+  add_custom_target(mmdtool-mcp-adapter
+    COMMAND "${CMAKE_COMMAND}"
+      "-DSOURCE=${CMT_PROJECT_ROOT_DIR}/mcp"
+      "-DDESTINATION=$<TARGET_FILE_DIR:${maxon_targetName}>/mcp"
+      -P "${CMT_PROJECT_ROOT_DIR}/cmake/sync_mcp_adapter.cmake"
+    VERBATIM
+    COMMENT "Copy production MCP adapter runtime"
+  )
+  add_dependencies(${maxon_targetName} mmdtool-mcp-adapter)
+
+  option(CMT_ENABLE_RUNTIME_REGRESSION "Enable the test-only Cinema 4D scene regression bridge" OFF)
+  if(CMT_ENABLE_RUNTIME_REGRESSION)
+    target_compile_definitions(${maxon_targetName} PRIVATE CMT_ENABLE_RUNTIME_REGRESSION=1)
+  endif()
 
   if(CMAKE_GENERATOR MATCHES "Visual Studio")
     set_target_properties(${maxon_targetName} PROPERTIES

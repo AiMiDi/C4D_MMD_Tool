@@ -75,6 +75,7 @@ jobs:
       - name: Run ISCC
         shell: pwsh
         run: |
+          ./cmake/prepare_installer_resources.ps1 -ProjectRoot $env:GITHUB_WORKSPACE
           $isccCandidates = @()
           $isccCommand = Get-Command ISCC.exe -ErrorAction SilentlyContinue
           if ($isccCommand) {
@@ -118,12 +119,6 @@ jobs:
       run:
         shell: bash
     steps:
-      - name: Checkout (res/)
-        uses: actions/checkout@v6
-        with:
-          ref: ${{ github.ref }}
-          submodules: false
-
       - name: Download macOS build artifacts
         uses: actions/download-artifact@v8
         with:
@@ -131,24 +126,22 @@ jobs:
           path: ${{ github.workspace }}/_dl
           merge-multiple: false
 
-      - name: Zip per-SDK plugin + matching res
+      - name: Zip complete per-SDK plugin artifacts
         run: |
           set -euo pipefail
           mkdir -p dist
-          res_for_sdk() {
-            case "$1" in
-              sdk_r20|sdk_r21|sdk_r23) echo "R20-S24" ;;
-              *)                       echo "S24_up"  ;;
-            esac
-          }
           for sdk in sdk_r20 sdk_r21 sdk_r23 sdk_r25 sdk_2023 sdk_2024 sdk_2025 sdk_2026; do
             src="_dl/build-macOS-${sdk}"
             if [ ! -d "$src" ]; then echo "Missing $src" >&2; exit 1; fi
-            res_dir="res/$(res_for_sdk "$sdk")"
-            rm -rf "pkg/${sdk}"
             mkdir -p "pkg/${sdk}/mmdtool"
-            cp -R "$src"/* "pkg/${sdk}/mmdtool/"
-            cp -R "$res_dir" "pkg/${sdk}/mmdtool/res"
+            cp -R "$src"/. "pkg/${sdk}/mmdtool/"
+            test -f "pkg/${sdk}/mmdtool/res/cmt_config.json"
+            test -f "pkg/${sdk}/mmdtool/res/c4d_symbols.h"
+            test -d "pkg/${sdk}/mmdtool/res/description"
+            if find "pkg/${sdk}/mmdtool" -type l | grep -q .; then
+              echo "Linked files in plugin artifact: $sdk" >&2
+              exit 1
+            fi
             (cd "pkg/${sdk}" && zip -r "${{ github.workspace }}/dist/MMD_Tool_${sdk}_macOS.zip" mmdtool)
           done
 

@@ -53,6 +53,17 @@
 			}
 		},
 		{
+			"name": "release-windows",
+			"inherits": ["dev-windows"],
+			"displayName": "Release plugin (no Inno)",
+			"cacheVariables": {
+				"CMT_SDK_BUILD_CONFIG": "Release",
+				"CMT_ENABLE_RUNTIME_REGRESSION": "OFF",
+				"CMT_ENABLE_PLUGIN_TESTS": "OFF",
+				"CMT_DEPS_ENABLE_LIBMMD_TESTS": "OFF"
+			}
+		},
+		{
 			"name": "package-windows",
 			"inherits": ["windows_vs2022_v143"],
 			"displayName": "Release + Inno (override ISCC path or use CMakeUserPresets)",
@@ -62,7 +73,10 @@
 				"CMT_SDK_BUILD_CONFIG": "Release",
 				"CMT_SDK_BUILD_TARGET": "mmdtool",
 				"CMT_INNO_SETUP_ISCC": "C:/Program Files/Inno Setup 6/ISCC.exe",
-				"CMT_ISS_EXTRA_ARGS": ""
+				"CMT_ISS_EXTRA_ARGS": "",
+				"CMT_ENABLE_RUNTIME_REGRESSION": "OFF",
+				"CMT_ENABLE_PLUGIN_TESTS": "OFF",
+				"CMT_DEPS_ENABLE_LIBMMD_TESTS": "OFF"
 			}
 		},
 		{
@@ -96,7 +110,19 @@
 			"inherits": ["dev-windows"],
 			"displayName": "dependency/ + libMMD CTest (CMT_DEPS_ENABLE_LIBMMD_TESTS)",
 			"cacheVariables": {
-				"CMT_DEPS_ENABLE_LIBMMD_TESTS": "ON"
+				"CMT_DEPS_ENABLE_LIBMMD_TESTS": "ON",
+				"CMT_ENABLE_PLUGIN_TESTS": "ON"
+			}
+		},
+		{
+			"name": "release-macos",
+			"inherits": ["dev-macos"],
+			"displayName": "macOS Release plugin",
+			"cacheVariables": {
+				"CMT_SDK_BUILD_CONFIG": "Release",
+				"CMT_ENABLE_RUNTIME_REGRESSION": "OFF",
+				"CMT_ENABLE_PLUGIN_TESTS": "OFF",
+				"CMT_DEPS_ENABLE_LIBMMD_TESTS": "OFF"
 			}
 		}
 	],
@@ -157,15 +183,27 @@
 		},
 		{
 			"name": "workflow-release",
-			"configurePreset": "dev-windows",
+			"configurePreset": "release-windows",
 			"configuration": "Release",
 			"targets": ["cmt-workflow"]
 		},
 		{
 			"name": "workflow-release-macos",
-			"configurePreset": "dev-macos",
+			"configurePreset": "release-macos",
 			"configuration": "Release",
 			"targets": ["cmt-workflow"]
+		},
+		{
+			"name": "cmt-deps-benchmark",
+			"configurePreset": "dev-windows-deps-test",
+			"configuration": "Debug",
+			"targets": ["cmt-deps-benchmark"]
+		},
+		{
+			"name": "cmt-plugin-tests",
+			"configurePreset": "dev-windows-deps-test",
+			"configuration": "Debug",
+			"targets": ["cmt-plugin-tests"]
 		}
 	]
 }

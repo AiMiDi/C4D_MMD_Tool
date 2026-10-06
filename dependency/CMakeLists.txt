@@ -24,7 +24,6 @@ if(CMT_DEPS_ENABLE_LIBMMD_TESTS)
     mmd_model_io_test
     mmd_model_animation_test
     mmd_model_regression_test
-    mmd_model_benchmark_test
     file_base_test
     path_util_test
     file_roundtrip_test
@@ -35,10 +34,19 @@ if(CMT_DEPS_ENABLE_LIBMMD_TESTS)
     mmd_ik_solver_test
     vmd_interpolation_test
   )
+  set(CMT_DEPS_TEST_CONFIG Debug CACHE STRING "Configuration used by dependency CTest targets")
   add_custom_target(cmt-deps-test
-    COMMAND ${CMAKE_CTEST_COMMAND} --test-dir "${CMAKE_BINARY_DIR}/cmt_deps/libMMD" -C Debug --output-on-failure
+    COMMAND ${CMAKE_CTEST_COMMAND} --test-dir "${CMAKE_BINARY_DIR}/cmt_deps/libMMD" -C "${CMT_DEPS_TEST_CONFIG}" -LE "benchmark|performance" --output-on-failure --no-tests=error
     DEPENDS ${_cmt_libmmd_test_targets}
+    VERBATIM
     USES_TERMINAL
-    COMMENT "Run libMMD CTest (Debug); enable with -D CMT_DEPS_ENABLE_LIBMMD_TESTS=ON or preset dev-windows-deps-test"
+    COMMENT "Run functional libMMD CTest (${CMT_DEPS_TEST_CONFIG})"
+  )
+  add_custom_target(cmt-deps-benchmark
+    COMMAND ${CMAKE_CTEST_COMMAND} --test-dir "${CMAKE_BINARY_DIR}/cmt_deps/libMMD" -C "${CMT_DEPS_TEST_CONFIG}" -L benchmark --output-on-failure --no-tests=error
+    DEPENDS mmd_model_benchmark_test
+    VERBATIM
+    USES_TERMINAL
+    COMMENT "Run opt-in libMMD benchmarks (${CMT_DEPS_TEST_CONFIG})"
   )
 endif()

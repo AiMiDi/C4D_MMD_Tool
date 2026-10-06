@@ -1,10 +1,18 @@
 # Root CMake workflow: same presets as locally (CMakePresets.json), override CMT_SDK_DIR per matrix cell.
-# Matrix = 8 Windows + 8 Intel macOS + 5 ARM64 macOS SDK jobs = 21 jobs.
+# PR/main: functional tests + latest SDK. Release/dispatch: full 21-job matrix.
 
 name: Build
 
 on:
+  pull_request:
+  push:
+    branches: [main]
   workflow_dispatch:
+    inputs:
+      run_benchmarks:
+        description: Run the separate libMMD benchmark job
+        type: boolean
+        default: false
   workflow_call:
     inputs:
       ref:
@@ -24,7 +32,87 @@ env:
   CMAKE_BUILD_PARALLEL_LEVEL: 4
 
 jobs:
+  checks:
+    runs-on: windows-2022
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ inputs.ref || github.ref }}
+          fetch-depth: 0
+          submodules: false
+
+      - name: Checkout build submodules
+        shell: bash
+        run: |
+          git submodule sync -- dependency/bullet3 dependency/libMMD
+          git submodule update --init --recursive dependency/bullet3 dependency/libMMD
+
+      - name: Verify runtime resource copying
+        shell: pwsh
+        run: ./scripts/check_runtime_resources.ps1 -FixtureRoot "$env:RUNNER_TEMP/cmt-resources"
+
+      - name: Verify pinned installer resource adaptation
+        shell: pwsh
+        run: ./scripts/check_installer_resources.ps1 -FixtureRoot "$env:RUNNER_TEMP/cmt-installer-resources"
+
+      - name: Select Python for production MCP checks
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+
+      - name: Verify typed MCP transport and operation handling
+        run: python -m unittest discover -s mcp/tests -v
+
+      - name: Configure functional tests
+        run: cmake --preset dev-windows-deps-test
+
+      - name: Run functional libMMD CTest
+        run: cmake --build --preset cmt-deps-test
+
+      - name: Run plugin algorithm CTest
+        run: cmake --build --preset cmt-plugin-tests
+
+      - name: Configure latest SDK Release
+        if: github.event_name == 'pull_request' || (github.event_name == 'push' && github.ref == 'refs/heads/main')
+        run: cmake --preset release-windows -D CMT_DEPS_ENABLE_LIBMMD_TESTS=OFF -D CMT_ENABLE_PLUGIN_TESTS=OFF -D CMT_ENABLE_RUNTIME_REGRESSION=OFF
+
+      - name: Compile latest SDK Release
+        if: github.event_name == 'pull_request' || (github.event_name == 'push' && github.ref == 'refs/heads/main')
+        run: cmake --build --preset workflow-release
+
+      - name: Upload functional test logs
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: functional-test-logs
+          path: |
+            _build_msvc/cmt_deps/libMMD/Testing/Temporary/
+            _build_msvc/tests/Testing/Temporary/
+          if-no-files-found: ignore
+
+  benchmarks:
+    if: github.event_name == 'workflow_dispatch' && inputs.run_benchmarks
+    runs-on: windows-2022
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          submodules: false
+      - shell: bash
+        run: git submodule update --init --recursive dependency/bullet3 dependency/libMMD
+      - run: cmake --preset dev-windows-deps-test
+      - run: cmake --build --preset cmt-deps-benchmark
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: benchmark-logs
+          path: _build_msvc/cmt_deps/libMMD/Testing/Temporary/
+          if-no-files-found: ignore
+
   matrix-build:
+    if: github.event_name != 'pull_request' && !(github.event_name == 'push' && github.ref == 'refs/heads/main')
+    needs: checks
     defaults:
       run:
         shell: bash
@@ -51,13 +139,13 @@ jobs:
           - sdk_2026
         include:
           - os: windows-2022
-            configure_preset: dev-windows
+            configure_preset: release-windows
             build_preset: workflow-release
             deps_generator: "Visual Studio 17 2022"
             upload_artifact: true
           # Intel output is packaged for the current release workflow.
           - os: macos-26-intel
-            configure_preset: dev-macos
+            configure_preset: release-macos
             build_preset: workflow-release-macos
             deps_generator: Xcode
             macos_arch: x86_64
@@ -67,35 +155,35 @@ jobs:
           # R20-R23 do not have ARM-capable SDKs, so only add S24/R25 and newer.
           - os: macos-26
             sdk: sdk_r25
-            configure_preset: dev-macos
+            configure_preset: release-macos
             build_preset: workflow-release-macos
             deps_generator: Xcode
             macos_arch: arm64
             upload_artifact: false
           - os: macos-26
             sdk: sdk_2023
-            configure_preset: dev-macos
+            configure_preset: release-macos
             build_preset: workflow-release-macos
             deps_generator: Xcode
             macos_arch: arm64
             upload_artifact: false
           - os: macos-26
             sdk: sdk_2024
-            configure_preset: dev-macos
+            configure_preset: release-macos
             build_preset: workflow-release-macos
             deps_generator: Xcode
             macos_arch: arm64
             upload_artifact: false
           - os: macos-26
             sdk: sdk_2025
-            configure_preset: dev-macos
+            configure_preset: release-macos
             build_preset: workflow-release-macos
             deps_generator: Xcode
             macos_arch: arm64
             upload_artifact: false
           - os: macos-26
             sdk: sdk_2026
-            configure_preset: dev-macos
+            configure_preset: release-macos
             build_preset: workflow-release-macos
             deps_generator: Xcode
             macos_arch: arm64
@@ -107,8 +195,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
         with:
-          # workflow_call: optional ref; push/dispatch: never read inputs (undefined outside workflow_call)
-          ref: ${{ github.event_name == 'workflow_call' && (inputs.ref != '' && inputs.ref || github.ref) || github.ref }}
+          # Reusable workflows inherit the caller event; use the requested ref directly.
+          ref: ${{ inputs.ref || github.ref }}
           # Nested dependency tags/commits are not always reachable from a depth=1
           # submodule clone, which forces fragile direct SHA fetches.
           fetch-depth: 0
@@ -119,12 +207,28 @@ jobs:
           git submodule sync -- dependency/bullet3 dependency/libMMD
           git submodule update --init --force --recursive dependency/bullet3 dependency/libMMD
 
+      - name: Identify dependency toolchain and revisions
+        id: deps-identity
+        run: |
+          set -euo pipefail
+          if [[ "$RUNNER_OS" == "Windows" ]]; then
+            vswhere="C:/Program Files (x86)/Microsoft Visual Studio/Installer/vswhere.exe"
+            toolchain=$("$vswhere" -latest -property installationVersion)
+            install=$("$vswhere" -latest -property installationPath | tr -d '\r')
+            toolchain+=$(ls "$install/VC/Tools/MSVC")
+          else
+            toolchain=$(xcodebuild -version; clang --version)
+          fi
+          toolchain+=$(cmake --version)
+          echo "toolchain=$(printf '%s' "$toolchain" | python -c 'import hashlib,sys; print(hashlib.sha256(sys.stdin.buffer.read()).hexdigest())')" >> "$GITHUB_OUTPUT"
+          echo "revisions=$(git submodule status --recursive dependency/bullet3 dependency/libMMD | python -c 'import hashlib,sys; print(hashlib.sha256(sys.stdin.buffer.read()).hexdigest())')" >> "$GITHUB_OUTPUT"
+
       - name: Cache prebuilt dependencies
         id: deps-cache
         uses: actions/cache@v5
         with:
           path: _build_msvc/cmt_deps_prebuilt
-          key: deps-prebuilt-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('dependency/**', 'cmake/mmdtool_plugin_dependencies.cmake') }}
+          key: deps-v2-${{ matrix.os }}-${{ matrix.macos_arch || 'x64' }}-Release-${{ steps.deps-identity.outputs.toolchain }}-${{ steps.deps-identity.outputs.revisions }}-${{ hashFiles('dependency/CMakeLists.txt', 'cmake/mmdtool_plugin_dependencies.cmake', 'CMakePresets.json', '.github/workflows/build.yml') }}
 
       - name: Build dependencies (on cache miss)
         if: steps.deps-cache.outputs.cache-hit != 'true'
@@ -155,6 +259,8 @@ jobs:
             -D "CMT_SDK_DIR=${{ github.workspace }}/${{ matrix.sdk }}" \
             -D CMT_SDK_BUILD_CONFIG=Release \
             -D CMT_WITH_DEPENDENCY_SUBDIR=OFF \
+            -D CMT_ENABLE_RUNTIME_REGRESSION=OFF \
+            -D CMT_RUNTIME_RESOURCE_CONFIG_POLICY=reset \
             -D "CMT_DEPS_PREBUILT_DIR=${{ github.workspace }}/_build_msvc/cmt_deps_prebuilt" \
             "${extra_args[@]}"
 
