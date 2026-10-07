@@ -43,3 +43,10 @@
 
 - [x] 7.1 删除 `.github/workflows/msbuild.yml`、`.github/workflows/RefactoringMSBuild.yml`
 - [x] 7.2 更新 `DEVELOPMENT.md` / `DEVELOPMENT_zh.md`（CI、`CMakePresets` 表）、`README.md` / `README_zh.md`（徽章 → `build.yml`）
+
+## 归档校准（2026-10-07）
+
+以上实现过程中的早期预设、Actions 版本与 Universal 设计保留为历史记录。
+归档规范以当前已提交工作流为准：PR/main 功能检查与最新 SDK Release，
+发布/手动运行 21 项矩阵，Release configure 预设，Intel/ARM64 原生架构分别验证，
+只有 Windows/Intel 产物进入打包。远端全矩阵及 macOS 运行未在本机执行。

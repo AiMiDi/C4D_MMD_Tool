@@ -18,6 +18,11 @@
 
 ## 4. 验证与回归检查
 
-- [ ] 4.1 验证骨骼重设父级、同层重排、新增、删除、复制后，bone tag 显示索引与 `bone_items_` 顺序保持一致
-- [ ] 4.2 验证依赖 `GetBoneItems()` 的对象（如 rigid、joint、display frame 相关选择器）在同步后读取到最新下拉列表
-- [ ] 4.3 验证 PMX 导出前读取到的 parent index 与 manager 同步结果一致，并确认 ANIM/VMD 模式未因移除 edit-mode 每帧重算而回归
+- [x] 4.1 验证骨骼重设父级、同层重排、新增、删除、复制后，bone tag 显示索引与 `bone_items_` 顺序保持一致
+- [x] 4.2 验证依赖 `GetBoneItems()` 的对象（如 rigid、joint、display frame 相关选择器）在同步后读取到最新下拉列表
+- [x] 4.3 验证 PMX 导出前读取到的 parent index 与 manager 同步结果一致，并确认 ANIM/VMD 模式未因移除 edit-mode 每帧重算而回归
+
+2026-10-06：上述验收在 C4D 2026.4.0 中通过 `hierarchy_edit_and_selectors` 和
+`hierarchy_export_and_anim` 执行，实际加载 SDK 2026 Debug 插件 SHA-256 为
+`781b176cfe1cbc638b787e4f1b13078e420ab74a13cdc041db3606277c83c401`。
+持久证据位于 `_build_msvc/validation/repository-reliability-and-runtime-hardening/native/receipt.json`。

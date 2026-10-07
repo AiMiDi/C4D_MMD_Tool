@@ -14,7 +14,7 @@ The material system SHALL maintain an effective runtime material state derived f
 - **THEN** every material runtime state SHALL match its stored base `MMDMaterialData`
 
 ### Requirement: Standard materials use generic ShaderData for morphable texture channels
-Standard C4D materials SHALL use a small set of generic MMD ShaderData shaders for texture channels where material morph logic must operate on sampled shader output. Texture morph shaders SHALL wrap the original texture shader as a child shader where supported by the C4D shader hierarchy and apply PMX texture, sphere texture, or toon texture factors to the sampled child output. Material morph updates SHALL update generic shader parameters or snapshots instead of creating one shader type per PMX field or per morph.
+Standard C4D materials SHALL use generic MMD ShaderData wrappers for morphable texture sampling. Wrappers SHALL retain the original child shader where the C4D hierarchy supports it and apply supported PMX texture, sphere or toon factors to its sampled output. Material morph evaluation SHALL update generic parameters or render-time snapshots instead of creating shader types per field or morph.
 
 #### Scenario: Texture morph shader wraps original texture shader
 - **WHEN** a Standard material is linked to material index 0

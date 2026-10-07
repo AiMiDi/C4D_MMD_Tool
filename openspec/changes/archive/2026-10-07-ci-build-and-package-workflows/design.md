@@ -102,3 +102,10 @@
 - **[artifact 保留期]** 默认 90 天过期，超期后 package 需重新触发 build → 发版通常在 build 之后短时间内进行，可接受；必要时可调整 retention
 - **[macOS 无 Inno Setup]** macOS 产物只能打 zip → 符合 macOS 用户习惯（拖放安装），无需安装程序
 
+
+## 归档校准（2026-10-07）
+
+以上实现过程中的早期预设、Actions 版本与 Universal 设计保留为历史记录。
+归档规范以当前已提交工作流为准：PR/main 功能检查与最新 SDK Release，
+发布/手动运行 21 项矩阵，Release configure 预设，Intel/ARM64 原生架构分别验证，
+只有 Windows/Intel 产物进入打包。远端全矩阵及 macOS 运行未在本机执行。

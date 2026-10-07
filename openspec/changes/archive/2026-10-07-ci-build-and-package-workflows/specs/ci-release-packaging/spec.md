@@ -27,14 +27,14 @@ The package workflow SHALL produce a Windows installer using Inno Setup on a Win
 
 #### Scenario: Inno Setup installer creation
 - **WHEN** all Windows SDK build artifacts are available (all 8 SDKs from the build matrix)
-- **THEN** the workflow SHALL install Inno Setup 6, place artifacts in the expected `_build/<sdk>/bin/Release/plugins/mmdtool/` paths, and run ISCC on `setup/Common/installer_script.iss` to produce the installer executable
+- **THEN** the workflow SHALL install Inno Setup 6, place artifacts in the expected `_build_msvc/<sdk>/bin/Release/plugins/mmdtool/` paths, and run ISCC on `setup/Common/installer_script.iss` to produce the installer executable
 
 ### Requirement: macOS zip packaging
 The package workflow SHALL produce macOS release archives on a macOS runner.
 
 #### Scenario: macOS zip creation
 - **WHEN** macOS build artifacts are available for each SDK version
-- **THEN** the workflow SHALL create a zip archive for each SDK version containing the plugin bundle (`mmdtool.xdl64`) and resources (`res/`)
+- **THEN** the workflow SHALL create a zip archive for each SDK version containing the native plugin binary or bundle and its physical resources (`res/`)
 
 ### Requirement: Upload to GitHub Release
 The package workflow SHALL upload all packaging artifacts to the GitHub Release associated with the triggering tag.

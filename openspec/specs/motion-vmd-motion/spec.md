@@ -110,9 +110,13 @@ The VMD import pipeline SHALL record bone names from the VMD file that do not ma
 
 ### Requirement: Unified `*_MODE` enums and `MODEL_ANIM_LIST` animation slots
 
-Description resources SHALL NOT expose a separate `*_MODE_VMD` value alongside `*_MODE_ANIM` for the same object family. `MODEL_MODE`, `BONE_MODE`, `MESH_MODE`, `JOINT_MODE`, and `RIGID_MODE` SHALL each offer **edit** vs **animation** only (`*_MODE_EDIT` and `*_MODE_ANIM`). Legacy scene files that stored `*_MODE_VMD` SHALL be read as `*_MODE_ANIM` on load.
+`MODEL_MODE`, `BONE_MODE`, `MESH_MODE`, `JOINT_MODE` and `RIGID_MODE` SHALL expose only Edit and Animation, without separate VMD values. Legacy VMD values SHALL load as Animation mode. Animation slots SHALL isolate per-bone keyframes and derive document MaxTime/LoopMaxTime from active-slot keys or metadata, rather than VMDAnimation::GetMaxKeyTime().
 
-`MODEL_ANIM_LIST` SHALL identify the **active animation slot** (multiple imported VMDs or merged clips). Each slot SHALL have model-manager-side metadata (at minimum display name and max-frame information), while bone keyframe truth for that slot lives on each `MMDBoneTag`. When `MODEL_ANIM_LIST` changes, the system SHALL propagate the active slot index so each `MMDBoneTag` evaluates **only keyframe data for that slot**. The document's `MaxTime` / `LoopMaxTime` SHALL be derived from the active slot's keyframe extent (or per-slot metadata), **not** from `VMDAnimation::GetMaxKeyTime()` when `VMDAnimation` is no longer used for bone playback. New imports SHALL NOT retain any replayable raw VMD source payload for the bone channel.
+#### Scenario: Animation slots retain metadata and bone keyframe truth
+- **WHEN** a VMD is imported into an animation slot
+- **THEN** the model manager SHALL retain the slot display name and maximum-frame metadata
+- **AND** each MMDBoneTag SHALL retain that slot's bone keyframes
+- **AND** the bone channel SHALL NOT retain a replayable raw VMD source payload
 
 #### Scenario: Legacy `*_MODE_VMD` in saved file
 
@@ -125,6 +129,8 @@ Description resources SHALL NOT expose a separate `*_MODE_VMD` value alongside `
 - **WHEN** the user selects a different animation slot in `MODEL_ANIM_LIST`
 
 - **THEN** bone tags SHALL evaluate the active slot's stored keyframes
+
+- **AND** the active slot index SHALL be propagated to every managed MMDBoneTag
 
 - **THEN** the timeline maximum SHALL match the active slot's range (or documented metadata rule)
 
@@ -219,6 +225,38 @@ After VMD motion import or when switching from edit mode back to animation mode,
 - **WHEN** the user switches the model back to animation mode
 
 - **THEN** the linked bone manager display type SHALL be `BONE_DISPLAY_TYPE_OFF`
+
+### Requirement: Motion import options control channel replacement
+Motion import SHALL honor the bone, morph, and model-info channel switches. Replacement SHALL replace the active slot while preserving other slots; non-replacement SHALL add an isolated slot; explicit merge SHALL combine keys in the active slot with incoming keys winning at matching times.
+
+#### Scenario: Model info disabled
+- **WHEN** a VMD with visibility and IK keys is imported with model info disabled
+- **THEN** those keys are not imported
+
+#### Scenario: Replacement and additional slot
+- **WHEN** import is performed with replacement enabled
+- **THEN** the active slot is replaced by the imported animation and other slots are retained
+- **WHEN** import is performed with replacement disabled
+- **THEN** previous slots remain and the new slot does not inherit their morph or IK tracks
+
+### Requirement: Model info follows animation slots and scene persistence
+Model visibility and IK states SHALL follow the selected animation slot and survive scene save/reload. Scenes from earlier persistence versions SHALL remain readable. Leaving animated visibility playback SHALL restore the artist's base viewport/render visibility.
+
+#### Scenario: Save reload and slot switch
+- **WHEN** two slots have different visibility and IK keys and the scene is saved and reopened
+- **THEN** selecting either slot evaluates only its corresponding keys
+
+### Requirement: Motion export options reflect actual output
+Motion export SHALL honor channel switches, position scale, frame offset, and rotation curve selection. Model-info-disabled output SHALL contain no visibility or IK keys. Sparse export SHALL preserve stored key interpolation; baked export SHALL sample evaluated final poses at 30 VMD frames per second.
+
+#### Scenario: Bake without disturbing source scene
+- **WHEN** the user exports baked motion containing IK, controls, or physics
+- **THEN** the output contains evaluated bone poses for every sampled frame
+- **AND** the original document time, mode, tracks, and simulation state are preserved
+
+#### Scenario: Model info round trip
+- **WHEN** a motion containing visibility toggles is imported and exported with model info enabled
+- **THEN** exported show/hide transitions retain their values and frame positions
 
 ## Overview
 

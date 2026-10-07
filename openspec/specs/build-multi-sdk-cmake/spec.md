@@ -21,12 +21,12 @@ The project SHALL treat the preset naming and generator conventions from `sdk_20
 - **THEN** the preset names and their expected build directories remain consistent with the 2026 baseline unless the documentation declares a version-specific exception
 
 ### Requirement: Dependencies build through CMake-managed workflow
-The project SHALL provide a CMake-managed workflow to configure, build, test where applicable, and install bullet3 and libMMD into `dependency/install`, and plugin builds MUST consume that installed output.
+The project SHALL provide a CMake-managed workflow to configure, build, and test Bullet3 and libMMD as shared build targets. Plugin builds SHALL consume those targets or explicitly configured compatible prebuilt libraries without requiring an install prefix.
 
 #### Scenario: Build dependencies before plugin build
 - **WHEN** a developer runs the documented dependency build workflow
-- **THEN** the system produces installable headers and libraries under `dependency/install`
-- **AND** a subsequent plugin configure step uses that install directory as its include and link root
+- **THEN** dependency targets and their transitive include/link requirements are available to the plugin
+- **AND** functional tests can be run through the documented test target
 
 ### Requirement: Legacy SDKs have minimal bridge configurations
 For SDK versions that do not natively provide the modern CMake workflow used by 2025/2026, the project MUST provide a minimal bridge configuration that is sufficient to compile the plugin from the canonical source tree.
@@ -47,3 +47,26 @@ During migration of legacy SDK versions, the team MAY use existing Visual Studio
 - **WHEN** the legacy SDK CMake workflow has completed the documented configure/build validation
 - **THEN** the matching VS project artifacts for that SDK are removed from the default repository workflow
 - **AND** removal does not happen before the CMake validation step is complete
+
+### Requirement: Portable runtime resources
+Every built plugin SHALL contain a physical copy of its matching runtime resource tree. The output SHALL be usable after moving it outside the repository. Synchronization SHALL never recursively delete the resource source through a stale output link and SHALL validate required resources and JSON configuration.
+
+#### Scenario: Existing output link
+- **WHEN** resource synchronization encounters a junction or symlink at output res
+- **THEN** only the link is removed and the canonical source remains intact
+- **AND** output res is replaced by a complete physical resource directory
+
+### Requirement: Explicit release workflow
+The documented Release preset SHALL configure and compile the selected SDK in Release configuration independently of earlier Debug configuration.
+
+#### Scenario: Developer runs release preset
+- **WHEN** a developer follows the documented release configure/build presets
+- **THEN** the resulting plugin is generated under the Release output directory
+
+### Requirement: Continuous functional validation
+Pull requests and main branch pushes SHALL run functional dependency tests and compile the latest supported SDK. Release validation SHALL compile the full supported SDK/platform matrix. Performance benchmarks SHALL have a separate entrypoint.
+
+#### Scenario: Ordinary pull request
+- **WHEN** a pull request changes maintained plugin or build files
+- **THEN** functional CTest results and latest SDK compile results are produced
+- **AND** the functional job does not include benchmarks

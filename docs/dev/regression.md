@@ -73,7 +73,7 @@ scene hook 的 BaseContainer，再调用 `hook.Message(1057017)`。C++ 回调只
 | `motion_roundtrip_and_bake` | 稀疏 VMD 帧和值保持不变，重新导入后姿势相同，逐帧骨骼及表情烘焙值与原生连续播放一致；源文档姿势、材质、时间和模式不变；拒绝导入回滚后保持原状态且仍能再次导入 |
 | `camera_export_and_failures` | 相机 VMD 文件头、插值、烘焙帧数及实际垂直 FOV；相机复制后的真实子对象和导出结果；旧 APERTURE 曲线的单次迁移、值切线缩放和保存重开；普通相机 APERTURE 轨道保留；导出无多余对象且时间不变，文件写入失败和负帧导出返回失败 |
 
-两项层级测试覆盖 `openspec/changes/bone-hierarchy-index-sync/tasks.md` 中的三项验收场景，
+两项层级测试覆盖 `openspec/changes/archive/2026-10-07-bone-hierarchy-index-sync/tasks.md` 中的三项验收场景，
 并检查删除被引用骨骼后的 display frame、刚体、关节选择和 indexed tail 引用解除。
 只有测试在指定的实际加载插件二进制上通过后，才能把对应任务标为已验证。
 
