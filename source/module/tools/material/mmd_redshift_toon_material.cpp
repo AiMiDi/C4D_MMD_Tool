@@ -276,11 +276,11 @@ maxon::Result<std::vector<Wire>> Wires(const maxon::nodes::NodesGraphModelRef& g
 		const char* combine_asset = metadata.GetInt32(SphereMode) == 1 ? "rsmathmulvector" : "rsmathaddvector";
 		const std::string input = std::string(combine_asset) + ".input1";
 		const std::string sphere_input = std::string(combine_asset) + ".input2";
-		const std::string output = std::string(combine_asset) + ".out";
+		const std::string sphere_output_port = std::string(combine_asset) + ".out";
 		const auto destination = mmd_rs::Input(sphere_combine, mmd_rs::CoreId(input.c_str())) iferr_return;
 		wires.push_back({base_color, destination});
 		append(sphere_add, "rsmathaddvector.out", sphere_combine, sphere_input.c_str()) iferr_return;
-		const auto combined = mmd_rs::Output(sphere_combine, mmd_rs::CoreId(output.c_str())) iferr_return;
+		const auto combined = mmd_rs::Output(sphere_combine, mmd_rs::CoreId(sphere_output_port.c_str())) iferr_return;
 		wires.push_back({combined, surface_color});
 	}
 	else wires.push_back({base_color, surface_color});
