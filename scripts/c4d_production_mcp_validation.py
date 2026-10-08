@@ -540,6 +540,17 @@ elif _action == "save_reopen":
     c4d.documents.KillDocument(_old)
     c4d.documents.SetActiveDocument(_new)
     _result = _snapshot(_new)
+elif _action == "load_restart_scene":
+    _old = _m.documents[_p["label"]]
+    _new = c4d.documents.LoadDocument(_p["path"],c4d.SCENEFILTER_OBJECTS|c4d.SCENEFILTER_MATERIALS,None)
+    if _new is None:
+        raise RuntimeError("Saved restart scene could not be loaded")
+    _own(_new)
+    c4d.documents.InsertBaseDocument(_new)
+    _m.documents[_p["label"]] = _new
+    c4d.documents.SetActiveDocument(_m.original)
+    c4d.documents.KillDocument(_old)
+    _result = _snapshot(_new)
 elif _action == "regression_disabled":
     _doc = _m.documents["A"]
     _hook = _doc.FindSceneHook(1057017)
@@ -603,11 +614,12 @@ print("CMT_PRODUCTION_VALIDATION:" + json.dumps(_result,ensure_ascii=False,allow
 class StdioClient:
     """A real serial adapter subprocess, never an in-memory server fixture."""
 
-    def __init__(self, endpoint, token_file, timeout):
+    def __init__(self, endpoint, token_file, timeout, *, python_executable=None, adapter_entry=None):
         self.timeout, self.next_id = timeout, 0
         self.responses = queue.Queue()
         flags = subprocess.CREATE_NO_WINDOW if os.name == "nt" else 0
-        self.process = subprocess.Popen([sys.executable, "-X", "utf8", str(REPOSITORY / "mcp/run_mmdtool_mcp.py"),
+        self.process = subprocess.Popen([str(python_executable or sys.executable), "-X", "utf8",
+                         str(adapter_entry or REPOSITORY / "mcp/run_mmdtool_mcp.py"),
                          "--endpoint", endpoint, "--token-file", str(token_file), "--timeout", str(timeout)],
                          stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
                          creationflags=flags)
@@ -999,10 +1011,26 @@ class ValidationRun:
         assert_equal_numeric(baked_before["documents"], self.native("snapshot")["documents"])
         if fixtures.read_vmd(baked["data"]["path"])["iks"]:
             raise AssertionError("model_info=false export still included IK/visibility metadata")
+        matched = self.call("mmdtool_import_motion", {**target, "path": self.fixture("motion_a.vmd"),
+                            "position_multiple": 1., "strategy": "append"})
+        if matched["data"]["unmatched_bones"] or matched["data"]["unmatched_morphs"]:
+            raise AssertionError("Matched motion names were incorrectly reported as absent")
+        missing_names = self.output / "inputs/unmatched-names.vmd"
+        data = Path(self.fixture("motion_a.vmd")).read_bytes()
+        data = data.replace(fixtures.fixed("root", 15), fixtures.fixed("absent_bone", 15))
+        data = data.replace(fixtures.fixed("tint", 15), fixtures.fixed("absent_morph", 15))
+        missing_names.write_bytes(data)
+        unmatched = self.call("mmdtool_import_motion", {**target, "path": str(missing_names),
+                              "position_multiple": 1., "strategy": "append"})
+        if set(unmatched["data"]["unmatched_bones"]) != {"absent_bone"} or set(
+                unmatched["data"]["unmatched_morphs"]) != {"absent_morph"}:
+            raise AssertionError("Missing VMD names did not produce the exact structured report")
         return {"baseline_slots": baseline, "appended_slots": appended, "merged_slots": after,
                 "temporary_evaluation": temporary, "source_state_restored": True,
                 "time_precision_checks": precision_checks,
-                "raw_export": exported, "baked_export": baked}
+                "raw_export": exported, "baked_export": baked,
+                "matched_name_report": matched, "unmatched_name_report": unmatched,
+                "unmatched_input": file_identity(missing_names)}
 
     def camera(self):
         document = self.values["documents"]["A"]
@@ -1084,12 +1112,27 @@ class ValidationRun:
         if precision_rejection["code"] != "invalid_time_precision":
             raise AssertionError("Unrepresentable nonzero time was not explicitly rejected")
         self.call("mmdtool_import_pmx", {"document": target["document"], "path": self.fixture("motion_a.vmd")}, expected=False)
+        invalid_files = []
+        for name, options, extension, valid_input in (
+                ("mmdtool_import_pmx", {"document": target["document"]}, "pmx", "model.pmx"),
+                ("mmdtool_import_motion", target, "vmd", "motion_a.vmd"),
+                ("mmdtool_import_camera", {"document": target["document"]}, "vmd", "camera.vmd")):
+            for fault in ("missing", "truncated", "wrong-format"):
+                path = self.output / "inputs" / (name + "-" + fault + "." + extension)
+                if fault == "truncated":
+                    path.write_bytes(Path(self.fixture(valid_input)).read_bytes()[:20])
+                elif fault == "wrong-format":
+                    path.write_bytes(b"invalid model or motion format")
+                result = self.call(name, {**options, "path": str(path)}, expected=False)
+                invalid_files.append({"tool": name, "fault": fault, "result": result})
+                assert_equal_numeric(before["documents"], self.native("snapshot")["documents"])
         self.call("mmdtool_select_animation_slot", {**target, "slot": "not-a-live-slot"}, expected=False)
         self.call("mmdtool_set_morph_strength", {**target, "morph_handle": "not-a-live-morph", "strength": .5}, expected=False)
         write_failures = self.export_write_failures()
         assert_equal_numeric(before["documents"], self.native("snapshot")["documents"])
         return {"stdio_rejections": rejections, "nonfinite_json_rejected": True,
                 "native_admission_rejected_invalid_values": True, "export_write_failures": write_failures,
+                "invalid_import_files": invalid_files,
                 "scene_unchanged": True}
 
     def export_write_failures(self):

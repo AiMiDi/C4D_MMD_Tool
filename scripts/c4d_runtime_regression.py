@@ -355,6 +355,25 @@ class Suite:
         material = self.doc.GetFirstMaterial()
         self.assert_true(material is not None, "Missing imported material")
         shader = material[self.c4d.MATERIAL_COLOR_SHADER]
+        if shader is not None and shader.GetType() == MATERIAL_MORPH_SHADER_ID and shader[2000]:
+            # Bound Standard materials evaluate in InitRender. Read the real
+            # shader output rather than an obsolete Xcolor child or UI factor.
+            render = self.c4d.modules.render
+            context = render.InitRenderStruct(self.doc)
+            context.linear_workflow = False
+            context.document_colorprofile = self.c4d.DOCUMENT_COLORPROFILE_DISABLED
+            self.assert_true(shader.InitRender(context) == self.c4d.INITRENDERRESULT_OK,
+                             "Material binding failed to initialize")
+            try:
+                sample = render.ChannelData()
+                sample.p = self.c4d.Vector(.5, .5, 0.)
+                sample.n = self.c4d.Vector(0., 0., 1.)
+                sample.d = self.c4d.Vector()
+                sample.t = sample.off = sample.scale = 0.
+                sample.texflag = self.c4d.CHANNEL_COLOR << 6
+                return self.vector(shader.Sample(sample))
+            finally:
+                shader.FreeRender()
         self.assert_true(shader is not None and shader.GetType() == self.c4d.Xcolor, "Expected untextured color shader")
         return self.vector(shader[self.c4d.COLORSHADER_COLOR])
 
@@ -891,6 +910,7 @@ class Suite:
 
     def material_morph_zero_and_delete(self):
         self.new_model()
+        self.model[self.ids["MODEL_MODE"]] = self.ids["MODEL_MODE_ANIM"]
         base = self.material_color()
         self.call("set_strength", strength=1.)
         full = self.material_color()
@@ -983,6 +1003,7 @@ class Suite:
     def check_toon_material_channels(self):
         c4d = self.c4d
         self.new_model("toon_material.pmx")
+        self.model[self.ids["MODEL_MODE"]] = self.ids["MODEL_MODE_ANIM"]
         material = self.doc.GetFirstMaterial()
         base = self.material_color()
         self.assert_true(not material[c4d.MATERIAL_USE_LUMINANCE], "PMX toon texture was imported as emission")
