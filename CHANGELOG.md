@@ -4,7 +4,7 @@
 
 Entries for 0.9.1.x were reconstructed from tagged source changes and release dates. Intermediate build tags are grouped below; original entries through 0.4.6.1 are retained.
 
-### 0.9.2.1 · Architecture, Morph and materials (2026-10-08)
+### 0.9.2.2 · Architecture, Morph and materials (2026-10-08)
 
 Changes since `v0.9.1.20`, grouped by module:
 
