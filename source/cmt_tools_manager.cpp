@@ -72,10 +72,10 @@ namespace CMTToolsManager
 
 	bool ExportVMDCamera(const CMTToolsSetting::CameraExport& setting)
 	{
+		SaveVmdCameraLog logger;
 		libmmd::VMDFile vmd_file;
-		if (SaveVmdCameraLog logger; !CMTSceneManager::SaveVMDCamera(setting, vmd_file))
+		if (!CMTSceneManager::SaveVMDCamera(setting, vmd_file))
 		{
-			logger.LogOK();
 			return false;
 		}
 
@@ -86,6 +86,7 @@ namespace CMTToolsManager
 			return false;
 		}
 
+		logger.LogOK();
 		return true;
 	}
 

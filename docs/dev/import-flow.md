@@ -4,6 +4,8 @@
 [`runtime-flow.md`](runtime-flow.md)。PMX 模型导出（重建式回写、导出前同步、v1 限制）见
 [`export-flow.md`](export-flow.md)。
 
+PMX 材质转换新增 `RS Toon（MMD 风格）`（持久化选择值 4），对应正式导入协议的 `material_type="redshift_toon"`。启用材质导入时先探测原生 Toon/Contour 配方；缺少所需节点或端口则在创建模型前返回原因。关闭材质导入时不要求 Toon 能力。普通 UV 主贴图与 Toon 着色均不依赖 Additional UV；基础值、使用方式和验收范围见 [RS Toon 材质](rs-toon-materials.md)。
+
 ## 关键代码地图
 
 | 区域 | 主要职责 |
@@ -129,6 +131,9 @@ frozen/bind 状态读取。
 
 ## 材质表情（Material Morph）
 
+默认 Standard 与 Redshift 的 RGB/Alpha 契约、逐字段支持差异及 shader/graph 与实际图像证据见
+[`material-support.md`](material-support.md)。贴图读取和节点连接成功不表示完整 MMD toon/sphere 外观已经对齐。
+
 PMX 材质表情（`PMXMorphType::Material`）的完整链路：持久化数据、PMX round-trip、运行时材质合成、
 ShaderData 贴图系数和材质 adapter 同步。
 
@@ -173,7 +178,7 @@ ShaderData 贴图系数和材质 adapter 同步。
 - `MMDMaterialTextureMorphShader`（插件 ID `1068715`，`source/module/tools/material/mmd_material_morph_shader.*`）
   包装一个原始贴图 child shader：child 经 `InsertUnder` 挂在 wrapper 之下（`GetDown()` 取得），
   `Output()` 采样 child 后乘以预计算的有效系数；颜色通道使用 `diffuse RGB * texture factor RGB`，
-  Alpha 通道使用 `diffuse alpha * texture factor alpha`，sphere/toon 通道使用各自 RGBA factor。
+  Alpha 通道使用 `diffuse alpha * texture factor alpha`，sphere 通道使用其 RGBA factor。
 - **ShaderData 边界**：`Output()` 只读取 shader 自身参数（render-time 快照）和 child 采样结果，不读取或
   修改任何可变场景状态（不碰 `MMDModelManagerObject` / `MMDMaterialData` / `BaseMaterial`）。有效系数由
   运行时 evaluator 预计算后写入 shader 参数。
@@ -185,10 +190,14 @@ ShaderData 贴图系数和材质 adapter 同步。
   diffuse/alpha 与 texture factor 合并写入 wrapper，避免贴图材质漏掉 diffuse morph。
 - 贴图系数经 `SyncRuntimeStateToMaterial()` → `MMDMaterialAdapter::SyncRuntimeState()`：Standard adapter
   按需安装/更新 wrapper shader（复用现有 shader 或从通道贴图路径新建 Bitmap 作为 child）。Standard
-  通道映射为：base texture → `CHANNEL_COLOR` / `CHANNEL_ALPHA`，sphere texture → `CHANNEL_ENVIRONMENT`，
-  toon texture → `CHANNEL_LUMINANCE`。sphere/toon 的 RGB 与 alpha factor 都写入各自 wrapper。
-- Redshift/Octane/Corona 首版只同步预计算简单字段（经各自 `SyncTo()`），不做贴图 factor、classic
-  ShaderData wrapper 或 renderer-specific node graph。
+  通道映射为：base texture → `CHANNEL_COLOR` / `CHANNEL_ALPHA`，sphere texture → `CHANNEL_ENVIRONMENT`。
+  sphere 的 RGB 与 alpha factor 写入 wrapper。PMX toon 是按光照取样的阴影 ramp，不能直接接到
+  `CHANNEL_LUMINANCE`；Standard 近似保留 toon 路径与 factor 数据用于持久化和导出，尚未实现完整 toon 着色。
+  新材质默认不启用发光；旧导入材质在显式同步时，仅对路径匹配且保持默认配置的 toon Bitmap 或本插件
+  单 Bitmap child wrapper 执行一次关闭通道的迁移，保留 shader。迁移标记随材质保存，后续用户自定义或
+  重新启用的发光不会被同步或 toon factor 修改。
+- Redshift adapter 使用独立节点图同步 diffuse/texture RGB 与 Alpha 系数，并通过 Color Splitter 的 A
+  接入 opacity；Octane/Corona 仍只同步现有简单字段。各渲染器未完成的字段及原生验证范围见材质支持矩阵。
 - `edgeColor` / `edgeSize` 等当前材质系统未承载的字段仅保留数据用于 UI 编辑、场景持久化和 PMX 导出。
 
 ### UI 位置
@@ -196,7 +205,7 @@ ShaderData 贴图系数和材质 adapter 同步。
 材质表情编辑栏在 **ModelManager** 属性管理器（`MODEL_MATMORPH_GRP`）：材质表情列表（动态 CYCLE）→
 偏移项列表（动态 CYCLE）→ 选中 offset 全部字段控件 + 添加/删除 offset 按钮。目标材质用单个动态 CYCLE，
 首项「全部材质」映射 `-1`，其后为各材质名。运行时/着色相关的 focused 验证（强度归零和最后定义删除恢复、
-重复求值不漂移、EDIT/ANIM 分离、贴图 wrapper child 保留、toon/sphere factor）依赖 C4D 运行时，
+重复求值不漂移、EDIT/ANIM 分离、贴图 wrapper child 保留、sphere factor、toon 元数据保留及误建发光迁移）依赖 C4D 运行时，
 按既有约定走手动验证。
 
 ## VMD 动作导入
@@ -211,8 +220,8 @@ flowchart TD
     D --> E{"当前选择是否<br/>MMDModelManagerObject"}
     E -- 否 --> F["报错：Not MMD model / select error"]
     E -- 是 --> G["MMDModelManagerObject::LoadVMDMotion"]
-    G --> H["确定目标 animation slot<br/>新建或 merge 当前 slot"]
-    H --> I["ImportVMDIKKeyframes<br/>导入 IK enable track"]
+    G --> H["预检并准备数据<br/>替换当前 / 新建 / 合并当前 slot"]
+    H --> I["ImportVMDModelInfo<br/>按开关保存命名 IK 与 visibility"]
     H --> J["morph keyframes<br/>ANIM 下写 ModelManager CTrack"]
     H --> K["bone keyframes<br/>写每个 MMDBoneTag animation slot"]
     K --> L["SetAnimationSlotMetadata<br/>切到 MODEL_MODE_ANIM"]
@@ -223,9 +232,24 @@ flowchart TD
 `LoadVMDMotion()` 会按骨骼名查找目标 tag，支持本地名/英文名导入；遇到 append/inherit 骨骼会跳过直接导入，
 因为这些骨骼应由运行时继承链计算。`setting.ignore_physical` 打开时，动态物理驱动骨骼也会跳过 VMD 写入。
 
-Morph 动作在 ANIM 模式下仍以 ModelManager 上的 CTrack 作为运行时数据源。进入 EDIT 模式时，这些 CTrack 会
-被缓存到 EDIT 专用 morph slot 后删除，方便调试 morph 强度和编辑动态 UI；从 EDIT 切回 ANIM 时再按当前动画
-slot 重建 CTrack。morph 定义和动态 UI 不因模式切换删除。
+Morph 动作在 ANIM 模式下仍以 ModelManager 上的 CTrack 作为运行时数据源。所有动画槽都有持久化的
+morph 和模型信息快照；切槽和保存前捕获活动轨道，切槽后重建目标轨道。进入 EDIT 会移除运行轨道，
+从 EDIT 切回 ANIM 时再按当前槽重建。morph 定义和动态 UI 不因模式切换删除。
+
+`delete_previous_animation=true` 替换当前槽并保留其他槽；关闭时新增独立槽；显式 merge 将输入合并到当前
+槽，同名同帧由输入覆盖。骨骼、morph、模型信息三个开关独立控制输入。偏移使用整数 VMD 帧，输入的范围、
+缩放、位置、四元数及 morph 浮点值在修改前预检。场景入口使用模型子树 Undo 分组，在返回失败时撤销该次
+导入并恢复文档时间范围；预处理阶段先准备合并数组，减少提交阶段分配。
+
+ModelManager 磁盘版本 5 在版本 4 数据尾部追加按名称存储的 IK 和 visibility 槽。旧文件已有的活动 CTracks
+在重建前迁移，动态 DescID 和 solver index 不作为 IK 持久化身份。隐藏帧接管根对象可见性，重新显示、
+切 EDIT 或进入无可见性数据的槽时恢复艺术家的 editor/render 可见性基线。
+
+动作导出遵守频道开关、整数偏移和模型单位/导出单位转换。普通 VMD 槽保留原四元数 Bezier；旋转曲线
+X/Y/Z 用于控制器 Euler 曲线采样，不是坐标轴转换。`use_bake=true` 克隆文档并通过 AliasTrans 重映射
+对象与材质链接，在副本中按 30fps 顺序采集最终骨骼与 morph，源文档无需恢复模拟副作用。
+导出模型信息时，烘焙结果关闭实际模型的 IK，避免再次求解。VMD 无法表达关闭物理或 PMX append 标志；
+重放最终变形需要目标模型配置避免重复变形，不能据此保证任意目标模型的物理往返一致。
 
 导入结束会：
 
@@ -311,6 +335,11 @@ flowchart TD
 
 当前 camera 导入按 30fps VMD 帧逐帧 bake C4D tracks，并把导入 key 设为 `CINTERPOLATION::LINEAR`，
 避免 C4D 默认曲线再平滑一次已经采样好的 VMD 曲线。
+
+AOV 使用 `CAMERAOBJECT_FOV_VERTICAL` 的弧度，VMD 读写边界换算整数度数；相机 Bezier 的四字节顺序为
+`x1, x2, y1, y2`。旧生成 MMD 子相机的 APERTURE 动画会在 schema 0 → 1 时一次性迁移到 FOV，
+先克隆并转换关键帧和值切线再替换。已有 FOV 轨道优先保留，普通艺术家相机的传感器宽度不参与迁移。
+相机复制清空运行时缓存并重新连接真实子层级，打开已有相机时保留保存的姿势。
 
 ## 导入问题定位
 

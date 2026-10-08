@@ -13,6 +13,17 @@ Description:	scene manager
 #include "plugin_resource.h"
 #include "module/tools/object/mmd_camera.h"
 #include "module/tools/object/mmd_model_manager.h"
+#include "module/tools/material/mmd_redshift_toon_material.h"
+#include "module/automation/mmd_automation.h"
+#include "utils/cmt_automation_protocol.hpp"
+#include <algorithm>
+#include <vector>
+#if defined(CMT_ENABLE_RUNTIME_REGRESSION)
+#include "utils/cmt_runtime_regression_protocol.hpp"
+#include "utils/filename_util.hpp"
+#include "utils/string_util.hpp"
+#include <exception>
+#endif
 
 namespace
 {
@@ -226,7 +237,10 @@ void SavePmxModelLog::Set(const libmmd::PMXFile& file, const CMTToolsSetting::Mo
 void LoadModelLog::LogOK()
 {
 	timing.Stop();
-	MessageDialog(GeLoadString(IDS_MES_IMPORT_MOD_OK,
+	// Successful imports must return to the event loop without a modal wait.
+	// Full PMX comments remain on the model and are printed to the console;
+	// an unattended success dialog otherwise blocks later UI/MCP requests.
+	GePrint(GeLoadString(IDS_MES_IMPORT_MOD_OK,
 	                    model_name_local + "\n",
 	                    "\n" + comments_local + "\n",
 	                    model_name_universal + "\n",
@@ -245,6 +259,9 @@ void LoadModelLog::LogOK()
 
 BaseObject* CMTSceneManager::LoadVMDCamera(const CMTToolsSetting::CameraImport& setting, std::unique_ptr<libmmd::VMDCameraAnimation> animation)
 {
+	if (!setting.doc || !animation)
+		return nullptr;
+
 	// create camera
 	BaseObject* vmd_camera = BaseObject::Alloc(g_mmd_camera_object_id);
 	if (!vmd_camera)
@@ -255,8 +272,13 @@ BaseObject* CMTSceneManager::LoadVMDCamera(const CMTToolsSetting::CameraImport& 
 	// init camera
 	vmd_camera->SetName(setting.fn.GetFileString());
 	auto* vmd_camera_data = vmd_camera->GetNodeData<MMDCamera>();
-	vmd_camera_data->InitCamera();
-	EventAdd();
+	if (!vmd_camera_data || !vmd_camera_data->InitCamera() ||
+		!vmd_camera_data->LoadVMDCamera(animation, setting))
+	{
+		vmd_camera->Remove();
+		BaseObject::Free(vmd_camera);
+		return nullptr;
+	}
 
 	// set document with vmd length
 	if(animation->GetKeyCount() > 0)
@@ -265,17 +287,16 @@ BaseObject* CMTSceneManager::LoadVMDCamera(const CMTToolsSetting::CameraImport& 
 		setting.doc->SetMaxTime(maxon::Max(setting.doc->GetMaxTime(), max_time));
 		setting.doc->SetLoopMaxTime(maxon::Max(setting.doc->GetLoopMaxTime(), max_time));
 	}
-	setting.doc->SetTime(BaseTime(1, 30.0));
-	setting.doc->SetTime(BaseTime{});
-
-	// set camera with vmd data
-	vmd_camera_data->LoadVMDCamera(animation, setting);
+	EventAdd();
 
 	return vmd_camera;
 }
 
 BaseObject* CMTSceneManager::SaveVMDCamera(const CMTToolsSetting::CameraExport& setting, libmmd::VMDFile& data)
 {
+	if (!setting.doc)
+		return nullptr;
+
 	BaseObject* select_object = setting.doc->GetActiveObject();
 	if (select_object == nullptr)
 	{
@@ -283,8 +304,7 @@ BaseObject* CMTSceneManager::SaveVMDCamera(const CMTToolsSetting::CameraExport& 
 		MessageDialog(GeLoadString(IDS_MES_EXPORT_ERR) + GeLoadString(IDS_MES_SELECT_ERR));
 		return nullptr;
 	}
-	setting.doc->SetTime(BaseTime(0.));
-	BaseObject* camera_obj;
+	BaseObject* camera_obj = nullptr;
 
 	// 转化对象自动销毁
 	AutoFree<BaseObject> convected_camera{};
@@ -292,9 +312,16 @@ BaseObject* CMTSceneManager::SaveVMDCamera(const CMTToolsSetting::CameraExport& 
 	// 选择对象为普通摄像机则转化
 	if (select_object->IsInstanceOf(Ocamera))
 	{
-		const auto convected_camera_ = ConversionCamera(CMTToolsSetting::CameraConversion{ setting.doc, 0., setting.use_rotation, select_object });
-		convected_camera.Set(convected_camera_);
-		camera_obj = convected_camera_;
+		// Export conversions stay detached from the document. Their lifetime is
+		// limited to serialization and they never become user-visible scene objects.
+		convected_camera.Set(BaseObject::Alloc(g_mmd_camera_object_id));
+		camera_obj = convected_camera;
+		if (!camera_obj)
+			return nullptr;
+		auto* camera_data = camera_obj->GetNodeData<MMDCamera>();
+		if (!camera_data || !camera_data->ConversionCamera(
+			CMTToolsSetting::CameraConversion{setting.doc, 0., setting.use_rotation, select_object}))
+			return nullptr;
 	}
 	// 选择对象为vmd摄像机则直接使用
 	else if (select_object->IsInstanceOf(g_mmd_camera_object_id))
@@ -308,34 +335,40 @@ BaseObject* CMTSceneManager::SaveVMDCamera(const CMTToolsSetting::CameraExport& 
 		MessageDialog(GeLoadString(IDS_MES_EXPORT_ERR) + GeLoadString(IDS_MES_EXPORT_TYPE_ERR));
 		return nullptr;
 	}
-	if(auto* vmd_camera_data = camera_obj->GetNodeData<MMDCamera>(); !vmd_camera_data->SaveVMDCamera(data, setting))
+	if (auto* vmd_camera_data = camera_obj->GetNodeData<MMDCamera>();
+		!vmd_camera_data || !vmd_camera_data->InitCamera() || !vmd_camera_data->SaveVMDCamera(data, setting))
 	{
 		return nullptr;
 	}
 
-	return camera_obj;
+	// The temporary converted camera is freed on return. Return the stable source
+	// object as the success token instead of returning a dangling pointer.
+	return select_object;
 }
 
 BaseObject* CMTSceneManager::ConversionCamera(const CMTToolsSetting::CameraConversion& setting)
 {
+	if (!setting.doc)
+		return nullptr;
 	BaseObject* vmd_camera = BaseObject::Alloc(g_mmd_camera_object_id);
 	if(!vmd_camera)
 		return nullptr;
-	if(!vmd_camera->GetNodeData<MMDCamera>()->ConversionCamera(setting))
+	auto* camera_data = vmd_camera->GetNodeData<MMDCamera>();
+	if (!camera_data || !camera_data->ConversionCamera(setting))
 	{
 		BaseObject::Free(vmd_camera);
 		return nullptr;
 	}
 	setting.doc->InsertObject(vmd_camera, nullptr, nullptr);
 	EventAdd();
-	setting.doc->SetTime(BaseTime{ 1.0 });
-	setting.doc->SetTime(BaseTime{});
 	return vmd_camera;
 }
 
 Bool CMTSceneManager::LoadVMDMotion(const CMTToolsSetting::MotionImport& setting, const libmmd::VMDFile& vmd_file, LoadVmdMotionLog& log, BaseObject*
-                                    select_object)
+                                    select_object, const Bool merge)
 {
+	if (!setting.doc || !GeIsMainThread())
+		return false;
 	if (select_object == nullptr)
 		select_object = setting.doc->GetActiveObject();
 
@@ -351,10 +384,44 @@ Bool CMTSceneManager::LoadVMDMotion(const CMTToolsSetting::MotionImport& setting
 		return false;
 	}
 
-	if(!select_object->GetNodeData<MMDModelManagerObject>()->LoadVMDMotion(vmd_file, setting, log))
+	auto* const model = select_object->GetNodeData<MMDModelManagerObject>();
+	if (!model || select_object->GetDocument() != setting.doc)
+		return false;
+
+	const BaseTime previous_time = setting.doc->GetTime();
+	const BaseTime previous_max_time = setting.doc->GetMaxTime();
+	const BaseTime previous_loop_max = setting.doc->GetLoopMaxTime();
+	if (!setting.doc->StartUndo())
+		return false;
+	// CHANGE captures the model and its child/tag substructures before mutation.
+	// A failed import can roll back allocated slots, marker tracks and mode edits
+	// without replacing the artist's object manually or resetting other undos.
+	if (!setting.doc->AddUndo(UNDOTYPE::CHANGE, select_object))
 	{
+		setting.doc->EndUndo();
 		return false;
 	}
+	Bool imported = false;
+	try
+	{
+		imported = model->LoadVMDMotion(vmd_file, setting, log, merge);
+	}
+	catch (...)
+	{
+		DebugOutput(maxon::OUTPUT::DIAGNOSTIC, "[CMT] VMD import raised an exception; rolling back the import");
+	}
+	if (!imported)
+	{
+		const Bool rolled_back = setting.doc->DoUndo(true);
+		setting.doc->SetMaxTime(previous_max_time);
+		setting.doc->SetLoopMaxTime(previous_loop_max);
+		setting.doc->SetTime(previous_time);
+		if (!rolled_back)
+			DebugOutput(maxon::OUTPUT::DIAGNOSTIC, "[CMT] VMD import failed; document undo rollback failed");
+		EventAdd();
+		return false;
+	}
+	setting.doc->EndUndo();
 
 	setting.doc->SetTime(BaseTime(1, 30.));
 	setting.doc->SetTime(BaseTime(0, 30.));
@@ -445,6 +512,15 @@ Bool CMTSceneManager::SaveVMDMotion(const CMTToolsSetting::MotionExport& setting
 
 BaseObject* CMTSceneManager::LoadPMXModel(const libmmd::PMXFile& pmx_file, const CMTToolsSetting::ModelImport& setting)
 {
+	if (setting.import_material && setting.import_material_type == CMTToolsSetting::ModelImport::material_type::RedShiftToon)
+	{
+		String reason;
+		if (!MMDRedShiftToonMaterialAdapter::IsAvailable(reason))
+		{
+			GePrint(String("[MMD] ") + reason);
+			return nullptr;
+		}
+	}
 	BaseObject* object = BaseObject::Alloc(g_mmd_model_manager_object_id);
 	if (!object)
 		return nullptr;
@@ -456,30 +532,48 @@ BaseObject* CMTSceneManager::LoadPMXModel(const libmmd::PMXFile& pmx_file, const
 	pmx_model_data->CreateManagers();
 	pmx_model_data->UpdateManagers();
 
-	BaseMaterial* last_mat_before = nullptr;
+	std::vector<BaseMaterial*> previous_materials;
 	for (BaseMaterial* m = setting.doc->GetFirstMaterial(); m; m = static_cast<BaseMaterial*>(m->GetNext()))
-		last_mat_before = m;
+		previous_materials.push_back(m);
 
-	if (!pmx_model_data->LoadPMX(pmx_file, setting))
+	auto remove_imported_content = [&]()
 	{
-		BaseMaterial* mat = last_mat_before
-			? static_cast<BaseMaterial*>(last_mat_before->GetNext())
-			: setting.doc->GetFirstMaterial();
+		// InsertMaterial can insert at the head. A remembered tail cannot identify
+		// new materials in a document that already contains artist materials.
+		BaseMaterial* mat = setting.doc->GetFirstMaterial();
 		while (mat)
 		{
 			BaseMaterial* next = static_cast<BaseMaterial*>(mat->GetNext());
-			mat->Remove();
-			BaseMaterial::Free(mat);
+			if (std::find(previous_materials.begin(), previous_materials.end(), mat) == previous_materials.end())
+			{
+				mat->Remove();
+				BaseMaterial::Free(mat);
+			}
 			mat = next;
 		}
 		object->Remove();
 		BaseObject::Free(object);
 		EventAdd();
+	};
+	Bool loaded = false;
+	try
+	{
+		loaded = pmx_model_data->LoadPMX(pmx_file, setting);
+	}
+	catch (...)
+	{
+		remove_imported_content();
+		throw;
+	}
+	if (!loaded)
+	{
+		remove_imported_content();
 		return nullptr;
 	}
 
 	EventAdd();
-	if (setting.import_material == DLG_CMT_MATERIAL_TYPE_REDSHIFT)
+	if (!setting.suppress_dialogs && setting.import_material &&
+		setting.import_material_type == CMTToolsSetting::ModelImport::material_type::RedShift)
 	{
 		CallCommand(1040218);
 	}
@@ -531,4 +625,187 @@ void CMTSceneManager::AddMMDCamera(SDK2024_Const BaseObject* camera)
 CMTSceneManager* CMTSceneManager::GetSceneManager(const BaseDocument* Document)
 {
 	return Document->FindSceneHook(g_cmt_scene_manager_scene_hook_id)->GetNodeData<CMTSceneManager>();
+}
+
+Bool CMTSceneManager::Message(GeListNode* node, Int32 type, void* data)
+{
+	if (type == cmt::automation::kTransportMessage && data && node)
+	{
+		auto* packet = static_cast<BaseContainer*>(data);
+		if (packet->GetId() == cmt::automation::kContainerId)
+		{
+			// A qualified production packet is consumed here. Forwarding it to
+			// SUPER can invoke generic routing; it never enters persistent data.
+			production_response_ = String{};
+			auto* hook = static_cast<BaseList2D*>(node);
+			const Bool dispatched = cmt::automation::Dispatch(hook->GetDocument(), packet);
+			production_response_ = packet->GetString(cmt::automation::kResponseJson);
+			return dispatched;
+		}
+	}
+	if (type != g_cmt_scene_manager_scene_hook_id || data || !node)
+		return SUPER::Message(node, type, data);
+	auto* hook = static_cast<BaseList2D*>(node);
+	auto* request = hook->GetDataInstance();
+#if defined(CMT_ENABLE_RUNTIME_REGRESSION)
+	if (!request || request->GetInt32(cmt_regression::Protocol) != cmt_regression::kProtocolVersion)
+		return false;
+	request->SetBool(cmt_regression::Success, false);
+	request->SetString(cmt_regression::Error, "Operation failed"_s);
+	for (const Int32 field : {cmt_regression::BoneCount, cmt_regression::MorphCount,
+		cmt_regression::FrameCount, cmt_regression::CameraCount})
+		request->SetInt32(field, 0);
+	auto* document = hook->GetDocument();
+	if (!document)
+		return false;
+	const auto operation = static_cast<cmt_regression::Operation>(request->GetInt32(cmt_regression::Action));
+	if (operation == cmt_regression::Operation::Handshake)
+	{
+		request->SetBool(cmt_regression::Success, true);
+		request->SetString(cmt_regression::Error, String{});
+		return true;
+	}
+
+	BaseObject* selected = document->GetActiveObject();
+	auto* model = selected && selected->IsInstanceOf(g_mmd_model_manager_object_id)
+		? selected->GetNodeData<MMDModelManagerObject>() : nullptr;
+	const Filename filename(request->GetString(cmt_regression::Path));
+	const std::string path = string_util::GetStdString(filename.GetString());
+	Bool success = false;
+	try
+	{
+		if (operation == cmt_regression::Operation::ImportModel)
+		{
+			std::vector<uint8_t> bytes;
+			libmmd::PMXFile pmx;
+			std::string error;
+			if (!filename_util::ReadFileData(filename, bytes) ||
+				!libmmd::ReadPMXFile(&pmx, bytes.data(), bytes.size(), &error))
+			{
+				request->SetString(cmt_regression::Error, String(error.c_str()));
+				return false;
+			}
+			CMTToolsSetting::ModelImport setting(document);
+			setting.fn = filename;
+			setting.position_multiple = 1.;
+			setting.import_polygon = setting.import_normal = setting.import_uv = true;
+			setting.import_material = setting.import_bone = setting.import_weights = true;
+			setting.import_ik = setting.import_inherit = setting.import_expression = true;
+			BaseObject* imported = LoadPMXModel(pmx, setting);
+			success = imported != nullptr;
+			if (imported)
+				document->SetActiveObject(imported, SELECTION_NEW);
+			request->SetInt32(cmt_regression::BoneCount, static_cast<Int32>(pmx.m_bones.size()));
+			request->SetInt32(cmt_regression::MorphCount, static_cast<Int32>(pmx.m_morphs.size()));
+		}
+		else if (operation == cmt_regression::Operation::ImportMotion && model)
+		{
+			std::vector<uint8_t> bytes;
+			libmmd::VMDFile vmd;
+			if (!filename_util::ReadFileData(filename, bytes) || !libmmd::ReadVMDFile(&vmd, bytes.data(), bytes.size()))
+				return false;
+			CMTToolsSetting::MotionImport setting(document);
+			setting.fn = filename;
+			setting.position_multiple = 1.;
+			setting.time_offset = request->GetFloat(cmt_regression::TimeOffset, 0.);
+			setting.import_motion = request->GetBool(cmt_regression::Motion, true);
+			setting.import_morph = request->GetBool(cmt_regression::Morph, true);
+			setting.import_model_info = request->GetBool(cmt_regression::ModelInfo, true);
+			setting.delete_previous_animation = request->GetBool(cmt_regression::ReplaceAnimation, true);
+			setting.ignore_physical = request->GetBool(cmt_regression::IgnorePhysics, false);
+			LoadVmdMotionLog log;
+			success = LoadVMDMotion(setting, vmd, log, selected);
+			request->SetInt32(cmt_regression::FrameCount, static_cast<Int32>(vmd.m_motions.size()));
+		}
+		else if (operation == cmt_regression::Operation::ExportModel && model)
+		{
+			CMTToolsSetting::ModelExport setting(document);
+			setting.fn = filename;
+			setting.position_multiple = 1.;
+			setting.export_polygon = setting.export_normal = setting.export_uv = true;
+			setting.export_material = setting.export_bone = setting.export_weights = true;
+			setting.export_ik = setting.export_inherit = setting.export_expression = true;
+			libmmd::PMXFile pmx;
+			success = SavePMXModel(setting, pmx) && libmmd::WritePMXFile(&pmx, path.c_str());
+			request->SetInt32(cmt_regression::BoneCount, static_cast<Int32>(pmx.m_bones.size()));
+			request->SetInt32(cmt_regression::MorphCount, static_cast<Int32>(pmx.m_morphs.size()));
+		}
+		else if (operation == cmt_regression::Operation::ExportMotion && model)
+		{
+			CMTToolsSetting::MotionExport setting(document);
+			setting.fn = filename;
+			setting.position_multiple = 1.;
+			setting.time_offset = request->GetFloat(cmt_regression::TimeOffset, 0.);
+			setting.export_motion = request->GetBool(cmt_regression::Motion, true);
+			setting.export_morph = request->GetBool(cmt_regression::Morph, true);
+			setting.export_model_info = request->GetBool(cmt_regression::ModelInfo, true);
+			setting.use_bake = request->GetBool(cmt_regression::Bake, false);
+			libmmd::VMDFile vmd;
+			success = model->SaveVMDMotion(vmd, setting) && libmmd::WriteVMDFile(&vmd, path.c_str());
+			request->SetInt32(cmt_regression::FrameCount, static_cast<Int32>(vmd.m_motions.size()));
+		}
+		else if (operation == cmt_regression::Operation::ImportCamera)
+		{
+			std::vector<uint8_t> bytes;
+			libmmd::VMDFile vmd;
+			auto animation = std::make_unique<libmmd::VMDCameraAnimation>();
+			if (!filename_util::ReadFileData(filename, bytes) || !libmmd::ReadVMDFile(&vmd, bytes.data(), bytes.size()) ||
+				!animation->Create(vmd))
+				return false;
+			CMTToolsSetting::CameraImport setting(document);
+			setting.fn = filename;
+			setting.position_multiple = 1.;
+			BaseObject* camera = LoadVMDCamera(setting, std::move(animation));
+			success = camera != nullptr;
+			if (camera)
+				document->SetActiveObject(camera, SELECTION_NEW);
+		}
+		else if (operation == cmt_regression::Operation::ExportCamera && selected &&
+			(selected->IsInstanceOf(Ocamera) || selected->IsInstanceOf(g_mmd_camera_object_id)))
+		{
+			CMTToolsSetting::CameraExport setting(document);
+			setting.fn = filename;
+			setting.position_multiple = 1.;
+			setting.use_bake = request->GetBool(cmt_regression::Bake, true);
+			setting.time_offset = request->GetFloat(cmt_regression::TimeOffset, 0.);
+			libmmd::VMDFile vmd;
+			success = SaveVMDCamera(setting, vmd) && libmmd::WriteVMDFile(&vmd, path.c_str());
+			request->SetInt32(cmt_regression::CameraCount, static_cast<Int32>(vmd.m_cameras.size()));
+		}
+		else if (operation == cmt_regression::Operation::DeleteMorph && model)
+			success = model->DeleteMorphForRegression(request->GetInt32(cmt_regression::MorphIndex));
+		else if (operation == cmt_regression::Operation::SetMorphStrength && model)
+			success = model->SetMorphStrengthForRegression(request->GetInt32(cmt_regression::MorphIndex),
+				request->GetFloat(cmt_regression::MorphStrength));
+	}
+	catch (const std::exception& error)
+	{
+		request->SetString(cmt_regression::Error, String(error.what()));
+		return false;
+	}
+	request->SetBool(cmt_regression::Success, success);
+	if (success)
+		request->SetString(cmt_regression::Error, String{});
+	return success;
+#else
+	return SUPER::Message(node, type, data);
+#endif
+}
+
+SDK2024_GetDParameter(CMTSceneManager)
+{
+	if (id.GetDepth() > 0 && id[0].id == cmt::automation::kResponseJson)
+	{
+		t_data.SetString(production_response_);
+		flags |= DESCFLAGS_GET::PARAM_GET;
+		return true;
+	}
+	return SUPER::GetDParameter(node, id, t_data, flags);
+}
+
+Bool CMTSceneManager::SetDParameter(GeListNode* node, const DescID& id, const GeData& value, DESCFLAGS_SET& flags)
+{
+	if (id.GetDepth() > 0 && id[0].id == cmt::automation::kResponseJson)
+		return false;
+	return SUPER::SetDParameter(node, id, value, flags);
 }

@@ -155,11 +155,15 @@ public:
 		return NewObjClear(CMTSceneManager);
 	}
 
+	Bool Message(GeListNode* node, Int32 type, void* data) override;
+	SDK2024_GetDParameterOverride;
+	Bool SetDParameter(GeListNode* node, const DescID& id, const GeData& value, DESCFLAGS_SET& flags) override;
+
 	static BaseObject* LoadVMDCamera(const CMTToolsSetting::CameraImport& setting, std::unique_ptr<libmmd::VMDCameraAnimation> animation);
 	static BaseObject* SaveVMDCamera(const CMTToolsSetting::CameraExport& setting, libmmd::VMDFile& data);
 	static BaseObject* ConversionCamera(const CMTToolsSetting::CameraConversion& setting);
 
-	static Bool LoadVMDMotion(const CMTToolsSetting::MotionImport& setting, const libmmd::VMDFile& vmd_file, LoadVmdMotionLog& log, BaseObject* select_object = nullptr);
+	static Bool LoadVMDMotion(const CMTToolsSetting::MotionImport& setting, const libmmd::VMDFile& vmd_file, LoadVmdMotionLog& log, BaseObject* select_object = nullptr, Bool merge = false);
 	static Bool SaveVMDMotion(const CMTToolsSetting::MotionExport& setting,  libmmd::VMDFile&  data, SaveVmdMotionLog& log);
 	static Bool LoadVPDPose(const CMTToolsSetting::PoseImport& setting, const libmmd::VPDFile& vpd_file, LoadVpdPoseLog& log, BaseObject* select_object = nullptr);
 	static Bool SaveVPDPose(const CMTToolsSetting::PoseExport& setting, libmmd::VPDFile& data, SaveVpdPoseLog& log, BaseObject* select_object = nullptr);
@@ -173,5 +177,8 @@ public:
 
 private:
 	BaseLinkArray SceneCameraArray;
+	// Python message bindings can copy the caller's BaseContainer. This
+	// non-serialized cache supplies the same reply through a readonly parameter.
+	String production_response_;
 
 };

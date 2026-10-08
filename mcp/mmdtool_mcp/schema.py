@@ -163,7 +163,7 @@ TOOLS = [
           "max_page_size": {"type": "integer"},
           "max_input_bytes": {"type": "integer"}, "transport_supported": {"type": "boolean"},
           "execution": {"type": "string"},
-          "material_types": array(choice("standard", "redshift", "octane", "corona"))}, read_only=True),
+          "material_types": array(choice("standard", "redshift", "octane", "corona", "redshift_toon"))}, read_only=True),
     tool("mmdtool_list_models", "List MMD models in the explicitly selected document, with opaque handles.",
          input_schema(properties=PAGING),
          {"models": array(MODEL), "total": {"type": "integer"}, "next_offset": {"type": "integer"}},
@@ -180,7 +180,7 @@ TOOLS = [
          input_schema(properties={"path": PATH, "position_multiple": SCALE, **PMX_SWITCHES,
                                   "multipart": boolean(False), "english": boolean(False),
                                   "english_check": boolean(False), "material_type": choice(
-                                      "standard", "redshift", "octane", "corona", default="standard")},
+                                      "standard", "redshift", "octane", "corona", "redshift_toon", default="standard")},
                       required=("path",)),
          {"model": MODEL, "counts": {"type": "object"}}, completed_required=("model",)),
     tool("mmdtool_export_pmx", "Export one PMX; existing files require overwrite=true. Preserve source state.",
