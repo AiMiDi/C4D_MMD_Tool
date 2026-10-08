@@ -77,6 +77,8 @@ Captured in Cinema 4D 2026.4.0 on 2026-10-06, these screenshots show the current
 
 ## Changelog
 
+The latest three releases are listed here. See the [complete changelog](CHANGELOG.md) for older versions and intermediate build tags.
+
 ### 0.9.2.0 · Architecture, Morph and materials (2026-10-08)
 
 Changes since `v0.9.1.20`, grouped by module:
@@ -92,215 +94,25 @@ Changes since `v0.9.1.20`, grouped by module:
 
 **Compatibility and limits:** RS Toon needs the required native Redshift nodes; unsupported hosts report the reason. Material Morph binding v1 requires an explicit upgrade to v2; older Toon graph revisions require explicit conversion. Toon lighting/specular and some outlines remain approximations; native MMD image equivalence is unverified. macOS/older-host runtime execution and full real-model physics replay remain unverified. Published macOS assets are Intel builds; Apple Silicon builds are CI validation only.
 
-Existing historical entries are retained below in descending version order. See [GitHub Releases](https://github.com/AiMiDi/C4D_MMD_Tool/releases) for releases not recorded here.
+### 0.9.1.20 (2026-07-15)
 
-### 0.4.6.1
+1. Add PMX Material Morph import, authoring, persistence and export, including material fields, texture factors and Standard material preview.
+2. Add VPD pose import/export controls, including current-pose export.
+3. Fix repeated VMD Morph evaluation accumulating deformation and stabilize PMX bone EDIT / ANIM transitions.
+4. Improve macOS builds, pin Windows CI to VS 2022, package macOS Intel binaries and add separate Apple Silicon build validation.
+5. Synchronize SDK resource layouts for release builds, including the missing SDK 2025 Material Morph resources.
 
-1. Fixed the crash that caused 0.4.6.
+[Release](https://github.com/AiMiDi/C4D_MMD_Tool/releases/tag/v0.9.1.20) · [Changes since 0.9.1.15](https://github.com/AiMiDi/C4D_MMD_Tool/compare/v0.9.1.15...v0.9.1.20)
 
-   2. Support S26.
+### 0.9.1.15 · Pre-release (2026-05-23)
 
-### 0.4.6
+1. Add PMX model export for plugin-managed models, with selectable mesh, normals, UV, material, bone, weight, IK, inheritance and Morph data.
+2. Add MMD bone control objects for editing poses on imported models.
+3. Restore PMX export compilation on older SDKs and fix Clang compatibility for bone indices and SDK interfaces.
+4. Repair dependency/submodule checkout and pin reachable Bullet/libMMD dependencies.
+5. Package macOS builds as Intel x86_64 and constrain the Xcode build architecture accordingly.
 
-1. A new expression hub panel is added to manage all expressions.
-
-2. Added support and editing for group and flip expressions.
-
-3. Motion import adds the option to ignore physical bones.
-
-4. New icon.（The logo icon is temporary and the logo icon may be changed again）
-
-### 0.4.5.1
-
-Fixed import model surface error.
-
-### 0.4.5
-
-1. Fixed an issue where saved documents could not be opened.
-2. Optimize the IK of the imported model.
-3. Add import model report.
-4. Optimize import speed and stability.
-5. Fixed import normal inversion problem for versions below R23.
-
-### 0.4.4.1
-
-Fix import normal inversion issue.
-
-### 0.4.4
-
-1. Fix the problem of vertex expression loss of partial vertices imported by multiple parts.
-2. Fix the problem that the model cannot be imported when the external parent is opened.
-3. Compatible with projects saved by older versions. (some information may be lost, but it does not affect the opening of the project)
-
-### 0.4.3
-
-1. Fixed multi-part import import weights not initializing bones.
-
-2. Improved weight import.
-
-3. Fix import failure caused by empty IK list.
-
-### 0.4.2
-
-1. Add import pose.
-
-2. Improve the function of PMX Control.
-
-3. Support R25.
-
-### 0.4.1
-
-1. Add camera bake export.
-
-2. Add motion bake export.
-
-3. Improve Ik.
-
-### 0.4
-
-1. Add the action export function
-
-2. Fix the action confusion problem after importing motion capture to make animation.
-
-3. Change the animation import to multithreaded optimization speed.
-
-4.  Fix some curve problems.
-
-5. Fix known bugs
-
-6. Fix some possible memory leaks.
-
-### 0.3.9.1
-
-1. Fixed the problem of stuck animation after import.
-
-2. Fix some possible memory leaks.
-
-### 0.3.9
-
-1. Added support for rigidbodies and joints. (Currently not implemented in physics)
-
-2. Fix the GUI scroll bar problem.
-
-3. Fixed an issue where animation curves could not be saved.
-
-4. Add new model management objects.
-
-5. Add model display filter system.
-
-6. Add IK enabled, model display animation import.
-
-7. Fixed some actions importing problems.
-
-### 0.3.8.1
-
-Add tool modules.
-
-​	~~If the model has a problem similar to the following figure after importing the action, you can try to use the tool to repair it.~~
-
-1. ~~Select the model.~~
-
-2. ~~Click on the fix action tool button.~~
-
-(V0.4 has been temporarily removed)
-
-### 0.3.8
-
-1. Rewrite the bone expression part.
-
-2. Add UV expression import (multi-part import mode).
-
-3. Fix some errors of imported models.
-
-4. Add the function of cleaning up the unconnected vertices of the imported model.
-
-5. Add drag and drop import of camera animation.
-
-6. Pre-loaded physics engine module support.
-
-### 0.3.7.5
-
-Fix the problem of non-rotatable bones and import animation of physical bones. Add UV expression import (only multi-part import mode).
-
-### 0.3.7
-
-Fixed the problem that the plug-in might not be loaded, and added bone expression import.
-
-### 0.3.6
-
-Fix the problem of multi-part import face error, and add the function of importing multi-part vertex expressions.
-
-### 0.3.5
-
-Fix stuck and errors caused by configuration files, increase multi-thread safety, and reduce crashes.
-
-### 0.3.4
-
-Add support for saving settings, save the last used configuration; update the R20 version.
-
-### 0.3.3
-
-Introduce the YAML configuration file; rewrite and rename the English module.
-
-![](https://ftp.bmp.ovh/imgs/2021/05/84376d077a7e0721.jpg)
-
-### 0.3.2
-
-1. Optimize the processing method of the imported model to ensure the same effect as in MMD.
-
-2. Optimize the leg bone problem of the imported model to ensure the same effect as in MMD.
-
-3. Optimized the detection of the alpha channel of the picture, and fixed the problem that the material was incorrectly imported into the transparent channel
-
-4. Increased code stability and reduced accidental crashes.
-
-### 0.3.1
-
-Improve the action import and PMX bone objects; fix the situation that the imported model may be stuck.
-
-### 0.3.0
-
-Improve camera action export function, support S24.
-
-### 0.2.9.1
-
-Added the function of deleting key frames of camera objects.
-
-### 0.2.9.0
-
-Fixed the problem that the imported model may be stuck.
-
-### 0.2.8.5
-
-Add the import expression function for non-multipart model import.
-
-### 0.2.8.3
-
-Fix the action import bug.
-
-### 0.2.8.1
-
-Fix import issues
-
-### 0.2.8
-
-Optimized for multi-threaded import.
-
-### 0.2.3
-
-Support s22 version
-
-### 0.2.2
-
-Fix the weight import problem
-
-### 0.2.1
-
-Fix the weight import problem and bone import problem
-
-### 0.2.0
-
-Initial commit
+[Release](https://github.com/AiMiDi/C4D_MMD_Tool/releases/tag/v0.9.1.15) · [Changes since 0.9.1.3](https://github.com/AiMiDi/C4D_MMD_Tool/compare/v0.9.1.3...v0.9.1.15)
 
 ## Author
 
