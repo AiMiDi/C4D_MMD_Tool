@@ -22,6 +22,11 @@ A plugin for Cinema 4D written in C++ is used to import MikuMikuDance data into 
 
 Click the latest version of the plugin under [![](https://img.shields.io/github/v/release/AiMiDi/C4D_MMD_Tool)](https://github.com/AiMiDi/C4D_MMD_Tool/releases) to download it
 
+Release filenames identify the plugin version, Cinema 4D compatibility and platform:
+
+- **Windows x64**: `MMD-Tool-v<version>-Windows-x64-Setup.exe` — one installer for Cinema 4D R20 through 2026.
+- **macOS Intel**: `MMD-Tool-v<version>-Cinema4D-2026-macOS-x86_64.zip` — choose the ZIP for your Cinema 4D version. Older pairs are labeled `R21-S22`, `R23-S24` and `R25-S26`; R20 has its own ZIP. Published macOS ZIPs contain Intel builds; Apple Silicon builds currently validate in CI only.
+
 At present, the main maintenance version are R20 and higher, R19 and lower are unsupported.
 
 If there is a problem with selecting multiple-parts when the model is imported, please do not check it.
@@ -72,21 +77,20 @@ Captured in Cinema 4D 2026.4.0 on 2026-10-06, these screenshots show the current
 
 ## Changelog
 
-### Unreleased · Major architectural refactor (2026-10-06)
+### 0.9.2.0 · Architecture, Morph and materials (2026-10-08)
 
-This work continues the architecture, import/export and development-workflow refactor after `v0.9.1.20`. The entries below describe the current working tree; a new release version has not been assigned.
+Changes since `v0.9.1.20`, grouped by module:
 
-1. Split the model manager's responsibilities into dedicated modules for IK/physics runtime rebuilding, frame evaluation and morph calculation, sharing libMMD's solver and physics interfaces.
-2. Clarify EDIT / ANIM transitions: commit the bind pose when entering animation mode and restore it when returning to editing. Consolidate runtime rebuilding after scene reopening, cloning and animation-slot changes.
-3. Centralize bone hierarchy and index synchronization so reparenting, reordering, insertion and deletion update references and selection lists together. Cache layered bone and IK execution plans to reduce repeated work.
-4. Complete VMD append, replace, merge and channel-option handling. Store morph animation, IK switches and model visibility per animation slot; improve final-pose baking, scale conversion and source-scene state restoration after export.
-5. Correct VMD camera vertical field of view and unit conversion, migrate legacy camera tracks, and improve camera cloning, baked export, failure reporting and temporary-object cleanup.
-6. Consolidate additive/multiplicative material morph calculations and Group/Flip strength evaluation. Improve base-material restoration when strengths return to zero, morphs are deleted or editing resumes, and update Standard and Redshift material adapters.
-7. Add the production MCP API, 16 typed tools and a stdio adapter for model inspection, PMX/VMD import/export, animation slots, modes, physics, morphs and frame evaluation. Host integration requires Cinema 4D 2026.4 or later.
-8. Unify shared source, resources and the common CMake layer across SDKs, with explicit Debug, Release and test presets. Ship real resource copies with plugin outputs and update Windows installer, macOS packaging and CI workflows.
-9. Add algorithm tests, deterministic fixtures, native C4D scene regressions and build-identified validation records. Expand import, export, runtime and debugging documentation, and refresh the feature screenshots in both READMEs.
+1. **Model runtime and bones:** Split IK/physics rebuilding, frame evaluation, Morph evaluation and material conversion into dedicated modules. Clarify EDIT / ANIM bind-pose transitions and rebuild after reopening, cloning and animation-slot changes. Synchronize hierarchy/index changes, cache layered execution plans and restore stored bone display settings.
+2. **Motion and camera:** Complete VMD append, replace, merge and channel options, with per-slot Morph animation, IK switches and visibility. Improve baked export, scale conversion and source-state restoration. Correct camera vertical field of view and unit conversion, migrate legacy tracks and fix export success reporting and temporary-object cleanup.
+3. **Morph and persistence:** Classify UV/Additional UV Morphs separately and preserve their PMX offsets. Persist impulse offsets and expression panels. Consolidate Group/Flip expansion and mixed preview. Repair stale mesh-tag references and derived-cache serialization so Undo/Redo followed by immediate save/reopen can rebuild safely.
+4. **Material Morph:** Add versioned Standard shader and fixed Redshift node bindings. Keep texture Multiply/Add RGBA factors separate, evaluate them after sampling and separate factor Alpha from image opacity. Add mixed preview, reset, support diagnostics, explicit upgrade/repair and independent material copies, with transactional Undo/Redo and ownership checks.
+5. **Standard and Redshift materials:** Add MMD-style RS Toon conversion using native Toon/Contour nodes, including main-texture transparency, Toon fallback, stylized specular, outlines and Sphere Multiply/Add. Improve Standard Sphere rendering and ordinary RS specular color/Power conversion and reverse synchronization. Preserve user connections and sampler color-space choices.
+6. **PMX export:** Apply length scaling consistently, enforce PMX 2.0/2.1 softbody serialization boundaries and improve write-failure cleanup while preserving source-scene state.
+7. **Production MCP:** Add 16 typed tools and a stdio adapter for inspection, PMX/VMD import/export, animation slots, modes, physics, Morphs and frame evaluation, including `redshift_toon` import. Host integration requires Cinema 4D 2026.4 or later. Windows acceptance includes real operations, timeout recovery and host restart; see the [acceptance record](docs/dev/mcp-acceptance-20261008.md).
+8. **Build, packaging and documentation:** Share source, resources and CMake setup across SDKs, with explicit Debug/Release/test presets and real runtime resource copies. Package Windows x64 for R20–2026 and separate macOS Intel ZIPs by compatible C4D version. Include platform/architecture/version in artifact names, expand regression tooling and refresh development guides and feature screenshots.
 
-**Validation status:** The working-tree production MCP implementation passed the Windows / Cinema 4D 2026.4+ acceptance scope on 2026-10-08: 16 tools, normal Release with the test bridge OFF, real HTTP/stdio operations, timeout recovery and host restart. See the [acceptance record](docs/dev/mcp-acceptance-20261008.md). macOS and older-host UI execution are explicitly deferred and unverified. Real-model physics replay and public-release acceptance remain separate work.
+**Compatibility and limits:** RS Toon needs the required native Redshift nodes; unsupported hosts report the reason. Material Morph binding v1 requires an explicit upgrade to v2; older Toon graph revisions require explicit conversion. Toon lighting/specular and some outlines remain approximations; native MMD image equivalence is unverified. macOS/older-host runtime execution and full real-model physics replay remain unverified. Published macOS assets are Intel builds; Apple Silicon builds are CI validation only.
 
 Existing historical entries are retained below in descending version order. See [GitHub Releases](https://github.com/AiMiDi/C4D_MMD_Tool/releases) for releases not recorded here.
 
