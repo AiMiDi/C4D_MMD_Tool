@@ -37,6 +37,26 @@ namespace
 		return mode == kLegacyMeshModeVmd ? MESH_MODE_ANIM : mode;
 	}
 
+	// CAMorphNode accessors require expanded data, including GetUV/GetPoint.
+	// Restore Cinema 4D's compact representation on every export exit path.
+	class ScopedMorphExpansion
+	{
+		CAMorph* morph_;
+		CAPoseMorphTag* tag_;
+		BaseDocument* document_;
+		Bool expanded_;
+	public:
+		ScopedMorphExpansion(CAMorph* morph, CAPoseMorphTag* tag, BaseDocument* document)
+			: morph_(morph), tag_(tag), document_(document),
+			  expanded_(morph->SetMode(document, tag, CAMORPH_MODE_FLAGS::ALL | CAMORPH_MODE_FLAGS::EXPAND, CAMORPH_MODE::REL)) {}
+		~ScopedMorphExpansion()
+		{
+			if (expanded_)
+				morph_->SetMode(document_, tag_, CAMORPH_MODE_FLAGS::ALL | CAMORPH_MODE_FLAGS::COLLAPSE, CAMORPH_MODE::AUTO);
+		}
+		Bool IsExpanded() const { return expanded_; }
+	};
+
 	template <typename FROM, typename TO, typename LOOP>
 	static void ParallelForDynamic(FROM from, TO to, const LOOP& loop, Int grain, Bool enableParallel)
 	{
@@ -436,6 +456,7 @@ void MMDMeshManagerObject::RefreshWeightBindPoses(BaseObject* op, BaseDocument* 
 struct morph_tag_info
 {
 	CAPoseMorphTag* morph_tag = nullptr;
+	Int32 first_face = 0;
 	maxon::HashMap<maxon::String, CAMorph*> morphs;
 	bool is_point_morph_tag_init = false;
 	bool is_uv_morph_tag_init = false;
@@ -878,7 +899,7 @@ Bool MMDMeshManagerObject::LoadPMX(
 
 					// set morph node to end
 					CAMorphNode* morph_node = morph->GetFirst();
-					while (!(morph_node->GetInfo() & CAMORPH_DATA_FLAGS::POINTS) && morph_node)
+					while (morph_node && !(morph_node->GetInfo() & CAMORPH_DATA_FLAGS::POINTS))
 					{
 						morph_node = morph_node->GetNext();
 					}
@@ -929,11 +950,13 @@ Bool MMDMeshManagerObject::LoadPMX(
 
 					// set morph node to end
 					CAMorphNode* morph_node = morph->GetFirst();
-					while (!(morph_node->GetInfo() & CAMORPH_DATA_FLAGS::POINTS) && morph_node)
+					while (morph_node && !(morph_node->GetInfo() & CAMORPH_DATA_FLAGS::UV))
 					{
 						morph_node = morph_node->GetNext();
 					}
 
+					if (!morph_node)
+						return false;
 					morph->SetMode(setting.doc, morph_tag, CAMORPH_MODE_FLAGS::ALL | CAMORPH_MODE_FLAGS::EXPAND, CAMORPH_MODE::REL);
 
 					// vertex_index -> uv offset
@@ -951,19 +974,19 @@ Bool MMDMeshManagerObject::LoadPMX(
 						const auto& pmx_surface_vertex_a = pmx_surface.m_vertices[0];
 						const auto& pmx_surface_vertex_b = pmx_surface.m_vertices[1];
 						const auto& pmx_surface_vertex_c = pmx_surface.m_vertices[2];
-						UVWStruct uvw;
+						UVWStruct uvw{};
 						bool is_has_uv_morph = false;
 						if (const auto vertex_a_ptr = morph_uv_map.Find(static_cast<Int32>(pmx_surface_vertex_a)); vertex_a_ptr)
 						{
 							uvw[0] = vertex_a_ptr->GetValue();
 							is_has_uv_morph = true;
 						}
-						else if (const auto vertex_b_ptr = morph_uv_map.Find(static_cast<Int32>(pmx_surface_vertex_b)); vertex_b_ptr)
+						if (const auto vertex_b_ptr = morph_uv_map.Find(static_cast<Int32>(pmx_surface_vertex_b)); vertex_b_ptr)
 						{
 							uvw[1] = vertex_b_ptr->GetValue();
 							is_has_uv_morph = true;
 						}
-						else if (const auto vertex_c_ptr = morph_uv_map.Find(static_cast<Int32>(pmx_surface_vertex_c)); vertex_c_ptr)
+						if (const auto vertex_c_ptr = morph_uv_map.Find(static_cast<Int32>(pmx_surface_vertex_c)); vertex_c_ptr)
 						{
 							uvw[2] = vertex_c_ptr->GetValue();
 							is_has_uv_morph = true;
@@ -1166,7 +1189,9 @@ Bool MMDMeshManagerObject::LoadPMX(
 				if (!morph_tag)
 					return false;
 				mesh_object->InsertTag(morph_tag);
-				morph_tag_infos.Append(morph_tag_info{ morph_tag })iferr_return;
+				morph_tag_info info(morph_tag);
+				info.first_face = static_cast<Int32>(surface_begin_index);
+				morph_tag_infos.Append(std::move(info))iferr_return;
 			}
 
 			maxon::HashMap<uint32_t, Int32> vertex_index_map;
@@ -1415,7 +1440,7 @@ Bool MMDMeshManagerObject::LoadPMX(
 						for (auto it = vertex_info_map.Read()->FindAll(src_vertex_index); it; ++it)
 						{
 							const auto& [vertex_index, offset_mesh_object, morph_tag_index] = it->GetValue();
-							auto& [morph_tag, morphs, is_point_morph_tag_init, is_uv_morph_tag_init] = morph_tag_infos[morph_tag_index];
+							auto& [morph_tag, first_face, morphs, is_point_morph_tag_init, is_uv_morph_tag_init] = morph_tag_infos[morph_tag_index];
 
 							if (!is_point_morph_tag_init)
 							{
@@ -1447,7 +1472,7 @@ Bool MMDMeshManagerObject::LoadPMX(
 
 							// set morph node to end
 							CAMorphNode* morph_node = morph->GetFirst();
-							while (!(morph_node->GetInfo() & CAMORPH_DATA_FLAGS::POINTS) && morph_node)
+							while (morph_node && !(morph_node->GetInfo() & CAMORPH_DATA_FLAGS::POINTS))
 							{
 								morph_node = morph_node->GetNext();
 							}
@@ -1472,86 +1497,56 @@ Bool MMDMeshManagerObject::LoadPMX(
 
 					uv_morph_names_.Insert(pmx_morph_name)iferr_return;
 
-					// vertex_index -> uv offset
-					maxon::HashMap<Int32, std::tuple<CAMorphNode*, Vector>> morph_uv_map;
-					// mapping uv morph from vertex_index to surface_index
-						for (const auto& [src_vertex_index, uv] : uv_morphs)
+					maxon::HashMap<Int32, Vector> offsets;
+					for (const auto& [vertex_index, uv] : uv_morphs)
 					{
-						// MultiMap
-						for (auto it = vertex_info_map.Read()->FindAll(src_vertex_index); it; ++it)
-						{
-							const auto& [vertex_index, offset_mesh_object, morph_tag_index] = it->GetValue();
-							auto& [morph_tag, morphs, is_point_morph_tag_init, is_uv_morph_tag_init] = morph_tag_infos[morph_tag_index];
-
-							if (!is_uv_morph_tag_init)
-							{
-								morph_tag->SetParameter(ConstDescID(DescLevel(ID_CA_POSE_UV)), true, DESCFLAGS_SET::NONE);
-								is_uv_morph_tag_init = true;
-							}
-
-							CAMorph* morph = nullptr;
-							if (auto morph_ptr = morphs.Find(pmx_morph_name); !morph_ptr)
-							{
-								morph = morph_tag->AddMorph();
-								if (!morph)
-									return false;
-
-								morphs.Insert(pmx_morph_name, morph)iferr_return;
-
-								// set morph name
-								morph->SetName(pmx_morph_name);
-
-								morph->Store(setting.doc, morph_tag, CAMORPH_DATA_FLAGS::ASTAG);
-
-								// set morph mode
-								morph->SetMode(setting.doc, morph_tag, CAMORPH_MODE_FLAGS::ALL | CAMORPH_MODE_FLAGS::EXPAND, CAMORPH_MODE::REL);
-							}
-							else
-							{
-								morph = morph_ptr->GetValue();
-							}
-
-							// set morph node to end
-							CAMorphNode* morph_node = morph->GetFirst();
-							while (!(morph_node->GetInfo() & CAMORPH_DATA_FLAGS::UV) && morph_node)
-							{
-								morph_node = morph_node->GetNext();
-							}
-
-							morph_uv_map.Insert(static_cast<Int32>(src_vertex_index), std::make_tuple(morph_node, Vector(uv[0], uv[1], 0.)))iferr_return;
-						}
+						offsets.Insert(static_cast<Int32>(vertex_index), Vector(uv[0], uv[1], 0.)) iferr_return;
 					}
 
-					// add morph uv (single-threaded: CAMorphNode::SetUV is not safe for concurrent calls on the same node)
-					for (Int surface_index = 0; surface_index < Int(faces_count); ++surface_index)
+					for (auto& info : morph_tag_infos)
 					{
-						const auto& pmx_surface = pmx_faces[surface_index];
-						const auto& pmx_surface_vertex_a = pmx_surface.m_vertices[0];
-						const auto& pmx_surface_vertex_b = pmx_surface.m_vertices[1];
-						const auto& pmx_surface_vertex_c = pmx_surface.m_vertices[2];
-						UVWStruct uvw{};
+						auto* mesh = static_cast<PolygonObject*>(info.morph_tag->GetObject());
+						CAMorph* morph = nullptr;
 						CAMorphNode* morph_node = nullptr;
-						if (const auto vertex_a_ptr = morph_uv_map.Find(static_cast<Int32>(pmx_surface_vertex_a)); vertex_a_ptr)
+						for (Int32 local_face = 0; local_face < mesh->GetPolygonCount(); ++local_face)
 						{
-							const auto& [morph_node_, offset] = vertex_a_ptr->GetValue();
-							uvw[0] = offset;
-							morph_node = morph_node_;
+							const auto& face = pmx_faces[info.first_face + local_face];
+							UVWStruct uvw{};
+							Bool affected = false;
+							for (Int32 corner = 0; corner < 3; ++corner)
+								if (const auto* offset = offsets.Find(static_cast<Int32>(face.m_vertices[corner])))
+								{
+									uvw[corner] = offset->GetValue();
+									affected = true;
+								}
+							if (!affected)
+								continue;
+							if (!morph)
+							{
+								if (!info.is_uv_morph_tag_init)
+								{
+									info.morph_tag->SetParameter(ConstDescID(DescLevel(ID_CA_POSE_UV)), true, DESCFLAGS_SET::NONE);
+									info.is_uv_morph_tag_init = true;
+								}
+								morph = info.morph_tag->AddMorph();
+								if (!morph)
+									return false;
+								morph->SetName(pmx_morph_name);
+								if (!morph->Store(setting.doc, info.morph_tag, CAMORPH_DATA_FLAGS::ASTAG)
+									|| !morph->SetMode(setting.doc, info.morph_tag, CAMORPH_MODE_FLAGS::ALL | CAMORPH_MODE_FLAGS::EXPAND, CAMORPH_MODE::REL))
+									return false;
+								morph_node = morph->GetFirst();
+								while (morph_node && !(morph_node->GetInfo() & CAMORPH_DATA_FLAGS::UV))
+									morph_node = morph_node->GetNext();
+								if (!morph_node || morph_node->GetUVTagCount() == 0
+									|| morph_node->GetUVCount(0) != mesh->GetPolygonCount())
+									return false;
+							}
+							morph_node->SetUV(0, local_face, uvw);
 						}
-						else if (const auto vertex_b_ptr = morph_uv_map.Find(static_cast<Int32>(pmx_surface_vertex_b)); vertex_b_ptr)
+						if (morph)
 						{
-							const auto& [morph_node_, offset] = vertex_b_ptr->GetValue();
-							uvw[1] = offset;
-							morph_node = morph_node_;
-						}
-						else if (const auto vertex_c_ptr = morph_uv_map.Find(static_cast<Int32>(pmx_surface_vertex_c)); vertex_c_ptr)
-						{
-							const auto& [morph_node_, offset] = vertex_c_ptr->GetValue();
-							uvw[2] = offset;
-							morph_node = morph_node_;
-						}
-						if (morph_node)
-						{
-							morph_node->SetUV(0, static_cast<Int32>(surface_index), uvw);
+							info.morphs.Insert(pmx_morph_name, morph) iferr_return;
 						}
 					}
 					break;
@@ -1888,6 +1883,9 @@ Bool MMDMeshManagerObject::ExportMeshMorphsToPMX(libmmd::PMXFile& pmx_file,
 				continue;
 			const PolygonObject* base_mesh = static_cast<const PolygonObject*>(morph_mesh);
 			PolygonObject* const writable_base_mesh = const_cast<PolygonObject*>(base_mesh);
+			ScopedMorphExpansion expansion(morph, morph_tag, morph_mesh->GetDocument());
+			if (!expansion.IsExpanded())
+				return false;
 
 			CAMorphNode* morph_node = morph->GetFirst();
 			while (morph_node && !(morph_node->GetInfo() & (is_uv ? CAMORPH_DATA_FLAGS::UV : CAMORPH_DATA_FLAGS::POINTS)))
@@ -1898,6 +1896,8 @@ Bool MMDMeshManagerObject::ExportMeshMorphsToPMX(libmmd::PMXFile& pmx_file,
 			if (is_uv)
 			{
 				const Int32 face_count = writable_base_mesh->GetPolygonCount();
+				if (morph_node->GetUVTagCount() == 0 || morph_node->GetUVCount(0) != face_count)
+					return false;
 				const CPolygon* const polygons = writable_base_mesh->GetPolygonR();
 				for (Int32 face_index = 0; face_index < face_count; ++face_index)
 				{
