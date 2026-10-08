@@ -137,74 +137,47 @@ The VMD import pipeline SHALL record bone names from the VMD file that do not ma
 - **THEN** the timeline maximum SHALL match the active slot's range (or documented metadata rule)
 
 ### Requirement: MMD bone controls creation and persistence
-
-The system SHALL provide a bone-manager-owned MMD control layer for authoring and previewing bone animation deltas. Controls SHALL be created only for bones whose `MMDBoneTag` has `PMX_BONE_LOCAL_IS_COORDINATE` or `PMX_BONE_IS_FIXED_AXIS` enabled. The system SHALL NOT create controls from a common MMD skeleton whitelist or alias table. Each control SHALL be linked from the driven bone tag through `PMX_BONE_CONTROL_LINK`, and the link SHALL be persisted by Cinema 4D's parameter storage.
+The system SHALL provide a bone-manager-owned MMD control layer for animation deltas. It SHALL create controls for PMX local-coordinate/fixed-axis bones, PMX IS_IK targets, and exactly matched standard leg, knee, ankle, toe, toe-extension and IK-parent names in Japanese or English. Names alone SHALL NOT create an IK solver or qualify an IK goal. Deformation duplicates with a D suffix SHALL NOT qualify by name alone. Controls SHALL persist through PMX_BONE_CONTROL_LINK.
 
 #### Scenario: Refresh creates only eligible controls
-
-- **WHEN** the user clicks `Create/Refresh Controls`
-
-- **THEN** the system SHALL create or reconnect controls for bones with PMX local coordinates or fixed axes
-
-- **THEN** the system SHALL NOT create controls for ordinary bones that only match common MMD bone names
-
-- **THEN** ineligible bones SHALL have stale `PMX_BONE_CONTROL_LINK` values cleared
+- **WHEN** Create/Refresh Controls is invoked on an ordinary MMD skeleton
+- **THEN** its eligible leg, knee, ankle, toe, IK target and IK parent bones SHALL receive controls even without local/fixed-axis flags
+- **AND** unrelated clothing/deformation bones SHALL NOT qualify merely by containing part of a standard bone name
+- **AND** stale links on ineligible bones SHALL be cleared
 
 #### Scenario: Control placement follows bone hierarchy
-
-- **WHEN** a control is created for a bone with a parent object
-
-- **THEN** the control SHALL be inserted as a sibling under the driven bone's parent, not as a child of the driven bone
-
-- **THEN** refreshing controls SHALL NOT delete existing user animation tracks on managed control objects
+- **WHEN** a control is created for a bone with a parent
+- **THEN** it SHALL be inserted as a sibling under that parent
+- **AND** refresh SHALL preserve existing relative inputs, frozen transforms and animation tracks
 
 ### Requirement: MMD bone controls orientation, constraints, and visual display
-
-Control splines SHALL be oriented so their plane is perpendicular to the PMX fixed axis, PMX local X axis, or a stable fallback bone/tail direction. Local-coordinate bones SHALL use PMX local Z as the control plane reference direction. Control scale SHALL be ignored at runtime. Fixed-axis control rotation SHALL be projected to the bone's fixed axis.
+Control planes SHALL use the PMX fixed axis or local X as normal, with local Z as reference for local-coordinate bones. Fallback orientation SHALL follow the bone/tail, except IK controls SHALL use the posed model horizontal plane. Fixed-axis rotation SHALL be projected to that axis and scale SHALL be ignored. Visual markers MAY extend outside the plane without changing the transform basis.
 
 #### Scenario: Control axis and shape are derived from bone data
-
-- **WHEN** a bone has `PMX_BONE_IS_FIXED_AXIS`
-
-- **THEN** its control SHALL use the fixed axis as the effective rotation axis
-
-- **THEN** its visual control shape SHOULD distinguish it from a regular local-coordinate control
-
-- **WHEN** a bone has `PMX_BONE_LOCAL_IS_COORDINATE`
-
-- **THEN** its control SHALL use PMX local X as the plane normal and PMX local Z as the reference direction
+- **WHEN** a bone has a fixed axis
+- **THEN** its control SHALL use that axis and a distinct fixed-axis silhouette
+- **WHEN** a bone has local coordinates
+- **THEN** its control SHALL use local X as normal and local Z as reference
 
 #### Scenario: Bone manager control-only display mode
-
-- **WHEN** the user selects the bone manager `Controls` display type
-
-- **THEN** bone/joint visual display SHALL be hidden
-
-- **THEN** linked control objects SHALL remain visible
+- **WHEN** the user selects Controls display
+- **THEN** bone/joint visuals SHALL be hidden
+- **AND** generated controls SHALL follow the model's Primary/All display scope
 
 ### Requirement: MMD bone controls runtime delta and keyframe writeback
-
-In animation mode, a control object's relative PRS SHALL be interpreted as an additive delta on top of the active bone animation value. The delta SHALL be applied before append/inherit, IK, and physics processing. Translation SHALL only affect bones with `PMX_BONE_TRANSLATABLE`; rotation SHALL only affect bones with `PMX_BONE_ROTATABLE`; scale SHALL always be ignored.
+In animation mode, control relative PRS SHALL contribute additive animation deltas before append/inherit, IK and physics. Translation and rotation SHALL respect their PMX channel flags; scale SHALL be ignored. An active valid FK rotation on an affected non-goal bone SHALL take rotation ownership of that IK chain until neutral, consistent with direct external rotation constraints. IK goal controls SHALL remain solver inputs.
 
 #### Scenario: Control delta drives animation in the same frame
-
-- **WHEN** the model is in `MODEL_MODE_ANIM` and a user moves or rotates an eligible bone control
-
-- **THEN** `MMDModelManagerObject::Execute` SHALL re-evaluate the bone pipeline even if the document time has not changed
-
-- **THEN** the driven bone animation value SHALL include the control delta before append/inherit, IK, and physics are evaluated
+- **WHEN** a control changes without advancing the timeline
+- **THEN** the pipeline SHALL re-evaluate its input
+- **AND** active limb FK rotation SHALL survive IK, with normal IK restored after the FK control is neutral
+- **AND** moving an IK target or its parent SHALL move the existing chain
 
 #### Scenario: Add keyframe writes adjusted animation value
-
-- **WHEN** the user adjusts a bone control and clicks the bone animation add-key button
-
-- **THEN** the target bone's keyframe SHALL store the current animation value plus the control delta
-
-- **THEN** an existing keyframe at the same VMD frame SHALL be overwritten
-
-- **THEN** the control relative PRS SHALL be reset to identity after the keyframe is written
-
-- **THEN** the current pose SHALL remain stable after the reset
+- **WHEN** adjusted animation is registered through the bone add-key command
+- **THEN** the current animation plus control delta SHALL replace the key at that VMD frame
+- **AND** relative control PRS SHALL reset to identity while preserving the registered pose
+- **AND** registered FK rotation SHALL retain authored-pose ownership across reload and remain editable by subsequent control deltas
 
 ### Requirement: Bone manager display mode auto-switching
 
@@ -259,6 +232,26 @@ Motion export SHALL honor channel switches, position scale, frame offset, and ro
 #### Scenario: Model info round trip
 - **WHEN** a motion containing visibility toggles is imported and exported with model info enabled
 - **THEN** exported show/hide transitions retain their values and frame positions
+
+### Requirement: Model-level controller presentation settings
+The model Attribute Manager SHALL expose controls to create or refresh generated bone controls, select visible controls, choose Primary/All/Hidden display, adjust overall shape size, and show or hide occluded outlines. These settings SHALL persist with the model. Primary display SHALL exclude bones marked hidden or disabled by PMX flags without deleting their controls.
+
+#### Scenario: Adjust controller presentation
+- **WHEN** the user changes display or size at model level
+- **THEN** existing managed control splines SHALL update without changing their transforms, links, tracks, bone bind state, or current pose
+- **AND** external artist-linked objects SHALL NOT have their geometry restyled
+
+#### Scenario: Save and reopen
+- **WHEN** the model is copied or saved and reopened
+- **THEN** its presentation settings SHALL apply to its own generated controls
+
+### Requirement: Readable generated controller geometry
+Generated controls SHALL use distinct rotation, fixed-axis and translation silhouettes, model-proportional sizes, and consistent left/right/central colors. Occluded outlines SHALL be optional and visually quieter than selected controls. Existing fixed/local-axis semantics SHALL remain unchanged. Ordinary foot IK goals SHALL use horizontal foot outlines, toe IK goals triangles, and IK parents larger rounded frames.
+
+#### Scenario: Refresh an animated controller
+- **WHEN** a controller with authored tracks or a nonzero relative pose is refreshed
+- **THEN** its object identity, transform and animation tracks SHALL be preserved
+- **AND** its generated shape and color SHALL use the current presentation settings
 
 ## Implementation overview
 

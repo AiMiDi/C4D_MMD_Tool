@@ -4,6 +4,15 @@
 
 Entries for 0.9.1.x were reconstructed from tagged source changes and release dates. Intermediate build tags are grouped below; original entries through 0.4.6.1 are retained.
 
+### 0.9.2.3 · MMD controllers (2026-10-08)
+
+1. Support native PSR position/rotation constraints on imported MMD bones, including IK target motion and direct FK ownership.
+2. Add leg, knee, ankle, toe, foot IK, toe IK and IK-parent controllers. Stabilize repeated evaluation and preserve registered FK poses.
+3. Redesign control silhouettes and left/right colors, with continuous outlines through meshes. Add model-level generation, selection, Primary/All/Hidden display and size settings.
+4. Preserve existing control transforms, links, animation tracks and bind pose when refreshing the presentation.
+
+Validation scope and Windows package receipts: [controller acceptance](docs/dev/controllers-acceptance-20261008.md).
+
 ### 0.9.2.2 · Architecture, Morph and materials (2026-10-08)
 
 Changes since `v0.9.1.20`, grouped by module:

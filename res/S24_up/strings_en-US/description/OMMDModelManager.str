@@ -1,5 +1,14 @@
 STRINGTABLE OMMDModelManager
 {
+	MODEL_CONTROLS_GRP "Controllers";
+	MODEL_CONTROLS_CREATE "Create / refresh controllers";
+	MODEL_CONTROLS_SELECT "Select visible controllers";
+	MODEL_CONTROLS_DISPLAY "Show";
+	MODEL_CONTROLS_SIZE "Controller size";
+	MODEL_CONTROLS_OCCLUDED "Show through mesh";
+	MODEL_CONTROLS_DISPLAY_PRIMARY "Primary controllers";
+	MODEL_CONTROLS_DISPLAY_ALL "All controllers";
+	MODEL_CONTROLS_DISPLAY_HIDDEN "Hide controllers";
 	OMMDModelManager "MMD Model Manager";
 	MODEL_INFO_GRP "MMD Model info";
 	MODEL_NAME_LOCAL "Local model name";

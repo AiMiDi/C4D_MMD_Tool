@@ -256,6 +256,16 @@ class MMDModelManagerObject final : public ObjectData
 	std::vector<std::unique_ptr<C4DIKChainNodeAdapter>> physics_bone_pool_;
 	maxon::HashMap<Int32, C4DIKChainNodeAdapter*> physics_bone_adapters_;
 	maxon::BaseArray<Int32> physics_dynamic_bone_indices_;
+	struct ExternalBonePose
+	{
+		Matrix relative;
+		Bool position = false;
+		Bool rotation = false;
+	};
+	// Samples belong only to this expression pass, never to saved/copied state.
+	std::unordered_map<Int32, ExternalBonePose> external_bone_poses_;
+	Bool external_pose_captured_ = false;
+	Bool external_pose_refresh_ = false;
 	Int32 model_mode_ = MODEL_MODE_EDIT;
 	BaseTime prev_time_{-1};
 	Float32 fps_{ 30.f };
@@ -275,6 +285,11 @@ class MMDModelManagerObject final : public ObjectData
 	friend class MMDMeshManagerObject;
 
 public:
+	static constexpr Int32 kExternalPosePreparePriority = EXECUTIONPRIORITY_EXPRESSION - 500;
+	static constexpr Int32 kExternalPoseSolvePriority = EXECUTIONPRIORITY_EXPRESSION + 500;
+	Bool HasExternalBonePoses() const { return !external_bone_poses_.empty(); }
+	Bool GetExternalBonePose(Int32 bone_index, Matrix& relative, Bool& position, Bool& rotation) const;
+	Bool HasExternalBoneRotation(Int32 bone_index) const;
 	MMDModelManagerObject(const MMDModelManagerObject&) = delete; void operator =(const MMDModelManagerObject&) = delete;
 	MMDModelManagerObject(MMDModelManagerObject&&) = delete; void operator =(MMDModelManagerObject&&) = delete;
 	typedef ObjectData SUPER;
@@ -400,13 +415,15 @@ public:
 
 private:
 	void ResetStandaloneRuntimeCaches();
+	void PrepareExternalBonePoses(BaseDocument* doc);
+	void CaptureExternalBonePoses();
 	Int32 GetMorphNamedNumber();
 	bool DeleteMorphImpl(IMorph& morph, const Int morph_index);
 	Int AddMorph(const MMDMorphType& morph_type, String morph_name = {}, bool is_add_morph_ui = true, Int32 panel = 0);
 	void RenameMorph(const String& name);
 	void ApplyMorphRuntimeStrengths();
 	UInt64 GetBoneMorphStateChecksum() const;
-	void PrepareBoneMorphReevaluation(BaseDocument* doc);
+	void PrepareSameFrameReevaluation(BaseDocument* doc);
 	void ApplyMorphRuntimeStrength(IMorph& morph, Float strength);
 
 	/**

@@ -1,0 +1,2277 @@
+{
+  "version": "0.9.2.3",
+  "date": "2026-10-08",
+  "host_version": 2026400,
+  "native_suites": {
+    "native-pmx-physics-False": {
+      "passed": true,
+      "count": 63,
+      "checks": [
+        {
+          "name": "lower_body_coverage",
+          "passed": true,
+          "total": 40,
+          "missing": []
+        },
+        {
+          "name": "deformation_duplicates_excluded",
+          "passed": true
+        },
+        {
+          "name": "lower_body_shapes",
+          "passed": true
+        },
+        {
+          "name": "左足ＩＫ_drives_limb",
+          "passed": true,
+          "displacement": 6.265065020311489
+        },
+        {
+          "name": "左足ＩＫ_same_frame_stable",
+          "passed": true,
+          "error": 0.0
+        },
+        {
+          "name": "左足ＩＫ_neutral_recovery",
+          "passed": true,
+          "error": 7.061018436615996e-14
+        },
+        {
+          "name": "左つま先ＩＫ_drives_limb",
+          "passed": true,
+          "displacement": 6.1232794523713725
+        },
+        {
+          "name": "左つま先ＩＫ_same_frame_stable",
+          "passed": true,
+          "error": 0.0
+        },
+        {
+          "name": "左つま先ＩＫ_neutral_recovery",
+          "passed": true,
+          "error": 7.638334409421077e-14
+        },
+        {
+          "name": "左足IK親_drives_limb",
+          "passed": true,
+          "displacement": 6.265702207039235
+        },
+        {
+          "name": "左足IK親_same_frame_stable",
+          "passed": true,
+          "error": 0.0
+        },
+        {
+          "name": "左足IK親_neutral_recovery",
+          "passed": true,
+          "error": 7.061018436615996e-14
+        },
+        {
+          "name": "左足_fk_drives_rotation",
+          "passed": true
+        },
+        {
+          "name": "左足_fk_same_frame_stable",
+          "passed": true,
+          "error": 0.0
+        },
+        {
+          "name": "左足_refresh_keeps_fk",
+          "passed": true
+        },
+        {
+          "name": "左足_fk_neutral_restores_ik",
+          "passed": true,
+          "error": 0.0
+        },
+        {
+          "name": "左ひざ_fk_drives_rotation",
+          "passed": true
+        },
+        {
+          "name": "左ひざ_fk_same_frame_stable",
+          "passed": true,
+          "error": 3.4638958368304884e-14
+        },
+        {
+          "name": "左ひざ_refresh_keeps_fk",
+          "passed": true
+        },
+        {
+          "name": "左ひざ_fk_neutral_restores_ik",
+          "passed": true,
+          "error": 0.0
+        },
+        {
+          "name": "左足首_fk_drives_rotation",
+          "passed": true
+        },
+        {
+          "name": "左足首_fk_same_frame_stable",
+          "passed": true,
+          "error": 7.105427357601002e-14
+        },
+        {
+          "name": "左足首_refresh_keeps_fk",
+          "passed": true
+        },
+        {
+          "name": "左足首_fk_neutral_restores_ik",
+          "passed": true,
+          "error": 0.0
+        },
+        {
+          "name": "左足先EX_fk_drives_rotation",
+          "passed": true
+        },
+        {
+          "name": "左足先EX_fk_same_frame_stable",
+          "passed": true,
+          "error": 3.4638958368304884e-14
+        },
+        {
+          "name": "左足先EX_refresh_keeps_fk",
+          "passed": true
+        },
+        {
+          "name": "左足先EX_fk_neutral_restores_ik",
+          "passed": true,
+          "error": 0.0
+        },
+        {
+          "name": "右足ＩＫ_drives_limb",
+          "passed": true,
+          "displacement": 6.265420264932564
+        },
+        {
+          "name": "右足ＩＫ_same_frame_stable",
+          "passed": true,
+          "error": 0.0
+        },
+        {
+          "name": "右足ＩＫ_neutral_recovery",
+          "passed": true,
+          "error": 0.0
+        },
+        {
+          "name": "右つま先ＩＫ_drives_limb",
+          "passed": true,
+          "displacement": 6.126485282879711
+        },
+        {
+          "name": "右つま先ＩＫ_same_frame_stable",
+          "passed": true,
+          "error": 0.0
+        },
+        {
+          "name": "右つま先ＩＫ_neutral_recovery",
+          "passed": true,
+          "error": 0.0
+        },
+        {
+          "name": "右足IK親_drives_limb",
+          "passed": true,
+          "displacement": 6.265660621182577
+        },
+        {
+          "name": "右足IK親_same_frame_stable",
+          "passed": true,
+          "error": 0.0
+        },
+        {
+          "name": "右足IK親_neutral_recovery",
+          "passed": true,
+          "error": 0.0
+        },
+        {
+          "name": "右足_fk_drives_rotation",
+          "passed": true
+        },
+        {
+          "name": "右足_fk_same_frame_stable",
+          "passed": true,
+          "error": 0.0
+        },
+        {
+          "name": "右足_refresh_keeps_fk",
+          "passed": true
+        },
+        {
+          "name": "右足_fk_neutral_restores_ik",
+          "passed": true,
+          "error": 0.0
+        },
+        {
+          "name": "右ひざ_fk_drives_rotation",
+          "passed": true
+        },
+        {
+          "name": "右ひざ_fk_same_frame_stable",
+          "passed": true,
+          "error": 0.0
+        },
+        {
+          "name": "右ひざ_refresh_keeps_fk",
+          "passed": true
+        },
+        {
+          "name": "右ひざ_fk_neutral_restores_ik",
+          "passed": true,
+          "error": 0.0
+        },
+        {
+          "name": "右足首_fk_drives_rotation",
+          "passed": true
+        },
+        {
+          "name": "右足首_fk_same_frame_stable",
+          "passed": true,
+          "error": 1.7763568394002505e-15
+        },
+        {
+          "name": "右足首_refresh_keeps_fk",
+          "passed": true
+        },
+        {
+          "name": "右足首_fk_neutral_restores_ik",
+          "passed": true,
+          "error": 0.0
+        },
+        {
+          "name": "右足先EX_fk_drives_rotation",
+          "passed": true
+        },
+        {
+          "name": "右足先EX_fk_same_frame_stable",
+          "passed": true,
+          "error": 2.373101715136272e-15
+        },
+        {
+          "name": "右足先EX_refresh_keeps_fk",
+          "passed": true
+        },
+        {
+          "name": "右足先EX_fk_neutral_restores_ik",
+          "passed": true,
+          "error": 5.898059818321144e-17
+        },
+        {
+          "name": "bind_unchanged",
+          "passed": true
+        },
+        {
+          "name": "ik_track_refresh",
+          "passed": true,
+          "error": 3.375077994860476e-14
+        },
+        {
+          "name": "ik_track_reload",
+          "passed": true,
+          "error": 0.0
+        },
+        {
+          "name": "ik_track_reload_keys",
+          "passed": true
+        },
+        {
+          "name": "fk_register_resets_input",
+          "passed": true
+        },
+        {
+          "name": "fk_register_preserves_pose",
+          "passed": true,
+          "error": 2.0816681711721685e-16
+        },
+        {
+          "name": "registered_fk_remains_editable",
+          "passed": true
+        },
+        {
+          "name": "registered_fk_edit_stable",
+          "passed": true
+        },
+        {
+          "name": "registered_fk_neutral_returns_key",
+          "passed": true
+        },
+        {
+          "name": "registered_fk_reload",
+          "passed": true
+        }
+      ]
+    },
+    "native-pmx-physics-True": {
+      "passed": true,
+      "count": 63,
+      "checks": [
+        {
+          "name": "lower_body_coverage",
+          "passed": true,
+          "total": 40,
+          "missing": []
+        },
+        {
+          "name": "deformation_duplicates_excluded",
+          "passed": true
+        },
+        {
+          "name": "lower_body_shapes",
+          "passed": true
+        },
+        {
+          "name": "左足ＩＫ_drives_limb",
+          "passed": true,
+          "displacement": 6.265065020311489
+        },
+        {
+          "name": "左足ＩＫ_same_frame_stable",
+          "passed": true,
+          "error": 0.0
+        },
+        {
+          "name": "左足ＩＫ_neutral_recovery",
+          "passed": true,
+          "error": 7.061018436615996e-14
+        },
+        {
+          "name": "左つま先ＩＫ_drives_limb",
+          "passed": true,
+          "displacement": 6.1232794523713725
+        },
+        {
+          "name": "左つま先ＩＫ_same_frame_stable",
+          "passed": true,
+          "error": 0.0
+        },
+        {
+          "name": "左つま先ＩＫ_neutral_recovery",
+          "passed": true,
+          "error": 7.638334409421077e-14
+        },
+        {
+          "name": "左足IK親_drives_limb",
+          "passed": true,
+          "displacement": 6.265702207039235
+        },
+        {
+          "name": "左足IK親_same_frame_stable",
+          "passed": true,
+          "error": 0.0
+        },
+        {
+          "name": "左足IK親_neutral_recovery",
+          "passed": true,
+          "error": 7.061018436615996e-14
+        },
+        {
+          "name": "左足_fk_drives_rotation",
+          "passed": true
+        },
+        {
+          "name": "左足_fk_same_frame_stable",
+          "passed": true,
+          "error": 0.0
+        },
+        {
+          "name": "左足_refresh_keeps_fk",
+          "passed": true
+        },
+        {
+          "name": "左足_fk_neutral_restores_ik",
+          "passed": true,
+          "error": 0.0
+        },
+        {
+          "name": "左ひざ_fk_drives_rotation",
+          "passed": true
+        },
+        {
+          "name": "左ひざ_fk_same_frame_stable",
+          "passed": true,
+          "error": 3.4638958368304884e-14
+        },
+        {
+          "name": "左ひざ_refresh_keeps_fk",
+          "passed": true
+        },
+        {
+          "name": "左ひざ_fk_neutral_restores_ik",
+          "passed": true,
+          "error": 0.0
+        },
+        {
+          "name": "左足首_fk_drives_rotation",
+          "passed": true
+        },
+        {
+          "name": "左足首_fk_same_frame_stable",
+          "passed": true,
+          "error": 7.105427357601002e-14
+        },
+        {
+          "name": "左足首_refresh_keeps_fk",
+          "passed": true
+        },
+        {
+          "name": "左足首_fk_neutral_restores_ik",
+          "passed": true,
+          "error": 0.0
+        },
+        {
+          "name": "左足先EX_fk_drives_rotation",
+          "passed": true
+        },
+        {
+          "name": "左足先EX_fk_same_frame_stable",
+          "passed": true,
+          "error": 3.4638958368304884e-14
+        },
+        {
+          "name": "左足先EX_refresh_keeps_fk",
+          "passed": true
+        },
+        {
+          "name": "左足先EX_fk_neutral_restores_ik",
+          "passed": true,
+          "error": 0.0
+        },
+        {
+          "name": "右足ＩＫ_drives_limb",
+          "passed": true,
+          "displacement": 6.265420264932564
+        },
+        {
+          "name": "右足ＩＫ_same_frame_stable",
+          "passed": true,
+          "error": 0.0
+        },
+        {
+          "name": "右足ＩＫ_neutral_recovery",
+          "passed": true,
+          "error": 0.0
+        },
+        {
+          "name": "右つま先ＩＫ_drives_limb",
+          "passed": true,
+          "displacement": 6.126485282879711
+        },
+        {
+          "name": "右つま先ＩＫ_same_frame_stable",
+          "passed": true,
+          "error": 0.0
+        },
+        {
+          "name": "右つま先ＩＫ_neutral_recovery",
+          "passed": true,
+          "error": 0.0
+        },
+        {
+          "name": "右足IK親_drives_limb",
+          "passed": true,
+          "displacement": 6.265660621182577
+        },
+        {
+          "name": "右足IK親_same_frame_stable",
+          "passed": true,
+          "error": 0.0
+        },
+        {
+          "name": "右足IK親_neutral_recovery",
+          "passed": true,
+          "error": 0.0
+        },
+        {
+          "name": "右足_fk_drives_rotation",
+          "passed": true
+        },
+        {
+          "name": "右足_fk_same_frame_stable",
+          "passed": true,
+          "error": 0.0
+        },
+        {
+          "name": "右足_refresh_keeps_fk",
+          "passed": true
+        },
+        {
+          "name": "右足_fk_neutral_restores_ik",
+          "passed": true,
+          "error": 0.0
+        },
+        {
+          "name": "右ひざ_fk_drives_rotation",
+          "passed": true
+        },
+        {
+          "name": "右ひざ_fk_same_frame_stable",
+          "passed": true,
+          "error": 0.0
+        },
+        {
+          "name": "右ひざ_refresh_keeps_fk",
+          "passed": true
+        },
+        {
+          "name": "右ひざ_fk_neutral_restores_ik",
+          "passed": true,
+          "error": 0.0
+        },
+        {
+          "name": "右足首_fk_drives_rotation",
+          "passed": true
+        },
+        {
+          "name": "右足首_fk_same_frame_stable",
+          "passed": true,
+          "error": 1.7763568394002505e-15
+        },
+        {
+          "name": "右足首_refresh_keeps_fk",
+          "passed": true
+        },
+        {
+          "name": "右足首_fk_neutral_restores_ik",
+          "passed": true,
+          "error": 0.0
+        },
+        {
+          "name": "右足先EX_fk_drives_rotation",
+          "passed": true
+        },
+        {
+          "name": "右足先EX_fk_same_frame_stable",
+          "passed": true,
+          "error": 2.373101715136272e-15
+        },
+        {
+          "name": "右足先EX_refresh_keeps_fk",
+          "passed": true
+        },
+        {
+          "name": "右足先EX_fk_neutral_restores_ik",
+          "passed": true,
+          "error": 5.898059818321144e-17
+        },
+        {
+          "name": "bind_unchanged",
+          "passed": true
+        },
+        {
+          "name": "ik_track_refresh",
+          "passed": true,
+          "error": 3.375077994860476e-14
+        },
+        {
+          "name": "ik_track_reload",
+          "passed": true,
+          "error": 0.0
+        },
+        {
+          "name": "ik_track_reload_keys",
+          "passed": true
+        },
+        {
+          "name": "fk_register_resets_input",
+          "passed": true
+        },
+        {
+          "name": "fk_register_preserves_pose",
+          "passed": true,
+          "error": 2.0816681711721685e-16
+        },
+        {
+          "name": "registered_fk_remains_editable",
+          "passed": true
+        },
+        {
+          "name": "registered_fk_edit_stable",
+          "passed": true
+        },
+        {
+          "name": "registered_fk_neutral_returns_key",
+          "passed": true
+        },
+        {
+          "name": "registered_fk_reload",
+          "passed": true
+        }
+      ]
+    },
+    "native-vmd-physics-False": {
+      "passed": true,
+      "count": 63,
+      "checks": [
+        {
+          "name": "lower_body_coverage",
+          "passed": true,
+          "total": 40,
+          "missing": []
+        },
+        {
+          "name": "deformation_duplicates_excluded",
+          "passed": true
+        },
+        {
+          "name": "lower_body_shapes",
+          "passed": true
+        },
+        {
+          "name": "左足ＩＫ_drives_limb",
+          "passed": true,
+          "displacement": 6.79771263498722
+        },
+        {
+          "name": "左足ＩＫ_same_frame_stable",
+          "passed": true,
+          "error": 0.0
+        },
+        {
+          "name": "左足ＩＫ_neutral_recovery",
+          "passed": true,
+          "error": 0.0
+        },
+        {
+          "name": "左つま先ＩＫ_drives_limb",
+          "passed": true,
+          "displacement": 6.131663342276465
+        },
+        {
+          "name": "左つま先ＩＫ_same_frame_stable",
+          "passed": true,
+          "error": 0.0
+        },
+        {
+          "name": "左つま先ＩＫ_neutral_recovery",
+          "passed": true,
+          "error": 0.0
+        },
+        {
+          "name": "左足IK親_drives_limb",
+          "passed": true,
+          "displacement": 6.807992903886497
+        },
+        {
+          "name": "左足IK親_same_frame_stable",
+          "passed": true,
+          "error": 0.0
+        },
+        {
+          "name": "左足IK親_neutral_recovery",
+          "passed": true,
+          "error": 0.0
+        },
+        {
+          "name": "左足_fk_drives_rotation",
+          "passed": true
+        },
+        {
+          "name": "左足_fk_same_frame_stable",
+          "passed": true,
+          "error": 5.551115123125783e-15
+        },
+        {
+          "name": "左足_refresh_keeps_fk",
+          "passed": true
+        },
+        {
+          "name": "左足_fk_neutral_restores_ik",
+          "passed": true,
+          "error": 0.0
+        },
+        {
+          "name": "左ひざ_fk_drives_rotation",
+          "passed": true
+        },
+        {
+          "name": "左ひざ_fk_same_frame_stable",
+          "passed": true,
+          "error": 3.774758283725532e-15
+        },
+        {
+          "name": "左ひざ_refresh_keeps_fk",
+          "passed": true
+        },
+        {
+          "name": "左ひざ_fk_neutral_restores_ik",
+          "passed": true,
+          "error": 0.0
+        },
+        {
+          "name": "左足首_fk_drives_rotation",
+          "passed": true
+        },
+        {
+          "name": "左足首_fk_same_frame_stable",
+          "passed": true,
+          "error": 1.7763568394002505e-15
+        },
+        {
+          "name": "左足首_refresh_keeps_fk",
+          "passed": true
+        },
+        {
+          "name": "左足首_fk_neutral_restores_ik",
+          "passed": true,
+          "error": 0.0
+        },
+        {
+          "name": "左足先EX_fk_drives_rotation",
+          "passed": true
+        },
+        {
+          "name": "左足先EX_fk_same_frame_stable",
+          "passed": true,
+          "error": 7.105427357601002e-15
+        },
+        {
+          "name": "左足先EX_refresh_keeps_fk",
+          "passed": true
+        },
+        {
+          "name": "左足先EX_fk_neutral_restores_ik",
+          "passed": true,
+          "error": 8.881784197001252e-16
+        },
+        {
+          "name": "右足ＩＫ_drives_limb",
+          "passed": true,
+          "displacement": 6.789474187931831
+        },
+        {
+          "name": "右足ＩＫ_same_frame_stable",
+          "passed": true,
+          "error": 0.0
+        },
+        {
+          "name": "右足ＩＫ_neutral_recovery",
+          "passed": true,
+          "error": 1.4210854715202004e-14
+        },
+        {
+          "name": "右つま先ＩＫ_drives_limb",
+          "passed": true,
+          "displacement": 5.752633680455851
+        },
+        {
+          "name": "右つま先ＩＫ_same_frame_stable",
+          "passed": true,
+          "error": 0.0
+        },
+        {
+          "name": "右つま先ＩＫ_neutral_recovery",
+          "passed": true,
+          "error": 2.842170943040401e-14
+        },
+        {
+          "name": "右足IK親_drives_limb",
+          "passed": true,
+          "displacement": 6.789474187931831
+        },
+        {
+          "name": "右足IK親_same_frame_stable",
+          "passed": true,
+          "error": 0.0
+        },
+        {
+          "name": "右足IK親_neutral_recovery",
+          "passed": true,
+          "error": 1.4210854715202004e-14
+        },
+        {
+          "name": "右足_fk_drives_rotation",
+          "passed": true
+        },
+        {
+          "name": "右足_fk_same_frame_stable",
+          "passed": true,
+          "error": 0.0
+        },
+        {
+          "name": "右足_refresh_keeps_fk",
+          "passed": true
+        },
+        {
+          "name": "右足_fk_neutral_restores_ik",
+          "passed": true,
+          "error": 0.0
+        },
+        {
+          "name": "右ひざ_fk_drives_rotation",
+          "passed": true
+        },
+        {
+          "name": "右ひざ_fk_same_frame_stable",
+          "passed": true,
+          "error": 2.6645352591003757e-15
+        },
+        {
+          "name": "右ひざ_refresh_keeps_fk",
+          "passed": true
+        },
+        {
+          "name": "右ひざ_fk_neutral_restores_ik",
+          "passed": true,
+          "error": 0.0
+        },
+        {
+          "name": "右足首_fk_drives_rotation",
+          "passed": true
+        },
+        {
+          "name": "右足首_fk_same_frame_stable",
+          "passed": true,
+          "error": 1.4210854715202004e-14
+        },
+        {
+          "name": "右足首_refresh_keeps_fk",
+          "passed": true
+        },
+        {
+          "name": "右足首_fk_neutral_restores_ik",
+          "passed": true,
+          "error": 0.0
+        },
+        {
+          "name": "右足先EX_fk_drives_rotation",
+          "passed": true
+        },
+        {
+          "name": "右足先EX_fk_same_frame_stable",
+          "passed": true,
+          "error": 4.6074255521944e-15
+        },
+        {
+          "name": "右足先EX_refresh_keeps_fk",
+          "passed": true
+        },
+        {
+          "name": "右足先EX_fk_neutral_restores_ik",
+          "passed": true,
+          "error": 2.3592239273284576e-16
+        },
+        {
+          "name": "bind_unchanged",
+          "passed": true
+        },
+        {
+          "name": "ik_track_refresh",
+          "passed": true,
+          "error": 3.674073880688411e-07
+        },
+        {
+          "name": "ik_track_reload",
+          "passed": true,
+          "error": 1.4210854715202004e-14
+        },
+        {
+          "name": "ik_track_reload_keys",
+          "passed": true
+        },
+        {
+          "name": "fk_register_resets_input",
+          "passed": true
+        },
+        {
+          "name": "fk_register_preserves_pose",
+          "passed": true,
+          "error": 4.218847493575595e-15
+        },
+        {
+          "name": "registered_fk_remains_editable",
+          "passed": true
+        },
+        {
+          "name": "registered_fk_edit_stable",
+          "passed": true
+        },
+        {
+          "name": "registered_fk_neutral_returns_key",
+          "passed": true
+        },
+        {
+          "name": "registered_fk_reload",
+          "passed": true
+        }
+      ]
+    },
+    "native-vmd-physics-True": {
+      "passed": true,
+      "count": 63,
+      "checks": [
+        {
+          "name": "lower_body_coverage",
+          "passed": true,
+          "total": 40,
+          "missing": []
+        },
+        {
+          "name": "deformation_duplicates_excluded",
+          "passed": true
+        },
+        {
+          "name": "lower_body_shapes",
+          "passed": true
+        },
+        {
+          "name": "左足ＩＫ_drives_limb",
+          "passed": true,
+          "displacement": 6.7977126349872234
+        },
+        {
+          "name": "左足ＩＫ_same_frame_stable",
+          "passed": true,
+          "error": 0.0
+        },
+        {
+          "name": "左足ＩＫ_neutral_recovery",
+          "passed": true,
+          "error": 7.105427357601002e-15
+        },
+        {
+          "name": "左つま先ＩＫ_drives_limb",
+          "passed": true,
+          "displacement": 6.131663342276465
+        },
+        {
+          "name": "左つま先ＩＫ_same_frame_stable",
+          "passed": true,
+          "error": 0.0
+        },
+        {
+          "name": "左つま先ＩＫ_neutral_recovery",
+          "passed": true,
+          "error": 0.0
+        },
+        {
+          "name": "左足IK親_drives_limb",
+          "passed": true,
+          "displacement": 6.807992903886497
+        },
+        {
+          "name": "左足IK親_same_frame_stable",
+          "passed": true,
+          "error": 0.0
+        },
+        {
+          "name": "左足IK親_neutral_recovery",
+          "passed": true,
+          "error": 0.0
+        },
+        {
+          "name": "左足_fk_drives_rotation",
+          "passed": true
+        },
+        {
+          "name": "左足_fk_same_frame_stable",
+          "passed": true,
+          "error": 5.551115123125783e-15
+        },
+        {
+          "name": "左足_refresh_keeps_fk",
+          "passed": true
+        },
+        {
+          "name": "左足_fk_neutral_restores_ik",
+          "passed": true,
+          "error": 0.0
+        },
+        {
+          "name": "左ひざ_fk_drives_rotation",
+          "passed": true
+        },
+        {
+          "name": "左ひざ_fk_same_frame_stable",
+          "passed": true,
+          "error": 3.774758283725532e-15
+        },
+        {
+          "name": "左ひざ_refresh_keeps_fk",
+          "passed": true
+        },
+        {
+          "name": "左ひざ_fk_neutral_restores_ik",
+          "passed": true,
+          "error": 0.0
+        },
+        {
+          "name": "左足首_fk_drives_rotation",
+          "passed": true
+        },
+        {
+          "name": "左足首_fk_same_frame_stable",
+          "passed": true,
+          "error": 1.7763568394002505e-15
+        },
+        {
+          "name": "左足首_refresh_keeps_fk",
+          "passed": true
+        },
+        {
+          "name": "左足首_fk_neutral_restores_ik",
+          "passed": true,
+          "error": 0.0
+        },
+        {
+          "name": "左足先EX_fk_drives_rotation",
+          "passed": true
+        },
+        {
+          "name": "左足先EX_fk_same_frame_stable",
+          "passed": true,
+          "error": 7.105427357601002e-15
+        },
+        {
+          "name": "左足先EX_refresh_keeps_fk",
+          "passed": true
+        },
+        {
+          "name": "左足先EX_fk_neutral_restores_ik",
+          "passed": true,
+          "error": 4.440892098500626e-16
+        },
+        {
+          "name": "右足ＩＫ_drives_limb",
+          "passed": true,
+          "displacement": 6.789474187931831
+        },
+        {
+          "name": "右足ＩＫ_same_frame_stable",
+          "passed": true,
+          "error": 0.0
+        },
+        {
+          "name": "右足ＩＫ_neutral_recovery",
+          "passed": true,
+          "error": 1.4210854715202004e-14
+        },
+        {
+          "name": "右つま先ＩＫ_drives_limb",
+          "passed": true,
+          "displacement": 5.752633680455851
+        },
+        {
+          "name": "右つま先ＩＫ_same_frame_stable",
+          "passed": true,
+          "error": 0.0
+        },
+        {
+          "name": "右つま先ＩＫ_neutral_recovery",
+          "passed": true,
+          "error": 2.842170943040401e-14
+        },
+        {
+          "name": "右足IK親_drives_limb",
+          "passed": true,
+          "displacement": 6.789474187931831
+        },
+        {
+          "name": "右足IK親_same_frame_stable",
+          "passed": true,
+          "error": 0.0
+        },
+        {
+          "name": "右足IK親_neutral_recovery",
+          "passed": true,
+          "error": 1.4210854715202004e-14
+        },
+        {
+          "name": "右足_fk_drives_rotation",
+          "passed": true
+        },
+        {
+          "name": "右足_fk_same_frame_stable",
+          "passed": true,
+          "error": 0.0
+        },
+        {
+          "name": "右足_refresh_keeps_fk",
+          "passed": true
+        },
+        {
+          "name": "右足_fk_neutral_restores_ik",
+          "passed": true,
+          "error": 0.0
+        },
+        {
+          "name": "右ひざ_fk_drives_rotation",
+          "passed": true
+        },
+        {
+          "name": "右ひざ_fk_same_frame_stable",
+          "passed": true,
+          "error": 2.6645352591003757e-15
+        },
+        {
+          "name": "右ひざ_refresh_keeps_fk",
+          "passed": true
+        },
+        {
+          "name": "右ひざ_fk_neutral_restores_ik",
+          "passed": true,
+          "error": 0.0
+        },
+        {
+          "name": "右足首_fk_drives_rotation",
+          "passed": true
+        },
+        {
+          "name": "右足首_fk_same_frame_stable",
+          "passed": true,
+          "error": 1.4210854715202004e-14
+        },
+        {
+          "name": "右足首_refresh_keeps_fk",
+          "passed": true
+        },
+        {
+          "name": "右足首_fk_neutral_restores_ik",
+          "passed": true,
+          "error": 0.0
+        },
+        {
+          "name": "右足先EX_fk_drives_rotation",
+          "passed": true
+        },
+        {
+          "name": "右足先EX_fk_same_frame_stable",
+          "passed": true,
+          "error": 4.718447854656915e-15
+        },
+        {
+          "name": "右足先EX_refresh_keeps_fk",
+          "passed": true
+        },
+        {
+          "name": "右足先EX_fk_neutral_restores_ik",
+          "passed": true,
+          "error": 7.78543896018391e-15
+        },
+        {
+          "name": "bind_unchanged",
+          "passed": true
+        },
+        {
+          "name": "ik_track_refresh",
+          "passed": true,
+          "error": 3.674073880688411e-07
+        },
+        {
+          "name": "ik_track_reload",
+          "passed": true,
+          "error": 1.4210854715202004e-14
+        },
+        {
+          "name": "ik_track_reload_keys",
+          "passed": true
+        },
+        {
+          "name": "fk_register_resets_input",
+          "passed": true
+        },
+        {
+          "name": "fk_register_preserves_pose",
+          "passed": true,
+          "error": 4.218847493575595e-15
+        },
+        {
+          "name": "registered_fk_remains_editable",
+          "passed": true
+        },
+        {
+          "name": "registered_fk_edit_stable",
+          "passed": true
+        },
+        {
+          "name": "registered_fk_neutral_returns_key",
+          "passed": true
+        },
+        {
+          "name": "registered_fk_reload",
+          "passed": true
+        }
+      ]
+    },
+    "native-checks": {
+      "passed": true,
+      "count": 27,
+      "checks": [
+        {
+          "name": "size_description_bounds",
+          "passed": true
+        },
+        {
+          "name": "refresh_preserves_existing_transforms",
+          "passed": true
+        },
+        {
+          "name": "generation_is_idempotent",
+          "passed": true,
+          "count": 40
+        },
+        {
+          "name": "native_splines_with_axis_marker",
+          "passed": true
+        },
+        {
+          "name": "display_primary",
+          "passed": true,
+          "actual": 32,
+          "expected": 32
+        },
+        {
+          "name": "display_all",
+          "passed": true,
+          "actual": 40,
+          "expected": 40
+        },
+        {
+          "name": "display_hidden",
+          "passed": true,
+          "actual": 0,
+          "expected": 0
+        },
+        {
+          "name": "select_visible",
+          "passed": true
+        },
+        {
+          "name": "select_respects_individual_visibility",
+          "passed": true
+        },
+        {
+          "name": "size_0.5",
+          "passed": true,
+          "parameter": 0.5,
+          "ratio": 0.5
+        },
+        {
+          "name": "size_1.5",
+          "passed": true,
+          "parameter": 1.5,
+          "ratio": 1.4999999999999998
+        },
+        {
+          "name": "size_2.0",
+          "passed": true,
+          "parameter": 2.0,
+          "ratio": 2.0
+        },
+        {
+          "name": "size_preserves_transforms",
+          "passed": true
+        },
+        {
+          "name": "presentation_keeps_bind_pose",
+          "passed": true
+        },
+        {
+          "name": "undo_size_restores_geometry",
+          "passed": true
+        },
+        {
+          "name": "redo_size_restores_geometry",
+          "passed": true
+        },
+        {
+          "name": "undo_display_restores_visibility",
+          "passed": true,
+          "actual": 32
+        },
+        {
+          "name": "rotation_drives_bone",
+          "passed": true
+        },
+        {
+          "name": "refresh_keeps_unkeyed_pose",
+          "passed": true
+        },
+        {
+          "name": "hiding_keeps_pose",
+          "passed": true
+        },
+        {
+          "name": "refresh_keeps_keyframes",
+          "passed": true
+        },
+        {
+          "name": "save",
+          "passed": true
+        },
+        {
+          "name": "reload_settings",
+          "passed": true
+        },
+        {
+          "name": "reload_visibility",
+          "passed": true,
+          "actual": 40
+        },
+        {
+          "name": "reload_geometry",
+          "passed": true
+        },
+        {
+          "name": "reload_tracks",
+          "passed": true
+        },
+        {
+          "name": "external_control_not_restyled",
+          "passed": true
+        }
+      ]
+    },
+    "psr-regression": {
+      "passed": true,
+      "count": 90,
+      "checks": [
+        {
+          "name": "physics=False,priority=-100/IK responds",
+          "passed": true,
+          "effector_delta": 19.59996915633687
+        },
+        {
+          "name": "physics=False,priority=-100/goal follows",
+          "passed": true
+        },
+        {
+          "name": "physics=False,priority=-100/same-frame stable",
+          "passed": true
+        },
+        {
+          "name": "physics=False,priority=-100/whole skeleton stable",
+          "passed": true,
+          "error": 0.0
+        },
+        {
+          "name": "physics=False,priority=-100/frame 1",
+          "passed": true
+        },
+        {
+          "name": "physics=False,priority=-100/frame 30",
+          "passed": true
+        },
+        {
+          "name": "physics=False,priority=-100/frame 90",
+          "passed": true
+        },
+        {
+          "name": "physics=False,priority=-100/frame 0",
+          "passed": true
+        },
+        {
+          "name": "physics=False,priority=-100/bind unchanged",
+          "passed": true
+        },
+        {
+          "name": "physics=False,priority=0/IK responds",
+          "passed": true,
+          "effector_delta": 19.59996915633687
+        },
+        {
+          "name": "physics=False,priority=0/goal follows",
+          "passed": true
+        },
+        {
+          "name": "physics=False,priority=0/same-frame stable",
+          "passed": true
+        },
+        {
+          "name": "physics=False,priority=0/whole skeleton stable",
+          "passed": true,
+          "error": 0.0
+        },
+        {
+          "name": "physics=False,priority=0/frame 1",
+          "passed": true
+        },
+        {
+          "name": "physics=False,priority=0/frame 30",
+          "passed": true
+        },
+        {
+          "name": "physics=False,priority=0/frame 90",
+          "passed": true
+        },
+        {
+          "name": "physics=False,priority=0/frame 0",
+          "passed": true
+        },
+        {
+          "name": "physics=False,priority=0/bind unchanged",
+          "passed": true
+        },
+        {
+          "name": "physics=False,priority=100/IK responds",
+          "passed": true,
+          "effector_delta": 19.59996915633687
+        },
+        {
+          "name": "physics=False,priority=100/goal follows",
+          "passed": true
+        },
+        {
+          "name": "physics=False,priority=100/same-frame stable",
+          "passed": true
+        },
+        {
+          "name": "physics=False,priority=100/whole skeleton stable",
+          "passed": true,
+          "error": 0.0
+        },
+        {
+          "name": "physics=False,priority=100/frame 1",
+          "passed": true
+        },
+        {
+          "name": "physics=False,priority=100/frame 30",
+          "passed": true
+        },
+        {
+          "name": "physics=False,priority=100/frame 90",
+          "passed": true
+        },
+        {
+          "name": "physics=False,priority=100/frame 0",
+          "passed": true
+        },
+        {
+          "name": "physics=False,priority=100/bind unchanged",
+          "passed": true
+        },
+        {
+          "name": "physics=False/priority equivalence",
+          "passed": true
+        },
+        {
+          "name": "physics=True,priority=-100/IK responds",
+          "passed": true,
+          "effector_delta": 19.59996915633687
+        },
+        {
+          "name": "physics=True,priority=-100/goal follows",
+          "passed": true
+        },
+        {
+          "name": "physics=True,priority=-100/same-frame stable",
+          "passed": true
+        },
+        {
+          "name": "physics=True,priority=-100/whole skeleton stable",
+          "passed": true,
+          "error": 0.0
+        },
+        {
+          "name": "physics=True,priority=-100/frame 1",
+          "passed": true
+        },
+        {
+          "name": "physics=True,priority=-100/frame 30",
+          "passed": true
+        },
+        {
+          "name": "physics=True,priority=-100/frame 90",
+          "passed": true
+        },
+        {
+          "name": "physics=True,priority=-100/frame 0",
+          "passed": true
+        },
+        {
+          "name": "physics=True,priority=-100/bind unchanged",
+          "passed": true
+        },
+        {
+          "name": "physics=True,priority=0/IK responds",
+          "passed": true,
+          "effector_delta": 19.59996915633687
+        },
+        {
+          "name": "physics=True,priority=0/goal follows",
+          "passed": true
+        },
+        {
+          "name": "physics=True,priority=0/same-frame stable",
+          "passed": true
+        },
+        {
+          "name": "physics=True,priority=0/whole skeleton stable",
+          "passed": true,
+          "error": 0.0
+        },
+        {
+          "name": "physics=True,priority=0/frame 1",
+          "passed": true
+        },
+        {
+          "name": "physics=True,priority=0/frame 30",
+          "passed": true
+        },
+        {
+          "name": "physics=True,priority=0/frame 90",
+          "passed": true
+        },
+        {
+          "name": "physics=True,priority=0/frame 0",
+          "passed": true
+        },
+        {
+          "name": "physics=True,priority=0/bind unchanged",
+          "passed": true
+        },
+        {
+          "name": "physics=True,priority=100/IK responds",
+          "passed": true,
+          "effector_delta": 19.59996915633687
+        },
+        {
+          "name": "physics=True,priority=100/goal follows",
+          "passed": true
+        },
+        {
+          "name": "physics=True,priority=100/same-frame stable",
+          "passed": true
+        },
+        {
+          "name": "physics=True,priority=100/whole skeleton stable",
+          "passed": true,
+          "error": 0.0
+        },
+        {
+          "name": "physics=True,priority=100/frame 1",
+          "passed": true
+        },
+        {
+          "name": "physics=True,priority=100/frame 30",
+          "passed": true
+        },
+        {
+          "name": "physics=True,priority=100/frame 90",
+          "passed": true
+        },
+        {
+          "name": "physics=True,priority=100/frame 0",
+          "passed": true
+        },
+        {
+          "name": "physics=True,priority=100/bind unchanged",
+          "passed": true
+        },
+        {
+          "name": "physics=True/priority equivalence",
+          "passed": true
+        },
+        {
+          "name": "disable/restore animation",
+          "passed": true
+        },
+        {
+          "name": "disable/resume driven",
+          "passed": true
+        },
+        {
+          "name": "missing target/restore animation",
+          "passed": true
+        },
+        {
+          "name": "missing target/resume driven",
+          "passed": true
+        },
+        {
+          "name": "zero weight/restore animation",
+          "passed": true
+        },
+        {
+          "name": "zero weight/resume driven",
+          "passed": true
+        },
+        {
+          "name": "delete/restore animation",
+          "passed": true
+        },
+        {
+          "name": "delete/resume driven",
+          "passed": true
+        },
+        {
+          "name": "undo/restore animation",
+          "passed": true
+        },
+        {
+          "name": "undo/resume driven",
+          "passed": true
+        },
+        {
+          "name": "save",
+          "passed": true
+        },
+        {
+          "name": "clone/own link",
+          "passed": true
+        },
+        {
+          "name": "clone/frame 0",
+          "passed": true
+        },
+        {
+          "name": "clone/frame 15",
+          "passed": true
+        },
+        {
+          "name": "clone/frame 30",
+          "passed": true
+        },
+        {
+          "name": "clone/frame 0",
+          "passed": true
+        },
+        {
+          "name": "reload/own link",
+          "passed": true
+        },
+        {
+          "name": "reload/frame 0",
+          "passed": true
+        },
+        {
+          "name": "reload/frame 15",
+          "passed": true
+        },
+        {
+          "name": "reload/frame 30",
+          "passed": true
+        },
+        {
+          "name": "reload/frame 0",
+          "passed": true
+        },
+        {
+          "name": "native oracle/P=True,R=False,weight=1.0,mask=False/0",
+          "passed": true,
+          "error": 0.0
+        },
+        {
+          "name": "native oracle/P=True,R=False,weight=1.0,mask=False/1",
+          "passed": true,
+          "error": 0.0
+        },
+        {
+          "name": "native oracle/P=True,R=False,weight=1.0,mask=False/2",
+          "passed": true,
+          "error": 0.0
+        },
+        {
+          "name": "native oracle/P=False,R=True,weight=1.0,mask=False/0",
+          "passed": true,
+          "error": 3.9949306351871883e-07
+        },
+        {
+          "name": "native oracle/P=False,R=True,weight=1.0,mask=False/1",
+          "passed": true,
+          "error": 3.9949306351871883e-07
+        },
+        {
+          "name": "native oracle/P=False,R=True,weight=1.0,mask=False/2",
+          "passed": true,
+          "error": 3.9949306351871883e-07
+        },
+        {
+          "name": "native oracle/P=True,R=True,weight=0.5,mask=False/0",
+          "passed": true,
+          "error": 2.5818778759401084e-07
+        },
+        {
+          "name": "native oracle/P=True,R=True,weight=0.5,mask=False/1",
+          "passed": true,
+          "error": 2.5818778759401084e-07
+        },
+        {
+          "name": "native oracle/P=True,R=True,weight=0.5,mask=False/2",
+          "passed": true,
+          "error": 2.5818778759401084e-07
+        },
+        {
+          "name": "native oracle/P=True,R=True,weight=1.0,mask=True/0",
+          "passed": true,
+          "error": 1.2332872967313335e-07
+        },
+        {
+          "name": "native oracle/P=True,R=True,weight=1.0,mask=True/1",
+          "passed": true,
+          "error": 1.2332872967313335e-07
+        },
+        {
+          "name": "native oracle/P=True,R=True,weight=1.0,mask=True/2",
+          "passed": true,
+          "error": 1.2332872967313335e-07
+        },
+        {
+          "name": "source document unchanged",
+          "passed": true
+        }
+      ]
+    },
+    "psr-vmd-regression": {
+      "passed": true,
+      "count": 90,
+      "checks": [
+        {
+          "name": "physics=False,priority=-100/IK responds",
+          "passed": true,
+          "effector_delta": 19.36204655150811
+        },
+        {
+          "name": "physics=False,priority=-100/goal follows",
+          "passed": true
+        },
+        {
+          "name": "physics=False,priority=-100/same-frame stable",
+          "passed": true
+        },
+        {
+          "name": "physics=False,priority=-100/whole skeleton stable",
+          "passed": true,
+          "error": 7.105427357601002e-15
+        },
+        {
+          "name": "physics=False,priority=-100/frame 1",
+          "passed": true
+        },
+        {
+          "name": "physics=False,priority=-100/frame 30",
+          "passed": true
+        },
+        {
+          "name": "physics=False,priority=-100/frame 90",
+          "passed": true
+        },
+        {
+          "name": "physics=False,priority=-100/frame 0",
+          "passed": true
+        },
+        {
+          "name": "physics=False,priority=-100/bind unchanged",
+          "passed": true
+        },
+        {
+          "name": "physics=False,priority=0/IK responds",
+          "passed": true,
+          "effector_delta": 19.36204655150811
+        },
+        {
+          "name": "physics=False,priority=0/goal follows",
+          "passed": true
+        },
+        {
+          "name": "physics=False,priority=0/same-frame stable",
+          "passed": true
+        },
+        {
+          "name": "physics=False,priority=0/whole skeleton stable",
+          "passed": true,
+          "error": 7.105427357601002e-15
+        },
+        {
+          "name": "physics=False,priority=0/frame 1",
+          "passed": true
+        },
+        {
+          "name": "physics=False,priority=0/frame 30",
+          "passed": true
+        },
+        {
+          "name": "physics=False,priority=0/frame 90",
+          "passed": true
+        },
+        {
+          "name": "physics=False,priority=0/frame 0",
+          "passed": true
+        },
+        {
+          "name": "physics=False,priority=0/bind unchanged",
+          "passed": true
+        },
+        {
+          "name": "physics=False,priority=100/IK responds",
+          "passed": true,
+          "effector_delta": 19.36204655150811
+        },
+        {
+          "name": "physics=False,priority=100/goal follows",
+          "passed": true
+        },
+        {
+          "name": "physics=False,priority=100/same-frame stable",
+          "passed": true
+        },
+        {
+          "name": "physics=False,priority=100/whole skeleton stable",
+          "passed": true,
+          "error": 7.105427357601002e-15
+        },
+        {
+          "name": "physics=False,priority=100/frame 1",
+          "passed": true
+        },
+        {
+          "name": "physics=False,priority=100/frame 30",
+          "passed": true
+        },
+        {
+          "name": "physics=False,priority=100/frame 90",
+          "passed": true
+        },
+        {
+          "name": "physics=False,priority=100/frame 0",
+          "passed": true
+        },
+        {
+          "name": "physics=False,priority=100/bind unchanged",
+          "passed": true
+        },
+        {
+          "name": "physics=False/priority equivalence",
+          "passed": true
+        },
+        {
+          "name": "physics=True,priority=-100/IK responds",
+          "passed": true,
+          "effector_delta": 19.36204655150811
+        },
+        {
+          "name": "physics=True,priority=-100/goal follows",
+          "passed": true
+        },
+        {
+          "name": "physics=True,priority=-100/same-frame stable",
+          "passed": true
+        },
+        {
+          "name": "physics=True,priority=-100/whole skeleton stable",
+          "passed": true,
+          "error": 7.105427357601002e-15
+        },
+        {
+          "name": "physics=True,priority=-100/frame 1",
+          "passed": true
+        },
+        {
+          "name": "physics=True,priority=-100/frame 30",
+          "passed": true
+        },
+        {
+          "name": "physics=True,priority=-100/frame 90",
+          "passed": true
+        },
+        {
+          "name": "physics=True,priority=-100/frame 0",
+          "passed": true
+        },
+        {
+          "name": "physics=True,priority=-100/bind unchanged",
+          "passed": true
+        },
+        {
+          "name": "physics=True,priority=0/IK responds",
+          "passed": true,
+          "effector_delta": 19.36204655150811
+        },
+        {
+          "name": "physics=True,priority=0/goal follows",
+          "passed": true
+        },
+        {
+          "name": "physics=True,priority=0/same-frame stable",
+          "passed": true
+        },
+        {
+          "name": "physics=True,priority=0/whole skeleton stable",
+          "passed": true,
+          "error": 7.105427357601002e-15
+        },
+        {
+          "name": "physics=True,priority=0/frame 1",
+          "passed": true
+        },
+        {
+          "name": "physics=True,priority=0/frame 30",
+          "passed": true
+        },
+        {
+          "name": "physics=True,priority=0/frame 90",
+          "passed": true
+        },
+        {
+          "name": "physics=True,priority=0/frame 0",
+          "passed": true
+        },
+        {
+          "name": "physics=True,priority=0/bind unchanged",
+          "passed": true
+        },
+        {
+          "name": "physics=True,priority=100/IK responds",
+          "passed": true,
+          "effector_delta": 19.36204655150811
+        },
+        {
+          "name": "physics=True,priority=100/goal follows",
+          "passed": true
+        },
+        {
+          "name": "physics=True,priority=100/same-frame stable",
+          "passed": true
+        },
+        {
+          "name": "physics=True,priority=100/whole skeleton stable",
+          "passed": true,
+          "error": 7.105427357601002e-15
+        },
+        {
+          "name": "physics=True,priority=100/frame 1",
+          "passed": true
+        },
+        {
+          "name": "physics=True,priority=100/frame 30",
+          "passed": true
+        },
+        {
+          "name": "physics=True,priority=100/frame 90",
+          "passed": true
+        },
+        {
+          "name": "physics=True,priority=100/frame 0",
+          "passed": true
+        },
+        {
+          "name": "physics=True,priority=100/bind unchanged",
+          "passed": true
+        },
+        {
+          "name": "physics=True/priority equivalence",
+          "passed": true
+        },
+        {
+          "name": "disable/restore animation",
+          "passed": true
+        },
+        {
+          "name": "disable/resume driven",
+          "passed": true
+        },
+        {
+          "name": "missing target/restore animation",
+          "passed": true
+        },
+        {
+          "name": "missing target/resume driven",
+          "passed": true
+        },
+        {
+          "name": "zero weight/restore animation",
+          "passed": true
+        },
+        {
+          "name": "zero weight/resume driven",
+          "passed": true
+        },
+        {
+          "name": "delete/restore animation",
+          "passed": true
+        },
+        {
+          "name": "delete/resume driven",
+          "passed": true
+        },
+        {
+          "name": "undo/restore animation",
+          "passed": true
+        },
+        {
+          "name": "undo/resume driven",
+          "passed": true
+        },
+        {
+          "name": "save",
+          "passed": true
+        },
+        {
+          "name": "clone/own link",
+          "passed": true
+        },
+        {
+          "name": "clone/frame 0",
+          "passed": true
+        },
+        {
+          "name": "clone/frame 15",
+          "passed": true
+        },
+        {
+          "name": "clone/frame 30",
+          "passed": true
+        },
+        {
+          "name": "clone/frame 0",
+          "passed": true
+        },
+        {
+          "name": "reload/own link",
+          "passed": true
+        },
+        {
+          "name": "reload/frame 0",
+          "passed": true
+        },
+        {
+          "name": "reload/frame 15",
+          "passed": true
+        },
+        {
+          "name": "reload/frame 30",
+          "passed": true
+        },
+        {
+          "name": "reload/frame 0",
+          "passed": true
+        },
+        {
+          "name": "native oracle/P=True,R=False,weight=1.0,mask=False/0",
+          "passed": true,
+          "error": 0.0
+        },
+        {
+          "name": "native oracle/P=True,R=False,weight=1.0,mask=False/1",
+          "passed": true,
+          "error": 0.0
+        },
+        {
+          "name": "native oracle/P=True,R=False,weight=1.0,mask=False/2",
+          "passed": true,
+          "error": 0.0
+        },
+        {
+          "name": "native oracle/P=False,R=True,weight=1.0,mask=False/0",
+          "passed": true,
+          "error": 3.9949306351871883e-07
+        },
+        {
+          "name": "native oracle/P=False,R=True,weight=1.0,mask=False/1",
+          "passed": true,
+          "error": 3.9949306351871883e-07
+        },
+        {
+          "name": "native oracle/P=False,R=True,weight=1.0,mask=False/2",
+          "passed": true,
+          "error": 3.9949306351871883e-07
+        },
+        {
+          "name": "native oracle/P=True,R=True,weight=0.5,mask=False/0",
+          "passed": true,
+          "error": 2.5818778759401084e-07
+        },
+        {
+          "name": "native oracle/P=True,R=True,weight=0.5,mask=False/1",
+          "passed": true,
+          "error": 2.5818778759401084e-07
+        },
+        {
+          "name": "native oracle/P=True,R=True,weight=0.5,mask=False/2",
+          "passed": true,
+          "error": 2.5818778759401084e-07
+        },
+        {
+          "name": "native oracle/P=True,R=True,weight=1.0,mask=True/0",
+          "passed": true,
+          "error": 1.2332872967313335e-07
+        },
+        {
+          "name": "native oracle/P=True,R=True,weight=1.0,mask=True/1",
+          "passed": true,
+          "error": 1.2332872967313335e-07
+        },
+        {
+          "name": "native oracle/P=True,R=True,weight=1.0,mask=True/2",
+          "passed": true,
+          "error": 1.2332872967313335e-07
+        },
+        {
+          "name": "source document unchanged",
+          "passed": true
+        }
+      ]
+    }
+  },
+  "limits": [
+    "Native runtime tested only on Windows Cinema 4D 2026.4",
+    "Other Windows SDKs have compile/artifact evidence, not host runtime acceptance",
+    "Installer lifecycle used a private AppId and private host directories with the actual Release payloads",
+    "Public installer was compiled, not installed over user Cinema 4D installations",
+    "No macOS package or public release in this delivery"
+  ],
+  "bone-add-key": {
+    "passed": true,
+    "relative_rotation": 0.0,
+    "pose_error": 5.551115123125783e-15
+  },
+  "fixed-axis-shape": {
+    "passed": true,
+    "points": 7,
+    "expected": 7
+  },
+  "installer_validation": {
+    "schema_version": 1,
+    "status": "passed",
+    "compiler": {
+      "path": "C:\\code\\C4D_MMD_Tool\\_build_msvc\\tools\\inno-6.7.3\\ISCC.exe",
+      "bytes": 1456272,
+      "sha256": "0a8757031b33777e4c9cbffee40f11a5062b36d25cbe144c1db73b6102b80ad7"
+    },
+    "fixture_root": "S:\\tmp\\cmt-controls-installer-20261008-delivery",
+    "native_plugin_loaded": false,
+    "release_installer_accepted": false,
+    "installed": true,
+    "uninstalled": true,
+    "test_payloads": false,
+    "checks": [
+      "Maintained template compiled by actual ISCC with paired resources/MCP",
+      "All 11 components install their matching eight SDK fixture payloads",
+      "Repeat install removes stale plugin content and preserves unrelated host files",
+      "Private uninstall removes installed payloads and preserves unrelated host files"
+    ],
+    "release_build_root": "C:\\code\\C4D_MMD_Tool\\_build_msvc",
+    "original_template": {
+      "path": "C:\\code\\C4D_MMD_Tool\\setup\\Common\\installer_script.iss",
+      "bytes": 8698,
+      "sha256": "f7235341f72dfe12c470d03324c54924c25dc39e2723317990ada98ebbb3aafb"
+    },
+    "adapted_template": {
+      "path": "S:\\tmp\\cmt-controls-installer-20261008-delivery\\project\\setup\\Common\\installer_script.iss",
+      "bytes": 8786,
+      "sha256": "59148ecd9c0b77e996c04e7b5d3e1fcd242052ecb8deded43bfb02ab4c4213fe"
+    },
+    "installer": {
+      "path": "S:\\tmp\\cmt-controls-installer-20261008-delivery\\compiled\\CMT_Installer_Validation.exe",
+      "bytes": 5419714,
+      "sha256": "b5d7099f4c45389e80d35b4c0fe8b4147c0c4e7d3c033432be2aedd6d94fcf48"
+    },
+    "installed_file_checks": 869
+  },
+  "windows_sdks": [
+    {
+      "sdk": "sdk_r20",
+      "status": "inputs_present",
+      "runtime_regression": "OFF",
+      "binary": {
+        "path": "C:\\code\\C4D_MMD_Tool\\_build_msvc\\sdk_r20\\bin\\Release\\plugins\\mmdtool\\mmdtool.xdl64",
+        "bytes": 3197440,
+        "sha256": "770fec758ff3ca74c3e4f9d10b31462e935504374c405bc672c93301ac2b48dc"
+      }
+    },
+    {
+      "sdk": "sdk_r21",
+      "status": "inputs_present",
+      "runtime_regression": "OFF",
+      "binary": {
+        "path": "C:\\code\\C4D_MMD_Tool\\_build_msvc\\sdk_r21\\bin\\Release\\plugins\\mmdtool\\mmdtool.xdl64",
+        "bytes": 3438080,
+        "sha256": "07fd31b3133e4469afa1b1b19ac8577604d0cddc2be7b86a6e4fad042c954a20"
+      }
+    },
+    {
+      "sdk": "sdk_r23",
+      "status": "inputs_present",
+      "runtime_regression": "OFF",
+      "binary": {
+        "path": "C:\\code\\C4D_MMD_Tool\\_build_msvc\\sdk_r23\\bin\\Release\\plugins\\mmdtool\\mmdtool.xdl64",
+        "bytes": 3258880,
+        "sha256": "991b6c7cf78895b6986bc84178ebb856d9e92270fc11c3572f152508c7d2d87e"
+      }
+    },
+    {
+      "sdk": "sdk_r25",
+      "status": "inputs_present",
+      "runtime_regression": "OFF",
+      "binary": {
+        "path": "C:\\code\\C4D_MMD_Tool\\_build_msvc\\sdk_r25\\bin\\Release\\plugins\\mmdtool\\mmdtool.xdl64",
+        "bytes": 3273728,
+        "sha256": "895fa0838c12d00f8fbe4f0d8072043c5da1fc83a9d5457597440a1d70c126ad"
+      }
+    },
+    {
+      "sdk": "sdk_2023",
+      "status": "inputs_present",
+      "runtime_regression": "OFF",
+      "binary": {
+        "path": "C:\\code\\C4D_MMD_Tool\\_build_msvc\\sdk_2023\\bin\\Release\\plugins\\mmdtool\\mmdtool.xdl64",
+        "bytes": 3302912,
+        "sha256": "efb970bc202c9acc0acf79d76b57871d6e30d7eb69cd8e41b65a0c5102bf788b"
+      }
+    },
+    {
+      "sdk": "sdk_2024",
+      "status": "inputs_present",
+      "runtime_regression": "OFF",
+      "binary": {
+        "path": "C:\\code\\C4D_MMD_Tool\\_build_msvc\\sdk_2024\\bin\\Release\\plugins\\mmdtool\\mmdtool.xdl64",
+        "bytes": 3295232,
+        "sha256": "31835697fb24699ba6cbc7b1cef81b7ee648f3cd2f15a4dda5068c9baf251b9b"
+      }
+    },
+    {
+      "sdk": "sdk_2025",
+      "status": "inputs_present",
+      "runtime_regression": "OFF",
+      "binary": {
+        "path": "C:\\code\\C4D_MMD_Tool\\_build_msvc\\sdk_2025\\bin\\Release\\plugins\\mmdtool\\mmdtool.xdl64",
+        "bytes": 3093504,
+        "sha256": "96d298e00f25f6a7fb67053f4e4726050475edc108643456c26a673f0328dfee"
+      }
+    },
+    {
+      "sdk": "sdk_2026",
+      "status": "inputs_present",
+      "runtime_regression": "OFF",
+      "binary": {
+        "path": "C:\\code\\C4D_MMD_Tool\\_build_msvc\\sdk_2026\\bin\\Release\\plugins\\mmdtool\\mmdtool.xdl64",
+        "bytes": 3083264,
+        "sha256": "b5fd82babf2cafdcf7e39a3890b3bf9a8a2ee97f4874bd82913159e14dcd7bff"
+      }
+    }
+  ],
+  "source_fingerprint": "427a879bd22f6dee8c48d32ac424a9a5d19f1509f215d8dcd4632f3979b0a9eb",
+  "loaded_module": {
+    "pid": 42392,
+    "startTime": "2026-10-08T20:46:47.7722348+08:00",
+    "modules": [
+      {
+        "path": "C:\\code\\C4D_MMD_Tool\\_build_msvc\\sdk_2026\\bin\\Release\\plugins\\mmdtool\\mmdtool.xdl64",
+        "sha256": "B5FD82BABF2CAFDCF7E39A3890B3BF9A8A2EE97F4874BD82913159E14DCD7BFF"
+      }
+    ]
+  },
+  "inputs": [
+    {
+      "path": "C:\\白银之城—阿芙2.0\\阿芙2.0.pmx",
+      "sha256": "18d5e76cb248e46448dcc62d4f747f1331d2834df144d103b3c6d9e01e8c3ebd"
+    },
+    {
+      "path": "C:\\vmd\\Stay Tonight Heaven Lee Ver. 动作.vmd",
+      "sha256": "db7d3a542359c92d057d28be4b38e89c3368de1185bf23d1bbbd4d0e67eb187d"
+    }
+  ],
+  "package": {
+    "name": "MMD-Tool-v0.9.2.3-Windows-x64-Setup.exe",
+    "bytes": 5419510,
+    "sha256": "3334426a7421314970ed51804f4bd0ab5eaff15479b07c27316b690f324934d5"
+  },
+  "logic_tests": {
+    "passed": true,
+    "count": 20,
+    "log": "output/controllers-0.9.2.3/evidence/logic-tests.log"
+  },
+  "private_scenes": [
+    "Afu_controllers.c4d",
+    "Afu_controllers_VMD.c4d",
+    "Afu_controllers_leg_detail.c4d"
+  ]
+}

@@ -1921,6 +1921,12 @@ Bool MMDBoneTag::AddAnimationKeyframeFromCurrentPose(GeListNode* node, BaseDocum
 	keyframe.rotation_y = rotation[1];
 	keyframe.rotation_z = rotation[2];
 	keyframe.rotation_w = rotation[3];
+	// Preserve authored FK ownership after resetting the controller input.
+	// IK targets remain solver inputs rather than authored limb poses.
+	const BaseTag* const self_tag = static_cast<BaseTag*>(node);
+	if (!self_tag->GetDataInstance()->GetBool(PMX_BONE_IS_IK) &&
+		mmd_bone_control_util::HasActiveControlRotation(static_cast<BaseTag*>(node)))
+		keyframe.static_pose = true;
 
 	std::sort(slot->keyframes.Begin(), slot->keyframes.End(), [](const BoneAnimationKeyframeData& lhs, const BoneAnimationKeyframeData& rhs)
 	{
@@ -2703,7 +2709,7 @@ void MMDBoneTag::SetBoneDisplay(const BaseContainer* const data_instance_bc, con
 {
 	BaseTag* const owner_tag = const_cast<BaseTag*>(static_cast<const BaseTag*>(Get()));
 	BaseObject* const control = ResolveObjectFromLinkParameter(owner_tag, PMX_BONE_CONTROL_LINK);
-	const Bool controls_visible = msg->display_type != BONE_DISPLAY_TYPE_OFF;
+	const Bool controls_visible = mmd_bone_control_util::IsControlVisible(owner_tag, msg->bone_manager_object, msg->display_type);
 	SetObjectDisplay(control, controls_visible ? MODE_ON : MODE_OFF);
 
 	if (msg->display_type == BONE_DISPLAY_TYPE_CONTROLS)
@@ -3404,7 +3410,7 @@ Bool MMDBoneTag::ApplyActiveAnimation(BaseObject* op, BaseDocument* doc, const B
 
 	Vector control_translation;
 	std::array<Float32, 4> control_rotation { 0.F, 0.F, 0.F, 1.F };
-	if (!static_pose_segment && mmd_bone_control_util::GetControlDeltaInBoneSpace(static_cast<BaseTag*>(Get()), op, control_translation, control_rotation))
+	if (mmd_bone_control_util::GetControlDeltaInBoneSpace(static_cast<BaseTag*>(Get()), op, control_translation, control_rotation, rotation))
 	{
 		if (!bc || bc->GetBool(PMX_BONE_TRANSLATABLE))
 			translation += control_translation;
@@ -3496,16 +3502,38 @@ Bool MMDBoneTag::ApplyActiveAnimation(BaseObject* op, BaseDocument* doc, const B
 		}
 	}
 
-	const Vector final_translation = evaluated_animation_translation_ + evaluated_append_animation_translation_;
-	const std::array<Float32, 4> final_rotation = ToQuaternionArray(
+	Vector final_translation = evaluated_animation_translation_ + evaluated_append_animation_translation_;
+	std::array<Float32, 4> final_rotation = ToQuaternionArray(
 		ToEigenQuaternion(evaluated_animation_rotation_) * ToEigenQuaternion(evaluated_append_animation_rotation_));
+	Matrix external_relative;
+	Bool external_position = false;
+	Bool external_rotation = false;
+	if (auto* const model = GetModelManager();
+		model && model->GetExternalBonePose(GetBoneIndex(), external_relative, external_position, external_rotation))
+	{
+		// C4D already solved weights, masks and offsets against this frame's
+		// baseline. Publish the result to both the scene and append/IK readers.
+		if (external_position)
+		{
+			final_translation = external_relative.off;
+			evaluated_animation_translation_ = final_translation;
+			evaluated_append_animation_translation_ = Vector();
+		}
+		if (external_rotation)
+		{
+			final_rotation = ToQuaternionArray(ExtractRotation(MatrixToEigen(NormalizeMatrixBasis(external_relative))));
+			evaluated_animation_rotation_ = final_rotation;
+			evaluated_append_animation_rotation_ = { 0.F, 0.F, 0.F, 1.F };
+		}
+	}
 	if (apply_to_scene)
 	{
 		op->SetRelMl(BuildAnimationMatrix(final_translation, final_rotation));
 		MarkBoneTransformDirty(op);
 	}
 	if (static_pose_segment)
-		SetPlaybackRuntimeOverride(doc, translation, rotation, true);
+		SetPlaybackRuntimeOverride(doc, external_position ? final_translation : translation,
+			external_rotation ? final_rotation : rotation, true);
 	return true;
 }
 

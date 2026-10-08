@@ -25,6 +25,7 @@ Description:	DESC
 #include "maxon/queue.h"
 #include "module/tools/tag/mmd_bone.h"
 #include "utils/mmd_bone_control_util.hpp"
+#include "description/OMMDModelManager.h"
 #include "utils/string_util.hpp"
 #include "libMMD/Model/MMD/PMXFile.h"
 #include "libMMD/Model/MMD/PMXModel.h"
@@ -770,6 +771,8 @@ SDK2024_CopyTo(MMDBoneManagerObject)
 	dest_object->is_syncing_bone_hierarchy_ = false;
 	dest_object->has_pending_bone_hierarchy_sync_ = false;
 	dest_object->bone_display_sync_pending_ = true;
+	dest_object->control_visual_size_ = -1.0;
+	dest_object->control_visual_display_ = NOTOK;
 	dest_object->has_hierarchy_checksum_ = false;
 	dest_object->bone_index_lookup_.Reset();
 	dest_object->bone_items_.FlushAll();
@@ -792,6 +795,8 @@ SDK2024_CopyTo(MMDBoneManagerObject)
 
 Bool MMDBoneManagerObject::Read(GeListNode* node, HyperFile* hf, Int32 level)
 {
+	control_visual_size_ = -1.0;
+	control_visual_display_ = NOTOK;
 	iferr_scope_handler{
 		return false;
 	};
@@ -930,8 +935,40 @@ Bool MMDBoneManagerObject::CreateOrRefreshControls(BaseObject* bone_manager_obje
 {
 	if (!mmd_bone_control_util::CreateOrRefreshControls(*this, bone_manager_object))
 		return false;
-	ApplyStoredBoneDisplayType(bone_manager_object ? bone_manager_object : reinterpret_cast<BaseObject*>(Get()));
+	SetBoneDisplayType(BONE_DISPLAY_TYPE_CONTROLS, bone_manager_object ? bone_manager_object : reinterpret_cast<BaseObject*>(Get()));
 	return true;
+}
+
+DRAWRESULT MMDBoneManagerObject::Draw(BaseObject* op, DRAWPASS drawpass, BaseDraw* bd, BaseDrawHelp* bh)
+{
+	return mmd_bone_control_util::DrawControls(*this, op, drawpass, bd, bh);
+}
+
+void MMDBoneManagerObject::SynchronizeControlPresentation(BaseObject* manager)
+{
+	BaseObject* const model = io_util::ResolveObjectLink(model_manager_);
+	if (!manager || !model)
+		return;
+	const BaseContainer* const data = model->GetDataInstance();
+	const Float size = data->GetFloat(MODEL_CONTROLS_SIZE, 1.0);
+	const Int32 display = data->GetInt32(MODEL_CONTROLS_DISPLAY);
+	if (size != control_visual_size_)
+	{
+		mmd_bone_control_util::RefreshControlVisuals(*this, manager);
+		control_visual_size_ = size;
+	}
+	if (display != control_visual_display_)
+	{
+		// Read/CopyTo already synchronize the stored bone display. Thereafter,
+		// model attribute Undo and direct container edits must update visibility.
+		if (control_visual_display_ != NOTOK)
+		{
+			const Int32 bone_display = display == MODEL_CONTROLS_DISPLAY_HIDDEN ? BONE_DISPLAY_TYPE_OFF : BONE_DISPLAY_TYPE_CONTROLS;
+			manager->GetDataInstance()->SetInt32(BONE_DISPLAY_TYPE, bone_display);
+			ApplyBoneDisplayType(manager, bone_display);
+		}
+		control_visual_display_ = display;
+	}
 }
 
 bool MMDBoneManagerObject::HandleMMDBoneTagMessage(GeListNode* node, void* data)
@@ -2162,10 +2199,16 @@ EXECUTIONRESULT MMDBoneManagerObject::Execute(BaseObject* op, BaseDocument* doc,
 		return EXECUTIONRESULT::OK;
 	if (bone_display_sync_pending_)
 		ApplyStoredBoneDisplayType(op);
+	SynchronizeControlPresentation(op);
 
 	BaseObject* const model_manager_object = io_util::ResolveObjectLink(model_manager_);
 	const BaseContainer* const model_bc = model_manager_object ? model_manager_object->GetDataInstance() : nullptr;
 	if (!model_bc || model_bc->GetInt32(MODEL_MODE) != MODEL_MODE_ANIM)
+		return EXECUTIONRESULT::OK;
+	// The model consumes native constraints after the expression tags. Do not
+	// overwrite their results with cached IK poses in the intermediate pass.
+	if (auto* const model = model_manager_object->GetNodeData<MMDModelManagerObject>();
+		model && model->HasExternalBonePoses())
 		return EXECUTIONRESULT::OK;
 
 	EnsurePlaybackExecutionPlan();
@@ -2307,9 +2350,11 @@ Int32 MMDBoneManagerObject::PrepareSceneForPhysicsPlaybackLayer(BaseDocument* do
 			continue;
 		if (bc->GetBool(PMX_BONE_PHYSICS_AFTER_DEFORM) != after_physics)
 			continue;
-		if (!after_physics && bone_tag_node->HasStaticPoseRuntimeOverride(doc))
+		// A held authored pose owns IK, but remains editable by its FK control.
+		const Bool editing_fk = mmd_bone_control_util::HasActiveControlRotation(bone_tag);
+		if (!after_physics && bone_tag_node->HasStaticPoseRuntimeOverride(doc) && !editing_fk)
 			continue;
-		if (after_physics && bone_tag_node->HasRecentPlaybackRuntimeOverride(doc))
+		if (after_physics && bone_tag_node->HasRecentPlaybackRuntimeOverride(doc) && !editing_fk)
 			continue;
 
 		// The standalone physics / IK runtime executes before bone tags have
@@ -2382,6 +2427,15 @@ void MMDBoneManagerObject::ApplyBoneDisplayType(BaseObject* const bone_manager_o
 {
 	if (!bone_manager_object || display_type < BONE_DISPLAY_TYPE_ON || display_type > BONE_DISPLAY_TYPE_CONTROLS)
 		return;
+	if (BaseObject* const model = io_util::ResolveObjectLink(model_manager_))
+	{
+		BaseContainer& data = model->GetDataInstanceRef();
+		if (display_type == BONE_DISPLAY_TYPE_OFF)
+			data.SetInt32(MODEL_CONTROLS_DISPLAY, MODEL_CONTROLS_DISPLAY_HIDDEN);
+		else if (data.GetInt32(MODEL_CONTROLS_DISPLAY) == MODEL_CONTROLS_DISPLAY_HIDDEN)
+			data.SetInt32(MODEL_CONTROLS_DISPLAY, MODEL_CONTROLS_DISPLAY_PRIMARY);
+		control_visual_display_ = data.GetInt32(MODEL_CONTROLS_DISPLAY);
+	}
 	const Int32 manager_visibility = display_type == BONE_DISPLAY_TYPE_OFF ? MODE_OFF : MODE_UNDEF;
 	bone_manager_object->SetEditorMode(manager_visibility);
 	bone_manager_object->SetRenderMode(manager_visibility);
