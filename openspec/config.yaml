@@ -14,13 +14,13 @@ context: |
   - Eigen (header-only) — Math library (libMMD public dependency)
 
   Source layout:
-  - refactoring/ — Active plugin source code
+  - source/ — Active plugin source code
   - res/S24_up/ — Plugin resources (descriptions, dialogs, strings)
   - dependency/ — Third-party sources (Bullet3, libMMD); built via CMake add_subdirectory, no install prefix required
 
   Conventions:
   - SDK compatibility macros in module/core/cmt_marco.h
-  - Utils are header-only (.hpp) in refactoring/utils/
+  - Shared utils live in source/utils/; most are header-only (.hpp), runtime helpers may use .cpp
   - Debug libraries use _Debug suffix (e.g. libMMD_Debug.lib)
   - Error handling: iferr_scope_handler, iferr_return
   - Memory: NewObj/NewObjClear, AutoFree/AutoAlloc
