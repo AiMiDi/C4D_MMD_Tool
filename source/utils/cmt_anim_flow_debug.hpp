@@ -62,6 +62,12 @@ namespace cmt::debug
 		return kEnabled;
 	}
 
+	inline bool IsRuntimeProfileEnabled()
+	{
+		static const bool kEnabled = detail::ParseTruthyEnv("CMT_RUNTIME_PROFILE");
+		return kEnabled;
+	}
+
 	/**
 	 * @brief Optional bone-index filter; -1 means "log every bone".
 	 *

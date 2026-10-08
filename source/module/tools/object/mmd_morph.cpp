@@ -10,8 +10,14 @@
 
 Bool IMorph::Read(HyperFile* hf, Int32 level)
 {
+	m_runtime_identity = cmt_runtime_identity::Next();
 	IOReadField(m_strength_id);
 	IOReadField(m_name);
+	if (level >= 6)
+	{
+		IOReadField(m_panel);
+		IOReadField(m_panel_id);
+	}
 	return true;
 }
 
@@ -19,13 +25,20 @@ Bool IMorph::Write(HyperFile* hf) SDK2024_Const
 {
 	IOWriteField(m_strength_id);
 	IOWriteField(m_name);
+	IOWriteField(m_panel);
+	IOWriteField(m_panel_id);
 	return true;
 }
 
 Bool IMorph::CopyTo(IMorph* dest) const
 {
+	if (!dest || dest->GetType() != GetType())
+		return false;
 	dest->m_strength_id = m_strength_id;
 	dest->m_name = m_name;
+	dest->m_panel = m_panel;
+	dest->m_panel_id = m_panel_id;
+	dest->m_runtime_identity = m_runtime_identity;
 	return true;
 }
 
@@ -63,6 +76,13 @@ Bool GroupMorph::CopyTo(IMorph* dest) const
 {
 	if (IMorph::CopyTo(dest) == false)
 		return false;
+	auto* const group_dest = static_cast<GroupMorph*>(dest);
+	group_dest->m_grp_id = m_grp_id;
+	group_dest->m_button_grp_id = m_button_grp_id;
+	group_dest->m_button_editor_id = m_button_editor_id;
+	group_dest->m_button_delete_id = m_button_delete_id;
+	group_dest->m_button_rename_id = m_button_rename_id;
+	group_dest->m_data.Reset();
 	for (auto& data : m_data)
 	{
 		iferr(dest->GetSubMorphDataWritable()->Insert(data.GetKey(), data.GetValue()))
@@ -104,6 +124,13 @@ Bool FlipMorph::CopyTo(IMorph* dest) const
 {
 	if (IMorph::CopyTo(dest) == false)
 		return false;
+	auto* const flip_dest = static_cast<FlipMorph*>(dest);
+	flip_dest->m_grp_id = m_grp_id;
+	flip_dest->m_button_grp_id = m_button_grp_id;
+	flip_dest->m_button_editor_id = m_button_editor_id;
+	flip_dest->m_button_delete_id = m_button_delete_id;
+	flip_dest->m_button_rename_id = m_button_rename_id;
+	flip_dest->m_data.Reset();
 	for (auto& data : m_data)
 	{
 		iferr(dest->GetSubMorphDataWritable()->Insert(data.GetKey(), data.GetValue()))
@@ -124,7 +151,9 @@ IMorph::IMorph(String name, DescID strength_id):
 
 IMorph::IMorph(IMorph&& other) noexcept:
 	m_name(std::move(other.m_name)),
-	m_strength_id(std::move(other.m_strength_id))
+	m_strength_id(std::move(other.m_strength_id)),
+	m_panel(other.m_panel),
+	m_runtime_identity(other.m_runtime_identity)
 {}
 
 void IMorph::AddPanelUI(MMDModelManagerObject& model, Int morph_id, const DescID& parent_grp)
@@ -720,11 +749,78 @@ void MaterialMorph::DeleteMorphUI(MMDModelManagerObject& model)
 	}
 }
 
+void MMDImpulseMorphOffset::FromPMX(const libmmd::PMXFileMorph::ImpulseMorph& src)
+{
+	rigid_index = src.m_rigidbodyIndex;
+	local = src.m_localFlag != 0;
+	translate_velocity = Vector(src.m_translateVelocity.x(), src.m_translateVelocity.y(), src.m_translateVelocity.z());
+	rotate_torque = Vector(src.m_rotateTorque.x(), src.m_rotateTorque.y(), src.m_rotateTorque.z());
+}
+
+void MMDImpulseMorphOffset::ToPMX(libmmd::PMXFileMorph::ImpulseMorph& dst) const
+{
+	dst.m_rigidbodyIndex = rigid_index;
+	dst.m_localFlag = local ? 1 : 0;
+	dst.m_translateVelocity = Eigen::Vector3f(translate_velocity.x, translate_velocity.y, translate_velocity.z);
+	dst.m_rotateTorque = Eigen::Vector3f(rotate_torque.x, rotate_torque.y, rotate_torque.z);
+}
+
+Bool MMDImpulseMorphOffset::Read(HyperFile* hf)
+{
+	IOReadField(rigid_index);
+	IOReadField(local);
+	IOReadField(rigid_link);
+	IOReadField(translate_velocity);
+	IOReadField(rotate_torque);
+	return true;
+}
+
+Bool MMDImpulseMorphOffset::Write(HyperFile* hf) const
+{
+	IOWriteField(rigid_index);
+	IOWriteField(local);
+	IOWriteField(rigid_link);
+	IOWriteField(translate_velocity);
+	IOWriteField(rotate_torque);
+	return true;
+}
+
 ImpulseMorph::ImpulseMorph(String name, DescID strength_id) : IMorph(std::move(name), std::move(strength_id))
 {}
 
-ImpulseMorph::ImpulseMorph(ImpulseMorph&& other) noexcept : IMorph(std::move(other))
+ImpulseMorph::ImpulseMorph(ImpulseMorph&& other) noexcept : IMorph(std::move(other)), m_offsets(std::move(other.m_offsets))
 {}
+
+Bool ImpulseMorph::Read(HyperFile* hf, Int32 level)
+{
+	if (!IMorph::Read(hf, level))
+		return false;
+	m_offsets.Reset();
+	// Older scene levels contain no impulse offsets; do not consume the next morph.
+	return level < 6 || io_util::ReadLinearContainer(hf, m_offsets);
+}
+
+Bool ImpulseMorph::Write(HyperFile* hf) SDK2024_Const
+{
+	return IMorph::Write(hf) && io_util::WriteLinearContainer(hf, m_offsets);
+}
+
+Bool ImpulseMorph::CopyTo(IMorph* dest) const
+{
+	if (!IMorph::CopyTo(dest) || dest->GetType() != MMDMorphType::IMPULSE)
+		return false;
+	iferr(static_cast<ImpulseMorph*>(dest)->m_offsets.CopyFrom(m_offsets))
+		return false;
+	for (auto& offset : static_cast<ImpulseMorph*>(dest)->m_offsets)
+	{
+		const auto source_link = offset.rigid_link;
+		iferr(offset.rigid_link = maxon::StrongRef<AutoAlloc<BaseLink>>::Create())
+			return false;
+		if (source_link && *source_link)
+			(*offset.rigid_link)->SetLink((*source_link)->ForceGetLink());
+	}
+	return true;
+}
 
 void ImpulseMorph::UpdateMorph(MMDModelManagerObject& model)
 {}

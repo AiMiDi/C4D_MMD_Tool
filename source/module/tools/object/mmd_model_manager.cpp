@@ -10,7 +10,6 @@ Description:	MMD model object
 
 #include "module/core/cmt_old_sdk_stl_preload.h"
 #include "mmd_model_manager.h"
-#include "utils/cmt_pmx_export_scale.hpp"
 #include <c4d.h>
 #include <c4d_symbols.h>
 #include "plugin_resource.h"
@@ -18,6 +17,9 @@ Description:	MMD model object
 #include "cmt_tools_manager.h"
 #include "mmd_morph.h"
 #include "module/tools/material/mmd_material.h"
+#include "module/tools/material/mmd_redshift_toon_material.h"
+#include "module/tools/material/mmd_material_morph_binding.h"
+#include "utils/cmt_pmx_export_scale.hpp"
 #include "module/tools/tag/mmd_bone.h"
 #include "mmd_bone_manager.h"
 #include "mmd_joint_manager.h"
@@ -30,14 +32,16 @@ Description:	MMD model object
 #include "maxon/queue.h"
 #include "utils/filename_util.hpp"
 #include "utils/mmd_bone_control_util.hpp"
+#include "utils/cmt_motion_validation.hpp"
 #include "utils/string_util.hpp"
+#include "utils/cmt_runtime_profile.hpp"
+#include "utils/cmt_anim_flow_debug.hpp"
 #include "libMMD/Model/MMD/MMDIkSolver.h"
 #include "libMMD/Model/MMD/MMDPhysics.h"
 #include "libMMD/Model/MMD/SjisToUnicode.h"
 #include "libMMD/Model/MMD/VMDInterpolation.h"
 
 
-#include <btBulletDynamicsCommon.h>
 
 #include <Eigen/Geometry>
 
@@ -360,7 +364,68 @@ namespace
 
 	Int32 ToAnimationFrame(const UInt32 frame, const Float time_offset)
 	{
-		return static_cast<Int32>(frame) + static_cast<Int32>(time_offset);
+		std::int32_t result = 0;
+		return cmt_motion_validation::TryAnimationFrame(frame, time_offset, result) ? result : 0;
+	}
+
+	Bool TryDocumentAnimationFrame(const BaseTime& time, Int32& result)
+	{
+		return cmt_motion_validation::TryDocumentFrame(time.GetNumerator(), time.GetDenominator(), kModelAnimationFps, result);
+	}
+
+	Int32 GetDocumentAnimationFrame(const BaseTime& time)
+	{
+		Int32 frame = 0;
+		return TryDocumentAnimationFrame(time, frame) ? frame : 0;
+	}
+
+	UInt32 ToExportFrame(const Int32 source_frame, const Float offset)
+	{
+		std::uint32_t frame = 0;
+		return cmt_motion_validation::TryExportFrame(source_frame, offset, frame) ? frame : 0;
+	}
+
+	Bool ValidateCurveExportFrames(CCurve* curve, const Float offset)
+	{
+		if (!curve)
+			return true;
+		for (Int32 index = 0; index < curve->GetKeyCount(); ++index)
+		{
+			const CKey* const key = curve->GetKey(index);
+			Int32 source_frame = 0;
+			std::uint32_t output_frame = 0;
+			if (key && (!TryDocumentAnimationFrame(key->GetTime(), source_frame)
+				|| !cmt_motion_validation::TryExportFrame(source_frame, offset, output_frame)))
+				return false;
+		}
+		return true;
+	}
+
+	Bool ValidateMotionImport(const libmmd::VMDFile& file, const CMTToolsSetting::MotionImport& setting, const Float model_scale)
+	{
+		if (!cmt_motion_validation::IsFrameOffsetValid(setting.time_offset))
+			return false;
+		std::int32_t frame = 0;
+		if (setting.import_motion)
+		{
+			const double ratio = setting.position_multiple / model_scale;
+			for (const auto& key : file.m_motions)
+			{
+				if (!cmt_motion_validation::TryAnimationFrame(key.m_frame, setting.time_offset, frame)
+					|| !cmt_motion_validation::IsPositionValid({key.m_translate.x(), key.m_translate.y(), key.m_translate.z()}, ratio)
+					|| !cmt_motion_validation::IsQuaternionValid({key.m_quaternion.x(), key.m_quaternion.y(), key.m_quaternion.z(), key.m_quaternion.w()}))
+					return false;
+			}
+		}
+		if (setting.import_morph)
+			for (const auto& key : file.m_morphs)
+				if (!std::isfinite(key.m_weight) || !cmt_motion_validation::TryAnimationFrame(key.m_frame, setting.time_offset, frame))
+					return false;
+		if (setting.import_model_info)
+			for (const auto& key : file.m_iks)
+				if (!cmt_motion_validation::TryAnimationFrame(key.m_frame, setting.time_offset, frame))
+					return false;
+		return true;
 	}
 
 	String GetBoneTagName(const BaseTag* tag, const Bool use_local_name)
@@ -514,15 +579,15 @@ namespace
 		interpolation[offset + 12] = bezier.by;
 	}
 
-	BoneAnimationKeyframeData ConvertMotionToBoneKeyframe(const libmmd::VMDMotion& motion, const CMTToolsSetting::MotionImport& setting)
+	BoneAnimationKeyframeData ConvertMotionToBoneKeyframe(const libmmd::VMDMotion& motion, const CMTToolsSetting::MotionImport& setting, const Float model_scale)
 	{
 		BoneAnimationKeyframeData keyframe;
 		keyframe.frame = ToAnimationFrame(motion.m_frame, setting.time_offset);
 		keyframe.translation = Vector32(
-			motion.m_translate.x(),
-			motion.m_translate.y(),
-			motion.m_translate.z());
-		const Eigen::Quaternionf rotation = motion.m_quaternion.normalized();
+			static_cast<Float32>(motion.m_translate.x() * setting.position_multiple / model_scale),
+			static_cast<Float32>(motion.m_translate.y() * setting.position_multiple / model_scale),
+			static_cast<Float32>(motion.m_translate.z() * setting.position_multiple / model_scale));
+		const Eigen::Quaternionf rotation = motion.m_quaternion.cast<double>().normalized().cast<float>();
 		keyframe.rotation_x = rotation.x();
 		keyframe.rotation_y = rotation.y();
 		keyframe.rotation_z = rotation.z();
@@ -534,13 +599,13 @@ namespace
 		return keyframe;
 	}
 
-	libmmd::VMDMotion ConvertBoneKeyframeToMotion(const String& bone_name, const BoneAnimationKeyframeData& keyframe, const CMTToolsSetting::MotionExport& setting)
+	libmmd::VMDMotion ConvertBoneKeyframeToMotion(const String& bone_name, const BoneAnimationKeyframeData& keyframe, const CMTToolsSetting::MotionExport& setting, const Float model_scale)
 	{
 		libmmd::VMDMotion motion;
 		const std::string sjis_name = ConvertStringToSjis(bone_name);
 		motion.m_boneName.Set(sjis_name.c_str());
-		motion.m_frame = static_cast<UInt32>(std::max(0, keyframe.frame + static_cast<Int32>(setting.time_offset)));
-		motion.m_translate = Eigen::Vector3f(
+		motion.m_frame = ToExportFrame(keyframe.frame, setting.time_offset);
+		motion.m_translate = static_cast<float>(model_scale / setting.position_multiple) * Eigen::Vector3f(
 			keyframe.translation.x,
 			keyframe.translation.y,
 			keyframe.translation.z);
@@ -773,8 +838,9 @@ namespace
 			for (const auto& morph : vmd_file.m_morphs)
 				max_frame = std::max(max_frame, ToAnimationFrame(morph.m_frame, setting.time_offset));
 		}
-		for (const auto& ik : vmd_file.m_iks)
-			max_frame = std::max(max_frame, ToAnimationFrame(ik.m_frame, setting.time_offset));
+		if (setting.import_model_info)
+			for (const auto& ik : vmd_file.m_iks)
+				max_frame = std::max(max_frame, ToAnimationFrame(ik.m_frame, setting.time_offset));
 		return max_frame;
 	}
 
@@ -832,7 +898,7 @@ namespace
 
 				libmmd::VMDMorph morph_key;
 				morph_key.m_blendShapeName.Set(sjis_name.c_str());
-				morph_key.m_frame = static_cast<UInt32>(std::max(0, key->GetTime().GetFrame(kModelAnimationFps) + static_cast<Int32>(setting.time_offset)));
+				morph_key.m_frame = ToExportFrame(GetDocumentAnimationFrame(key->GetTime()), setting.time_offset);
 				morph_key.m_weight = static_cast<float>(key->GetValue());
 				vmd_motion.m_morphs.push_back(std::move(morph_key));
 			}
@@ -861,7 +927,7 @@ namespace
 
 			libmmd::VMDMorph morph_key;
 			morph_key.m_blendShapeName.Set(ConvertStringToSjis(keyframe.morph_name).c_str());
-			morph_key.m_frame = static_cast<UInt32>(std::max(0, keyframe.frame + static_cast<Int32>(setting.time_offset)));
+			morph_key.m_frame = ToExportFrame(keyframe.frame, setting.time_offset);
 			morph_key.m_weight = keyframe.weight;
 			vmd_motion.m_morphs.push_back(std::move(morph_key));
 		}
@@ -874,62 +940,144 @@ namespace
 		});
 	}
 
-	void AppendIKTracksToVmd(BaseObject* object, const StandaloneIKManager* ik_manager, const maxon::BaseArray<maxon::Pair<DescID, Int>>& dynamic_params, const CMTToolsSetting::MotionExport& setting, libmmd::VMDFile& vmd_motion)
+	Bool ReadStepKeys(HyperFile* hf, mmd_model_info::StepKeys& keys)
 	{
-		if (!object || !ik_manager)
+		Int64 count = 0;
+		if (!hf->ReadInt64(&count) || count < 0 || count > 10000000)
+			return false;
+		keys.clear();
+		for (Int64 i = 0; i < count; ++i)
 		{
-			vmd_motion.m_iks.clear();
-			return;
+			Int32 frame = 0;
+			Bool value = true;
+			if (!hf->ReadInt32(&frame) || frame < 0 || !hf->ReadBool(&value))
+				return false;
+			keys[frame] = value;
 		}
-
-		std::map<UInt32, std::map<std::string, uint8_t>> ik_frames;
-		for (const auto& param : dynamic_params)
-		{
-			const auto solver_index = static_cast<size_t>(param.second);
-			libmmd::MMDIkSolver* const solver = ik_manager->GetMMDIKSolver(solver_index);
-			if (!solver)
-				continue;
-
-			CTrack* const track = object->FindCTrack(param.first);
-			if (!track)
-				continue;
-
-			CCurve* const curve = track->GetCurve(CCURVE::CURVE, false);
-			if (!curve)
-				continue;
-
-			const Int32 key_count = curve->GetKeyCount();
-			for (Int32 key_index = 0; key_index < key_count; ++key_index)
-			{
-				const CKey* const key = curve->GetKey(key_index);
-				if (!key)
-					continue;
-
-				const UInt32 frame = static_cast<UInt32>(std::max(0, key->GetTime().GetFrame(kModelAnimationFps) + static_cast<Int32>(setting.time_offset)));
-				ik_frames[frame][ConvertUtf8ToSjis(solver->GetName())] = key->GetValue() >= 0.5 ? 1 : 0;
-			}
-		}
-
-		vmd_motion.m_iks.clear();
-		for (const auto& [frame, infos] : ik_frames)
-		{
-			libmmd::VMDIk ik;
-			ik.m_frame = frame;
-			ik.m_show = 1;
-			for (const auto& [name, enabled] : infos)
-			{
-				libmmd::VMDIkInfo info;
-				info.m_name.Set(name.c_str());
-				info.m_enable = enabled;
-				ik.m_ikInfos.push_back(std::move(info));
-			}
-			vmd_motion.m_iks.push_back(std::move(ik));
-		}
+		return true;
 	}
+
+	Bool WriteStepKeys(HyperFile* hf, const mmd_model_info::StepKeys& keys)
+	{
+		if (!hf->WriteInt64(static_cast<Int64>(keys.size())))
+			return false;
+		for (const auto& key : keys)
+			if (!hf->WriteInt32(key.first) || !hf->WriteBool(key.second))
+				return false;
+		return true;
+	}
+
+	Bool ReadModelInfoSlot(HyperFile* hf, mmd_model_info::AnimationSlot& slot)
+	{
+		if (!ReadStepKeys(hf, slot.visibility))
+			return false;
+		Int64 count = 0;
+		if (!hf->ReadInt64(&count) || count < 0 || count > 10000)
+			return false;
+		for (Int64 i = 0; i < count; ++i)
+		{
+			String name;
+			Bool enabled = true;
+			if (!hf->ReadString(&name) || !hf->ReadBool(&enabled))
+				return false;
+			slot.ik_defaults[string_util::GetStdString(name)] = enabled;
+		}
+		if (!hf->ReadInt64(&count) || count < 0 || count > 10000)
+			return false;
+		for (Int64 i = 0; i < count; ++i)
+		{
+			String name;
+			if (!hf->ReadString(&name) || !ReadStepKeys(hf, slot.ik_channels[string_util::GetStdString(name)]))
+				return false;
+		}
+		return true;
+	}
+
+	Bool WriteModelInfoSlot(HyperFile* hf, const mmd_model_info::AnimationSlot& slot)
+	{
+		if (!WriteStepKeys(hf, slot.visibility) || !hf->WriteInt64(static_cast<Int64>(slot.ik_defaults.size())))
+			return false;
+		for (const auto& state : slot.ik_defaults)
+			if (!hf->WriteString(String(state.first.c_str())) || !hf->WriteBool(state.second))
+				return false;
+		if (!hf->WriteInt64(static_cast<Int64>(slot.ik_channels.size())))
+			return false;
+		for (const auto& channel : slot.ik_channels)
+			if (!hf->WriteString(String(channel.first.c_str())) || !WriteStepKeys(hf, channel.second))
+				return false;
+		return true;
+	}
+
+	BaseObject* GetBoneControlObject(BaseTag* tag)
+	{
+		GeData link;
+		return tag && tag->GetParameter(ConstDescID(DescLevel(PMX_BONE_CONTROL_LINK)), link, DESCFLAGS_GET::NONE)
+			? static_cast<BaseObject*>(link.GetLink(tag->GetDocument(), Obase)) : nullptr;
+	}
+
+	CCurve* GetTransformCurve(BaseObject* object, const Int32 parameter, const Int32 axis)
+	{
+		CTrack* const track = object ? object->FindCTrack(CreateDescID(DescLevel(parameter, DTYPE_VECTOR, 0), DescLevel(axis, DTYPE_REAL, 0))) : nullptr;
+		return track ? track->GetCurve() : nullptr;
+	}
+
+	Bool HasControlTransformKeys(BaseObject* control)
+	{
+		for (const Int32 parameter : { ID_BASEOBJECT_REL_POSITION, ID_BASEOBJECT_REL_ROTATION })
+			for (const Int32 axis : { VECTOR_X, VECTOR_Y, VECTOR_Z })
+				if (const CCurve* const curve = GetTransformCurve(control, parameter, axis))
+					if (curve->GetKeyCount() > 0)
+						return true;
+		return false;
+	}
+
+	BoneAnimationBezierData GetControlRotationInterpolation(BaseObject* control, const Int32 axis,
+		const Int32 previous_frame, const Int32 frame)
+	{
+		BoneAnimationBezierData result;
+		CCurve* const curve = GetTransformCurve(control, ID_BASEOBJECT_REL_ROTATION, VECTOR_X + std::clamp(axis, 0, 2));
+		if (!curve || previous_frame < 0)
+			return result;
+		Int32 previous_index = 0;
+		Int32 index = 0;
+		const CKey* const previous = curve->FindKey(BaseTime(static_cast<Float>(previous_frame), kModelAnimationFps), &previous_index);
+		const CKey* const current = curve->FindKey(BaseTime(static_cast<Float>(frame), kModelAnimationFps), &index);
+		if (!previous || !current || index != previous_index + 1)
+			return result;
+		const Float64 duration = current->GetTime().Get() - previous->GetTime().Get();
+		const Float64 difference = current->GetValue() - previous->GetValue();
+		if (duration <= 0.0 || std::abs(difference) < 1e-9 || previous->GetInterpolation() != CINTERPOLATION::SPLINE)
+			return result;
+		Float64 left_value = 0.0, right_value = 0.0, left_time = 0.0, right_time = 0.0;
+		curve->GetTangents(previous_index, &left_value, &right_value, &left_time, &right_time);
+		const auto quantize = [](const Float64 value) { return static_cast<UChar>(std::lround(std::clamp(value, 0.0, 1.0) * 127.0)); };
+		result.ax = quantize(right_time / duration);
+		result.ay = quantize(right_value / difference);
+		curve->GetTangents(index, &left_value, &right_value, &left_time, &right_time);
+		result.bx = quantize(1.0 + left_time / duration);
+		result.by = quantize(1.0 + left_value / difference);
+		return result;
+	}
+
+	template<typename Key, typename NameOf>
+	void CanonicalizeVmdKeys(std::vector<Key>& keys, NameOf name_of)
+	{
+		// Negative export offsets can clamp several keys onto frame zero. Keep the
+		// latest source value deterministically, just as merged import slots do.
+		std::map<std::pair<std::string, UInt32>, Key> unique;
+		for (auto& key : keys)
+			unique[{ name_of(key), key.m_frame }] = std::move(key);
+		keys.clear();
+		keys.reserve(unique.size());
+		for (auto& key : unique)
+			keys.push_back(std::move(key.second));
+	}
+
 }
 
 Bool AnimationSlotMetadata::Read(HyperFile* hf)
 {
+	runtime_identity = cmt_runtime_identity::Next();
 	return hf->ReadString(&name) && hf->ReadInt32(&max_frame);
 }
 
@@ -942,6 +1090,7 @@ Bool AnimationSlotMetadata::CopyTo(AnimationSlotMetadata& dest) const
 {
 	dest.name = name;
 	dest.max_frame = max_frame;
+	dest.runtime_identity = runtime_identity;
 	return true;
 }
 
@@ -1229,6 +1378,14 @@ bool inline io_util::WriteData<maxon::Pair<MMDModelRootDynamicDescriptionType, I
 }
 
 Bool MMDModelManagerObject::Read(GeListNode* node, HyperFile* hf, Int32 level) {
+	material_preview_enabled_ = false;
+	material_preview_weights_.clear();
+	material_binding_diagnostic_ = String();
+	model_info_animation_slots_.clear();
+	migrate_legacy_model_info_tracks_ = level < 5;
+	migrate_legacy_morph_tracks_ = level < 5;
+	has_visibility_baseline_ = false;
+	visibility_override_active_ = false;
 	iferr_scope_handler
 	{
 		return false;
@@ -1416,6 +1573,22 @@ Bool MMDModelManagerObject::Read(GeListNode* node, HyperFile* hf, Int32 level) {
 		}
 	}
 
+	// Level 5 appends named IK/visibility slots; all level 0-4 fields stay intact.
+	if (level >= 5)
+	{
+		Int64 count = 0;
+		if (!hf->ReadBool(&has_visibility_baseline_) || !hf->ReadBool(&visibility_override_active_)
+			|| !hf->ReadInt32(&visibility_editor_baseline_)
+			|| !hf->ReadInt32(&visibility_render_baseline_)
+			|| !hf->ReadInt64(&count) || count < 0 || count > 10000)
+			return false;
+		model_info_animation_slots_.resize(static_cast<size_t>(count));
+		for (auto& slot : model_info_animation_slots_)
+			if (!ReadModelInfoSlot(hf, slot))
+				return false;
+	}
+	model_info_animation_slots_.resize(static_cast<size_t>(animation_slot_metadata_.GetCount()));
+
 	if (!EnsureMorphAnimationSlotCount(static_cast<Int32>(animation_slot_metadata_.GetCount())))
 		return false;
 
@@ -1434,8 +1607,6 @@ Bool MMDModelManagerObject::Read(GeListNode* node, HyperFile* hf, Int32 level) {
 	{
 		model_mode_ = NormalizeModelMode(model_mode_);
 	}
-	if (model_mode_ != MODEL_MODE_EDIT)
-		ClearMorphAnimationSlots();
 	RefreshAnimationSlotItems();
 	ConfigureModelManagerExecutionPriority(node);
 
@@ -1444,6 +1615,11 @@ Bool MMDModelManagerObject::Read(GeListNode* node, HyperFile* hf, Int32 level) {
 	return true;
 }
 SDK2024_Write(MMDModelManagerObject) {
+	auto* mutable_self = const_cast<MMDModelManagerObject*>(this);
+	if (model_mode_ != MODEL_MODE_EDIT && !mutable_self->CaptureMorphAnimationSlotFromTracks(animation_index_))
+		return false;
+	if (!mutable_self->CaptureModelInfoAnimationSlotFromTracks(animation_index_))
+		return false;
 
 	IOWriteField(bone_manager_);
 	IOWriteField(mesh_manager_);
@@ -1507,31 +1683,46 @@ SDK2024_Write(MMDModelManagerObject) {
 			return false;
 	}
 
-	const auto* self = this;
-	if (model_mode_ == MODEL_MODE_EDIT)
-	{
-		if (!const_cast<MMDModelManagerObject*>(self)->EnsureMorphAnimationSlotCount(static_cast<Int32>(animation_slot_metadata_.GetCount())))
+	if (!hf->WriteInt64(static_cast<Int64>(morph_animation_slots_.GetCount())))
+		return false;
+	for (const auto& slot : morph_animation_slots_)
+		if (!io_util::WriteData(hf, slot))
 			return false;
-		if (!hf->WriteInt64(static_cast<Int64>(morph_animation_slots_.GetCount())))
+	if (!hf->WriteBool(has_visibility_baseline_) || !hf->WriteBool(visibility_override_active_)
+		|| !hf->WriteInt32(visibility_editor_baseline_)
+		|| !hf->WriteInt32(visibility_render_baseline_)
+		|| !hf->WriteInt64(static_cast<Int64>(model_info_animation_slots_.size())))
+		return false;
+	for (const auto& slot : model_info_animation_slots_)
+		if (!WriteModelInfoSlot(hf, slot))
 			return false;
-		for (const auto& slot : morph_animation_slots_)
-		{
-			if (!io_util::WriteData(hf, slot))
-				return false;
-		}
-	}
-	else
-	{
-		if (!hf->WriteInt64(0))
-			return false;
-	}
 
 	return true;
 }
 SDK2024_CopyTo(MMDModelManagerObject)
 {
 	const auto destObject = reinterpret_cast<MMDModelManagerObject*>(dest);
+	// Undo can restore into an existing NodeData while replacing its children.
+	// These pointers belong to the old subtree, even when the translated links
+	// now refer to valid restored managers. Never retain them across CopyTo.
+	destObject->bone_manager_data_ = nullptr;
+	destObject->mesh_manager_data_ = nullptr;
+	destObject->rigid_manager_data_ = nullptr;
+	destObject->joint_manager_data_ = nullptr;
 	destObject->model_mode_ = model_mode_;
+	// Copy transient values by value for render documents and Undo. HyperFile
+	// deliberately omits them and Read() always resets preview on disk reload.
+	destObject->material_preview_enabled_ = material_preview_enabled_;
+	destObject->material_preview_weights_ = material_preview_weights_;
+	destObject->material_preview_selection_ = material_preview_selection_;
+	destObject->material_runtime_checksum_.Reset();
+	destObject->model_info_animation_slots_ = model_info_animation_slots_;
+	destObject->has_visibility_baseline_ = has_visibility_baseline_;
+	destObject->visibility_override_active_ = visibility_override_active_;
+	destObject->visibility_editor_baseline_ = visibility_editor_baseline_;
+	destObject->visibility_render_baseline_ = visibility_render_baseline_;
+	destObject->migrate_legacy_model_info_tracks_ = migrate_legacy_model_info_tracks_;
+	destObject->migrate_legacy_morph_tracks_ = migrate_legacy_morph_tracks_;
 	if (bone_manager_)
 		bone_manager_->CopyTo(destObject->bone_manager_, flags, trn);
 	if (joint_manager_)
@@ -1548,6 +1739,17 @@ SDK2024_CopyTo(MMDModelManagerObject)
 		return false;
 	if (!CopyMorph(destObject))
 		return false;
+	for (Int i = 0; i < morph_data_.GetCount(); ++i)
+	{
+		if (morph_data_[i].GetType() != MMDMorphType::IMPULSE)
+			continue;
+		const auto& source_offsets = static_cast<const ImpulseMorph&>(morph_data_[i]).GetOffsets();
+		auto& copied_offsets = static_cast<ImpulseMorph&>(destObject->morph_data_[i]).GetOffsetsWritable();
+		for (Int j = 0; j < source_offsets.GetCount(); ++j)
+			if (source_offsets[j].rigid_link && *source_offsets[j].rigid_link)
+				if (!(*source_offsets[j].rigid_link)->CopyTo(*copied_offsets[j].rigid_link, flags, trn))
+					return false;
+	}
 	iferr(destObject->material_list_.Resize(0))
 		return false;
 	destObject->material_selection_index_ = material_selection_index_;
@@ -1556,6 +1758,16 @@ SDK2024_CopyTo(MMDModelManagerObject)
 		MMDMaterialData copy;
 		if (!material_list_[i].CopyTo(copy))
 			return false;
+		// MMDMaterialData::CopyTo also serves detached runtime snapshots. Here we
+		// are cloning scene data, so register both links with the scene translator.
+		// Otherwise a bake clone could still write material morphs to its source.
+		const auto& material = material_list_[i];
+		if (material.material_link && *material.material_link && copy.material_link && *copy.material_link)
+			if (!(*material.material_link)->CopyTo(*copy.material_link, flags, trn))
+				return false;
+		if (material.mesh_link && *material.mesh_link && copy.mesh_link && *copy.mesh_link)
+			if (!(*material.mesh_link)->CopyTo(*copy.mesh_link, flags, trn))
+				return false;
 		iferr(destObject->material_list_.Append(std::move(copy)))
 			return false;
 	}
@@ -1587,7 +1799,9 @@ SDK2024_CopyTo(MMDModelManagerObject)
 		return false;
 	for (Int32 i = 0; i < morph_animation_slots_.GetCount(); ++i)
 		destObject->morph_animation_slots_[i] = morph_animation_slots_[i];
-	destObject->InvalidateStandaloneRuntime();
+	// AliasTrans may still refer to source nodes here. Reset only owned caches;
+	// scene-facing invalidation must wait until the copied links are translated.
+	destObject->ResetStandaloneRuntimeCaches();
 	return true;
 }
 Bool MMDModelManagerObject::ReadMorph(HyperFile* hf, Int32 level)
@@ -1616,7 +1830,8 @@ Bool MMDModelManagerObject::ReadMorph(HyperFile* hf, Int32 level)
 		default: return false;
 		}
 		morph_data_.AppendPtr(morph) iferr_return;
-		morph->Read(hf, level);
+		if (!morph->Read(hf, level))
+			return false;
 	}
 
 	return true;
@@ -1641,21 +1856,21 @@ Bool MMDModelManagerObject::CopyMorph(MMDModelManagerObject* dst) const
 	if(!dst)
 		return false;
 	iferr_scope_handler{ return false; };
+	dst->morph_data_.Reset();
+	dst->morph_name_.Reset();
+	dst->morph_named_number_ = morph_named_number_;
 	for (const auto& morph : morph_data_)
 	{
 		const auto& new_morph_name = morph.GetName();
-		const auto new_morph_index = dst->AddMorph(morph.GetType(), new_morph_name, false);
+		const auto new_morph_index = dst->AddMorph(morph.GetType(), new_morph_name, false, morph.GetPanel());
+		if (new_morph_index < 0)
+			return false;
 		const auto new_morph = &dst->morph_data_[new_morph_index];
 		if (!morph.CopyTo(new_morph))
-			return true;
-		new_morph->AddMorphUI(*dst, new_morph_index);
-		if (GeListNode* const dst_node = dst->Get())
-		{
-			Float src_strength = 0.0;
-			if (GeListNode* const src_node = const_cast<MMDModelManagerObject*>(this)->Get())
-				src_strength = morph.GetStrength(src_node);
-			new_morph->SetStrength(dst_node, src_strength);
-		}
+			return false;
+		// C4D clones the dynamic description, parameter values and CTracks.
+		// Retain their DescIDs: allocating UI here would give the copied morph a
+		// different strength ID from its already cloned animation track.
 	}
 	return true;
 }
@@ -1704,6 +1919,7 @@ Bool MMDModelManagerObject::EnsureAnimationSlotCount(const Int32 slot_count)
 	{
 		iferr(animation_slot_metadata_.Resize(0))
 			return false;
+		model_info_animation_slots_.clear();
 		if (!EnsureMorphAnimationSlotCount(0))
 			return false;
 		animation_index_ = -1;
@@ -1711,6 +1927,7 @@ Bool MMDModelManagerObject::EnsureAnimationSlotCount(const Int32 slot_count)
 		return true;
 	}
 
+	model_info_animation_slots_.resize(static_cast<size_t>(slot_count));
 	iferr(animation_slot_metadata_.Resize(slot_count))
 		return false;
 	if (!EnsureMorphAnimationSlotCount(slot_count))
@@ -1725,7 +1942,7 @@ Bool MMDModelManagerObject::SetAnimationSlotMetadata(const Int32 slot_index, con
 {
 	if (slot_index < 0)
 		return false;
-	if (!EnsureAnimationSlotCount(slot_index + 1))
+	if (slot_index >= animation_slot_metadata_.GetCount() && !EnsureAnimationSlotCount(slot_index + 1))
 		return false;
 
 	animation_slot_metadata_[slot_index].name = name;
@@ -1809,31 +2026,42 @@ void MMDModelManagerObject::ApplyAnimationSlotSelection(BaseDocument* doc)
 
 void MMDModelManagerObject::RefreshMorph()
 {
+	auto* mesh_manager = GetMeshManagerData();
+	auto* bone_manager = GetBoneManagerData();
+	std::map<std::string, MMDMorphType> available;
+	if (mesh_manager)
+	{
+		const auto& uv_names = mesh_manager->GetUVMorphNames();
+		for (const auto& name : mesh_manager->GetMeshMorphData().GetKeys())
+			available[string_util::GetStdString(name)] = uv_names.Find(name) ? MMDMorphType::UV : MMDMorphType::MESH;
+	}
+	if (bone_manager)
+		for (const auto& name : bone_manager->GetBoneMorphMap().GetKeys())
+			available[string_util::GetStdString(name)] = MMDMorphType::BONE;
+
+	// Tag discovery only owns mesh/UV/bone morphs. Group/flip/material/impulse
+	// definitions are authored model data and must survive refresh and scene load.
+	// Keep existing tag-derived entries too: rebuilding an unchanged entry would
+	// delete its CTracks, strength DescID, and references from authored groups.
 	for (auto it = maxon::Iterable::EraseIterator(morph_data_); it; ++it)
 	{
-		DeleteMorph(it);
+		const IMorph& morph = *it;
+		const MMDMorphType type = morph.GetType();
+		const Bool mesh_owned = type == MMDMorphType::MESH || type == MMDMorphType::UV;
+		const Bool bone_owned = type == MMDMorphType::BONE;
+		if ((!mesh_owned && !bone_owned) || (mesh_owned && !mesh_manager) || (bone_owned && !bone_manager))
+			continue;
+		const auto entry = available.find(string_util::GetStdString(morph.GetName()));
+		if (entry == available.end() || entry->second != type)
+			DeleteMorph(it);
 	}
-	// Refresh may remove the final material morph. Restore linked materials before
-	// rebuilding mesh/bone-only morph entries, including early-return paths below.
+	for (const auto& entry : available)
+	{
+		const String name(entry.first.c_str());
+		if (!morph_name_.Find(name))
+			AddMorph(entry.second, name);
+	}
 	ApplyMorphRuntimeStrengths();
-	auto* mesh_mgr = io_util::ResolveObjectLink(mesh_manager_);
-	if (!mesh_mgr) return;
-	auto* mesh_manager_data = mesh_mgr->GetNodeData<MMDMeshManagerObject>();
-	auto& mesh_morph_map = mesh_manager_data->GetMeshMorphData();
-	const auto& uv_morph_names = mesh_manager_data->GetUVMorphNames();
-	for (auto& name : mesh_morph_map.GetKeys())
-	{
-		const auto morph_type = uv_morph_names.Find(name) ? MMDMorphType::UV : MMDMorphType::MESH;
-		AddMorph(morph_type, name);
-	}
-	if (auto* bone_mgr = io_util::ResolveObjectLink(bone_manager_))
-	{
-		auto& bone_morph_map = bone_mgr->GetNodeData<MMDBoneManagerObject>()->GetBoneMorphMap();
-		for (auto& name : bone_morph_map.GetKeys())
-		{
-			AddMorph(MMDMorphType::BONE, name);
-		}
-	}
 }
 
 void MMDModelManagerObject::SyncMorphSlidersFromTags()
@@ -2078,6 +2306,9 @@ EXECUTIONRESULT MMDModelManagerObject::Execute(BaseObject* op, BaseDocument* doc
 		return EXECUTIONRESULT::OK;
 	}
 
+	cmt_runtime::FrameMetrics metrics(cmt::debug::IsRuntimeProfileEnabled());
+	cmt_runtime::ScopedFrameMetrics metrics_guard(metrics);
+
 	if (BaseContainer* const bc = op->GetDataInstance())
 		model_mode_ = NormalizeModelMode(bc->GetInt32(MODEL_MODE));
 
@@ -2126,6 +2357,7 @@ EXECUTIONRESULT MMDModelManagerObject::Execute(BaseObject* op, BaseDocument* doc
 		ApplyMorphRuntimeStrengths();
 	}
 
+	ApplyModelInfoVisibility(op, doc);
 	if (model_mode_ == MODEL_MODE_ANIM)
 	{
 		const auto now_time = doc->GetTime();
@@ -2136,7 +2368,10 @@ EXECUTIONRESULT MMDModelManagerObject::Execute(BaseObject* op, BaseDocument* doc
 		const UInt32 control_state_checksum = bone_manager_data_ ? mmd_bone_control_util::GetControlStateChecksum(*bone_manager_data_) : 0;
 		const Bool control_state_changed = control_state_checksum != control_state_checksum_;
 		const Bool control_delta_active = bone_manager_data_ && mmd_bone_control_util::HasActiveControlDelta(*bone_manager_data_);
-		if (time_changed || control_state_changed || control_delta_active)
+		const UInt64 bone_morph_state_checksum = GetBoneMorphStateChecksum();
+		const Bool bone_morph_state_changed = bone_morph_pose_dirty_ || !has_bone_morph_state_checksum_
+			|| bone_morph_state_checksum != bone_morph_state_checksum_;
+		if (time_changed || control_state_changed || control_delta_active || bone_morph_state_changed)
 		{
 			fps_ = static_cast<Float32>(doc->GetFps());
 
@@ -2151,6 +2386,8 @@ EXECUTIONRESULT MMDModelManagerObject::Execute(BaseObject* op, BaseDocument* doc
 
 			ApplyIKSolverFromParameters(op);
 			ApplyPhysicsConfigToRuntime(op);
+			if (bone_morph_state_changed && !time_changed)
+				PrepareBoneMorphReevaluation(doc);
 			RunLayeredBonePass(doc, false);
 
 			const Bool physics_enabled = IsPhysicsEnabled(op);
@@ -2164,6 +2401,13 @@ EXECUTIONRESULT MMDModelManagerObject::Execute(BaseObject* op, BaseDocument* doc
 						StepStandalonePhysics(1.f / fps_);
 					is_animation_initialized_ = true;
 				}
+				else if (bone_morph_state_changed)
+				{
+					// Reapply the existing physical pose after clearing old IK/morph
+					// overrides. A slider edit must not advance or reset Bullet time.
+					cmt_runtime::ScopedRuntimeStage stage(cmt_runtime::RuntimeStage::Physics);
+					ApplyStandalonePhysicsResults();
+				}
 			}
 			else
 			{
@@ -2175,9 +2419,25 @@ EXECUTIONRESULT MMDModelManagerObject::Execute(BaseObject* op, BaseDocument* doc
 			if (bone_manager_data_)
 				mmd_bone_control_util::SyncControlsToCurrentPose(*bone_manager_data_);
 			control_state_checksum_ = bone_manager_data_ ? mmd_bone_control_util::GetControlStateChecksum(*bone_manager_data_) : 0;
+			bone_morph_state_checksum_ = bone_morph_state_checksum;
+			has_bone_morph_state_checksum_ = true;
+			bone_morph_pose_dirty_ = false;
 			if (time_changed)
 				prev_time_ = now_time;
 		}
+	}
+	if (metrics.enabled)
+	{
+		DebugOutput(maxon::OUTPUT::DIAGNOSTIC,
+			"[CMT][RuntimeProfile] frame=@ rebuildMs=@ animationMs=@ ikMs=@ physicsMs=@ morphMs=@ materialMs=@ planRebuilds=@",
+			doc->GetTime().GetFrame(kModelAnimationFps),
+			metrics.Milliseconds(cmt_runtime::RuntimeStage::Rebuild),
+			metrics.Milliseconds(cmt_runtime::RuntimeStage::Animation),
+			metrics.Milliseconds(cmt_runtime::RuntimeStage::IK),
+			metrics.Milliseconds(cmt_runtime::RuntimeStage::Physics),
+			metrics.Milliseconds(cmt_runtime::RuntimeStage::Morph),
+			metrics.Milliseconds(cmt_runtime::RuntimeStage::MaterialSync),
+			bone_manager_data_ ? bone_manager_data_->GetPlaybackPlanRebuildCount() : 0);
 	}
 	return EXECUTIONRESULT::OK;
 }
@@ -2191,26 +2451,18 @@ Int MMDModelManagerObject::ImportGroupAndFlipMorph(const libmmd::PMXFileMorph& p
 	case libmmd::PMXMorphType::Group:
 	{
 		morph_id = AddMorph(MMDMorphType::GROUP, String(pmx_morph.m_name.c_str()), true, panel);
-		auto& morph = morph_data_[morph_id];
-		for (const auto& [morph_index, weight] : pmx_morph.m_groupMorph)
-		{
-			morph.AddSubMorphNoCheck(morph_index, weight);
-		}
 		break;
 	}
 	case libmmd::PMXMorphType::Flip:
 	{
 		morph_id = AddMorph(MMDMorphType::FLIP, String(pmx_morph.m_name.c_str()), true, panel);
-		auto& morph = morph_data_[morph_id];
-		for (const auto& [morph_index, weight] : pmx_morph.m_flipMorph)
-		{
-			morph.AddSubMorphNoCheck(morph_index, weight);
-		}
 		break;
 	}
 	default:
 		break;
 	}
+	// PMX child indices belong to the original file order. Resolve them once all
+	// authored and tag-derived definitions exist, including forward references.
 	return morph_id;
 }
 
@@ -2244,6 +2496,7 @@ void MMDModelManagerObject::StripIKSolverDynamicUI()
 	{
 		if (it->GetValue().first == MMDModelRootDynamicDescriptionType::IK_SOLVER_ENABLE)
 		{
+			RemoveParameterTrack(reinterpret_cast<BaseObject*>(Get()), it->GetKey());
 			dd->Remove(it->GetKey());
 			it = desc_id_map_.Erase(it);
 		}
@@ -2273,6 +2526,11 @@ void MMDModelManagerObject::BuildIKSolverUI()
 	auto* ik_manager = ik_manager_own_.get();
 	if (!ik_manager)
 		return;
+	if (migrate_legacy_model_info_tracks_)
+	{
+		std::ignore = CaptureModelInfoAnimationSlotFromTracks(animation_index_);
+		migrate_legacy_model_info_tracks_ = false;
+	}
 	StripIKSolverDynamicUI();
 	const auto solver_count = ik_manager->GetIKSolverCount();
 	for (size_t i = 0; i < solver_count; ++i)
@@ -2286,9 +2544,12 @@ void MMDModelManagerObject::BuildIKSolverUI()
 		bc.SetData(DESC_PARENTGROUP, MakeDescIDGeData(ConstDescID(DescLevel(MODEL_IK_GRP))));
 		const DescID id = AddDynamicDescription(bc, MMDModelRootDynamicDescriptionType::IK_SOLVER_ENABLE, static_cast<Int>(i));
 		iferr(ik_solver_dynamic_params_.Append(maxon::Pair<DescID, Int>(id, static_cast<Int>(i)))) {}
+		applying_model_info_parameters_ = true;
 		Get()->SetParameter(id, GeData(true), DESCFLAGS_SET::NONE);
+		applying_model_info_parameters_ = false;
 	}
 	ApplyIKSolverStates();
+	std::ignore = RebuildModelInfoTracksFromAnimationSlot(animation_index_);
 }
 
 void MMDModelManagerObject::ApplyIKSolverStates()
@@ -2310,7 +2571,11 @@ void MMDModelManagerObject::ApplyIKSolverStates()
 		const Bool enabled = state_entry->GetValue();
 		solver->Enable(enabled);
 		if (node)
+		{
+			applying_model_info_parameters_ = true;
 			node->SetParameter(p.first, GeData(enabled), DESCFLAGS_SET::NONE);
+			applying_model_info_parameters_ = false;
+		}
 	}
 }
 
@@ -2326,69 +2591,199 @@ void MMDModelManagerObject::ApplyIKSolverFromParameters(BaseObject* op)
 		GeData value;
 		if (op->GetParameter(p.first, value, DESCFLAGS_GET::NONE))
 		{
+			CTrack* const track = op->FindCTrack(p.first);
+			CCurve* const curve = track ? track->GetCurve() : nullptr;
+			const Bool enabled = curve && op->GetDocument()
+				? curve->GetValue(op->GetDocument()->GetTime()) >= 0.5 : value.GetBool();
 			if (auto* solver = ik_manager->GetMMDIKSolver(static_cast<size_t>(p.second)))
-				solver->Enable(value.GetBool());
+				solver->Enable(enabled);
 		}
 	}
 }
 
-void MMDModelManagerObject::ImportVMDIKKeyframes(const libmmd::VMDFile& vmd_file, const CMTToolsSetting::MotionImport& setting)
+Bool MMDModelManagerObject::ImportVMDModelInfo(const libmmd::VMDFile& vmd_file,
+	const CMTToolsSetting::MotionImport& setting, const Int32 slot_index)
 {
-	if (!ik_manager_own_ || vmd_file.m_iks.empty())
-		return;
-	auto* ik_manager = ik_manager_own_.get();
-	if (!ik_manager)
-		return;
-	auto* op = static_cast<BaseObject*>(Get());
-	if (!op)
-		return;
-
-	SyncIKSolverDynamicParamsFromDescMap();
-
-	maxon::HashMap<String, DescID> ik_name_to_desc_id;
-	for (const auto& p : ik_solver_dynamic_params_)
+	if (slot_index < 0 || static_cast<size_t>(slot_index) >= model_info_animation_slots_.size())
+		return false;
+	auto& slot = model_info_animation_slots_[static_cast<size_t>(slot_index)];
+	BaseObject* const object = reinterpret_cast<BaseObject*>(Get());
+	if (!vmd_file.m_iks.empty() && object && !has_visibility_baseline_)
 	{
-		if (auto* solver = ik_manager->GetMMDIKSolver(static_cast<size_t>(p.second)))
-		{
-			iferr(ik_name_to_desc_id.Insert(String(solver->GetName().c_str()), p.first)) {}
-		}
+		visibility_editor_baseline_ = object->GetEditorMode();
+		visibility_render_baseline_ = object->GetRenderMode();
+		has_visibility_baseline_ = true;
 	}
-
-	BaseDocument* const doc = op->GetDocument();
-
 	for (const auto& ik : vmd_file.m_iks)
 	{
-		for (const auto& ik_info : ik.m_ikInfos)
+		const Int32 frame = ToAnimationFrame(ik.m_frame, setting.time_offset);
+		slot.visibility[frame] = ik.m_show != 0;
+		for (const auto& info : ik.m_ikInfos)
 		{
-			const String ik_name(ik_info.m_name.ToUtf8String().c_str());
-			const auto* entry = ik_name_to_desc_id.Find(ik_name);
-			if (!entry)
-				continue;
-			const DescID& desc_id = entry->GetValue();
-
-			CTrack* track = op->FindCTrack(desc_id);
-			if (!track)
-			{
-				track = CTrack::Alloc(op, desc_id);
-				if (!track)
-					continue;
-				op->InsertTrackSorted(track);
-			}
-			CCurve* curve = track->GetCurve(CCURVE::CURVE, true);
-			if (!curve)
-				continue;
-
-			const BaseTime frame_time(static_cast<Float>(ik.m_frame) + setting.time_offset, 30.0);
-			CKey* key = curve->FindKey(frame_time);
-			if (!key)
-				key = curve->AddKey(frame_time);
-			if (!key)
-				continue;
-			key->SetValue(curve, ik_info.m_enable ? 1.0 : 0.0);
-			key->SetInterpolation(curve, CINTERPOLATION::STEP);
-			if (doc)
-				track->FillKey(doc, op, key);
+			const std::string name = info.m_name.ToUtf8String();
+			if (slot.ik_channels.find(name) == slot.ik_channels.end())
+				slot.ik_defaults[name] = true;
+			slot.ik_channels[name][frame] = info.m_enable != 0;
 		}
+	}
+	return true;
+}
+
+Bool MMDModelManagerObject::CaptureModelInfoAnimationSlotFromTracks(const Int32 slot_index)
+{
+	if (slot_index < 0 || static_cast<size_t>(slot_index) >= model_info_animation_slots_.size() || !ik_manager_own_)
+		return true;
+	BaseObject* const object = reinterpret_cast<BaseObject*>(Get());
+	if (!object)
+		return false;
+	auto& slot = model_info_animation_slots_[static_cast<size_t>(slot_index)];
+	for (const auto& param : ik_solver_dynamic_params_)
+	{
+		const auto* solver = ik_manager_own_->GetMMDIKSolver(static_cast<size_t>(param.second));
+		if (!solver)
+			continue;
+		CTrack* const track = object->FindCTrack(param.first);
+		CCurve* const curve = track ? track->GetCurve() : nullptr;
+		// No track can mean an all-enabled imported channel; keep its exact sparse
+		// records for a faithful round-trip. Defaults are separate from evaluated UI.
+		if (!curve)
+			continue;
+		mmd_model_info::StepKeys captured;
+		for (Int32 i = 0; i < curve->GetKeyCount(); ++i)
+		{
+			if (const CKey* const key = curve->GetKey(i))
+			{
+				Int32 frame = 0;
+				if (!TryDocumentAnimationFrame(key->GetTime(), frame))
+					return false;
+				captured[std::max(0, frame)] = key->GetValue() >= 0.5;
+			}
+		}
+		slot.ik_channels[solver->GetName()] = std::move(captured);
+	}
+	return true;
+}
+
+Bool MMDModelManagerObject::RebuildModelInfoTracksFromAnimationSlot(const Int32 slot_index)
+{
+	BaseObject* const object = reinterpret_cast<BaseObject*>(Get());
+	if (!object || !ik_manager_own_)
+		return true;
+	const mmd_model_info::AnimationSlot* const slot = slot_index >= 0 && static_cast<size_t>(slot_index) < model_info_animation_slots_.size()
+		? &model_info_animation_slots_[static_cast<size_t>(slot_index)] : nullptr;
+	for (const auto& param : ik_solver_dynamic_params_)
+	{
+		auto* solver = ik_manager_own_->GetMMDIKSolver(static_cast<size_t>(param.second));
+		if (!solver)
+			continue;
+		RemoveParameterTrack(object, param.first);
+		const auto* default_entry = ik_solver_enable_states_.Find(String(solver->GetName().c_str()));
+		const Bool global_default = default_entry ? default_entry->GetValue() : true;
+		const Int32 frame = object->GetDocument() ? object->GetDocument()->GetTime().GetFrame(kModelAnimationFps) : 0;
+		const Bool enabled = slot ? mmd_model_info::EvaluateIK(*slot, solver->GetName(), frame, global_default) : global_default;
+		applying_model_info_parameters_ = true;
+		object->SetParameter(param.first, GeData(enabled), DESCFLAGS_SET::NONE);
+		applying_model_info_parameters_ = false;
+		solver->Enable(enabled);
+		if (!slot)
+			continue;
+		const auto channel = slot->ik_channels.find(solver->GetName());
+		if (channel == slot->ik_channels.end() || channel->second.empty())
+			continue;
+		const Bool default_state = mmd_model_info::EvaluateIK(*slot, solver->GetName(), -1, global_default);
+		const Bool needs_track = !default_state || std::any_of(channel->second.begin(), channel->second.end(),
+			[](const auto& key) { return !key.second; });
+		if (!needs_track)
+			continue;
+		CTrack* const track = CTrack::Alloc(object, param.first);
+		if (!track)
+			return false;
+		object->InsertTrackSorted(track);
+		CCurve* const curve = track->GetCurve(CCURVE::CURVE, true);
+		if (!curve)
+			return false;
+		// C4D clamps before the first key, whereas VMD defaults to enabled.
+		// Insert frame zero for an initial later disable without changing stored data.
+		if (channel->second.begin()->first > 0)
+		{
+			CKey* const initial = curve->AddKey(BaseTime());
+			if (!initial)
+				return false;
+			initial->SetValue(curve, mmd_model_info::EvaluateIK(*slot, solver->GetName(), 0, global_default) ? 1.0 : 0.0);
+			initial->SetInterpolation(curve, CINTERPOLATION::STEP);
+		}
+		for (const auto& keyframe : channel->second)
+		{
+			CKey* const key = curve->AddKey(BaseTime(static_cast<Float>(keyframe.first), kModelAnimationFps));
+			if (!key)
+				return false;
+			key->SetValue(curve, keyframe.second ? 1.0 : 0.0);
+			key->SetInterpolation(curve, CINTERPOLATION::STEP);
+		}
+	}
+	return true;
+}
+
+void MMDModelManagerObject::ApplyModelInfoVisibility(BaseObject* object, BaseDocument* doc)
+{
+	if (!object || !has_visibility_baseline_)
+		return;
+	Bool show = true;
+	if (model_mode_ == MODEL_MODE_ANIM && animation_index_ >= 0 && static_cast<size_t>(animation_index_) < model_info_animation_slots_.size())
+		show = mmd_model_info::Evaluate(model_info_animation_slots_[static_cast<size_t>(animation_index_)].visibility,
+			doc ? doc->GetTime().GetFrame(kModelAnimationFps) : 0, true);
+	if (show && !visibility_override_active_)
+		return;
+	if (!show && !visibility_override_active_)
+	{
+		// Capture the most recent artist modes when the first hidden frame starts.
+		visibility_editor_baseline_ = object->GetEditorMode();
+		visibility_render_baseline_ = object->GetRenderMode();
+	}
+	const Int32 editor_mode = show ? visibility_editor_baseline_ : MODE_OFF;
+	const Int32 render_mode = show ? visibility_render_baseline_ : MODE_OFF;
+	if (object->GetEditorMode() != editor_mode)
+		object->SetEditorMode(editor_mode);
+	if (object->GetRenderMode() != render_mode)
+		object->SetRenderMode(render_mode);
+	visibility_override_active_ = !show;
+}
+
+void MMDModelManagerObject::AppendModelInfoToVmd(const CMTToolsSetting::MotionExport& setting,
+	libmmd::VMDFile& motion, const Bool /*baked*/) const
+{
+	if (!setting.export_model_info || animation_index_ < 0 || static_cast<size_t>(animation_index_) >= model_info_animation_slots_.size())
+		return;
+	const auto& slot = model_info_animation_slots_[static_cast<size_t>(animation_index_)];
+	std::set<Int32> frames;
+	for (const auto& key : slot.visibility)
+		frames.insert(key.first);
+	for (const auto& channel : slot.ik_channels)
+		for (const auto& key : channel.second)
+			frames.insert(key.first);
+	// Static per-slot checkbox choices must survive export as well.
+	if (!slot.ik_defaults.empty())
+		frames.insert(0);
+	for (const Int32 frame : frames)
+	{
+		libmmd::VMDIk key;
+		key.m_frame = ToExportFrame(frame, setting.time_offset);
+		key.m_show = mmd_model_info::Evaluate(slot.visibility, frame, true) ? 1 : 0;
+		std::set<std::string> names;
+		for (const auto& channel : slot.ik_channels)
+			names.insert(channel.first);
+		for (const auto& state : slot.ik_defaults)
+			names.insert(state.first);
+		for (const auto& name : names)
+		{
+			libmmd::VMDIkInfo info;
+			info.m_name.Set(ConvertUtf8ToSjis(name).c_str());
+			// Retain unknown IK states verbatim. Baked export disables only solvers
+			// present in this model, which actually contributed to the baked pose.
+			info.m_enable = mmd_model_info::EvaluateIK(slot, name, frame, true) ? 1 : 0;
+			key.m_ikInfos.push_back(std::move(info));
+		}
+		motion.m_iks.push_back(std::move(key));
 	}
 }
 
@@ -2407,718 +2802,55 @@ const maxon::HashMap<String, Int>& MMDModelManagerObject::GetMorphNameMap()
 	return morph_name_;
 }
 
-libmmd::MMDIkSolver* MMDModelManagerObject::GetStandaloneIKSolver(const Int32 bone_index) const
+Bool MMDModelManagerObject::SelectAutomationAnimationSlot(const UInt64 identity)
 {
-	if (!ik_manager_own_ || bone_index < 0)
-		return nullptr;
-
-	auto* bone_manager = const_cast<MMDModelManagerObject*>(this)->GetBoneManagerData();
-	if (!bone_manager)
-		return nullptr;
-
-	BaseTag* const bone_tag = bone_manager->FindBone(bone_index);
-	if (!bone_tag)
-		return nullptr;
-
-	String solver_name = GetBoneTagName(bone_tag, true);
-	if (solver_name.IsEmpty())
-		solver_name = GetBoneTagName(bone_tag, false);
-	if (solver_name.IsEmpty())
-		return nullptr;
-
-	const size_t solver_index = ik_manager_own_->FindIKSolverIndex(string_util::GetStdString(solver_name));
-	if (solver_index == static_cast<size_t>(-1))
-		return nullptr;
-	return ik_manager_own_->GetMMDIKSolver(solver_index);
-}
-
-C4DIKChainNodeAdapter* MMDModelManagerObject::GetBoneAdapter(const Int32 bone_index) const
-{
-	if (const auto* const entry = physics_bone_adapters_.Find(bone_index))
-		return entry->GetValue();
-	return nullptr;
-}
-
-void MMDModelManagerObject::SyncStandaloneBoneAdaptersFromScene(const Bool reset_ik_rotation)
-{
-	for (const auto& adapter : physics_bone_pool_)
-	{
-		if (adapter)
-			adapter->SyncCurrentTransformsFromBoneObject(reset_ik_rotation);
-	}
-
-	for (const auto& adapter : physics_bone_pool_)
-	{
-		if (adapter && adapter->GetParent() == nullptr)
-			adapter->UpdateGlobalTransform();
-	}
-}
-
-void MMDModelManagerObject::SyncStandaloneBoneAdaptersLocalFromGlobal(const maxon::BaseArray<Int32>& bone_indices) const
-{
-	for (const Int32 bone_index : bone_indices)
-	{
-		if (C4DIKChainNodeAdapter* const adapter = GetBoneAdapter(bone_index))
-			adapter->SyncLocalTransformFromGlobal();
-	}
-
-	for (const auto& adapter : physics_bone_pool_)
-	{
-		if (adapter && adapter->GetParent() == nullptr)
-			adapter->UpdateGlobalTransform();
-	}
-}
-
-Bool MMDModelManagerObject::SolveStandaloneIKBeforePhysics(const Bool include_after_physics_bones)
-{
-	bone_manager_data_ = GetBoneManagerData();
-	if (!bone_manager_data_)
+	if (!Get() || !GeIsMainThread())
 		return false;
-
-	Bool solved = false;
-	const Int32 max_layer = bone_manager_data_->GetMaxBoneLayer();
-	for (Int32 layer = 0; layer <= max_layer; ++layer)
+	for (Int32 index = 0; index < animation_slot_metadata_.GetCount(); ++index)
 	{
-		solved = SolveStandaloneIKForLayer(layer, false) > 0 || solved;
-		if (include_after_physics_bones)
-			solved = SolveStandaloneIKForLayer(layer, true) > 0 || solved;
+		if (animation_slot_metadata_[index].runtime_identity == identity)
+			return Get()->SetParameter(ConstDescID(DescLevel(MODEL_ANIM_LIST)), GeData(index), DESCFLAGS_SET::NONE);
 	}
-	return solved;
+	return false;
 }
 
-Int32 MMDModelManagerObject::SolveStandaloneIKForLayer(const Int32 layer, const Bool after_physics, const Bool sync_from_scene)
+Bool MMDModelManagerObject::SetAutomationMorphStrength(const UInt64 identity, const Float strength)
 {
-	if (!ik_manager_own_)
-		return 0;
-
-	bone_manager_data_ = GetBoneManagerData();
-	if (!bone_manager_data_)
-		return 0;
-
-	auto has_static_pose_keyframe_at_time = [](MMDBoneTag* bone_tag, const BaseDocument* doc) -> Bool
+	if (!Get() || !GeIsMainThread() || !std::isfinite(strength))
+		return false;
+	for (auto& morph : morph_data_)
 	{
-		return bone_tag && bone_tag->HasStaticPoseAnimationSegmentAtTime(doc);
-	};
-
-	auto ik_chain_has_static_pose_override = [this, &has_static_pose_keyframe_at_time](MMDBoneTag* ik_bone_tag, const BaseDocument* doc) -> Bool
-	{
-		if (!ik_bone_tag || !doc)
+		if (morph.GetRuntimeIdentity() != identity)
+			continue;
+		if (!morph.SetStrength(Get(), strength))
 			return false;
-
-		maxon::BaseArray<Int32> affected_indices;
-		ik_bone_tag->CollectIKAffectedBoneIndices(affected_indices);
-		for (const Int32 affected_index : affected_indices)
-		{
-			BaseTag* const affected_tag = bone_manager_data_ ? bone_manager_data_->FindBone(affected_index) : nullptr;
-			auto* const affected_tag_node = affected_tag ? affected_tag->GetNodeData<MMDBoneTag>() : nullptr;
-			if (affected_tag_node && (affected_tag_node->HasStaticPoseRuntimeOverride(doc) || has_static_pose_keyframe_at_time(affected_tag_node, doc)))
-				return true;
-		}
-		return false;
-	};
-
-	std::vector<Int32> sorted_indices;
-	sorted_indices.reserve(bone_manager_data_->bone_list_.GetCount());
-	for (const auto& entry : bone_manager_data_->bone_list_)
-		sorted_indices.emplace_back(static_cast<Int32>(entry.GetKey()));
-	std::sort(sorted_indices.begin(), sorted_indices.end());
-
-	std::vector<Int32> ik_indices;
-	ik_indices.reserve(sorted_indices.size());
-	for (const Int32 bone_index : sorted_indices)
-	{
-		BaseTag* const bone_tag = bone_manager_data_->FindBone(bone_index);
-		auto* const bone_tag_node = bone_tag ? bone_tag->GetNodeData<MMDBoneTag>() : nullptr;
-		BaseObject* const bone_object = bone_tag ? bone_tag->GetObject() : nullptr;
-		const BaseContainer* const bc = bone_tag ? bone_tag->GetDataInstance() : nullptr;
-		if (!bone_tag_node || !bone_object || !bc || !bc->GetBool(PMX_BONE_IS_IK))
-			continue;
-		if (std::max(0, bc->GetInt32(PMX_BONE_LAYER)) != layer)
-			continue;
-		if (bc->GetBool(PMX_BONE_PHYSICS_AFTER_DEFORM) != after_physics)
-			continue;
-
-		libmmd::MMDIkSolver* const ik_solver = GetStandaloneIKSolver(bone_index);
-		if (!ik_solver || !ik_solver->Enabled() || !ik_solver->GetIKNode() || !ik_solver->GetTargetNode())
-			continue;
-		if (ik_chain_has_static_pose_override(bone_tag_node, bone_object->GetDocument()))
-			continue;
-		ik_indices.emplace_back(bone_index);
-	}
-	if (ik_indices.empty())
-		return 0;
-
-	if (sync_from_scene)
-		SyncStandaloneBoneAdaptersFromScene(true);
-
-	Int32 solved_count = 0;
-	for (const Int32 bone_index : ik_indices)
-	{
-		BaseTag* const bone_tag = bone_manager_data_->FindBone(bone_index);
-		auto* const bone_tag_node = bone_tag ? bone_tag->GetNodeData<MMDBoneTag>() : nullptr;
-		BaseObject* const bone_object = bone_tag ? bone_tag->GetObject() : nullptr;
-		if (!bone_tag_node || !bone_object)
-			continue;
-
-		libmmd::MMDIkSolver* const ik_solver = GetStandaloneIKSolver(bone_index);
-		if (!ik_solver || !ik_solver->Enabled() || !ik_solver->GetIKNode() || !ik_solver->GetTargetNode())
-			continue;
-		if (ik_chain_has_static_pose_override(bone_tag_node, bone_object->GetDocument()))
-			continue;
-
-		bone_tag_node->BuildStandaloneIKChains();
-
-		ik_solver->Solve();
-
-		maxon::BaseArray<Int32> affected_indices;
-		bone_tag_node->CollectIKAffectedBoneIndices(affected_indices);
-		ApplyStandaloneBoneAdaptersToScene(affected_indices);
-
-		if (BaseDocument* const doc = bone_object->GetDocument())
-		{
-			bone_tag_node->last_ik_solve_time_ = doc->GetTime();
-			bone_tag_node->CacheIKSolveRuntimeOverrides(doc);
-			bone_tag_node->MarkPrephysicsIKChainUpdated(doc);
-		}
-		++solved_count;
-	}
-
-	return solved_count;
-}
-
-Bool MMDModelManagerObject::RunLayeredBonePass(BaseDocument* doc, const Bool after_physics)
-{
-	if (!doc)
-		return false;
-
-	bone_manager_data_ = GetBoneManagerData();
-	if (!bone_manager_data_)
-		return false;
-
-	Bool touched = false;
-	const Int32 max_layer = bone_manager_data_->GetMaxBoneLayer();
-	for (Int32 layer = 0; layer <= max_layer; ++layer)
-	{
-		const Int32 anim_count = bone_manager_data_->PrepareSceneForPhysicsPlaybackLayer(doc, layer, after_physics);
-		SyncStandaloneBoneAdaptersFromScene(true);
-		const Int32 ik_count = SolveStandaloneIKForLayer(layer, after_physics, false);
-		touched = touched || anim_count > 0 || ik_count > 0;
-	}
-	return touched;
-}
-
-void MMDModelManagerObject::ApplyStandaloneBoneAdaptersToScene() const
-{
-	for (const auto& adapter : physics_bone_pool_)
-	{
-		if (adapter)
-			adapter->ApplyLocalToBoneObject();
-	}
-}
-
-void MMDModelManagerObject::ApplyStandaloneBoneAdaptersToScene(const maxon::BaseArray<Int32>& bone_indices) const
-{
-	for (const Int32 bone_index : bone_indices)
-	{
-		if (C4DIKChainNodeAdapter* const adapter = GetBoneAdapter(bone_index))
-			adapter->ApplyLocalToBoneObject();
-	}
-}
-
-void MMDModelManagerObject::InvalidateStandaloneRuntime()
-{
-	// Bone tags cache raw solver pointers and same-frame runtime overrides. Clear
-	// those before destroying the standalone managers so a rebuilt solver cannot
-	// be mistaken for the old one when the allocator reuses an address.
-	if (BaseObject* const bone_manager_object = io_util::ResolveObjectLink(bone_manager_))
-	{
-		if (auto* const bone_manager = bone_manager_object->GetNodeData<MMDBoneManagerObject>())
-			bone_manager->InvalidatePlaybackRuntimeState();
-	}
-	ik_manager_own_.reset();
-	physics_manager_own_.reset();
-	physics_bone_pool_.clear();
-	physics_bone_adapters_.Reset();
-	iferr(physics_dynamic_bone_indices_.Resize(0)) {}
-	*is_runtime_initialized_.Write() = false;
-	is_animation_initialized_ = false;
-	prev_time_ = BaseTime(-1.);
-}
-
-Bool MMDModelManagerObject::BuildStandaloneBoneAdapters()
-{
-	iferr_scope_handler{ return false; };
-
-	bone_manager_data_ = GetBoneManagerData();
-	if (!bone_manager_data_)
+		ApplyMorphRuntimeStrengths();
 		return true;
-
-	if (BaseObject* const bone_manager_object = io_util::ResolveObjectLink(bone_manager_))
-		bone_manager_data_->HandleBoneIndexChangeMessage(bone_manager_object);
-
-	physics_bone_pool_.clear();
-	physics_bone_adapters_.Reset();
-
-	std::vector<Int32> sorted_indices;
-	for (const auto& entry : bone_manager_data_->bone_list_)
-		sorted_indices.emplace_back(static_cast<Int32>(entry.GetKey()));
-	std::sort(sorted_indices.begin(), sorted_indices.end());
-
-	physics_bone_pool_.reserve(sorted_indices.size());
-	for (const Int32 bone_index : sorted_indices)
-	{
-		BaseTag* const bone_tag = bone_manager_data_->FindBone(bone_index);
-		if (!bone_tag || !bone_tag->GetObject())
-			continue;
-
-		auto* const bone_tag_node = bone_tag->GetNodeData<MMDBoneTag>();
-		if (!bone_tag_node)
-			continue;
-
-		String bone_name = GetBoneTagName(bone_tag, true);
-		if (bone_name.IsEmpty())
-			bone_name = GetBoneTagName(bone_tag, false);
-
-		auto adapter = std::make_unique<C4DIKChainNodeAdapter>();
-		adapter->SetupFromBone(bone_tag->GetObject(), bone_tag_node, string_util::GetStdString(bone_name));
-
-		C4DIKChainNodeAdapter* const adapter_ptr = adapter.get();
-		physics_bone_pool_.push_back(std::move(adapter));
-		physics_bone_adapters_.Insert(bone_index, adapter_ptr)iferr_return;
 	}
+	return false;
+}
 
-	for (const Int32 bone_index : sorted_indices)
-	{
-		C4DIKChainNodeAdapter* const adapter = GetBoneAdapter(bone_index);
-		if (!adapter)
-			continue;
-
-		adapter->ClearChildren();
-		adapter->SetParentAdapter(nullptr);
-
-		BaseTag* const bone_tag = bone_manager_data_->FindBone(bone_index);
-		BaseObject* const bone_object = bone_tag ? bone_tag->GetObject() : nullptr;
-		if (!bone_object)
-			continue;
-
-		if (BaseObject* const parent_object = bone_object->GetUp())
-		{
-			if (BaseTag* const parent_tag = parent_object->GetTag(g_mmd_bone_tag_id))
-			{
-				const Int32 parent_index = bone_manager_data_->FindBoneIndex(parent_tag);
-				if (C4DIKChainNodeAdapter* const parent_adapter = GetBoneAdapter(parent_index))
-				{
-					adapter->SetParentAdapter(parent_adapter);
-					parent_adapter->AddChildAdapter(adapter);
-				}
-			}
-		}
-	}
-
-	for (const Int32 bone_index : sorted_indices)
-	{
-		C4DIKChainNodeAdapter* const adapter = GetBoneAdapter(bone_index);
-		if (adapter && adapter->GetParent() == nullptr)
-		{
-			adapter->UpdateInitialGlobalTransform();
-			adapter->ResetCurrentTransformToInitial();
-		}
-	}
-
+#if defined(CMT_ENABLE_RUNTIME_REGRESSION)
+Bool MMDModelManagerObject::SetMorphStrengthForRegression(const Int index, const Float strength)
+{
+	if (index < 0 || index >= morph_data_.GetCount() || !std::isfinite(strength))
+		return false;
+	if (!Get() || !morph_data_[index].SetStrength(Get(), strength))
+		return false;
+	ApplyMorphRuntimeStrengths();
 	return true;
 }
 
-Bool MMDModelManagerObject::BuildStandaloneIKManager()
+Bool MMDModelManagerObject::DeleteMorphForRegression(const Int index)
 {
-	iferr_scope_handler{ return false; };
-
-	ik_manager_own_ = std::make_unique<StandaloneIKManager>();
-	if (!ik_manager_own_)
+	if (index < 0 || index >= morph_data_.GetCount())
 		return false;
-
-	bone_manager_data_ = GetBoneManagerData();
-	if (!bone_manager_data_)
-		return true;
-
-	std::vector<Int32> sorted_indices;
-	for (const auto& entry : bone_manager_data_->bone_list_)
-		sorted_indices.emplace_back(static_cast<Int32>(entry.GetKey()));
-	std::sort(sorted_indices.begin(), sorted_indices.end());
-
-	for (const Int32 bone_index : sorted_indices)
-	{
-		BaseTag* const bone_tag = bone_manager_data_->FindBone(bone_index);
-		if (!bone_tag)
-			continue;
-
-		const BaseContainer* const bc = bone_tag->GetDataInstance();
-		if (!bc || !bc->GetBool(PMX_BONE_IS_IK))
-			continue;
-
-		C4DIKChainNodeAdapter* const control_adapter = GetBoneAdapter(bone_index);
-		if (!control_adapter)
-			continue;
-
-		auto* const solver = ik_manager_own_->AddIKSolver();
-		String solver_name = GetBoneTagName(bone_tag, true);
-		if (solver_name.IsEmpty())
-			solver_name = GetBoneTagName(bone_tag, false);
-		solver->SetName(string_util::GetStdString(solver_name));
-		solver->SetIKNode(control_adapter);
-
-		// PMX convention (matches libMMD PMXModel loader):
-		//   - IK node    = the control/goal bone (external, position stays fixed)
-		//   - target node = the effector bone at the end of the chain (descendant)
-		// SolveCore reads m_ikNode position once (must be stable); m_ikTarget
-		// is re-read per chain (moves with rotation).  BuildChainPath walks
-		// from m_ikTarget upward to find chain nodes.
-		// PMX_BONE_IK_TARGET_BONE_* stores the effector bone, not the control IK
-		// bone itself. Resolve that effector via the stable BaseLink instead of
-		// the stale PMX-file index.
-		Int32 effector_index = -1;
-		C4DIKChainNodeAdapter* effector_adapter = nullptr;
-		BaseDocument* const tag_doc = bone_tag->GetDocument();
-		if (GeData link_data; bone_tag->GetParameter(ConstDescID(DescLevel(PMX_BONE_IK_TARGET_BONE_LINK)), link_data, DESCFLAGS_GET::NONE))
-		{
-			BaseList2D* linked = nullptr;
-			if (tag_doc)
-				linked = const_cast<BaseList2D*>(link_data.GetLink(tag_doc));
-			if (!linked)
-			{
-				if (const BaseLink* const raw_link = link_data.GetBaseLink())
-					linked = static_cast<BaseList2D*>(raw_link->ForceGetLink());
-			}
-			if (linked && linked->IsInstanceOf(Obase))
-			{
-				if (BaseTag* const target_tag = static_cast<BaseObject*>(linked)->GetTag(g_mmd_bone_tag_id))
-				{
-					const Int32 resolved = bone_manager_data_->FindBoneIndex(target_tag);
-					if (C4DIKChainNodeAdapter* const adapter = GetBoneAdapter(resolved))
-					{
-						effector_index = resolved;
-						effector_adapter = adapter;
-					}
-				}
-			}
-		}
-		// Legacy fallback: older scenes/cases without the link may still carry
-		// a usable DFS index in the container.
-		if (!effector_adapter)
-		{
-			const Int32 legacy = bc->GetInt32(PMX_BONE_IK_TARGET_BONE_INDEX);
-			if (C4DIKChainNodeAdapter* const adapter = GetBoneAdapter(legacy))
-			{
-				effector_index = legacy;
-				effector_adapter = adapter;
-			}
-		}
-
-		if (effector_adapter)
-			solver->SetTargetNode(effector_adapter);
-		const Int32 iter_count = bc->GetInt32(PMX_BONE_IK_ITERATION);
-		const Float unit_angle = bc->GetFloat(PMX_BONE_IK_UNIT_ANGLE);
-		solver->SetIterateCount(static_cast<uint32_t>(iter_count <= 0 ? 4 : iter_count));
-		solver->SetLimitAngle(static_cast<float>(unit_angle));
-
-		const auto* const enabled_state = ik_solver_enable_states_.Find(solver_name);
-		const Bool enabled = enabled_state ? enabled_state->GetValue() : bc->GetBool(PMX_BONE_IS_IK);
-		solver->Enable(enabled);
-	}
-
-	return true;
+	const Int count = morph_data_.GetCount();
+	DeleteMorph(index);
+	ApplyMorphRuntimeStrengths();
+	return morph_data_.GetCount() == count - 1;
 }
-
-Bool MMDModelManagerObject::BuildStandalonePhysics()
-{
-	iferr_scope_handler{ return false; };
-
-	physics_manager_own_ = std::make_unique<libmmd::MMDPhysicsManager>();
-	if (!physics_manager_own_ || !physics_manager_own_->Create())
-		return false;
-
-	iferr(physics_dynamic_bone_indices_.Resize(0))
-		return false;
-
-	if (rigid_manager_data_)
-	{
-		rigid_manager_data_->mmd_physics_manager_ = physics_manager_own_.get();
-		if (!rigid_manager_data_->BuildStandaloneRigidBodies(physics_manager_own_.get(), [this](const Int32 bone_index) -> libmmd::IMMDNode*
-		{
-			return GetBoneAdapter(bone_index);
-		}))
-		{
-			return false;
-		}
-
-		auto* const physics = physics_manager_own_->GetMMDPhysics();
-		auto* const rigid_bodies = physics_manager_own_->GetRigidBodys();
-		if (physics && rigid_bodies)
-		{
-			for (const auto& rigid_body : *rigid_bodies)
-				physics->AddRigidBody(rigid_body.get());
-		}
-
-		if (BaseObject* const rigid_manager_object = io_util::ResolveObjectLink(rigid_manager_))
-		{
-			for (BaseObject* child = rigid_manager_object->GetDown(); child; child = child->GetNext())
-			{
-				if (!child->IsInstanceOf(g_mmd_rigid_object_id))
-					continue;
-
-				const BaseContainer* const bc = child->GetDataInstance();
-				if (!bc)
-					continue;
-
-				const auto op_mode = static_cast<libmmd::PMXRigidbody::Operation>(bc->GetInt32(RIGID_PHYSICS_MODE));
-				if (op_mode == libmmd::PMXRigidbody::Operation::Static)
-					continue;
-
-				const Int32 bone_index = bc->GetInt32(RIGID_RELATED_BONE_INDEX);
-				if (bone_index < 0)
-					continue;
-
-				iferr(physics_dynamic_bone_indices_.Append(bone_index)) {}
-			}
-		}
-
-	}
-
-	if (joint_manager_data_)
-	{
-		joint_manager_data_->mmd_physics_manager_ = physics_manager_own_.get();
-		if (!joint_manager_data_->BuildStandaloneJoints(physics_manager_own_.get()))
-			return false;
-
-		auto* const physics = physics_manager_own_->GetMMDPhysics();
-		auto* const joints = physics_manager_own_->GetJoints();
-		if (physics && joints)
-		{
-			for (const auto& joint : *joints)
-				physics->AddJoint(joint.get());
-		}
-	}
-
-	if (rigid_manager_data_)
-		rigid_manager_data_->ReconnectRigidBodyPointers(physics_manager_own_.get());
-	if (joint_manager_data_)
-		joint_manager_data_->ReconnectJointPointers(physics_manager_own_.get());
-
-	return true;
-}
-
-Bool MMDModelManagerObject::EnsureStandaloneRuntimeManagers()
-{
-	iferr_scope_handler{ return false; };
-
-	if (*is_runtime_initialized_.Read() && ik_manager_own_ && physics_manager_own_)
-		return true;
-
-	if (BaseObject* const op = reinterpret_cast<BaseObject*>(Get()))
-	{
-		if (!UpdateManagers(op))
-			return false;
-	}
-
-	if (!BuildStandaloneBoneAdapters())
-		return false;
-	if (!BuildStandaloneIKManager())
-		return false;
-	if (!BuildStandalonePhysics())
-		return false;
-
-	BuildIKSolverUI();
-	ApplyIKSolverStates();
-	if (bone_manager_data_)
-	{
-		if (animation_slot_metadata_.GetCount() > 0)
-			bone_manager_data_->EnsureAllAnimationSlotCount(static_cast<Int32>(animation_slot_metadata_.GetCount()));
-		if (animation_index_ >= 0 && animation_index_ < animation_slot_metadata_.GetCount())
-			bone_manager_data_->SetAllActiveAnimationSlot(animation_index_);
-
-		// The manager container is the persistent source of truth for its
-		// independently editable mode. Hydrate every tag on every runtime rebuild,
-		// including edit mode and scenes without an animation slot.
-		Int32 bone_mode = model_mode_ == MODEL_MODE_ANIM ? BONE_MODE_ANIM : BONE_MODE_EDIT;
-		if (BaseObject* const bone_manager_object = io_util::ResolveObjectLink(bone_manager_))
-		{
-			if (const BaseContainer* const bone_bc = bone_manager_object->GetDataInstance())
-				bone_mode = NormalizeModelMode(bone_bc->GetInt32(BONE_MODE));
-			bone_manager_data_->SetAllBoneMode(bone_mode, bone_manager_object);
-		}
-		else
-		{
-			bone_manager_data_->SetAllBoneMode(bone_mode);
-		}
-	}
-
-	ApplyPhysicsConfigToRuntime(reinterpret_cast<BaseObject*>(Get()));
-	ResetStandalonePhysics();
-	*is_runtime_initialized_.Write() = true;
-	return true;
-}
-
-void MMDModelManagerObject::ResetStandalonePhysics()
-{
-	if (!physics_manager_own_)
-		return;
-
-	auto* const physics = physics_manager_own_->GetMMDPhysics();
-	auto* const rigid_bodies = physics_manager_own_->GetRigidBodys();
-	if (!physics || !rigid_bodies)
-		return;
-
-	for (const auto& rigid_body : *rigid_bodies)
-		rigid_body->ResetTransform();
-
-	for (const auto& rigid_body : *rigid_bodies)
-		rigid_body->Reset(physics);
-
-	for (const auto& rigid_body : *rigid_bodies)
-		rigid_body->SetActivation(true);
-}
-
-void MMDModelManagerObject::StepStandalonePhysics(const Float elapsed)
-{
-	if (!physics_manager_own_)
-		return;
-
-	bone_manager_data_ = GetBoneManagerData();
-	auto* const physics = physics_manager_own_->GetMMDPhysics();
-	auto* const rigid_bodies = physics_manager_own_->GetRigidBodys();
-	if (!physics || !rigid_bodies)
-		return;
-
-	BaseObject* const model_object = reinterpret_cast<BaseObject*>(Get());
-	BaseDocument* const doc = model_object ? model_object->GetDocument() : nullptr;
-
-	for (const auto& rigid_body : *rigid_bodies)
-		rigid_body->SyncBonePositionToPhysics(elapsed);
-
-	physics->Update(elapsed);
-
-	for (const auto& rigid_body : *rigid_bodies)
-		rigid_body->ReflectGlobalTransform();
-
-	SyncStandaloneBoneAdaptersLocalFromGlobal(physics_dynamic_bone_indices_);
-
-	if (bone_manager_data_)
-	{
-		for (const Int32 bone_index : physics_dynamic_bone_indices_)
-		{
-			if (C4DIKChainNodeAdapter* const adapter = GetBoneAdapter(bone_index))
-			{
-				Vector translation;
-				std::array<Float32, 4> rotation { 0.F, 0.F, 0.F, 1.F };
-				adapter->GetCurrentRelativeState(translation, rotation);
-				bone_manager_data_->SetPhysicsOverride(bone_index, doc, translation, rotation);
-			}
-		}
-	}
-
-	ApplyPhysicsResultsToBoneObjects();
-}
-
-void MMDModelManagerObject::ApplyPhysicsResultsToBoneObjects() const
-{
-	ApplyStandaloneBoneAdaptersToScene(physics_dynamic_bone_indices_);
-	MarkMeshHierarchyDirty(GetMeshManagerObject());
-}
-
-void MMDModelManagerObject::CommitEditModeBindState(BaseDocument* doc)
-{
-	if (BaseObject* const op = reinterpret_cast<BaseObject*>(Get()))
-		std::ignore = UpdateManagers(op);
-
-	bone_manager_data_ = GetBoneManagerData();
-	if (bone_manager_data_)
-		bone_manager_data_->CommitEditModeBindState(io_util::ResolveObjectLink(bone_manager_));
-	if (rigid_manager_data_ || GetRigidManagerData())
-		rigid_manager_data_->CommitEditorTransforms(io_util::ResolveObjectLink(rigid_manager_));
-	if (joint_manager_data_ || GetJointManagerData())
-		joint_manager_data_->CommitEditorTransforms(io_util::ResolveObjectLink(joint_manager_));
-	if (mesh_manager_data_ || GetMeshManagerData())
-		mesh_manager_data_->RefreshWeightBindPoses(GetMeshManagerObject(), doc);
-	if (bone_manager_data_)
-		bone_manager_data_->SetAllBoneMode(MODEL_MODE_ANIM, io_util::ResolveObjectLink(bone_manager_));
-	if (rigid_manager_data_ || GetRigidManagerData())
-		rigid_manager_data_->SetAllRigidMode(MODEL_MODE_ANIM, io_util::ResolveObjectLink(rigid_manager_));
-	if (joint_manager_data_ || GetJointManagerData())
-		joint_manager_data_->SetAllJointMode(MODEL_MODE_ANIM, io_util::ResolveObjectLink(joint_manager_));
-
-	MarkMeshHierarchyDirty(GetMeshManagerObject());
-	*is_morph_initialized_.Write() = true;
-	*update_morph_.Write() = true;
-}
-
-void MMDModelManagerObject::RestoreBindStateForEdit(BaseDocument* doc)
-{
-	if (BaseObject* const op = reinterpret_cast<BaseObject*>(Get()))
-		std::ignore = UpdateManagers(op);
-
-	bone_manager_data_ = GetBoneManagerData();
-	if (bone_manager_data_)
-		bone_manager_data_->RestoreBindStateForEdit(io_util::ResolveObjectLink(bone_manager_));
-	if (rigid_manager_data_ || GetRigidManagerData())
-		rigid_manager_data_->RestoreEditorTransforms(io_util::ResolveObjectLink(rigid_manager_));
-	if (joint_manager_data_ || GetJointManagerData())
-		joint_manager_data_->RestoreEditorTransforms(io_util::ResolveObjectLink(joint_manager_));
-	if (bone_manager_data_)
-		bone_manager_data_->SetAllBoneMode(MODEL_MODE_EDIT, io_util::ResolveObjectLink(bone_manager_));
-	if (rigid_manager_data_ || GetRigidManagerData())
-		rigid_manager_data_->SetAllRigidMode(MODEL_MODE_EDIT, io_util::ResolveObjectLink(rigid_manager_));
-	if (joint_manager_data_ || GetJointManagerData())
-		joint_manager_data_->SetAllJointMode(MODEL_MODE_EDIT, io_util::ResolveObjectLink(joint_manager_));
-	ClearMorphRuntimeForEdit();
-	MarkMeshHierarchyDirty(GetMeshManagerObject());
-
-	(void)doc;
-}
-
-Bool MMDModelManagerObject::IsPhysicsEnabled(const BaseObject* op) const
-{
-	const BaseContainer* const bc = op ? op->GetDataInstance() : nullptr;
-	return bc ? bc->GetBool(MODEL_PHYSICS_ENABLED) : true;
-}
-
-Bool MMDModelManagerObject::ShouldResetPhysicsOnSeek(const BaseObject* op) const
-{
-	const BaseContainer* const bc = op ? op->GetDataInstance() : nullptr;
-	return bc ? bc->GetBool(MODEL_PHYSICS_RESET_ON_SEEK) : true;
-}
-
-Vector MMDModelManagerObject::GetPhysicsGravity(const BaseObject* op) const
-{
-	const BaseContainer* const bc = op ? op->GetDataInstance() : nullptr;
-	const Float strength = bc ? bc->GetFloat(MODEL_PHYSICS_GRAVITY_STRENGTH, 98.0) : 98.0;
-	Vector direction = bc ? bc->GetVector(MODEL_PHYSICS_GRAVITY_DIRECTION, Vector(0, -1, 0)) : Vector(0, -1, 0);
-	const Float64 length_sq = static_cast<Float64>(direction.x) * direction.x
-		+ static_cast<Float64>(direction.y) * direction.y
-		+ static_cast<Float64>(direction.z) * direction.z;
-	if (length_sq <= std::numeric_limits<Float64>::epsilon())
-		direction = Vector(0, -1, 0);
-	else
-		direction = direction.GetNormalized();
-	return direction * strength;
-}
-
-void MMDModelManagerObject::ApplyPhysicsConfigToRuntime(const BaseObject* op)
-{
-	if (!physics_manager_own_)
-		return;
-
-	auto* const physics = physics_manager_own_->GetMMDPhysics();
-	if (!physics)
-		return;
-
-	if (auto* const world = physics->GetDynamicsWorld())
-	{
-		const Vector gravity = IsPhysicsEnabled(op) ? GetPhysicsGravity(op) : Vector(0);
-		world->setGravity(btVector3(
-			static_cast<btScalar>(gravity.x),
-			static_cast<btScalar>(gravity.y),
-			static_cast<btScalar>(gravity.z)));
-	}
-}
+#endif
 
 void MMDModelManagerObject::SyncSubManagerScale(const Float pm)
 {
@@ -3186,6 +2918,34 @@ void MMDModelManagerObject::ImportDisplayFrames(const libmmd::PMXFile& pmx_file)
 	}
 	display_frame_selection_index_ = display_frame_list_.GetCount() > 0 ? 0 : -1;
 	RefreshDisplayFrameUI();
+}
+
+void MMDModelManagerObject::RemapDisplayFrameBoneIndices(const std::unordered_map<Int32, Int32>& previous_to_current)
+{
+	Bool changed = false;
+	for (auto& frame : display_frame_list_)
+	{
+		for (Int i = frame.targets.GetCount() - 1; i >= 0; --i)
+		{
+			auto& target = frame.targets[i];
+			if (target.type != DisplayFrameTargetType::Bone)
+				continue;
+			const auto found = previous_to_current.find(target.index);
+			if (found == previous_to_current.end())
+			{
+				// A deleted bone must not silently become a different bone at its old index.
+				iferr(frame.targets.Erase(i)) return;
+				changed = true;
+			}
+			else if (target.index != found->second)
+			{
+				target.index = found->second;
+				changed = true;
+			}
+		}
+	}
+	if (changed)
+		RefreshDisplayFrameUI();
 }
 
 void MMDModelManagerObject::RefreshDisplayFrameUI()
@@ -3331,6 +3091,16 @@ void MMDModelManagerObject::RefreshDisplayFrameUI()
 
 Bool MMDModelManagerObject::LoadPMX(const libmmd::PMXFile& pmx_file, const CMTToolsSetting::ModelImport& setting)
 {
+	Bool uses_additional_uv = false;
+	for (const auto& morph : pmx_file.m_morphs)
+	{
+		if (morph.m_morphType >= libmmd::PMXMorphType::AddUV1 && morph.m_morphType <= libmmd::PMXMorphType::AddUV4)
+			uses_additional_uv = true;
+	}
+	BaseObject* const model_object = static_cast<BaseObject*>(Get());
+	BaseContainer source_info = model_object->GetDataInstance()->GetContainer(g_mmd_material_texture_morph_shader_id);
+	source_info.SetBool(mmd_material_binding::AdditionalUvUsage, uses_additional_uv);
+	model_object->GetDataInstance()->SetContainer(g_mmd_material_texture_morph_shader_id, source_info);
 	InvalidateStandaloneRuntime();
 	iferr(material_list_.Resize(0))
 		return false;
@@ -3373,6 +3143,20 @@ Bool MMDModelManagerObject::LoadPMX(const libmmd::PMXFile& pmx_file, const CMTTo
 		bone_manager_data_->CreateOrRefreshControls(io_util::ResolveObjectLink(bone_manager_));
 
 	ImportDisplayFrames(pmx_file);
+	std::unordered_map<Int32, Int32> imported_to_current;
+	if (bone_manager_data_)
+	{
+		for (Int i = 0; i < bone_list.GetCount(); ++i)
+		{
+			if (BaseTag* const tag = bone_list[i]->GetTag(g_mmd_bone_tag_id))
+			{
+				const Int32 current = bone_manager_data_->FindBoneIndex(tag);
+				if (current >= 0)
+					imported_to_current.emplace(static_cast<Int32>(i), current);
+			}
+		}
+	}
+	RemapDisplayFrameBoneIndices(imported_to_current);
 
 	if (setting.import_expression)
 	{
@@ -3385,7 +3169,8 @@ Bool MMDModelManagerObject::LoadPMX(const libmmd::PMXFile& pmx_file, const CMTTo
 			const auto panel = static_cast<Int32>(pmx_morph.m_controlPanel);
 			if (morph_offset_type == libmmd::PMXMorphType::Group || morph_offset_type == libmmd::PMXMorphType::Flip)
 			{
-				ImportGroupAndFlipMorph(pmx_morph, panel);
+				if (ImportGroupAndFlipMorph(pmx_morph, panel) < 0)
+					return false;
 			}
 			else if (morph_offset_type == libmmd::PMXMorphType::Material)
 			{
@@ -3411,10 +3196,95 @@ Bool MMDModelManagerObject::LoadPMX(const libmmd::PMXFile& pmx_file, const CMTTo
 			}
 			else if (morph_offset_type == libmmd::PMXMorphType::Impluse)
 			{
-				AddMorph(MMDMorphType::IMPULSE, String(pmx_morph.m_name.c_str()), true, panel);
+				const Int impulse_id = AddMorph(MMDMorphType::IMPULSE, String(pmx_morph.m_name.c_str()), true, panel);
+				if (impulse_id < 0 || impulse_id >= morph_data_.GetCount()
+					|| morph_data_[impulse_id].GetType() != MMDMorphType::IMPULSE)
+					return false;
+				auto& offsets = static_cast<ImpulseMorph&>(morph_data_[impulse_id]).GetOffsetsWritable();
+				offsets.Reset();
+				for (const auto& source : pmx_morph.m_impulseMorph)
+				{
+					MMDImpulseMorphOffset offset;
+					offset.FromPMX(source);
+					iferr(offset.rigid_link = maxon::StrongRef<AutoAlloc<BaseLink>>::Create())
+						return false;
+					(*offset.rigid_link)->SetLink(rigid_manager_data_->FindRigid(offset.rigid_index));
+					iferr(offsets.Append(offset))
+						return false;
+				}
 			}
 		}
 	}
+	// Finish discovery before converting PMX morph references. Derived morphs are
+	// built from tags, whereas authored definitions above are built in file order;
+	// their runtime indices therefore cannot be inferred from the PMX array index.
+	if (mesh_manager_data_ && GetMeshManagerObject())
+		mesh_manager_data_->ForceRefreshMorphData(GetMeshManagerObject());
+	RefreshMorph();
+	std::vector<Int> imported_morph_indices(pmx_file.m_morphs.size(), NOTOK);
+	if (setting.import_expression)
+	{
+		for (size_t index = 0; index < pmx_file.m_morphs.size(); ++index)
+		{
+			const auto* entry = morph_name_.Find(String(pmx_file.m_morphs[index].m_name.c_str()));
+			if (entry && entry->GetValue() >= 0 && entry->GetValue() < morph_data_.GetCount())
+				imported_morph_indices[index] = entry->GetValue();
+		}
+		for (size_t index = 0; index < pmx_file.m_morphs.size(); ++index)
+		{
+			const auto& imported = pmx_file.m_morphs[index];
+			if (imported.m_morphType != libmmd::PMXMorphType::Group && imported.m_morphType != libmmd::PMXMorphType::Flip)
+				continue;
+			const Int runtime_index = imported_morph_indices[index];
+			if (runtime_index < 0)
+				continue;
+			auto* offsets = morph_data_[runtime_index].GetSubMorphDataWritable();
+			if (!offsets)
+				continue;
+			offsets->Reset();
+			const auto remap_offsets = [&imported_morph_indices, offsets, runtime_index](const auto& imported_offsets) -> Bool
+			{
+				for (const auto& [source_index, weight] : imported_offsets)
+				{
+					if (source_index < 0 || static_cast<size_t>(source_index) >= imported_morph_indices.size())
+						continue;
+					const Int target = imported_morph_indices[static_cast<size_t>(source_index)];
+					if (target < 0 || target == runtime_index)
+						continue;
+					iferr(offsets->Insert(target, weight))
+						return false;
+				}
+				return true;
+			};
+			if (imported.m_morphType == libmmd::PMXMorphType::Group)
+			{
+				if (!remap_offsets(imported.m_groupMorph))
+					return false;
+			}
+			else if (!remap_offsets(imported.m_flipMorph))
+				return false;
+		}
+	}
+	for (auto& frame : display_frame_list_)
+	{
+		for (Int index = frame.targets.GetCount() - 1; index >= 0; --index)
+		{
+			auto& target = frame.targets[index];
+			if (target.type != DisplayFrameTargetType::Morph)
+				continue;
+			const Int runtime_index = target.index >= 0 && static_cast<size_t>(target.index) < imported_morph_indices.size()
+				? imported_morph_indices[static_cast<size_t>(target.index)] : NOTOK;
+			if (runtime_index < 0)
+			{
+				iferr(frame.targets.Erase(index))
+					return false;
+			}
+			else
+				target.index = static_cast<Int32>(runtime_index);
+		}
+	}
+	RefreshDisplayFrameUI();
+	if (!PrepareMaterialMorphBindings(false)) return false;
 	return true;
 }
 
@@ -3424,24 +3294,7 @@ Bool MMDModelManagerObject::AddMaterial(const libmmd::PMXMaterial& pmx_material,
 {
 	iferr_scope_handler { return false; };
 	MMDMaterialData mat;
-	mat.FromPMX(pmx_material);
-	const auto tex_idx = pmx_material.m_textureIndex;
-	if (tex_idx >= 0 && tex_idx < texture_paths.GetCount())
-		mat.texture_path = texture_paths[tex_idx].GetString();
-	const auto sphere_idx = pmx_material.m_sphereTextureIndex;
-	if (sphere_idx >= 0 && sphere_idx < texture_paths.GetCount())
-		mat.sphere_texture_path = texture_paths[sphere_idx].GetString();
-	if (mat.toon_texture_index >= 0)
-	{
-		if (mat.toon_mode == 1)
-		{
-			Char buf[20];
-			snprintf(buf, sizeof(buf), "toon%02d.bmp", static_cast<int>(mat.toon_texture_index + 1));
-			mat.toon_texture_path = (GeGetPluginResourcePath() + Filename("mikumikudance_data") + Filename(buf)).GetString();
-		}
-		else if (mat.toon_texture_index < texture_paths.GetCount())
-			mat.toon_texture_path = texture_paths[mat.toon_texture_index].GetString();
-	}
+	ResolvePMXMaterialData(pmx_material, texture_paths, mat);
 	if (c4d_material)
 	{
 		auto link_result = maxon::StrongRef<AutoAlloc<BaseLink>>::Create();
@@ -3702,6 +3555,42 @@ Bool MMDModelManagerObject::SavePMX(libmmd::PMXFile& pmx_file, const CMTToolsSet
 		if (const auto jmd = joint_mgr->GetNodeData<MMDJointManagerObject>(); jmd && !jmd->SavePMX(pmx_file, &rigid_index_remap))
 			return false;
 
+	if (setting.export_expression)
+	{
+		for (auto& exported_morph : pmx_file.m_morphs)
+		{
+			if (exported_morph.m_morphType != libmmd::PMXMorphType::Impluse)
+				continue;
+			const auto* entry = morph_name_.Find(String(exported_morph.m_name.c_str()));
+			if (!entry || entry->GetValue() < 0 || entry->GetValue() >= morph_data_.GetCount())
+				return false;
+			const auto& morph = morph_data_[entry->GetValue()];
+			if (morph.GetType() != MMDMorphType::IMPULSE)
+				return false;
+			for (const auto& offset : static_cast<const ImpulseMorph&>(morph).GetOffsets())
+			{
+				BaseObject* const rigid = offset.rigid_link && *offset.rigid_link
+					? static_cast<BaseObject*>((*offset.rigid_link)->ForceGetLink()) : nullptr;
+				if (!rigid || rigid->GetUp() != io_util::ResolveObjectLink(rigid_manager_))
+					return false;
+				GeData current_index;
+				if (!rigid->GetParameter(ConstDescID(DescLevel(RIGID_INDEX)), current_index, DESCFLAGS_GET::NONE))
+					return false;
+				const Int32 index = current_index.GetType() == DA_LONG
+					? current_index.GetInt32() : current_index.GetString().ToInt32(nullptr);
+				const auto target = rigid_index_remap.find(index);
+				// A deleted target must fail export, rather than silently losing an offset.
+				if (target == rigid_index_remap.end())
+					return false;
+				libmmd::PMXFileMorph::ImpulseMorph exported_offset;
+				offset.ToPMX(exported_offset);
+				exported_offset.m_rigidbodyIndex = target->second;
+				exported_morph.m_impulseMorph.push_back(exported_offset);
+			}
+			pmx_file.m_header.m_version = std::max(pmx_file.m_header.m_version, 2.1f);
+		}
+	}
+
 	ClearUnsupportedPmxSections(pmx_file);
 	FinalizePmxHeaderIndexSizes(pmx_file);
 	return cmt_export::ScalePMXLengths(pmx_file, export_length_scale);
@@ -3773,7 +3662,8 @@ Bool MMDModelManagerObject::CaptureMorphAnimationSlotFromTracks(const Int32 slot
 
 			MorphAnimationKeyframeData data;
 			data.morph_name = morph.GetName();
-			data.frame = key->GetTime().GetFrame(kModelAnimationFps);
+			if (!TryDocumentAnimationFrame(key->GetTime(), data.frame))
+				return false;
 			data.weight = static_cast<Float32>(key->GetValue());
 			iferr(slot.keyframes.Append(std::move(data)))
 				return false;
@@ -3822,37 +3712,78 @@ Bool MMDModelManagerObject::LoadVMDMotion(const libmmd::VMDFile& vmd_file, const
 	log.not_find_bone_name_list.Reset();
 	log.not_find_morph_name_list.Reset();
 	const auto animation_name = setting.fn.GetFileString();
+	if (!UpdateManagers(reinterpret_cast<BaseObject*>(Get())))
+		return false;
 	bone_manager_data_ = GetBoneManagerData();
 	rigid_manager_data_ = GetRigidManagerData();
 	BaseObject* const rigid_manager_object = io_util::ResolveObjectLink(rigid_manager_);
 
-	const Bool merge_into_existing = merge
-		&& animation_index_ >= 0
-		&& animation_index_ < animation_slot_metadata_.GetCount();
-	const Int32 target_slot = merge_into_existing
-		? animation_index_
-		: static_cast<Int32>(animation_slot_metadata_.GetCount());
-	if (!EnsureAnimationSlotCount(target_slot + 1))
+	BaseObject* const object = reinterpret_cast<BaseObject*>(Get());
+	const Float model_scale = object ? object->GetDataInstance()->GetFloat(MODEL_POSITION_MULTIPLE, 8.5) : 8.5;
+	if (!object || !std::isfinite(model_scale) || model_scale <= 0.0
+		|| !std::isfinite(setting.position_multiple) || setting.position_multiple <= 0.0)
 		return false;
-	if (bone_manager_data_ && !bone_manager_data_->EnsureAllAnimationSlotCount(target_slot + 1))
+	// Reject all invalid enabled sections before capturing tracks, resizing slots,
+	// clearing the previous animation, or constructing replacement CTracks.
+	if (!ValidateMotionImport(vmd_file, setting, model_scale))
 		return false;
-
-	if (!vmd_file.m_iks.empty())
-		ImportVMDIKKeyframes(vmd_file, setting);
+	if (model_mode_ != MODEL_MODE_EDIT && !CaptureMorphAnimationSlotFromTracks(animation_index_))
+		return false;
+	if (!CaptureModelInfoAnimationSlotFromTracks(animation_index_))
+		return false;
+	const Bool has_active_slot = animation_index_ >= 0 && animation_index_ < animation_slot_metadata_.GetCount();
+	const Bool merge_into_existing = merge && has_active_slot;
+	const Bool replace_existing = !merge && setting.delete_previous_animation && has_active_slot;
+	const Int32 target_slot = merge_into_existing || replace_existing
+		? animation_index_ : static_cast<Int32>(animation_slot_metadata_.GetCount());
+	const Int32 slot_count = std::max(target_slot + 1, static_cast<Int32>(animation_slot_metadata_.GetCount()));
+	if (!EnsureAnimationSlotCount(slot_count))
+		return false;
+	if (bone_manager_data_ && !bone_manager_data_->EnsureAllAnimationSlotCount(slot_count))
+		return false;
+	// Prepare complete replacement data before removing prior tracks or keys.
+	// Allocation during the final C4D commit still requires an undo transaction.
+	MorphAnimationSlotData prepared_morph_slot;
+	mmd_model_info::AnimationSlot prepared_model_info;
+	std::map<MMDBoneTag*, maxon::BaseArray<BoneAnimationKeyframeData>> prepared_bone_slots;
+	if (merge_into_existing)
+	{
+		prepared_morph_slot = morph_animation_slots_[target_slot];
+		prepared_model_info = model_info_animation_slots_[static_cast<size_t>(target_slot)];
+	}
 
 	if (setting.import_morph)
 	{
-		std::set<std::string> unmatched_morph_utf8;
+		std::map<std::pair<std::string, Int32>, MorphAnimationKeyframeData> keys;
+		if (merge_into_existing)
+			for (const auto& key : prepared_morph_slot.keyframes)
+				keys[{ string_util::GetStdString(key.morph_name), key.frame }] = key;
+		std::set<std::string> unmatched;
 		for (const auto& morph : vmd_file.m_morphs)
 		{
-			const String morph_name(morph.m_blendShapeName.ToUtf8String().c_str());
-			const BaseTime key_time(static_cast<Float>(morph.m_frame) + setting.time_offset, kModelAnimationFps);
-			if (!AddMorphStrengthKeyframe(morph_name, key_time, morph.m_weight))
-				unmatched_morph_utf8.insert(morph.m_blendShapeName.ToUtf8String());
+			const std::string name = morph.m_blendShapeName.ToUtf8String();
+			if (!morph_name_.Find(String(name.c_str())))
+			{
+				unmatched.insert(name);
+				continue;
+			}
+			MorphAnimationKeyframeData key;
+			key.morph_name = String(name.c_str());
+			key.frame = ToAnimationFrame(morph.m_frame, setting.time_offset);
+			key.weight = morph.m_weight;
+			keys[{ name, key.frame }] = key;
 		}
-		for (const auto& utf8 : unmatched_morph_utf8)
+		auto& slot = prepared_morph_slot;
+		iferr(slot.keyframes.Resize(0))
+			return false;
+		for (const auto& key : keys)
 		{
-			log.not_find_morph_name_list.Append(String(utf8.c_str())) iferr_return;
+			iferr(slot.keyframes.Append(key.second))
+				return false;
+		}
+		for (const auto& name : unmatched)
+		{
+			log.not_find_morph_name_list.Append(String(name.c_str())) iferr_return;
 		}
 	}
 
@@ -3897,7 +3828,7 @@ Bool MMDModelManagerObject::LoadVMDMotion(const libmmd::VMDFile& vmd_file, const
 			if (is_inherit || is_dynamic_physics_bone)
 				continue;
 
-			imported_motion_map[target_tag].push_back(ConvertMotionToBoneKeyframe(motion, setting));
+			imported_motion_map[target_tag].push_back(ConvertMotionToBoneKeyframe(motion, setting, model_scale));
 		}
 
 		for (const auto& utf8 : unmatched_bone_utf8)
@@ -3929,14 +3860,45 @@ Bool MMDModelManagerObject::LoadVMDMotion(const libmmd::VMDFile& vmd_file, const
 				iferr(merged_keys.Append(keyframe))
 					return false;
 			}
-			if (!bone_tag->ReplaceAnimationSlot(target_slot, merged_keys))
-				return false;
+			prepared_bone_slots.emplace(bone_tag, std::move(merged_keys));
 		}
 	}
 
-	log.imported_bone_count = vmd_file.m_motions.size();
-	log.imported_morph_count = vmd_file.m_morphs.size();
-	log.imported_motion_count = vmd_file.m_iks.size();
+	if (setting.import_model_info)
+		for (const auto& key : vmd_file.m_iks)
+		{
+			const Int32 frame = ToAnimationFrame(key.m_frame, setting.time_offset);
+			prepared_model_info.visibility[frame] = key.m_show != 0;
+			for (const auto& info : key.m_ikInfos)
+			{
+				const std::string name = info.m_name.ToUtf8String();
+				if (prepared_model_info.ik_channels.find(name) == prepared_model_info.ik_channels.end())
+					prepared_model_info.ik_defaults[name] = true;
+				prepared_model_info.ik_channels[name][frame] = info.m_enable != 0;
+			}
+		}
+
+	// Commit only after conversion, name matching, and merged-key allocation.
+	if (replace_existing && bone_manager_data_)
+		for (const auto& entry : bone_manager_data_->bone_list_)
+			if (BaseTag* const tag = bone_manager_data_->FindBone(static_cast<Int32>(entry.GetKey())))
+				if (auto* const data = tag->GetNodeData<MMDBoneTag>())
+					data->ClearAnimationSlot(target_slot);
+	morph_animation_slots_[target_slot] = std::move(prepared_morph_slot);
+	model_info_animation_slots_[static_cast<size_t>(target_slot)] = std::move(prepared_model_info);
+	for (const auto& pending : prepared_bone_slots)
+		if (!pending.first->ReplaceAnimationSlot(target_slot, pending.second))
+			return false;
+	if (setting.import_model_info && !vmd_file.m_iks.empty() && !has_visibility_baseline_)
+	{
+		visibility_editor_baseline_ = object->GetEditorMode();
+		visibility_render_baseline_ = object->GetRenderMode();
+		has_visibility_baseline_ = true;
+	}
+
+	log.imported_bone_count = setting.import_motion ? vmd_file.m_motions.size() : 0;
+	log.imported_morph_count = setting.import_morph ? vmd_file.m_morphs.size() : 0;
+	log.imported_motion_count = setting.import_model_info ? vmd_file.m_iks.size() : 0;
 
 	const String slot_name = merge_into_existing && !animation_slot_metadata_[target_slot].name.IsEmpty()
 		? animation_slot_metadata_[target_slot].name
@@ -3948,6 +3910,10 @@ Bool MMDModelManagerObject::LoadVMDMotion(const libmmd::VMDFile& vmd_file, const
 		return false;
 
 	animation_index_ = target_slot;
+	if (model_mode_ != MODEL_MODE_EDIT && !RebuildMorphTracksFromAnimationSlot(target_slot))
+		return false;
+	if (!RebuildModelInfoTracksFromAnimationSlot(target_slot))
+		return false;
 	ApplyAnimationSlotSelection(setting.doc);
 	InvalidateStandaloneRuntime();
 	const auto node = Get();
@@ -4317,69 +4283,346 @@ Bool MMDModelManagerObject::SaveVPDPose(libmmd::VPDFile& vpd_pose, const CMTTool
 	return true;
 }
 
-Bool MMDModelManagerObject::SaveVMDMotion(libmmd::VMDFile& vmd_motion, const CMTToolsSetting::MotionExport& setting) const
+Bool MMDModelManagerObject::BakeVMDMotion(libmmd::VMDFile& motion, const CMTToolsSetting::MotionExport& setting, const Bool controls_only) const
 {
-	if (animation_index_ < 0 || animation_index_ >= animation_slot_metadata_.GetCount())
+	BaseObject* const source_object = reinterpret_cast<BaseObject*>(const_cast<MMDModelManagerObject*>(this)->Get());
+	BaseDocument* const source_doc = source_object ? source_object->GetDocument() : nullptr;
+	if (!source_doc || !GeIsMainThread())
 		return false;
-
-	auto* const self = const_cast<MMDModelManagerObject*>(this);
-	BaseObject* const object = reinterpret_cast<BaseObject*>(self->Get());
-
-	vmd_motion = libmmd::VMDFile();
-	vmd_motion.m_header.m_header.Set("Vocaloid Motion Data 0002");
-	vmd_motion.m_header.m_modelName.Set(ConvertStringToSjis(GetModelManagerName(object)).c_str());
-
-	if (self->EnsureStandaloneRuntimeManagers())
-		AppendIKTracksToVmd(object, self->ik_manager_own_.get(), ik_solver_dynamic_params_, setting, vmd_motion);
-	else
-		vmd_motion.m_iks.clear();
-	if (model_mode_ == MODEL_MODE_EDIT && animation_index_ >= 0 && animation_index_ < morph_animation_slots_.GetCount())
-		AppendMorphSlotToVmd(&morph_animation_slots_[animation_index_], morph_name_, setting, vmd_motion);
-	else
-		AppendMorphTracksToVmd(object, morph_data_, setting, vmd_motion);
-
-	if (!setting.export_motion)
+	// Evaluate an independent document so export cannot change the artist's time,
+	// controllers, morph materials, mode, or the live Bullet simulation state.
+	std::vector<Int32> object_path;
+	for (BaseObject* object = source_object; object; object = object->GetUp())
 	{
-		vmd_motion.m_motions.clear();
-		return true;
+		Int32 index = 0;
+		for (BaseObject* previous = object->GetPred(); previous; previous = previous->GetPred())
+			++index;
+		object_path.push_back(index);
 	}
-
-	vmd_motion.m_motions.clear();
-	const auto* bone_manager = const_cast<MMDModelManagerObject*>(this)->GetBoneManagerData();
-	if (!bone_manager)
-		return true;
-
-	for (const auto& entry : bone_manager->bone_list_)
+	AutoAlloc<AliasTrans> translator;
+	if (!translator || !translator->Init(source_doc))
+		return false;
+	std::unique_ptr<BaseDocument, void(*)(BaseDocument*)> doc(
+		static_cast<BaseDocument*>(source_doc->GetClone(COPYFLAGS::NONE, translator)),
+		[](BaseDocument* document) { BaseDocument::Free(document); });
+	if (!doc)
+		return false;
+	translator->Translate(true);
+	BaseObject* object = doc->GetFirstObject();
+	for (auto path = object_path.rbegin(); path != object_path.rend(); ++path)
 	{
-		BaseTag* bone_tag_base = static_cast<BaseTag*>((*entry.GetValue())->ForceGetLink());
-		if (!bone_tag_base)
-			continue;
-
-		auto* bone_tag = bone_tag_base->GetNodeData<MMDBoneTag>();
-		if (!bone_tag)
-			continue;
-
-		maxon::BaseArray<BoneAnimationKeyframeData> keyframes;
-		if (!bone_tag->CopyAnimationSlot(animation_index_, keyframes))
+		for (Int32 index = 0; object && index < *path; ++index)
+			object = object->GetNext();
+		if (!object)
 			return false;
-
-		String bone_name = GetBoneTagName(bone_tag_base, true);
-		if (bone_name.IsEmpty())
-			bone_name = GetBoneTagName(bone_tag_base, false);
-		for (const auto& keyframe : keyframes)
-			vmd_motion.m_motions.push_back(ConvertBoneKeyframeToMotion(bone_name, keyframe, setting));
+		if (std::next(path) != object_path.rend())
+			object = object->GetDown();
 	}
-
-	std::sort(vmd_motion.m_motions.begin(), vmd_motion.m_motions.end(), [](const libmmd::VMDMotion& lhs, const libmmd::VMDMotion& rhs)
+	auto* const model = object ? object->GetNodeData<MMDModelManagerObject>() : nullptr;
+	if (!model)
+		return false;
+	model->model_mode_ = MODEL_MODE_ANIM;
+	object->GetDataInstance()->SetInt32(MODEL_MODE, MODEL_MODE_ANIM);
+	if (auto* const bones = model->GetBoneManagerData())
+		bones->SetAllBoneMode(BONE_MODE_ANIM, model->GetBoneManagerObject());
+	if (model_mode_ == MODEL_MODE_EDIT && !model->RebuildMorphTracksFromAnimationSlot(animation_index_))
+		return false;
+	doc->SetFps(static_cast<Int32>(kModelAnimationFps));
+	doc->SetMinTime(BaseTime());
+	Int32 document_max_frame = 0;
+	std::uint32_t last_output_frame = 0;
+	if (!controls_only && !TryDocumentAnimationFrame(source_doc->GetMaxTime(), document_max_frame))
+		return false;
+	const Int32 last_frame = std::max(GetAnimationSlotMaxFrame(animation_index_), document_max_frame);
+	if (!controls_only && !cmt_motion_validation::TryExportFrame(last_frame, setting.time_offset, last_output_frame))
+		return false;
+	const Float model_scale = object->GetDataInstance()->GetFloat(MODEL_POSITION_MULTIPLE, 8.5);
+	std::set<Int32> sample_frames;
+	std::set<Int32> controlled_bones;
+	if (controls_only)
 	{
-		if (lhs.m_boneName.ToString() == rhs.m_boneName.ToString())
-			return lhs.m_frame < rhs.m_frame;
-		return lhs.m_boneName.ToString() < rhs.m_boneName.ToString();
-	});
+		object->GetDataInstance()->SetBool(MODEL_PHYSICS_ENABLED, false);
+		auto& slot = model->model_info_animation_slots_[static_cast<size_t>(animation_index_)];
+		slot.ik_channels.clear();
+		if (auto* const bones = model->GetBoneManagerData())
+			for (const auto& entry : bones->bone_list_)
+			{
+				const Int32 bone_index = static_cast<Int32>(entry.GetKey());
+				BaseTag* const tag = bones->FindBone(bone_index);
+				if (tag && tag->GetDataInstance()->GetBool(PMX_BONE_IS_IK))
+					slot.ik_defaults[string_util::GetStdString(GetBoneTagName(tag, true))] = false;
+				BaseObject* const control = GetBoneControlObject(tag);
+				if (!HasControlTransformKeys(control))
+					continue;
+				controlled_bones.insert(bone_index);
+				if (auto* const data = tag->GetNodeData<MMDBoneTag>())
+				{
+					maxon::BaseArray<BoneAnimationKeyframeData> keys;
+					if (!data->CopyAnimationSlot(animation_index_, keys))
+						return false;
+					for (const auto& key : keys)
+						sample_frames.insert(key.frame);
+				}
+				for (const Int32 parameter : { ID_BASEOBJECT_REL_POSITION, ID_BASEOBJECT_REL_ROTATION })
+					for (const Int32 axis : { VECTOR_X, VECTOR_Y, VECTOR_Z })
+						if (CCurve* const curve = GetTransformCurve(control, parameter, axis))
+							for (Int32 key = 0; key < curve->GetKeyCount(); ++key)
+								sample_frames.insert(std::max(0, GetDocumentAnimationFrame(curve->GetKey(key)->GetTime())));
+				const std::string name = ConvertStringToSjis(GetBoneTagName(tag, true));
+				motion.m_motions.erase(std::remove_if(motion.m_motions.begin(), motion.m_motions.end(), [&name](const auto& key)
+				{
+					return key.m_boneName.ToString() == name;
+				}), motion.m_motions.end());
+			}
+		sample_frames.insert(0);
+	}
+	else
+	{
+		for (Int64 frame = 0; frame <= last_frame; ++frame)
+			sample_frames.insert(static_cast<Int32>(frame));
+	}
+	if (controls_only)
+	{
+		// The clone still has the source IK CTracks. Remove them before invalidation
+		// so their capture cannot re-enable the solver channels prepared above.
+		for (const auto& param : model->ik_solver_dynamic_params_)
+			RemoveParameterTrack(object, param.first);
+	}
+	model->InvalidateStandaloneRuntime();
+	Int32 previous_frame = -1;
+	for (const Int32 frame : sample_frames)
+	{
+		doc->SetTime(BaseTime(static_cast<Float>(frame), kModelAnimationFps));
+		if (!doc->ExecutePasses(nullptr, true, true, true, BUILDFLAGS::NONE) || !*model->is_runtime_initialized_.Read())
+			return false;
+		if (setting.export_motion)
+		{
+			auto* const bones = model->GetBoneManagerData();
+			if (!bones)
+				return false;
+			for (const auto& entry : bones->bone_list_)
+			{
+				if (controls_only && controlled_bones.find(static_cast<Int32>(entry.GetKey())) == controlled_bones.end())
+					continue;
+				BaseTag* const tag = bones->FindBone(static_cast<Int32>(entry.GetKey()));
+				BaseObject* const bone = tag ? tag->GetObject() : nullptr;
+				if (!bone)
+					continue;
+				String name = GetBoneTagName(tag, true);
+				if (name.IsEmpty())
+					name = GetBoneTagName(tag, false);
+				const Matrix relative = bone->GetRelMl();
+				auto key = MakeBoneKeyframe(frame, relative.off, ToBoneRotationArray(ExtractVpdQuaternion(relative)));
+				if (controls_only)
+					key.rotation = GetControlRotationInterpolation(GetBoneControlObject(tag), setting.use_rotation, previous_frame, frame);
+				motion.m_motions.push_back(ConvertBoneKeyframeToMotion(name, key, setting, model_scale));
+			}
+		}
+		if (setting.export_morph && !controls_only)
+		{
+			for (const auto& morph : model->morph_data_)
+			{
+				libmmd::VMDMorph key;
+				key.m_blendShapeName.Set(ConvertStringToSjis(morph.GetName()).c_str());
+				key.m_frame = ToExportFrame(frame, setting.time_offset);
+				key.m_weight = static_cast<float>(const_cast<IMorph&>(morph).GetStrength(object));
+				motion.m_morphs.push_back(std::move(key));
+			}
+		}
+		previous_frame = frame;
+	}
 	return true;
 }
 
-// TODO: VMD model-info / visibility / per-frame IK controller → CTrack (see removed SetModelControllerAnimation draft).
+Bool MMDModelManagerObject::SaveVMDMotion(libmmd::VMDFile& vmd_motion, const CMTToolsSetting::MotionExport& setting) const
+{
+	if (animation_index_ < 0 || animation_index_ >= animation_slot_metadata_.GetCount()
+		|| !std::isfinite(setting.position_multiple) || setting.position_multiple <= 0.0
+		|| !cmt_motion_validation::IsFrameOffsetValid(setting.time_offset))
+		return false;
+	auto* const self = const_cast<MMDModelManagerObject*>(this);
+	BaseObject* const object = reinterpret_cast<BaseObject*>(self->Get());
+	if (!object)
+		return false;
+	const Float model_scale = object->GetDataInstance()->GetFloat(MODEL_POSITION_MULTIPLE, 8.5);
+	if (!std::isfinite(model_scale) || model_scale <= 0.0)
+		return false;
+	const auto valid_frame = [&setting](const Int32 frame)
+	{
+		std::uint32_t output_frame = 0;
+		return cmt_motion_validation::TryExportFrame(frame, setting.time_offset, output_frame);
+	};
+	// Validate every enabled output timeline before evaluating a clone or
+	// converting a signed frame plus offset into VMD's unsigned frame field.
+	if (setting.export_model_info)
+	{
+		if (!valid_frame(0))
+			return false;
+		const auto& slot = model_info_animation_slots_[static_cast<size_t>(animation_index_)];
+		for (const auto& key : slot.visibility)
+			if (!valid_frame(key.first))
+				return false;
+		for (const auto& channel : slot.ik_channels)
+			for (const auto& key : channel.second)
+				if (!valid_frame(key.first))
+					return false;
+		for (const auto& param : ik_solver_dynamic_params_)
+		{
+			CTrack* const track = object->FindCTrack(param.first);
+			if (!ValidateCurveExportFrames(track ? track->GetCurve() : nullptr, setting.time_offset))
+				return false;
+		}
+	}
+	if (setting.export_morph && !setting.use_bake)
+	{
+		if (model_mode_ == MODEL_MODE_EDIT)
+		{
+			for (const auto& key : morph_animation_slots_[animation_index_].keyframes)
+				if (!valid_frame(key.frame))
+					return false;
+		}
+		else
+		{
+			for (auto& morph : self->morph_data_)
+			{
+				CTrack* const track = object->FindCTrack(morph.GetStrengthDescID());
+				if (!ValidateCurveExportFrames(track ? track->GetCurve() : nullptr, setting.time_offset))
+					return false;
+			}
+		}
+	}
+	if (setting.export_motion && !setting.use_bake)
+	{
+		if (const auto* const bones = self->GetBoneManagerData())
+			for (const auto& entry : bones->bone_list_)
+			{
+				BaseTag* const tag = bones->FindBone(static_cast<Int32>(entry.GetKey()));
+				if (auto* const data = tag ? tag->GetNodeData<MMDBoneTag>() : nullptr)
+				{
+					maxon::BaseArray<BoneAnimationKeyframeData> keys;
+					if (!data->CopyAnimationSlot(animation_index_, keys))
+						return false;
+					for (const auto& key : keys)
+						if (!valid_frame(key.frame))
+							return false;
+				}
+				BaseObject* const control = GetBoneControlObject(tag);
+				for (const Int32 parameter : { ID_BASEOBJECT_REL_POSITION, ID_BASEOBJECT_REL_ROTATION })
+					for (const Int32 axis : { VECTOR_X, VECTOR_Y, VECTOR_Z })
+						if (!ValidateCurveExportFrames(GetTransformCurve(control, parameter, axis), setting.time_offset))
+							return false;
+			}
+	}
+	if (setting.use_bake && (setting.export_motion || setting.export_morph))
+	{
+		BaseDocument* const doc = object->GetDocument();
+		Int32 max_frame = 0;
+		if (!doc || !TryDocumentAnimationFrame(doc->GetMaxTime(), max_frame)
+			|| !valid_frame(std::max(max_frame, GetAnimationSlotMaxFrame(animation_index_))))
+			return false;
+	}
+	if (!self->CaptureModelInfoAnimationSlotFromTracks(animation_index_))
+		return false;
+
+	libmmd::VMDFile result;
+	result.m_header.m_header.Set("Vocaloid Motion Data 0002");
+	result.m_header.m_modelName.Set(ConvertStringToSjis(GetModelManagerName(object)).c_str());
+	AppendModelInfoToVmd(setting, result, setting.use_bake);
+	if (setting.use_bake)
+	{
+		if ((setting.export_motion || setting.export_morph) && !BakeVMDMotion(result, setting))
+			return false;
+		if (setting.export_model_info && setting.export_motion)
+		{
+			std::set<std::string> solved_ik_names;
+			if (auto* const bones = self->GetBoneManagerData())
+				for (const auto& entry : bones->bone_list_)
+				{
+					BaseTag* const tag = bones->FindBone(static_cast<Int32>(entry.GetKey()));
+					if (!tag || !tag->GetDataInstance()->GetBool(PMX_BONE_IS_IK))
+						continue;
+					String name = GetBoneTagName(tag, true);
+					if (name.IsEmpty())
+						name = GetBoneTagName(tag, false);
+					solved_ik_names.insert(ConvertStringToSjis(name));
+				}
+			if (!solved_ik_names.empty())
+			{
+				const UInt32 first_frame = ToExportFrame(0, setting.time_offset);
+				const Bool has_first_frame = std::any_of(result.m_iks.begin(), result.m_iks.end(), [first_frame](const auto& key)
+				{
+					return key.m_frame == first_frame;
+				});
+				if (!has_first_frame)
+				{
+					libmmd::VMDIk initial;
+					initial.m_frame = first_frame;
+					initial.m_show = mmd_model_info::Evaluate(model_info_animation_slots_[static_cast<size_t>(animation_index_)].visibility, 0, true) ? 1 : 0;
+					result.m_iks.push_back(std::move(initial));
+				}
+				// Solved IK is already present in the bone poses. Disable every known
+				// solver in every record, while preserving unknown names and visibility.
+				for (auto& key : result.m_iks)
+					for (const auto& name : solved_ik_names)
+					{
+						auto existing = std::find_if(key.m_ikInfos.begin(), key.m_ikInfos.end(), [&name](const auto& info)
+						{
+							return info.m_name.ToString() == name;
+						});
+						if (existing != key.m_ikInfos.end())
+							existing->m_enable = 0;
+						else
+						{
+							libmmd::VMDIkInfo info;
+							info.m_name.Set(name.c_str());
+							info.m_enable = 0;
+							key.m_ikInfos.push_back(std::move(info));
+						}
+					}
+			}
+
+		}
+	}
+	else
+	{
+		if (model_mode_ == MODEL_MODE_EDIT)
+			AppendMorphSlotToVmd(&morph_animation_slots_[animation_index_], morph_name_, setting, result);
+		else
+			AppendMorphTracksToVmd(object, morph_data_, setting, result);
+		if (setting.export_motion)
+		{
+			const auto* const bones = self->GetBoneManagerData();
+			if (bones)
+				for (const auto& entry : bones->bone_list_)
+				{
+					BaseTag* const tag = bones->FindBone(static_cast<Int32>(entry.GetKey()));
+					auto* const data = tag ? tag->GetNodeData<MMDBoneTag>() : nullptr;
+					if (!data)
+						continue;
+					maxon::BaseArray<BoneAnimationKeyframeData> keys;
+					if (!data->CopyAnimationSlot(animation_index_, keys))
+						return false;
+					String name = GetBoneTagName(tag, true);
+					if (name.IsEmpty())
+						name = GetBoneTagName(tag, false);
+					for (const auto& key : keys)
+						result.m_motions.push_back(ConvertBoneKeyframeToMotion(name, key, setting, model_scale));
+				}
+			Bool has_control_keys = false;
+			if (bones)
+				for (const auto& entry : bones->bone_list_)
+					if (HasControlTransformKeys(GetBoneControlObject(bones->FindBone(static_cast<Int32>(entry.GetKey())))))
+						has_control_keys = true;
+			if (has_control_keys && !BakeVMDMotion(result, setting, true))
+				return false;
+		}
+	}
+	CanonicalizeVmdKeys(result.m_motions, [](const auto& key) { return key.m_boneName.ToString(); });
+	CanonicalizeVmdKeys(result.m_morphs, [](const auto& key) { return key.m_blendShapeName.ToString(); });
+	CanonicalizeVmdKeys(result.m_iks, [](const auto&) { return std::string(); });
+	vmd_motion = std::move(result);
+	return true;
+}
 
 Bool MMDModelManagerObject::EnsureCurrentAnimationSlot(BaseDocument* doc, const Int32 frame)
 {
@@ -4639,6 +4882,13 @@ Bool MMDModelManagerObject::DeleteCurrentFrameKeyframes(BaseDocument* doc)
 
 	const Int32 frame = doc ? doc->GetTime().GetFrame(kModelAnimationFps) : 0;
 	Bool changed = false;
+	if (static_cast<size_t>(animation_index_) < model_info_animation_slots_.size())
+	{
+		auto& slot = model_info_animation_slots_[static_cast<size_t>(animation_index_)];
+		changed = slot.visibility.erase(frame) != 0;
+		for (auto& channel : slot.ik_channels)
+			changed = channel.second.erase(frame) != 0 || changed;
+	}
 
 	bone_manager_data_ = GetBoneManagerData();
 	if (bone_manager_data_)
@@ -4783,15 +5033,19 @@ Bool MMDModelManagerObject::DeleteVMDAnimation()
 				return false;
 		}
 	}
+	model_info_animation_slots_.erase(model_info_animation_slots_.begin() + animation_index_);
 	std::swap(animation_slot_metadata_, new_slot_metadata);
 	std::swap(morph_animation_slots_, new_morph_slots);
 	if (animation_slot_metadata_.IsEmpty())
 		animation_index_ = -1;
 	else
 		animation_index_ = std::min(animation_index_, static_cast<Int32>(animation_slot_metadata_.GetCount() - 1));
-	if (model_mode_ != MODEL_MODE_EDIT)
-		ClearMorphAnimationSlots();
 	RefreshAnimationSlotItems();
+	if (model_mode_ != MODEL_MODE_EDIT && !RebuildMorphTracksFromAnimationSlot(animation_index_))
+		return false;
+	if (!RebuildModelInfoTracksFromAnimationSlot(animation_index_))
+		return false;
+	InvalidateStandaloneRuntime();
 	ApplyAnimationSlotSelection(Get() ? Get()->GetDocument() : nullptr);
 	const auto node = Get();
 	node->SetDirty(DIRTYFLAGS::DESCRIPTION);
@@ -4862,6 +5116,13 @@ SDK2024_GetDDescription(MMDModelManagerObject)
 		material_list_items_.SetString(i, FormatString("@: @", i, material_list_[i].name_local));
 	if (BaseContainer* mat_settings = description->GetParameterI(ConstDescID(DescLevel(MODEL_MATERIAL_LIST)), nullptr))
 		mat_settings->SetContainer(DESC_CYCLE, material_list_items_);
+
+	BaseContainer preview_items;
+	preview_items.SetString(-1, GeLoadString(IDS_MODEL_MATERIAL_NONE));
+	for (Int32 i = 0; i < morph_data_.GetCount(); ++i)
+		if (IsMaterialPreviewMorph(i)) preview_items.SetString(i, morph_data_[i].GetName());
+	if (BaseContainer* settings = description->GetParameterI(ConstDescID(DescLevel(MODEL_MATMORPH_PREVIEW_LIST)), nullptr))
+		settings->SetContainer(DESC_CYCLE, preview_items);
 
 	// 材质表情：动态填充表情列表 / 偏移项列表 / 目标材质列表。
 	{
@@ -5094,7 +5355,12 @@ Bool MMDModelManagerObject::Message(GeListNode* node, Int32 type, void* data)
 				{
 					if (QuestionDialog(IDS_MES_BONE_MORPH_DELETE, morph.GetName()))
 					{
+						BaseDocument* doc = node->GetDocument();
+						if (!doc) break;
+						doc->StartUndo();
+						doc->AddUndo(UNDOTYPE::CHANGE, node);
 						DeleteMorph(morph_index);
+						doc->EndUndo();
 					}
 					break;
 				}
@@ -5188,17 +5454,67 @@ Bool MMDModelManagerObject::Message(GeListNode* node, Int32 type, void* data)
 				AddMorph(MMDMorphType::IMPULSE, ge_data.GetString());
 				break;
 			}
+			case MODEL_MATMORPH_PREVIEW_RESET:
+				material_preview_weights_.clear();
+				RefreshMaterialMorphPreview();
+				break;
+			case MODEL_MATMORPH_UPGRADE:
+				if (model_mode_ == MODEL_MODE_EDIT) PrepareMaterialMorphBindings(true);
+				RefreshMaterialMorphPreview();
+				break;
+			case MODEL_MATMORPH_REPAIR:
+				if (model_mode_ == MODEL_MODE_EDIT) RepairSelectedMaterialBinding();
+				RefreshMaterialMorphPreview();
+				break;
+			case MODEL_MATMORPH_INDEPENDENT:
+				if (model_mode_ == MODEL_MODE_EDIT) CreateIndependentMaterialBinding();
+				RefreshMaterialMorphPreview();
+				break;
+			case MODEL_MATMORPH_RESET_NEUTRAL:
+				if (auto* offset = GetSelectedMaterialMorphOffset())
+				{
+					BaseDocument* doc = node->GetDocument();
+					if (!doc) break;
+					doc->StartUndo();
+					doc->AddUndo(UNDOTYPE::CHANGE, node);
+					offset->ResetNeutral();
+					doc->EndUndo();
+					RefreshMaterialMorphPreview();
+				}
+				break;
 			case MODEL_MATMORPH_OFFSET_ADD_BUTTON:
 			{
 				if (MaterialMorph* mm = GetSelectedMaterialMorph())
 				{
-					iferr(mm->GetOffsetsWritable().Append(MMDMaterialMorphOffset()))
-						break;
+					BaseDocument* doc = node->GetDocument();
+					if (!doc) break;
+					MMDMaterialMorphOffset offset;
+					if (const auto* selected = GetSelectedMaterialMorphOffset()) offset.op_type = selected->op_type;
+					offset.ResetNeutral();
+					doc->StartUndo();
+					doc->AddUndo(UNDOTYPE::CHANGE, node);
+					iferr(mm->GetOffsetsWritable().Append(offset))
+					{ doc->EndUndo(); break; }
 					material_morph_offset_selection_index_ = static_cast<Int32>(mm->GetOffsetCount()) - 1;
-					ApplyMorphRuntimeStrengths();
+					doc->EndUndo();
+					RefreshMaterialMorphPreview();
 					::SendCoreMessage(COREMSG_CINEMA, BaseContainer(COREMSG_CINEMA_FORCE_AM_UPDATE));
 					EventAdd();
 				}
+				break;
+			}
+			case MODEL_MATMORPH_DELETE_BUTTON:
+			{
+				MaterialMorph* morph = GetSelectedMaterialMorph();
+				BaseDocument* doc = node->GetDocument();
+				if (model_mode_ != MODEL_MODE_EDIT || !morph || !doc)
+					break;
+				if (!QuestionDialog(FormatString("@: @?", GeLoadString(IDS_MORPH_DELETE), morph->GetName())))
+					break;
+				doc->StartUndo();
+				doc->AddUndo(UNDOTYPE::CHANGE, node);
+				DeleteMorph(material_morph_selection_index_);
+				doc->EndUndo();
 				break;
 			}
 			case MODEL_MATMORPH_OFFSET_DELETE_BUTTON:
@@ -5208,10 +5524,15 @@ Bool MMDModelManagerObject::Message(GeListNode* node, Int32 type, void* data)
 					auto& offs = mm->GetOffsetsWritable();
 					if (material_morph_offset_selection_index_ >= 0 && material_morph_offset_selection_index_ < offs.GetCount())
 					{
+						BaseDocument* doc = node->GetDocument();
+						if (!doc) break;
+						doc->StartUndo();
+						doc->AddUndo(UNDOTYPE::CHANGE, node);
 						offs.Erase(material_morph_offset_selection_index_) iferr_ignore("erase material morph offset failed"_s);
 						if (material_morph_offset_selection_index_ >= offs.GetCount())
 							material_morph_offset_selection_index_ = static_cast<Int32>(offs.GetCount()) - 1;
-						ApplyMorphRuntimeStrengths();
+						doc->EndUndo();
+						RefreshMaterialMorphPreview();
 						::SendCoreMessage(COREMSG_CINEMA, BaseContainer(COREMSG_CINEMA_FORCE_AM_UPDATE));
 						EventAdd();
 					}
@@ -5325,6 +5646,9 @@ Bool MMDModelManagerObject::Message(GeListNode* node, Int32 type, void* data)
 				DeleteCurrentFrameKeyframes(GetActiveDocument());
 				break;
 			}
+			case MODEL_MATERIAL_CONVERT_TOON:
+				ConvertSelectedMaterialToon();
+				break;
 			case MODEL_MATERIAL_CREATE_BUTTON:
 			{
 				if (material_selection_index_ >= 0 && material_selection_index_ < material_list_.GetCount())
@@ -5332,12 +5656,14 @@ Bool MMDModelManagerObject::Message(GeListNode* node, Int32 type, void* data)
 					auto& mat = material_list_[material_selection_index_];
 					GeData type_data;
 					node->GetParameter(ConstDescID(DescLevel(MODEL_MATERIAL_CREATE_TYPE)), type_data, DESCFLAGS_GET::NONE);
-					constexpr MMDRendererMaterialType type_map[] = {
-						MMDRendererMaterialType::Standard, MMDRendererMaterialType::RedShift,
-						MMDRendererMaterialType::Octane,   MMDRendererMaterialType::Corona
-					};
-					const Int32 type_idx = type_data.GetInt32();
-					const MMDRendererMaterialType rt = (type_idx >= 0 && type_idx < 4) ? type_map[type_idx] : MMDRendererMaterialType::Standard;
+					const MMDRendererMaterialType rt = MaterialTypeFromSelection(type_data.GetInt32());
+					if (rt == MMDRendererMaterialType::RedShiftToon)
+					{
+						// This newly introduced choice has no legacy create behavior.
+						// Use the same assignment transaction as the explicit action.
+						ConvertSelectedMaterialToon();
+						break;
+					}
 					BaseMaterial* new_mat = CreateMaterialFromData(mat, rt);
 					if (new_mat)
 					{
@@ -5349,6 +5675,11 @@ Bool MMDModelManagerObject::Message(GeListNode* node, Int32 type, void* data)
 								mat.material_link = NewObj(AutoAlloc<BaseLink>).GetValue();
 							if (mat.material_link && *mat.material_link)
 								(*mat.material_link)->SetLink(new_mat);
+							if (auto adapter = MMDMaterialAdapter::CreateFor(new_mat))
+							{
+								BaseObject* mesh = mat.mesh_link && *mat.mesh_link ? static_cast<BaseObject*>((*mat.mesh_link)->GetLink(doc)) : nullptr;
+								adapter->PrepareMorphBinding(mat, new_mat, static_cast<BaseObject*>(node), mesh, material_binding_diagnostic_);
+							}
 							EventAdd();
 						}
 					}
@@ -5373,6 +5704,7 @@ Bool MMDModelManagerObject::Message(GeListNode* node, Int32 type, void* data)
 			}
 			case MODEL_MATERIAL_REVERSE_SYNC_BUTTON:
 			{
+				if (model_mode_ != MODEL_MODE_EDIT || material_preview_enabled_) break;
 				if (material_selection_index_ >= 0 && material_selection_index_ < material_list_.GetCount())
 				{
 					auto& mat = material_list_[material_selection_index_];
@@ -5380,8 +5712,15 @@ Bool MMDModelManagerObject::Message(GeListNode* node, Int32 type, void* data)
 					if (doc && mat.material_link && *mat.material_link)
 					{
 						BaseMaterial* linked_mat = static_cast<BaseMaterial*>((*mat.material_link)->GetLink(doc));
-						if (linked_mat)
+						if (linked_mat && mmd_material_binding::IsBound(linked_mat))
+							material_binding_diagnostic_ = "Managed shader outputs use the base fields; reverse sync has no independent values to import"_s;
+						else if (linked_mat)
+						{
+							doc->StartUndo();
+							doc->AddUndo(UNDOTYPE::CHANGE, node);
 							ReadFromMaterial(linked_mat, mat);
+							doc->EndUndo();
+						}
 						EventAdd();
 					}
 				}
@@ -5391,12 +5730,18 @@ Bool MMDModelManagerObject::Message(GeListNode* node, Int32 type, void* data)
 			{
 				if (material_selection_index_ > 0 && material_selection_index_ < material_list_.GetCount())
 				{
+					BaseDocument* doc = node->GetDocument();
+					if (!doc) break;
+					doc->StartUndo();
+					doc->AddUndo(UNDOTYPE::CHANGE, node);
 					const Int32 old_index = material_selection_index_;
 					const Int32 new_index = material_selection_index_ - 1;
 					std::swap(material_list_[old_index], material_list_[new_index]);
 					AdjustMaterialMorphIndicesAfterMaterialSwap(old_index, new_index);
 					material_runtime_checksum_.Reset();
 					material_selection_index_--;
+					doc->EndUndo();
+					RefreshMaterialMorphPreview();
 					::SendCoreMessage(COREMSG_CINEMA, BaseContainer(COREMSG_CINEMA_FORCE_AM_UPDATE));
 					EventAdd();
 				}
@@ -5406,12 +5751,18 @@ Bool MMDModelManagerObject::Message(GeListNode* node, Int32 type, void* data)
 			{
 				if (material_selection_index_ >= 0 && material_selection_index_ < material_list_.GetCount() - 1)
 				{
+					BaseDocument* doc = node->GetDocument();
+					if (!doc) break;
+					doc->StartUndo();
+					doc->AddUndo(UNDOTYPE::CHANGE, node);
 					const Int32 old_index = material_selection_index_;
 					const Int32 new_index = material_selection_index_ + 1;
 					std::swap(material_list_[old_index], material_list_[new_index]);
 					AdjustMaterialMorphIndicesAfterMaterialSwap(old_index, new_index);
 					material_runtime_checksum_.Reset();
 					material_selection_index_++;
+					doc->EndUndo();
+					RefreshMaterialMorphPreview();
 					::SendCoreMessage(COREMSG_CINEMA, BaseContainer(COREMSG_CINEMA_FORCE_AM_UPDATE));
 					EventAdd();
 				}
@@ -5560,12 +5911,7 @@ Bool MMDModelManagerObject::Message(GeListNode* node, Int32 type, void* data)
 				};
 				GeData type_data;
 				node->GetParameter(ConstDescID(DescLevel(MODEL_MATERIAL_CREATE_TYPE)), type_data, DESCFLAGS_GET::NONE);
-				constexpr MMDRendererMaterialType type_map[] = {
-					MMDRendererMaterialType::Standard, MMDRendererMaterialType::RedShift,
-					MMDRendererMaterialType::Octane,   MMDRendererMaterialType::Corona
-				};
-				const Int32 type_idx = type_data.GetInt32();
-				const MMDRendererMaterialType create_type = (type_idx >= 0 && type_idx < 4) ? type_map[type_idx] : MMDRendererMaterialType::Standard;
+				const MMDRendererMaterialType create_type = MaterialTypeFromSelection(type_data.GetInt32());
 				auto AddMaterialEntry = [&](BaseObject* child, const String& sel_name, const String& display_name) -> Bool
 				{
 					MMDMaterialData new_mat;
@@ -5673,6 +6019,33 @@ SDK2024_GetDParameter(MMDModelManagerObject)
 
 	switch (id[0].id)
 	{
+	case MODEL_MATMORPH_PREVIEW_ENABLED:
+		t_data = GeData(material_preview_enabled_);
+		flags |= DESCFLAGS_GET::PARAM_GET;
+		return true;
+	case MODEL_MATMORPH_PREVIEW_LIST:
+		t_data.SetInt32(material_preview_selection_);
+		flags |= DESCFLAGS_GET::PARAM_GET;
+		return true;
+	case MODEL_MATMORPH_PREVIEW_WEIGHT:
+		t_data.SetFloat(GetMaterialPreviewWeight());
+		flags |= DESCFLAGS_GET::PARAM_GET;
+		return true;
+	case MODEL_MATERIAL_TOON_STATUS:
+	case MODEL_MATMORPH_STATUS:
+		if (material_binding_diagnostic_.IsEmpty()
+			&& static_cast<const BaseObject*>(node)->GetDataInstance()->GetInt32(MODEL_MATERIAL_CREATE_TYPE) == MODEL_MATERIAL_CREATE_TYPE_REDSHIFT_TOON)
+		{
+			String availability;
+			MMDRedShiftToonMaterialAdapter::AvailabilityForUi(availability);
+			t_data.SetString(availability);
+			flags |= DESCFLAGS_GET::PARAM_GET;
+			return true;
+		}
+		t_data.SetString(material_binding_diagnostic_.IsPopulated() ? material_binding_diagnostic_
+			: String("Diffuse / Alpha / Specular / Roughness supported; Toon / Sphere / Ambient / Edge: data only"));
+		flags |= DESCFLAGS_GET::PARAM_GET;
+		return true;
 	case MODEL_MODE:
 		t_data.SetInt32(model_mode_);
 		flags |= DESCFLAGS_GET::PARAM_GET;
@@ -5832,6 +6205,24 @@ Bool MMDModelManagerObject::SetDParameter(GeListNode* node, const DescID& id, co
 			SyncSubManagerScale(t_data.GetFloat());
 			break;
 		}
+		case MODEL_MATMORPH_PREVIEW_ENABLED:
+			material_preview_enabled_ = model_mode_ == MODEL_MODE_EDIT && t_data.GetBool();
+			RefreshMaterialMorphPreview();
+			flags |= DESCFLAGS_SET::PARAM_SET;
+			return true;
+		case MODEL_MATMORPH_PREVIEW_LIST:
+			material_preview_selection_ = IsMaterialPreviewMorph(t_data.GetInt32()) ? t_data.GetInt32() : -1;
+			node->SetDirty(DIRTYFLAGS::DESCRIPTION);
+			flags |= DESCFLAGS_SET::PARAM_SET;
+			return true;
+		case MODEL_MATMORPH_PREVIEW_WEIGHT:
+			if (model_mode_ == MODEL_MODE_EDIT && IsMaterialPreviewMorph(material_preview_selection_) && std::isfinite(t_data.GetFloat()))
+			{
+				material_preview_weights_[morph_data_[material_preview_selection_].GetRuntimeIdentity()] = maxon::Clamp01(t_data.GetFloat());
+				RefreshMaterialMorphPreview();
+			}
+			flags |= DESCFLAGS_SET::PARAM_SET;
+			return true;
 		case MODEL_MODE:
 		{
 			const GeData normalized_mode(NormalizeModelMode(t_data.GetInt32()));
@@ -5845,6 +6236,11 @@ Bool MMDModelManagerObject::SetDParameter(GeListNode* node, const DescID& id, co
 			else if (previous_mode == MODEL_MODE_ANIM && next_mode == MODEL_MODE_EDIT)
 				RestoreBindStateForEdit(doc);
 
+			if (next_mode == MODEL_MODE_ANIM)
+			{
+				material_preview_enabled_ = false;
+				material_preview_weights_.clear();
+			}
 			model_mode_ = normalized_mode.GetInt32();
 			bone_manager_data_ = GetBoneManagerData();
 			is_animation_initialized_ = false;
@@ -5870,14 +6266,21 @@ Bool MMDModelManagerObject::SetDParameter(GeListNode* node, const DescID& id, co
 			{
 				if (!RebuildMorphTracksFromAnimationSlot(animation_index_))
 					return false;
-				ClearMorphAnimationSlots();
 				std::ignore = EnsureStandaloneRuntimeManagers();
 			}
 			return result;
 		}
 		case MODEL_ANIM_LIST:
 		{
+			if (model_mode_ != MODEL_MODE_EDIT && !CaptureMorphAnimationSlotFromTracks(animation_index_))
+				return false;
+			if (!CaptureModelInfoAnimationSlotFromTracks(animation_index_))
+				return false;
 			animation_index_ = t_data.GetInt32();
+			if (model_mode_ != MODEL_MODE_EDIT && !RebuildMorphTracksFromAnimationSlot(animation_index_))
+				return false;
+			if (!RebuildModelInfoTracksFromAnimationSlot(animation_index_))
+				return false;
 			is_animation_initialized_ = false;
 			prev_time_ = BaseTime(-1.);
 			const auto doc = node->GetDocument();
@@ -5966,7 +6369,7 @@ Bool MMDModelManagerObject::SetDParameter(GeListNode* node, const DescID& id, co
 				::SendCoreMessage(COREMSG_CINEMA, BaseContainer(COREMSG_CINEMA_FORCE_AM_UPDATE));
 			}
 			// 触发视口刷新，使下一次 Execute 重新合成材质表情运行时状态。
-			ApplyMorphRuntimeStrengths();
+			RefreshMaterialMorphPreview();
 			EventAdd();
 			flags |= DESCFLAGS_SET::PARAM_SET;
 			return true;
@@ -6014,7 +6417,18 @@ Bool MMDModelManagerObject::SetDParameter(GeListNode* node, const DescID& id, co
 						if (auto* solver = ik_manager_own_->GetMMDIKSolver(static_cast<size_t>(p.second)))
 						{
 							solver->Enable(enabled);
-							iferr(ik_solver_enable_states_.Insert(String(solver->GetName().c_str()), enabled)) {}
+							if (!applying_model_info_parameters_ && !reinterpret_cast<BaseObject*>(node)->FindCTrack(id))
+							{
+								const std::string name = solver->GetName();
+								if (animation_index_ >= 0 && static_cast<size_t>(animation_index_) < model_info_animation_slots_.size())
+								{
+									model_info_animation_slots_[static_cast<size_t>(animation_index_)].ik_defaults[name] = enabled;
+								}
+								else
+								{
+									iferr(ik_solver_enable_states_.Insert(String(name.c_str()), enabled)) {}
+								}
+							}
 						}
 					}
 					prev_time_ = BaseTime(-1.);
@@ -6062,36 +6476,42 @@ Bool MMDModelManagerObject::SetDParameter(GeListNode* node, const DescID& id, co
 				case MODEL_MATERIAL_EDGE_SIZE: mat.edge_size = t_data.GetFloat(); material_handled = true; break;
 				case MODEL_MATERIAL_EDGE_COLOR: mat.edge_color_rgb = t_data.GetVector(); material_handled = true; break;
 				case MODEL_MATERIAL_EDGE_ALPHA: mat.edge_color_alpha = t_data.GetFloat(); material_handled = true; break;
-				case MODEL_MATERIAL_TEXTURE_PATH: mat.texture_path = t_data.GetString(); material_handled = true; break;
-				case MODEL_MATERIAL_SPHERE_TEXTURE_PATH: mat.sphere_texture_path = t_data.GetString(); material_handled = true; break;
-				case MODEL_MATERIAL_SPHERE_MODE: mat.sphere_mode = t_data.GetInt32(); material_handled = true; break;
+				case MODEL_MATERIAL_TEXTURE_PATH:
+					if (!UpdateSelectedMaterialTexture(t_data.GetString()))
+					{
+						// The virtual parameter handled the request and kept the old
+						// value. Do not let C4D store a rejected path in its container.
+						flags |= DESCFLAGS_SET::PARAM_SET;
+						return true;
+					}
+					material_handled = true;
+					break;
+				case MODEL_MATERIAL_SPHERE_TEXTURE_PATH:
+				case MODEL_MATERIAL_SPHERE_MODE:
+					if (!UpdateSelectedMaterialSphere(
+						id[0].id == MODEL_MATERIAL_SPHERE_MODE ? t_data.GetInt32() : mat.sphere_mode,
+						id[0].id == MODEL_MATERIAL_SPHERE_TEXTURE_PATH ? t_data.GetString() : mat.sphere_texture_path))
+					{
+						flags |= DESCFLAGS_SET::PARAM_SET;
+						return true;
+					}
+					material_handled = true;
+					break;
 				case MODEL_MATERIAL_TOON_MODE:
 				{
-					mat.toon_mode = t_data.GetInt32();
-					if (mat.toon_mode == 1 && mat.toon_texture_index >= 0)
-					{
-						Char buf[20];
-						snprintf(buf, sizeof(buf), "toon%02d.bmp", static_cast<int>(mat.toon_texture_index + 1));
-						mat.toon_texture_path = (GeGetPluginResourcePath() + Filename("mikumikudance_data") + Filename(buf)).GetString();
-					}
+					const Int32 mode = t_data.GetInt32();
+					const Int32 index = mode == 0 && mat.toon_mode == 1 ? -1 : mat.toon_texture_index;
+					UpdateSelectedMaterialToon(mode, index, mat.toon_texture_path);
 					material_handled = true;
 					break;
 				}
 				case MODEL_MATERIAL_TOON_TEXTURE_INDEX:
-				{
-					mat.toon_texture_index = t_data.GetInt32();
-					if (mat.toon_mode == 1 && mat.toon_texture_index >= 0)
-					{
-						Char buf[20];
-						snprintf(buf, sizeof(buf), "toon%02d.bmp", static_cast<int>(mat.toon_texture_index + 1));
-						mat.toon_texture_path = (GeGetPluginResourcePath() + Filename("mikumikudance_data") + Filename(buf)).GetString();
-					}
+					UpdateSelectedMaterialToon(mat.toon_mode, t_data.GetInt32(), mat.toon_texture_path);
 					material_handled = true;
 					break;
-				}
 				case MODEL_MATERIAL_TOON_TEXTURE_PATH:
 					if (mat.toon_texture_index == -1)
-						mat.toon_texture_path = t_data.GetString();
+						UpdateSelectedMaterialToon(mat.toon_mode, mat.toon_texture_index, t_data.GetString());
 					material_handled = true;
 					break;
 				case MODEL_MATERIAL_MEMO: mat.memo = t_data.GetString(); material_handled = true; break;
@@ -6122,8 +6542,16 @@ Bool MMDModelManagerObject::SetDParameter(GeListNode* node, const DescID& id, co
 					BaseMaterial* linked_mat = doc && mat.material_link && *mat.material_link
 						? static_cast<BaseMaterial*>((*mat.material_link)->GetLink(doc))
 						: nullptr;
-					if (linked_mat)
+					if (linked_mat && (!mmd_material_binding::IsBound(linked_mat)
+						|| (mmd_material_binding::IsOwner(linked_mat, static_cast<BaseObject*>(node), doc)
+							&& HasUniqueMaterialBinding(linked_mat))))
+					{
+						// Join the editor's parameter undo so the material name and RS
+						// preview defaults restore with the authoritative MMD values.
+						if (GeIsMainThread()) doc->AddUndo(UNDOTYPE::CHANGE, linked_mat);
 						SyncToMaterial(mat, linked_mat);
+					}
+					RefreshMaterialMorphPreview();
 					flags |= DESCFLAGS_SET::PARAM_SET;
 					return true;
 				}
@@ -6133,7 +6561,14 @@ Bool MMDModelManagerObject::SetDParameter(GeListNode* node, const DescID& id, co
 			break;
 		}
 	}
-	return ObjectData::SetDParameter(node, id, t_data, flags);
+	const Bool result = ObjectData::SetDParameter(node, id, t_data, flags);
+	if (result && id[0].id == ID_USERDATA && GeIsMainThread())
+	{
+		const auto* entry = desc_id_map_.Find(id);
+		if (entry && entry->GetValue().first == MMDModelRootDynamicDescriptionType::MORPH_STRENGTH)
+			RefreshMaterialMorphPreview();
+	}
+	return result;
 }
 
 SDK2024_GetDEnabling(MMDModelManagerObject)
@@ -6146,6 +6581,21 @@ SDK2024_GetDEnabling(MMDModelManagerObject)
 				return true;
 		}
 	}
+	if (id[0].id == MODEL_MATERIAL_REVERSE_SYNC_BUTTON)
+		return model_mode_ == MODEL_MODE_EDIT && !material_preview_enabled_
+			&& material_selection_index_ >= 0 && material_selection_index_ < material_list_.GetCount();
+	if (id[0].id == MODEL_MATMORPH_PREVIEW_ENABLED || id[0].id == MODEL_MATMORPH_UPGRADE)
+		return model_mode_ == MODEL_MODE_EDIT;
+	if (id[0].id == MODEL_MATMORPH_REPAIR || id[0].id == MODEL_MATMORPH_INDEPENDENT)
+		return model_mode_ == MODEL_MODE_EDIT && material_selection_index_ >= 0 && material_selection_index_ < material_list_.GetCount();
+	if (id[0].id == MODEL_MATMORPH_PREVIEW_LIST || id[0].id == MODEL_MATMORPH_PREVIEW_RESET)
+		return model_mode_ == MODEL_MODE_EDIT && material_preview_enabled_;
+	if (id[0].id == MODEL_MATMORPH_PREVIEW_WEIGHT)
+		return model_mode_ == MODEL_MODE_EDIT && material_preview_enabled_ && IsMaterialPreviewMorph(material_preview_selection_);
+	if (id[0].id == MODEL_MATMORPH_DELETE_BUTTON)
+		return model_mode_ == MODEL_MODE_EDIT && GetSelectedMaterialMorph() != nullptr;
+	if (id[0].id == MODEL_MATMORPH_RESET_NEUTRAL)
+		return GetSelectedMaterialMorphOffset() != nullptr;
 	if (id[0].id >= MODEL_MATERIAL_NAME_LOCAL && id[0].id < MODEL_MATERIAL_ADD_BUTTON)
 	{
 		return material_selection_index_ >= 0 && material_selection_index_ < material_list_.GetCount();
@@ -6188,6 +6638,13 @@ SDK2024_GetDEnabling(MMDModelManagerObject)
 		if (material_selection_index_ >= 0 && material_selection_index_ < material_list_.GetCount())
 			return material_list_[material_selection_index_].edge_enabled;
 		return false;
+	case MODEL_MATERIAL_CONVERT_TOON:
+	{
+		String reason;
+		return model_mode_ == MODEL_MODE_EDIT && !material_preview_enabled_
+			&& material_selection_index_ >= 0 && material_selection_index_ < material_list_.GetCount()
+			&& MMDRedShiftToonMaterialAdapter::AvailabilityForUi(reason);
+	}
 	case MODEL_MATERIAL_TOON_TEXTURE_INDEX:
 		if (material_selection_index_ >= 0 && material_selection_index_ < material_list_.GetCount())
 			return material_list_[material_selection_index_].toon_mode == 1;
@@ -6328,290 +6785,6 @@ void MMDModelManagerObject::RenameMorph(const String& name)
 	}
 }
 
-void MMDModelManagerObject::ApplyMorphRuntimeStrengths()
-{
-	GeListNode* const node = Get();
-	const Int morph_count = morph_data_.GetCount();
-	if (!node)
-		return;
-	if (morph_count <= 0)
-	{
-		EvaluateMaterialMorphRuntime({});
-		return;
-	}
-
-	std::vector<Float> strengths(static_cast<size_t>(morph_count), 0.0);
-	for (Int i = 0; i < morph_count; ++i)
-		strengths[static_cast<size_t>(i)] = morph_data_[i].GetStrength(node);
-
-	struct MorphStackEntry
-	{
-		Int index = -1;
-		Float strength = 0.0;
-		Int depth = 0;
-	};
-
-	std::vector<MorphStackEntry> stack;
-	stack.reserve(static_cast<size_t>(morph_count));
-	for (Int i = 0; i < morph_count; ++i)
-	{
-		const MMDMorphType type = morph_data_[i].GetType();
-		if ((type == MMDMorphType::GROUP || type == MMDMorphType::FLIP) && strengths[static_cast<size_t>(i)] != 0.0)
-			stack.push_back({ i, strengths[static_cast<size_t>(i)], 0 });
-	}
-
-	while (!stack.empty())
-	{
-		const MorphStackEntry entry = stack.back();
-		stack.pop_back();
-		if (entry.index < 0 || entry.index >= morph_count || entry.depth > morph_count)
-			continue;
-
-		IMorph& morph = morph_data_[entry.index];
-		const MMDMorphType type = morph.GetType();
-		if (type != MMDMorphType::GROUP && type != MMDMorphType::FLIP)
-			continue;
-
-		maxon::HashMap<Int, Float>* const sub_morphs = morph.GetSubMorphDataWritable();
-		if (!sub_morphs)
-			continue;
-
-		const Float source_strength = (type == MMDMorphType::FLIP)
-			? (entry.strength >= 0.5 ? 1.0 : 0.0)
-			: entry.strength;
-		if (source_strength == 0.0)
-			continue;
-
-		for (const auto& sub_morph : *sub_morphs)
-		{
-			const Int sub_index = sub_morph.GetKey();
-			if (sub_index < 0 || sub_index >= morph_count || sub_index == entry.index)
-				continue;
-
-			const Float contribution = source_strength * sub_morph.GetValue();
-			if (contribution == 0.0)
-				continue;
-
-			const MMDMorphType sub_type = morph_data_[sub_index].GetType();
-			if (sub_type == MMDMorphType::GROUP || sub_type == MMDMorphType::FLIP)
-				stack.push_back({ sub_index, contribution, entry.depth + 1 });
-			else
-				strengths[static_cast<size_t>(sub_index)] += contribution;
-		}
-	}
-
-	for (Int i = 0; i < morph_count; ++i)
-	{
-		const MMDMorphType type = morph_data_[i].GetType();
-		if (type == MMDMorphType::GROUP || type == MMDMorphType::FLIP)
-			continue;
-		ApplyMorphRuntimeStrength(morph_data_[i], strengths[static_cast<size_t>(i)]);
-	}
-
-	EvaluateMaterialMorphRuntime(strengths);
-}
-
-void MMDModelManagerObject::EvaluateMaterialMorphRuntime(const std::vector<Float>& strengths)
-{
-	const Int material_count = material_list_.GetCount();
-	if (material_count <= 0)
-	{
-		material_runtime_checksum_.Reset();
-		material_morph_runtime_active_ = false;
-		return;
-	}
-
-	const Int morph_count = morph_data_.GetCount();
-
-	// 仅当存在材质表情时才接管链接材质，避免在未使用该特性时覆盖用户材质。
-	Bool has_material_morph = false;
-	for (Int i = 0; i < morph_count && i < static_cast<Int>(strengths.size()); ++i)
-	{
-		if (morph_data_[i].GetType() == MMDMorphType::MATERIAL
-			&& static_cast<const MaterialMorph&>(morph_data_[i]).GetOffsetCount() > 0)
-		{
-			has_material_morph = true;
-			break;
-		}
-	}
-	if (!has_material_morph && !material_morph_runtime_active_)
-		return;
-	if (has_material_morph)
-		material_morph_runtime_active_ = true;
-
-	// 乘算/加算累加器：mul 初始为 1（恒等），add 初始为 0。
-	struct MaterialMorphAccumulator
-	{
-		Vector mul_diffuse = Vector(1.0); Float mul_diffuse_alpha = 1.0;
-		Vector mul_specular = Vector(1.0); Float mul_specular_power = 1.0;
-		Vector mul_ambient = Vector(1.0);
-		Vector mul_edge_color = Vector(1.0); Float mul_edge_alpha = 1.0; Float mul_edge_size = 1.0;
-		Vector mul_texture = Vector(1.0); Float mul_texture_alpha = 1.0;
-		Vector mul_sphere = Vector(1.0); Float mul_sphere_alpha = 1.0;
-		Vector mul_toon = Vector(1.0); Float mul_toon_alpha = 1.0;
-
-		Vector add_diffuse = Vector(0.0); Float add_diffuse_alpha = 0.0;
-		Vector add_specular = Vector(0.0); Float add_specular_power = 0.0;
-		Vector add_ambient = Vector(0.0);
-		Vector add_edge_color = Vector(0.0); Float add_edge_alpha = 0.0; Float add_edge_size = 0.0;
-		Vector add_texture = Vector(0.0); Float add_texture_alpha = 0.0;
-		Vector add_sphere = Vector(0.0); Float add_sphere_alpha = 0.0;
-		Vector add_toon = Vector(0.0); Float add_toon_alpha = 0.0;
-	};
-	std::vector<MaterialMorphAccumulator> acc(static_cast<size_t>(material_count));
-
-	// lerp(1, offset, w) = 1 + (offset-1)*w，用于乘算模式的强度插值。
-	const auto lerp_to_one = [](const Float offset, const Float w) { return 1.0 + (offset - 1.0) * w; };
-	const auto vec_lerp_to_one = [&lerp_to_one](const Vector& offset, const Float w)
-	{
-		return Vector(lerp_to_one(offset.x, w), lerp_to_one(offset.y, w), lerp_to_one(offset.z, w));
-	};
-	const auto comp_mul = [](const Vector& a, const Vector& b) { return Vector(a.x * b.x, a.y * b.y, a.z * b.z); };
-
-	const auto apply_offset = [&](MaterialMorphAccumulator& a, const MMDMaterialMorphOffset& off, const Float w)
-	{
-		if (off.op_type == static_cast<Int32>(MMDMaterialMorphOpType::Add))
-		{
-			a.add_diffuse += off.diffuse_rgb * w; a.add_diffuse_alpha += off.diffuse_alpha * w;
-			a.add_specular += off.specular * w; a.add_specular_power += off.specular_power * w;
-			a.add_ambient += off.ambient * w;
-			a.add_edge_color += off.edge_color_rgb * w; a.add_edge_alpha += off.edge_color_alpha * w; a.add_edge_size += off.edge_size * w;
-			a.add_texture += off.texture_factor_rgb * w; a.add_texture_alpha += off.texture_factor_alpha * w;
-			a.add_sphere += off.sphere_texture_factor_rgb * w; a.add_sphere_alpha += off.sphere_texture_factor_alpha * w;
-			a.add_toon += off.toon_texture_factor_rgb * w; a.add_toon_alpha += off.toon_texture_factor_alpha * w;
-		}
-		else
-		{
-			a.mul_diffuse = comp_mul(a.mul_diffuse, vec_lerp_to_one(off.diffuse_rgb, w)); a.mul_diffuse_alpha *= lerp_to_one(off.diffuse_alpha, w);
-			a.mul_specular = comp_mul(a.mul_specular, vec_lerp_to_one(off.specular, w)); a.mul_specular_power *= lerp_to_one(off.specular_power, w);
-			a.mul_ambient = comp_mul(a.mul_ambient, vec_lerp_to_one(off.ambient, w));
-			a.mul_edge_color = comp_mul(a.mul_edge_color, vec_lerp_to_one(off.edge_color_rgb, w)); a.mul_edge_alpha *= lerp_to_one(off.edge_color_alpha, w); a.mul_edge_size *= lerp_to_one(off.edge_size, w);
-			a.mul_texture = comp_mul(a.mul_texture, vec_lerp_to_one(off.texture_factor_rgb, w)); a.mul_texture_alpha *= lerp_to_one(off.texture_factor_alpha, w);
-			a.mul_sphere = comp_mul(a.mul_sphere, vec_lerp_to_one(off.sphere_texture_factor_rgb, w)); a.mul_sphere_alpha *= lerp_to_one(off.sphere_texture_factor_alpha, w);
-			a.mul_toon = comp_mul(a.mul_toon, vec_lerp_to_one(off.toon_texture_factor_rgb, w)); a.mul_toon_alpha *= lerp_to_one(off.toon_texture_factor_alpha, w);
-		}
-	};
-
-	for (Int i = 0; i < morph_count && i < static_cast<Int>(strengths.size()); ++i)
-	{
-		if (morph_data_[i].GetType() != MMDMorphType::MATERIAL)
-			continue;
-		const Float w = strengths[static_cast<size_t>(i)];
-		if (w == 0.0)
-			continue;
-		const auto& material_morph = static_cast<const MaterialMorph&>(morph_data_[i]);
-		for (const auto& off : material_morph.GetOffsets())
-		{
-			if (off.material_index == -1)
-			{
-				for (Int t = 0; t < material_count; ++t)
-					apply_offset(acc[static_cast<size_t>(t)], off, w);
-			}
-			else if (off.material_index >= 0 && off.material_index < material_count)
-			{
-				apply_offset(acc[static_cast<size_t>(off.material_index)], off, w);
-			}
-			// 越界索引（非 -1）直接跳过，避免悬空索引崩溃。
-		}
-	}
-
-	if (material_runtime_checksum_.GetCount() != material_count)
-	{
-		iferr(material_runtime_checksum_.Resize(material_count))
-			return;
-		for (auto& cs : material_runtime_checksum_)
-			cs = 0;
-	}
-
-	GeListNode* const node = Get();
-	BaseDocument* const doc = node ? node->GetDocument() : nullptr;
-	// Keep the active marker/checksums intact when links cannot be resolved yet so
-	// scene-load ordering can retry the synchronization on a later Execute pass.
-	if (!doc)
-		return;
-	Bool runtime_sync_complete = true;
-
-	for (Int t = 0; t < material_count; ++t)
-	{
-		const MMDMaterialData& base = material_list_[t];
-		const MaterialMorphAccumulator& a = acc[static_cast<size_t>(t)];
-
-		MMDMaterialRuntimeState state = MMDMaterialRuntimeState::FromBase(base);
-		state.diffuse_rgb = comp_mul(base.diffuse_rgb, a.mul_diffuse) + a.add_diffuse;
-		state.diffuse_alpha = base.diffuse_alpha * a.mul_diffuse_alpha + a.add_diffuse_alpha;
-		state.specular = comp_mul(base.specular, a.mul_specular) + a.add_specular;
-		state.specular_power = base.specular_power * a.mul_specular_power + a.add_specular_power;
-		state.ambient = comp_mul(base.ambient, a.mul_ambient) + a.add_ambient;
-		state.edge_color_rgb = comp_mul(base.edge_color_rgb, a.mul_edge_color) + a.add_edge_color;
-		state.edge_color_alpha = base.edge_color_alpha * a.mul_edge_alpha + a.add_edge_alpha;
-		state.edge_size = base.edge_size * a.mul_edge_size + a.add_edge_size;
-		// texture/sphere/toon factor 基准 1.0，供后续 shader 应用。
-		state.texture_factor_rgb = comp_mul(Vector(1.0), a.mul_texture) + a.add_texture;
-		state.texture_factor_alpha = 1.0 * a.mul_texture_alpha + a.add_texture_alpha;
-		state.sphere_texture_factor_rgb = comp_mul(Vector(1.0), a.mul_sphere) + a.add_sphere;
-		state.sphere_texture_factor_alpha = 1.0 * a.mul_sphere_alpha + a.add_sphere_alpha;
-		state.toon_texture_factor_rgb = comp_mul(Vector(1.0), a.mul_toon) + a.add_toon;
-		state.toon_texture_factor_alpha = 1.0 * a.mul_toon_alpha + a.add_toon_alpha;
-
-		const maxon::UInt64 checksum = state.Checksum();
-		if (material_runtime_checksum_[t] == checksum)
-			continue;
-
-		if (!base.material_link || !*base.material_link)
-		{
-			material_runtime_checksum_[t] = checksum;
-			continue;
-		}
-		BaseMaterial* const c4d_material = static_cast<BaseMaterial*>((*base.material_link)->GetLink(doc));
-		if (!c4d_material)
-		{
-			runtime_sync_complete = false;
-			continue;
-		}
-
-		MMDMaterialData synced;
-		if (!base.CopyTo(synced))
-		{
-			runtime_sync_complete = false;
-			continue;
-		}
-		state.WriteSupportedFieldsTo(synced);
-		SyncToMaterial(synced, c4d_material);
-		// 贴图系数等无法由 SyncTo 表达的字段：经 adapter 安装/更新 wrapper shader。
-		SyncRuntimeStateToMaterial(state, c4d_material);
-		material_runtime_checksum_[t] = checksum;
-	}
-
-	if (!has_material_morph && runtime_sync_complete)
-		material_morph_runtime_active_ = false;
-}
-
-void MMDModelManagerObject::ApplyMorphRuntimeStrength(IMorph& morph, const Float strength)
-{
-	switch (morph.GetType())
-	{
-	case MMDMorphType::MESH:
-	case MMDMorphType::UV:
-		if (mesh_manager_data_ || GetMeshManagerData())
-			mesh_manager_data_->SetMorphStrength(morph.GetName(), strength);
-		break;
-	case MMDMorphType::BONE:
-	{
-		if (!(bone_manager_data_ || GetBoneManagerData()))
-			break;
-		auto& bone_morph_map = bone_manager_data_->GetBoneMorphMap();
-		if (auto* entry = bone_morph_map.Find(morph.GetName()))
-		{
-			for (const auto& hub : entry->GetValue())
-				hub.SetStrength(strength);
-		}
-		break;
-	}
-	default:
-		break;
-	}
-}
-
 void MMDModelManagerObject::DeleteMorph(const Int morph_index)
 {
 	if (auto& morph = morph_data_[morph_index]; !DeleteMorphImpl(morph, morph_index))
@@ -6620,11 +6793,53 @@ void MMDModelManagerObject::DeleteMorph(const Int morph_index)
 	// The erased entry may have been the final material morph. Re-evaluate even
 	// when the collection is now empty so linked materials return to base state.
 	ApplyMorphRuntimeStrengths();
+	RefreshMaterialMorphPreview();
 }
 
 bool MMDModelManagerObject::DeleteMorphImpl(IMorph& morph, const Int morph_index)
 {
 	iferr_scope_handler{ return false; };
+	// References use collection indices. Prepare all remaps before removing a
+	// definition so surviving Group/Flip entries cannot silently target a new
+	// morph (or themselves) when the collection closes the erased slot.
+	maxon::BaseArray<maxon::HashMap<Int, Float>> references;
+	references.Resize(morph_data_.GetCount()) iferr_return;
+	for (Int index = 0; index < morph_data_.GetCount(); ++index)
+	{
+		const auto* source = morph_data_[index].GetSubMorphDataWritable();
+		if (!source || index == morph_index) continue;
+		for (const auto& entry : *source)
+		{
+			const Int target = entry.GetKey();
+			if (target == morph_index) continue;
+			references[index].Insert(target > morph_index ? target - 1 : target, entry.GetValue()) iferr_return;
+		}
+	}
+	for (Int index = 0; index < morph_data_.GetCount(); ++index)
+		if (auto* target = morph_data_[index].GetSubMorphDataWritable())
+			*target = std::move(references[index]);
+	for (auto& frame : display_frame_list_)
+	{
+		for (Int index = frame.targets.GetCount() - 1; index >= 0; --index)
+		{
+			auto& target = frame.targets[index];
+			if (target.type != DisplayFrameTargetType::Morph) continue;
+			if (target.index == morph_index)
+			{
+				frame.targets.Erase(index) iferr_return;
+			}
+			else if (target.index > morph_index) --target.index;
+		}
+	}
+	material_preview_weights_.erase(morph.GetRuntimeIdentity());
+	if (material_preview_selection_ == morph_index) material_preview_selection_ = -1;
+	else if (material_preview_selection_ > morph_index) --material_preview_selection_;
+	if (material_morph_selection_index_ == morph_index)
+	{
+		material_morph_selection_index_ = -1;
+		material_morph_offset_selection_index_ = -1;
+	}
+	else if (material_morph_selection_index_ > morph_index) --material_morph_selection_index_;
 	morph.DeleteMorphUI(*this);
 	for (auto it = desc_id_map_.Begin(); it != desc_id_map_.End(); ++it)
 	{

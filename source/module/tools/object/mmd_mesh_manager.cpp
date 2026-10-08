@@ -176,10 +176,17 @@ SDK2024_Write(MMDMeshManagerObject)
 	IOWriteField(mesh_mode_);
 	IOWriteField(model_manager_);
 
-	if (!io_util::WriteHashMap(hf, mesh_morph_mode_))
+	// These are derived runtime caches, not authored Morph data. Keep their
+	// legacy slots in the file format, but never serialize cached tag pointers:
+	// an Undo can replace a child mesh before this manager executes again.
+	// Pose Morph tags persist the authoritative data and Read/CopyTo rebuild it.
+	const maxon::HashMap<BaseTag*, Int32> empty_modes;
+	const maxon::HashMap<String, Int32> empty_names;
+	const maxon::BaseArray<maxon::PointerArray<MorphUIData>> empty_data;
+	if (!io_util::WriteHashMap(hf, empty_modes))
 		return false;
 
-	if (!io_util::WriteHashMap(hf, mesh_morph_name_))
+	if (!io_util::WriteHashMap(hf, empty_names))
 		return false;
 
 	{
@@ -188,7 +195,7 @@ SDK2024_Write(MMDMeshManagerObject)
 			return false;
 	}
 
-	if (!io_util::WriteLinearContainer(hf, mesh_morph_data_))
+	if (!io_util::WriteLinearContainer(hf, empty_data))
 		return false;
 
 	if (!hf->WriteInt64(uv_morph_names_.GetCount()))
@@ -208,10 +215,9 @@ SDK2024_CopyTo(MMDMeshManagerObject)
 		return false;
 	};
 	auto const dest_object = reinterpret_cast<MMDMeshManagerObject*>(dest);
-	for (const auto& entry : mesh_morph_mode_)
-	{
-		dest_object->mesh_morph_mode_.Insert(entry.GetKey(), entry.GetValue())iferr_return;
-	}
+	dest_object->mesh_morph_mode_.Reset();
+	dest_object->mesh_morph_name_.Reset();
+	dest_object->mesh_morph_data_.Reset();
 	for (const auto& name : uv_morph_names_)
 	{
 		dest_object->uv_morph_names_.Insert(name)iferr_return;
@@ -330,7 +336,11 @@ EXECUTIONRESULT MMDMeshManagerObject::Execute(BaseObject* op, BaseDocument* doc,
 		}
 	}
 
-	if (*needs_morph_data_refresh_.Read())
+	Bool invalid_morph_link = false;
+	for (const auto& group : mesh_morph_data_)
+		for (const auto& morph : group)
+			if (!morph.ResolveTag()) invalid_morph_link = true;
+	if (*needs_morph_data_refresh_.Read() || invalid_morph_link)
 	{
 		mesh_morph_mode_.Reset();
 		mesh_morph_name_.Reset();
@@ -502,17 +512,12 @@ Bool MMDMeshManagerObject::LoadPMX(
 	if (faces_count == 0 || vertex_count == 0 || material_count == 0)
 		return true;
 
-	// create material manager
-	std::shared_ptr<MMDMaterialManager> material_manager;
-	if (setting.import_material)
-	{
-		material_manager = std::make_shared<MMDMaterialManager>();
-		if (!material_manager)
-			return false;
-		material_manager->SetTextureRelativePath(setting.fn.GetDirectory());
-		if (!material_manager->LoadPMXTextures(pmx_file.m_textures))
-			return false;
-	}
+	// Model material entries retain PMX paths even when renderer materials are
+	// disabled. Resolve these independently of the renderer creation gate below.
+	MMDMaterialManager material_manager;
+	material_manager.SetTextureRelativePath(setting.fn.GetDirectory());
+	if (!material_manager.LoadPMXTextures(pmx_file.m_textures))
+		return false;
 
 	std::vector<std::unordered_map<Int32, Float32>> vertex_weight_data;
 	if (setting.import_weights)
@@ -1051,18 +1056,20 @@ Bool MMDMeshManagerObject::LoadPMX(
 			BaseMaterial* material = nullptr;
 			if (setting.import_material)
 			{
-				material = material_manager->LoadPMXMaterial(pmx_material, material_index, material_name, setting);
+				material = material_manager.LoadPMXMaterial(pmx_material, material_index, material_name, setting);
 				if (!material)
 				{
 					maxon::String renderer_name;
 					switch (setting.import_material_type)
 					{
 					case CMTToolsSetting::ModelImport::material_type::RedShift: renderer_name = "RedShift"_s; break;
+					case CMTToolsSetting::ModelImport::material_type::RedShiftToon: renderer_name = "RS Toon"_s; break;
 					case CMTToolsSetting::ModelImport::material_type::Octane:   renderer_name = "Octane"_s;   break;
 					case CMTToolsSetting::ModelImport::material_type::Corona:   renderer_name = "Corona"_s;   break;
 					default: renderer_name = "Standard"_s; break;
 					}
-					MessageDialog(GeLoadString(IDS_MES_RENDERER_NOT_INSTALLED, renderer_name));
+					if (!setting.suppress_dialogs)
+						MessageDialog(GeLoadString(IDS_MES_RENDERER_NOT_INSTALLED, renderer_name));
 					return false;
 				}
 				setting.doc->InsertMaterial(material);
@@ -1078,7 +1085,8 @@ Bool MMDMeshManagerObject::LoadPMX(
 			}
 			if (BaseObject* model_op = static_cast<BaseObject*>(Get()->GetUp()))
 				if (MMDModelManagerObject* model_data = model_op->GetNodeData<MMDModelManagerObject>())
-					model_data->AddMaterial(pmx_material, material, mesh_object, material_name, material_manager->GetTexturePaths());
+					if (!model_data->AddMaterial(pmx_material, material, mesh_object, material_name, material_manager.GetTexturePaths()))
+						return false;
 
 			surface_begin_index += part_face_num;
 		}
@@ -1123,18 +1131,20 @@ Bool MMDMeshManagerObject::LoadPMX(
 			BaseMaterial* material = nullptr;
 			if (setting.import_material)
 			{
-				material = material_manager->LoadPMXMaterial(pmx_material, material_index, material_name, setting);
+				material = material_manager.LoadPMXMaterial(pmx_material, material_index, material_name, setting);
 				if (!material)
 				{
 					maxon::String renderer_name;
 					switch (setting.import_material_type)
 					{
 					case CMTToolsSetting::ModelImport::material_type::RedShift: renderer_name = "RedShift"_s; break;
+					case CMTToolsSetting::ModelImport::material_type::RedShiftToon: renderer_name = "RS Toon"_s; break;
 					case CMTToolsSetting::ModelImport::material_type::Octane:   renderer_name = "Octane"_s;   break;
 					case CMTToolsSetting::ModelImport::material_type::Corona:   renderer_name = "Corona"_s;   break;
 					default: renderer_name = "Standard"_s; break;
 					}
-					MessageDialog(GeLoadString(IDS_MES_RENDERER_NOT_INSTALLED, renderer_name));
+					if (!setting.suppress_dialogs)
+						MessageDialog(GeLoadString(IDS_MES_RENDERER_NOT_INSTALLED, renderer_name));
 					return false;
 				}
 				setting.doc->InsertMaterial(material);
@@ -1149,7 +1159,8 @@ Bool MMDMeshManagerObject::LoadPMX(
 			}
 			if (BaseObject* model_op = static_cast<BaseObject*>(Get()->GetUp()))
 				if (MMDModelManagerObject* model_data = model_op->GetNodeData<MMDModelManagerObject>())
-					model_data->AddMaterial(pmx_material, material, mesh_object, ""_s, material_manager->GetTexturePaths());
+					if (!model_data->AddMaterial(pmx_material, material, mesh_object, ""_s, material_manager.GetTexturePaths()))
+						return false;
 
 			// if import_weights is true, create weight tag
 			CAWeightTag* weight_tag = nullptr;

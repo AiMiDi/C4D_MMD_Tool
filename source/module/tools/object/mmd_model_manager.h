@@ -12,6 +12,7 @@ Description:	MMD model object
 
 #include <algorithm>
 #include <memory>
+#include <unordered_map>
 #include <vector>
 #include "libMMD/Model/MMD/MMDIkSolver.h"
 #include "libMMD/Model/MMD/MMDModel.h"
@@ -24,6 +25,8 @@ Description:	MMD model object
 #include "module/tools/material/mmd_material.h"
 #include "maxon/pointerarray.h"
 #include "utils/images_user_area_util.hpp"
+#include "utils/mmd_model_info_animation.h"
+#include "utils/cmt_runtime_identity.hpp"
 
 class IMorph;
 class MaterialMorph;
@@ -137,6 +140,7 @@ struct AnimationSlotMetadata
 {
 	String name;
 	Int32 max_frame = 0;
+	UInt64 runtime_identity = cmt_runtime_identity::Next();
 
 	Bool Read(HyperFile* hf);
 	Bool Write(HyperFile* hf) const;
@@ -203,6 +207,14 @@ class MMDModelManagerObject final : public ObjectData
 	BaseContainer animation_items_;
 	maxon::BaseArray<AnimationSlotMetadata> animation_slot_metadata_;
 	maxon::BaseArray<MorphAnimationSlotData> morph_animation_slots_;
+	std::vector<mmd_model_info::AnimationSlot> model_info_animation_slots_;
+	Bool migrate_legacy_model_info_tracks_ = false;
+	Bool migrate_legacy_morph_tracks_ = false;
+	Bool applying_model_info_parameters_ = false;
+	Bool has_visibility_baseline_ = false;
+	Bool visibility_override_active_ = false;
+	Int32 visibility_editor_baseline_ = MODE_UNDEF;
+	Int32 visibility_render_baseline_ = MODE_UNDEF;
 
 	maxon::BaseArray<MMDMaterialData> material_list_;
 	Int32 material_selection_index_ = -1;
@@ -213,6 +225,12 @@ class MMDModelManagerObject final : public ObjectData
 	maxon::BaseArray<maxon::UInt64> material_runtime_checksum_;
 	// 曾经接管过材质运行时状态；最后一个 offset/morph 被删除时据此执行一次基础状态恢复。
 	Bool material_morph_runtime_active_ = false;
+	// Transient authoring state. Ordinary disk reads clear it; document clones
+	// carry it to render the current preview without touching animation tracks.
+	Bool material_preview_enabled_ = false;
+	std::unordered_map<UInt64, Float> material_preview_weights_;
+	Int32 material_preview_selection_ = -1;
+	String material_binding_diagnostic_;
 
 	// 材质表情属性页（UI-only，不持久化）：选中的材质表情（morph_data_ 下标）与 offset 下标。
 	// mutable：GetDDescription（const）会在校正选中索引时写入。
@@ -243,6 +261,9 @@ class MMDModelManagerObject final : public ObjectData
 	Float32 fps_{ 30.f };
 	Bool is_animation_initialized_{ false };
 	UInt32 control_state_checksum_{ 0 };
+	UInt64 bone_morph_state_checksum_ = 0;
+	Bool has_bone_morph_state_checksum_ = false;
+	Bool bone_morph_pose_dirty_ = false;
 	Bool has_transient_vpd_pose_ = false;
 	BaseTime transient_vpd_pose_time_{ -1 };
 	std::vector<Int32> transient_vpd_bone_indices_;
@@ -291,6 +312,28 @@ public:
 	Int GetMorphNum() const;
 	const maxon::PointerArray<IMorph>& GetMorphData();
 	const maxon::HashMap<String, Int>& GetMorphNameMap();
+	std::vector<Float> EvaluateMorphWeights(const BaseTime& time, Bool preview, Bool sample_tracks, Bool* cyclic = nullptr);
+	std::vector<MMDMaterialRuntimeState> EvaluateMaterialMorphs(const std::vector<Float>& strengths) const;
+	Bool GetMaterialRenderState(BaseMaterial* material, const BaseTime& time, MMDMaterialRuntimeState& state);
+	Bool HasUniqueMaterialBinding(BaseMaterial* material) const;
+	Bool PrepareMaterialMorphBindings(Bool record_undo);
+	Bool IsMaterialPreviewMorph(Int32 index) const;
+	Float GetMaterialPreviewWeight() const;
+	void RefreshMaterialMorphPreview();
+	Bool RepairSelectedMaterialBinding();
+	Bool UpdateSelectedMaterialTexture(const String& path);
+	Bool CreateIndependentMaterialBinding();
+	Bool ConvertSelectedMaterialToon();
+	Bool UpdateSelectedMaterialToon(Int32 mode, Int32 index, const String& path);
+	Bool UpdateSelectedMaterialSphere(Int32 mode, const String& path);
+	const maxon::BaseArray<AnimationSlotMetadata>& GetAutomationAnimationSlots() const { return animation_slot_metadata_; }
+	Int32 GetAutomationActiveAnimationSlot() const { return animation_index_; }
+	Bool SelectAutomationAnimationSlot(UInt64 identity);
+	Bool SetAutomationMorphStrength(UInt64 identity, Float strength);
+#if defined(CMT_ENABLE_RUNTIME_REGRESSION)
+	Bool DeleteMorphForRegression(Int index);
+	Bool SetMorphStrengthForRegression(Int index, Float strength);
+#endif
 
 	Bool CreateManagers();
 	Bool UpdateManagers(BaseObject* op = nullptr);
@@ -312,6 +355,7 @@ public:
 
 	Bool LoadPMX(const libmmd::PMXFile& pmx_file, const CMTToolsSetting::ModelImport& setting);
 	void ImportDisplayFrames(const libmmd::PMXFile& pmx_file);
+	void RemapDisplayFrameBoneIndices(const std::unordered_map<Int32, Int32>& previous_to_current);
 	void RefreshDisplayFrameUI();
 	Bool PreparePMXExportState(BaseDocument* doc);
 	void FinishPMXExportState(BaseDocument* doc, Bool restore_edit_mode);
@@ -355,11 +399,14 @@ public:
 	Bool SaveVPDPose(libmmd::VPDFile& vpd_pose, const CMTToolsSetting::PoseExport& setting) const;
 
 private:
+	void ResetStandaloneRuntimeCaches();
 	Int32 GetMorphNamedNumber();
 	bool DeleteMorphImpl(IMorph& morph, const Int morph_index);
 	Int AddMorph(const MMDMorphType& morph_type, String morph_name = {}, bool is_add_morph_ui = true, Int32 panel = 0);
 	void RenameMorph(const String& name);
 	void ApplyMorphRuntimeStrengths();
+	UInt64 GetBoneMorphStateChecksum() const;
+	void PrepareBoneMorphReevaluation(BaseDocument* doc);
 	void ApplyMorphRuntimeStrength(IMorph& morph, Float strength);
 
 	/**
@@ -403,6 +450,7 @@ private:
 	Bool RunLayeredBonePass(BaseDocument* doc, Bool after_physics);
 	void ResetStandalonePhysics();
 	void StepStandalonePhysics(Float elapsed);
+	void ApplyStandalonePhysicsResults();
 	void ApplyPhysicsResultsToBoneObjects() const;
 	void CommitEditModeBindState(BaseDocument* doc);
 	void RestoreBindStateForEdit(BaseDocument* doc);
@@ -413,7 +461,12 @@ private:
 	void BuildIKSolverUI();
 	void ApplyIKSolverStates();
 	void ApplyIKSolverFromParameters(BaseObject* op);
-	void ImportVMDIKKeyframes(const libmmd::VMDFile& vmd_file, const CMTToolsSetting::MotionImport& setting);
+	Bool ImportVMDModelInfo(const libmmd::VMDFile& vmd_file, const CMTToolsSetting::MotionImport& setting, Int32 slot_index);
+	Bool CaptureModelInfoAnimationSlotFromTracks(Int32 slot_index);
+	Bool RebuildModelInfoTracksFromAnimationSlot(Int32 slot_index);
+	void ApplyModelInfoVisibility(BaseObject* object, BaseDocument* doc);
+	void AppendModelInfoToVmd(const CMTToolsSetting::MotionExport& setting, libmmd::VMDFile& motion, Bool baked) const;
+	Bool BakeVMDMotion(libmmd::VMDFile& motion, const CMTToolsSetting::MotionExport& setting, Bool controls_only = false) const;
 	Bool EnsureAnimationSlotCount(Int32 slot_count);
 	Bool SetAnimationSlotMetadata(Int32 slot_index, const String& name, Int32 max_frame);
 	void RefreshAnimationSlotItems();

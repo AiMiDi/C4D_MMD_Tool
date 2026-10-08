@@ -3,6 +3,7 @@
 #include <c4d.h>
 #include "libMMD/Model/MMD/PMXFile.h"
 #include "module/core/cmt_marco.h"
+#include "utils/cmt_runtime_identity.hpp"
 
 class MMDModelManagerObject;
 
@@ -52,6 +53,14 @@ struct MMDMaterialMorphOffset
 
 	void FromPMX(const libmmd::PMXFileMorph::MaterialMorph& src);
 	void ToPMX(libmmd::PMXFileMorph::MaterialMorph& dst) const;
+	void ResetNeutral()
+	{
+		const Float value = op_type == static_cast<Int32>(MMDMaterialMorphOpType::Add) ? 0.0 : 1.0;
+		diffuse_rgb = specular = ambient = edge_color_rgb = Vector(value);
+		texture_factor_rgb = sphere_texture_factor_rgb = toon_texture_factor_rgb = Vector(value);
+		diffuse_alpha = specular_power = edge_color_alpha = edge_size = value;
+		texture_factor_alpha = sphere_texture_factor_alpha = toon_texture_factor_alpha = value;
+	}
 	Bool Read(HyperFile* hf);
 	Bool Write(HyperFile* hf) const;
 };
@@ -62,6 +71,7 @@ protected:
 	String m_name;
 	DescID m_strength_id;
 	Int32 m_panel = 0;
+	UInt64 m_runtime_identity = cmt_runtime_identity::Next();
 public:
 	explicit IMorph(String name = {}, DescID strength_id = {});
 	IMorph(const IMorph&) = delete;
@@ -72,6 +82,7 @@ public:
 	IMorph& operator=(IMorph&& other) noexcept = default;
  
 	[[nodiscard]] const String& GetName() const { return m_name; }
+	[[nodiscard]] UInt64 GetRuntimeIdentity() const { return m_runtime_identity; }
 	[[nodiscard]] Int32 GetPanel() const { return m_panel; }
 	void SetPanel(Int32 panel) { m_panel = panel; }
 	Float GetStrength(SDK2024_Const GeListNode* node) const;
@@ -259,8 +270,24 @@ public:
 	Bool ValidateMaterialIndices(Int material_count, Bool drop_invalid = false);
 };
 
+/** Authored PMX 2.1 impulse offset, in the original PMX units and rigid index. */
+struct MMDImpulseMorphOffset
+{
+	Int32 rigid_index = -1;
+	Bool local = false;
+	maxon::StrongRef<AutoAlloc<BaseLink>> rigid_link;
+	Vector translate_velocity;
+	Vector rotate_torque;
+
+	void FromPMX(const libmmd::PMXFileMorph::ImpulseMorph& src);
+	void ToPMX(libmmd::PMXFileMorph::ImpulseMorph& dst) const;
+	Bool Read(HyperFile* hf);
+	Bool Write(HyperFile* hf) const;
+};
+
 class ImpulseMorph final : public IMorph
 {
+	maxon::BaseArray<MMDImpulseMorphOffset> m_offsets;
 public:
 	explicit ImpulseMorph(String name = {}, DescID strength_id = {});
 	ImpulseMorph(const ImpulseMorph&) = delete;
@@ -273,5 +300,10 @@ public:
 	void UpdateMorph(MMDModelManagerObject& model) override;
 	void AddMorphUI(MMDModelManagerObject& model, Int morph_id) override;
 	void DeleteMorphUI(MMDModelManagerObject& model) override;
+	Bool Read(HyperFile* hf, Int32 level = 0) override;
+	Bool Write(HyperFile* hf) SDK2024_Const override;
+	Bool CopyTo(IMorph* dest) const override;
 	MMDMorphType GetType() const override { return MMDMorphType::IMPULSE; }
+	[[nodiscard]] const maxon::BaseArray<MMDImpulseMorphOffset>& GetOffsets() const { return m_offsets; }
+	[[nodiscard]] maxon::BaseArray<MMDImpulseMorphOffset>& GetOffsetsWritable() { return m_offsets; }
 };

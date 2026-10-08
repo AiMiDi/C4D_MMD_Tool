@@ -11,12 +11,14 @@ Description:	DESC
 #pragma once
 
 #include <array>
+#include <tuple>
 
 #include "CMTSceneManager.h"
 #include "mmd_manager.hpp"
 #include "description/OMMDBoneManager.h"
 #include "maxon/pointerarray.h"
 #include "utils/morph_ui_data_util.hpp"
+#include "utils/cmt_bone_execution_plan.hpp"
 
 class MMDModelManagerObject;
 class MMDBoneManagerObject;
@@ -74,6 +76,8 @@ class MMDBoneManagerObject final : public MMDManagerObject
 	AutoAlloc<BaseLink> controls_root_link_;
 
 	maxon::HashMap<String, maxon::PointerArray<MorphUIData>> bone_morph_map_;
+	Bool bone_morph_map_dirty_ = true;
+	Bool RebuildBoneMorphMap();
 
 	struct BoneHierarchySyncEntry
 	{
@@ -90,8 +94,15 @@ class MMDBoneManagerObject final : public MMDManagerObject
 	Bool is_syncing_bone_hierarchy_ = false;
 	Bool is_model_mode_sync_ = false;
 	Bool has_pending_bone_hierarchy_sync_ = false;
+	Bool bone_display_sync_pending_ = true;
+	UInt32 hierarchy_checksum_ = 0;
+	Bool has_hierarchy_checksum_ = false;
 	Bool append_execution_order_dirty_ = true;
 	Bool is_refreshing_append_execution_order_ = false;
+	cmt_runtime::BoneExecutionPlan playback_execution_plan_;
+	std::vector<cmt_runtime::BoneExecutionEntry> playback_execution_snapshot_;
+	std::vector<std::tuple<Int32, Int32, Bool, Bool>> append_dependency_snapshot_;
+	std::vector<std::tuple<Int32, Int32, Bool, Bool>> append_dependency_scratch_;
 	struct PhysicsOverrideState
 	{
 		BaseTime time = BaseTime(-1.);
@@ -126,7 +137,7 @@ class MMDBoneManagerObject final : public MMDManagerObject
 	void BuildOrderedBoneObjectList(maxon::BaseArray<BaseObject*>& out) const;
 	const BaseContainer& GetBoneItems() const;
 	MMDModelManagerObject* GetModelManagerData();
-	maxon::HashMap<String, maxon::PointerArray<MorphUIData>>& GetBoneMorphMap() { return bone_morph_map_; }
+	maxon::HashMap<String, maxon::PointerArray<MorphUIData>>& GetBoneMorphMap();
 
 	Bool LoadPMX(const libmmd::PMXFile& pmx_file, maxon::BaseArray<BaseObject*>& bone_list, const CMTToolsSetting::ModelImport& setting);
 	Bool SavePMX(libmmd::PMXFile& pmx_model, const CMTToolsSetting::ModelExport& setting);
@@ -143,17 +154,28 @@ class MMDBoneManagerObject final : public MMDManagerObject
 	Bool CreateOrRefreshControls(BaseObject* bone_manager_object);
 	void MarkAppendExecutionOrderDirty();
 	void EnsureAppendExecutionOrder();
+	void EnsurePlaybackExecutionPlan();
+	// Refresh once before a playback pass; getters do not traverse the scene.
+	// Direct BaseContainer parameter edits are detected by the refresh snapshot.
+	const std::vector<std::int32_t>& GetPlaybackBoneIndices() const { return playback_execution_plan_.BoneIndices(); }
+	const std::vector<std::int32_t>& GetPlaybackLayers() const { return playback_execution_plan_.Layers(); }
+	const std::vector<std::int32_t>& GetPlaybackBonesForLayer(Int32 layer, Bool after_physics) const { return playback_execution_plan_.BonesForLayer(layer, after_physics); }
+	const std::vector<std::int32_t>& GetPlaybackIKBonesForLayer(Int32 layer, Bool after_physics) const { return playback_execution_plan_.IKBonesForLayer(layer, after_physics); }
+	std::uint64_t GetPlaybackPlanRebuildCount() const { return playback_execution_plan_.RebuildCount(); }
 	Int32 GetMaxBoneLayer() const;
 	void PrepareSceneForPhysicsPlayback(BaseDocument* doc);
 	Int32 PrepareSceneForPhysicsPlaybackLayer(BaseDocument* doc, Int32 layer, Bool after_physics);
 	void SetPhysicsOverride(Int32 bone_index, const BaseDocument* doc, const Vector& translation, const std::array<Float32, 4>& rotation);
 
 private:
+	void ApplyBoneDisplayType(BaseObject* bone_manager_object, Int32 display_type);
+	void ApplyStoredBoneDisplayType(BaseObject* bone_manager_object);
 	void CreateDisplayTag(GeListNode* node) override;
 	void HandleDescriptionCommandMessage(GeListNode* node, void* data);
 	bool HandleMMDBoneTagMessage(GeListNode* node, void* data);
 	bool HandleBoneIndexChangeMessage(GeListNode* node);
 	bool SynchronizeBoneHierarchy(BaseObject* bone_manager_object, Bool update_ui = true);
+	bool EnsureBoneHierarchyCurrent();
 	bool CollectBoneHierarchyDFS(BaseObject* object, maxon::BaseArray<BoneHierarchySyncEntry>& entries) const;
 	void RefreshBoneHierarchyUI(BaseObject* bone_manager_object) const;
 	Int32 ComputeAppendRecursionDepth(Int32 bone_index, maxon::BaseArray<Int32>& depth_cache, maxon::BaseArray<UChar>& visit_state) const;

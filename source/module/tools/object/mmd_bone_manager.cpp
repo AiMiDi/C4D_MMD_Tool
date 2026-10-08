@@ -18,6 +18,8 @@ Description:	DESC
 #include "mmd_mesh_manager.h"
 #include "mmd_rigid.h"
 #include "mmd_rigid_manager.h"
+#include "mmd_joint_manager.h"
+#include "description/OMMDJoint.h"
 #include "customgui_priority.h"
 #include "description/TMMDBone.h"
 #include "maxon/queue.h"
@@ -495,7 +497,7 @@ namespace
 
 	Int32 RemapRigidRelatedBoneIndices(BaseObject* rigid_manager_object, const std::unordered_map<Int32, Int32>& remap)
 	{
-		if (!rigid_manager_object || remap.empty())
+		if (!rigid_manager_object)
 			return 0;
 
 		Int32 remapped_count = 0;
@@ -513,10 +515,11 @@ namespace
 				continue;
 
 			const auto it = remap.find(old_bone_index);
-			if (it == remap.end() || it->second == old_bone_index)
+			const Int32 current_index = it == remap.end() ? -1 : it->second;
+			if (current_index == old_bone_index)
 				continue;
 
-			rigid_object->SetParameter(ConstDescID(DescLevel(RIGID_RELATED_BONE_INDEX)), it->second, DESCFLAGS_SET::NONE);
+			rigid_object->SetParameter(ConstDescID(DescLevel(RIGID_RELATED_BONE_INDEX)), current_index, DESCFLAGS_SET::NONE);
 			rigid_object->SetDirty(DIRTYFLAGS::DATA);
 			++remapped_count;
 		}
@@ -742,6 +745,13 @@ SDK2024_Init(MMDBoneManagerObject)
 		bc->SetInt32(BONE_MODE, BONE_MODE_EDIT);
 		bc->SetInt32(BONE_DISPLAY_TYPE, BONE_DISPLAY_TYPE_OFF);
 	}
+	// Writing the description default does not call SetDParameter(). Apply the
+	// manager's own visibility immediately; its future children are synchronized
+	// after import, or after a copied/read hierarchy belongs to its destination.
+	auto* const object = static_cast<BaseObject*>(node);
+	object->SetEditorMode(MODE_OFF);
+	object->SetRenderMode(MODE_OFF);
+	bone_display_sync_pending_ = true;
 
 	ConfigureBoneManagerExecutionPriority(node);
 	return true;
@@ -757,6 +767,18 @@ SDK2024_CopyTo(MMDBoneManagerObject)
 	if (controls_root_link_)
 		controls_root_link_->CopyTo(dest_object->controls_root_link_, flags, trn);
 	dest_object->is_model_mode_sync_ = false;
+	dest_object->is_syncing_bone_hierarchy_ = false;
+	dest_object->has_pending_bone_hierarchy_sync_ = false;
+	dest_object->bone_display_sync_pending_ = true;
+	dest_object->has_hierarchy_checksum_ = false;
+	dest_object->bone_index_lookup_.Reset();
+	dest_object->bone_items_.FlushAll();
+	dest_object->bone_list_.Reset();
+	// MorphUIData contains raw tag pointers. Rebuild it only after the copied
+	// hierarchy and AliasTrans links belong to the destination document.
+	dest_object->bone_morph_map_.Reset();
+	dest_object->bone_morph_map_dirty_ = true;
+	dest_object->physics_overrides_.Reset();
 	dest_object->append_execution_order_dirty_ = true;
 	dest_object->is_refreshing_append_execution_order_ = false;
 	for (const auto& entry : bone_list_)
@@ -784,9 +806,12 @@ Bool MMDBoneManagerObject::Read(GeListNode* node, HyperFile* hf, Int32 level)
 	bone_items_.FlushAll();
 	bone_items_.SetString(-1, "-"_s);
 	bone_index_lookup_.Reset();
+	bone_morph_map_.Reset();
+	bone_morph_map_dirty_ = true;
 	is_syncing_bone_hierarchy_ = false;
 	is_model_mode_sync_ = false;
 	has_pending_bone_hierarchy_sync_ = false;
+	bone_display_sync_pending_ = true;
 	append_execution_order_dirty_ = true;
 	is_refreshing_append_execution_order_ = false;
 	physics_overrides_.Reset();
@@ -815,75 +840,7 @@ Bool MMDBoneManagerObject::SetDParameter(GeListNode* node, const DescID& id, con
 	switch (id[0].id)
 	{
 	case BONE_DISPLAY_TYPE:
-		switch (t_data.GetInt32())
-		{
-		case BONE_DISPLAY_TYPE_ON:
-		{
-			op->SetEditorMode(MODE_UNDEF);
-			op->SetRenderMode(MODE_UNDEF);
-			MMDBoneManagerObjectMsg msg { MMDBoneManagerObjectMsgType::SET_BONE_DISPLAY_UPDATE, BONE_DISPLAY_TYPE_ON };
-			node->MultiMessage(MULTIMSG_ROUTE::BROADCAST, g_mmd_bone_manager_object_id, &msg);
-			break;
-		}
-		case BONE_DISPLAY_TYPE_OFF:
-		{
-			op->SetEditorMode(MODE_OFF);
-			op->SetRenderMode(MODE_OFF);
-			MMDBoneManagerObjectMsg msg{ MMDBoneManagerObjectMsgType::SET_BONE_DISPLAY_UPDATE, BONE_DISPLAY_TYPE_OFF };
-			node->MultiMessage(MULTIMSG_ROUTE::BROADCAST, g_mmd_bone_manager_object_id, &msg);
-			break;
-		}
-		case BONE_DISPLAY_TYPE_MOVABLE:
-		{
-			op->SetEditorMode(MODE_UNDEF);
-			op->SetRenderMode(MODE_UNDEF);
-			MMDBoneManagerObjectMsg msg{ MMDBoneManagerObjectMsgType::SET_BONE_DISPLAY_UPDATE, BONE_DISPLAY_TYPE_MOVABLE };
-			node->MultiMessage(MULTIMSG_ROUTE::BROADCAST, g_mmd_bone_manager_object_id, &msg);
-			break;
-		}
-		case BONE_DISPLAY_TYPE_VISIBLE:
-		{
-			op->SetEditorMode(MODE_UNDEF);
-			op->SetRenderMode(MODE_UNDEF);
-			MMDBoneManagerObjectMsg msg{ MMDBoneManagerObjectMsgType::SET_BONE_DISPLAY_UPDATE, BONE_DISPLAY_TYPE_VISIBLE };
-			node->MultiMessage(MULTIMSG_ROUTE::BROADCAST, g_mmd_bone_manager_object_id, &msg);
-			break;
-		}
-		case BONE_DISPLAY_TYPE_ROTATABLE:
-		{
-			op->SetEditorMode(MODE_UNDEF);
-			op->SetRenderMode(MODE_UNDEF);
-			MMDBoneManagerObjectMsg msg{ MMDBoneManagerObjectMsgType::SET_BONE_DISPLAY_UPDATE, BONE_DISPLAY_TYPE_ROTATABLE };
-			node->MultiMessage(MULTIMSG_ROUTE::BROADCAST, g_mmd_bone_manager_object_id, &msg);
-			break;
-		}
-		case BONE_DISPLAY_TYPE_ENABLED:
-		{
-			op->SetEditorMode(MODE_UNDEF);
-			op->SetRenderMode(MODE_UNDEF);
-			MMDBoneManagerObjectMsg msg{ MMDBoneManagerObjectMsgType::SET_BONE_DISPLAY_UPDATE, BONE_DISPLAY_TYPE_ENABLED };
-			node->MultiMessage(MULTIMSG_ROUTE::BROADCAST, g_mmd_bone_manager_object_id, &msg);
-			break;
-		}
-		case BONE_DISPLAY_TYPE_IK:
-		{
-			op->SetEditorMode(MODE_UNDEF);
-			op->SetRenderMode(MODE_UNDEF);
-			MMDBoneManagerObjectMsg msg{ MMDBoneManagerObjectMsgType::SET_BONE_DISPLAY_UPDATE, BONE_DISPLAY_TYPE_IK };
-			node->MultiMessage(MULTIMSG_ROUTE::BROADCAST, g_mmd_bone_manager_object_id, &msg);
-			break;
-		}
-		case BONE_DISPLAY_TYPE_CONTROLS:
-		{
-			op->SetEditorMode(MODE_UNDEF);
-			op->SetRenderMode(MODE_UNDEF);
-			MMDBoneManagerObjectMsg msg{ MMDBoneManagerObjectMsgType::SET_BONE_DISPLAY_UPDATE, BONE_DISPLAY_TYPE_CONTROLS };
-			node->MultiMessage(MULTIMSG_ROUTE::BROADCAST, g_mmd_bone_manager_object_id, &msg);
-			break;
-		}
-		default:
-			break;
-		}
+		ApplyBoneDisplayType(op, t_data.GetInt32());
 		break;
 	case BONE_MODE:
 	{
@@ -956,6 +913,7 @@ void MMDBoneManagerObject::HandleDescriptionCommandMessage(GeListNode* node, voi
 		new_bone_node->RefreshColor();
 		new_bone->InsertUnder(node);
 		SynchronizeBoneHierarchy(reinterpret_cast<BaseObject*>(node));
+		ApplyStoredBoneDisplayType(reinterpret_cast<BaseObject*>(node));
 		break;
 	}
 	case BONE_CONTROLS_CREATE_BUTTON:
@@ -970,7 +928,10 @@ void MMDBoneManagerObject::HandleDescriptionCommandMessage(GeListNode* node, voi
 
 Bool MMDBoneManagerObject::CreateOrRefreshControls(BaseObject* bone_manager_object)
 {
-	return mmd_bone_control_util::CreateOrRefreshControls(*this, bone_manager_object);
+	if (!mmd_bone_control_util::CreateOrRefreshControls(*this, bone_manager_object))
+		return false;
+	ApplyStoredBoneDisplayType(bone_manager_object ? bone_manager_object : reinterpret_cast<BaseObject*>(Get()));
+	return true;
 }
 
 bool MMDBoneManagerObject::HandleMMDBoneTagMessage(GeListNode* node, void* data)
@@ -982,6 +943,13 @@ bool MMDBoneManagerObject::HandleMMDBoneTagMessage(GeListNode* node, void* data)
 		return false;
 	bool need_update_morph = false;
 	const auto* msg = static_cast<MMDBoneTagMsg*>(data);
+	if (msg->type == MMDBoneTagMsgType::BONE_MORPH_ADD ||
+		msg->type == MMDBoneTagMsgType::BONE_MORPH_DELETE ||
+		msg->type == MMDBoneTagMsgType::BONE_MORPH_RENAME)
+	{
+		if (!EnsureBoneHierarchyCurrent() || !RebuildBoneMorphMap())
+			return false;
+	}
 	switch (msg->type)
 	{
 	case MMDBoneTagMsgType::BONE_HIERARCHY_DIRTY:
@@ -1143,6 +1111,7 @@ bool MMDBoneManagerObject::SynchronizeBoneHierarchy(BaseObject* bone_manager_obj
 
 	is_syncing_bone_hierarchy_ = true;
 	BoolResetGuard sync_guard(&is_syncing_bone_hierarchy_);
+	bone_morph_map_dirty_ = true;
 	do
 	{
 		has_pending_bone_hierarchy_sync_ = false;
@@ -1150,6 +1119,13 @@ bool MMDBoneManagerObject::SynchronizeBoneHierarchy(BaseObject* bone_manager_obj
 		maxon::BaseArray<BoneHierarchySyncEntry> entries;
 		if (!CollectBoneHierarchyDFS(bone_manager_object->GetDown(), entries))
 			return false;
+
+		// Use the previous object identity map, since a newly cloned tag carries
+		// the original tag's numeric index until this synchronization completes.
+		std::unordered_map<const BaseObject*, Int32> previous_bone_indices;
+		for (const auto& previous : bone_index_lookup_)
+			previous_bone_indices.emplace(previous.GetKey(), previous.GetValue());
+		const Bool had_previous_indices = !previous_bone_indices.empty();
 
 		bone_items_.FlushAll();
 		bone_items_.SetString(-1, "-"_s);
@@ -1165,9 +1141,11 @@ bool MMDBoneManagerObject::SynchronizeBoneHierarchy(BaseObject* bone_manager_obj
 		for (const auto& entry : entries)
 		{
 			BoneHierarchySyncEntry synchronized_entry = entry;
-			const Int32 previous_index = ReadBoneIndexParameter(synchronized_entry.tag);
+			const auto previous = previous_bone_indices.find(synchronized_entry.object);
+			const Int32 previous_index = previous != previous_bone_indices.end() ? previous->second
+				: had_previous_indices ? -1 : ReadBoneIndexParameter(synchronized_entry.tag);
 			if (previous_index >= 0)
-				previous_to_current_index[previous_index] = synchronized_entry.bone_index;
+				previous_to_current_index.emplace(previous_index, synchronized_entry.bone_index);
 
 			BaseObject* parent_object = synchronized_entry.object ? synchronized_entry.object->GetUp() : nullptr;
 			if (parent_object)
@@ -1205,18 +1183,55 @@ bool MMDBoneManagerObject::SynchronizeBoneHierarchy(BaseObject* bone_manager_obj
 			if (synchronized_entry.object)
 				synchronized_entry.object->SetDirty(DIRTYFLAGS::DATA);
 		}
+		for (const auto& entry : entries)
+		{
+			BaseContainer* const data = entry.tag->GetDataInstance();
+			if (!data || data->GetInt32(PMX_BONE_INDEXED_TAIL_POSITION) != PMX_BONE_TAIL_IS_INDEX)
+				continue;
+			const Int32 old_tail = data->GetInt32(PMX_BONE_TAIL_INDEX);
+			if (old_tail < 0)
+				continue;
+			const auto target = previous_to_current_index.find(old_tail);
+			const Int32 current_tail = target == previous_to_current_index.end() ? -1 : target->second;
+			if (current_tail != old_tail)
+				entry.tag->SetParameter(ConstDescID(DescLevel(PMX_BONE_TAIL_INDEX)), current_tail, DESCFLAGS_SET::NONE);
+		}
 
 		if (MMDModelManagerObject* const model_manager = GetModelManagerData())
 		{
+			model_manager->RemapDisplayFrameBoneIndices(previous_to_current_index);
 			if (MMDRigidManagerObject* const rigid_manager = model_manager->GetRigidManagerData())
 			{
 				BaseObject* const rigid_manager_object = reinterpret_cast<BaseObject*>(rigid_manager->Get());
 				RemapRigidRelatedBoneIndices(rigid_manager_object, previous_to_current_index);
 			}
+			if (MMDJointManagerObject* const joint_manager = model_manager->GetJointManagerData())
+			{
+				BaseObject* const joint_root = reinterpret_cast<BaseObject*>(joint_manager->Get());
+				for (BaseObject* joint = joint_root->GetDown(); joint; joint = joint->GetNext())
+				{
+					if (!joint->IsInstanceOf(g_mmd_joint_object_id))
+						continue;
+					const Int32 old_index = joint->GetDataInstanceRef().GetInt32(JOINT_ATTITUDE_USE_BONE_INDEX);
+					if (old_index < 0)
+						continue;
+					const auto target = previous_to_current_index.find(old_index);
+					const Int32 current = target == previous_to_current_index.end() ? -1 : target->second;
+					if (current != old_index)
+					{
+						joint->SetParameter(ConstDescID(DescLevel(JOINT_ATTITUDE_USE_BONE_INDEX)), current, DESCFLAGS_SET::NONE);
+						joint->SetDirty(DIRTYFLAGS::DATA | DIRTYFLAGS::DESCRIPTION);
+					}
+				}
+			}
 		}
 	}
 	while (has_pending_bone_hierarchy_sync_);
 
+	if (!RebuildBoneMorphMap())
+		return false;
+	hierarchy_checksum_ = bone_manager_object->GetHDirty(HDIRTYFLAGS::OBJECT_HIERARCHY);
+	has_hierarchy_checksum_ = true;
 	MarkAppendExecutionOrderDirty();
 	if (!is_refreshing_append_execution_order_)
 		EnsureAppendExecutionOrder();
@@ -1235,9 +1250,72 @@ bool MMDBoneManagerObject::SynchronizeBoneHierarchy(BaseObject* bone_manager_obj
 	return true;
 }
 
+bool MMDBoneManagerObject::EnsureBoneHierarchyCurrent()
+{
+	BaseObject* const object = reinterpret_cast<BaseObject*>(Get());
+	if (!object)
+		return false;
+	if (is_syncing_bone_hierarchy_)
+		return true;
+	// A removed last child has no surviving tag whose parent/pred changed.
+	// C4D's hierarchy checksum also observes that deletion, without a DFS scan
+	// on every unchanged animation frame.
+	const UInt32 checksum = object->GetHDirty(HDIRTYFLAGS::OBJECT_HIERARCHY);
+	return has_hierarchy_checksum_ && checksum == hierarchy_checksum_
+		? true : SynchronizeBoneHierarchy(object);
+}
+
 void MMDBoneManagerObject::MarkAppendExecutionOrderDirty()
 {
 	append_execution_order_dirty_ = true;
+	playback_execution_plan_.Invalidate();
+}
+
+void MMDBoneManagerObject::EnsurePlaybackExecutionPlan()
+{
+	if (!EnsureBoneHierarchyCurrent())
+		return;
+	// Scripts can write BaseContainer fields without sending description messages.
+	// Detect those append edits before reusing recursion depths from the last pass.
+	append_dependency_scratch_.clear();
+	append_dependency_scratch_.reserve(bone_list_.GetCount());
+	for (const auto& entry : bone_list_)
+	{
+		const Int32 index = static_cast<Int32>(entry.GetKey());
+		BaseTag* const tag = FindBone(index);
+		const BaseContainer* const bc = tag ? tag->GetDataInstance() : nullptr;
+		const MMDBoneTag* const tag_data = tag ? tag->GetNodeData<MMDBoneTag>() : nullptr;
+		if (!bc || !tag_data)
+			continue;
+		BaseTag* const source = tag_data->ResolveInheritSourceBoneTag();
+		append_dependency_scratch_.emplace_back(index, source ? FindBoneIndex(source) : -1,
+			bc->GetBool(PMX_BONE_INHERIT_TRANSLATION), bc->GetBool(PMX_BONE_INHERIT_ROTATION));
+	}
+	if (append_dependency_scratch_ != append_dependency_snapshot_)
+	{
+		append_dependency_snapshot_ = append_dependency_scratch_;
+		MarkAppendExecutionOrderDirty();
+	}
+	EnsureAppendExecutionOrder();
+	playback_execution_snapshot_.clear();
+	playback_execution_snapshot_.reserve(bone_list_.GetCount());
+	for (const auto& entry : bone_list_)
+	{
+		const Int32 index = static_cast<Int32>(entry.GetKey());
+		BaseTag* const tag = FindBone(index);
+		const BaseContainer* const bc = tag ? tag->GetDataInstance() : nullptr;
+		const MMDBoneTag* const tag_data = tag ? tag->GetNodeData<MMDBoneTag>() : nullptr;
+		if (!bc || !tag_data)
+			continue;
+		playback_execution_snapshot_.push_back({
+			index,
+			std::max(0, bc->GetInt32(PMX_BONE_LAYER)),
+			tag_data->append_recursion_depth_,
+			bc->GetBool(PMX_BONE_PHYSICS_AFTER_DEFORM),
+			bc->GetBool(PMX_BONE_IS_IK)
+		});
+	}
+	playback_execution_plan_.Update(playback_execution_snapshot_);
 }
 
 Int32 MMDBoneManagerObject::ComputeAppendRecursionDepth(const Int32 bone_index, maxon::BaseArray<Int32>& depth_cache, maxon::BaseArray<UChar>& visit_state) const
@@ -1339,6 +1417,15 @@ Bool MMDBoneManagerObject::Message(GeListNode* node, Int32 type, void* data)
 	};
 	switch (type)
 	{
+	case MSG_MULTI_DOCUMENTCLONED:
+	case MSG_MENUPREPARE:
+		// AliasTrans may still point copied controls at the source document here.
+		// The first execution after insertion applies the copied display choice.
+		bone_display_sync_pending_ = true;
+		break;
+	case MSG_MULTI_DOCUMENTIMPORTED:
+		ApplyStoredBoneDisplayType(static_cast<BaseObject*>(node));
+		break;
 	case MSG_DESCRIPTION_COMMAND:
 	{
 		HandleDescriptionCommandMessage(node, data);
@@ -1733,6 +1820,19 @@ Bool MMDBoneManagerObject::LoadPMX(const libmmd::PMXFile& pmx_file, maxon::BaseA
 
 	// send bone index change msg
 	SynchronizeBoneHierarchy(reinterpret_cast<BaseObject*>(Get()));
+	// The input uses PMX ordering, while the manager now uses scene DFS ordering.
+	// Tail targets have no BaseLink, so resolve them through the original objects.
+	for (size_t i = 0; i < pmx_bone_num; ++i)
+	{
+		const auto& source = pmx_bones[i];
+		if (!(static_cast<uint16_t>(source.m_boneFlag) & static_cast<uint16_t>(libmmd::PMXBoneFlags::TargetShowMode)))
+			continue;
+		Int32 target = -1;
+		if (source.m_linkBoneIndex >= 0 && source.m_linkBoneIndex < bone_list.GetCount())
+			target = FindBoneIndex(bone_list[source.m_linkBoneIndex]->GetTag(g_mmd_bone_tag_id));
+		if (BaseTag* const tag = bone_list[static_cast<Int>(i)]->GetTag(g_mmd_bone_tag_id))
+			tag->SetParameter(ConstDescID(DescLevel(PMX_BONE_TAIL_INDEX)), target, DESCFLAGS_SET::NONE);
+	}
 
 	// send description check update msg
 	{
@@ -1783,6 +1883,7 @@ Bool MMDBoneManagerObject::LoadPMX(const libmmd::PMXFile& pmx_file, maxon::BaseA
 		}
 	}
 
+	ApplyStoredBoneDisplayType(reinterpret_cast<BaseObject*>(Get()));
 	return true;
 }
 
@@ -1957,6 +2058,7 @@ Bool MMDBoneManagerObject::ExportBoneMorphsToPMX(libmmd::PMXFile& pmx_file,
 
 const BaseContainer& MMDBoneManagerObject::GetBoneItems() const
 {
+	const_cast<MMDBoneManagerObject*>(this)->EnsureBoneHierarchyCurrent();
 	if (bone_items_.GetIndexId(0) == NOTOK)
 		bone_items_.SetString(-1, "-"_s);
 	return bone_items_;
@@ -1974,6 +2076,46 @@ MMDModelManagerObject* MMDBoneManagerObject::GetModelManagerData()
 		}
 	}
 	return model_manager_object ? model_manager_object->GetNodeData<MMDModelManagerObject>() : nullptr;
+}
+
+Bool MMDBoneManagerObject::RebuildBoneMorphMap()
+{
+	if (!bone_morph_map_dirty_)
+		return true;
+	iferr_scope_handler { return false; };
+
+	maxon::HashMap<String, maxon::PointerArray<MorphUIData>> rebuilt;
+	// bone_list_ has been hydrated from this manager's own hierarchy. Serialized
+	// tag definitions are the source of truth; do not copy another document's hubs.
+	for (const auto& entry : bone_list_)
+	{
+		BaseTag* const tag = FindBone(static_cast<Int32>(entry.GetKey()));
+		const auto* const bone = tag ? tag->GetNodeData<MMDBoneTag>() : nullptr;
+		if (!bone)
+			continue;
+		for (const auto& morph : bone->bone_morph_data_arr_)
+		{
+			if (morph.name.IsEmpty())
+				continue;
+			auto& hubs = rebuilt.InsertKey(morph.name)iferr_return;
+			hubs.Append(MorphUIData(tag, morph.strength_id))iferr_return;
+		}
+	}
+	bone_morph_map_ = std::move(rebuilt);
+	bone_morph_map_dirty_ = false;
+	return true;
+}
+
+maxon::HashMap<String, maxon::PointerArray<MorphUIData>>& MMDBoneManagerObject::GetBoneMorphMap()
+{
+	if (!EnsureBoneHierarchyCurrent() || !RebuildBoneMorphMap())
+	{
+		// A failed refresh can follow tag deletion/replacement. Never expose
+		// the old raw pointers; leave the map invalid so the next call retries.
+		bone_morph_map_.Reset();
+		bone_morph_map_dirty_ = true;
+	}
+	return bone_morph_map_;
 }
 
 const MMDBoneManagerObject::PhysicsOverrideState* MMDBoneManagerObject::FindPhysicsOverride(const Int32 bone_index, const BaseDocument* doc) const
@@ -2016,39 +2158,23 @@ EXECUTIONRESULT MMDBoneManagerObject::Execute(BaseObject* op, BaseDocument* doc,
 
 	if (!op || !doc)
 		return EXECUTIONRESULT::OK;
+	if (!EnsureBoneHierarchyCurrent())
+		return EXECUTIONRESULT::OK;
+	if (bone_display_sync_pending_)
+		ApplyStoredBoneDisplayType(op);
 
 	BaseObject* const model_manager_object = io_util::ResolveObjectLink(model_manager_);
 	const BaseContainer* const model_bc = model_manager_object ? model_manager_object->GetDataInstance() : nullptr;
 	if (!model_bc || model_bc->GetInt32(MODEL_MODE) != MODEL_MODE_ANIM)
 		return EXECUTIONRESULT::OK;
 
-	EnsureAppendExecutionOrder();
+	EnsurePlaybackExecutionPlan();
 	Int32 self_override_bones = 0;
 	Int32 inherit_override_bones = 0;
 	Int32 applied_animation_bones = 0;
 	Int32 post_physics_ik_solved = 0;
 
-	std::vector<Int32> sorted_indices;
-	sorted_indices.reserve(bone_list_.GetCount());
-	for (const auto& entry : bone_list_)
-		sorted_indices.emplace_back(static_cast<Int32>(entry.GetKey()));
-
-	std::sort(sorted_indices.begin(), sorted_indices.end(), [this](const Int32 lhs, const Int32 rhs)
-	{
-		auto get_sort_key = [this](const Int32 bone_index) -> std::tuple<Int32, Int32, Int32>
-		{
-			BaseTag* const bone_tag = FindBone(bone_index);
-			const BaseContainer* const bc = bone_tag ? bone_tag->GetDataInstance() : nullptr;
-			const Int32 layer = bc ? std::max(0, bc->GetInt32(PMX_BONE_LAYER)) : 0;
-			const Int32 append_depth = bone_tag && bone_tag->GetNodeData<MMDBoneTag>()
-				? bone_tag->GetNodeData<MMDBoneTag>()->append_recursion_depth_
-				: 0;
-			return std::make_tuple(layer, append_depth, bone_index);
-		};
-		return get_sort_key(lhs) < get_sort_key(rhs);
-	});
-
-	for (const Int32 bone_index : sorted_indices)
+	for (const Int32 bone_index : GetPlaybackBoneIndices())
 	{
 		BaseTag* const bone_tag = FindBone(bone_index);
 		if (!bone_tag)
@@ -2146,8 +2272,8 @@ void MMDBoneManagerObject::PrepareSceneForPhysicsPlayback(BaseDocument* doc)
 	if (!doc)
 		return;
 
-	const Int32 max_layer = GetMaxBoneLayer();
-	for (Int32 layer = 0; layer <= max_layer; ++layer)
+	EnsurePlaybackExecutionPlan();
+	for (const Int32 layer : GetPlaybackLayers())
 		PrepareSceneForPhysicsPlaybackLayer(doc, layer, false);
 }
 
@@ -2161,30 +2287,11 @@ Int32 MMDBoneManagerObject::PrepareSceneForPhysicsPlaybackLayer(BaseDocument* do
 	if (!doc)
 		return 0;
 
-	EnsureAppendExecutionOrder();
+	if (append_execution_order_dirty_ || playback_execution_plan_.IsDirty())
+		EnsurePlaybackExecutionPlan();
 	Int32 prepared_bones = 0;
 
-	std::vector<Int32> sorted_indices;
-	sorted_indices.reserve(bone_list_.GetCount());
-	for (const auto& entry : bone_list_)
-		sorted_indices.emplace_back(static_cast<Int32>(entry.GetKey()));
-
-	std::sort(sorted_indices.begin(), sorted_indices.end(), [this](const Int32 lhs, const Int32 rhs)
-	{
-		auto get_sort_key = [this](const Int32 bone_index) -> std::tuple<Int32, Int32, Int32>
-		{
-			BaseTag* const bone_tag = FindBone(bone_index);
-			const BaseContainer* const bc = bone_tag ? bone_tag->GetDataInstance() : nullptr;
-			const Int32 layer = bc ? std::max(0, bc->GetInt32(PMX_BONE_LAYER)) : 0;
-			const Int32 append_depth = bone_tag && bone_tag->GetNodeData<MMDBoneTag>()
-				? bone_tag->GetNodeData<MMDBoneTag>()->append_recursion_depth_
-				: 0;
-			return std::make_tuple(layer, append_depth, bone_index);
-		};
-		return get_sort_key(lhs) < get_sort_key(rhs);
-	});
-
-	for (const Int32 bone_index : sorted_indices)
+	for (const Int32 bone_index : GetPlaybackBonesForLayer(layer, after_physics))
 	{
 		BaseTag* const bone_tag = FindBone(bone_index);
 		BaseObject* const bone_object = bone_tag ? bone_tag->GetObject() : nullptr;
@@ -2269,6 +2376,25 @@ void MMDBoneManagerObject::InvalidatePlaybackRuntimeState()
 		bone_tag_node->ik_overridden_this_frame_ = false;
 		bone_tag_node->InvalidateStandaloneIKChainCache();
 	}
+}
+
+void MMDBoneManagerObject::ApplyBoneDisplayType(BaseObject* const bone_manager_object, const Int32 display_type)
+{
+	if (!bone_manager_object || display_type < BONE_DISPLAY_TYPE_ON || display_type > BONE_DISPLAY_TYPE_CONTROLS)
+		return;
+	const Int32 manager_visibility = display_type == BONE_DISPLAY_TYPE_OFF ? MODE_OFF : MODE_UNDEF;
+	bone_manager_object->SetEditorMode(manager_visibility);
+	bone_manager_object->SetRenderMode(manager_visibility);
+	MMDBoneManagerObjectMsg message{MMDBoneManagerObjectMsgType::SET_BONE_DISPLAY_UPDATE, display_type, bone_manager_object};
+	bone_manager_object->MultiMessage(MULTIMSG_ROUTE::BROADCAST, g_mmd_bone_manager_object_id, &message);
+	bone_display_sync_pending_ = false;
+}
+
+void MMDBoneManagerObject::ApplyStoredBoneDisplayType(BaseObject* const bone_manager_object)
+{
+	const BaseContainer* const data = bone_manager_object ? bone_manager_object->GetDataInstance() : nullptr;
+	if (data)
+		ApplyBoneDisplayType(bone_manager_object, data->GetInt32(BONE_DISPLAY_TYPE, BONE_DISPLAY_TYPE_OFF));
 }
 
 void MMDBoneManagerObject::SetBoneDisplayType(const Int32 display_type, BaseObject* bone_manager_object)

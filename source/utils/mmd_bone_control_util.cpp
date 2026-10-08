@@ -947,6 +947,12 @@ Bool mmd_bone_control_util::GetControlDeltaInBoneSpace(BaseTag* bone_tag, BaseOb
 	if (!control || !bone_object)
 		return false;
 
+	// An inactive control contributes no animation delta. Projecting identity
+	// through float bases can introduce a rotation that depends on the last
+	// synchronized control pose and perturb a cold physics replay.
+	if (IsMatrixIdentityLike(control->GetRelMl()))
+		return false;
+
 	const Eigen::Matrix4f control_rest = MatrixToEigen(BuildControlBaseGlobalMatrix(control));
 	const Eigen::Matrix4f bone_rest = MatrixToEigen(BuildCurrentBoneGlobalMatrix(bone_object));
 	const Eigen::Matrix4f control_delta = MatrixToEigen(NormalizeMatrixBasis(control->GetRelMl()));

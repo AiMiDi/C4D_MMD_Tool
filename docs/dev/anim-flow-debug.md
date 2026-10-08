@@ -7,7 +7,7 @@
 `[CMT][Frame N]` 既有的 `ModelExecute` / `BoneManagerExecute` / `PrepareSceneForPhysicsPlayback`
 / `PrePhysicsIK` / `StepStandalonePhysics` 行，可以拼出完整的逐帧执行流水线。
 
-> 默认完全关闭，开关基于 `std::getenv` + 静态变量缓存，关闭时只剩一次 atomic load，
+> 默认完全关闭，开关基于 `std::getenv` + 静态变量缓存，关闭时只读取缓存的布尔开关，
 > 不影响 release 性能。
 
 ---
@@ -21,6 +21,7 @@
 | `CMT_ANIM_FLOW_DEBUG` | `1` / `true` 等任意非 `0`/`false`/`FALSE` 的非空值 | 打开整套 `[CMT][AnimFlow]` 日志 |
 | `CMT_ANIM_FLOW_BONE` | 整数 bone_index，例如 `87` | 仅记录指定骨骼（一般写问题最严重的 IK 末端骨骼 index）；不设或 `-1` 表示全部记录 |
 | `CMT_INITIAL_STATE_DEBUG` | `1` | 已有开关；打开后 `BoneManagerExecute` 等日志会列出每帧涉及的骨骼名，便于交叉对照 |
+| `CMT_RUNTIME_PROFILE` | `1` | 输出运行时各阶段毫秒与骨骼计划重建计数，字段及统计边界见 `runtime-flow.md` |
 
 PowerShell 启动 Cinema 4D 2026 + 我们的插件并打开诊断的最小命令：
 
@@ -35,7 +36,9 @@ $env:CMT_INITIAL_STATE_DEBUG = "1"                              # 可选，但�
 ```
 
 `g_console=true` 在 Windows 上会打开独立的 Console 窗口，所有 `DebugOutput(maxon::OUTPUT::DIAGNOSTIC, ...)`
-会直接输出到那里。如果想抓到文件里，再用 `2>&1 | Tee-Object cmt_anim_flow.log` 之类组合即可。
+会直接输出到那里。普通 `Start-Process` 启动不能据此保证 stdout/stderr 被重定向到终端文件。
+需要文件证据时保存 Console 内容，或按 `AGENTS.md` 的正常启动后 attach 流程读取已配置的调试器日志；
+不要为了日志捕获改用 LLDB/DAP 直接启动。
 
 ### 1.2 复现工作流
 

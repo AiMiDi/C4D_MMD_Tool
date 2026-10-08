@@ -7,12 +7,16 @@
 
 | 区域 | 主要职责 |
 |---|---|
-| `source/module/tools/object/mmd_model_manager.cpp` | 模型根对象：运行时主驱动、standalone IK/physics runtime、每帧分层执行 |
+| `source/module/tools/object/mmd_model_manager.cpp` | 模型根对象：ObjectData 入口、持久化、动画槽、导入导出及属性 UI |
+| `source/module/tools/object/mmd_model_runtime.cpp` | standalone IK/physics 重建、骨骼适配器和每帧分层执行 |
+| `source/module/tools/object/mmd_model_morph_runtime.cpp` | group/flip 有效强度、材质表情合成及场景同步 |
 | `source/module/tools/object/mmd_bone_manager.cpp` | 骨骼 manager：分层准备动画、消费 runtime override、最终协调写回 |
 | `source/module/tools/tag/mmd_bone.cpp` | 骨骼 tag：动画槽求值、append 继承、IK chain 构建、runtime override 缓存 |
 | `source/module/tools/object/mmd_rigid_manager.cpp` | 从 C4D 刚体对象重建 runtime rigid bodies |
 | `source/module/tools/object/mmd_joint_manager.cpp` | 从 C4D joint 对象重建 runtime constraints |
 | `dependency/libMMD/src` | `MMDIkSolver`、`MMDPhysicsManager` 和 Bullet 封装 |
+| `source/utils/cmt_bone_execution_plan.hpp` | 与 SDK 无关的骨骼排序、实际 layer 分组和 IK 顺序缓存 |
+| `source/utils/cmt_material_morph_accumulator.hpp` | 与 SDK 无关的材质 Mul/Add 字段计算 |
 | `docs/dev/anim-flow-debug.md` | 动画/IK/物理诊断日志说明 |
 
 ## Ownership 边界
@@ -92,8 +96,12 @@ IK link 描述生成。chain link 也优先用稳定的 `BaseLink`，再回退�
 4. runtime rigid bodies 和 joints 添加到 libMMD/Bullet physics world。
 5. `ReconnectRigidBodyPointers()` / `ReconnectJointPointers()` 把 C4D 对象重新指向新 runtime 对象；存档重开后这一步尤其重要。
 
-`ResetStandalonePhysics()` 会先禁用刚体、ResetTransform、跑一次短 physics update、ReflectGlobalTransform，
-再把动态骨骼结果同步回 adapter 和 BoneManager override，最后 reset/activate rigid body。
+`ResetStandalonePhysics()` 在已初始化的 runtime 中先把 adapter 的 current transform 临时恢复到缓存的
+initial/bind transform，再重建完整 Bullet world、刚体和关节；这使关节 anchor 按 bind-space body 构造。
+随后从当前场景恢复 adapter 的动画姿态，并重新应用物理配置。首次初始化的 world 本来就是新建的，
+因此不重复重建。两条路径最后都执行刚体 `ResetTransform()`、清理 contact pair 算法及速度/力，并激活刚体。
+reset 本身不执行 physics update、Reflect 或场景骨骼写回，也不提交新的 bind；正常帧的更新和写回由
+`StepStandalonePhysics()` / `ApplyStandalonePhysicsResults()` 负责。
 
 ## 每帧主流程
 
@@ -102,7 +110,7 @@ IK link 描述生成。chain link 也优先用稳定的 `BaseLink`，再回退�
 ```mermaid
 flowchart TD
     A["ModelManager::Execute"] --> B["UpdateManagers / runtime 初始化 / morph 刷新"]
-    B --> C{"MODEL_MODE_ANIM<br/>且时间变化"}
+    B --> C{"MODEL_MODE_ANIM<br/>且时间、控制器或骨表情变化"}
     C -- 否 --> Z["返回"]
     C -- 是 --> D["计算 fps/time_diff<br/>判断 seek reset"]
     D --> E["EnsureStandaloneRuntimeManagers"]
@@ -112,11 +120,13 @@ flowchart TD
     H --> I{"Physics enabled"}
     I -- 是且需要 reset --> J["ResetStandalonePhysics"]
     I -- 是且连续播放 --> K["StepStandalonePhysics(1/fps)"]
+    I -- 是且同帧骨表情更新 --> O["ApplyStandalonePhysicsResults<br/>反映当前物理状态，不推进时间"]
     J --> L["RunLayeredBonePass(after_physics=true)"]
     K --> L
+    O --> L
     I -- 否 --> M["is_animation_initialized_=false"]
-    L --> N["prev_time_=now_time"]
-    M --> N
+    L --> N["更新已消费的骨表情状态<br/>时间变化时更新 prev_time"]
+    M --> L
 ```
 
 几个运行时规则要一起看：
@@ -125,6 +135,9 @@ flowchart TD
 - physics step 使用当前 C4D 文档 fps：`StepStandalonePhysics(1.f / fps_)`。
 - seek、跳帧、回到最小时间或第一次播放会触发 `ResetStandalonePhysics()`，不是直接沿用上一帧物理状态。
 - 物理关闭时仍会先执行 pre-physics 的 `RunLayeredBonePass(false)`，因此 IK 不依赖物理开启才运行。
+- 固定帧调节骨表情时，检查展开后的 tag 强度和骨表情平移/旋转定义，重新执行 pre/post 骨阶段。
+  同帧清理旧 IK/append override，同时保留显式 transient VPD 姿态；已经初始化的物理世界只重新反映
+  当前状态，不额外调用 Bullet update、reset 或提交 bind。复制/重建清除骨表情状态的消费缓存。
 
 ## 分层动画与 IK
 
@@ -132,7 +145,7 @@ flowchart TD
 
 ```mermaid
 flowchart TD
-    A["RunLayeredBonePass(after_physics)"] --> B["for layer = 0..max_layer"]
+    A["RunLayeredBonePass(after_physics)"] --> B["遍历执行计划中实际存在的 layer"]
     B --> C["BoneManager::PrepareSceneForPhysicsPlaybackLayer"]
     C --> D["按 PMX_BONE_LAYER + append_recursion_depth + bone_index 排序"]
     D --> E["MMDBoneTag::ApplyActiveAnimation"]
@@ -154,6 +167,12 @@ flowchart TD
 完整模型中，`MMDBoneTag::Execute()` 看到 ModelManager 存在时只会 `ApplyActiveAnimation(op, doc, false)`，
 也就是更新 tag 内部求值状态，不直接写场景。真正写场景发生在 ModelManager 的 layered pass、IK/physics
 adapter 写回，以及 BoneManager 消费 runtime override 时。
+
+BoneManager 在每次播放 pass 前通过 `EnsurePlaybackExecutionPlan()` 比较排序/分组参数快照。
+层级或 append 通知会显式使计划失效，直接写入 BaseContainer 的 layer、pre/post phase、IK flag、append
+源与继承标志也会被下一次快照比较检测到。仅发生变化时重新计算顺序；实际存在的 layer 单独存储，避免
+稀疏大 layer 值造成空层遍历。动画顺序保持 `(layer, append_depth, bone_index)`，IK 同层顺序保持 PMX index。
+单独调用 `PrepareSceneForPhysicsPlaybackLayer()` 的代码应先刷新计划，不能绕过一次 pass 的快照入口。
 
 ## 物理 step 与 override
 
@@ -265,3 +284,13 @@ BoneManager 的动画槽状态。因此调试存档重开问题时，要同时�
 现场调试，按 `AGENTS.md` 的 LLDB-DAP attach 流程：先正常启动 C4D 加载插件，再 attach 到进程。
 
 本页使用 Mermaid 作为流程图格式，因为函数名、箭头和运行顺序需要可 diff、可维护、可审查。
+
+## 阶段耗时与回归
+
+设置 `CMT_RUNTIME_PROFILE=1` 后，ModelManager 输出 `[CMT][RuntimeProfile]`，包含 `frame`、`rebuildMs`、
+`animationMs`、`ikMs`、`physicsMs`、`morphMs`、`materialMs` 和累计 `planRebuilds`。
+关闭时不读取时钟；嵌套文档求值使用独立统计并恢复外层上下文。统计覆盖当前线程调用栈中的阶段，
+`morphMs` 包含其材质同步子阶段，数值不能简单相加，也不能作为跨线程整帧总耗时。
+
+算法、输入 fixture 和回执检查通过后，还需要按 [regression.md](regression.md) 在真实 C4D 中执行
+场景保存重开、模式/层级/动画槽/物理和材质回归；编译和纯逻辑测试不能替代原生场景验收。

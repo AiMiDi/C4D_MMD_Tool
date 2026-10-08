@@ -18,10 +18,14 @@ Description:	morph UI data util
 class MorphUIData final
 {
 	DescID strength_id;
-	BaseTag* morph_tag;
+	// Undo may replace a mesh and its tags without replacing this cache owner.
+	// A BaseLink invalidates safely; a cached BaseTag* can become freed memory.
+	maxon::StrongRef<AutoAlloc<BaseLink>> morph_tag;
 public:
-	MorphUIData(BaseTag* tag = nullptr, DescID id = {}) : strength_id(std::move(id)), morph_tag(tag)
+	MorphUIData(BaseTag* tag = nullptr, DescID id = {}) : strength_id(std::move(id))
 	{
+		iferr (morph_tag = maxon::StrongRef<AutoAlloc<BaseLink>>::Create()) { return; }
+		if (morph_tag && *morph_tag) (*morph_tag)->SetLink(tag);
 	}
 
 	~MorphUIData() = default;
@@ -45,22 +49,28 @@ public:
 	}
 	[[nodiscard]] Bool Compare(BaseTag* const tag, const DescID& id) const
 	{
-		return morph_tag == tag && strength_id == id;
+		return ResolveTag() == tag && strength_id == id;
+	}
+	[[nodiscard]] BaseTag* ResolveTag() const
+	{
+		return morph_tag && *morph_tag ? static_cast<BaseTag*>((*morph_tag)->ForceGetLink()) : nullptr;
 	}
 
 	void SetStrength(const Float& strength) const
 	{
-		if (!morph_tag)
+		BaseTag* tag = ResolveTag();
+		if (!tag)
 			return;
-		morph_tag->SetParameter(strength_id, strength, DESCFLAGS_SET::NONE);
+		tag->SetParameter(strength_id, strength, DESCFLAGS_SET::NONE);
 	}
 
 	[[nodiscard]] Float GetStrength() const
 	{
-		if (!morph_tag)
+		BaseTag* tag = ResolveTag();
+		if (!tag)
 			return 0.0;
 		GeData ge_data;
-		if (!morph_tag->GetParameter(strength_id, ge_data, DESCFLAGS_GET::NONE))
+		if (!tag->GetParameter(strength_id, ge_data, DESCFLAGS_GET::NONE))
 			return 0.0;
 		return ge_data.GetFloat();
 	}
