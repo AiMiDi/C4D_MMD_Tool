@@ -81,7 +81,7 @@ Windows development: `cmake --preset dev-windows` then `cmake --build --preset w
 
 The latest three releases are listed here. See the [complete changelog](CHANGELOG.md) for older versions and intermediate build tags.
 
-### 0.9.2.0 · Architecture, Morph and materials (2026-10-08)
+### 0.9.2.1 · Architecture, Morph and materials (2026-10-08)
 
 Changes since `v0.9.1.20`, grouped by module:
 
