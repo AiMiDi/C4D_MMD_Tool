@@ -86,7 +86,7 @@ This work continues the architecture, import/export and development-workflow ref
 8. Unify shared source, resources and the common CMake layer across SDKs, with explicit Debug, Release and test presets. Ship real resource copies with plugin outputs and update Windows installer, macOS packaging and CI workflows.
 9. Add algorithm tests, deterministic fixtures, native C4D scene regressions and build-identified validation records. Expand import, export, runtime and debugging documentation, and refresh the feature screenshots in both READMEs.
 
-**Validation status:** Selected algorithm, build and native scene checks have recorded results. Complete production MCP, real-model physics replay and cross-platform release acceptance still require follow-up. This record will be updated as release validation progresses.
+**Validation status:** The working-tree production MCP implementation passed the Windows / Cinema 4D 2026.4+ acceptance scope on 2026-10-08: 16 tools, normal Release with the test bridge OFF, real HTTP/stdio operations, timeout recovery and host restart. See the [acceptance record](docs/dev/mcp-acceptance-20261008.md). macOS and older-host UI execution are explicitly deferred and unverified. Real-model physics replay and public-release acceptance remain separate work.
 
 Existing historical entries are retained below in descending version order. See [GitHub Releases](https://github.com/AiMiDi/C4D_MMD_Tool/releases) for releases not recorded here.
 

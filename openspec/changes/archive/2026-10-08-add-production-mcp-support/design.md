@@ -4,7 +4,7 @@
 
 需求动机见 proposal.md。本机 C4D 2026.4.0 的宿主 MCP 已实际提供 `exec_python`、对象/参数和文档工具。
 当前安装的 catalog 说明可覆写层仅支持工具描述等展示信息，未发现可依赖的第三方工具注册契约。
-本轮原生业务回归通过，但入口属于默认关闭的测试桥；生产接口、句柄协议和 Release MCP 验收均尚未实现。
+提案时业务回归入口属于默认关闭的测试桥。当时生产接口与 Release MCP 尚未实现；2026-10-08 已完成本提案 Windows 范围的生产接口、句柄与普通 Release 验收，证据见 tasks.md。
 
 ## Goals / Non-Goals
 
@@ -75,7 +75,7 @@
 ### 6. 发行与 SDK 兼容
 
 公共 CMake 层管理生产桥及适配器打包，SDK wrapper 保持薄封装。SDK 差异使用 `module/core/cmt_marco.h` 的兼容设施。
-首个实机验收基线为 Windows/C4D 2026.4.0，补齐 macOS；无宿主 MCP 的旧 C4D 明确报告 transport 不支持，原插件功能照常可用。
+首个实机验收基线为 Windows/C4D 2026.4.0。2026-10-08 用户明确允许因缺少设备跳过本轮 macOS 实机验证；其状态为 deferred / unverified，不作为 Windows 交付的通过证据或阻塞条件。无宿主 MCP 的旧 C4D 明确报告 transport 不支持，原插件功能照常可用；兼容编译和旧宿主实际运行分别登记。用户同日也允许将旧宿主 UI 实测延期并保留 unverified。
 文档提供本地 token 文件/配置入口和 stdio 客户端示例，不写入实际 secret；插件 API 默认包含不等于自动启用宿主服务。
 
 本需求不预设 C++ SDK 升级。现有 `sdk_2026` 产物已在 C4D 2026.4.0 执行九项原生业务回归；

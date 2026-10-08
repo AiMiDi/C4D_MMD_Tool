@@ -1,0 +1,90 @@
+{
+  "date": "2026-10-08",
+  "status": "passed",
+  "scope": "Windows / Cinema 4D 2026.4+ production MCP",
+  "module": {
+    "path": "C:\\code\\C4D_MMD_Tool\\_build_msvc\\sdk_2026_release_candidate\\bin\\Release\\plugins\\mmdtool\\mmdtool.xdl64",
+    "bytes": 3062272,
+    "sha256": "806a50913b36db18a894c11ce868e74cb3908d741d9c65d476658e6d090e0422"
+  },
+  "source_sha256": "f75f9c77494be0214803a60b516670fcb4e7e6fbbd899e201d931f60a8f04899",
+  "regression_bridge": "OFF",
+  "typed_mcp": {
+    "receipt": "typed/receipt.json",
+    "stages": 8,
+    "tools": 16,
+    "invalid_imports": 9,
+    "write_failures": 12
+  },
+  "uv": {
+    "receipt": "uv/receipt.json",
+    "cases": 4,
+    "channel": "ordinary UV",
+    "additional_uv": "not_covered"
+  },
+  "impulse": {
+    "receipt": "impulse/receipt.json",
+    "cases": 7,
+    "physics_application": "not_covered"
+  },
+  "recovery": {
+    "before": "recovery-before/before-restart.json",
+    "after": "recovery-after/after-restart.json",
+    "fault": "2.5 second HTTP response delay after actual native execution",
+    "replayed_mutations": 0,
+    "host_pids": [
+      58448,
+      35888
+    ],
+    "stale_handle_rejections": 5,
+    "expired_http_session": "not_applicable_stateless_host"
+  },
+  "business": {
+    "receipt": "business/receipt.json",
+    "cases": 9,
+    "test_bridge": "ON",
+    "production_evidence": false
+  },
+  "ctest": {
+    "log": "logic-tests.log",
+    "cases": 19
+  },
+  "adapter": {
+    "log": "adapter-tests.log",
+    "tests": 35
+  },
+  "sdk_compile": [
+    "2026 Release",
+    "R20 Debug"
+  ],
+  "deferred": {
+    "macos": "user-authorized unverified",
+    "older_host_ui": "user-authorized unverified"
+  },
+  "public_release_accepted": false,
+  "implementation_fully_committed": false,
+  "runtime_resources": {
+    "cases": 9,
+    "log": "runtime-resources.log"
+  },
+  "installer_rules": {
+    "pinned_cases": 6,
+    "legacy_cases": 6,
+    "logs": [
+      "installer-resources-final.log",
+      "installer-resources-legacy.log"
+    ]
+  },
+  "openspec": {
+    "change_tasks": "19/19",
+    "archive": "openspec/changes/archive/2026-10-08-add-production-mcp-support",
+    "archived_strict": "19/19",
+    "mcp_spec_strict": "passed",
+    "global_main_specs_strict": "23/31; eight existing unrelated warning failures"
+  },
+  "commits": {
+    "uv": "4de2b04f",
+    "validation": "8be851a7",
+    "packaging_fixture": "cab5deb9"
+  }
+}

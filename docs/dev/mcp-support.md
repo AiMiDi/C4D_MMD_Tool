@@ -1,14 +1,16 @@
 # 生产 MCP 支持：实现与验收状态
 
-状态：**生产 API、16 个 typed tools 和 stdio 适配器已实现；Windows 普通 Release 的八阶段原生验收通过，跨平台发行验收尚未完成**。
-本页状态核对日期为 2026-10-06，不表示 GitHub 已发布的安装包已经包含这些改动。
+状态：**生产 API、16 个 typed tools 和 stdio 适配器已实现；2026-10-08 的 Windows / C4D 2026.4+ 验收范围完成，OpenSpec 19/19**。
+macOS 和旧宿主 UI 按用户明确要求延期，保持未验证。公开发行尚未验收；本状态不表示 GitHub 已发布安装包包含这些改动。
+最新 [验收记录](mcp-acceptance-20261008.md)包含同一普通 Release、桥 OFF 的八阶段、UV/Impulse 数据、
+真实响应超时/重连、宿主重启及干净客户端证据。模块为 `806a5091…`，源码/资源指纹为 `f75f9c77…`。
 本轮按模块提交时，Python 客户端、测试及构建资源已分别固化；C++ dispatcher 与共享 ModelManager
 仍与进行中的材质验收一起保留在工作树。下列原生结果属于明确标识的已构建模块，
 不能据此认定仅检出这些部分提交就已经具备完整生产 API。
-对应 OpenSpec：[proposal](../../openspec/changes/add-production-mcp-support/proposal.md)、
-[design](../../openspec/changes/add-production-mcp-support/design.md)、
-[spec](../../openspec/changes/add-production-mcp-support/specs/mcp-mmd-operations/spec.md)、
-[tasks](../../openspec/changes/add-production-mcp-support/tasks.md)。
+对应 OpenSpec：[proposal](../../openspec/changes/archive/2026-10-08-add-production-mcp-support/proposal.md)、
+[design](../../openspec/changes/archive/2026-10-08-add-production-mcp-support/design.md)、
+[spec](../../openspec/changes/archive/2026-10-08-add-production-mcp-support/specs/mcp-mmd-operations/spec.md)、
+[tasks](../../openspec/changes/archive/2026-10-08-add-production-mcp-support/tasks.md)。
 
 普通 Debug/Release 的公共构建层默认包含生产 API，并同步 `mcp/` 运行文件。
 薄 stdio 适配器公开 `mmdtool_*` 工具，通过已授权的 C4D 宿主 MCP 发送固定调用。
@@ -32,7 +34,8 @@ VPD 和专用定义编辑工具留作后续扩展。
 | Windows PMX 初段集成 | 通过 | 普通 Release、回归桥 OFF；跨 HTTP/stdio 去重、状态查询、包含材质的单步 Undo/Redo、同名多文档及显式实例隔离通过 |
 | Windows 后续集成 | 八阶段通过 | setup/discovery/model/motion/camera/invalid/lifecycle/cleanup 全部通过；动作槽、模式、表情、物理开关、精确时间、导出与源状态保持、复制/删除/重开句柄验证完成；不包含真实模型的物理重放或默认材质外观验收 |
 | 运行文件/安装规则 fixture | 已通过 | 真实 pinned installer 输入的 resource fixture 6/6、runtime resource fixture 9/9，以及正常 Release、回归桥 OFF 的真实 `res/` 和 `mcp/` 副本已核对；不表示 ISCC 安装包或全 SDK 发行矩阵验收完成 |
-| macOS 生产 MCP | 尚未验收 | 没有对应宿主、模块身份和 typed tools 实机证据 |
+| Windows 2026-10-08 补齐 | 通过 | UV 4 例、Impulse 7 例、无效导入 9 例、准确名称报告、响应超时去重、宿主重启旧句柄拒绝与干净客户端均通过；见最新验收记录 |
+| macOS 生产 MCP / 旧宿主 UI | 延期，未验证 | 用户明确允许排除本轮；不登记为通过 |
 
 较早 `49d331…` 模块的失败 receipt 保持 `acceptance_eligible=false`、`status=incomplete`。
 补充原生探测发现：包含材质的 PMX 导入，第一次 Redo 只恢复材质，第二次才恢复模型；
@@ -126,7 +129,7 @@ PMX 2.0 尾部格式失败和测试端状态字段错误的旧收据保持失败
 与八 SDK Release 构建、实际安装文件身份核对、ISCC 候选包及隔离安装/重复安装/卸载记录一并归档。
 安装测试使用私有 AppId 和目录、真实 Release 文件，869 项文件哈希通过；没有把公开 AppId 的候选包安装到用户 host。
 
-尚需完成：真实宿主超时/重连集成、宿主重启后的完整身份矩阵、UV Morph 导出保真、
-旧宿主 UI 运行、macOS 对应接入与实际发行包验证。当前 Windows 八阶段通过不能代替这些范围。
+2026-10-08 已补齐响应超时/重连集成、宿主重启后的身份矩阵、普通 UV Morph 和 Impulse 数据导出。
+旧宿主 UI 与 macOS 依用户明确调整延期，实际公开发行包验证仍独立保留。此前历史模块的八阶段记录不覆盖本次新增范围。
 真实阿芙 0–60 帧的严格 seek 重放仍失败，另见 [剩余验证](remaining-validation.md)；
 物理开关工具的事务验证不意味着物理模拟重放已经通过。

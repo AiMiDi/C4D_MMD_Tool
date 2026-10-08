@@ -8,7 +8,7 @@
 
 **开发文档：** [DEVELOPMENT_zh.md](DEVELOPMENT_zh.md) · [English DEVELOPMENT.md](DEVELOPMENT.md)
 
-**MCP 接入：** [客户端配置](docs/dev/mcp-client.md) · [实现与验收状态](docs/dev/mcp-support.md)。当前工作树已实现 16 个生产工具和 stdio 适配器，Python 协议 fixture 35/35 通过；Windows 普通 Release 的八阶段原生验收已通过，macOS 和完整发行尚未验收。
+**MCP 接入：** [客户端配置](docs/dev/mcp-client.md) · [实现与验收状态](docs/dev/mcp-support.md) · [2026-10-08 验收](docs/dev/mcp-acceptance-20261008.md)。当前工作树的 16 个生产工具与适配器已完成 Windows / C4D 2026.4+ 验收，包含普通 Release/桥 OFF 的真实调用、超时恢复与宿主重启。macOS 和旧宿主 UI 已明确延期并保留未验证；公开发行尚未验收。
 
 ## 关于
 
@@ -105,7 +105,7 @@ Cinema 4D的mmdtool。
 8. 统一多 SDK 的源码、资源和公共 CMake 构建层，明确 Debug / Release / 测试预设；插件产物使用真实资源副本，并同步调整 Windows 安装包、macOS 打包和 CI 构建流程。
 9. 增加算法测试、确定性输入、C4D 场景回归和带构建身份的验证记录；补充导入、导出、运行时与调试文档，更新中英文 README 的功能截图。
 
-**验收进度：** 部分算法、构建及原生场景回归已有验证记录；生产 MCP 完整流程、真实模型物理重放和跨平台发行验收仍需收尾，后续将随发行验收更新此记录。
+**验收进度：** 生产 MCP 当前 Windows 范围已完成（19/19），真实模型物理重放与公开发行仍独立验收。macOS 和旧宿主 UI 的延期状态不记为通过，后续有条件时补测。
 
 以下保留已有历史条目并按版本号倒序排列；未收录的发行版本可查看 [GitHub Releases](https://github.com/AiMiDi/C4D_MMD_Tool/releases)。
 

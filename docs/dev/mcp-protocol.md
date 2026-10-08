@@ -199,4 +199,10 @@ runner 使用真实 stdio subprocess 和真实 HTTP typed 调用；创建、复�
 当前 Windows 普通 Release、回归桥 OFF 的八阶段已通过，原文档已恢复，所属文档全部关闭。
 manifest 同时记录 libMMD/Bullet 维护源码、submodule HEAD/源码脏状态与该 cache 的实际静态链接输入；
 完整依赖快照未确认的 run 不能成为新的完整验收通过记录。源码/库变动后使用新 run，旧 manifest 不改写。
-这些是切片身份及原生结果，不构成依赖历史构建来源证明。macOS 和真实宿主超时恢复仍待对应验收。
+这些是切片身份及原生结果，不构成依赖历史构建来源证明。2026-10-08 的响应超时、去重重连和宿主重启
+已通过，见 [最新验收记录](mcp-acceptance-20261008.md)。macOS 与旧宿主 UI 依用户要求延期，保留未验证。
+
+两阶段恢复 runner `scripts/c4d_mcp_recovery_validation.py` 的 `--phase before-restart` 使用真实普通打包适配器，
+在本机故障代理中延迟已执行的响应；`--phase after-restart` 检查新宿主 nonce、旧句柄拒绝与新句柄可用。
+每阶段使用新的准备记录并验证普通 Release 模块和回归桥 OFF。两阶段之间只重启已清理的测试宿主，
+保留 `before-restart.json`、保存场景和 `after-restart.json`，不自动终止或重启用户宿主。

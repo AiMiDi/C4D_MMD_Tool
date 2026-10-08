@@ -1,10 +1,11 @@
-# Spec Delta
+# mcp-mmd-operations Specification
 
 ## Purpose
-
 Provide discoverable, typed MCP access to production MMD operations, with explicit scene identity, documented options, transactional mutations, and verifiable release behavior.
 
-## ADDED Requirements
+The accepted execution scope for this delivery is Windows / Cinema 4D 2026.4+ and SDK 2026/R20 compilation. On 2026-10-08 the user explicitly deferred macOS and older-host UI execution; both remain unverified, not passed. This scope does not constitute public-release or cross-platform runtime acceptance.
+
+## Requirements
 
 ### Requirement: Production API availability in normal releases
 Normal Debug and Release distributions SHALL include the production MMD automation API and its maintained MCP adapter by default. Availability MUST NOT require enabling the runtime regression bridge. Host MCP activation and credentials SHALL remain explicit user configuration.

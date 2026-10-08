@@ -20,9 +20,10 @@ MMD Tool 的生产 API 与运行期回归桥是独立入口。`mcp/` 内的 `mmd
 当前实施及实机验收状态以 [MCP 支持说明](mcp-support.md) 和该 change 的验证记录为准；
 协议 fixture 通过不能代替同一个 Release 模块的 C4D 实机验收。
 
-截至 2026-10-06，Python fixture 为 35/35 通过；Windows 普通 Release、回归桥 OFF 的真实连接和
-16 工具发现已执行，PMX 导入及 Undo 通过，但一次 Redo 未恢复模型，集成 runner 在此停止。
-后续业务阶段及 macOS 尚未完成生产 MCP 验收。当前工作树的实现状态不表示已发布安装包包含这些改动。
+截至 2026-10-08，Python fixture 为 35/35 通过；普通 Release、回归桥 OFF 的 Windows 八阶段、
+PMX 单步 Undo/Redo、真实响应超时与去重恢复、宿主重启及干净客户端接入均已通过。
+macOS 和旧宿主 UI 依用户明确要求延期并保留未验证；见 [完整记录](mcp-acceptance-20261008.md)。
+当前工作树的实现状态不表示已发布安装包包含这些改动。
 
 ## 启动与客户端配置
 
@@ -64,7 +65,7 @@ python C:\path\to\mmdtool\mcp\run_mmdtool_mcp.py `
 固定宿主调用使用 SDK 支持的 `MSG_BASECONTAINER` 和调用者拥有的临时容器。请求及响应不会写入场景中
 SceneHook 的持久数据；当 Python 绑定复制消息容器时，响应从插件的只读、非序列化成员缓存取得。
 普通读取工具因此不应改变文档脏状态或 Undo/Redo 历史。首次使用该传输必须使用包含对应入口的新插件模块。
-这是传输设计边界；当前 PMX Undo/Redo 的实机失败仍待修复，不能把临时容器改动视为完整事务验收已通过。
+这是传输设计边界；PMX Undo/Redo 的早期失败已修复并重跑通过，临时容器机制本身不代替事务实测。
 具体 packet 和响应读取约定见 [协议维护说明](mcp-protocol.md)。
 
 ## 工具与选项
