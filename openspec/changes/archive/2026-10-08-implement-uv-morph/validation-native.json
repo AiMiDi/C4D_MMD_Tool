@@ -1,0 +1,650 @@
+{
+  "import": {
+    "status": "passed",
+    "phase": "import",
+    "native_executed": true,
+    "c4d_version": 2026400,
+    "host_pid": 20696,
+    "module": {
+      "path": "S:\\tmp\\cmt-morph-completion-20261008\\plugins\\mmdtool\\mmdtool.xdl64",
+      "sha256": "e5c0501cebb1af35ecb2320fede99eebb80261152461694bb58add078eeb2b34"
+    },
+    "rendered_uv_fidelity": false,
+    "cases": [
+      {
+        "case": "single-mesh",
+        "status": "passed",
+        "description": {
+          "types": {
+            "AddUV1": 16,
+            "AddUV2": 16,
+            "AddUV3": 16,
+            "AddUV4": 16,
+            "UV": 16,
+            "Vertex": 4
+          },
+          "groups": {
+            "MODEL_MORPH_MESH_GRP": 1015,
+            "MODEL_MORPH_UV_GRP": 1016
+          },
+          "sliders": {
+            "Vertex": {
+              "id": [
+                700,
+                6
+              ],
+              "parent": 1015,
+              "strength": 0.0
+            },
+            "UV": {
+              "id": [
+                700,
+                5
+              ],
+              "parent": 1016,
+              "strength": 0.0
+            },
+            "AddUV1": {
+              "id": [
+                700,
+                1
+              ],
+              "parent": 1016,
+              "strength": 0.0
+            },
+            "AddUV2": {
+              "id": [
+                700,
+                2
+              ],
+              "parent": 1016,
+              "strength": 0.0
+            },
+            "AddUV3": {
+              "id": [
+                700,
+                3
+              ],
+              "parent": 1016,
+              "strength": 0.0
+            },
+            "AddUV4": {
+              "id": [
+                700,
+                4
+              ],
+              "parent": 1016,
+              "strength": 0.0
+            }
+          },
+          "polygon_objects": 1
+        },
+        "weighted_description": {
+          "types": {
+            "AddUV1": 16,
+            "AddUV2": 16,
+            "AddUV3": 16,
+            "AddUV4": 16,
+            "UV": 16,
+            "Vertex": 4
+          },
+          "groups": {
+            "MODEL_MORPH_MESH_GRP": 1015,
+            "MODEL_MORPH_UV_GRP": 1016
+          },
+          "sliders": {
+            "Vertex": {
+              "id": [
+                700,
+                6
+              ],
+              "parent": 1015,
+              "strength": 0.1
+            },
+            "UV": {
+              "id": [
+                700,
+                5
+              ],
+              "parent": 1016,
+              "strength": 0.2
+            },
+            "AddUV1": {
+              "id": [
+                700,
+                1
+              ],
+              "parent": 1016,
+              "strength": 0.3
+            },
+            "AddUV2": {
+              "id": [
+                700,
+                2
+              ],
+              "parent": 1016,
+              "strength": 0.4
+            },
+            "AddUV3": {
+              "id": [
+                700,
+                3
+              ],
+              "parent": 1016,
+              "strength": 0.5
+            },
+            "AddUV4": {
+              "id": [
+                700,
+                4
+              ],
+              "parent": 1016,
+              "strength": 0.6
+            }
+          },
+          "polygon_objects": 1
+        },
+        "scene": {
+          "path": "S:\\tmp\\cmt-uv-morph-20261008-103036\\evidence-mcp\\single-mesh.c4d",
+          "sha256": "81f56763e9b7a06ed6248e2e6da402e45cf647395df390f2ed202109ca60c10e"
+        },
+        "reopened_description": {
+          "types": {
+            "AddUV1": 16,
+            "AddUV2": 16,
+            "AddUV3": 16,
+            "AddUV4": 16,
+            "UV": 16,
+            "Vertex": 4
+          },
+          "groups": {
+            "MODEL_MORPH_MESH_GRP": 1015,
+            "MODEL_MORPH_UV_GRP": 1016
+          },
+          "sliders": {
+            "Vertex": {
+              "id": [
+                700,
+                6
+              ],
+              "parent": 1015,
+              "strength": 0.1
+            },
+            "UV": {
+              "id": [
+                700,
+                5
+              ],
+              "parent": 1016,
+              "strength": 0.2
+            },
+            "AddUV1": {
+              "id": [
+                700,
+                1
+              ],
+              "parent": 1016,
+              "strength": 0.3
+            },
+            "AddUV2": {
+              "id": [
+                700,
+                2
+              ],
+              "parent": 1016,
+              "strength": 0.4
+            },
+            "AddUV3": {
+              "id": [
+                700,
+                3
+              ],
+              "parent": 1016,
+              "strength": 0.5
+            },
+            "AddUV4": {
+              "id": [
+                700,
+                4
+              ],
+              "parent": 1016,
+              "strength": 0.6
+            }
+          },
+          "polygon_objects": 1
+        },
+        "cleanup": {
+          "owner_run_id": "31ff6d94-d6be-474b-9487-7589b16bb25e",
+          "closed_owned_documents": [
+            "reopened single-mesh-same-host"
+          ],
+          "released_nonlive_documents": [],
+          "remaining_owned_documents": [],
+          "errors": [],
+          "original_document_restored": true
+        }
+      },
+      {
+        "case": "multipart",
+        "status": "passed",
+        "description": {
+          "types": {
+            "AddUV1": 16,
+            "AddUV2": 16,
+            "AddUV3": 16,
+            "AddUV4": 16,
+            "UV": 16,
+            "Vertex": 4
+          },
+          "groups": {
+            "MODEL_MORPH_MESH_GRP": 1015,
+            "MODEL_MORPH_UV_GRP": 1016
+          },
+          "sliders": {
+            "Vertex": {
+              "id": [
+                700,
+                6
+              ],
+              "parent": 1015,
+              "strength": 0.0
+            },
+            "UV": {
+              "id": [
+                700,
+                5
+              ],
+              "parent": 1016,
+              "strength": 0.0
+            },
+            "AddUV1": {
+              "id": [
+                700,
+                1
+              ],
+              "parent": 1016,
+              "strength": 0.0
+            },
+            "AddUV2": {
+              "id": [
+                700,
+                2
+              ],
+              "parent": 1016,
+              "strength": 0.0
+            },
+            "AddUV3": {
+              "id": [
+                700,
+                3
+              ],
+              "parent": 1016,
+              "strength": 0.0
+            },
+            "AddUV4": {
+              "id": [
+                700,
+                4
+              ],
+              "parent": 1016,
+              "strength": 0.0
+            }
+          },
+          "polygon_objects": 2
+        },
+        "weighted_description": {
+          "types": {
+            "AddUV1": 16,
+            "AddUV2": 16,
+            "AddUV3": 16,
+            "AddUV4": 16,
+            "UV": 16,
+            "Vertex": 4
+          },
+          "groups": {
+            "MODEL_MORPH_MESH_GRP": 1015,
+            "MODEL_MORPH_UV_GRP": 1016
+          },
+          "sliders": {
+            "Vertex": {
+              "id": [
+                700,
+                6
+              ],
+              "parent": 1015,
+              "strength": 0.1
+            },
+            "UV": {
+              "id": [
+                700,
+                5
+              ],
+              "parent": 1016,
+              "strength": 0.2
+            },
+            "AddUV1": {
+              "id": [
+                700,
+                1
+              ],
+              "parent": 1016,
+              "strength": 0.3
+            },
+            "AddUV2": {
+              "id": [
+                700,
+                2
+              ],
+              "parent": 1016,
+              "strength": 0.4
+            },
+            "AddUV3": {
+              "id": [
+                700,
+                3
+              ],
+              "parent": 1016,
+              "strength": 0.5
+            },
+            "AddUV4": {
+              "id": [
+                700,
+                4
+              ],
+              "parent": 1016,
+              "strength": 0.6
+            }
+          },
+          "polygon_objects": 2
+        },
+        "scene": {
+          "path": "S:\\tmp\\cmt-uv-morph-20261008-103036\\evidence-mcp\\multipart.c4d",
+          "sha256": "9e78d011cd69234463a3cf828e1965555813ce1b6e2e752f5b711babbec3b974"
+        },
+        "reopened_description": {
+          "types": {
+            "AddUV1": 16,
+            "AddUV2": 16,
+            "AddUV3": 16,
+            "AddUV4": 16,
+            "UV": 16,
+            "Vertex": 4
+          },
+          "groups": {
+            "MODEL_MORPH_MESH_GRP": 1015,
+            "MODEL_MORPH_UV_GRP": 1016
+          },
+          "sliders": {
+            "Vertex": {
+              "id": [
+                700,
+                6
+              ],
+              "parent": 1015,
+              "strength": 0.1
+            },
+            "UV": {
+              "id": [
+                700,
+                5
+              ],
+              "parent": 1016,
+              "strength": 0.2
+            },
+            "AddUV1": {
+              "id": [
+                700,
+                1
+              ],
+              "parent": 1016,
+              "strength": 0.3
+            },
+            "AddUV2": {
+              "id": [
+                700,
+                2
+              ],
+              "parent": 1016,
+              "strength": 0.4
+            },
+            "AddUV3": {
+              "id": [
+                700,
+                3
+              ],
+              "parent": 1016,
+              "strength": 0.5
+            },
+            "AddUV4": {
+              "id": [
+                700,
+                4
+              ],
+              "parent": 1016,
+              "strength": 0.6
+            }
+          },
+          "polygon_objects": 2
+        },
+        "cleanup": {
+          "owner_run_id": "f4f3dd60-fb56-4199-8666-4044a30e8801",
+          "closed_owned_documents": [
+            "reopened multipart-same-host"
+          ],
+          "released_nonlive_documents": [],
+          "remaining_owned_documents": [],
+          "errors": [],
+          "original_document_restored": true
+        }
+      }
+    ],
+    "fixture": {
+      "path": "S:\\tmp\\cmt-uv-morph-20261008-103036\\evidence-mcp\\uv-classification.pmx",
+      "sha256": "9e9a65d41464dcce294fa022110ed5276512e6feed34fae97e120e4773416b17",
+      "morph_types": {
+        "Vertex": 4,
+        "UV": 16,
+        "AddUV1": 16,
+        "AddUV2": 16,
+        "AddUV3": 16,
+        "AddUV4": 16
+      }
+    }
+  },
+  "reload": {
+    "status": "passed",
+    "phase": "reload",
+    "native_executed": true,
+    "c4d_version": 2026400,
+    "host_pid": 20696,
+    "module": {
+      "path": "S:\\tmp\\cmt-morph-completion-20261008\\plugins\\mmdtool\\mmdtool.xdl64",
+      "sha256": "e5c0501cebb1af35ecb2320fede99eebb80261152461694bb58add078eeb2b34"
+    },
+    "rendered_uv_fidelity": false,
+    "cases": [
+      {
+        "case": "single-mesh",
+        "status": "passed",
+        "description": {
+          "types": {
+            "AddUV1": 16,
+            "AddUV2": 16,
+            "AddUV3": 16,
+            "AddUV4": 16,
+            "UV": 16,
+            "Vertex": 4
+          },
+          "groups": {
+            "MODEL_MORPH_MESH_GRP": 1015,
+            "MODEL_MORPH_UV_GRP": 1016
+          },
+          "sliders": {
+            "Vertex": {
+              "id": [
+                700,
+                6
+              ],
+              "parent": 1015,
+              "strength": 0.1
+            },
+            "UV": {
+              "id": [
+                700,
+                5
+              ],
+              "parent": 1016,
+              "strength": 0.2
+            },
+            "AddUV1": {
+              "id": [
+                700,
+                1
+              ],
+              "parent": 1016,
+              "strength": 0.3
+            },
+            "AddUV2": {
+              "id": [
+                700,
+                2
+              ],
+              "parent": 1016,
+              "strength": 0.4
+            },
+            "AddUV3": {
+              "id": [
+                700,
+                3
+              ],
+              "parent": 1016,
+              "strength": 0.5
+            },
+            "AddUV4": {
+              "id": [
+                700,
+                4
+              ],
+              "parent": 1016,
+              "strength": 0.6
+            }
+          },
+          "polygon_objects": 1
+        },
+        "scene": {
+          "path": "S:\\tmp\\cmt-uv-morph-20261008-103036\\evidence-mcp\\single-mesh.c4d",
+          "sha256": "81f56763e9b7a06ed6248e2e6da402e45cf647395df390f2ed202109ca60c10e"
+        },
+        "cleanup": {
+          "owner_run_id": "ac4dda2b-f806-4912-9c64-cc9703b205dc",
+          "closed_owned_documents": [
+            "single-mesh"
+          ],
+          "released_nonlive_documents": [],
+          "remaining_owned_documents": [],
+          "errors": [],
+          "original_document_restored": true
+        }
+      },
+      {
+        "case": "multipart",
+        "status": "passed",
+        "description": {
+          "types": {
+            "AddUV1": 16,
+            "AddUV2": 16,
+            "AddUV3": 16,
+            "AddUV4": 16,
+            "UV": 16,
+            "Vertex": 4
+          },
+          "groups": {
+            "MODEL_MORPH_MESH_GRP": 1015,
+            "MODEL_MORPH_UV_GRP": 1016
+          },
+          "sliders": {
+            "Vertex": {
+              "id": [
+                700,
+                6
+              ],
+              "parent": 1015,
+              "strength": 0.1
+            },
+            "UV": {
+              "id": [
+                700,
+                5
+              ],
+              "parent": 1016,
+              "strength": 0.2
+            },
+            "AddUV1": {
+              "id": [
+                700,
+                1
+              ],
+              "parent": 1016,
+              "strength": 0.3
+            },
+            "AddUV2": {
+              "id": [
+                700,
+                2
+              ],
+              "parent": 1016,
+              "strength": 0.4
+            },
+            "AddUV3": {
+              "id": [
+                700,
+                3
+              ],
+              "parent": 1016,
+              "strength": 0.5
+            },
+            "AddUV4": {
+              "id": [
+                700,
+                4
+              ],
+              "parent": 1016,
+              "strength": 0.6
+            }
+          },
+          "polygon_objects": 2
+        },
+        "scene": {
+          "path": "S:\\tmp\\cmt-uv-morph-20261008-103036\\evidence-mcp\\multipart.c4d",
+          "sha256": "9e78d011cd69234463a3cf828e1965555813ce1b6e2e752f5b711babbec3b974"
+        },
+        "cleanup": {
+          "owner_run_id": "821ce966-40fc-40ec-baca-8d80df035f0f",
+          "closed_owned_documents": [
+            "multipart"
+          ],
+          "released_nonlive_documents": [],
+          "remaining_owned_documents": [],
+          "errors": [],
+          "original_document_restored": true
+        }
+      }
+    ],
+    "fixture": {
+      "path": "S:\\tmp\\cmt-uv-morph-20261008-103036\\evidence-mcp\\uv-classification.pmx",
+      "sha256": "9e9a65d41464dcce294fa022110ed5276512e6feed34fae97e120e4773416b17",
+      "morph_types": {
+        "Vertex": 4,
+        "UV": 16,
+        "AddUV1": 16,
+        "AddUV2": 16,
+        "AddUV3": 16,
+        "AddUV4": 16
+      }
+    }
+  },
+  "test_script": {
+    "path": "tests/uv_morph_native_test.py",
+    "sha256": "b99d62303f307e08ac47dde89212fe5eb9f45f6892206ec6e3b9588a65bffde5"
+  }
+}

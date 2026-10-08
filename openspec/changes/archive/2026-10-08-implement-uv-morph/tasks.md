@@ -27,7 +27,7 @@
 ## 5. Verification
 
 - [x] 5.1 Build project and verify no compile errors
-- [ ] 5.2 Import a PMX model with UV morphs and verify they appear under the UV morph group in the attribute manager
-- [ ] 5.3 Verify position morphs still appear under the Mesh group
-- [ ] 5.4 Test save/reload scene and confirm UV morph classification persists
+- [x] 5.2 Import a PMX model with UV morphs and verify they appear under the UV morph group in the attribute manager
+- [x] 5.3 Verify position morphs still appear under the Mesh group
+- [x] 5.4 Test save/reload scene and confirm UV morph classification persists
 

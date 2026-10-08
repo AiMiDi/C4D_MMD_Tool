@@ -18,7 +18,7 @@ UV morphs (PMX types UV/AddUV1–4) are already imported from PMX files by `MMDM
 
 ### Modified Capabilities
 
-- `morph-system`: Add UVMorph to the morph type hierarchy and update morph storage/UI contracts.
+- `object-morph-system`: Add UVMorph to the morph type hierarchy and update morph storage/UI contracts.
 
 ## Impact
 

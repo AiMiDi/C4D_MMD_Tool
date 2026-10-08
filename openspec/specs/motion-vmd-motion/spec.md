@@ -3,7 +3,9 @@
 ## Purpose
 
 Import and export VMD motion animations for MMD models. Motion data includes bone keyframes and morph keyframes, applied to an existing `MMDModelManagerObject` in the scene.
+
 ## Requirements
+
 ### Requirement: VMD morph animation playback mechanism
 
 In animation mode (`MODEL_MODE_ANIM`), morph animation playback SHALL be driven by C4D's CTrack system instead of per-frame reads from libMMD's morph weight output. The `MMDMeshManagerObject` SHALL NOT read morph weights from `libmmd::MorphManager` during `MODEL_MODE_ANIM` execution. Instead, morph strength values come from C4D parameters (set by CTrack evaluation), and `UpdateMorph()` dispatches them to mesh/bone managers through existing paths (`SetMorphStrength`, bone morph hubs).
@@ -258,92 +260,25 @@ Motion export SHALL honor channel switches, position scale, frame offset, and ro
 - **WHEN** a motion containing visibility toggles is imported and exported with model info enabled
 - **THEN** exported show/hide transitions retain their values and frame positions
 
-## Overview
+## Implementation overview
 
-Import and export VMD motion animations for MMD models. Motion data includes bone keyframes and morph keyframes, applied to an existing MMDModelManagerObject in the scene.
+VMD bone keys are stored in each bone tag's animation slots. Morph and model-info data have model-manager slot snapshots; the active slot rebuilds CTracks for morph strengths and named IK channels. The model manager owns standalone IK and physics through adapters bound to C4D scene bones.
 
-## Import
+Import preflights enabled channels before mutation and prepares merged arrays before writing them. Replacement updates the active slot, append creates a separate slot, and explicit merge replaces matching name/frame keys with incoming values. Bone, morph and model-info switches are independent. Frame offsets are integral VMD frames at 30 fps.
 
-### Prerequisite
+Scene persistence stores slot metadata and bone-tag keys, rather than a replayable VMDAnimation payload. ModelManager level 5 appends named IK and visibility slots to the older layout. Earlier active tracks migrate before runtime UI/track reconstruction. Native save/reload acceptance is recorded by the regression suite.
 
-A `MMDModelManagerObject` must be selected in the scene. Motion is applied to the model's bone and morph systems.
+Sparse export preserves VMD interpolation and samples authored C4D controls when needed. Baked export evaluates a translated document clone at 30 fps and captures final poses. Export does not modify the original document's time or simulation state. Final baked poses require target physics/append configuration that avoids repeated deformation because VMD cannot encode those rig switches.
 
-### Pipeline
+Detailed maintained flows and acceptance boundaries are documented in `docs/dev/import-flow.md`, `docs/dev/runtime-flow.md` and `docs/dev/regression.md`.
 
-```
-VMD file → libmmd::ReadVMDFile() → VMDFile
-    → CMTToolsManager::ImportVMDMotion(MotionImport)
-        → CMTSceneManager::LoadVMDMotion()
-            → MMDModelManagerObject::LoadVMDMotion()
-                → Creates libmmd::VMDAnimation
-                → Stores in animations_ array
-                → Execute() drives playback + physics
-```
+## Source files
 
-### Settings (`MotionImport`)
-
-| Option | Default | Description |
-|--------|---------|-------------|
-| `position_multiple` | 8.5 | Position scale factor |
-| `time_offset` | 0 | Frame offset |
-| `import_motion` | true | Import bone keyframes |
-| `import_morph` | true | Import morph keyframes |
-| `import_model_info` | true | Import model info (visibility, IK states) |
-| `import_by_local_name` | true | Match bones by local (Japanese) name |
-| `ignore_physical` | true | Skip physical bone animations |
-| `delete_previous_animation` | true | Remove existing animation before import |
-| `detail_report` | false | Show detailed import report |
-
-## Export
-
-`CMTToolsManager::ExportVMDMotion(MotionExport)` → `CMTSceneManager::SaveVMDMotion()`
-
-### Settings (`MotionExport`)
-
-| Option | Default | Description |
-|--------|---------|-------------|
-| `position_multiple` | 8.5 | Position scale factor |
-| `time_offset` | 0 | Frame offset |
-| `use_rotation` | 0 | Rotation conversion mode |
-| `export_motion` | true | Export bone keyframes |
-| `export_morph` | true | Export morph keyframes |
-| `export_model_info` | true | Export model info |
-| `use_bake` | true | Bake animation before export |
-
-## Animation Storage & Persistence
-
-`MMDModelManagerObject` stores `animations_` array of VMD animations. Animation data is persisted across scene save/reload cycles, restoring to the same state after reload.
-
-### Save-Reload-Playback Cycle
-
-- On save: `Write()` serializes animation count, names, and VMD binary data (via `VMDAnimation::Save(VMDFile&)` + `WriteVMDFile()`) to HyperFile
-- On reload: `Read()` deserializes VMD binary data into temporary buffer (`pending_vmd_data_`)
-- On first `Execute()`: `RebuildRuntime()` restores `VMDAnimation` objects from pending data, then releases buffer
-- After restore: `animation_index_` and `animation_items_` are correctly restored; animations play as before save
-
-### VMD Binary Data Staging
-
-During `Read()`, VMD binary data is staged in `pending_vmd_data_` until runtime rebuild completes. The buffer is released after successful or failed rebuild.
-
-## Animation Playback
-
-`MMDModelManagerObject::Execute()` evaluates VMD animations each frame:
-1. Calls `libmmd::VMDAnimation::Evaluate()` for current frame
-2. libMMD resolves IK, inheritance, physics via bullet3
-3. Bone transforms are pushed to C4D joints via `MMDBoneTag`
-
-### Coordinate Conversion (MMD → C4D)
-
-libMMD outputs transforms in original PMX space (left-handed, Z+ into screen). C4D is also left-handed but with Z+ toward viewer. `MMDBoneTag::Execute` applies:
-
-- **Position delta**: Used directly (mesh, frozen positions, and deltas all share original PMX space).
-- **Rotation matrix**: Converted via `S*R*S` (`S=diag(1,1,-1)`) to flip X/Y rotation directions.
-
-## Source Files
-
-| File | Role |
-|------|------|
-| `cmt_tools_manager.cpp` | Import/Export entry points |
-| `CMTSceneManager.cpp` | Load/Save motion logic |
-| `module/tools/object/mmd_model_manager.cpp` | Animation storage + Execute() |
-| `module/tools/tag/mmd_bone.cpp` | Bone transform application |
+| File | Responsibility |
+|------|----------------|
+| `source/cmt_tools_manager.cpp` | File import/export and result reporting |
+| `source/CMTSceneManager.cpp` | Scene entrypoints and scoped import undo |
+| `source/module/tools/object/mmd_model_manager.cpp` | Slots, persistence, import/export and ObjectData entrypoints |
+| `source/module/tools/object/mmd_model_runtime.cpp` | Standalone IK/physics, adapters and layered execution |
+| `source/module/tools/object/mmd_model_morph_runtime.cpp` | Morph strength composition and scene synchronization |
+| `source/module/tools/tag/mmd_bone.cpp` | Bone slot storage and interpolation |

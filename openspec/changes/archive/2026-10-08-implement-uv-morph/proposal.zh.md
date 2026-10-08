@@ -18,7 +18,7 @@ UV 变形（PMX 类型 UV/AddUV1–4）已由 `MMDMeshManagerObject` 从 PMX 文
 
 ### 修改能力
 
-- `morph-system`：在变形类型层次结构中加入 UVMorph，并更新变形存储与 UI 契约。
+- `object-morph-system`：在变形类型层次结构中加入 UVMorph，并更新变形存储与 UI 契约。
 
 ## 影响范围
 
