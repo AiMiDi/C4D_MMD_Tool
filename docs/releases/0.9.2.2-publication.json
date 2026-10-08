@@ -1,0 +1,367 @@
+{
+  "version": "0.9.2.2",
+  "tag": "v0.9.2.2",
+  "source_commit": "eecbf2eb232b36c5e9abfa1f9d8bdb2464d4cd85",
+  "source_tree": "5e81ad8464c43f07a117c1499b9ca1dcb205ccdf",
+  "submodules": {
+    "dependency/bullet3": "63c4d67e337017f9d8b298c900e9aabdb69296e7",
+    "dependency/libMMD": "ecbbaed832377582a3e0f7296febc5186f9d82dd",
+    "setup": "b2b618314ef6bc76fe34a7e3df556c3abaa04bb6"
+  },
+  "package_run": {
+    "id": 37748821198,
+    "url": "https://github.com/AiMiDi/C4D_MMD_Tool/actions/runs/37748821198",
+    "conclusion": "success",
+    "sdk_builds": [
+      {
+        "job_id": 113217749799,
+        "platform": "macos-26-intel",
+        "sdk": "sdk_r21",
+        "architecture": "x86_64",
+        "conclusion": "success"
+      },
+      {
+        "job_id": 113217749824,
+        "platform": "windows-2022",
+        "sdk": "sdk_2024",
+        "architecture": "x64",
+        "conclusion": "success"
+      },
+      {
+        "job_id": 113217749830,
+        "platform": "windows-2022",
+        "sdk": "sdk_2025",
+        "architecture": "x64",
+        "conclusion": "success"
+      },
+      {
+        "job_id": 113217749842,
+        "platform": "windows-2022",
+        "sdk": "sdk_2026",
+        "architecture": "x64",
+        "conclusion": "success"
+      },
+      {
+        "job_id": 113217749844,
+        "platform": "windows-2022",
+        "sdk": "sdk_r23",
+        "architecture": "x64",
+        "conclusion": "success"
+      },
+      {
+        "job_id": 113217749855,
+        "platform": "macos-26-intel",
+        "sdk": "sdk_r23",
+        "architecture": "x86_64",
+        "conclusion": "success"
+      },
+      {
+        "job_id": 113217749886,
+        "platform": "macos-26-intel",
+        "sdk": "sdk_r20",
+        "architecture": "x86_64",
+        "conclusion": "success"
+      },
+      {
+        "job_id": 113217749889,
+        "platform": "windows-2022",
+        "sdk": "sdk_r25",
+        "architecture": "x64",
+        "conclusion": "success"
+      },
+      {
+        "job_id": 113217749919,
+        "platform": "windows-2022",
+        "sdk": "sdk_r20",
+        "architecture": "x64",
+        "conclusion": "success"
+      },
+      {
+        "job_id": 113217749920,
+        "platform": "macos-26-intel",
+        "sdk": "sdk_2023",
+        "architecture": "x86_64",
+        "conclusion": "success"
+      },
+      {
+        "job_id": 113217749924,
+        "platform": "macos-26-intel",
+        "sdk": "sdk_r25",
+        "architecture": "x86_64",
+        "conclusion": "success"
+      },
+      {
+        "job_id": 113217749930,
+        "platform": "windows-2022",
+        "sdk": "sdk_2023",
+        "architecture": "x64",
+        "conclusion": "success"
+      },
+      {
+        "job_id": 113217749932,
+        "platform": "windows-2022",
+        "sdk": "sdk_r21",
+        "architecture": "x64",
+        "conclusion": "success"
+      },
+      {
+        "job_id": 113217750039,
+        "platform": "macos-26-intel",
+        "sdk": "sdk_2024",
+        "architecture": "x86_64",
+        "conclusion": "success"
+      },
+      {
+        "job_id": 113217751483,
+        "platform": "macos-26-intel",
+        "sdk": "sdk_2025",
+        "architecture": "x86_64",
+        "conclusion": "success"
+      },
+      {
+        "job_id": 113217751772,
+        "platform": "macos-26",
+        "sdk": "sdk_2023",
+        "architecture": "arm64",
+        "conclusion": "success"
+      },
+      {
+        "job_id": 113217751804,
+        "platform": "macos-26",
+        "sdk": "sdk_r25",
+        "architecture": "arm64",
+        "conclusion": "success"
+      },
+      {
+        "job_id": 113217751878,
+        "platform": "macos-26-intel",
+        "sdk": "sdk_2026",
+        "architecture": "x86_64",
+        "conclusion": "success"
+      },
+      {
+        "job_id": 113217751913,
+        "platform": "macos-26",
+        "sdk": "sdk_2024",
+        "architecture": "arm64",
+        "conclusion": "success"
+      },
+      {
+        "job_id": 113217751942,
+        "platform": "macos-26",
+        "sdk": "sdk_2026",
+        "architecture": "arm64",
+        "conclusion": "success"
+      },
+      {
+        "job_id": 113217751973,
+        "platform": "macos-26",
+        "sdk": "sdk_2025",
+        "architecture": "arm64",
+        "conclusion": "success"
+      }
+    ]
+  },
+  "functional_tests": {
+    "mcp": 35,
+    "libmmd_ctest_groups": 13,
+    "plugin_ctest_groups": 20,
+    "all_passed": true,
+    "benchmarks": "not requested; skipped"
+  },
+  "release": {
+    "url": "https://github.com/AiMiDi/C4D_MMD_Tool/releases/tag/v0.9.2.2",
+    "published_at_utc": "2026-10-08T09:22:40Z",
+    "draft": false,
+    "prerelease": false,
+    "latest": true,
+    "notes_sha256_normalized_lf": "ab0b1d1d58aaf9a98cc094688ccfce6f670e0e3c36cee048ad354ebb8b0fb487",
+    "changelog_prose_unchanged": true,
+    "installer": {
+      "product_version": "0.9.2.2",
+      "file_version": ""
+    },
+    "assets": [
+      {
+        "name": "MMD-Tool-v0.9.2.2-Cinema4D-2023-macOS-x86_64.zip",
+        "bytes": 1286992,
+        "sha256": "5bb53cc0f7ccdbd01dd727fa40d876841bd413bb42f54435cb4344df012666c1",
+        "url": "https://github.com/AiMiDi/C4D_MMD_Tool/releases/download/v0.9.2.2/MMD-Tool-v0.9.2.2-Cinema4D-2023-macOS-x86_64.zip",
+        "digest_verified": true,
+        "archive": {
+          "entries": 93,
+          "real_resources": true,
+          "mcp_matches_source": true,
+          "modules": [
+            {
+              "path": "mmdtool/mmdtool.xlib",
+              "sha256": "5b56c58da7fc21f412322197c58ec95e1d0d16b06e300b5d6d4de96322cb61cf",
+              "architecture": "x86_64"
+            }
+          ]
+        }
+      },
+      {
+        "name": "MMD-Tool-v0.9.2.2-Cinema4D-2024-macOS-x86_64.zip",
+        "bytes": 1398439,
+        "sha256": "4828a8b874645f84b0fd593ad36b5bfcea24f3766db89810048b040c21602ed8",
+        "url": "https://github.com/AiMiDi/C4D_MMD_Tool/releases/download/v0.9.2.2/MMD-Tool-v0.9.2.2-Cinema4D-2024-macOS-x86_64.zip",
+        "digest_verified": true,
+        "archive": {
+          "entries": 93,
+          "real_resources": true,
+          "mcp_matches_source": true,
+          "modules": [
+            {
+              "path": "mmdtool/mmdtool.xlib",
+              "sha256": "d268fedd7843106df6a4fdceff1a04470e2673c73d1226028ff61e5f6441451d",
+              "architecture": "x86_64"
+            }
+          ]
+        }
+      },
+      {
+        "name": "MMD-Tool-v0.9.2.2-Cinema4D-2025-macOS-x86_64.zip",
+        "bytes": 1344920,
+        "sha256": "f0bf02c9924471b67ea425600395daae7cebb542e664c0f02ccf90a6184677c3",
+        "url": "https://github.com/AiMiDi/C4D_MMD_Tool/releases/download/v0.9.2.2/MMD-Tool-v0.9.2.2-Cinema4D-2025-macOS-x86_64.zip",
+        "digest_verified": true,
+        "archive": {
+          "entries": 93,
+          "real_resources": true,
+          "mcp_matches_source": true,
+          "modules": [
+            {
+              "path": "mmdtool/mmdtool.xlib",
+              "sha256": "7421aeba88e5bf2c095b90b379603f3a13baf01e63077f40c6217b34d1160e9c",
+              "architecture": "x86_64"
+            }
+          ]
+        }
+      },
+      {
+        "name": "MMD-Tool-v0.9.2.2-Cinema4D-2026-macOS-x86_64.zip",
+        "bytes": 1344701,
+        "sha256": "2007de56a7ab4d11a01cfc92756bfa53bbe9b05309f092dd01f2cb2d5de650ba",
+        "url": "https://github.com/AiMiDi/C4D_MMD_Tool/releases/download/v0.9.2.2/MMD-Tool-v0.9.2.2-Cinema4D-2026-macOS-x86_64.zip",
+        "digest_verified": true,
+        "archive": {
+          "entries": 93,
+          "real_resources": true,
+          "mcp_matches_source": true,
+          "modules": [
+            {
+              "path": "mmdtool/mmdtool.xlib",
+              "sha256": "c8c9d41ec5d9638a743100ddfbf049938350fcbf21de3d40e0da93a8405ceed9",
+              "architecture": "x86_64"
+            }
+          ]
+        }
+      },
+      {
+        "name": "MMD-Tool-v0.9.2.2-Cinema4D-R20-macOS-x86_64.zip",
+        "bytes": 1272155,
+        "sha256": "e38dd8b86c59e428a5654b3d4586980cbfc3e1e9a42179e8515d5a03c9a5b83c",
+        "url": "https://github.com/AiMiDi/C4D_MMD_Tool/releases/download/v0.9.2.2/MMD-Tool-v0.9.2.2-Cinema4D-R20-macOS-x86_64.zip",
+        "digest_verified": true,
+        "archive": {
+          "entries": 93,
+          "real_resources": true,
+          "mcp_matches_source": true,
+          "modules": [
+            {
+              "path": "mmdtool/mmdtool.xlib",
+              "sha256": "257db94d6446256fe4953fad8c6ce8cf424adac18708844ca1304faa0fe50aa9",
+              "architecture": "x86_64"
+            }
+          ]
+        }
+      },
+      {
+        "name": "MMD-Tool-v0.9.2.2-Cinema4D-R21-S22-macOS-x86_64.zip",
+        "bytes": 1289168,
+        "sha256": "a7ac21733a7c9200aa74701c435c79271b2b5ac3456c4e7f89fc459e1f3e649c",
+        "url": "https://github.com/AiMiDi/C4D_MMD_Tool/releases/download/v0.9.2.2/MMD-Tool-v0.9.2.2-Cinema4D-R21-S22-macOS-x86_64.zip",
+        "digest_verified": true,
+        "archive": {
+          "entries": 93,
+          "real_resources": true,
+          "mcp_matches_source": true,
+          "modules": [
+            {
+              "path": "mmdtool/mmdtool.xlib",
+              "sha256": "103c79d0c62a97fdac3b4c3439c7d5067792d9d2a174afb0d0188f971cf791a5",
+              "architecture": "x86_64"
+            }
+          ]
+        }
+      },
+      {
+        "name": "MMD-Tool-v0.9.2.2-Cinema4D-R23-S24-macOS-x86_64.zip",
+        "bytes": 1287542,
+        "sha256": "e6aeb8a604e62b40f475a723abecd2371707b2708ee944c07e537f3068267fa8",
+        "url": "https://github.com/AiMiDi/C4D_MMD_Tool/releases/download/v0.9.2.2/MMD-Tool-v0.9.2.2-Cinema4D-R23-S24-macOS-x86_64.zip",
+        "digest_verified": true,
+        "archive": {
+          "entries": 93,
+          "real_resources": true,
+          "mcp_matches_source": true,
+          "modules": [
+            {
+              "path": "mmdtool/mmdtool.xlib",
+              "sha256": "df26db7013059c51ee877fc6c7340d3c0fd3e6b1da1e9e8aba22b2e1bdbc6d44",
+              "architecture": "x86_64"
+            }
+          ]
+        }
+      },
+      {
+        "name": "MMD-Tool-v0.9.2.2-Cinema4D-R25-S26-macOS-x86_64.zip",
+        "bytes": 1279203,
+        "sha256": "b86f8e80d5cd11a9a7144d674c2bcca165cca8a1159bafff35c026fec2dc8ecb",
+        "url": "https://github.com/AiMiDi/C4D_MMD_Tool/releases/download/v0.9.2.2/MMD-Tool-v0.9.2.2-Cinema4D-R25-S26-macOS-x86_64.zip",
+        "digest_verified": true,
+        "archive": {
+          "entries": 93,
+          "real_resources": true,
+          "mcp_matches_source": true,
+          "modules": [
+            {
+              "path": "mmdtool/mmdtool.xlib",
+              "sha256": "eddc39765aba708fbfcffbed23047d796dd56aac75345539f03b86a0f067a8e2",
+              "architecture": "x86_64"
+            }
+          ]
+        }
+      },
+      {
+        "name": "MMD-Tool-v0.9.2.2-Windows-x64-Setup.exe",
+        "bytes": 4961294,
+        "sha256": "d08c63cfa2fe622ef0fb17b062bae4b4e5e5866ae8130893ddc1dde8aff9ab9c",
+        "url": "https://github.com/AiMiDi/C4D_MMD_Tool/releases/download/v0.9.2.2/MMD-Tool-v0.9.2.2-Windows-x64-Setup.exe",
+        "digest_verified": true
+      }
+    ]
+  },
+  "ci_repairs": [
+    {
+      "commit": "43ff5a93",
+      "change": "Declare test-only scene-hook locals only when the regression bridge is enabled"
+    },
+    {
+      "commit": "4d69f3bf",
+      "change": "Rename the RS Toon sphere output port local to avoid shadowing its outer graph node"
+    }
+  ],
+  "validation_scope": [
+    "Functional tests",
+    "All 21 SDK/platform Release compilations",
+    "Installer and ZIP packaging",
+    "9 downloaded release assets and GitHub SHA-256 digests",
+    "Intel Mach-O architecture, real resources and packaged MCP source content",
+    "Published release notes and installer product-version metadata"
+  ],
+  "preserved_local_drafts": [
+    "output/imagegen/"
+  ]
+}
