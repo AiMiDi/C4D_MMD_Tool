@@ -71,12 +71,18 @@ public:
 		state.edge_color_rgb = Multiply(base.edge_color_rgb, multiply_.edge_color_rgb) + add_.edge_color_rgb;
 		state.edge_color_alpha = base.edge_color_alpha * multiply_.edge_color_alpha + add_.edge_color_alpha;
 		state.edge_size = base.edge_size * multiply_.edge_size + add_.edge_size;
-		state.texture_factor_rgb = Multiply(base.texture_factor_rgb, multiply_.texture_factor_rgb) + add_.texture_factor_rgb;
-		state.texture_factor_alpha = base.texture_factor_alpha * multiply_.texture_factor_alpha + add_.texture_factor_alpha;
-		state.sphere_texture_factor_rgb = Multiply(base.sphere_texture_factor_rgb, multiply_.sphere_texture_factor_rgb) + add_.sphere_texture_factor_rgb;
-		state.sphere_texture_factor_alpha = base.sphere_texture_factor_alpha * multiply_.sphere_texture_factor_alpha + add_.sphere_texture_factor_alpha;
-		state.toon_texture_factor_rgb = Multiply(base.toon_texture_factor_rgb, multiply_.toon_texture_factor_rgb) + add_.toon_texture_factor_rgb;
-		state.toon_texture_factor_alpha = base.toon_texture_factor_alpha * multiply_.toon_texture_factor_alpha + add_.toon_texture_factor_alpha;
+		state.texture.multiply_rgb = multiply_.texture_factor_rgb;
+		state.texture.multiply_alpha = multiply_.texture_factor_alpha;
+		state.texture.add_rgb = add_.texture_factor_rgb;
+		state.texture.add_alpha = add_.texture_factor_alpha;
+		state.sphere_texture.multiply_rgb = multiply_.sphere_texture_factor_rgb;
+		state.sphere_texture.multiply_alpha = multiply_.sphere_texture_factor_alpha;
+		state.sphere_texture.add_rgb = add_.sphere_texture_factor_rgb;
+		state.sphere_texture.add_alpha = add_.sphere_texture_factor_alpha;
+		state.toon_texture.multiply_rgb = multiply_.toon_texture_factor_rgb;
+		state.toon_texture.multiply_alpha = multiply_.toon_texture_factor_alpha;
+		state.toon_texture.add_rgb = add_.toon_texture_factor_rgb;
+		state.toon_texture.add_alpha = add_.toon_texture_factor_alpha;
 		return state;
 	}
 

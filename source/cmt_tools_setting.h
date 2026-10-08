@@ -91,6 +91,7 @@ namespace CMTToolsSetting
 			RedShift,
 			Octane,
 			Corona,
+			RedShiftToon,
 		};
 
 		Float	position_multiple{};
@@ -106,6 +107,9 @@ namespace CMTToolsSetting
 		Bool	import_multipart{};
 		Bool	import_english{};
 		Bool	import_english_check{};
+		// Automated entry points report failures through their result envelope.
+		// Interactive imports retain their existing renderer error dialog.
+		Bool suppress_dialogs = false;
 		material_type import_material_type = material_type::Standard;
 
 		explicit ModelImport(BaseDocument* document) : BaseSetting(document) {}

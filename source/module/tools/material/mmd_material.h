@@ -4,6 +4,7 @@
 #include "libMMD/Model/MMD/PMXFile.h"
 #include <c4d.h>
 #include "module/core/cmt_marco.h"
+#include "utils/cmt_texture_morph.hpp"
 
 namespace CMTToolsSetting
 {
@@ -54,7 +55,7 @@ struct MMDMaterialData
  *
  * 由基础 `MMDMaterialData` 加上所有激活 material morph 的有效贡献合成而来。
  * 每帧从基础值重新计算，不回写基础数据，避免强度累积漂移。
- * texture/sphere/toon factor 以 1.0 为基准（无表情时不改变贴图采样），供后续 shader 应用使用。
+ * texture/sphere/toon 分别保留乘算 RGBA（初始 1）和加算 RGBA（初始 0）。
  */
 struct MMDMaterialRuntimeState
 {
@@ -66,14 +67,11 @@ struct MMDMaterialRuntimeState
 	Vector edge_color_rgb = Vector(0.0);
 	Float edge_color_alpha = 1.0;
 	Float edge_size = 0.0;
-	Vector texture_factor_rgb = Vector(1.0);
-	Float texture_factor_alpha = 1.0;
-	Vector sphere_texture_factor_rgb = Vector(1.0);
-	Float sphere_texture_factor_alpha = 1.0;
-	Vector toon_texture_factor_rgb = Vector(1.0);
-	Float toon_texture_factor_alpha = 1.0;
+	cmt_runtime::TextureMorphFactors<Vector, Float> texture;
+	cmt_runtime::TextureMorphFactors<Vector, Float> sphere_texture;
+	cmt_runtime::TextureMorphFactors<Vector, Float> toon_texture;
 
-	/** 从基础材质数据初始化运行时状态（factor 字段保持 1.0 基准）。 */
+	/** 从基础材质初始化运行时状态；纹理乘算为 1，加算为 0。 */
 	static MMDMaterialRuntimeState FromBase(const MMDMaterialData& base);
 
 	/** 将当前材质系统已承载的字段（diffuse/alpha/specular/power/ambient/edge）写入 MMDMaterialData 副本。 */
@@ -83,7 +81,13 @@ struct MMDMaterialRuntimeState
 	UInt64 Checksum() const;
 };
 
-enum class MMDRendererMaterialType { Unknown, Standard, RedShift, Octane, Corona };
+enum class MMDRendererMaterialType { Unknown, Standard, RedShift, Octane, Corona, RedShiftToon };
+
+/** Persisted import/UI choices have an independent numbering from adapters. */
+MMDRendererMaterialType MaterialTypeFromSelection(Int32 selection);
+/** Resolve texture and shared-Toon paths before renderer graph creation. */
+void ResolvePMXMaterialData(const libmmd::PMXMaterial& material,
+	const maxon::BaseArray<Filename>& paths, MMDMaterialData& data);
 
 /** MMD 材质适配器基类：统一各渲染器材质的创建、同步、读取接口。 */
 class MMDMaterialAdapter
@@ -100,10 +104,25 @@ public:
 	/**
 	 * @brief 将材质表情运行时状态中无法由 SyncTo 表达的部分（贴图系数 wrapper shader）同步到 C4D 材质。
 	 *
-	 * 默认无操作；Standard adapter 覆盖以按需安装/更新贴图系数 wrapper shader。
-	 * 简单颜色/浮点字段仍走 SyncTo 路径。
+	 * 仅旧场景在显式升级前使用此兼容路径；已绑定的材质由统一求值结果驱动，
+	 * 不再通过 SyncTo / SyncRuntimeState 写入每帧材质参数或创建节点。
 	 */
 	virtual void SyncRuntimeState(const MMDMaterialRuntimeState& state, BaseMaterial* material) {}
+
+	// Called only from import or an explicit main-thread authoring operation.
+	// Runtime evaluation may validate/publish but never install shader branches.
+	virtual Bool PrepareMorphBinding(const MMDMaterialData& data, BaseMaterial* material,
+		BaseObject* model, BaseObject* mesh, String& diagnostic) { diagnostic = "Renderer does not support shader bindings"_s; return false; }
+	virtual Bool ValidateMorphBinding(BaseMaterial* material, String& diagnostic) const { return false; }
+	virtual Bool RepairMorphBinding(const MMDMaterialData& data, BaseMaterial* material,
+		BaseObject* model, BaseObject* mesh, String& diagnostic) { return false; }
+
+	/** Main-thread authoring only. Preserve owned sampling settings and unrelated
+	 * graph branches; reject edited bindings before changing any structure. */
+	virtual Bool UpdateMorphTexture(const MMDMaterialData& previous, const String& path,
+		BaseMaterial* material, String& diagnostic) { return false; }
+	virtual Bool UpdateSphereTexture(const MMDMaterialData& previous, const String& path,
+		Int32 mode, BaseMaterial* material, String& diagnostic) { return false; }
 
 	static std::unique_ptr<MMDMaterialAdapter> Create(MMDRendererMaterialType type);
 	static std::unique_ptr<MMDMaterialAdapter> CreateFor(const BaseMaterial* material);

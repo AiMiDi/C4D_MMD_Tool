@@ -1,8 +1,37 @@
 # Standard 与 Redshift 材质支持
 
+新增的独立 `RS Toon（MMD 风格）` 类型使用原生 Toon/Contour 配方，revision 5 支持普通 UV 主贴图、Toon 明暗映射、普通 Sphere Multiply/Add 及十六个材质 Morph 输出角色。导入、当前条目转换、支持范围和实际验收状态见 [rs-toon-materials.md](rs-toon-materials.md) 及 [RS Toon 验证记录](../../openspec/changes/archive/2026-10-08-add-rs-toon-material-conversion/validation.md)。Additional UV 默认不需要；明确使用 SubTexture 或额外 UV Morph 时提示未映射的视觉贡献。以下历史章节仍以各自注明的模块为证据边界。
+
 插件默认导入为 Standard 材质。Redshift 使用独立的节点适配器；两者当前对齐的目标是
 diffuse RGB、真实贴图 Alpha，以及材质表情的有效 RGB/Alpha 系数。
 完整 MMD toon、sphere、边线和光照模型仍有差异，不能仅凭贴图加载成功判断外观已经等效。
+
+## 当前 Matcap Sphere 增量（2026-10-07）
+
+新建/转换的 Standard 与 RS Standard 均支持普通 Sphere/SPA 的 Multiply/Add。
+RS Standard 使用原生 Matcap（World）；默认材质用相机空间法线生成 UV，
+在 Color 输出内加/乘，不再把新材质的 SPA 接成 Environment 反射。
+Sphere RGBA Morph 独立求值，图片 Alpha 不进入 opacity；主贴图和 Diffuse Alpha
+维持原绑定契约。新 RS binding 为 profile 2/revision 1，十个字段保存于独立范围。
+旧 Standard Environment 场景及七字段 RS binding 不自动改图；需新建独立材质，
+RS 旧七字段 v2 binding 可通过“修复当前绑定”显式升级。路径/模式编辑保留采样设置、保护艺术家输入，并支持 Undo。
+
+两种材质继续用各自的 Standard/PBR 表面打光，SPA 的手绘高光不是 PBR 反射；
+Toon ramp、独立 Ambient、边线和 SubTexture/Additional UV 不因此获得映射。
+实际原生与图片范围见 [Matcap Sphere 验证](../../openspec/changes/archive/2026-10-08-add-rs-toon-material-conversion/standard-sphere-validation.md)。
+
+## 当前增量与历史证据的边界（2026-10-07）
+
+- 普通 RS Standard 的创建、同步与反向读取已覆盖高光颜色和 Specular Power；
+  无贴图/带贴图、外接 Shader 保护和保存重开均已原生验证。直接 PMX 创建已传递 Sphere 路径，
+  该历史模块尚未增加 Sphere 着色节点。对应 Release 模块为 `d6ca05c6…`，详见
+  [普通 RS 高光验证](rs-standard-specular.md)。下方旧矩阵中的“未映射高光”仅描述旧模块。
+- 新版 Morph binding v2 分别保存纹理 Mul/Add，纹理 factor Alpha 参与 RGB 运算，
+  opacity 为图片 Alpha × diffuse Alpha。详见 [当前 Morph 绑定说明](material-morph-shaders.md)；
+  下方 `9d132…` 的合并 factor 契约保留作历史证据，不是新版实现的期望值。
+- 普通 RS 高光已在独立宿主完成六张实际图片响应验收，覆盖颜色、零高光、Power 收窄、
+  重复与保存重开；详见 [高光验证记录](rs-standard-specular.md)。材质验收允许任一设备。
+  完整 Morph 绑定光照矩阵和 MMD 原生外观等效仍未完成。
 
 本文区分源码已实现、原生着色器或节点已验证、实际图像已验证三个状态。
 构建成功和节点连接成功都不能代替图像验收。导入与材质表情的数据链路见
@@ -11,7 +40,7 @@ diffuse RGB、真实贴图 Alpha，以及材质表情的有效 RGB/Alpha 系数�
 后来新增的 shader binding 有独立 `26f84838…` Debug 最小闭环，范围见本文后段；
 旧图像通过不能用于验收新的工作区源码或 binding。
 
-## RGB 与 Alpha 的契约
+## 旧模块 9d132 的 RGB 与 Alpha 契约
 
 令 `D_rgb/D_a` 为合成材质表情后的 diffuse，`F_rgb/F_a` 为合成后的 base texture factor，
 `T_rgb/T_a` 为同一贴图的颜色和内嵌 Alpha。带贴图材质的预期输出为：
@@ -122,7 +151,7 @@ Alpha 变化而 RGB 不变时，只应改变遮罩覆盖率。
 后来 shader-driven 实现的 [minimum-receipt.json](../../_build_msvc/validation/shader-driven-material-morph/minimum-26f84838/minimum-receipt.json)
 对应 SDK 2026 Debug 模块 `26f84838f7171521381330fea72fe801b25a48cf6883ab466f27dc935d40b0c2`。
 这是与 `9d132…` 分开的双材质最小样例：一个模型包含 plain/RGBA 两种材质、两个 Material Morph、Group 与 Flip。
-具体实现与验收边界见该变更的 [validation.md](../../openspec/changes/shader-driven-material-morph/validation.md)。
+具体实现与验收边界见已归档变更的 [validation.md](../../openspec/changes/archive/2026-10-08-shader-driven-material-morph/validation.md)。
 
 独立 [Standard sampling](../../_build_msvc/validation/shader-driven-material-morph/minimum-26f84838/standard-sampling.json)
 记录 base、add、add/mul、Group、Flip、reset 六组状态；实现方还记录线性强度轨道第 15 帧的原生检查。

@@ -82,6 +82,9 @@ using HashInt = UInt;
 inline constexpr int kSDKVersion = API_VERSION;
 inline constexpr bool kSDK2024 = (API_VERSION >= 2024000);
 inline constexpr bool kSDK2026 = (API_VERSION >= 2026000);
+// Native Redshift node adapters use the modern NodesGraph API. Renderer shader
+// availability is checked separately at runtime; this is only an SDK boundary.
+#define CMT_SDK_HAS_REDSHIFT_NODE_API (API_VERSION >= 2024000)
 /// maxon::ParallelFor::Granularity 与 Dynamic(..., const Granularity&, queue)（约 2024+）；R20–2023 为 (threadCnt, Int granularity)。
 #define CMT_SDK_HAS_PARALLELFOR_GRANULARITY_STRUCT (API_VERSION >= 2024000)
 /// ID_BASELIST_ICON_COLORIZE* 等（S21 / API 21000 起）；预处理器与运行时常量共用同一阈值。

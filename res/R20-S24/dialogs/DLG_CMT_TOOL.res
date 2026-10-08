@@ -575,6 +575,7 @@ DIALOG DLG_CMT_TOOL {
                                     DLG_CMT_MATERIAL_TYPE_REDSHIFT, IDS_CMT_MATERIAL_TYPE_REDSHIFT;
                                     DLG_CMT_MATERIAL_TYPE_OCTANE, IDS_CMT_MATERIAL_TYPE_OCTANE;
                                     DLG_CMT_MATERIAL_TYPE_CORONA, IDS_CMT_MATERIAL_TYPE_CORONA;
+                                    DLG_CMT_MATERIAL_TYPE_REDSHIFT_TOON, IDS_CMT_MATERIAL_TYPE_REDSHIFT_TOON;
                                 }
                             }
                         }

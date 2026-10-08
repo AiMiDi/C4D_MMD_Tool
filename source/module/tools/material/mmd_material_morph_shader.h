@@ -14,6 +14,7 @@ Description:	通用 MMD 材质表情贴图系数 ShaderData。
 
 #include <c4d.h>
 #include "module/core/cmt_marco.h"
+#include "utils/cmt_texture_morph.hpp"
 
 /**
  * @brief 在 Standard 材质贴图通道上包装原贴图 shader，应用材质表情贴图系数。
@@ -25,6 +26,16 @@ class MMDMaterialTextureMorphShader final : public ShaderData
 {
 	Vector m_factor_rgb = Vector(1.0);
 	Float m_factor_alpha = 1.0;
+	Bool m_child_initialized = false;
+	Int32 m_output = 0; // zero preserves the original coefficient-only shader.
+	Vector m_color = Vector(1.0);
+	Float m_scalar = 1.0;
+	cmt_runtime::TextureMorphFactors<Vector, Float> m_texture;
+	cmt_runtime::TextureMorphFactors<Vector, Float> m_sphere;
+	BaseShader* m_sphere_shader = nullptr; // Render-document child, never an editor link.
+	Int32 m_sphere_mode = 0;
+	Matrix m_camera_inverse;
+	Vector ApplySphere(const Vector& color, ChannelData* cd) const;
 public:
 	static NodeData* Alloc() { return NewObjClear(MMDMaterialTextureMorphShader); }
 
@@ -32,6 +43,8 @@ public:
 	INITRENDERRESULT InitRender(BaseShader* sh, const InitRenderStruct& irs) override;
 	void FreeRender(BaseShader* sh) override;
 	Vector Output(BaseShader* sh, ChannelData* cd) override;
+	SHADERINFO GetRenderInfo(BaseShader* sh) override;
+	BaseShader* GetSubsurfaceShader(BaseShader* sh, Float& bestmpl) override;
 };
 
 namespace cmt_register

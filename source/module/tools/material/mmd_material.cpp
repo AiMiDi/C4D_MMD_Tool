@@ -2,6 +2,7 @@
 #include "mmd_material.h"
 #include "mmd_standard_material.h"
 #include "mmd_redshift_material.h"
+#include "mmd_redshift_toon_material.h"
 #include "mmd_octane_material.h"
 #include "mmd_corona_material.h"
 #include "cmt_tools_setting.h"
@@ -24,6 +25,8 @@ MMDRendererMaterialType MMDMaterialAdapter::DetectType(const BaseMaterial* mater
 {
 	if (!material)
 		return MMDRendererMaterialType::Unknown;
+	if (MMDRedShiftToonMaterialAdapter::IsToonMaterial(material))
+		return MMDRendererMaterialType::RedShiftToon;
 	switch (material->GetType())
 	{
 	case Mmaterial:
@@ -54,7 +57,7 @@ MMDMaterialAdapter::TextureInfo MMDMaterialAdapter::DetectTextureFromPMX(
 {
 	TextureInfo info{};
 	const auto texture_index = pmx_material.m_textureIndex;
-	if (texture_index == -1 || texture_index >= texture_paths.GetCount())
+	if (texture_index < 0 || texture_index >= texture_paths.GetCount())
 		return info;
 	const auto& texture_path = texture_paths[texture_index];
 	if (!GeFExist(texture_path))
@@ -63,10 +66,10 @@ MMDMaterialAdapter::TextureInfo MMDMaterialAdapter::DetectTextureFromPMX(
 	AutoAlloc<BaseBitmap> bitmap;
 	if (bitmap && bitmap->Init(texture_path) == IMAGERESULT::OK)
 	{
-		if (bitmap->GetChannelCount() &&
-			(texture_path.GetSuffix().ToLower().Compare("png"_s) == maxon::COMPARERESULT::EQUAL ||
-			 texture_path.GetSuffix().ToLower().Compare("tga"_s) == maxon::COMPARERESULT::EQUAL))
-			info.has_alpha = true;
+		// Query the decoded embedded channel, not a filename extension or color
+		// bit depth. RGB PNG/JPEG may use padded 32-bit storage without alpha;
+		// other supported image formats can carry genuine embedded alpha.
+		info.has_alpha = bitmap->GetInternalChannel() != nullptr;
 	}
 	return info;
 }
@@ -81,10 +84,7 @@ MMDMaterialAdapter::TextureInfo MMDMaterialAdapter::DetectTextureFromData(const 
 	AutoAlloc<BaseBitmap> bitmap;
 	if (bitmap && bitmap->Init(texture_path) == IMAGERESULT::OK)
 	{
-		if (bitmap->GetChannelCount() &&
-			(texture_path.GetSuffix().ToLower().Compare("png"_s) == maxon::COMPARERESULT::EQUAL ||
-			 texture_path.GetSuffix().ToLower().Compare("tga"_s) == maxon::COMPARERESULT::EQUAL))
-			info.has_alpha = true;
+		info.has_alpha = bitmap->GetInternalChannel() != nullptr;
 	}
 	return info;
 }
@@ -95,6 +95,7 @@ std::unique_ptr<MMDMaterialAdapter> MMDMaterialAdapter::Create(MMDRendererMateri
 	{
 	case MMDRendererMaterialType::Standard: return std::make_unique<MMDStandardMaterialAdapter>();
 	case MMDRendererMaterialType::RedShift: return std::make_unique<MMDRedShiftMaterialAdapter>();
+	case MMDRendererMaterialType::RedShiftToon: return std::make_unique<MMDRedShiftToonMaterialAdapter>();
 	case MMDRendererMaterialType::Octane:   return std::make_unique<MMDOctaneMaterialAdapter>();
 	case MMDRendererMaterialType::Corona:   return std::make_unique<MMDCoronaMaterialAdapter>();
 	default:                                return nullptr;
@@ -391,10 +392,46 @@ UInt64 MMDMaterialRuntimeState::Checksum() const
 	mix_vec(specular); mix(specular_power);
 	mix_vec(ambient);
 	mix_vec(edge_color_rgb); mix(edge_color_alpha); mix(edge_size);
-	mix_vec(texture_factor_rgb); mix(texture_factor_alpha);
-	mix_vec(sphere_texture_factor_rgb); mix(sphere_texture_factor_alpha);
-	mix_vec(toon_texture_factor_rgb); mix(toon_texture_factor_alpha);
+	for (const auto* factors : {&texture, &sphere_texture, &toon_texture})
+	{
+		mix_vec(factors->multiply_rgb); mix(factors->multiply_alpha);
+		mix_vec(factors->add_rgb); mix(factors->add_alpha);
+	}
 	return hash;
+}
+
+MMDRendererMaterialType MaterialTypeFromSelection(const Int32 selection)
+{
+	switch (selection)
+	{
+	case 0: return MMDRendererMaterialType::Standard;
+	case 1: return MMDRendererMaterialType::RedShift;
+	case 2: return MMDRendererMaterialType::Octane;
+	case 3: return MMDRendererMaterialType::Corona;
+	case 4: return MMDRendererMaterialType::RedShiftToon;
+	default: return MMDRendererMaterialType::Unknown;
+	}
+}
+
+void ResolvePMXMaterialData(const libmmd::PMXMaterial& material,
+	const maxon::BaseArray<Filename>& paths, MMDMaterialData& data)
+{
+	data.FromPMX(material);
+	if (material.m_textureIndex >= 0 && material.m_textureIndex < paths.GetCount())
+		data.texture_path = paths[material.m_textureIndex].GetString();
+	if (material.m_sphereTextureIndex >= 0 && material.m_sphereTextureIndex < paths.GetCount())
+		data.sphere_texture_path = paths[material.m_sphereTextureIndex].GetString();
+	if (data.toon_mode == static_cast<Int32>(libmmd::PMXToonMode::Common)
+		&& data.toon_texture_index >= 0 && data.toon_texture_index < 10)
+	{
+		const String number = data.toon_texture_index < 9
+			? String("0") + String::IntToString(data.toon_texture_index + 1) : String("10");
+		data.toon_texture_path = (GeGetPluginResourcePath() + Filename("mikumikudance_data")
+			+ Filename(String("toon") + number + String(".bmp"))).GetString();
+	}
+	else if (data.toon_mode == static_cast<Int32>(libmmd::PMXToonMode::Separate)
+		&& data.toon_texture_index >= 0 && data.toon_texture_index < paths.GetCount())
+		data.toon_texture_path = paths[data.toon_texture_index].GetString();
 }
 
 void MMDMaterialManager::SetTextureRelativePath(const Filename& texture_relative_path)
@@ -427,14 +464,7 @@ Bool MMDMaterialManager::LoadPMXTextures(const std::vector<libmmd::PMXTexture>& 
 
 BaseMaterial* MMDMaterialManager::LoadPMXMaterial(const libmmd::PMXMaterial& pmx_material, const uint64_t material_index, const maxon::String& material_name, const CMTToolsSetting::ModelImport& setting)
 {
-	MMDRendererMaterialType create_type = MMDRendererMaterialType::Standard;
-	switch (setting.import_material_type)
-	{
-	case CMTToolsSetting::ModelImport::material_type::Standard: create_type = MMDRendererMaterialType::Standard; break;
-	case CMTToolsSetting::ModelImport::material_type::RedShift: create_type = MMDRendererMaterialType::RedShift; break;
-	case CMTToolsSetting::ModelImport::material_type::Octane:   create_type = MMDRendererMaterialType::Octane;   break;
-	case CMTToolsSetting::ModelImport::material_type::Corona:   create_type = MMDRendererMaterialType::Corona;   break;
-	}
+	const auto create_type = MaterialTypeFromSelection(static_cast<Int32>(setting.import_material_type));
 	auto adapter = MMDMaterialAdapter::Create(create_type);
 	return adapter ? adapter->CreateFromPMX(pmx_material, m_texture_path_array, material_name) : nullptr;
 }
