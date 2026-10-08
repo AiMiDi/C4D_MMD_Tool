@@ -32,7 +32,34 @@ def _restore(suite):
     return restore_active_document(suite.c4d, suite.original_document)
 
 
+def ensure_redshift_post(c4d, render_data):
+    """Reuse the default RS post; duplicate renderer posts can deadlock RS.
+
+    New documents may already contain a Redshift post, depending on the host
+    defaults. Reject an ambiguous scene instead of silently deleting settings.
+    """
+    matches = []
+    post = render_data.GetFirstVideoPost()
+    while post is not None:
+        if post.GetType() == 1036219:
+            matches.append(post)
+        post = post.GetNext()
+    if len(matches) > 1:
+        raise RuntimeError("Render fixture has duplicate Redshift video posts")
+    if matches:
+        return matches[0]
+    post = c4d.documents.BaseVideoPost(1036219)
+    if post is None:
+        raise RuntimeError("Could not allocate the Redshift video post")
+    render_data.InsertVideoPost(post)
+    return post
+
+
 def _worker(c4d, document, bitmap):
+    render_data = document.GetActiveRenderData()
+    if render_data[c4d.RDATA_RENDERENGINE] == 1036219:
+        ensure_redshift_post(c4d, render_data)
+
     class RenderWorker(c4d.threading.C4DThread):
         def __init__(self):
             super().__init__()
@@ -154,14 +181,7 @@ def _configure_scene(suite, document, renderer, shading, width, height):
         engine = getattr(c4d, "VPrsrenderer", 1036219)
         if c4d.plugins.FindPlugin(engine, c4d.PLUGINTYPE_VIDEOPOST) is None:
             raise RuntimeError("Redshift renderer is unavailable; no fallback is allowed")
-        post = render_data.GetFirstVideoPost()
-        while post is not None and post.GetType() != engine:
-            post = post.GetNext()
-        if post is None:
-            post = c4d.documents.BaseVideoPost(engine)
-            if post is None:
-                raise RuntimeError("Could not allocate the Redshift video post")
-            render_data.InsertVideoPost(post)
+        ensure_redshift_post(c4d, render_data)
     else:
         engine = c4d.RDATA_RENDERENGINE_STANDARD
     render_data[c4d.RDATA_RENDERENGINE] = engine
