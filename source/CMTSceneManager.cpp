@@ -645,9 +645,9 @@ Bool CMTSceneManager::Message(GeListNode* node, Int32 type, void* data)
 	}
 	if (type != g_cmt_scene_manager_scene_hook_id || data || !node)
 		return SUPER::Message(node, type, data);
+#if defined(CMT_ENABLE_RUNTIME_REGRESSION)
 	auto* hook = static_cast<BaseList2D*>(node);
 	auto* request = hook->GetDataInstance();
-#if defined(CMT_ENABLE_RUNTIME_REGRESSION)
 	if (!request || request->GetInt32(cmt_regression::Protocol) != cmt_regression::kProtocolVersion)
 		return false;
 	request->SetBool(cmt_regression::Success, false);
