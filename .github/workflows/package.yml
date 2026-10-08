@@ -44,7 +44,7 @@ jobs:
       - name: Download Windows build artifacts
         uses: actions/download-artifact@v5
         with:
-          pattern: build-Windows-*
+          pattern: build-Windows-x64-*
           path: ${{ github.workspace }}/_dl
           merge-multiple: false
 
@@ -53,7 +53,7 @@ jobs:
           set -euo pipefail
           for sdk in sdk_r20 sdk_r21 sdk_r23 sdk_r25 sdk_2023 sdk_2024 sdk_2025 sdk_2026; do
             mkdir -p "_build_msvc/${sdk}/bin/Release/plugins/mmdtool"
-            src="_dl/build-Windows-${sdk}"
+            src="_dl/build-Windows-x64-${sdk}"
             if [ -d "$src" ]; then
               cp -R "$src"/* "_build_msvc/${sdk}/bin/Release/plugins/mmdtool/"
             else
@@ -95,6 +95,7 @@ jobs:
           $iscc = $isccCandidates[0]
           $arguments = @(
             "/DPluginVersion=${{ steps.ver.outputs.version }}",
+            "/FMMD-Tool-v${{ steps.ver.outputs.version }}-Windows-x64-Setup",
             "/DSdkBuildDir=_build_msvc",
             "/DSdkBinConfig=Release",
             "$env:GITHUB_WORKSPACE\setup\Common\installer_script.iss"
@@ -122,16 +123,26 @@ jobs:
       - name: Download macOS build artifacts
         uses: actions/download-artifact@v8
         with:
-          pattern: build-macOS-*
+          pattern: build-macOS-x86_64-*
           path: ${{ github.workspace }}/_dl
           merge-multiple: false
 
       - name: Zip complete per-SDK plugin artifacts
         run: |
           set -euo pipefail
+          version="${GITHUB_REF_NAME#v}"
           mkdir -p dist
           for sdk in sdk_r20 sdk_r21 sdk_r23 sdk_r25 sdk_2023 sdk_2024 sdk_2025 sdk_2026; do
-            src="_dl/build-macOS-${sdk}"
+            # Show Cinema 4D compatibility instead of internal SDK directory names.
+            case "$sdk" in
+              sdk_r20) c4d="R20" ;;
+              sdk_r21) c4d="R21-S22" ;;
+              sdk_r23) c4d="R23-S24" ;;
+              sdk_r25) c4d="R25-S26" ;;
+              sdk_2023|sdk_2024|sdk_2025|sdk_2026) c4d="${sdk#sdk_}" ;;
+              *) echo "Unknown SDK: $sdk" >&2; exit 1 ;;
+            esac
+            src="_dl/build-macOS-x86_64-${sdk}"
             if [ ! -d "$src" ]; then echo "Missing $src" >&2; exit 1; fi
             mkdir -p "pkg/${sdk}/mmdtool"
             cp -R "$src"/. "pkg/${sdk}/mmdtool/"
@@ -142,7 +153,7 @@ jobs:
               echo "Linked files in plugin artifact: $sdk" >&2
               exit 1
             fi
-            (cd "pkg/${sdk}" && zip -r "${{ github.workspace }}/dist/MMD_Tool_${sdk}_macOS.zip" mmdtool)
+            (cd "pkg/${sdk}" && zip -r "${{ github.workspace }}/dist/MMD-Tool-v${version}-Cinema4D-${c4d}-macOS-x86_64.zip" mmdtool)
           done
 
       - name: Upload macOS zip artifacts
@@ -172,8 +183,15 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ github.ref_name }}
-          name: ${{ github.ref_name }}
+          name: MMD Tool for Cinema 4D ${{ github.ref_name }}
           body: |
+            ## Downloads / 下载
+
+            - **Windows x64**: download `MMD-Tool-*-Windows-x64-Setup.exe`. The installer lets you select Cinema 4D R20 through 2026.
+            - **macOS Intel (x86_64)**: download the ZIP matching your Cinema 4D version, then place its `mmdtool` folder in your Cinema 4D plugins directory. `R21-S22`, `R23-S24`, and `R25-S26` each cover the paired releases.
+            - **Windows**：下载 `Windows-x64-Setup.exe` 安装包，在安装向导中选择 Cinema 4D 版本。
+            - **macOS Intel**：按 Cinema 4D 版本选择 `macOS-x86_64.zip`，解压后将 `mmdtool` 文件夹放入 Cinema 4D 插件目录。当前发布资产仅提供 Intel 构建，Apple Silicon 构建仍作为 CI 验证。
+
             ## Changelog
 
             _Add release notes here._

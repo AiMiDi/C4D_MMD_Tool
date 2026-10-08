@@ -271,7 +271,7 @@ jobs:
         if: ${{ matrix.upload_artifact }}
         uses: actions/upload-artifact@v7
         with:
-          name: build-${{ runner.os }}-${{ matrix.sdk }}
+          name: build-${{ runner.os }}-${{ matrix.macos_arch || 'x64' }}-${{ matrix.sdk }}
           path: _build_msvc/${{ matrix.sdk }}/bin/Release/plugins/mmdtool/
           retention-days: 7
           if-no-files-found: error
