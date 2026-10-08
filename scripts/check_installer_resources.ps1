@@ -44,7 +44,13 @@ $resourceRowPattern = '(?m)^Source:\s*"' + [regex]::Escape($builtResourcePath) +
 $resourceRow = [regex]::Match($expected, $resourceRowPattern).Value
 Assert-True (-not [string]::IsNullOrEmpty($resourceRow)) 'Expected fixture resource Source row was not found'
 $adapterRow = $resourceRow.Replace('\res\*', '\mcp\*').Replace('\res";', '\mcp";')
-$expected = $expected.Replace($resourceRow, $resourceRow + "`r`n" + $adapterRow)
+# The pinned installer may already contain the paired runtime row. In that
+# case adaptation must preserve it rather than inventing a duplicate in the
+# expected output. Keep the input's newline convention for older templates.
+if (-not $expected.Contains($adapterRow)) {
+    $newline = if ($expected.Contains("`r`n")) { "`r`n" } else { "`n" }
+    $expected = $expected.Replace($resourceRow, $resourceRow + $newline + $adapterRow)
+}
 Assert-True ([IO.File]::ReadAllText($installer, $encoding) -ceq $expected) 'Adaptation changed unrelated installer content'
 $passed.Add('resource Source and paired MCP runtime adapt with other bytes preserved')
 $before = (Get-FileHash -LiteralPath $installer).Hash
