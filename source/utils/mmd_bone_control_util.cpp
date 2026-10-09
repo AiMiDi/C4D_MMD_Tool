@@ -1246,7 +1246,7 @@ String mmd_bone_control_util::GetHoveredControlName(BaseDocument* doc, BaseDraw*
 			for (BaseObject* ancestor = control; ancestor && ancestor != object; ancestor = ancestor->GetUp())
 				if (ancestor->GetEditorMode() == MODE_OFF) { hidden = true; break; }
 			if (hidden) continue;
-			const SplineObject* const spline = ToSpline(control);
+			SplineObject* const spline = ToSpline(control);
 			const Vector* const points = spline->GetPointR();
 			const Segment* const segments = spline->GetSegmentR();
 			if (!points || !segments) continue;
