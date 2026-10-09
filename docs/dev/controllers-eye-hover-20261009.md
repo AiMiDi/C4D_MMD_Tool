@@ -16,8 +16,11 @@
 - 悬停回归调用实际 SceneHook 游标回调，覆盖透视 / 正视和不同镜头距离、名称切换、隐藏对象、隐藏父级及样条显示过滤。没有截取操作系统弹出的提示气泡。
 - `control_role_test` 和 `control_hit_test` 通过。
 - SDK 2026 Debug 测试构建和关闭回归桥的 Release 构建通过。最后的编辑模式刷新按钮显示修正已编译，未再次重启原生宿主单独复测。
-- R20 尝试受当前工作树中并行 motion-sizing 文件的旧版 source processor 错误阻挡；本轮没有 macOS 构建。
+- 修复阶段初次 R20 尝试受并行 motion-sizing 文件的旧版 source processor 错误阻挡。发行阶段已通过独立源码的 R20 编译及全平台线上矩阵；macOS／旧版宿主的原生运行时仍未验证。
 
 测试过程中复用同一宿主进行重复导入、模式切换及存档检查。原生插件二进制改变时仍需要加载新构建；当前生成工程未启用 Visual Studio 的 `/ZI` 与增量链接，因此没有使用 C++ Hot Reload。
 
-本次没有重新出安装包或发布 GitHub Release。工作树包含其他任务的 motion-sizing 修改，保持原状。
+修复阶段完成后，已随 [0.9.3.2](https://github.com/AiMiDi/C4D_MMD_Tool/releases/tag/v0.9.3.2) 发布。
+发行阶段的干净 R20 Release 编译、21 项线上 SDK／平台构建及 9 个下载资产校验均通过，
+见 [发布收据](../releases/0.9.3.2-publication.json)。主 README 保留最近三个版本，完整历史仍在 Changelog 文档中。
+其他任务的 motion-sizing 修改保持在工作树中，没有纳入本次发行标签。
