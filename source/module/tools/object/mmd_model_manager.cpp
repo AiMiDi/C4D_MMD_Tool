@@ -1341,6 +1341,9 @@ SDK2024_Init(MMDModelManagerObject)
 	bc->SetString(COMMENTS_UNIVERSAL, "description"_s);
 	bc->SetFloat(MODEL_POSITION_MULTIPLE, 8.5);
 	bc->SetInt32(MODEL_MODE, model_mode_);
+	bc->SetInt32(MODEL_CONTROLS_DISPLAY, MODEL_CONTROLS_DISPLAY_PRIMARY);
+	bc->SetFloat(MODEL_CONTROLS_SIZE, 1.0);
+	bc->SetBool(MODEL_CONTROLS_OCCLUDED, true);
 	bc->SetBool(MODEL_PHYSICS_ENABLED, true);
 	bc->SetFloat(MODEL_PHYSICS_GRAVITY_STRENGTH, 98.0);
 	bc->SetVector(MODEL_PHYSICS_GRAVITY_DIRECTION, Vector(0, -1, 0));
@@ -1602,6 +1605,10 @@ Bool MMDModelManagerObject::Read(GeListNode* node, HyperFile* hf, Int32 level) {
 	{
 		model_mode_ = NormalizeModelMode(bc->GetInt32(MODEL_MODE));
 		bc->SetInt32(MODEL_MODE, model_mode_);
+		if (bc->GetData(MODEL_CONTROLS_SIZE).GetType() == DA_NIL)
+			bc->SetFloat(MODEL_CONTROLS_SIZE, 1.0);
+		if (bc->GetData(MODEL_CONTROLS_OCCLUDED).GetType() == DA_NIL)
+			bc->SetBool(MODEL_CONTROLS_OCCLUDED, true);
 	}
 	else
 	{
@@ -2312,6 +2319,11 @@ EXECUTIONRESULT MMDModelManagerObject::Execute(BaseObject* op, BaseDocument* doc
 	if (BaseContainer* const bc = op->GetDataInstance())
 		model_mode_ = NormalizeModelMode(bc->GetInt32(MODEL_MODE));
 
+	if (priority == kExternalPoseSolvePriority && !HasExternalBonePoses())
+		return EXECUTIONRESULT::OK;
+	if (priority == EXECUTIONPRIORITY_EXPRESSION && HasExternalBonePoses())
+		return EXECUTIONRESULT::OK;
+
 	const auto manager_read = *is_manager_read_.Read();
 
 	if (!UpdateManagers(op))
@@ -2358,6 +2370,13 @@ EXECUTIONRESULT MMDModelManagerObject::Execute(BaseObject* op, BaseDocument* doc
 	}
 
 	ApplyModelInfoVisibility(op, doc);
+	if (priority == kExternalPosePreparePriority)
+	{
+		PrepareExternalBonePoses(doc);
+		return EXECUTIONRESULT::OK;
+	}
+	if (priority == kExternalPoseSolvePriority)
+		CaptureExternalBonePoses();
 	if (model_mode_ == MODEL_MODE_ANIM)
 	{
 		const auto now_time = doc->GetTime();
@@ -2371,7 +2390,7 @@ EXECUTIONRESULT MMDModelManagerObject::Execute(BaseObject* op, BaseDocument* doc
 		const UInt64 bone_morph_state_checksum = GetBoneMorphStateChecksum();
 		const Bool bone_morph_state_changed = bone_morph_pose_dirty_ || !has_bone_morph_state_checksum_
 			|| bone_morph_state_checksum != bone_morph_state_checksum_;
-		if (time_changed || control_state_changed || control_delta_active || bone_morph_state_changed)
+		if (time_changed || control_state_changed || control_delta_active || bone_morph_state_changed || external_pose_refresh_)
 		{
 			fps_ = static_cast<Float32>(doc->GetFps());
 
@@ -2386,8 +2405,8 @@ EXECUTIONRESULT MMDModelManagerObject::Execute(BaseObject* op, BaseDocument* doc
 
 			ApplyIKSolverFromParameters(op);
 			ApplyPhysicsConfigToRuntime(op);
-			if (bone_morph_state_changed && !time_changed)
-				PrepareBoneMorphReevaluation(doc);
+			if ((bone_morph_state_changed || control_state_changed) && !time_changed)
+				PrepareSameFrameReevaluation(doc);
 			RunLayeredBonePass(doc, false);
 
 			const Bool physics_enabled = IsPhysicsEnabled(op);
@@ -2401,10 +2420,10 @@ EXECUTIONRESULT MMDModelManagerObject::Execute(BaseObject* op, BaseDocument* doc
 						StepStandalonePhysics(1.f / fps_);
 					is_animation_initialized_ = true;
 				}
-				else if (bone_morph_state_changed)
+				else if (bone_morph_state_changed || control_state_changed || external_pose_refresh_)
 				{
-					// Reapply the existing physical pose after clearing old IK/morph
-					// overrides. A slider edit must not advance or reset Bullet time.
+					// Reapply the existing physical pose after invalidating same-frame
+					// IK results. Control and morph edits must not advance Bullet time.
 					cmt_runtime::ScopedRuntimeStage stage(cmt_runtime::RuntimeStage::Physics);
 					ApplyStandalonePhysicsResults();
 				}
@@ -2422,6 +2441,7 @@ EXECUTIONRESULT MMDModelManagerObject::Execute(BaseObject* op, BaseDocument* doc
 			bone_morph_state_checksum_ = bone_morph_state_checksum;
 			has_bone_morph_state_checksum_ = true;
 			bone_morph_pose_dirty_ = false;
+			external_pose_refresh_ = false;
 			if (time_changed)
 				prev_time_ = now_time;
 		}
@@ -4740,6 +4760,8 @@ Bool MMDModelManagerObject::RegisterCurrentStateKeyframe(BaseDocument* doc)
 			Bool should_register = false;
 			Bool reset_control = false;
 			Bool from_transient_vpd_pose = false;
+			const Bool authored_fk_rotation = mmd_bone_control_util::HasActiveControlRotation(bone_tag_base)
+				&& !bone_tag_base->GetDataInstance()->GetBool(PMX_BONE_IS_IK);
 			if (model_mode_ == MODEL_MODE_ANIM && IsTransientVPDBone(bone_index))
 			{
 				from_transient_vpd_pose = true;
@@ -4749,7 +4771,7 @@ Bool MMDModelManagerObject::RegisterCurrentStateKeyframe(BaseDocument* doc)
 			{
 				Vector control_translation;
 				std::array<Float32, 4> control_rotation { 0.F, 0.F, 0.F, 1.F };
-				if (mmd_bone_control_util::GetControlDeltaInBoneSpace(bone_tag_base, bone_object, control_translation, control_rotation))
+				if (mmd_bone_control_util::GetControlDeltaInBoneSpace(bone_tag_base, bone_object, control_translation, control_rotation, base_rotation))
 				{
 					const BaseContainer* const bc = bone_tag_base->GetDataInstance();
 					if (!bc || bc->GetBool(PMX_BONE_TRANSLATABLE))
@@ -4782,7 +4804,7 @@ Bool MMDModelManagerObject::RegisterCurrentStateKeyframe(BaseDocument* doc)
 				translation,
 				rotation,
 				reset_control,
-				from_transient_vpd_pose
+				from_transient_vpd_pose || authored_fk_rotation
 			});
 		}
 	}
@@ -4834,7 +4856,9 @@ Bool MMDModelManagerObject::RegisterCurrentStateKeyframe(BaseDocument* doc)
 
 		if (pending.reset_control)
 			mmd_bone_control_util::ResetControlRelativeTransform(pending.tag_base);
-		if (model_mode_ == MODEL_MODE_ANIM)
+		// Authored FK keys are already persistent pose overrides. Do not also
+		// retain a transient copy that can capture subsequent controller edits.
+		if (model_mode_ == MODEL_MODE_ANIM && !pending.static_pose)
 		{
 			pending.tag->SetPlaybackRuntimeOverride(doc, pending.translation, pending.rotation, true);
 			AppendUniqueBoneIndex(transient_vpd_bone_indices_, pending.bone_index);
@@ -5101,7 +5125,9 @@ Bool MMDModelManagerObject::AddToExecution(BaseObject* op, PriorityList* list)
 	{
 		return true;
 	}
+	list->Add(op, kExternalPosePreparePriority, EXECUTIONFLAGS::EXPRESSION);
 	list->Add(op, EXECUTIONPRIORITY_EXPRESSION, EXECUTIONFLAGS::EXPRESSION);
+	list->Add(op, kExternalPoseSolvePriority, EXECUTIONFLAGS::EXPRESSION);
 	return true;
 }
 SDK2024_GetDDescription(MMDModelManagerObject)
@@ -5426,6 +5452,14 @@ Bool MMDModelManagerObject::Message(GeListNode* node, Int32 type, void* data)
 		else {
 			switch (const auto id = dc->_descId[0].id)
 			{
+			case MODEL_CONTROLS_CREATE:
+				if (bone_manager_data_)
+					bone_manager_data_->CreateOrRefreshControls(GetBoneManagerObject());
+				break;
+			case MODEL_CONTROLS_SELECT:
+				if (bone_manager_data_)
+					mmd_bone_control_util::SelectVisibleControls(*bone_manager_data_, GetBoneManagerObject());
+				break;
 			case MODEL_MORPH_GROUP_ADD_BUTTON:
 			{
 				GeData ge_data;
@@ -6200,6 +6234,24 @@ Bool MMDModelManagerObject::SetDParameter(GeListNode* node, const DescID& id, co
 {
 	switch (id[0].id)
 	{
+		case MODEL_CONTROLS_DISPLAY:
+		case MODEL_CONTROLS_SIZE:
+		case MODEL_CONTROLS_OCCLUDED:
+		{
+			const GeData value = t_data;
+			BaseContainer* const bc = static_cast<BaseList2D*>(node)->GetDataInstance();
+			if (id[0].id == MODEL_CONTROLS_SIZE)
+				bc->SetFloat(MODEL_CONTROLS_SIZE, std::isfinite(value.GetFloat()) ? std::clamp(value.GetFloat(), 0.25, 3.0) : 1.0);
+			else if (id[0].id == MODEL_CONTROLS_DISPLAY)
+				bc->SetInt32(MODEL_CONTROLS_DISPLAY, std::clamp(value.GetInt32(), Int32(MODEL_CONTROLS_DISPLAY_PRIMARY), Int32(MODEL_CONTROLS_DISPLAY_HIDDEN)));
+			else
+				bc->SetBool(MODEL_CONTROLS_OCCLUDED, value.GetBool());
+			if (bone_manager_data_)
+				bone_manager_data_->SynchronizeControlPresentation(GetBoneManagerObject());
+			flags |= DESCFLAGS_SET::PARAM_SET;
+			if (GeIsMainThread()) EventAdd();
+			return true;
+		}
 		case MODEL_POSITION_MULTIPLE:
 		{
 			SyncSubManagerScale(t_data.GetFloat());

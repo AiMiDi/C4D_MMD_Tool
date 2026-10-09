@@ -129,6 +129,7 @@ class MMDBoneManagerObject final : public MMDManagerObject
 	SDK2024_WriteOverride;
 	EXECUTIONRESULT Execute(BaseObject* op, BaseDocument* doc, BaseThread* bt, Int32 priority, EXECUTIONFLAGS flags) override;
 	Bool AddToExecution(BaseObject* op, PriorityList* list) override;
+	DRAWRESULT Draw(BaseObject* op, DRAWPASS drawpass, BaseDraw* bd, BaseDrawHelp* bh) override;
 	Bool SetDParameter(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_SET& flags) override;
 	Bool Message(GeListNode* node, Int32 type, void* data) override;
 
@@ -152,6 +153,7 @@ class MMDBoneManagerObject final : public MMDManagerObject
 	Bool EnsureAllAnimationSlotCount(Int32 slot_count);
 	void SetAllActiveAnimationSlot(Int32 slot_index);
 	Bool CreateOrRefreshControls(BaseObject* bone_manager_object);
+	void SynchronizeControlPresentation(BaseObject* bone_manager_object);
 	void MarkAppendExecutionOrderDirty();
 	void EnsureAppendExecutionOrder();
 	void EnsurePlaybackExecutionPlan();
@@ -168,6 +170,10 @@ class MMDBoneManagerObject final : public MMDManagerObject
 	void SetPhysicsOverride(Int32 bone_index, const BaseDocument* doc, const Vector& translation, const std::array<Float32, 4>& rotation);
 
 private:
+	// Derived presentation only; deliberately reset on Read/CopyTo for Undo and
+	// legacy scene upgrades. Animation transforms are never part of this cache.
+	Float control_visual_size_ = -1.0;
+	Int32 control_visual_display_ = NOTOK;
 	void ApplyBoneDisplayType(BaseObject* bone_manager_object, Int32 display_type);
 	void ApplyStoredBoneDisplayType(BaseObject* bone_manager_object);
 	void CreateDisplayTag(GeListNode* node) override;

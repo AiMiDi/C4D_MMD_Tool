@@ -11,6 +11,8 @@
 #include "plugin_resource.h"
 #include "description/TMMDBone.h"
 #include "description/OMMDRigid.h"
+#include "description/tcaconstraint.h"
+#include "customgui_priority.h"
 #include "utils/mmd_bone_control_util.hpp"
 #include "utils/string_util.hpp"
 #include "utils/cmt_runtime_profile.hpp"
@@ -22,6 +24,9 @@
 
 namespace
 {
+	// Tcaconstraint is not declared by the R20 SDK, but the native plugin ID
+	// and its PSR description are shared by the supported Cinema 4D versions.
+	constexpr Int32 kNativeConstraintTagId = 1019364;
 	Int32 NormalizeModelMode(const Int32 mode)
 	{
 		constexpr Int32 kLegacyModelModeVmd = 2;
@@ -77,6 +82,111 @@ namespace
 		}
 	}
 
+}
+
+void MMDModelManagerObject::PrepareExternalBonePoses(BaseDocument* doc)
+{
+	const Bool had_external_input = HasExternalBonePoses();
+	external_bone_poses_.clear();
+	external_pose_captured_ = false;
+	external_pose_refresh_ = had_external_input;
+	if (!doc || model_mode_ != MODEL_MODE_ANIM || !bone_manager_data_)
+		return;
+
+	bone_manager_data_->EnsurePlaybackExecutionPlan();
+	for (const Int32 bone_index : bone_manager_data_->GetPlaybackBoneIndices())
+	{
+		BaseTag* const bone_tag = bone_manager_data_->FindBone(bone_index);
+		BaseObject* const bone = bone_tag ? bone_tag->GetObject() : nullptr;
+		const auto* const bone_node = bone_tag ? bone_tag->GetNodeData<MMDBoneTag>() : nullptr;
+		if (!bone || !bone_node || bone_node->bone_mode_ != BONE_MODE_ANIM)
+			continue;
+		ExternalBonePose pose;
+		for (BaseTag* tag = bone->GetFirstTag(); tag; tag = tag->GetNext())
+		{
+			if (tag->GetType() != kNativeConstraintTagId)
+				continue;
+			const BaseContainer& data = tag->GetDataInstanceRef();
+			if (!data.GetBool(EXPRESSION_ENABLE, true) || !data.GetBool(ID_CA_CONSTRAINT_TAG_PSR)
+				|| data.GetFloat(ID_CA_CONSTRAINT_TAG_PSR_TWEIGHT) <= 0.0)
+				continue;
+			GeData priority;
+			if (!tag->GetParameter(ConstDescID(DescLevel(EXPRESSION_PRIORITY)), priority, DESCFLAGS_GET::NONE))
+				continue;
+			const auto* const priority_data = GetCustomDataTypeWritable<PriorityData>(priority, CUSTOMGUI_PRIORITY_DATA);
+			if (!priority_data || priority_data->GetPriorityValue(PRIORITYVALUE_MODE).GetInt32() != CYCLE_EXPRESSION)
+				continue;
+			const Int32 offset = priority_data->GetPriorityValue(PRIORITYVALUE_PRIORITY).GetInt32();
+			if (offset <= -500 || offset >= 500)
+				continue;
+
+			const Bool position_axes = data.GetBool(ID_CA_CONSTRAINT_TAG_PSR_CONSTRAIN_P_X)
+				|| data.GetBool(ID_CA_CONSTRAINT_TAG_PSR_CONSTRAIN_P_Y) || data.GetBool(ID_CA_CONSTRAINT_TAG_PSR_CONSTRAIN_P_Z);
+			const Bool rotation_axes = data.GetBool(ID_CA_CONSTRAINT_TAG_PSR_CONSTRAIN_R_X)
+				|| data.GetBool(ID_CA_CONSTRAINT_TAG_PSR_CONSTRAIN_R_Y) || data.GetBool(ID_CA_CONSTRAINT_TAG_PSR_CONSTRAIN_R_Z);
+			// Native PSR targets use ten IDs per row: link +1, weight +2,
+			// position +5, scale +6, rotation +7 (the SDK reserves 10000..19999).
+			constexpr Int32 target_stride = 10;
+			constexpr Int32 max_targets = (ID_CA_CONSTRAINT_TAG_PSR_TARGET_COUNT_END - ID_CA_CONSTRAINT_TAG_PSR_TARGET_COUNT + 1) / target_stride;
+			const Int32 count = std::min(std::max(data.GetInt32(ID_CA_CONSTRAINT_TAG_PSR_TARGET_COUNT), 0), max_targets);
+			for (Int32 row = 0; row < count; ++row)
+			{
+				const Int32 base = ID_CA_CONSTRAINT_TAG_PSR_TARGET_COUNT + row * target_stride;
+				if (!data.GetLink(base + 1, doc) || data.GetFloat(base + 2) <= 0.0)
+					continue;
+				pose.position = pose.position || (position_axes && data.GetBool(base + 5));
+				pose.rotation = pose.rotation || (rotation_axes && data.GetBool(base + 7));
+			}
+		}
+		if (pose.position || pose.rotation)
+			external_bone_poses_.emplace(bone_index, pose);
+	}
+
+	external_pose_refresh_ = had_external_input || HasExternalBonePoses();
+	if (!external_pose_refresh_)
+		return;
+	if (has_transient_vpd_pose_ && doc->GetTime() != transient_vpd_pose_time_)
+		ClearTransientVPDPoseState(doc);
+	PrepareSameFrameReevaluation(doc);
+	if (!HasExternalBonePoses())
+		return;
+
+	// Only prepare animation here. Bullet and IK run once, after native tags.
+	for (const Bool after_physics : { false, true })
+	{
+		for (const Int32 layer : bone_manager_data_->GetPlaybackLayers())
+			bone_manager_data_->PrepareSceneForPhysicsPlaybackLayer(doc, layer, after_physics);
+	}
+}
+
+void MMDModelManagerObject::CaptureExternalBonePoses()
+{
+	for (auto& entry : external_bone_poses_)
+	{
+		BaseTag* const bone_tag = bone_manager_data_ ? bone_manager_data_->FindBone(entry.first) : nullptr;
+		if (BaseObject* const bone = bone_tag ? bone_tag->GetObject() : nullptr)
+			entry.second.relative = bone->GetRelMl();
+	}
+	external_pose_captured_ = true;
+}
+
+Bool MMDModelManagerObject::GetExternalBonePose(const Int32 bone_index, Matrix& relative, Bool& position, Bool& rotation) const
+{
+	if (!external_pose_captured_)
+		return false;
+	const auto entry = external_bone_poses_.find(bone_index);
+	if (entry == external_bone_poses_.end())
+		return false;
+	relative = entry->second.relative;
+	position = entry->second.position;
+	rotation = entry->second.rotation;
+	return true;
+}
+
+Bool MMDModelManagerObject::HasExternalBoneRotation(const Int32 bone_index) const
+{
+	const auto entry = external_bone_poses_.find(bone_index);
+	return external_pose_captured_ && entry != external_bone_poses_.end() && entry->second.rotation;
 }
 
 libmmd::MMDIkSolver* MMDModelManagerObject::GetStandaloneIKSolver(const Int32 bone_index) const
@@ -173,7 +283,7 @@ Int32 MMDModelManagerObject::SolveStandaloneIKForLayer(const Int32 layer, const 
 		return bone_tag && bone_tag->HasStaticPoseAnimationSegmentAtTime(doc);
 	};
 
-	auto ik_chain_has_static_pose_override = [this, &has_static_pose_keyframe_at_time](MMDBoneTag* ik_bone_tag, const BaseDocument* doc) -> Bool
+	auto ik_chain_has_authored_pose = [this, &has_static_pose_keyframe_at_time](MMDBoneTag* ik_bone_tag, const BaseDocument* doc) -> Bool
 	{
 		if (!ik_bone_tag || !doc)
 			return false;
@@ -182,7 +292,13 @@ Int32 MMDModelManagerObject::SolveStandaloneIKForLayer(const Int32 layer, const 
 		ik_bone_tag->CollectIKAffectedBoneIndices(affected_indices);
 		for (const Int32 affected_index : affected_indices)
 		{
+			// A driven IK goal is an input to this solver, not a competing FK
+			// rotation. Direct rotation constraints on its limb take ownership.
+			if (affected_index != ik_bone_tag->GetBoneIndex() && HasExternalBoneRotation(affected_index))
+				return true;
 			BaseTag* const affected_tag = bone_manager_data_ ? bone_manager_data_->FindBone(affected_index) : nullptr;
+			if (affected_index != ik_bone_tag->GetBoneIndex() && mmd_bone_control_util::HasActiveControlRotation(affected_tag))
+				return true;
 			auto* const affected_tag_node = affected_tag ? affected_tag->GetNodeData<MMDBoneTag>() : nullptr;
 			if (affected_tag_node && (affected_tag_node->HasStaticPoseRuntimeOverride(doc) || has_static_pose_keyframe_at_time(affected_tag_node, doc)))
 				return true;
@@ -209,7 +325,7 @@ Int32 MMDModelManagerObject::SolveStandaloneIKForLayer(const Int32 layer, const 
 		libmmd::MMDIkSolver* const ik_solver = GetStandaloneIKSolver(bone_index);
 		if (!ik_solver || !ik_solver->Enabled() || !ik_solver->GetIKNode() || !ik_solver->GetTargetNode())
 			continue;
-		if (ik_chain_has_static_pose_override(bone_tag_node, bone_object->GetDocument()))
+		if (ik_chain_has_authored_pose(bone_tag_node, bone_object->GetDocument()))
 			continue;
 		ik_indices.emplace_back(bone_index);
 	}
@@ -231,7 +347,7 @@ Int32 MMDModelManagerObject::SolveStandaloneIKForLayer(const Int32 layer, const 
 		libmmd::MMDIkSolver* const ik_solver = GetStandaloneIKSolver(bone_index);
 		if (!ik_solver || !ik_solver->Enabled() || !ik_solver->GetIKNode() || !ik_solver->GetTargetNode())
 			continue;
-		if (ik_chain_has_static_pose_override(bone_tag_node, bone_object->GetDocument()))
+		if (ik_chain_has_authored_pose(bone_tag_node, bone_object->GetDocument()))
 			continue;
 
 		bone_tag_node->BuildStandaloneIKChains();
@@ -313,6 +429,9 @@ void MMDModelManagerObject::InvalidateStandaloneRuntime()
 
 void MMDModelManagerObject::ResetStandaloneRuntimeCaches()
 {
+	external_bone_poses_.clear();
+	external_pose_captured_ = false;
+	external_pose_refresh_ = false;
 	ik_manager_own_.reset();
 	physics_manager_own_.reset();
 	physics_bone_pool_.clear();
@@ -326,7 +445,7 @@ void MMDModelManagerObject::ResetStandaloneRuntimeCaches()
 	bone_morph_pose_dirty_ = false;
 }
 
-void MMDModelManagerObject::PrepareBoneMorphReevaluation(BaseDocument* doc)
+void MMDModelManagerObject::PrepareSameFrameReevaluation(BaseDocument* doc)
 {
 	if (!bone_manager_data_ || !doc)
 		return;
@@ -352,7 +471,8 @@ void MMDModelManagerObject::PrepareBoneMorphReevaluation(BaseDocument* doc)
 		}
 	}
 
-	// Same-frame IK/append results must be recomputed from the new morph offsets.
+	// Recompute IK/append results when a control, morph, or external pose changes.
+	// In particular, old IK rotations must not overwrite a newly active FK control.
 	// Keep the Bullet world and explicit transient VPD pose; neither is a new frame.
 	bone_manager_data_->InvalidatePlaybackRuntimeState();
 	for (const auto& state : transient_overrides)

@@ -16,6 +16,8 @@ function(cmt_add_logic_test name source)
 endfunction()
 
 cmt_add_logic_test(bone_execution_plan_test bone_execution_plan_test.cpp)
+cmt_add_logic_test(control_role_test control_role_test.cpp)
+target_compile_options(control_role_test PRIVATE "$<$<CXX_COMPILER_ID:MSVC>:/utf-8>")
 cmt_add_logic_test(material_morph_runtime_test material_morph_runtime_test.cpp)
 cmt_add_logic_test(morph_evaluation_test morph_evaluation_test.cpp)
 cmt_add_logic_test(runtime_profile_test runtime_profile_test.cpp)

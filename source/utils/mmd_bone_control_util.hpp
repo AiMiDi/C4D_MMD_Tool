@@ -20,9 +20,15 @@ class MMDBoneManagerObject;
 namespace mmd_bone_control_util
 {
 	Bool CreateOrRefreshControls(MMDBoneManagerObject& bone_manager, BaseObject* bone_manager_object);
+	void RefreshControlVisuals(MMDBoneManagerObject& bone_manager, BaseObject* bone_manager_object);
+	Bool IsControlVisible(BaseTag* bone_tag, BaseObject* bone_manager_object, Int32 bone_display_type);
+	void SelectVisibleControls(MMDBoneManagerObject& bone_manager, BaseObject* bone_manager_object);
+	DRAWRESULT DrawControls(MMDBoneManagerObject& bone_manager, BaseObject* op, DRAWPASS drawpass, BaseDraw* bd, BaseDrawHelp* bh);
 	Bool HasActiveControlDelta(MMDBoneManagerObject& bone_manager);
+	Bool HasActiveControlRotation(BaseTag* bone_tag);
 	UInt32 GetControlStateChecksum(MMDBoneManagerObject& bone_manager);
 	void SyncControlsToCurrentPose(MMDBoneManagerObject& bone_manager);
-	Bool GetControlDeltaInBoneSpace(BaseTag* bone_tag, BaseObject* bone_object, Vector& translation, std::array<Float32, 4>& rotation);
+	Bool GetControlDeltaInBoneSpace(BaseTag* bone_tag, BaseObject* bone_object, Vector& translation, std::array<Float32, 4>& rotation,
+		const std::array<Float32, 4>& animation_rotation = { 0.F, 0.F, 0.F, 1.F });
 	void ResetControlRelativeTransform(BaseTag* bone_tag);
 }
