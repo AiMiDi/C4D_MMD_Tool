@@ -41,6 +41,9 @@ namespace
 	{
 		Circle,
 		Square,
+		Box,
+		ShoulderFrame,
+		Pelvis,
 		Diamond,
 		Oval,
 		Triangle,
@@ -54,6 +57,9 @@ namespace
 		Float radius = kControlMediumRadius;
 		Float aspect = 1.0;
 		Float axis_offset = 0.0;
+		Bool orientation_fin = true;
+		Bool model_aligned = false;
+		Vector model_offset;
 	};
 
 	Matrix MakeIdentityMatrix()
@@ -388,24 +394,86 @@ namespace
 		return std::isfinite(span) && span > EPSILON ? span : 20.0;
 	}
 
+	cmt::controls::Purpose GetControlPurpose(const BaseContainer* bc)
+	{
+		using namespace cmt::controls;
+		if (!bc) return Purpose::Unknown;
+		const auto local = ClassifyPurpose(string_util::GetStdString(bc->GetString(PMX_BONE_NAME_LOCAL)));
+		const auto universal = ClassifyPurpose(string_util::GetStdString(bc->GetString(PMX_BONE_NAME_UNIVERSAL)));
+		// Explicit auxiliary/twist metadata wins even if the other alias is a
+		// standard joint name. Unknown names retain the existing presentation.
+		if (IsSecondaryPurpose(local)) return local;
+		if (IsSecondaryPurpose(universal)) return universal;
+		return local != Purpose::Unknown ? local : universal;
+	}
+
 	Bool IsPrimaryControl(const BaseContainer* bc)
 	{
-		return bc && bc->GetBool(PMX_BONE_VISIBLE) && bc->GetBool(PMX_BONE_ENABLED);
+		return bc && bc->GetBool(PMX_BONE_VISIBLE) && bc->GetBool(PMX_BONE_ENABLED) &&
+			!cmt::controls::IsSecondaryPurpose(GetControlPurpose(bc));
 	}
+
+	BaseObject* GetControlModel(BaseObject* manager);
+	BaseObject* FindDescendantByName(BaseObject* parent, const String& name);
 
 	ControlVisualSpec GetControlVisualSpec(const BaseContainer* bc, BaseObject* bone_object, const Float span, const Float size)
 	{
 		const Float hierarchy_scale = std::clamp(1.0 - Float(GetBoneHierarchyDepth(bone_object)) * 0.025, 0.65, 1.0);
-		const Float radius = span * 0.055 * hierarchy_scale * size;
+		const auto purpose = GetControlPurpose(bc);
+		const Float radius = span * 0.055 * hierarchy_scale * size * cmt::controls::PurposeRadiusScale(purpose);
 		// Explicit PMX axes take precedence over an anatomical name, including
 		// knees authored as hinges in models other than the validation sample.
 		if (bc && bc->GetBool(PMX_BONE_IS_FIXED_AXIS))
 			return { ControlShape::Diamond, radius * 0.7, 1.0, radius * 0.8 };
+		if (cmt::controls::IsSecondaryPurpose(purpose))
+			return { ControlShape::Diamond, radius, 1.0 };
+		if (purpose == cmt::controls::Purpose::Shoulder)
+		{
+			ControlVisualSpec visual{ ControlShape::ShoulderFrame, radius, 1.0, 0.0, false };
+			visual.model_aligned = true;
+			const auto named = cmt::controls::ClassifyName(string_util::GetStdString(bc->GetString(PMX_BONE_NAME_LOCAL)));
+			Int right_position = NOTOK;
+			const Bool right = named.side == cmt::controls::Side::Right || bc->GetString(PMX_BONE_NAME_LOCAL).Find(String("右"), &right_position);
+			visual.model_offset = Vector((right ? -1 : 1) * span * 0.14, span * 0.045, -span * 0.025);
+			return visual;
+		}
+		if (purpose == cmt::controls::Purpose::Eye || purpose == cmt::controls::Purpose::Eyes)
+		{
+			ControlVisualSpec visual{ ControlShape::Oval, radius, 1.3, 0.0, false };
+			visual.model_aligned = true;
+			visual.model_offset = Vector(0, 0, -span * 0.12);
+			// The shared MMD eye pivot is often above the head. Place its outline
+			// by the actual eye pair while keeping that authored pivot untouched.
+			if (purpose == cmt::controls::Purpose::Eyes && bone_object)
+			{
+				BaseObject* const parent = bone_object->GetUp();
+				BaseObject* const left = FindDescendantByName(parent, String("左目"));
+				BaseObject* const right = FindDescendantByName(parent, String("右目"));
+				BaseObject* const model = GetControlModel(bone_object);
+				if (left && right && model)
+				{
+					const Vector midpoint = (BuildFrozenBoneGlobalMatrix(left).off + BuildFrozenBoneGlobalMatrix(right).off) * 0.5;
+					const Matrix inverse_model = ~NormalizeMatrixBasis(model->GetMg());
+					visual.model_offset += inverse_model.sqmat * (midpoint - BuildFrozenBoneGlobalMatrix(bone_object).off);
+				}
+			}
+			return visual;
+		}
+		if (purpose == cmt::controls::Purpose::Wrist)
+			return { ControlShape::Box, radius, 1.0 };
 		switch (GetControlRole(bc))
 		{
-		case cmt::controls::Role::IkGoal: return { ControlShape::Foot, radius * 0.9, 1.0 };
+		case cmt::controls::Role::Root: return { ControlShape::Circle, radius * 3.5, 1.0, 0.0, false };
+		case cmt::controls::Role::Center: return { ControlShape::RoundedSquare, radius * 2.4, 1.0, 0.0, false };
+		case cmt::controls::Role::Groove: return { ControlShape::Oval, radius * 1.85, 1.1, 0.0, false };
+		case cmt::controls::Role::Waist: return { ControlShape::Triangle, radius * 1.15, 1.0, 0.0, false };
+		case cmt::controls::Role::Pelvis: return { ControlShape::Pelvis, radius * 1.35, 1.0, 0.0, false };
+		case cmt::controls::Role::Spine: return { ControlShape::Circle, radius * 1.5, 1.0, 0.0, false };
+		case cmt::controls::Role::Neck: return { ControlShape::Circle, radius * 0.65, 1.0, 0.0, false };
+		case cmt::controls::Role::Head: return { ControlShape::Circle, radius * 1.1, 1.0, span * 0.16, false };
+		case cmt::controls::Role::IkGoal: return { ControlShape::Foot, radius * 0.9, 0.8 };
 		case cmt::controls::Role::ToeIk: return { ControlShape::Triangle, radius * 0.55, 1.0 };
-		case cmt::controls::Role::IkParent: return { ControlShape::RoundedSquare, radius * 1.3, 1.0 };
+		case cmt::controls::Role::IkParent: return { ControlShape::RoundedSquare, radius * 1.3, 0.5 };
 		case cmt::controls::Role::Leg: return { ControlShape::Circle, radius * 0.85, 1.0 };
 		case cmt::controls::Role::Knee: return { ControlShape::Circle, radius * 0.65, 1.0 };
 		case cmt::controls::Role::Ankle: return { ControlShape::Circle, radius * 0.6, 1.0 };
@@ -425,13 +493,13 @@ namespace
 	{
 		Int position = NOTOK;
 		if (local_name.IsPopulated() && local_name.Find(String("左"), &position))
-			return Vector(0.24, 0.78, 0.96);
+			return Vector(0.20, 0.48, 1.0);
 		if (local_name.IsPopulated() && local_name.Find(String("右"), &position))
-			return Vector(1.0, 0.38, 0.30);
+			return Vector(1.0, 0.28, 0.24);
 		const auto side = cmt::controls::ClassifyName(string_util::GetStdString(local_name)).side;
-		if (side == cmt::controls::Side::Left) return Vector(0.24, 0.78, 0.96);
-		if (side == cmt::controls::Side::Right) return Vector(1.0, 0.38, 0.30);
-		return Vector(1.0, 0.76, 0.32);
+		if (side == cmt::controls::Side::Left) return Vector(0.20, 0.48, 1.0);
+		if (side == cmt::controls::Side::Right) return Vector(1.0, 0.28, 0.24);
+		return Vector(1.0, 0.88, 0.18);
 	}
 
 	BaseObject* GetControlModel(BaseObject* manager)
@@ -539,6 +607,14 @@ namespace
 		return FormatString("@_ctrl", GetControlBaseName(bone_tag, bone_index));
 	}
 
+	bool UsesHorizontalControlPlane(const BaseContainer* bc)
+	{
+		using cmt::controls::Role;
+		const auto role = GetControlRole(bc);
+		return (bc && bc->GetBool(PMX_BONE_IS_IK)) || role == Role::IkParent ||
+			role == Role::Root || role == Role::Center || role == Role::Groove || role == Role::Waist || role == Role::Spine || role == Role::Pelvis || role == Role::Neck || role == Role::Head;
+	}
+
 	Matrix BuildControlMatrix(MMDBoneManagerObject& bone_manager, BaseTag* bone_tag, BaseObject* bone_object)
 	{
 		const Matrix rest = BuildFrozenBoneGlobalMatrix(bone_object);
@@ -547,14 +623,14 @@ namespace
 		Vector normal;
 		if (GetFixedAxis(bc, normal) || GetLocalBoneAxis(bc, normal))
 			normal = TransformRestDirectionToCurrent(rest, current, normal);
-		else if (bc && (bc->GetBool(PMX_BONE_IS_IK) || GetControlRole(bc) == cmt::controls::Role::IkParent))
+		else if (UsesHorizontalControlPlane(bc))
 			normal = TransformRestDirectionToCurrent(rest, current, Vector(0, 1, 0));
 		else if (!GetTailBoneAxis(bone_manager, bc, rest, current, bone_object, normal))
 			normal = current.sqmat.v3;
 
 		Vector reference = GetFallbackReference(current, normal);
 		if (bc && !bc->GetBool(PMX_BONE_IS_FIXED_AXIS) &&
-			(bc->GetBool(PMX_BONE_IS_IK) || GetControlRole(bc) == cmt::controls::Role::IkParent))
+			UsesHorizontalControlPlane(bc))
 			reference = TransformRestDirectionToCurrent(rest, current, Vector(1, 0, 0));
 		if (bc && bc->GetBool(PMX_BONE_LOCAL_IS_COORDINATE))
 			reference = TransformRestDirectionToCurrent(rest, current, bc->GetVector(PMX_BONE_LOCAL_Z));
@@ -632,6 +708,15 @@ namespace
 				}
 			}
 			break;
+		case ControlShape::ShoulderFrame:
+			points = { Vector(-r * 0.65, -r * 0.65, 0), Vector(r * 0.65, -r * 0.65, 0),
+				Vector(r * 0.65, r * 0.65, 0), Vector(-r * 0.65, r * 0.65, 0) };
+			break;
+		case ControlShape::Pelvis:
+			// Hip basket points down along the horizontal control plane normal.
+			points = { Vector(-r, 0, 0), Vector(r, 0, 0), Vector(0, 0, -r * 0.8) };
+			break;
+		case ControlShape::Box:
 		case ControlShape::Square:
 			points = {
 				Vector(-r, -r, 0.0),
@@ -668,7 +753,11 @@ namespace
 			break;
 		}
 		for (Vector& point : points)
+		{
+			if (spec.shape == ControlShape::Foot || spec.shape == ControlShape::RoundedSquare)
+				point.x *= spec.aspect;
 			point.z += spec.axis_offset;
+		}
 		return points;
 	}
 
@@ -679,43 +768,82 @@ namespace
 
 		const std::vector<Vector> points = BuildControlShapePoints(spec);
 		const Int32 outline_count = static_cast<Int32>(points.size());
-		const Int32 point_count = outline_count + 3;
-		if (point_count <= 0)
+		if (outline_count <= 0)
 			return;
-
-		if (spline->GetPointCount() != point_count || spline->GetSegmentCount() != 2)
+		// Explicit endpoints give native splines and foreground drawing identical
+		// topology. The global Closed flag must not connect unrelated segments.
+		std::vector<std::vector<Vector>> contours{ points };
+		contours.front().push_back(points.front());
+		const Bool has_fin = spec.orientation_fin &&
+			(spec.shape == ControlShape::Circle || spec.shape == ControlShape::Oval);
+		if (has_fin)
 		{
-			if (!spline->ResizeObject(point_count, 2))
-				return;
+			// A small gap separates the fin from the +X rim. Its base is tangent
+			// to the rim and its plane perpendicular to the rotation ring.
+			const Float edge = spec.radius * (spec.shape == ControlShape::Oval ? spec.aspect : 1.0);
+			const Vector center(edge + spec.radius * 0.12, 0, spec.axis_offset);
+			const Vector a = center + Vector(0, -spec.radius * 0.35, 0);
+			const Vector b = center + Vector(0, spec.radius * 0.35, 0);
+			const Vector tip = center + Vector(0, 0, spec.radius * 0.55);
+			contours.push_back({ a, b, tip, a });
 		}
-		if (Segment* const segment = spline->GetSegmentW())
+		else if (spec.shape == ControlShape::ShoulderFrame)
 		{
-			segment[0].cnt = outline_count;
-			segment[0].closed = true;
-			segment[1].cnt = 3;
-			segment[1].closed = false;
+			contours.push_back({ -spec.model_offset, Vector(0, -spec.radius * 0.65, 0) });
 		}
-		if (Vector* const point_data = spline->GetPointW())
+		else if (spec.shape == ControlShape::Box)
 		{
-			for (Int32 i = 0; i < outline_count; ++i)
-				point_data[i] = points[static_cast<std::size_t>(i)];
-			// A short axis fin keeps an edge-on ring legible without adding a
-			// second full ring. Offsetting the fixed-axis outline separates it
-			// from a local-axis control sharing the same joint pivot.
-			point_data[outline_count] = points.front();
-			point_data[outline_count + 1] = points.front() + Vector(0, 0, spec.radius * 0.45);
-			point_data[outline_count + 2] = points.front() * 0.8 + Vector(0, 0, spec.radius * 0.45);
+			// A shallow wire cage distinguishes hand controls from FK rings.
+			const Vector depth(0, 0, spec.radius * 0.8);
+			std::vector<Vector> top = contours.front();
+			for (Vector& point : top) point += depth;
+			contours.push_back(top);
+			for (const Vector& point : points) contours.push_back({ point, point + depth });
 		}
-		spline->SetParameter(ConstDescID(DescLevel(SPLINEOBJECT_CLOSED)), true, DESCFLAGS_SET::NONE);
+		Int32 point_count = 0;
+		for (const auto& contour : contours) point_count += static_cast<Int32>(contour.size());
+		const Int32 segment_count = static_cast<Int32>(contours.size());
+		if (spline->GetPointCount() != point_count || spline->GetSegmentCount() != segment_count)
+		{
+			if (!spline->ResizeObject(point_count, segment_count)) return;
+		}
+		Segment* const segments = spline->GetSegmentW();
+		Vector* const point_data = spline->GetPointW();
+		if (!segments || !point_data) return;
+		Int32 offset = 0;
+		for (Int32 i = 0; i < segment_count; ++i)
+		{
+			const auto& contour = contours[static_cast<std::size_t>(i)];
+			segments[i].cnt = static_cast<Int32>(contour.size());
+			segments[i].closed = false;
+			for (const Vector& point : contour) point_data[offset++] = point;
+		}
+		spline->SetParameter(ConstDescID(DescLevel(SPLINEOBJECT_CLOSED)), false, DESCFLAGS_SET::NONE);
 		spline->SetDefaultCoeff();
 		spline->Message(MSG_UPDATE);
 	}
 
-	void ApplyControlSplineShape(BaseObject* control, const ControlVisualSpec& spec)
+	void ApplyControlSplineShape(BaseObject* control, const ControlVisualSpec& spec, BaseObject* bone = nullptr)
 	{
 		if (!control || !(control->GetInfo() & OBJECT_ISSPLINE))
 			return;
-		ApplyControlSplineShape(ToSpline(control), spec);
+		SplineObject* const spline = ToSpline(control);
+		ApplyControlSplineShape(spline, spec);
+		BaseObject* const model = bone ? GetControlModel(bone) : nullptr;
+		if (spec.model_aligned && model)
+		{
+			// Convert the model-space display layout into the frozen control frame.
+			// Relative animation inputs are deliberately excluded from this mapping.
+			BaseObject* const parent = control->GetUp();
+			const Matrix parent_rest = parent ? BuildFrozenBoneGlobalMatrix(parent) : MakeIdentityMatrix();
+			const Matrix control_rest = NormalizeMatrixBasis(parent_rest * control->GetFrozenMln());
+			Matrix layout = ~control_rest * NormalizeMatrixBasis(model->GetMg());
+			layout.off = Vector(0);
+			if (Vector* const points = spline->GetPointW())
+				for (Int32 i = 0; i < spline->GetPointCount(); ++i)
+					points[i] = layout * (points[i] + spec.model_offset);
+			spline->Message(MSG_UPDATE);
+		}
 	}
 
 	SplineObject* CreateControlSpline(const ControlVisualSpec& spec)
@@ -923,7 +1051,7 @@ Bool mmd_bone_control_util::CreateOrRefreshControls(MMDBoneManagerObject& bone_m
 		if (managed_control)
 		{
 			control->SetName(control_name);
-			ApplyControlSplineShape(control, visual_spec);
+			ApplyControlSplineShape(control, visual_spec, bone_object);
 			SetControlObjectColor(control, GetControlColor(local_name));
 			ConfigureControlProtection(control, bc);
 		}
@@ -957,6 +1085,7 @@ Bool mmd_bone_control_util::CreateOrRefreshControls(MMDBoneManagerObject& bone_m
 		// presentation must not zero it or change the controller's frozen basis.
 		if (entry.created)
 			ApplyGlobalFrozenMatrix(entry.control, entry.global_rest);
+		ApplyControlSplineShape(entry.control, GetControlVisualSpec(entry.bc, entry.bone_object, skeleton_span, size), entry.bone_object);
 		MarkSceneNodeDirty(entry.control);
 	}
 
@@ -983,7 +1112,7 @@ void mmd_bone_control_util::RefreshControlVisuals(MMDBoneManagerObject& bone_man
 		BaseObject* const control = ResolveLinkedObjectParameter(tag, PMX_BONE_CONTROL_LINK);
 		if (!IsBoneControlEligible(bc) || !control || !IsSameOrDescendantOf(control, manager))
 			continue;
-		ApplyControlSplineShape(control, GetControlVisualSpec(bc, bone, span, size));
+		ApplyControlSplineShape(control, GetControlVisualSpec(bc, bone, span, size), bone);
 		SetControlObjectColor(control, GetControlColor(bc->GetString(PMX_BONE_NAME_LOCAL)));
 	}
 }

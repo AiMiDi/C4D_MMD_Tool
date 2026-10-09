@@ -59,8 +59,11 @@ def run(source, ids, output, base_frame=0, physics_enabled=False):
                     ('足', 'ひざ', '足首', 'つま先', '足先EX', '足IK親', '足ＩＫ', 'つま先ＩＫ')]
         check('lower_body_coverage', all(name in controls for name in required), total=len(controls), missing=[name for name in required if name not in controls])
         check('deformation_duplicates_excluded', not any(side+suffix+'D' in controls for side in ('左','右') for suffix in ('足','ひざ','足首')))
-        check('lower_body_shapes', controls['左足ＩＫ'].GetPointCount() == 9 and controls['左つま先ＩＫ'].GetPointCount() == 6
-              and controls['左足IK親'].GetPointCount() == 27)
+        # Outline counts include the explicit closing point; do not confuse
+        # the orientation fin with the foot/toe/parent silhouette itself.
+        check('lower_body_shapes', controls['左足ＩＫ'].GetSegment(0)['cnt'] == 7
+              and controls['左つま先ＩＫ'].GetSegment(0)['cnt'] == 4
+              and controls['左足IK親'].GetSegment(0)['cnt'] == 25)
         bind = {name: matrix_values(bone.GetFrozenMln()) for name, bone in bones.items()}
 
         # Moving each native IK target must reach its solver and the deformed
