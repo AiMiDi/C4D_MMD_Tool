@@ -81,6 +81,26 @@ Windows development: `cmake --preset dev-windows` then `cmake --build --preset w
 
 The latest three releases are listed here. See the [complete changelog](CHANGELOG.md) for older versions and intermediate build tags.
 
+### 0.9.3.1 · Controller placement and hover names (2026-10-09)
+
+1. Fix eye controller placement on fresh PMX import; align the shared eye outline with the actual eye pair while retaining its authored rotation pivot and model scale.
+2. Show the bone name when hovering a generated controller outline, using the selected local or English naming mode. Hidden controls and disabled spline display do not produce hints.
+3. Remove direction triangles from rotation rings and ovals; retain shoulder leaders, hand wire boxes and toe IK triangles.
+4. Hide generated controllers in Edit mode and restore Primary/All/Hidden settings in Animation mode. Preserve existing controller transforms and animation tracks when refreshing.
+5. Avoid transient GitLab Eigen checkout failures in CI by using a mirror of the same pinned commit and bounded checkout retries.
+
+[Changes since 0.9.3.0](https://github.com/AiMiDi/C4D_MMD_Tool/compare/v0.9.3.0...v0.9.3.1) · [Validation scope](docs/dev/controllers-eye-hover-20261009.md)
+
+### 0.9.3.0 · MMD controller hierarchy and silhouettes (2026-10-09)
+
+1. Support native PSR position/rotation constraints on imported MMD bones, including IK target motion and direct FK ownership. Stabilize repeated evaluation and retain registered FK poses.
+2. Add leg, knee, ankle, toe, foot IK and IK-parent controllers, plus root, center, groove, waist, torso, neck and head controls.
+3. Give shoulders, wrists, eyes, central bones and IK goals distinct silhouettes and consistent left/right colors. Reduce auxiliary/twist controls and exclude them from Primary display.
+4. Add model-level controller generation, visible-control selection, Primary/All/Hidden display, proportional sizing and continuous outlines through meshes.
+5. Preserve controller identities, transforms, animation tracks, links and bind poses when refreshing, changing size or saving and reopening.
+
+[Changes since 0.9.2.2](https://github.com/AiMiDi/C4D_MMD_Tool/compare/v0.9.2.2...v0.9.3.0) · [Controller acceptance](docs/dev/controllers-acceptance-20261008.md)
+
 ### 0.9.2.2 · Architecture, Morph and materials (2026-10-08)
 
 Changes since `v0.9.1.20`, grouped by module:
@@ -95,26 +115,6 @@ Changes since `v0.9.1.20`, grouped by module:
 8. **Build, packaging and documentation:** Share source, resources and CMake setup across SDKs, with explicit Debug/Release/test presets and real runtime resource copies. Package Windows x64 for R20–2026 and separate macOS Intel ZIPs by compatible C4D version. Include platform/architecture/version in artifact names, expand regression tooling and refresh development guides and feature screenshots.
 
 **Compatibility and limits:** RS Toon needs the required native Redshift nodes; unsupported hosts report the reason. Material Morph binding v1 requires an explicit upgrade to v2; older Toon graph revisions require explicit conversion. Toon lighting/specular and some outlines remain approximations; native MMD image equivalence is unverified. macOS/older-host runtime execution and full real-model physics replay remain unverified. Published macOS assets are Intel builds; Apple Silicon builds are CI validation only.
-
-### 0.9.1.20 (2026-07-15)
-
-1. Add PMX Material Morph import, authoring, persistence and export, including material fields, texture factors and Standard material preview.
-2. Add VPD pose import/export controls, including current-pose export.
-3. Fix repeated VMD Morph evaluation accumulating deformation and stabilize PMX bone EDIT / ANIM transitions.
-4. Improve macOS builds, pin Windows CI to VS 2022, package macOS Intel binaries and add separate Apple Silicon build validation.
-5. Synchronize SDK resource layouts for release builds, including the missing SDK 2025 Material Morph resources.
-
-[Release](https://github.com/AiMiDi/C4D_MMD_Tool/releases/tag/v0.9.1.20) · [Changes since 0.9.1.15](https://github.com/AiMiDi/C4D_MMD_Tool/compare/v0.9.1.15...v0.9.1.20)
-
-### 0.9.1.15 · Pre-release (2026-05-23)
-
-1. Add PMX model export for plugin-managed models, with selectable mesh, normals, UV, material, bone, weight, IK, inheritance and Morph data.
-2. Add MMD bone control objects for editing poses on imported models.
-3. Restore PMX export compilation on older SDKs and fix Clang compatibility for bone indices and SDK interfaces.
-4. Repair dependency/submodule checkout and pin reachable Bullet/libMMD dependencies.
-5. Package macOS builds as Intel x86_64 and constrain the Xcode build architecture accordingly.
-
-[Release](https://github.com/AiMiDi/C4D_MMD_Tool/releases/tag/v0.9.1.15) · [Changes since 0.9.1.3](https://github.com/AiMiDi/C4D_MMD_Tool/compare/v0.9.1.3...v0.9.1.15)
 
 ## Author
 

@@ -4,6 +4,26 @@
 
 Entries for 0.9.1.x were reconstructed from tagged source changes and release dates. Intermediate build tags are grouped below; original entries through 0.4.6.1 are retained.
 
+### 0.9.3.1 · Controller placement and hover names (2026-10-09)
+
+1. Fix eye controller placement on fresh PMX import; align the shared eye outline with the actual eye pair while retaining its authored rotation pivot and model scale.
+2. Show the bone name when hovering a generated controller outline, using the selected local or English naming mode. Hidden controls and disabled spline display do not produce hints.
+3. Remove direction triangles from rotation rings and ovals; retain shoulder leaders, hand wire boxes and toe IK triangles.
+4. Hide generated controllers in Edit mode and restore Primary/All/Hidden settings in Animation mode. Preserve existing controller transforms and animation tracks when refreshing.
+5. Avoid transient GitLab Eigen checkout failures in CI by using a mirror of the same pinned commit and bounded checkout retries.
+
+[Changes since 0.9.3.0](https://github.com/AiMiDi/C4D_MMD_Tool/compare/v0.9.3.0...v0.9.3.1) · [Validation scope](docs/dev/controllers-eye-hover-20261009.md)
+
+### 0.9.3.0 · MMD controller hierarchy and silhouettes (2026-10-09)
+
+1. Support native PSR position/rotation constraints on imported MMD bones, including IK target motion and direct FK ownership. Stabilize repeated evaluation and retain registered FK poses.
+2. Add leg, knee, ankle, toe, foot IK and IK-parent controllers, plus root, center, groove, waist, torso, neck and head controls.
+3. Give shoulders, wrists, eyes, central bones and IK goals distinct silhouettes and consistent left/right colors. Reduce auxiliary/twist controls and exclude them from Primary display.
+4. Add model-level controller generation, visible-control selection, Primary/All/Hidden display, proportional sizing and continuous outlines through meshes.
+5. Preserve controller identities, transforms, animation tracks, links and bind poses when refreshing, changing size or saving and reopening.
+
+[Changes since 0.9.2.2](https://github.com/AiMiDi/C4D_MMD_Tool/compare/v0.9.2.2...v0.9.3.0) · [Controller acceptance](docs/dev/controllers-acceptance-20261008.md)
+
 ### 0.9.2.3 · MMD controllers (2026-10-08)
 
 1. Support native PSR position/rotation constraints on imported MMD bones, including IK target motion and direct FK ownership.
