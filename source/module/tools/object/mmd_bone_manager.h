@@ -174,6 +174,7 @@ private:
 	// legacy scene upgrades. Animation transforms are never part of this cache.
 	Float control_visual_size_ = -1.0;
 	Int32 control_visual_display_ = NOTOK;
+	Int32 control_visual_mode_ = NOTOK;
 	void ApplyBoneDisplayType(BaseObject* bone_manager_object, Int32 display_type);
 	void ApplyStoredBoneDisplayType(BaseObject* bone_manager_object);
 	void CreateDisplayTag(GeListNode* node) override;

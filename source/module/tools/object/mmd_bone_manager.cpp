@@ -773,6 +773,7 @@ SDK2024_CopyTo(MMDBoneManagerObject)
 	dest_object->bone_display_sync_pending_ = true;
 	dest_object->control_visual_size_ = -1.0;
 	dest_object->control_visual_display_ = NOTOK;
+	dest_object->control_visual_mode_ = NOTOK;
 	dest_object->has_hierarchy_checksum_ = false;
 	dest_object->bone_index_lookup_.Reset();
 	dest_object->bone_items_.FlushAll();
@@ -797,6 +798,7 @@ Bool MMDBoneManagerObject::Read(GeListNode* node, HyperFile* hf, Int32 level)
 {
 	control_visual_size_ = -1.0;
 	control_visual_display_ = NOTOK;
+	control_visual_mode_ = NOTOK;
 	iferr_scope_handler{
 		return false;
 	};
@@ -935,7 +937,10 @@ Bool MMDBoneManagerObject::CreateOrRefreshControls(BaseObject* bone_manager_obje
 {
 	if (!mmd_bone_control_util::CreateOrRefreshControls(*this, bone_manager_object))
 		return false;
-	SetBoneDisplayType(BONE_DISPLAY_TYPE_CONTROLS, bone_manager_object ? bone_manager_object : reinterpret_cast<BaseObject*>(Get()));
+	BaseObject* const model = io_util::ResolveObjectLink(model_manager_);
+	const Int32 display = model && model->GetDataInstance()->GetInt32(MODEL_MODE) == MODEL_MODE_EDIT
+		? BONE_DISPLAY_TYPE_ON : BONE_DISPLAY_TYPE_CONTROLS;
+	SetBoneDisplayType(display, bone_manager_object ? bone_manager_object : reinterpret_cast<BaseObject*>(Get()));
 	return true;
 }
 
@@ -952,22 +957,25 @@ void MMDBoneManagerObject::SynchronizeControlPresentation(BaseObject* manager)
 	const BaseContainer* const data = model->GetDataInstance();
 	const Float size = data->GetFloat(MODEL_CONTROLS_SIZE, 1.0);
 	const Int32 display = data->GetInt32(MODEL_CONTROLS_DISPLAY);
+	const Int32 mode = data->GetInt32(MODEL_MODE);
 	if (size != control_visual_size_)
 	{
 		mmd_bone_control_util::RefreshControlVisuals(*this, manager);
 		control_visual_size_ = size;
 	}
-	if (display != control_visual_display_)
+	if (display != control_visual_display_ || mode != control_visual_mode_)
 	{
 		// Read/CopyTo already synchronize the stored bone display. Thereafter,
 		// model attribute Undo and direct container edits must update visibility.
-		if (control_visual_display_ != NOTOK)
+		if (control_visual_display_ != NOTOK || mode == MODEL_MODE_EDIT)
 		{
-			const Int32 bone_display = display == MODEL_CONTROLS_DISPLAY_HIDDEN ? BONE_DISPLAY_TYPE_OFF : BONE_DISPLAY_TYPE_CONTROLS;
+			const Int32 bone_display = mode == MODEL_MODE_EDIT ? BONE_DISPLAY_TYPE_ON
+				: display == MODEL_CONTROLS_DISPLAY_HIDDEN ? BONE_DISPLAY_TYPE_OFF : BONE_DISPLAY_TYPE_CONTROLS;
 			manager->GetDataInstance()->SetInt32(BONE_DISPLAY_TYPE, bone_display);
 			ApplyBoneDisplayType(manager, bone_display);
 		}
 		control_visual_display_ = display;
+		control_visual_mode_ = mode;
 	}
 }
 
@@ -2430,9 +2438,9 @@ void MMDBoneManagerObject::ApplyBoneDisplayType(BaseObject* const bone_manager_o
 	if (BaseObject* const model = io_util::ResolveObjectLink(model_manager_))
 	{
 		BaseContainer& data = model->GetDataInstanceRef();
-		if (display_type == BONE_DISPLAY_TYPE_OFF)
+		if (display_type == BONE_DISPLAY_TYPE_OFF && data.GetInt32(MODEL_MODE) == MODEL_MODE_ANIM)
 			data.SetInt32(MODEL_CONTROLS_DISPLAY, MODEL_CONTROLS_DISPLAY_HIDDEN);
-		else if (data.GetInt32(MODEL_CONTROLS_DISPLAY) == MODEL_CONTROLS_DISPLAY_HIDDEN)
+		else if (display_type == BONE_DISPLAY_TYPE_CONTROLS && data.GetInt32(MODEL_CONTROLS_DISPLAY) == MODEL_CONTROLS_DISPLAY_HIDDEN)
 			data.SetInt32(MODEL_CONTROLS_DISPLAY, MODEL_CONTROLS_DISPLAY_PRIMARY);
 		control_visual_display_ = data.GetInt32(MODEL_CONTROLS_DISPLAY);
 	}

@@ -29,40 +29,20 @@ def transform_values(obj):
 
 
 def control_curve_checks(control):
-    """Check actual native sampling, not just per-segment closed metadata."""
-    if control.GetSegmentCount() not in (1, 2, 6):
-        return {"outline_closed": False, "marker_triangle": False, "marker_at_rim": False}
+    """Check native curves and reject the removed orientation-fin segment."""
+    count = control.GetSegmentCount()
+    if count not in (1, 2, 6):
+        return {"outline_closed": False, "no_orientation_fin": False}
     outline = control.GetSegment(0)
     points = control.GetAllPoints()
-    marker_start = outline["cnt"]
-    has_fin = control.GetSegmentCount() == 2 and control.GetSegment(1)["cnt"] == 4
-    valid_counts = marker_start >= 4 and len(points) == marker_start + (4 if has_fin else 13 if control.GetSegmentCount() == 6 else 2 if control.GetSegmentCount() == 2 else 0)
-    if not valid_counts:
-        return {"outline_closed": False, "marker_triangle": False, "marker_at_rim": False}
+    end = outline["cnt"]
+    expected_extra = 13 if count == 6 else 2 if count == 2 else 0
+    valid_counts = end >= 4 and len(points) == end + expected_extra
     tolerance = max(1.0, control.GetRad().GetLength()) * 1e-5
-    outline_closed = (points[0] - points[marker_start-1]).GetLength() < tolerance
-    outline_closed &= (control.GetSplinePoint(0, 0) - control.GetSplinePoint(1, 0)).GetLength() < tolerance
-    if not has_fin:
-        return {"outline_closed": bool(outline_closed), "marker_triangle": True, "marker_at_rim": True}
-    marker = control.GetSegment(1)
-    a, b, tip, close = points[marker_start:]
-    center = (a+b)*0.5
-    base, height = (b-a).GetLength(), (tip-center).GetLength()
-    marker_triangle = marker["cnt"] == 4 and not control[c4d.SPLINEOBJECT_CLOSED] and not marker["closed"]
-    marker_triangle &= (a-close).GetLength() < tolerance
-    marker_triangle &= (control.GetSplinePoint(0, 1)-control.GetSplinePoint(1, 1)).GetLength() < tolerance
-    marker_triangle &= base > tolerance and height > base * 0.5 and height < base
-    marker_triangle &= (b-a).Cross(tip-a).GetLength() > base * height * 0.99
-    center = (a+b)*0.5
-    edge = max(p.x for p in points[:marker_start])
-    radius = max(abs(p.y) for p in points[:marker_start])
-    gap = center.x - edge
-    marker_at_rim = radius * 0.05 < gap < radius * 0.25 and abs(center.y) < tolerance
-    marker_at_rim &= abs(center.z-points[0].z) < tolerance and tip.z > center.z
-    marker_at_rim &= max(abs(p.x-center.x) for p in (a,b,tip)) < tolerance
-    marker_at_rim &= abs(tip.y-center.y) < tolerance
-    return {"outline_closed": bool(outline_closed), "marker_triangle": bool(marker_triangle),
-            "marker_at_rim": bool(marker_at_rim)}
+    closed = valid_counts and (points[0] - points[end-1]).GetLength() < tolerance
+    closed &= (control.GetSplinePoint(0, 0) - control.GetSplinePoint(1, 0)).GetLength() < tolerance
+    return {"outline_closed": bool(closed),
+            "no_orientation_fin": count != 2 or control.GetSegment(1)["cnt"] == 2}
 
 
 def run(source, ids, output):
@@ -103,6 +83,8 @@ def run(source, ids, output):
         evaluate()
         model = model_object()
         model[ids["MODEL_PHYSICS_ENABLED"]] = False
+        model[ids["MODEL_MODE"]] = ids["MODEL_MODE_ANIM"]
+        evaluate()
         bounds = model.GetDescription(c4d.DESCFLAGS_DESC_0).GetParameter(c4d.DescID(ids["MODEL_CONTROLS_SIZE"]), None)
         check("size_description_bounds", bounds[c4d.DESC_MIN] == 0.25 and bounds[c4d.DESC_MAX] == 3.0)
         bind = {obj.GetName(): [vector_values(obj.GetFrozenPos()), vector_values(obj.GetFrozenRot()), vector_values(obj.GetFrozenScale())]
@@ -121,7 +103,7 @@ def run(source, ids, output):
         c4d.CallButton(model, ids["MODEL_CONTROLS_CREATE"])
         rows = controls()
         check("generation_is_idempotent", len(rows) == first_count and set(old_transforms).issubset(rows), count=len(rows))
-        check("rotation_rings_have_fins", all(rows[side + name][2].GetSegmentCount() == 2
+        check("rotation_rings_have_no_fins", all(rows[side + name][2].GetSegmentCount() == 1
                                               for side in ("左", "右") for name in ("腕", "ひじ")))
         check("hand_controls_are_wire_boxes", all(rows[side + "手首"][2].GetSegmentCount() == 6
               and rows[side + "手首"][2].GetPointCount() == 18 for side in ("左", "右")))
@@ -139,8 +121,7 @@ def run(source, ids, output):
               and rows[name][2].GetRad().x < rows["頭"][2].GetRad().x for name in ("左目", "右目", "両目")))
         geometry = [control_curve_checks(control) for _, _, control in rows.values()]
         check("native_outline_closed", all(item["outline_closed"] for item in geometry))
-        check("native_marker_triangle", all(item["marker_triangle"] for item in geometry))
-        check("native_marker_at_rim", all(item["marker_at_rim"] for item in geometry))
+        check("native_no_orientation_fins", all(item["no_orientation_fin"] for item in geometry))
         foot_controls = [rows[side + suffix][2] for side in ("左", "右")
                          for suffix in ("足ＩＫ", "つま先ＩＫ", "足IK親")]
         check("ik_outlines_stay_planar_without_fins", all(control.GetSegmentCount() == 1

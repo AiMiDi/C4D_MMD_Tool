@@ -30,6 +30,7 @@ Description:	MMD bone control utilities
 #include "utils/io_util.hpp"
 #include "utils/string_util.hpp"
 #include "utils/cmt_control_role.hpp"
+#include "utils/cmt_control_hit_test.hpp"
 
 namespace
 {
@@ -57,7 +58,6 @@ namespace
 		Float radius = kControlMediumRadius;
 		Float aspect = 1.0;
 		Float axis_offset = 0.0;
-		Bool orientation_fin = true;
 		Bool model_aligned = false;
 		Vector model_offset;
 	};
@@ -152,17 +152,34 @@ namespace
 		return bone_object ? NormalizeMatrixBasis(bone_object->GetMg()) : MakeIdentityMatrix();
 	}
 
-	Matrix BuildFrozenBoneGlobalMatrix(BaseObject* bone_object)
+	Matrix BuildFrozenLocalTransform(BaseObject* object)
+	{
+		Matrix matrix = object->GetFrozenMln();
+		const Vector scale = object->GetFrozenScale();
+		matrix.sqmat.v1 *= scale.x;
+		matrix.sqmat.v2 *= scale.y;
+		matrix.sqmat.v3 *= scale.z;
+		return matrix;
+	}
+
+	Matrix BuildFrozenBoneGlobalTransform(BaseObject* bone_object)
 	{
 		std::vector<BaseObject*> chain;
 		BaseObject* current = bone_object;
 		for (; current && current->GetTag(g_mmd_bone_tag_id); current = current->GetUp())
 			chain.push_back(current);
 
-		Matrix global = current ? NormalizeMatrixBasis(current->GetMg()) : MakeIdentityMatrix();
+		// Import sets frozen bone transforms before C4D updates GetMg(). Compose
+		// those authored transforms directly, retaining model scale for positions.
+		Matrix global = current ? current->GetMg() : MakeIdentityMatrix();
 		for (auto it = chain.rbegin(); it != chain.rend(); ++it)
-			global = NormalizeMatrixBasis(global * (*it)->GetFrozenMln());
+			global = global * BuildFrozenLocalTransform(*it);
 		return global;
+	}
+
+	Matrix BuildFrozenBoneGlobalMatrix(BaseObject* bone_object)
+	{
+		return NormalizeMatrixBasis(BuildFrozenBoneGlobalTransform(bone_object));
 	}
 
 	Vector TransformRestDirectionToCurrent(const Matrix& rest_matrix, const Matrix& current_matrix, const Vector& direction)
@@ -269,7 +286,7 @@ namespace
 			!tail_position.IsZero();
 	}
 
-	bool GetTailBonePoint(MMDBoneManagerObject& bone_manager, const BaseContainer* bc, const Matrix& rest_matrix, const Matrix& current_matrix, BaseObject* bone_object, Vector& point)
+	bool GetTailBonePoint(MMDBoneManagerObject& bone_manager, const BaseContainer* bc, const Matrix& rest_matrix, const Matrix& current_matrix, BaseObject* bone_object, Vector& point, const Bool rest_pose)
 	{
 		if (bc)
 		{
@@ -280,7 +297,7 @@ namespace
 				{
 					if (BaseObject* const tail_object = tail_tag->GetObject())
 					{
-						const Matrix tail_matrix = BuildCurrentBoneGlobalMatrix(tail_object);
+						const Matrix tail_matrix = rest_pose ? BuildFrozenBoneGlobalMatrix(tail_object) : BuildCurrentBoneGlobalMatrix(tail_object);
 						if ((tail_matrix.off - current_matrix.off).GetLength() > EPSILON)
 						{
 							point = tail_matrix.off;
@@ -304,7 +321,7 @@ namespace
 		{
 			if (!child->GetTag(g_mmd_bone_tag_id))
 				continue;
-			const Matrix child_matrix = BuildCurrentBoneGlobalMatrix(child);
+			const Matrix child_matrix = rest_pose ? BuildFrozenBoneGlobalMatrix(child) : BuildCurrentBoneGlobalMatrix(child);
 			if ((child_matrix.off - current_matrix.off).GetLength() > EPSILON)
 			{
 				point = child_matrix.off;
@@ -314,10 +331,10 @@ namespace
 		return false;
 	}
 
-	bool GetTailBoneAxis(MMDBoneManagerObject& bone_manager, const BaseContainer* bc, const Matrix& rest_matrix, const Matrix& current_matrix, BaseObject* bone_object, Vector& axis)
+	bool GetTailBoneAxis(MMDBoneManagerObject& bone_manager, const BaseContainer* bc, const Matrix& rest_matrix, const Matrix& current_matrix, BaseObject* bone_object, Vector& axis, const Bool rest_pose)
 	{
 		Vector tail_point;
-		if (GetTailBonePoint(bone_manager, bc, rest_matrix, current_matrix, bone_object, tail_point))
+		if (GetTailBonePoint(bone_manager, bc, rest_matrix, current_matrix, bone_object, tail_point, rest_pose))
 		{
 			axis = tail_point - current_matrix.off;
 			if (TryNormalize(axis))
@@ -382,7 +399,7 @@ namespace
 		manager.BuildOrderedBoneObjectList(bones);
 		Vector low, high;
 		Bool first = true;
-		const Matrix inverse_model = model ? ~NormalizeMatrixBasis(model->GetMg()) : Matrix();
+		const Matrix inverse_model = model ? ~model->GetMg() : Matrix();
 		for (BaseObject* bone : bones)
 		{
 			const Vector point = inverse_model * BuildFrozenBoneGlobalMatrix(bone).off;
@@ -429,7 +446,7 @@ namespace
 			return { ControlShape::Diamond, radius, 1.0 };
 		if (purpose == cmt::controls::Purpose::Shoulder)
 		{
-			ControlVisualSpec visual{ ControlShape::ShoulderFrame, radius, 1.0, 0.0, false };
+			ControlVisualSpec visual{ ControlShape::ShoulderFrame, radius, 1.0 };
 			visual.model_aligned = true;
 			const auto named = cmt::controls::ClassifyName(string_util::GetStdString(bc->GetString(PMX_BONE_NAME_LOCAL)));
 			Int right_position = NOTOK;
@@ -439,7 +456,7 @@ namespace
 		}
 		if (purpose == cmt::controls::Purpose::Eye || purpose == cmt::controls::Purpose::Eyes)
 		{
-			ControlVisualSpec visual{ ControlShape::Oval, radius, 1.3, 0.0, false };
+			ControlVisualSpec visual{ ControlShape::Oval, radius, 1.3 };
 			visual.model_aligned = true;
 			visual.model_offset = Vector(0, 0, -span * 0.12);
 			// The shared MMD eye pivot is often above the head. Place its outline
@@ -453,7 +470,7 @@ namespace
 				if (left && right && model)
 				{
 					const Vector midpoint = (BuildFrozenBoneGlobalMatrix(left).off + BuildFrozenBoneGlobalMatrix(right).off) * 0.5;
-					const Matrix inverse_model = ~NormalizeMatrixBasis(model->GetMg());
+					const Matrix inverse_model = ~model->GetMg();
 					visual.model_offset += inverse_model.sqmat * (midpoint - BuildFrozenBoneGlobalMatrix(bone_object).off);
 				}
 			}
@@ -463,14 +480,14 @@ namespace
 			return { ControlShape::Box, radius, 1.0 };
 		switch (GetControlRole(bc))
 		{
-		case cmt::controls::Role::Root: return { ControlShape::Circle, radius * 3.5, 1.0, 0.0, false };
-		case cmt::controls::Role::Center: return { ControlShape::RoundedSquare, radius * 2.4, 1.0, 0.0, false };
-		case cmt::controls::Role::Groove: return { ControlShape::Oval, radius * 1.85, 1.1, 0.0, false };
-		case cmt::controls::Role::Waist: return { ControlShape::Triangle, radius * 1.15, 1.0, 0.0, false };
-		case cmt::controls::Role::Pelvis: return { ControlShape::Pelvis, radius * 1.35, 1.0, 0.0, false };
-		case cmt::controls::Role::Spine: return { ControlShape::Circle, radius * 1.5, 1.0, 0.0, false };
-		case cmt::controls::Role::Neck: return { ControlShape::Circle, radius * 0.65, 1.0, 0.0, false };
-		case cmt::controls::Role::Head: return { ControlShape::Circle, radius * 1.1, 1.0, span * 0.16, false };
+		case cmt::controls::Role::Root: return { ControlShape::Circle, radius * 3.5, 1.0 };
+		case cmt::controls::Role::Center: return { ControlShape::RoundedSquare, radius * 2.4, 1.0 };
+		case cmt::controls::Role::Groove: return { ControlShape::Oval, radius * 1.85, 1.1 };
+		case cmt::controls::Role::Waist: return { ControlShape::Triangle, radius * 1.15, 1.0 };
+		case cmt::controls::Role::Pelvis: return { ControlShape::Pelvis, radius * 1.35, 1.0 };
+		case cmt::controls::Role::Spine: return { ControlShape::Circle, radius * 1.5, 1.0 };
+		case cmt::controls::Role::Neck: return { ControlShape::Circle, radius * 0.65, 1.0 };
+		case cmt::controls::Role::Head: return { ControlShape::Circle, radius * 1.1, 1.0, span * 0.16 };
 		case cmt::controls::Role::IkGoal: return { ControlShape::Foot, radius * 0.9, 0.8 };
 		case cmt::controls::Role::ToeIk: return { ControlShape::Triangle, radius * 0.55, 1.0 };
 		case cmt::controls::Role::IkParent: return { ControlShape::RoundedSquare, radius * 1.3, 0.5 };
@@ -615,17 +632,17 @@ namespace
 			role == Role::Root || role == Role::Center || role == Role::Groove || role == Role::Waist || role == Role::Spine || role == Role::Pelvis || role == Role::Neck || role == Role::Head;
 	}
 
-	Matrix BuildControlMatrix(MMDBoneManagerObject& bone_manager, BaseTag* bone_tag, BaseObject* bone_object)
+	Matrix BuildControlMatrix(MMDBoneManagerObject& bone_manager, BaseTag* bone_tag, BaseObject* bone_object, const Bool rest_pose)
 	{
 		const Matrix rest = BuildFrozenBoneGlobalMatrix(bone_object);
-		const Matrix current = BuildCurrentBoneGlobalMatrix(bone_object);
+		const Matrix current = rest_pose ? rest : BuildCurrentBoneGlobalMatrix(bone_object);
 		const BaseContainer* const bc = bone_tag ? bone_tag->GetDataInstance() : nullptr;
 		Vector normal;
 		if (GetFixedAxis(bc, normal) || GetLocalBoneAxis(bc, normal))
 			normal = TransformRestDirectionToCurrent(rest, current, normal);
 		else if (UsesHorizontalControlPlane(bc))
 			normal = TransformRestDirectionToCurrent(rest, current, Vector(0, 1, 0));
-		else if (!GetTailBoneAxis(bone_manager, bc, rest, current, bone_object, normal))
+		else if (!GetTailBoneAxis(bone_manager, bc, rest, current, bone_object, normal, rest_pose))
 			normal = current.sqmat.v3;
 
 		Vector reference = GetFallbackReference(current, normal);
@@ -642,35 +659,29 @@ namespace
 
 	Matrix BuildControlRestMatrix(MMDBoneManagerObject& bone_manager, BaseTag* bone_tag, BaseObject* bone_object)
 	{
-		return BuildControlMatrix(bone_manager, bone_tag, bone_object);
+		return BuildControlMatrix(bone_manager, bone_tag, bone_object, true);
 	}
 
 	Matrix BuildControlCurrentMatrix(MMDBoneManagerObject& bone_manager, BaseTag* bone_tag, BaseObject* bone_object)
 	{
-		return BuildControlMatrix(bone_manager, bone_tag, bone_object);
+		return BuildControlMatrix(bone_manager, bone_tag, bone_object, false);
 	}
 
-	void CommitObjectLocalToFrozen(BaseObject* object)
+	void ApplyGlobalFrozenMatrix(BaseObject* object, const Matrix& matrix, const Bool rest_pose = false)
 	{
 		if (!object)
 			return;
 
-		const Matrix current_local = object->GetMl();
+		BaseObject* const parent = object->GetUp();
+		const Matrix parent_matrix = parent
+			? (rest_pose ? BuildFrozenBoneGlobalTransform(parent) : parent->GetMg()) : MakeIdentityMatrix();
+		const Matrix current_local = ~parent_matrix * matrix;
 		const Matrix normalized_local = NormalizeMatrixBasis(current_local);
 		object->SetFrozenPos(current_local.off);
 		object->SetFrozenScale(Vector(1.0));
 		object->SetFrozenRot(MatrixToHPB(normalized_local, GetObjectRotationOrder(object)));
 		object->SetRelMl(MakeIdentityMatrix());
 		MarkSceneNodeDirty(object);
-	}
-
-	void ApplyGlobalFrozenMatrix(BaseObject* object, const Matrix& matrix)
-	{
-		if (!object)
-			return;
-
-		object->SetMg(NormalizeMatrixBasis(matrix));
-		CommitObjectLocalToFrozen(object);
 	}
 
 	void MoveControlUnder(BaseObject* control, BaseObject* parent)
@@ -774,20 +785,7 @@ namespace
 		// topology. The global Closed flag must not connect unrelated segments.
 		std::vector<std::vector<Vector>> contours{ points };
 		contours.front().push_back(points.front());
-		const Bool has_fin = spec.orientation_fin &&
-			(spec.shape == ControlShape::Circle || spec.shape == ControlShape::Oval);
-		if (has_fin)
-		{
-			// A small gap separates the fin from the +X rim. Its base is tangent
-			// to the rim and its plane perpendicular to the rotation ring.
-			const Float edge = spec.radius * (spec.shape == ControlShape::Oval ? spec.aspect : 1.0);
-			const Vector center(edge + spec.radius * 0.12, 0, spec.axis_offset);
-			const Vector a = center + Vector(0, -spec.radius * 0.35, 0);
-			const Vector b = center + Vector(0, spec.radius * 0.35, 0);
-			const Vector tip = center + Vector(0, 0, spec.radius * 0.55);
-			contours.push_back({ a, b, tip, a });
-		}
-		else if (spec.shape == ControlShape::ShoulderFrame)
+		if (spec.shape == ControlShape::ShoulderFrame)
 		{
 			contours.push_back({ -spec.model_offset, Vector(0, -spec.radius * 0.65, 0) });
 		}
@@ -835,9 +833,9 @@ namespace
 			// Convert the model-space display layout into the frozen control frame.
 			// Relative animation inputs are deliberately excluded from this mapping.
 			BaseObject* const parent = control->GetUp();
-			const Matrix parent_rest = parent ? BuildFrozenBoneGlobalMatrix(parent) : MakeIdentityMatrix();
-			const Matrix control_rest = NormalizeMatrixBasis(parent_rest * control->GetFrozenMln());
-			Matrix layout = ~control_rest * NormalizeMatrixBasis(model->GetMg());
+			const Matrix parent_rest = parent ? BuildFrozenBoneGlobalTransform(parent) : MakeIdentityMatrix();
+			const Matrix control_rest = parent_rest * BuildFrozenLocalTransform(control);
+			Matrix layout = ~control_rest * model->GetMg();
 			layout.off = Vector(0);
 			if (Vector* const points = spline->GetPointW())
 				for (Int32 i = 0; i < spline->GetPointCount(); ++i)
@@ -1084,7 +1082,7 @@ Bool mmd_bone_control_util::CreateOrRefreshControls(MMDBoneManagerObject& bone_m
 		// An unkeyed relative transform is still authored input. Refreshing the
 		// presentation must not zero it or change the controller's frozen basis.
 		if (entry.created)
-			ApplyGlobalFrozenMatrix(entry.control, entry.global_rest);
+			ApplyGlobalFrozenMatrix(entry.control, entry.global_rest, true);
 		ApplyControlSplineShape(entry.control, GetControlVisualSpec(entry.bc, entry.bone_object, skeleton_span, size), entry.bone_object);
 		MarkSceneNodeDirty(entry.control);
 	}
@@ -1126,6 +1124,8 @@ Bool mmd_bone_control_util::IsControlVisible(BaseTag* bone_tag, BaseObject* mana
 	if (!control || !IsSameOrDescendantOf(control, manager))
 		return true;
 	BaseObject* const model = GetControlModel(manager);
+	if (model && model->GetDataInstance()->GetInt32(MODEL_MODE) == MODEL_MODE_EDIT)
+		return false;
 	const Int32 display = model ? model->GetDataInstance()->GetInt32(MODEL_CONTROLS_DISPLAY) : MODEL_CONTROLS_DISPLAY_PRIMARY;
 	return display != MODEL_CONTROLS_DISPLAY_HIDDEN &&
 		(display == MODEL_CONTROLS_DISPLAY_ALL || IsPrimaryControl(bone_tag->GetDataInstance()));
@@ -1212,6 +1212,70 @@ DRAWRESULT mmd_bone_control_util::DrawControls(MMDBoneManagerObject& bone_manage
 	bd->SetDrawParam(DRAW_PARAMETER_LINEWIDTH, previous_width);
 	bd->SetMatrix_Matrix(nullptr, Matrix());
 	return DRAWRESULT::OK;
+}
+
+String mmd_bone_control_util::GetHoveredControlName(BaseDocument* doc, BaseDraw* bd, const Float x, const Float y)
+{
+	if (!doc || !bd || !(bd->GetDisplayFilter() & DISPLAYFILTER::SPLINE))
+		return String();
+	Float nearest_distance = 6.0 * 6.0;
+	String name;
+	std::vector<BaseObject*> pending;
+	if (doc->GetFirstObject()) pending.push_back(doc->GetFirstObject());
+	while (!pending.empty())
+	{
+		BaseObject* const object = pending.back();
+		pending.pop_back();
+		if (object->GetNext()) pending.push_back(object->GetNext());
+		// A hidden ancestor suppresses its complete hierarchy, including hints.
+		if (object->GetEditorMode() == MODE_OFF) continue;
+		if (object->GetDown()) pending.push_back(object->GetDown());
+		if (!object->IsInstanceOf(g_mmd_bone_manager_object_id)) continue;
+		auto* manager = object->GetNodeData<MMDBoneManagerObject>();
+		if (!manager) continue;
+		const Int32 display = object->GetDataInstance()->GetInt32(BONE_DISPLAY_TYPE, BONE_DISPLAY_TYPE_OFF);
+		maxon::BaseArray<BaseObject*> bones;
+		manager->BuildOrderedBoneObjectList(bones);
+		for (BaseObject* bone : bones)
+		{
+			BaseTag* const tag = bone->GetTag(g_mmd_bone_tag_id);
+			BaseObject* const control = ResolveLinkedObjectParameter(tag, PMX_BONE_CONTROL_LINK);
+			if (!control || !control->IsInstanceOf(Ospline) || !IsSameOrDescendantOf(control, object)
+				|| !IsControlVisible(tag, object, display)) continue;
+			Bool hidden = false;
+			for (BaseObject* ancestor = control; ancestor && ancestor != object; ancestor = ancestor->GetUp())
+				if (ancestor->GetEditorMode() == MODE_OFF) { hidden = true; break; }
+			if (hidden) continue;
+			const SplineObject* const spline = ToSpline(control);
+			const Vector* const points = spline->GetPointR();
+			const Segment* const segments = spline->GetSegmentR();
+			if (!points || !segments) continue;
+			const Matrix global = control->GetMg();
+			Int32 offset = 0;
+			for (Int32 segment_index = 0; segment_index < spline->GetSegmentCount(); ++segment_index)
+			{
+				const Segment& segment = segments[segment_index];
+				if (segment.cnt < 0 || offset + segment.cnt > spline->GetPointCount()) break;
+				const Int32 edge_count = segment.closed ? segment.cnt : segment.cnt - 1;
+				for (Int32 edge = 0; edge < edge_count; ++edge)
+				{
+					Vector a = bd->WC(global * points[offset + edge]);
+					Vector b = bd->WC(global * points[offset + (edge + 1) % segment.cnt]);
+					if (!bd->ClipLineZ(&a, &b)) continue;
+					a = bd->WS(bd->CW(a));
+					b = bd->WS(bd->CW(b));
+					const Float distance = cmt::controls::SegmentDistanceSquared(x, y, a.x, a.y, b.x, b.y);
+					if (distance < nearest_distance)
+					{
+						nearest_distance = distance;
+						name = GetControlBaseName(tag, manager->FindBoneIndex(tag));
+					}
+				}
+				offset += segment.cnt;
+			}
+		}
+	}
+	return name;
 }
 
 Bool mmd_bone_control_util::HasActiveControlDelta(MMDBoneManagerObject& bone_manager)

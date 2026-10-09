@@ -16,6 +16,7 @@ Description:	scene manager
 #include "module/tools/material/mmd_redshift_toon_material.h"
 #include "module/automation/mmd_automation.h"
 #include "utils/cmt_automation_protocol.hpp"
+#include "utils/mmd_bone_control_util.hpp"
 #include <algorithm>
 #include <vector>
 #if defined(CMT_ENABLE_RUNTIME_REGRESSION)
@@ -37,6 +38,16 @@ namespace
 			report += FormatString("@ ,", name);
 		report += "\n"_s;
 	}
+}
+
+Bool CMTSceneManager::GetCursorInfo(BaseSceneHook* node, BaseDocument* doc, BaseDraw* bd,
+	const Float x, const Float y, BaseContainer& bc)
+{
+	const String name = mmd_bone_control_util::GetHoveredControlName(doc, bd, x, y);
+	if (name.IsEmpty())
+		return SUPER::GetCursorInfo(node, doc, bd, x, y, bc);
+	bc.SetString(RESULT_BUBBLEHELP, name);
+	return true;
 }
 
 void IOLog::LogOutMem()
@@ -659,6 +670,16 @@ Bool CMTSceneManager::Message(GeListNode* node, Int32 type, void* data)
 	if (!document)
 		return false;
 	const auto operation = static_cast<cmt_regression::Operation>(request->GetInt32(cmt_regression::Action));
+	if (operation == cmt_regression::Operation::ControlHover)
+	{
+		BaseContainer cursor;
+		GetCursorInfo(static_cast<BaseSceneHook*>(node), document, document->GetActiveBaseDraw(),
+			request->GetFloat(cmt_regression::HoverX), request->GetFloat(cmt_regression::HoverY), cursor);
+		request->SetString(cmt_regression::HoverName, cursor.GetString(RESULT_BUBBLEHELP));
+		request->SetBool(cmt_regression::Success, true);
+		request->SetString(cmt_regression::Error, String());
+		return true;
+	}
 	if (operation == cmt_regression::Operation::Handshake)
 	{
 		request->SetBool(cmt_regression::Success, true);

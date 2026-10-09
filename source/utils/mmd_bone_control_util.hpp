@@ -24,6 +24,7 @@ namespace mmd_bone_control_util
 	Bool IsControlVisible(BaseTag* bone_tag, BaseObject* bone_manager_object, Int32 bone_display_type);
 	void SelectVisibleControls(MMDBoneManagerObject& bone_manager, BaseObject* bone_manager_object);
 	DRAWRESULT DrawControls(MMDBoneManagerObject& bone_manager, BaseObject* op, DRAWPASS drawpass, BaseDraw* bd, BaseDrawHelp* bh);
+	String GetHoveredControlName(BaseDocument* doc, BaseDraw* bd, Float x, Float y);
 	Bool HasActiveControlDelta(MMDBoneManagerObject& bone_manager);
 	Bool HasActiveControlRotation(BaseTag* bone_tag);
 	UInt32 GetControlStateChecksum(MMDBoneManagerObject& bone_manager);

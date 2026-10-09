@@ -156,6 +156,7 @@ public:
 	}
 
 	Bool Message(GeListNode* node, Int32 type, void* data) override;
+	Bool GetCursorInfo(BaseSceneHook* node, BaseDocument* doc, BaseDraw* bd, Float x, Float y, BaseContainer& bc) override;
 	SDK2024_GetDParameterOverride;
 	Bool SetDParameter(GeListNode* node, const DescID& id, const GeData& value, DESCFLAGS_SET& flags) override;
 

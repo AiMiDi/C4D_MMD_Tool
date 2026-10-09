@@ -6307,7 +6307,8 @@ Bool MMDModelManagerObject::SetDParameter(GeListNode* node, const DescID& id, co
 				if (model_mode_ == MODEL_MODE_EDIT)
 					bone_manager_data_->SetBoneDisplayType(BONE_DISPLAY_TYPE_ON, bone_manager_object);
 				else if (model_mode_ == MODEL_MODE_ANIM)
-					bone_manager_data_->SetBoneDisplayType(BONE_DISPLAY_TYPE_OFF, bone_manager_object);
+					bone_manager_data_->SetBoneDisplayType(static_cast<BaseList2D*>(node)->GetDataInstance()->GetInt32(MODEL_CONTROLS_DISPLAY) == MODEL_CONTROLS_DISPLAY_HIDDEN
+						? BONE_DISPLAY_TYPE_OFF : BONE_DISPLAY_TYPE_CONTROLS, bone_manager_object);
 			}
 			if (rigid_manager_data_ || GetRigidManagerData())
 				rigid_manager_data_->SetAllRigidMode(model_mode_, io_util::ResolveObjectLink(rigid_manager_));

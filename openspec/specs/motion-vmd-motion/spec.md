@@ -266,11 +266,11 @@ Generated controls SHALL use distinct rotation, fixed-axis and translation silho
 
 #### Scenario: Native and foreground geometry agree
 - **WHEN** a generated control is drawn normally or through the mesh
-- **THEN** its main outline and any triangular orientation fin SHALL each be explicitly closed
-- **AND** limb rotation rings SHALL have a fin outside the rim with a small gap, its broad base tangent to the rim and its tip extending along the positive plane normal; the fin plane SHALL be perpendicular to the ring plane
+- **THEN** its main outline SHALL be explicitly closed
+- **AND** rotation rings SHALL have no added orientation triangles
 - **AND** fixed-axis diamonds, feet and IK frames SHALL remain planar without an added fin
 - **AND** foot IK and IK-parent frames SHALL be narrower across the foot than along its length
-- **AND** no implicit additional closing edge SHALL appear on the marker
+- **AND** no implicit closing edge SHALL connect unrelated spline segments
 
 #### Scenario: Character-style controls for hands and central bones
 - **WHEN** standard root, center, groove, waist, torso, neck and head bones are present
@@ -283,6 +283,24 @@ Generated controls SHALL use distinct rotation, fixed-axis and translation silho
 - **WHEN** shoulders, eyes and upper/lower torso have generated controls
 - **THEN** shoulder outlines SHALL use an offset frame and short leader, eye outlines SHALL be small ovals in front of their pivots, and lower-torso outlines SHALL differ from upper-torso rings
 - **AND** changing the silhouette SHALL NOT introduce a new IK pole-vector or eye Aim solver
+
+#### Scenario: Fresh import places eye controls correctly
+- **WHEN** a PMX is imported before C4D has evaluated its new hierarchy
+- **THEN** controller pivots SHALL be initialized from the composed frozen bone transforms, retaining model scale
+- **AND** the shared eye outline SHALL align with the actual eye pair while preserving the authored shared eye rotation pivot
+
+#### Scenario: Editing and animating a model
+- **WHEN** the model enters Edit mode
+- **THEN** generated controllers and their hover hints SHALL be hidden
+- **WHEN** the model returns to Animation mode
+- **THEN** controllers SHALL follow the retained Primary, All or Hidden setting
+- **AND** mode switches SHALL preserve controller objects and animation
+
+#### Scenario: Hover a visible controller
+- **WHEN** the pointer is within six screen pixels of a visible generated controller edge
+- **THEN** the native viewport bubble help SHALL show its bone name in the selected local or universal naming mode
+- **AND** the nearest edge SHALL win when outlines overlap
+- **AND** hidden controllers, hidden ancestors and disabled spline display SHALL not produce controller hints
 
 ## Implementation overview
 

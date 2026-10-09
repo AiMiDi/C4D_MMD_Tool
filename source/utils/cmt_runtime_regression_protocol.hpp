@@ -21,6 +21,9 @@ namespace cmt_regression
 		IgnorePhysics,
 		MorphIndex,
 		MorphStrength,
+		HoverX = 1000030,
+		HoverY,
+		HoverName,
 		Success = 1000100,
 		Error,
 		BoneCount,
@@ -38,6 +41,7 @@ namespace cmt_regression
 		ImportCamera,
 		ExportCamera,
 		DeleteMorph,
-		SetMorphStrength
+		SetMorphStrength,
+		ControlHover = 30
 	};
 }

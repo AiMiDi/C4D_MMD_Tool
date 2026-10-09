@@ -1,0 +1,251 @@
+{
+  "checks": [
+    {
+      "name": "size_description_bounds",
+      "passed": true
+    },
+    {
+      "name": "refresh_preserves_existing_transforms",
+      "passed": true
+    },
+    {
+      "name": "generation_is_idempotent",
+      "passed": true,
+      "count": 49
+    },
+    {
+      "name": "rotation_rings_have_no_fins",
+      "passed": true
+    },
+    {
+      "name": "hand_controls_are_wire_boxes",
+      "passed": true
+    },
+    {
+      "name": "central_body_coverage",
+      "passed": true,
+      "missing": []
+    },
+    {
+      "name": "central_body_rings",
+      "passed": true
+    },
+    {
+      "name": "central_purpose_shapes",
+      "passed": true
+    },
+    {
+      "name": "shoulders_have_offset_handles",
+      "passed": true
+    },
+    {
+      "name": "eyes_have_small_planar_handles",
+      "passed": true
+    },
+    {
+      "name": "native_outline_closed",
+      "passed": true
+    },
+    {
+      "name": "native_no_orientation_fins",
+      "passed": true
+    },
+    {
+      "name": "ik_outlines_stay_planar_without_fins",
+      "passed": true
+    },
+    {
+      "name": "foot_frames_are_narrow",
+      "passed": true
+    },
+    {
+      "name": "display_primary",
+      "passed": true,
+      "actual": 34,
+      "expected": 34
+    },
+    {
+      "name": "display_all",
+      "passed": true,
+      "actual": 49,
+      "expected": 49
+    },
+    {
+      "name": "display_hidden",
+      "passed": true,
+      "actual": 0,
+      "expected": 0
+    },
+    {
+      "name": "primary_hides_auxiliary_and_twist",
+      "passed": true
+    },
+    {
+      "name": "primary_keeps_main_elbows",
+      "passed": true
+    },
+    {
+      "name": "左_helper_is_subordinate",
+      "passed": true,
+      "ratio": 0.3142857142857143
+    },
+    {
+      "name": "左_twist_is_subordinate",
+      "passed": true,
+      "ratio": 0.2550284629981024
+    },
+    {
+      "name": "左_joint_size_hierarchy",
+      "passed": true,
+      "radii": [
+        0.6934360548965633,
+        0.5342220840379595,
+        0.4263250128775835
+      ]
+    },
+    {
+      "name": "右_helper_is_subordinate",
+      "passed": true,
+      "ratio": 0.3142857142857143
+    },
+    {
+      "name": "右_twist_is_subordinate",
+      "passed": true,
+      "ratio": 0.2550284629981024
+    },
+    {
+      "name": "右_joint_size_hierarchy",
+      "passed": true,
+      "radii": [
+        0.6934360548965633,
+        0.5342220840379595,
+        0.4263250128775835
+      ]
+    },
+    {
+      "name": "select_visible",
+      "passed": true
+    },
+    {
+      "name": "select_respects_individual_visibility",
+      "passed": true
+    },
+    {
+      "name": "size_0.5",
+      "passed": true,
+      "parameter": 0.5,
+      "ratio": 0.5
+    },
+    {
+      "name": "size_1.5",
+      "passed": true,
+      "parameter": 1.5,
+      "ratio": 1.4999999999999996
+    },
+    {
+      "name": "size_2.0",
+      "passed": true,
+      "parameter": 2.0,
+      "ratio": 2.0
+    },
+    {
+      "name": "size_preserves_transforms",
+      "passed": true
+    },
+    {
+      "name": "presentation_keeps_bind_pose",
+      "passed": true
+    },
+    {
+      "name": "undo_size_restores_geometry",
+      "passed": true
+    },
+    {
+      "name": "redo_size_restores_geometry",
+      "passed": true
+    },
+    {
+      "name": "undo_display_restores_visibility",
+      "passed": true,
+      "actual": 34
+    },
+    {
+      "name": "センター_control_drives_bone",
+      "passed": true
+    },
+    {
+      "name": "上半身_control_drives_bone",
+      "passed": true
+    },
+    {
+      "name": "頭_control_drives_bone",
+      "passed": true
+    },
+    {
+      "name": "左肩_layout_stays_in_frozen_frame",
+      "passed": true
+    },
+    {
+      "name": "両目_layout_stays_in_frozen_frame",
+      "passed": true
+    },
+    {
+      "name": "rotation_drives_bone",
+      "passed": true
+    },
+    {
+      "name": "refresh_keeps_unkeyed_pose",
+      "passed": true
+    },
+    {
+      "name": "hiding_keeps_pose",
+      "passed": true
+    },
+    {
+      "name": "refresh_keeps_keyframes",
+      "passed": true
+    },
+    {
+      "name": "helper_refresh_preserves_identity_animation",
+      "passed": true
+    },
+    {
+      "name": "hidden_helper_keeps_pose",
+      "passed": true
+    },
+    {
+      "name": "save",
+      "passed": true
+    },
+    {
+      "name": "reload_settings",
+      "passed": true
+    },
+    {
+      "name": "reload_visibility",
+      "passed": true,
+      "actual": 49
+    },
+    {
+      "name": "reload_geometry",
+      "passed": true
+    },
+    {
+      "name": "reload_tracks",
+      "passed": true
+    },
+    {
+      "name": "reload_helper_tracks",
+      "passed": true
+    },
+    {
+      "name": "reload_primary_hides_helpers",
+      "passed": true
+    },
+    {
+      "name": "external_control_not_restyled",
+      "passed": true
+    }
+  ],
+  "passed": true
+}

@@ -1,0 +1,64 @@
+{
+  "date": "2026-10-09",
+  "base_commit": "aa03a80dc7ce48db98f8ea8fcfa59e21e21ebbdb",
+  "scope": [
+    "fresh PMX eye controller placement",
+    "remove ring orientation triangles",
+    "native controller hover name",
+    "hide controls in Edit mode and retain animation display settings"
+  ],
+  "native_host": {
+    "pid": 26028,
+    "version": "Cinema 4D 2026.4.0",
+    "configuration": "Debug",
+    "runtime_regression": true,
+    "binary_sha256": "974838a2d181f1a3022f902e6a8db2b1d60b8aa01be4ccaeea78af1ebf6877c8"
+  },
+  "native_suites": [
+    {
+      "suite": "native-interaction",
+      "passed": true,
+      "count": 28
+    },
+    {
+      "suite": "native-interaction-scale1-rotated",
+      "passed": true,
+      "count": 28
+    },
+    {
+      "suite": "native-presentation",
+      "passed": true,
+      "count": 54
+    }
+  ],
+  "native_check_count": 110,
+  "unit_tests": {
+    "control_role_test": "passed",
+    "control_hit_test": "passed"
+  },
+  "release_build": {
+    "sdk": "2026",
+    "configuration": "Release",
+    "runtime_regression": false,
+    "result": "passed",
+    "binary_sha256": "56d50345eb22b1de204d9fe7425ee28eae025912d7da83a50405eb1ac05cb212"
+  },
+  "validation_limits": {
+    "tooltip_callback": "native GetCursorInfo tested; visible OS bubble not captured",
+    "final_edit_refresh_button_adjustment": "compiled in final Release, not rerun in native host to avoid another restart",
+    "r20": "blocked by source processor errors in concurrent motion-sizing files; no macOS builds"
+  },
+  "working_tree": "Includes unrelated concurrent motion-sizing changes; no release packaging or Git staging performed",
+  "source_sha256": {
+    "source/utils/mmd_bone_control_util.cpp": "b1edbd90c586051888679cc9b1208afe268e7017faf7d59603f4800d39cb680d",
+    "source/utils/mmd_bone_control_util.hpp": "8b7e7c5fccdb265a3a26b6432d343c24607782b2c0823c53a424f49092468c80",
+    "source/utils/cmt_control_hit_test.hpp": "b33a39e827fbb2d48d6dd2c1cf27e5f3fc7b4ab90bdf1f496321f2b7a1800bb6",
+    "source/CMTSceneManager.cpp": "7b2d4944a16e4780a4ea59d316310e55b43af8bb9071dce4186f87ba32161f32",
+    "source/CMTSceneManager.h": "1e448cb6e11f54583f43f0d9919b3cf34d4b115a223b4e75a40c601db5abdd7d",
+    "source/module/tools/object/mmd_bone_manager.cpp": "1cedf6e2494325f64606b24ee49530771580f6dd1cfa1738e2c720c2245981fb",
+    "source/module/tools/object/mmd_bone_manager.h": "65b5bb4ebfcf482097f6ad2c50fb62af8cc986f0cacf9013ecfdfaa3e44145f4",
+    "source/module/tools/object/mmd_model_manager.cpp": "3a53cfe3e06256e3fe2ff82d1a556ce3d9d38bd9540400d1612cd398dff8ff2f"
+  },
+  "viewport": "docs/images/controllers-eye-hover-20261009.png",
+  "private_scene": "output/controllers-eye-hover-20261009/eye-controls.c4d"
+}

@@ -1,0 +1,160 @@
+{
+  "checks": [
+    {
+      "name": "左目_fresh_import_pivot",
+      "passed": true
+    },
+    {
+      "name": "左目_outline_at_eye_height",
+      "passed": true,
+      "actual": [
+        0.2979623973369572,
+        16.548385620117188,
+        -2.5681028842926015
+      ],
+      "expected": [
+        0.29796239733695806,
+        16.548385620117184,
+        -0.2714024782180786
+      ]
+    },
+    {
+      "name": "右目_fresh_import_pivot",
+      "passed": true
+    },
+    {
+      "name": "右目_outline_at_eye_height",
+      "passed": true,
+      "actual": [
+        -0.2979815900325793,
+        16.548385620117188,
+        -2.5681028842926015
+      ],
+      "expected": [
+        -0.2979815900325784,
+        16.548385620117188,
+        -0.2714024782180786
+      ]
+    },
+    {
+      "name": "両目_fresh_import_pivot",
+      "passed": true
+    },
+    {
+      "name": "両目_outline_at_eye_height",
+      "passed": true,
+      "actual": [
+        -9.59634780928198e-06,
+        16.548385620117188,
+        -2.568102884292598
+      ],
+      "expected": [
+        -9.596347810614247e-06,
+        16.54838562011718,
+        -0.2714024782180786
+      ]
+    },
+    {
+      "name": "edit_mode_hides_controls",
+      "passed": true,
+      "actual": 0
+    },
+    {
+      "name": "animation_mode_shows_primary",
+      "passed": true,
+      "actual": 34
+    },
+    {
+      "name": "左腕_plain_closed_ring",
+      "passed": true
+    },
+    {
+      "name": "右腕_plain_closed_ring",
+      "passed": true
+    },
+    {
+      "name": "左ひじ_plain_closed_ring",
+      "passed": true
+    },
+    {
+      "name": "右ひじ_plain_closed_ring",
+      "passed": true
+    },
+    {
+      "name": "hover_0_40",
+      "passed": true,
+      "returned": "左腕"
+    },
+    {
+      "name": "hover_0_100",
+      "passed": true,
+      "returned": "左腕"
+    },
+    {
+      "name": "hover_4_40",
+      "passed": true,
+      "returned": "左腕"
+    },
+    {
+      "name": "hover_4_100",
+      "passed": true,
+      "returned": "左腕"
+    },
+    {
+      "name": "empty_view_has_no_hint",
+      "passed": true
+    },
+    {
+      "name": "disabled_spline_filter_has_no_hint",
+      "passed": true
+    },
+    {
+      "name": "hidden_control_has_no_hint",
+      "passed": true
+    },
+    {
+      "name": "hidden_ancestor_has_no_hint",
+      "passed": true
+    },
+    {
+      "name": "hover_uses_selected_name",
+      "passed": true,
+      "returned": "Left arm hover test"
+    },
+    {
+      "name": "edit_mode_has_no_hint",
+      "passed": true
+    },
+    {
+      "name": "edit_hides_setting_0",
+      "passed": true
+    },
+    {
+      "name": "animation_restores_setting_0",
+      "passed": true,
+      "expected": 34,
+      "actual": 34
+    },
+    {
+      "name": "edit_hides_setting_1",
+      "passed": true
+    },
+    {
+      "name": "animation_restores_setting_1",
+      "passed": true,
+      "expected": 49,
+      "actual": 49
+    },
+    {
+      "name": "edit_hides_setting_2",
+      "passed": true
+    },
+    {
+      "name": "animation_restores_setting_2",
+      "passed": true,
+      "expected": 0,
+      "actual": 0
+    }
+  ],
+  "passed": true
+}
