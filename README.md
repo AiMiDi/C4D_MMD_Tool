@@ -81,7 +81,7 @@ Windows development: `cmake --preset dev-windows` then `cmake --build --preset w
 
 The latest three releases are listed here. See the [complete changelog](CHANGELOG.md) for older versions and intermediate build tags.
 
-### 0.9.3.1 · Controller placement and hover names (2026-10-09)
+### 0.9.3.2 · Controller placement and hover names (2026-10-09)
 
 1. Fix eye controller placement on fresh PMX import; align the shared eye outline with the actual eye pair while retaining its authored rotation pivot and model scale.
 2. Show the bone name when hovering a generated controller outline, using the selected local or English naming mode. Hidden controls and disabled spline display do not produce hints.
@@ -89,7 +89,7 @@ The latest three releases are listed here. See the [complete changelog](CHANGELO
 4. Hide generated controllers in Edit mode and restore Primary/All/Hidden settings in Animation mode. Preserve existing controller transforms and animation tracks when refreshing.
 5. Avoid transient GitLab Eigen checkout failures in CI by using a mirror of the same pinned commit and bounded checkout retries.
 
-[Changes since 0.9.3.0](https://github.com/AiMiDi/C4D_MMD_Tool/compare/v0.9.3.0...v0.9.3.1) · [Validation scope](docs/dev/controllers-eye-hover-20261009.md)
+[Changes since 0.9.3.0](https://github.com/AiMiDi/C4D_MMD_Tool/compare/v0.9.3.0...v0.9.3.2) · [Validation scope](docs/dev/controllers-eye-hover-20261009.md)
 
 ### 0.9.3.0 · MMD controller hierarchy and silhouettes (2026-10-09)
 
