@@ -44,9 +44,7 @@ jobs:
 
       - name: Checkout build submodules
         shell: bash
-        run: |
-          git submodule sync -- dependency/bullet3 dependency/libMMD
-          git submodule update --init --recursive dependency/bullet3 dependency/libMMD
+        run: bash ./scripts/checkout_build_submodules.sh
 
       - name: Verify runtime resource copying
         shell: pwsh
@@ -100,7 +98,7 @@ jobs:
           fetch-depth: 0
           submodules: false
       - shell: bash
-        run: git submodule update --init --recursive dependency/bullet3 dependency/libMMD
+        run: bash ./scripts/checkout_build_submodules.sh
       - run: cmake --preset dev-windows-deps-test
       - run: cmake --build --preset cmt-deps-benchmark
       - uses: actions/upload-artifact@v7
@@ -203,9 +201,7 @@ jobs:
           submodules: false
 
       - name: Checkout build submodules
-        run: |
-          git submodule sync -- dependency/bullet3 dependency/libMMD
-          git submodule update --init --force --recursive dependency/bullet3 dependency/libMMD
+        run: bash ./scripts/checkout_build_submodules.sh
 
       - name: Identify dependency toolchain and revisions
         id: deps-identity
