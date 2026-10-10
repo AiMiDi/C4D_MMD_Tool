@@ -1,0 +1,350 @@
+{
+  "frame": 300,
+  "checks": [
+    {
+      "name": "extra_handle_coverage",
+      "passed": true
+    },
+    {
+      "name": "左_goal_size_matches_limb",
+      "passed": true,
+      "width": 4.171684429372482,
+      "limb_length": 46.35416728391465
+    },
+    {
+      "name": "右_goal_size_matches_limb",
+      "passed": true,
+      "width": 4.171684429372482,
+      "limb_length": 46.356251063888664
+    },
+    {
+      "name": "fingers_generated",
+      "passed": true
+    },
+    {
+      "name": "refresh_is_idempotent",
+      "passed": true
+    },
+    {
+      "name": "face_solo_selection",
+      "passed": true,
+      "names": [
+        "両目_ctrl",
+        "左目_ctrl",
+        "右目_ctrl",
+        "頭_ctrl"
+      ]
+    },
+    {
+      "name": "disabled_solo_is_empty",
+      "passed": true
+    },
+    {
+      "name": "ARM_L_switch_to_ik_matches",
+      "passed": true,
+      "error": 5.733840615315267e-06
+    },
+    {
+      "name": "ARM_L_goal_moves_effector",
+      "passed": true,
+      "displacement": 6.403122492309085
+    },
+    {
+      "name": "ARM_L_reachable_target",
+      "passed": true,
+      "error": 3.738461842938137e-06
+    },
+    {
+      "name": "ARM_L_held_input_stable",
+      "passed": true,
+      "error": 3.730349362740526e-14
+    },
+    {
+      "name": "ARM_L_inactive_fk_ignored",
+      "passed": true
+    },
+    {
+      "name": "ARM_L_to_fk_0",
+      "passed": true,
+      "error": 5.134562275988073e-06
+    },
+    {
+      "name": "ARM_L_back_ik_0",
+      "passed": true,
+      "error": 5.424548260467811e-06
+    },
+    {
+      "name": "ARM_L_to_fk_1",
+      "passed": true,
+      "error": 2.4890010001662718e-06
+    },
+    {
+      "name": "ARM_L_back_ik_1",
+      "passed": true,
+      "error": 3.7085461323427292e-06
+    },
+    {
+      "name": "ARM_L_to_fk_2",
+      "passed": true,
+      "error": 4.975767544742471e-06
+    },
+    {
+      "name": "ARM_L_back_ik_2",
+      "passed": true,
+      "error": 2.662361406666736e-06
+    },
+    {
+      "name": "ARM_L_refresh_keeps_pose",
+      "passed": true
+    },
+    {
+      "name": "LEG_L_switch_to_ik_matches",
+      "passed": true,
+      "error": 5.479313718401407e-06
+    },
+    {
+      "name": "LEG_L_goal_moves_effector",
+      "passed": true,
+      "displacement": 6.403122966992167
+    },
+    {
+      "name": "LEG_L_reachable_target",
+      "passed": true,
+      "error": 3.6554367579733874e-06
+    },
+    {
+      "name": "LEG_L_held_input_stable",
+      "passed": true,
+      "error": 0.0
+    },
+    {
+      "name": "LEG_L_inactive_fk_ignored",
+      "passed": true
+    },
+    {
+      "name": "LEG_L_to_fk_0",
+      "passed": true,
+      "error": 2.6071665672525262e-05
+    },
+    {
+      "name": "LEG_L_back_ik_0",
+      "passed": true,
+      "error": 2.291544446556045e-05
+    },
+    {
+      "name": "LEG_L_to_fk_1",
+      "passed": true,
+      "error": 5.872340469018554e-06
+    },
+    {
+      "name": "LEG_L_back_ik_1",
+      "passed": true,
+      "error": 4.296853528910484e-06
+    },
+    {
+      "name": "LEG_L_to_fk_2",
+      "passed": true,
+      "error": 1.00324846688034e-05
+    },
+    {
+      "name": "LEG_L_back_ik_2",
+      "passed": true,
+      "error": 1.5491630418201828e-05
+    },
+    {
+      "name": "LEG_L_refresh_keeps_pose",
+      "passed": true
+    },
+    {
+      "name": "ARM_R_switch_to_ik_matches",
+      "passed": true,
+      "error": 1.7891751896042511e-06
+    },
+    {
+      "name": "ARM_R_goal_moves_effector",
+      "passed": true,
+      "displacement": 6.403124956943077
+    },
+    {
+      "name": "ARM_R_reachable_target",
+      "passed": true,
+      "error": 2.629830973984466e-06
+    },
+    {
+      "name": "ARM_R_held_input_stable",
+      "passed": true,
+      "error": 3.218344867404965e-14
+    },
+    {
+      "name": "ARM_R_inactive_fk_ignored",
+      "passed": true
+    },
+    {
+      "name": "ARM_R_to_fk_0",
+      "passed": true,
+      "error": 6.125800147386178e-06
+    },
+    {
+      "name": "ARM_R_back_ik_0",
+      "passed": true,
+      "error": 7.007387595405127e-06
+    },
+    {
+      "name": "ARM_R_to_fk_1",
+      "passed": true,
+      "error": 6.084605274508388e-06
+    },
+    {
+      "name": "ARM_R_back_ik_1",
+      "passed": true,
+      "error": 8.503800787003693e-06
+    },
+    {
+      "name": "ARM_R_to_fk_2",
+      "passed": true,
+      "error": 2.2711654156008796e-06
+    },
+    {
+      "name": "ARM_R_back_ik_2",
+      "passed": true,
+      "error": 3.247546267850237e-06
+    },
+    {
+      "name": "ARM_R_refresh_keeps_pose",
+      "passed": true
+    },
+    {
+      "name": "LEG_R_switch_to_ik_matches",
+      "passed": true,
+      "error": 3.485426112897076e-06
+    },
+    {
+      "name": "LEG_R_goal_moves_effector",
+      "passed": true,
+      "displacement": 6.403126521530629
+    },
+    {
+      "name": "LEG_R_reachable_target",
+      "passed": true,
+      "error": 3.838214734126589e-06
+    },
+    {
+      "name": "LEG_R_held_input_stable",
+      "passed": true,
+      "error": 0.0
+    },
+    {
+      "name": "LEG_R_inactive_fk_ignored",
+      "passed": true
+    },
+    {
+      "name": "LEG_R_to_fk_0",
+      "passed": true,
+      "error": 1.3221217471653672e-05
+    },
+    {
+      "name": "LEG_R_back_ik_0",
+      "passed": true,
+      "error": 6.928242662473261e-06
+    },
+    {
+      "name": "LEG_R_to_fk_1",
+      "passed": true,
+      "error": 1.6598320881098222e-05
+    },
+    {
+      "name": "LEG_R_back_ik_1",
+      "passed": true,
+      "error": 1.3972523506311906e-05
+    },
+    {
+      "name": "LEG_R_to_fk_2",
+      "passed": true,
+      "error": 4.328788004070456e-06
+    },
+    {
+      "name": "LEG_R_back_ik_2",
+      "passed": true,
+      "error": 6.191436263744558e-06
+    },
+    {
+      "name": "LEG_R_refresh_keeps_pose",
+      "passed": true
+    },
+    {
+      "name": "goal_native_keys",
+      "passed": true
+    },
+    {
+      "name": "goal_key_undo",
+      "passed": true
+    },
+    {
+      "name": "reset_selected_neutral",
+      "passed": true
+    },
+    {
+      "name": "reset_undo",
+      "passed": true,
+      "error": 0.0,
+      "before": "Matrix(v1: (2.658, 7.94, -1.462); v2: (6.652, -3.026, -4.341); v3: (-4.576, 0.213, -7.16); off: (-5.334, 3.742, -11.453))",
+      "after": "Matrix(v1: (2.658, 7.94, -1.462); v2: (6.652, -3.026, -4.341); v3: (-4.576, 0.213, -7.16); off: (-5.334, 3.742, -11.453))"
+    },
+    {
+      "name": "fk_native_keys",
+      "passed": true
+    },
+    {
+      "name": "keyed_switch_matches",
+      "passed": true,
+      "error": 4.9237434724114786e-06
+    },
+    {
+      "name": "match_preserves_other_keys",
+      "passed": true
+    },
+    {
+      "name": "match_inserts_current_key",
+      "passed": true
+    },
+    {
+      "name": "switch_undo_mode",
+      "passed": true
+    },
+    {
+      "name": "switch_undo_pose",
+      "passed": true,
+      "error": 3.30540822551633e-14
+    },
+    {
+      "name": "switch_undo_keys",
+      "passed": true
+    },
+    {
+      "name": "save",
+      "passed": true
+    },
+    {
+      "name": "reload",
+      "passed": true
+    },
+    {
+      "name": "settings_persist",
+      "passed": true
+    },
+    {
+      "name": "goal_links_persist",
+      "passed": true
+    },
+    {
+      "name": "goal_tracks_persist",
+      "passed": true
+    },
+    {
+      "name": "reload_pose",
+      "passed": true,
+      "error": 5.043883840194739e-15
+    }
+  ],
+  "passed": true
+}

@@ -1,0 +1,499 @@
+{
+  "checks": [
+    {
+      "name": "physics=False,priority=-100/IK responds",
+      "passed": true,
+      "effector_delta": 0.881408556111723
+    },
+    {
+      "name": "physics=False,priority=-100/goal follows",
+      "passed": true
+    },
+    {
+      "name": "physics=False,priority=-100/same-frame stable",
+      "passed": true
+    },
+    {
+      "name": "physics=False,priority=-100/whole skeleton stable",
+      "passed": true,
+      "error": 5.662137425588298e-15
+    },
+    {
+      "name": "physics=False,priority=-100/frame 1",
+      "passed": true
+    },
+    {
+      "name": "physics=False,priority=-100/frame 30",
+      "passed": true
+    },
+    {
+      "name": "physics=False,priority=-100/frame 90",
+      "passed": true
+    },
+    {
+      "name": "physics=False,priority=-100/frame 0",
+      "passed": true
+    },
+    {
+      "name": "physics=False,priority=-100/bind unchanged",
+      "passed": true
+    },
+    {
+      "name": "physics=False,priority=0/IK responds",
+      "passed": true,
+      "effector_delta": 0.881408556111723
+    },
+    {
+      "name": "physics=False,priority=0/goal follows",
+      "passed": true
+    },
+    {
+      "name": "physics=False,priority=0/same-frame stable",
+      "passed": true
+    },
+    {
+      "name": "physics=False,priority=0/whole skeleton stable",
+      "passed": true,
+      "error": 5.662137425588298e-15
+    },
+    {
+      "name": "physics=False,priority=0/frame 1",
+      "passed": true
+    },
+    {
+      "name": "physics=False,priority=0/frame 30",
+      "passed": true
+    },
+    {
+      "name": "physics=False,priority=0/frame 90",
+      "passed": true
+    },
+    {
+      "name": "physics=False,priority=0/frame 0",
+      "passed": true
+    },
+    {
+      "name": "physics=False,priority=0/bind unchanged",
+      "passed": true
+    },
+    {
+      "name": "physics=False,priority=100/IK responds",
+      "passed": true,
+      "effector_delta": 0.881408556111723
+    },
+    {
+      "name": "physics=False,priority=100/goal follows",
+      "passed": true
+    },
+    {
+      "name": "physics=False,priority=100/same-frame stable",
+      "passed": true
+    },
+    {
+      "name": "physics=False,priority=100/whole skeleton stable",
+      "passed": true,
+      "error": 5.662137425588298e-15
+    },
+    {
+      "name": "physics=False,priority=100/frame 1",
+      "passed": true
+    },
+    {
+      "name": "physics=False,priority=100/frame 30",
+      "passed": true
+    },
+    {
+      "name": "physics=False,priority=100/frame 90",
+      "passed": true
+    },
+    {
+      "name": "physics=False,priority=100/frame 0",
+      "passed": true
+    },
+    {
+      "name": "physics=False,priority=100/bind unchanged",
+      "passed": true
+    },
+    {
+      "name": "physics=False/priority equivalence",
+      "passed": true
+    },
+    {
+      "name": "physics=True,priority=-100/IK responds",
+      "passed": true,
+      "effector_delta": 0.881408556111723
+    },
+    {
+      "name": "physics=True,priority=-100/goal follows",
+      "passed": true
+    },
+    {
+      "name": "physics=True,priority=-100/same-frame stable",
+      "passed": true
+    },
+    {
+      "name": "physics=True,priority=-100/whole skeleton stable",
+      "passed": true,
+      "error": 5.662137425588298e-15
+    },
+    {
+      "name": "physics=True,priority=-100/frame 1",
+      "passed": true
+    },
+    {
+      "name": "physics=True,priority=-100/frame 30",
+      "passed": true
+    },
+    {
+      "name": "physics=True,priority=-100/frame 90",
+      "passed": true
+    },
+    {
+      "name": "physics=True,priority=-100/frame 0",
+      "passed": true
+    },
+    {
+      "name": "physics=True,priority=-100/bind unchanged",
+      "passed": true
+    },
+    {
+      "name": "physics=True,priority=0/IK responds",
+      "passed": true,
+      "effector_delta": 0.881408556111723
+    },
+    {
+      "name": "physics=True,priority=0/goal follows",
+      "passed": true
+    },
+    {
+      "name": "physics=True,priority=0/same-frame stable",
+      "passed": true
+    },
+    {
+      "name": "physics=True,priority=0/whole skeleton stable",
+      "passed": true,
+      "error": 5.662137425588298e-15
+    },
+    {
+      "name": "physics=True,priority=0/frame 1",
+      "passed": true
+    },
+    {
+      "name": "physics=True,priority=0/frame 30",
+      "passed": true
+    },
+    {
+      "name": "physics=True,priority=0/frame 90",
+      "passed": true
+    },
+    {
+      "name": "physics=True,priority=0/frame 0",
+      "passed": true
+    },
+    {
+      "name": "physics=True,priority=0/bind unchanged",
+      "passed": true
+    },
+    {
+      "name": "physics=True,priority=100/IK responds",
+      "passed": true,
+      "effector_delta": 0.881408556111723
+    },
+    {
+      "name": "physics=True,priority=100/goal follows",
+      "passed": true
+    },
+    {
+      "name": "physics=True,priority=100/same-frame stable",
+      "passed": true
+    },
+    {
+      "name": "physics=True,priority=100/whole skeleton stable",
+      "passed": true,
+      "error": 5.662137425588298e-15
+    },
+    {
+      "name": "physics=True,priority=100/frame 1",
+      "passed": true
+    },
+    {
+      "name": "physics=True,priority=100/frame 30",
+      "passed": true
+    },
+    {
+      "name": "physics=True,priority=100/frame 90",
+      "passed": true
+    },
+    {
+      "name": "physics=True,priority=100/frame 0",
+      "passed": true
+    },
+    {
+      "name": "physics=True,priority=100/bind unchanged",
+      "passed": true
+    },
+    {
+      "name": "physics=True/priority equivalence",
+      "passed": true
+    },
+    {
+      "name": "disable/restore animation",
+      "passed": true
+    },
+    {
+      "name": "disable/resume driven",
+      "passed": true
+    },
+    {
+      "name": "missing target/restore animation",
+      "passed": true
+    },
+    {
+      "name": "missing target/resume driven",
+      "passed": true
+    },
+    {
+      "name": "zero weight/restore animation",
+      "passed": true
+    },
+    {
+      "name": "zero weight/resume driven",
+      "passed": true
+    },
+    {
+      "name": "delete/restore animation",
+      "passed": true
+    },
+    {
+      "name": "delete/resume driven",
+      "passed": true
+    },
+    {
+      "name": "undo/restore animation",
+      "passed": true
+    },
+    {
+      "name": "undo/resume driven",
+      "passed": true
+    },
+    {
+      "name": "save",
+      "passed": true
+    },
+    {
+      "name": "clone/own link",
+      "passed": true
+    },
+    {
+      "name": "clone/frame 0",
+      "passed": true
+    },
+    {
+      "name": "clone/frame 15",
+      "passed": true
+    },
+    {
+      "name": "clone/frame 30",
+      "passed": true
+    },
+    {
+      "name": "clone/frame 0",
+      "passed": true
+    },
+    {
+      "name": "reload/own link",
+      "passed": true
+    },
+    {
+      "name": "reload/frame 0",
+      "passed": true
+    },
+    {
+      "name": "reload/frame 15",
+      "passed": true
+    },
+    {
+      "name": "reload/frame 30",
+      "passed": true
+    },
+    {
+      "name": "reload/frame 0",
+      "passed": true
+    },
+    {
+      "name": "native oracle/P=True,R=False,weight=1.0,mask=False/0",
+      "passed": true,
+      "error": 2.104788782500422e-15
+    },
+    {
+      "name": "native oracle/P=True,R=False,weight=1.0,mask=False/1",
+      "passed": true,
+      "error": 2.104788782500422e-15
+    },
+    {
+      "name": "native oracle/P=True,R=False,weight=1.0,mask=False/2",
+      "passed": true,
+      "error": 2.104788782500422e-15
+    },
+    {
+      "name": "native oracle/P=False,R=True,weight=1.0,mask=False/0",
+      "passed": true,
+      "error": 2.3923341885279115e-06
+    },
+    {
+      "name": "native oracle/P=False,R=True,weight=1.0,mask=False/1",
+      "passed": true,
+      "error": 2.3923341885279115e-06
+    },
+    {
+      "name": "native oracle/P=False,R=True,weight=1.0,mask=False/2",
+      "passed": true,
+      "error": 2.3923341885279115e-06
+    },
+    {
+      "name": "native oracle/P=True,R=True,weight=0.5,mask=False/0",
+      "passed": true,
+      "error": 2.3334792711438013e-06
+    },
+    {
+      "name": "native oracle/P=True,R=True,weight=0.5,mask=False/1",
+      "passed": true,
+      "error": 2.3334792711438013e-06
+    },
+    {
+      "name": "native oracle/P=True,R=True,weight=0.5,mask=False/2",
+      "passed": true,
+      "error": 2.3334792711438013e-06
+    },
+    {
+      "name": "native oracle/P=True,R=True,weight=1.0,mask=True/0",
+      "passed": true,
+      "error": 2.0710398977996647e-06
+    },
+    {
+      "name": "native oracle/P=True,R=True,weight=1.0,mask=True/1",
+      "passed": true,
+      "error": 2.0710398977996647e-06
+    },
+    {
+      "name": "native oracle/P=True,R=True,weight=1.0,mask=True/2",
+      "passed": true,
+      "error": 2.0710398977996647e-06
+    },
+    {
+      "name": "source document unchanged",
+      "passed": true
+    }
+  ],
+  "samples": [
+    {
+      "case": "physics=False,priority=-100",
+      "effector_delta": 0.881408556111723,
+      "effector": [
+        0.6951418545269958,
+        8.405244508749272,
+        -24.791805326424655,
+        -8.48337124428967,
+        0.1498262801059951,
+        -0.5098680635327947,
+        0.2007106369222044,
+        8.454495235238879,
+        -0.8551168653387645,
+        0.4920656362925275,
+        -0.8654835858386973,
+        -8.44149402899323
+      ]
+    },
+    {
+      "case": "physics=False,priority=0",
+      "effector_delta": 0.881408556111723,
+      "effector": [
+        0.6951418545269958,
+        8.405244508749272,
+        -24.791805326424655,
+        -8.48337124428967,
+        0.1498262801059951,
+        -0.5098680635327947,
+        0.2007106369222044,
+        8.454495235238879,
+        -0.8551168653387645,
+        0.4920656362925275,
+        -0.8654835858386973,
+        -8.44149402899323
+      ]
+    },
+    {
+      "case": "physics=False,priority=100",
+      "effector_delta": 0.881408556111723,
+      "effector": [
+        0.6951418545269958,
+        8.405244508749272,
+        -24.791805326424655,
+        -8.48337124428967,
+        0.1498262801059951,
+        -0.5098680635327947,
+        0.2007106369222044,
+        8.454495235238879,
+        -0.8551168653387645,
+        0.4920656362925275,
+        -0.8654835858386973,
+        -8.44149402899323
+      ]
+    },
+    {
+      "case": "physics=True,priority=-100",
+      "effector_delta": 0.881408556111723,
+      "effector": [
+        0.6951418545269958,
+        8.405244508749272,
+        -24.791805326424655,
+        -8.48337124428967,
+        0.1498262801059951,
+        -0.5098680635327947,
+        0.2007106369222044,
+        8.454495235238879,
+        -0.8551168653387645,
+        0.4920656362925275,
+        -0.8654835858386973,
+        -8.44149402899323
+      ]
+    },
+    {
+      "case": "physics=True,priority=0",
+      "effector_delta": 0.881408556111723,
+      "effector": [
+        0.6951418545269958,
+        8.405244508749272,
+        -24.791805326424655,
+        -8.48337124428967,
+        0.1498262801059951,
+        -0.5098680635327947,
+        0.2007106369222044,
+        8.454495235238879,
+        -0.8551168653387645,
+        0.4920656362925275,
+        -0.8654835858386973,
+        -8.44149402899323
+      ]
+    },
+    {
+      "case": "physics=True,priority=100",
+      "effector_delta": 0.881408556111723,
+      "effector": [
+        0.6951418545269958,
+        8.405244508749272,
+        -24.791805326424655,
+        -8.48337124428967,
+        0.1498262801059951,
+        -0.5098680635327947,
+        0.2007106369222044,
+        8.454495235238879,
+        -0.8551168653387645,
+        0.4920656362925275,
+        -0.8654835858386973,
+        -8.44149402899323
+      ]
+    }
+  ],
+  "passed": true
+}

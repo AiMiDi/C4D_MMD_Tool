@@ -1,0 +1,43 @@
+{
+  "perturbation_max_scene_delta": {
+    "perturbation.txt": 0.589095616088214,
+    "perturbation-free.txt": 0.0111697023025663,
+    "perturbation-plane.txt": 0.212527979017582,
+    "perturbation-atan2.txt": 0.000110721303202635,
+    "perturbation-production.txt": 0.000110721303202635
+  },
+  "production_scale_and_node_path": {
+    "1 vs 8.5": {
+      "max_scene_difference": 0.0025763518830496123,
+      "frame": 776,
+      "bone": "右ひざ",
+      "points": 80
+    },
+    "1 vs 1norm": {
+      "max_scene_difference": 0.004467885567711665,
+      "frame": 776,
+      "bone": "右足首",
+      "points": 80
+    },
+    "8.5 vs 8.5norm": {
+      "max_scene_difference": 0.0011488383730370547,
+      "frame": 373,
+      "bone": "左足首",
+      "points": 80
+    }
+  },
+  "production_matches_private_experiment": 0.0,
+  "regression": {
+    "old_failed_new_assertions": 12,
+    "old_passed": 816,
+    "fixed_passed": 828,
+    "total": 828,
+    "official_sse2_ctest_passed": 3
+  },
+  "sha256": {
+    "C:\\code\\C4D_MMD_Tool\\dependency\\libMMD\\src\\libMMD\\Model\\MMD\\MMDIkSolver.cpp": "95469b2edf24d7e1d913abf71b897776779f479747ad08fc068cc426af565f73",
+    "C:\\code\\C4D_MMD_Tool\\dependency\\libMMD\\tests\\MMDIkSolver.test.cpp": "b548a4ae625e6af1e39e7e3bc8a3fe629c819ff9e1bdef35dcc1e1dfaa529b78",
+    "S:\\tmp\\cmt-joint-validation-20261010\\target-normalized.pmx": "d4514ffdc549cde852a52f7954ef6658307008620a1307b563e25624b9397a3f",
+    "S:\\tmp\\cmt-joint-validation-20261010\\adjusted.vmd": "4383a5b8a0ab4c330ad7b15f4ed64b46e2efa5dbd047044fd3ce94fc857108e6"
+  }
+}

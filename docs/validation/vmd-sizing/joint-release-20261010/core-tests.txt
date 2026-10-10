@@ -1,0 +1,48 @@
+Test project C:/code/C4D_MMD_Tool/_build_msvc/libmmd-sizing-standalone
+      Start  1: mmd_motion_sizing_test
+ 1/16 Test  #1: mmd_motion_sizing_test ............   Passed    0.01 sec
+      Start  2: mmd_motion_sizing_advanced_test
+ 2/16 Test  #2: mmd_motion_sizing_advanced_test ...   Passed    0.10 sec
+      Start  3: mmd_model_test
+ 3/16 Test  #3: mmd_model_test ....................   Passed    0.29 sec
+      Start  4: mmd_model_io_test
+ 4/16 Test  #4: mmd_model_io_test .................   Passed    0.32 sec
+      Start  5: mmd_model_animation_test
+ 5/16 Test  #5: mmd_model_animation_test ..........   Passed    0.29 sec
+      Start  6: mmd_model_regression_test
+ 6/16 Test  #6: mmd_model_regression_test .........   Passed    0.77 sec
+      Start  8: file_base_test
+ 7/16 Test  #8: file_base_test ....................   Passed    0.20 sec
+      Start  9: path_util_test
+ 8/16 Test  #9: path_util_test ....................   Passed    0.18 sec
+      Start 10: file_roundtrip_test
+ 9/16 Test #10: file_roundtrip_test ...............   Passed    0.28 sec
+      Start 11: vpd_file_test
+10/16 Test #11: vpd_file_test .....................   Passed    0.21 sec
+      Start 12: pmx_export_invariants_test
+11/16 Test #12: pmx_export_invariants_test ........   Passed    0.21 sec
+      Start 13: pmx_vertex_weights_test
+12/16 Test #13: pmx_vertex_weights_test ...........   Passed    0.20 sec
+      Start 14: pmx_material_morph_test
+13/16 Test #14: pmx_material_morph_test ...........   Passed    0.20 sec
+      Start 15: mmd_physics_test
+14/16 Test #15: mmd_physics_test ..................   Passed    0.31 sec
+      Start 16: mmd_ik_solver_test
+15/16 Test #16: mmd_ik_solver_test ................   Passed    0.01 sec
+      Start 17: vmd_interpolation_test
+16/16 Test #17: vmd_interpolation_test ............   Passed    0.16 sec
+
+100% tests passed out of 16
+
+Label Time Summary:
+animation      =   0.56 sec*proc (4 tests)
+base           =   0.20 sec*proc (1 test)
+core           =   0.29 sec*proc (1 test)
+ik             =   0.01 sec*proc (1 test)
+integration    =   0.31 sec*proc (1 test)
+io             =   1.43 sec*proc (6 tests)
+path           =   0.18 sec*proc (1 test)
+regression     =   0.88 sec*proc (3 tests)
+sizing         =   0.11 sec*proc (2 tests)
+
+Total Test time (real) =   3.75 sec

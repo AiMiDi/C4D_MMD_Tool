@@ -1,0 +1,3085 @@
+{
+  "document": "246459cc9e30950fc5d65:document:1",
+  "model": "246459cc9e30950fc5d65:object:9",
+  "job": "246459cc9e30950fc5d65:sizing:10",
+  "slot": "246459cc9e30950fc5d65:object:9:slot:388",
+  "completed": {
+    "job": "246459cc9e30950fc5d65:sizing:10",
+    "job_state": "completed",
+    "character_count": 1,
+    "has_camera": true,
+    "preview_document": "",
+    "error": "",
+    "progress": {
+      "phase": "camera",
+      "completed": 93,
+      "total": 93,
+      "character_index": 0,
+      "character_count": 1,
+      "phase_percent": 100,
+      "indeterminate": false
+    }
+  },
+  "observations": [
+    {
+      "phase": "validation",
+      "completed": 0,
+      "total": 0,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 0,
+      "indeterminate": true
+    },
+    {
+      "phase": "twist",
+      "completed": 0,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 0,
+      "indeterminate": false
+    },
+    {
+      "phase": "twist",
+      "completed": 0,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 0,
+      "indeterminate": false
+    },
+    {
+      "phase": "twist",
+      "completed": 64,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 3.7230948225712623,
+      "indeterminate": false
+    },
+    {
+      "phase": "twist",
+      "completed": 64,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 3.7230948225712623,
+      "indeterminate": false
+    },
+    {
+      "phase": "twist",
+      "completed": 64,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 3.7230948225712623,
+      "indeterminate": false
+    },
+    {
+      "phase": "twist",
+      "completed": 128,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 7.446189645142525,
+      "indeterminate": false
+    },
+    {
+      "phase": "twist",
+      "completed": 128,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 7.446189645142525,
+      "indeterminate": false
+    },
+    {
+      "phase": "twist",
+      "completed": 128,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 7.446189645142525,
+      "indeterminate": false
+    },
+    {
+      "phase": "twist",
+      "completed": 192,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 11.169284467713787,
+      "indeterminate": false
+    },
+    {
+      "phase": "twist",
+      "completed": 192,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 11.169284467713787,
+      "indeterminate": false
+    },
+    {
+      "phase": "twist",
+      "completed": 192,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 11.169284467713787,
+      "indeterminate": false
+    },
+    {
+      "phase": "twist",
+      "completed": 256,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 14.89237929028505,
+      "indeterminate": false
+    },
+    {
+      "phase": "twist",
+      "completed": 256,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 14.89237929028505,
+      "indeterminate": false
+    },
+    {
+      "phase": "twist",
+      "completed": 256,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 14.89237929028505,
+      "indeterminate": false
+    },
+    {
+      "phase": "twist",
+      "completed": 320,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 18.61547411285631,
+      "indeterminate": false
+    },
+    {
+      "phase": "twist",
+      "completed": 320,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 18.61547411285631,
+      "indeterminate": false
+    },
+    {
+      "phase": "twist",
+      "completed": 384,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 22.338568935427574,
+      "indeterminate": false
+    },
+    {
+      "phase": "twist",
+      "completed": 384,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 22.338568935427574,
+      "indeterminate": false
+    },
+    {
+      "phase": "twist",
+      "completed": 384,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 22.338568935427574,
+      "indeterminate": false
+    },
+    {
+      "phase": "twist",
+      "completed": 448,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 26.061663757998836,
+      "indeterminate": false
+    },
+    {
+      "phase": "twist",
+      "completed": 448,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 26.061663757998836,
+      "indeterminate": false
+    },
+    {
+      "phase": "twist",
+      "completed": 448,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 26.061663757998836,
+      "indeterminate": false
+    },
+    {
+      "phase": "twist",
+      "completed": 512,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 29.7847585805701,
+      "indeterminate": false
+    },
+    {
+      "phase": "twist",
+      "completed": 512,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 29.7847585805701,
+      "indeterminate": false
+    },
+    {
+      "phase": "twist",
+      "completed": 512,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 29.7847585805701,
+      "indeterminate": false
+    },
+    {
+      "phase": "twist",
+      "completed": 576,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 33.50785340314136,
+      "indeterminate": false
+    },
+    {
+      "phase": "twist",
+      "completed": 576,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 33.50785340314136,
+      "indeterminate": false
+    },
+    {
+      "phase": "twist",
+      "completed": 576,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 33.50785340314136,
+      "indeterminate": false
+    },
+    {
+      "phase": "twist",
+      "completed": 640,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 37.23094822571262,
+      "indeterminate": false
+    },
+    {
+      "phase": "twist",
+      "completed": 640,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 37.23094822571262,
+      "indeterminate": false
+    },
+    {
+      "phase": "twist",
+      "completed": 640,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 37.23094822571262,
+      "indeterminate": false
+    },
+    {
+      "phase": "twist",
+      "completed": 704,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 40.954043048283886,
+      "indeterminate": false
+    },
+    {
+      "phase": "twist",
+      "completed": 704,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 40.954043048283886,
+      "indeterminate": false
+    },
+    {
+      "phase": "twist",
+      "completed": 768,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 44.67713787085515,
+      "indeterminate": false
+    },
+    {
+      "phase": "twist",
+      "completed": 768,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 44.67713787085515,
+      "indeterminate": false
+    },
+    {
+      "phase": "twist",
+      "completed": 768,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 44.67713787085515,
+      "indeterminate": false
+    },
+    {
+      "phase": "twist",
+      "completed": 832,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 48.40023269342641,
+      "indeterminate": false
+    },
+    {
+      "phase": "twist",
+      "completed": 832,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 48.40023269342641,
+      "indeterminate": false
+    },
+    {
+      "phase": "twist",
+      "completed": 832,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 48.40023269342641,
+      "indeterminate": false
+    },
+    {
+      "phase": "twist",
+      "completed": 896,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 52.12332751599767,
+      "indeterminate": false
+    },
+    {
+      "phase": "twist",
+      "completed": 896,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 52.12332751599767,
+      "indeterminate": false
+    },
+    {
+      "phase": "twist",
+      "completed": 896,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 52.12332751599767,
+      "indeterminate": false
+    },
+    {
+      "phase": "twist",
+      "completed": 960,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 55.846422338568935,
+      "indeterminate": false
+    },
+    {
+      "phase": "twist",
+      "completed": 960,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 55.846422338568935,
+      "indeterminate": false
+    },
+    {
+      "phase": "twist",
+      "completed": 960,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 55.846422338568935,
+      "indeterminate": false
+    },
+    {
+      "phase": "twist",
+      "completed": 1024,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 59.5695171611402,
+      "indeterminate": false
+    },
+    {
+      "phase": "twist",
+      "completed": 1024,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 59.5695171611402,
+      "indeterminate": false
+    },
+    {
+      "phase": "twist",
+      "completed": 1024,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 59.5695171611402,
+      "indeterminate": false
+    },
+    {
+      "phase": "twist",
+      "completed": 1088,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 63.29261198371146,
+      "indeterminate": false
+    },
+    {
+      "phase": "twist",
+      "completed": 1088,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 63.29261198371146,
+      "indeterminate": false
+    },
+    {
+      "phase": "twist",
+      "completed": 1088,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 63.29261198371146,
+      "indeterminate": false
+    },
+    {
+      "phase": "twist",
+      "completed": 1152,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 67.01570680628272,
+      "indeterminate": false
+    },
+    {
+      "phase": "twist",
+      "completed": 1152,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 67.01570680628272,
+      "indeterminate": false
+    },
+    {
+      "phase": "twist",
+      "completed": 1216,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 70.73880162885399,
+      "indeterminate": false
+    },
+    {
+      "phase": "twist",
+      "completed": 1216,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 70.73880162885399,
+      "indeterminate": false
+    },
+    {
+      "phase": "twist",
+      "completed": 1216,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 70.73880162885399,
+      "indeterminate": false
+    },
+    {
+      "phase": "twist",
+      "completed": 1280,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 74.46189645142525,
+      "indeterminate": false
+    },
+    {
+      "phase": "twist",
+      "completed": 1280,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 74.46189645142525,
+      "indeterminate": false
+    },
+    {
+      "phase": "twist",
+      "completed": 1280,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 74.46189645142525,
+      "indeterminate": false
+    },
+    {
+      "phase": "twist",
+      "completed": 1344,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 78.18499127399652,
+      "indeterminate": false
+    },
+    {
+      "phase": "twist",
+      "completed": 1344,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 78.18499127399652,
+      "indeterminate": false
+    },
+    {
+      "phase": "twist",
+      "completed": 1344,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 78.18499127399652,
+      "indeterminate": false
+    },
+    {
+      "phase": "twist",
+      "completed": 1408,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 81.90808609656777,
+      "indeterminate": false
+    },
+    {
+      "phase": "twist",
+      "completed": 1408,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 81.90808609656777,
+      "indeterminate": false
+    },
+    {
+      "phase": "twist",
+      "completed": 1408,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 81.90808609656777,
+      "indeterminate": false
+    },
+    {
+      "phase": "twist",
+      "completed": 1472,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 85.63118091913904,
+      "indeterminate": false
+    },
+    {
+      "phase": "twist",
+      "completed": 1472,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 85.63118091913904,
+      "indeterminate": false
+    },
+    {
+      "phase": "twist",
+      "completed": 1472,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 85.63118091913904,
+      "indeterminate": false
+    },
+    {
+      "phase": "twist",
+      "completed": 1536,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 89.3542757417103,
+      "indeterminate": false
+    },
+    {
+      "phase": "twist",
+      "completed": 1536,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 89.3542757417103,
+      "indeterminate": false
+    },
+    {
+      "phase": "twist",
+      "completed": 1536,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 89.3542757417103,
+      "indeterminate": false
+    },
+    {
+      "phase": "twist",
+      "completed": 1600,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 93.07737056428157,
+      "indeterminate": false
+    },
+    {
+      "phase": "twist",
+      "completed": 1600,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 93.07737056428157,
+      "indeterminate": false
+    },
+    {
+      "phase": "twist",
+      "completed": 1664,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 96.80046538685282,
+      "indeterminate": false
+    },
+    {
+      "phase": "twist",
+      "completed": 1664,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 96.80046538685282,
+      "indeterminate": false
+    },
+    {
+      "phase": "twist",
+      "completed": 1664,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 96.80046538685282,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 0,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 0,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 64,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 1.8615474112856312,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 64,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 1.8615474112856312,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 128,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 3.7230948225712623,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 192,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 5.5846422338568935,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 192,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 5.5846422338568935,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 192,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 5.5846422338568935,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 192,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 5.5846422338568935,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 192,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 5.5846422338568935,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 256,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 7.446189645142525,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 256,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 7.446189645142525,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 256,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 7.446189645142525,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 256,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 7.446189645142525,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 256,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 7.446189645142525,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 256,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 7.446189645142525,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 256,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 7.446189645142525,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 256,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 7.446189645142525,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 256,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 7.446189645142525,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 256,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 7.446189645142525,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 256,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 7.446189645142525,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 256,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 7.446189645142525,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 256,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 7.446189645142525,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 256,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 7.446189645142525,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 256,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 7.446189645142525,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 256,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 7.446189645142525,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 256,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 7.446189645142525,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 256,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 7.446189645142525,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 256,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 7.446189645142525,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 256,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 7.446189645142525,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 256,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 7.446189645142525,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 320,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 9.307737056428156,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 320,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 9.307737056428156,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 384,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 11.169284467713787,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 448,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 13.030831878999418,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 448,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 13.030831878999418,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 512,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 14.89237929028505,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 512,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 14.89237929028505,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 512,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 14.89237929028505,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 512,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 14.89237929028505,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 512,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 14.89237929028505,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 512,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 14.89237929028505,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 576,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 16.75392670157068,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 576,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 16.75392670157068,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 576,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 16.75392670157068,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 576,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 16.75392670157068,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 576,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 16.75392670157068,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 576,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 16.75392670157068,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 576,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 16.75392670157068,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 640,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 18.61547411285631,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 640,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 18.61547411285631,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 704,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 20.477021524141943,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 704,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 20.477021524141943,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 768,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 22.338568935427574,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 768,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 22.338568935427574,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 768,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 22.338568935427574,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 832,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 24.200116346713205,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 896,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 26.061663757998836,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 896,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 26.061663757998836,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 896,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 26.061663757998836,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 896,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 26.061663757998836,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 960,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 27.923211169284468,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 960,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 27.923211169284468,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 1024,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 29.7847585805701,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 1088,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 31.64630599185573,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 1088,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 31.64630599185573,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 1152,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 33.50785340314136,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 1152,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 33.50785340314136,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 1152,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 33.50785340314136,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 1152,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 33.50785340314136,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 1152,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 33.50785340314136,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 1152,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 33.50785340314136,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 1152,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 33.50785340314136,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 1152,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 33.50785340314136,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 1216,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 35.369400814426996,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 1216,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 35.369400814426996,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 1216,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 35.369400814426996,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 1216,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 35.369400814426996,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 1216,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 35.369400814426996,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 1216,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 35.369400814426996,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 1216,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 35.369400814426996,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 1216,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 35.369400814426996,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 1216,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 35.369400814426996,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 1280,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 37.23094822571262,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 1280,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 37.23094822571262,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 1344,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 39.09249563699826,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 1344,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 39.09249563699826,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 1408,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 40.954043048283886,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 1408,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 40.954043048283886,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 1472,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 42.81559045956952,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 1472,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 42.81559045956952,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 1536,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 44.67713787085515,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 1600,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 46.53868528214078,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 1600,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 46.53868528214078,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 1600,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 46.53868528214078,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 1600,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 46.53868528214078,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 1600,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 46.53868528214078,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 1600,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 46.53868528214078,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 1600,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 46.53868528214078,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 1600,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 46.53868528214078,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 1664,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 48.40023269342641,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 1664,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 48.40023269342641,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 1664,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 48.40023269342641,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 1728,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 50.261780104712045,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 1792,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 52.12332751599767,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 1856,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 53.98487492728331,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 1856,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 53.98487492728331,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 1920,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 55.846422338568935,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 1984,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 57.70796974985457,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 2048,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 59.5695171611402,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 2048,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 59.5695171611402,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 2112,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 61.43106457242583,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 2176,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 63.29261198371146,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 2240,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 65.1541593949971,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 2304,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 67.01570680628272,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 2304,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 67.01570680628272,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 2368,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 68.87725421756835,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 2432,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 70.73880162885399,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 2496,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 72.60034904013962,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 2560,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 74.46189645142525,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 2624,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 76.32344386271087,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 2624,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 76.32344386271087,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 2688,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 78.18499127399652,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 2752,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 80.04653868528214,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 2816,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 81.90808609656777,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 2880,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 83.7696335078534,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 2944,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 85.63118091913904,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 2944,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 85.63118091913904,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 3008,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 87.49272833042467,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 3072,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 89.3542757417103,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 3136,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 91.21582315299592,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 3200,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 93.07737056428157,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 3200,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 93.07737056428157,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 3264,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 94.9389179755672,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 3328,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 96.80046538685282,
+      "indeterminate": false
+    },
+    {
+      "phase": "leg_avoidance",
+      "completed": 3392,
+      "total": 3438,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 98.66201279813845,
+      "indeterminate": false
+    },
+    {
+      "phase": "avoidance",
+      "completed": 0,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 0,
+      "indeterminate": false
+    },
+    {
+      "phase": "avoidance",
+      "completed": 64,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 3.7230948225712623,
+      "indeterminate": false
+    },
+    {
+      "phase": "avoidance",
+      "completed": 128,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 7.446189645142525,
+      "indeterminate": false
+    },
+    {
+      "phase": "avoidance",
+      "completed": 128,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 7.446189645142525,
+      "indeterminate": false
+    },
+    {
+      "phase": "avoidance",
+      "completed": 192,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 11.169284467713787,
+      "indeterminate": false
+    },
+    {
+      "phase": "avoidance",
+      "completed": 256,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 14.89237929028505,
+      "indeterminate": false
+    },
+    {
+      "phase": "avoidance",
+      "completed": 256,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 14.89237929028505,
+      "indeterminate": false
+    },
+    {
+      "phase": "avoidance",
+      "completed": 256,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 14.89237929028505,
+      "indeterminate": false
+    },
+    {
+      "phase": "avoidance",
+      "completed": 320,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 18.61547411285631,
+      "indeterminate": false
+    },
+    {
+      "phase": "avoidance",
+      "completed": 320,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 18.61547411285631,
+      "indeterminate": false
+    },
+    {
+      "phase": "avoidance",
+      "completed": 384,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 22.338568935427574,
+      "indeterminate": false
+    },
+    {
+      "phase": "avoidance",
+      "completed": 384,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 22.338568935427574,
+      "indeterminate": false
+    },
+    {
+      "phase": "avoidance",
+      "completed": 448,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 26.061663757998836,
+      "indeterminate": false
+    },
+    {
+      "phase": "avoidance",
+      "completed": 512,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 29.7847585805701,
+      "indeterminate": false
+    },
+    {
+      "phase": "avoidance",
+      "completed": 576,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 33.50785340314136,
+      "indeterminate": false
+    },
+    {
+      "phase": "avoidance",
+      "completed": 640,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 37.23094822571262,
+      "indeterminate": false
+    },
+    {
+      "phase": "avoidance",
+      "completed": 640,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 37.23094822571262,
+      "indeterminate": false
+    },
+    {
+      "phase": "avoidance",
+      "completed": 704,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 40.954043048283886,
+      "indeterminate": false
+    },
+    {
+      "phase": "avoidance",
+      "completed": 704,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 40.954043048283886,
+      "indeterminate": false
+    },
+    {
+      "phase": "avoidance",
+      "completed": 704,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 40.954043048283886,
+      "indeterminate": false
+    },
+    {
+      "phase": "avoidance",
+      "completed": 704,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 40.954043048283886,
+      "indeterminate": false
+    },
+    {
+      "phase": "avoidance",
+      "completed": 768,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 44.67713787085515,
+      "indeterminate": false
+    },
+    {
+      "phase": "avoidance",
+      "completed": 832,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 48.40023269342641,
+      "indeterminate": false
+    },
+    {
+      "phase": "avoidance",
+      "completed": 832,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 48.40023269342641,
+      "indeterminate": false
+    },
+    {
+      "phase": "avoidance",
+      "completed": 832,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 48.40023269342641,
+      "indeterminate": false
+    },
+    {
+      "phase": "avoidance",
+      "completed": 832,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 48.40023269342641,
+      "indeterminate": false
+    },
+    {
+      "phase": "avoidance",
+      "completed": 896,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 52.12332751599767,
+      "indeterminate": false
+    },
+    {
+      "phase": "avoidance",
+      "completed": 896,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 52.12332751599767,
+      "indeterminate": false
+    },
+    {
+      "phase": "avoidance",
+      "completed": 896,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 52.12332751599767,
+      "indeterminate": false
+    },
+    {
+      "phase": "avoidance",
+      "completed": 960,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 55.846422338568935,
+      "indeterminate": false
+    },
+    {
+      "phase": "avoidance",
+      "completed": 1024,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 59.5695171611402,
+      "indeterminate": false
+    },
+    {
+      "phase": "avoidance",
+      "completed": 1024,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 59.5695171611402,
+      "indeterminate": false
+    },
+    {
+      "phase": "avoidance",
+      "completed": 1088,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 63.29261198371146,
+      "indeterminate": false
+    },
+    {
+      "phase": "avoidance",
+      "completed": 1088,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 63.29261198371146,
+      "indeterminate": false
+    },
+    {
+      "phase": "avoidance",
+      "completed": 1152,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 67.01570680628272,
+      "indeterminate": false
+    },
+    {
+      "phase": "avoidance",
+      "completed": 1152,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 67.01570680628272,
+      "indeterminate": false
+    },
+    {
+      "phase": "avoidance",
+      "completed": 1216,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 70.73880162885399,
+      "indeterminate": false
+    },
+    {
+      "phase": "avoidance",
+      "completed": 1280,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 74.46189645142525,
+      "indeterminate": false
+    },
+    {
+      "phase": "avoidance",
+      "completed": 1344,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 78.18499127399652,
+      "indeterminate": false
+    },
+    {
+      "phase": "avoidance",
+      "completed": 1408,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 81.90808609656777,
+      "indeterminate": false
+    },
+    {
+      "phase": "avoidance",
+      "completed": 1472,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 85.63118091913904,
+      "indeterminate": false
+    },
+    {
+      "phase": "avoidance",
+      "completed": 1536,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 89.3542757417103,
+      "indeterminate": false
+    },
+    {
+      "phase": "avoidance",
+      "completed": 1600,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 93.07737056428157,
+      "indeterminate": false
+    },
+    {
+      "phase": "avoidance",
+      "completed": 1600,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 93.07737056428157,
+      "indeterminate": false
+    },
+    {
+      "phase": "avoidance",
+      "completed": 1664,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 96.80046538685282,
+      "indeterminate": false
+    },
+    {
+      "phase": "contact",
+      "completed": 0,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 0,
+      "indeterminate": false
+    },
+    {
+      "phase": "contact",
+      "completed": 0,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 0,
+      "indeterminate": false
+    },
+    {
+      "phase": "contact",
+      "completed": 0,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 0,
+      "indeterminate": false
+    },
+    {
+      "phase": "contact",
+      "completed": 64,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 3.7230948225712623,
+      "indeterminate": false
+    },
+    {
+      "phase": "contact",
+      "completed": 64,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 3.7230948225712623,
+      "indeterminate": false
+    },
+    {
+      "phase": "contact",
+      "completed": 128,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 7.446189645142525,
+      "indeterminate": false
+    },
+    {
+      "phase": "contact",
+      "completed": 128,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 7.446189645142525,
+      "indeterminate": false
+    },
+    {
+      "phase": "contact",
+      "completed": 128,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 7.446189645142525,
+      "indeterminate": false
+    },
+    {
+      "phase": "contact",
+      "completed": 192,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 11.169284467713787,
+      "indeterminate": false
+    },
+    {
+      "phase": "contact",
+      "completed": 192,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 11.169284467713787,
+      "indeterminate": false
+    },
+    {
+      "phase": "contact",
+      "completed": 256,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 14.89237929028505,
+      "indeterminate": false
+    },
+    {
+      "phase": "contact",
+      "completed": 256,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 14.89237929028505,
+      "indeterminate": false
+    },
+    {
+      "phase": "contact",
+      "completed": 256,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 14.89237929028505,
+      "indeterminate": false
+    },
+    {
+      "phase": "contact",
+      "completed": 256,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 14.89237929028505,
+      "indeterminate": false
+    },
+    {
+      "phase": "contact",
+      "completed": 256,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 14.89237929028505,
+      "indeterminate": false
+    },
+    {
+      "phase": "contact",
+      "completed": 256,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 14.89237929028505,
+      "indeterminate": false
+    },
+    {
+      "phase": "contact",
+      "completed": 256,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 14.89237929028505,
+      "indeterminate": false
+    },
+    {
+      "phase": "contact",
+      "completed": 256,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 14.89237929028505,
+      "indeterminate": false
+    },
+    {
+      "phase": "contact",
+      "completed": 320,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 18.61547411285631,
+      "indeterminate": false
+    },
+    {
+      "phase": "contact",
+      "completed": 320,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 18.61547411285631,
+      "indeterminate": false
+    },
+    {
+      "phase": "contact",
+      "completed": 320,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 18.61547411285631,
+      "indeterminate": false
+    },
+    {
+      "phase": "contact",
+      "completed": 384,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 22.338568935427574,
+      "indeterminate": false
+    },
+    {
+      "phase": "contact",
+      "completed": 384,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 22.338568935427574,
+      "indeterminate": false
+    },
+    {
+      "phase": "contact",
+      "completed": 448,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 26.061663757998836,
+      "indeterminate": false
+    },
+    {
+      "phase": "contact",
+      "completed": 448,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 26.061663757998836,
+      "indeterminate": false
+    },
+    {
+      "phase": "contact",
+      "completed": 512,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 29.7847585805701,
+      "indeterminate": false
+    },
+    {
+      "phase": "contact",
+      "completed": 512,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 29.7847585805701,
+      "indeterminate": false
+    },
+    {
+      "phase": "contact",
+      "completed": 576,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 33.50785340314136,
+      "indeterminate": false
+    },
+    {
+      "phase": "contact",
+      "completed": 576,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 33.50785340314136,
+      "indeterminate": false
+    },
+    {
+      "phase": "contact",
+      "completed": 640,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 37.23094822571262,
+      "indeterminate": false
+    },
+    {
+      "phase": "contact",
+      "completed": 640,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 37.23094822571262,
+      "indeterminate": false
+    },
+    {
+      "phase": "contact",
+      "completed": 704,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 40.954043048283886,
+      "indeterminate": false
+    },
+    {
+      "phase": "contact",
+      "completed": 704,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 40.954043048283886,
+      "indeterminate": false
+    },
+    {
+      "phase": "contact",
+      "completed": 768,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 44.67713787085515,
+      "indeterminate": false
+    },
+    {
+      "phase": "contact",
+      "completed": 768,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 44.67713787085515,
+      "indeterminate": false
+    },
+    {
+      "phase": "contact",
+      "completed": 832,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 48.40023269342641,
+      "indeterminate": false
+    },
+    {
+      "phase": "contact",
+      "completed": 832,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 48.40023269342641,
+      "indeterminate": false
+    },
+    {
+      "phase": "contact",
+      "completed": 832,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 48.40023269342641,
+      "indeterminate": false
+    },
+    {
+      "phase": "contact",
+      "completed": 832,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 48.40023269342641,
+      "indeterminate": false
+    },
+    {
+      "phase": "contact",
+      "completed": 832,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 48.40023269342641,
+      "indeterminate": false
+    },
+    {
+      "phase": "contact",
+      "completed": 832,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 48.40023269342641,
+      "indeterminate": false
+    },
+    {
+      "phase": "contact",
+      "completed": 832,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 48.40023269342641,
+      "indeterminate": false
+    },
+    {
+      "phase": "contact",
+      "completed": 832,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 48.40023269342641,
+      "indeterminate": false
+    },
+    {
+      "phase": "contact",
+      "completed": 832,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 48.40023269342641,
+      "indeterminate": false
+    },
+    {
+      "phase": "contact",
+      "completed": 896,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 52.12332751599767,
+      "indeterminate": false
+    },
+    {
+      "phase": "contact",
+      "completed": 896,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 52.12332751599767,
+      "indeterminate": false
+    },
+    {
+      "phase": "contact",
+      "completed": 960,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 55.846422338568935,
+      "indeterminate": false
+    },
+    {
+      "phase": "contact",
+      "completed": 960,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 55.846422338568935,
+      "indeterminate": false
+    },
+    {
+      "phase": "contact",
+      "completed": 1024,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 59.5695171611402,
+      "indeterminate": false
+    },
+    {
+      "phase": "contact",
+      "completed": 1024,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 59.5695171611402,
+      "indeterminate": false
+    },
+    {
+      "phase": "contact",
+      "completed": 1024,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 59.5695171611402,
+      "indeterminate": false
+    },
+    {
+      "phase": "contact",
+      "completed": 1024,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 59.5695171611402,
+      "indeterminate": false
+    },
+    {
+      "phase": "contact",
+      "completed": 1088,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 63.29261198371146,
+      "indeterminate": false
+    },
+    {
+      "phase": "contact",
+      "completed": 1088,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 63.29261198371146,
+      "indeterminate": false
+    },
+    {
+      "phase": "contact",
+      "completed": 1152,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 67.01570680628272,
+      "indeterminate": false
+    },
+    {
+      "phase": "contact",
+      "completed": 1152,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 67.01570680628272,
+      "indeterminate": false
+    },
+    {
+      "phase": "contact",
+      "completed": 1216,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 70.73880162885399,
+      "indeterminate": false
+    },
+    {
+      "phase": "contact",
+      "completed": 1216,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 70.73880162885399,
+      "indeterminate": false
+    },
+    {
+      "phase": "contact",
+      "completed": 1216,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 70.73880162885399,
+      "indeterminate": false
+    },
+    {
+      "phase": "contact",
+      "completed": 1280,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 74.46189645142525,
+      "indeterminate": false
+    },
+    {
+      "phase": "contact",
+      "completed": 1280,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 74.46189645142525,
+      "indeterminate": false
+    },
+    {
+      "phase": "contact",
+      "completed": 1344,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 78.18499127399652,
+      "indeterminate": false
+    },
+    {
+      "phase": "contact",
+      "completed": 1344,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 78.18499127399652,
+      "indeterminate": false
+    },
+    {
+      "phase": "contact",
+      "completed": 1408,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 81.90808609656777,
+      "indeterminate": false
+    },
+    {
+      "phase": "contact",
+      "completed": 1408,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 81.90808609656777,
+      "indeterminate": false
+    },
+    {
+      "phase": "contact",
+      "completed": 1472,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 85.63118091913904,
+      "indeterminate": false
+    },
+    {
+      "phase": "contact",
+      "completed": 1472,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 85.63118091913904,
+      "indeterminate": false
+    },
+    {
+      "phase": "contact",
+      "completed": 1536,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 89.3542757417103,
+      "indeterminate": false
+    },
+    {
+      "phase": "contact",
+      "completed": 1536,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 89.3542757417103,
+      "indeterminate": false
+    },
+    {
+      "phase": "contact",
+      "completed": 1536,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 89.3542757417103,
+      "indeterminate": false
+    },
+    {
+      "phase": "contact",
+      "completed": 1600,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 93.07737056428157,
+      "indeterminate": false
+    },
+    {
+      "phase": "contact",
+      "completed": 1664,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 96.80046538685282,
+      "indeterminate": false
+    },
+    {
+      "phase": "contact",
+      "completed": 1664,
+      "total": 1719,
+      "character_index": 1,
+      "character_count": 1,
+      "phase_percent": 96.80046538685282,
+      "indeterminate": false
+    },
+    {
+      "phase": "camera",
+      "completed": 0,
+      "total": 93,
+      "character_index": 0,
+      "character_count": 1,
+      "phase_percent": 0,
+      "indeterminate": false
+    }
+  ],
+  "base": {
+    "document": "246459cc9e30950fc5d65:document:1",
+    "job": "246459cc9e30950fc5d65:sizing:10"
+  },
+  "checks": [
+    {
+      "name": "real_sizing_completed",
+      "passed": true
+    },
+    {
+      "name": "preview_original",
+      "passed": true
+    },
+    {
+      "name": "preview_scale",
+      "passed": true
+    },
+    {
+      "name": "preview_offset",
+      "passed": true
+    },
+    {
+      "name": "preview_stance",
+      "passed": true
+    },
+    {
+      "name": "preview_twist",
+      "passed": true
+    },
+    {
+      "name": "preview_avoidance",
+      "passed": true
+    },
+    {
+      "name": "preview_contact",
+      "passed": true
+    },
+    {
+      "name": "preview_multi_character",
+      "passed": true
+    },
+    {
+      "name": "preview_played_and_closed",
+      "passed": true
+    },
+    {
+      "name": "exports_completed",
+      "passed": true
+    },
+    {
+      "name": "apply_after_playback_no_false_stale",
+      "passed": true
+    },
+    {
+      "name": "target_export_for_pose_parity",
+      "passed": true
+    },
+    {
+      "name": "real_ik_edit_stales_result",
+      "passed": true
+    },
+    {
+      "name": "restored_ik_binding_accepts_camera",
+      "passed": true
+    },
+    {
+      "name": "real_job_released",
+      "passed": true
+    }
+  ],
+  "adjusted_slot": "246459cc9e30950fc5d65:object:9:slot:1941",
+  "stale_rejection": {
+    "success": false,
+    "code": "sizing_apply_failed",
+    "message": "目标绑定模型已改变，请重新计算后再应用。",
+    "operation_id": "714ad76f-f1ae-4d1d-9e33-30ad410a5404",
+    "state": "failed",
+    "host_session": "246459cc9e30950fc5d65",
+    "data": {},
+    "warnings": []
+  }
+}

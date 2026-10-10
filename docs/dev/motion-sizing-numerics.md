@@ -28,3 +28,11 @@ The experiment changed the compilation context; it did not separately isolate FM
 Before enabling AVX2 for sizing, compare uniformly compiled candidates with controlled FMA/vectorization settings, verify Eigen type sizes and alignment across translation-unit boundaries, and trace the first differing frame, goal, iteration, residual, accepted step and damping. Validate both pose deviation and per-goal residuals, together with performance. Adding pose regularization or changing acceptance thresholds would change solver behavior and needs a separate regression baseline.
 
 References: [MSVC floating-point behavior](https://learn.microsoft.com/en-us/cpp/build/reference/fp-specify-floating-point-behavior), [Eigen vectorization and ABI macros](https://libeigen.gitlab.io/eigen/docs-3.4/TopicPreprocessorDirectives.html). The sizing source flag is independent of the existing libMMD playback AVX2 option.
+
+## Joint validation: near-parallel playback IK
+
+The 2026-10-10 joint validation isolated another numerical failure in the shared CCD solver. Both the free-joint and single-axis paths used `acos` of a normalized float dot product. Near parallel links can round that dot to one, losing a meaningful small rotation. Real-asset target perturbations then produced discontinuous knee positions.
+
+The shared solver now calculates the angle from the original vectors with double products: `atan2(norm(cross(a,b)), dot(a,b))`. Rotation directions, joint limits, iteration counts and stopping thresholds retain their existing behavior. The regression checks both signs and both solver paths at three uniform scales; all twelve new residual assertions fail with the frozen old solver and pass with the fix.
+
+The new C4D 2026 Release module and the offline library passed a selected-frame pose comparison at the user's 8.5 scale. The full report, negative control, binary identity and remaining contact limitations are in [joint validation](../validation/vmd-sizing/joint-release-20261010/README.md). This isolates the CCD failure; the earlier contact-stage AVX2 comparison remains a separate historical experiment.

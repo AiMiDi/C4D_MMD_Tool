@@ -1,0 +1,28 @@
+{
+  "date": "2026-10-10",
+  "status": "native_passed_release_pending",
+  "cmt_branch": "codex/sizing-final-fixes",
+  "core_commit": "577c46d122c1276d198e1fd9f3cedb04dab93348",
+  "native_binary_sha256": "734d012adb15e4418db5907b0d4491372b9079499ac5b707c89a515217578a09",
+  "native_binary_loaded": true,
+  "runtime_regression": false,
+  "controller_dependency_complete": true,
+  "source_review_leak_fixed": true,
+  "core_ctest_passed": 16,
+  "plugin_logic_passed": 23,
+  "mcp_tests_passed": 42,
+  "native_production_mcp_checks": 27,
+  "native_real_asset_checks": 16,
+  "native_controller_checks": 72,
+  "native_physics_checks": 90,
+  "control_input_preservation_passed": true,
+  "native_parity_passed": true,
+  "version": "0.9.3.4",
+  "published": false,
+  "pending": "Merge main, full release CI and asset audit",
+  "remaining_limitations": [
+    "Native checks on C4D 2026.4 Windows only",
+    "Deep leg crossings and clothing collisions not universally solved",
+    "Temporal candidate prototype not integrated"
+  ]
+}

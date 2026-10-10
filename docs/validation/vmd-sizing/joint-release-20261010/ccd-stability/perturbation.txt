@@ -1,0 +1,25 @@
+upper=4.59184289572906 lower=4.81687449764904 reach=9.30289594174813 slack=0.105821451629977
+1e-08 axis=0 sign=-1 knee_scene_delta=0 goal_scene_delta=8.4999999483415e-08
+1e-08 axis=0 sign=1 knee_scene_delta=0 goal_scene_delta=8.4999999483415e-08
+1e-08 axis=1 sign=-1 knee_scene_delta=0 goal_scene_delta=8.50000004271045e-08
+1e-08 axis=1 sign=1 knee_scene_delta=0 goal_scene_delta=8.50000004271045e-08
+1e-08 axis=2 sign=-1 knee_scene_delta=0 goal_scene_delta=8.4999999483415e-08
+1e-08 axis=2 sign=1 knee_scene_delta=0 goal_scene_delta=8.4999999483415e-08
+1e-07 axis=0 sign=-1 knee_scene_delta=0.22050902882039 goal_scene_delta=8.50000000496287e-07
+1e-07 axis=0 sign=1 knee_scene_delta=0.142838828533935 goal_scene_delta=8.50000000496287e-07
+1e-07 axis=1 sign=-1 knee_scene_delta=0 goal_scene_delta=8.49999999552598e-07
+1e-07 axis=1 sign=1 knee_scene_delta=0.0325348000856568 goal_scene_delta=8.49999999552598e-07
+1e-07 axis=2 sign=-1 knee_scene_delta=0 goal_scene_delta=8.50000002383666e-07
+1e-07 axis=2 sign=1 knee_scene_delta=0 goal_scene_delta=8.50000002383666e-07
+1e-06 axis=0 sign=-1 knee_scene_delta=0.121464782004507 goal_scene_delta=8.49999999930073e-06
+1e-06 axis=0 sign=1 knee_scene_delta=0.142841168166725 goal_scene_delta=8.49999999930073e-06
+1e-06 axis=1 sign=-1 knee_scene_delta=0.142840530067291 goal_scene_delta=8.50000000024442e-06
+1e-06 axis=1 sign=1 knee_scene_delta=0.120937077119761 goal_scene_delta=8.50000000024442e-06
+1e-06 axis=2 sign=-1 knee_scene_delta=0.101882505534488 goal_scene_delta=8.50000000118811e-06
+1e-06 axis=2 sign=1 knee_scene_delta=0.0226572743240707 goal_scene_delta=8.50000000118811e-06
+1e-05 axis=0 sign=-1 knee_scene_delta=0.090705505720436 goal_scene_delta=8.50000000005569e-05
+1e-05 axis=0 sign=1 knee_scene_delta=0.121483546812473 goal_scene_delta=8.50000000005569e-05
+1e-05 axis=1 sign=-1 knee_scene_delta=0.589095616088214 goal_scene_delta=8.49999999996132e-05
+1e-05 axis=1 sign=1 knee_scene_delta=0.0330471911147575 goal_scene_delta=8.49999999996132e-05
+1e-05 axis=2 sign=-1 knee_scene_delta=0.146812588187395 goal_scene_delta=8.49999999967821e-05
+1e-05 axis=2 sign=1 knee_scene_delta=0.120456151035887 goal_scene_delta=8.49999999967821e-05

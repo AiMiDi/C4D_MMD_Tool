@@ -1,0 +1,6 @@
+{
+  "completed": true,
+  "snapshot_preserves_control_inputs": true,
+  "apply_preserves_control_inputs": true,
+  "apply_after_nonzero_input_no_false_stale": true
+}

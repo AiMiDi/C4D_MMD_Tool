@@ -1,0 +1,20 @@
+=== MMDIkSolver Tests ===
+[test] MMDIkSolver_SolveConverges_SimpleChain
+[test] MMDIkSolver_RealMMDNode_Regression
+[test] MMDIkSolver_BuildChainPath_MatchesFullSubtreeUpdates
+[test] MMDIkSolver_NearParallelLinks_PreserveSmallAngles
+  plane=0 radius=1 angle=-0.0003 relativeError=0
+  plane=0 radius=1 angle=0.0003 relativeError=0
+  plane=0 radius=8.5 angle=-0.0003 relativeError=2.73918e-11
+  plane=0 radius=8.5 angle=0.0003 relativeError=2.73918e-11
+  plane=0 radius=100 angle=-0.0003 relativeError=0
+  plane=0 radius=100 angle=0.0003 relativeError=0
+  plane=1 radius=1 angle=-0.0003 relativeError=0
+  plane=1 radius=1 angle=0.0003 relativeError=0
+  plane=1 radius=8.5 angle=-0.0003 relativeError=2.73918e-11
+  plane=1 radius=8.5 angle=0.0003 relativeError=2.73918e-11
+  plane=1 radius=100 angle=-0.0003 relativeError=0
+  plane=1 radius=100 angle=0.0003 relativeError=0
+
+Results: 828 / 828 passed
+All tests passed.
