@@ -1,0 +1,12 @@
+Test project C:/code/C4D_MMD_Tool/_build_msvc/libmmd-sizing-standalone
+    Start 10: file_roundtrip_test
+1/2 Test #10: file_roundtrip_test ..............   Passed    0.29 sec
+    Start 12: pmx_export_invariants_test
+2/2 Test #12: pmx_export_invariants_test .......   Passed    0.21 sec
+
+100% tests passed out of 2
+
+Label Time Summary:
+io    =   0.51 sec*proc (2 tests)
+
+Total Test time (real) =   0.51 sec

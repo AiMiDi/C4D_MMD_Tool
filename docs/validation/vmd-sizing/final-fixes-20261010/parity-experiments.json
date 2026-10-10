@@ -1,0 +1,146 @@
+[
+  {
+    "file": "scaled-reviewed.tsv",
+    "case": "1",
+    "frame258_right_knee": 0.5941633491083513,
+    "maximum": 0.5941633491083513,
+    "worst_frame": 258,
+    "worst_bone": "右ひざ"
+  },
+  {
+    "file": "scaled-reviewed.tsv",
+    "case": "8.5",
+    "frame258_right_knee": 0.6325399280143056,
+    "maximum": 0.6325399280143056,
+    "worst_frame": 258,
+    "worst_bone": "右ひざ"
+  },
+  {
+    "file": "scaled-normalized-reviewed.tsv",
+    "case": "1",
+    "frame258_right_knee": 0.5941633491083513,
+    "maximum": 0.5941633491083513,
+    "worst_frame": 258,
+    "worst_bone": "右ひざ"
+  },
+  {
+    "file": "scaled-normalized-reviewed.tsv",
+    "case": "1norm",
+    "frame258_right_knee": 0.6040224708520275,
+    "maximum": 0.6040224708520275,
+    "worst_frame": 258,
+    "worst_bone": "右ひざ"
+  },
+  {
+    "file": "scaled-normalized-reviewed.tsv",
+    "case": "8.5",
+    "frame258_right_knee": 0.6325399280143056,
+    "maximum": 0.6325399280143056,
+    "worst_frame": 258,
+    "worst_bone": "右ひざ"
+  },
+  {
+    "file": "scaled-normalized-reviewed.tsv",
+    "case": "8.5norm",
+    "frame258_right_knee": 0.6325339269696406,
+    "maximum": 0.6325339269696406,
+    "worst_frame": 258,
+    "worst_bone": "右ひざ"
+  },
+  {
+    "file": "scaled-adapter-reviewed.tsv",
+    "case": "1",
+    "frame258_right_knee": 0.5941633491083513,
+    "maximum": 0.5941633491083513,
+    "worst_frame": 258,
+    "worst_bone": "右ひざ"
+  },
+  {
+    "file": "scaled-adapter-reviewed.tsv",
+    "case": "1norm",
+    "frame258_right_knee": 0.6134824125234002,
+    "maximum": 0.6134824125234002,
+    "worst_frame": 258,
+    "worst_bone": "右ひざ"
+  },
+  {
+    "file": "scaled-adapter-reviewed.tsv",
+    "case": "8.5",
+    "frame258_right_knee": 0.6325399280143056,
+    "maximum": 0.6325399280143056,
+    "worst_frame": 258,
+    "worst_bone": "右ひざ"
+  },
+  {
+    "file": "scaled-adapter-reviewed.tsv",
+    "case": "8.5norm",
+    "frame258_right_knee": 0.4692024183048309,
+    "maximum": 0.4692024183048309,
+    "worst_frame": 258,
+    "worst_bone": "右ひざ"
+  },
+  {
+    "file": "scaled-avx2-reviewed.tsv",
+    "case": "1",
+    "frame258_right_knee": 0.632008781240286,
+    "maximum": 0.632008781240286,
+    "worst_frame": 258,
+    "worst_bone": "右ひざ"
+  },
+  {
+    "file": "scaled-avx2-reviewed.tsv",
+    "case": "1norm",
+    "frame258_right_knee": 0.2902564866255421,
+    "maximum": 0.2902564866255421,
+    "worst_frame": 258,
+    "worst_bone": "右ひざ"
+  },
+  {
+    "file": "scaled-avx2-reviewed.tsv",
+    "case": "8.5",
+    "frame258_right_knee": 0.587055874771418,
+    "maximum": 0.587055874771418,
+    "worst_frame": 258,
+    "worst_bone": "右ひざ"
+  },
+  {
+    "file": "scaled-avx2-reviewed.tsv",
+    "case": "8.5norm",
+    "frame258_right_knee": 0.039030639377930686,
+    "maximum": 0.05671321425941957,
+    "worst_frame": 313,
+    "worst_bone": "左ひざ"
+  },
+  {
+    "file": "scaled-avx2-normalized-only.tsv",
+    "case": "1",
+    "frame258_right_knee": 0.632008781240286,
+    "maximum": 0.632008781240286,
+    "worst_frame": 258,
+    "worst_bone": "右ひざ"
+  },
+  {
+    "file": "scaled-avx2-normalized-only.tsv",
+    "case": "1norm",
+    "frame258_right_knee": 0.6320092078722437,
+    "maximum": 0.6320092078722437,
+    "worst_frame": 258,
+    "worst_bone": "右ひざ"
+  },
+  {
+    "file": "scaled-avx2-normalized-only.tsv",
+    "case": "8.5",
+    "frame258_right_knee": 0.587055874771418,
+    "maximum": 0.587055874771418,
+    "worst_frame": 258,
+    "worst_bone": "右ひざ"
+  },
+  {
+    "file": "scaled-avx2-normalized-only.tsv",
+    "case": "8.5norm",
+    "frame258_right_knee": 0.579153778383537,
+    "maximum": 0.579153778383537,
+    "worst_frame": 258,
+    "worst_bone": "右ひざ"
+  }
+]

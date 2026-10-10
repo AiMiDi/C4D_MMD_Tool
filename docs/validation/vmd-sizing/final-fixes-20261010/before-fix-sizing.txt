@@ -1,0 +1,3 @@
+[2026-10-10 17:46:48.640] [default] [info] PMX File Read Successed. C:/code/C4D_MMD_Tool/dependency/libMMD/tests/fixtures/vmd-sizing/source.pmx
+[2026-10-10 17:46:48.641] [default] [info] PMX File Read Successed. C:/code/C4D_MMD_Tool/dependency/libMMD/tests/fixtures/vmd-sizing/target.pmx
+Toe reference ignored the second bone's implicit weight

@@ -1,0 +1,7 @@
+[2026-10-10 17:41:48.943] [default] [info] PMX File Write Successed. S:/tmp/cmt-sizing-signature-review-20261010/a.pmx
+[2026-10-10 17:41:48.963] [default] [info] PMX File Write Successed. S:/tmp/cmt-sizing-signature-review-20261010/b.pmx
+two_weight_vertices=43885 signature_equal=0
+serialized_equal=1
+bdef1_unused_slot_hash_equal=0
+ik_iteration_edit_signature_equal=1
+deform_layer_edit_signature_equal=1

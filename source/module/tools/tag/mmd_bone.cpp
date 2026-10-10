@@ -796,11 +796,11 @@ Int32 C4DIKChainNodeAdapter::GetBoneIndex() const
 
 void C4DIKChainNodeAdapter::SetGlobalTransform(const Eigen::Matrix4f& m)
 {
+	// Match MMDNode's contract: CCD updates the global cache without changing
+	// its local input. Physics performs an explicit local synchronization after
+	// all reflected globals have been written; doing it here introduces drift
+	// through repeated inverse(parent) * global during IK path updates.
 	global_transform_ = m;
-	if (parent_ != nullptr)
-		local_transform_ = parent_->GetGlobalTransform().inverse() * global_transform_;
-	else
-		local_transform_ = global_transform_;
 }
 
 void C4DIKChainNodeAdapter::SyncLocalTransformFromGlobal()

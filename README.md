@@ -110,11 +110,14 @@ The three most recent version entries are shown below. See the [complete changel
 
 ### 0.9.3.4 · Motion pose preservation and IK correction (2026-10-10)
 
+Publication awaits combined validation with the PMX controller compatibility work.
+
 1. Fix destructive wrist/finger contact adjustments while preserving finger curls, palm orientation and source contact relationships.
 2. Reuse playback IK for offline poses, including PMX link limits, iteration counts and VMD IK switches; skip driven channels that cannot accept direct animation.
 3. Add optional leg self-collision avoidance with foot IK target protection, temporal filtering and rollback for conflicting floor constraints.
 4. Add C4D status-bar progress and cancellation feedback for long calculations, with shared MCP and panel options.
 5. Document motion adaptation, wrist/leg effect comparisons and the reference project.
+6. Fix false PMX binding expiry, uninitialized vertex data, QDEF weight IO and side effects in playback IK global-cache updates.
 
 Inspect complex contacts in the stage preview. [Validation and known limits](docs/validation/vmd-sizing/leg-ik-fix-20261010/README.md)
 

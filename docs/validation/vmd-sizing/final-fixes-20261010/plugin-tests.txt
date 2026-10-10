@@ -1,0 +1,106 @@
+CMake is re-running because S:/tmp/cmt-sizing-final-fixes-20261010/plugin-tests/CMakeFiles/generate.stamp is out-of-date.
+  the file 'C:/code/C4D_MMD_Tool/tests/CMakeLists.txt'
+  is newer than 'S:/tmp/cmt-sizing-final-fixes-20261010/plugin-tests/CMakeFiles/generate.stamp.depend'
+  result='-1'
+-- Configuring done (0.5s)
+-- Generating done (0.1s)
+-- Build files have been written to: S:/tmp/cmt-sizing-final-fixes-20261010/plugin-tests
+适用于 .NET Framework MSBuild 版本 18.9.1+a81b43525
+
+  1>Checking Build System
+  Building Custom Rule C:/code/C4D_MMD_Tool/tests/CMakeLists.txt
+  bone_execution_plan_test.cpp
+  bone_execution_plan_test.vcxproj -> S:\tmp\cmt-sizing-final-fixes-20261010\plugin-tests\Release\bone_execution_plan_test.exe
+  Building Custom Rule C:/code/C4D_MMD_Tool/tests/CMakeLists.txt
+  camera_fov_test.cpp
+  camera_fov_test.vcxproj -> S:\tmp\cmt-sizing-final-fixes-20261010\plugin-tests\Release\camera_fov_test.exe
+  Building Custom Rule C:/code/C4D_MMD_Tool/tests/CMakeLists.txt
+  control_hit_test.cpp
+  control_hit_test.vcxproj -> S:\tmp\cmt-sizing-final-fixes-20261010\plugin-tests\Release\control_hit_test.exe
+  Building Custom Rule C:/code/C4D_MMD_Tool/tests/CMakeLists.txt
+  control_role_test.cpp
+  control_role_test.vcxproj -> S:\tmp\cmt-sizing-final-fixes-20261010\plugin-tests\Release\control_role_test.exe
+  Building Custom Rule C:/code/C4D_MMD_Tool/tests/CMakeLists.txt
+  material_morph_runtime_test.cpp
+  material_morph_runtime_test.vcxproj -> S:\tmp\cmt-sizing-final-fixes-20261010\plugin-tests\Release\material_morph_runtime_test.exe
+  Building Custom Rule C:/code/C4D_MMD_Tool/tests/CMakeLists.txt
+  mmd_model_info_test.cpp
+  mmd_model_info_test.vcxproj -> S:\tmp\cmt-sizing-final-fixes-20261010\plugin-tests\Release\mmd_model_info_test.exe
+  Building Custom Rule C:/code/C4D_MMD_Tool/tests/CMakeLists.txt
+  mmd_motion_validation_test.cpp
+  mmd_motion_validation_test.vcxproj -> S:\tmp\cmt-sizing-final-fixes-20261010\plugin-tests\Release\mmd_motion_validation_test.exe
+  Building Custom Rule C:/code/C4D_MMD_Tool/tests/CMakeLists.txt
+  morph_evaluation_test.cpp
+  morph_evaluation_test.vcxproj -> S:\tmp\cmt-sizing-final-fixes-20261010\plugin-tests\Release\morph_evaluation_test.exe
+  Building Custom Rule C:/code/C4D_MMD_Tool/tests/CMakeLists.txt
+  pmx_export_scale_test.cpp
+  pmx_export_scale_test.vcxproj -> S:\tmp\cmt-sizing-final-fixes-20261010\plugin-tests\Release\pmx_export_scale_test.exe
+  Building Custom Rule C:/code/C4D_MMD_Tool/tests/CMakeLists.txt
+  pmx_vertex_identity_test.cpp
+  pmx_vertex_identity_test.vcxproj -> S:\tmp\cmt-sizing-final-fixes-20261010\plugin-tests\Release\pmx_vertex_identity_test.exe
+  Building Custom Rule C:/code/C4D_MMD_Tool/tests/CMakeLists.txt
+  runtime_profile_test.cpp
+  runtime_profile_test.vcxproj -> S:\tmp\cmt-sizing-final-fixes-20261010\plugin-tests\Release\runtime_profile_test.exe
+  Building Custom Rule C:/code/C4D_MMD_Tool/tests/CMakeLists.txt
+  specular_conversion_test.cpp
+  specular_conversion_test.vcxproj -> S:\tmp\cmt-sizing-final-fixes-20261010\plugin-tests\Release\specular_conversion_test.exe
+  Building Custom Rule C:/code/C4D_MMD_Tool/tests/CMakeLists.txt
+  toon_fallback_test.cpp
+  toon_fallback_test.vcxproj -> S:\tmp\cmt-sizing-final-fixes-20261010\plugin-tests\Release\toon_fallback_test.exe
+  Run SDK-independent plugin logic regression tests
+  Test project S:/tmp/cmt-sizing-final-fixes-20261010/plugin-tests
+        Start  1: bone_execution_plan_test
+   1/22 Test  #1: bone_execution_plan_test ............   Passed    0.23 sec
+        Start  2: control_role_test
+   2/22 Test  #2: control_role_test ...................   Passed    0.25 sec
+        Start  3: control_hit_test
+   3/22 Test  #3: control_hit_test ....................   Passed    0.24 sec
+        Start  4: material_morph_runtime_test
+   4/22 Test  #4: material_morph_runtime_test .........   Passed    0.25 sec
+        Start  5: morph_evaluation_test
+   5/22 Test  #5: morph_evaluation_test ...............   Passed    0.29 sec
+        Start  6: runtime_profile_test
+   6/22 Test  #6: runtime_profile_test ................   Passed    0.22 sec
+        Start  7: mmd_model_info_test
+   7/22 Test  #7: mmd_model_info_test .................   Passed    0.29 sec
+        Start  8: mmd_motion_validation_test
+   8/22 Test  #8: mmd_motion_validation_test ..........   Passed    0.21 sec
+        Start  9: camera_fov_test
+   9/22 Test  #9: camera_fov_test .....................   Passed    0.21 sec
+        Start 10: specular_conversion_test
+  10/22 Test #10: specular_conversion_test ............   Passed    0.20 sec
+        Start 11: toon_fallback_test
+  11/22 Test #11: toon_fallback_test ..................   Passed    0.21 sec
+        Start 12: pmx_export_scale_test
+  12/22 Test #12: pmx_export_scale_test ...............   Passed    0.20 sec
+        Start 13: pmx_vertex_identity_test
+  13/22 Test #13: pmx_vertex_identity_test ............   Passed    0.21 sec
+        Start 14: cmt_runtime_receipt_contract
+  14/22 Test #14: cmt_runtime_receipt_contract ........   Passed    0.85 sec
+        Start 15: cmt_document_lifecycle
+  15/22 Test #15: cmt_document_lifecycle ..............   Passed    0.20 sec
+        Start 16: cmt_production_document_lifecycle
+  16/22 Test #16: cmt_production_document_lifecycle ...   Passed    0.29 sec
+        Start 17: cmt_dependency_provenance
+  17/22 Test #17: cmt_dependency_provenance ...........   Passed    0.24 sec
+        Start 18: cmt_pmx_scale_snapshot
+  18/22 Test #18: cmt_pmx_scale_snapshot ..............   Passed    0.19 sec
+        Start 19: cmt_material_fixture_matrix
+  19/22 Test #19: cmt_material_fixture_matrix .........   Passed    0.19 sec
+        Start 20: cmt_highlight_lifecycle
+  20/22 Test #20: cmt_highlight_lifecycle .............   Passed    0.21 sec
+        Start 21: cmt_highlight_analysis
+  21/22 Test #21: cmt_highlight_analysis ..............   Passed    0.37 sec
+        Start 22: cmt_production_mcp_adapter
+  22/22 Test #22: cmt_production_mcp_adapter ..........   Passed    3.46 sec
+  
+  100% tests passed out of 22
+  
+  Label Time Summary:
+  fixture       =   5.99 sec*proc (9 tests)
+  plugin        =   8.99 sec*proc (22 tests)
+  regression    =   8.99 sec*proc (22 tests)
+  unit          =   3.00 sec*proc (13 tests)
+  
+  Total Test time (real) =   9.01 sec
+  Building Custom Rule C:/code/C4D_MMD_Tool/tests/CMakeLists.txt

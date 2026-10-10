@@ -24,6 +24,7 @@ Description:	MMD mesh root object
 #include "maxon/queue.h"
 #include "module/tools/material/mmd_material.h"
 #include "utils/string_util.hpp"
+#include "utils/cmt_pmx_vertex_key.hpp"
 
 #include <algorithm>
 #include <cmath>
@@ -1605,46 +1606,6 @@ namespace
 			| static_cast<UInt64>(corner & 3);
 	}
 
-	static UInt64 HashVertexKeyValue(UInt64 seed, const UInt64 value)
-	{
-		seed ^= value + 0x9e3779b97f4a7c15ULL + (seed << 6) + (seed >> 2);
-		return seed;
-	}
-
-	static UInt64 HashVertexKeyFloat(UInt64 seed, const Float value)
-	{
-		const Int64 quantized = static_cast<Int64>(std::llround(value * 1000000.0));
-		return HashVertexKeyValue(seed, static_cast<UInt64>(quantized));
-	}
-
-	static UInt64 MakePmxVertexKey(const libmmd::PMXVertex& vertex)
-	{
-		UInt64 seed = 1469598103934665603ULL;
-		for (Int32 i = 0; i < 3; ++i)
-		{
-			seed = HashVertexKeyFloat(seed, vertex.m_position[i]);
-			seed = HashVertexKeyFloat(seed, vertex.m_normal[i]);
-		}
-		for (Int32 i = 0; i < 2; ++i)
-			seed = HashVertexKeyFloat(seed, vertex.m_uv[i]);
-		seed = HashVertexKeyFloat(seed, vertex.m_edgeMag);
-		seed = HashVertexKeyValue(seed, static_cast<UInt64>(vertex.m_weightType));
-		for (Int32 i = 0; i < 4; ++i)
-		{
-			seed = HashVertexKeyValue(seed, static_cast<UInt64>(vertex.m_boneIndices[i]));
-			seed = HashVertexKeyFloat(seed, vertex.m_boneWeights[i]);
-		}
-		if (vertex.m_weightType == libmmd::PMXVertexWeight::SDEF)
-		{
-			for (Int32 i = 0; i < 3; ++i)
-			{
-				seed = HashVertexKeyFloat(seed, vertex.m_sdefC[i]);
-				seed = HashVertexKeyFloat(seed, vertex.m_sdefR0[i]);
-				seed = HashVertexKeyFloat(seed, vertex.m_sdefR1[i]);
-			}
-		}
-		return seed;
-	}
 
 	static const CAMorphNode* FindBasePoseMorphPointNode(const PolygonObject* mesh_object)
 	{
@@ -2114,7 +2075,7 @@ Bool MMDMeshManagerObject::SavePMX(libmmd::PMXFile& pmx_file, const CMTToolsSett
 			}
 
 			const Float32 edge_mag = edge_data ? edge_data[point_index] : 1.F;
-			libmmd::PMXVertex pmx_vertex;
+			libmmd::PMXVertex pmx_vertex{};
 			const Vector point = base_point_node ? const_cast<CAMorphNode*>(base_point_node)->GetPoint(point_index) : points[point_index];
 			pmx_vertex.m_position = Eigen::Vector3f(
 				static_cast<float>(point.x),
@@ -2147,7 +2108,7 @@ Bool MMDMeshManagerObject::SavePMX(libmmd::PMXFile& pmx_file, const CMTToolsSett
 				pmx_vertex.m_boneWeights[0] = 1.F;
 			}
 
-			const UInt64 vertex_key = MakePmxVertexKey(pmx_vertex);
+			const UInt64 vertex_key = cmt_export::MakePMXVertexKey(pmx_vertex);
 			if (const auto* existing = exported_vertex_map.Find(vertex_key))
 			{
 				out_index = existing->GetValue();

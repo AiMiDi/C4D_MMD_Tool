@@ -1,0 +1,35 @@
+{
+  "date": "2026-10-10",
+  "branch": "codex/sizing-final-fixes",
+  "core_branch": "codex/motion-sizing-final-fixes",
+  "core_focused_tests": {
+    "passed": 5,
+    "failed": 0,
+    "negative_regressions_fail_before_fix": true
+  },
+  "plugin_sdk_independent_tests": {
+    "passed": 22,
+    "failed": 0
+  },
+  "sdk_2026_release_compiled": true,
+  "candidate_sha256": "cb4bcc07ce6d585fd47ce880a2649dc4d4a517114eb9698c09eaf7550968c0d2",
+  "candidate_native_loaded": false,
+  "native_apply_ik_physics_acceptance": false,
+  "package_run": {
+    "id": 38042164707,
+    "conclusion": "cancelled",
+    "url": "https://github.com/AiMiDi/C4D_MMD_Tool/actions/runs/38042164707"
+  },
+  "publishing_deferred_by_user": true,
+  "waiting_for": {
+    "thread_id": "01a11afc-7be7-7363-a781-0c2240de41f8",
+    "title": "评估PMX模型一键绑定兼容性",
+    "last_observed_status": "active"
+  },
+  "remaining_quality_scope": [
+    "Deep leg crossings are still not universally solved; window prototype is not integrated",
+    "New adapter IK and physics writeback require joint native validation",
+    "Snapshot apply protection requires native retest with the new module"
+  ],
+  "core_commit": "b265696bb0aba9a41e94a95834d11ddda9e3723f"
+}

@@ -1,0 +1,2 @@
+[2026-10-10 17:46:48.865] [default] [info] PMX File Write Successed. S:\tmp\libmmd_vertex_weights_27854676531800.pmx
+QDEF disk weight index is wrong

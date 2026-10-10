@@ -33,6 +33,12 @@ target_include_directories(pmx_export_scale_test PRIVATE
   "${CMAKE_CURRENT_SOURCE_DIR}/../dependency/libMMD/external/eigen")
 target_compile_options(pmx_export_scale_test PRIVATE "$<$<CXX_COMPILER_ID:MSVC>:/utf-8>")
 
+cmt_add_logic_test(pmx_vertex_identity_test pmx_vertex_identity_test.cpp)
+target_include_directories(pmx_vertex_identity_test PRIVATE
+  "${CMAKE_CURRENT_SOURCE_DIR}/../dependency/libMMD/src"
+  "${CMAKE_CURRENT_SOURCE_DIR}/../dependency/libMMD/external/eigen")
+target_compile_options(pmx_vertex_identity_test PRIVATE "$<$<CXX_COMPILER_ID:MSVC>:/utf-8>")
+
 find_package(Python3 REQUIRED COMPONENTS Interpreter)
 function(cmt_add_python_fixture_test name script)
   add_test(NAME ${name}

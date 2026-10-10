@@ -9,8 +9,7 @@
 #include <c4d_symbols.h>
 #include <set>
 #include <chrono>
-#include <iomanip>
-#include <sstream>
+#include "utils/cmt_sizing_signature.hpp"
 #include <mutex>
 #include "maxon/job.h"
 
@@ -189,40 +188,12 @@ bool Snapshot(BaseObject* target, libmmd::PMXFile& output, Float& scale,
     setting.export_bone = setting.export_weights = setting.export_ik = setting.export_inherit = true;
     setting.export_material = true;
     setting.export_expression = true;
+    // Match regular PMX export: commit edited bind data and clear morph
+    // deformation in the isolated clone before serializing solver input.
+    model->PreparePMXExportState(copy.get());
     return model->SavePMX(output, setting);
 }
 
-std::string Signature(const libmmd::PMXFile& model, Float scale)
-{
-    // Exact textual signature over all inputs used by the solver. Names are
-    // length-prefixed; float values round-trip. No object dirty counter is used:
-    // ordinary animation playback must not spuriously invalidate bind data.
-    std::ostringstream out;
-    out.imbue(std::locale::classic());
-    out << std::setprecision(17) << scale << ' ' << model.m_bones.size() << ' ' << model.m_vertices.size() << '\n';
-    for (const auto& bone : model.m_bones)
-    {
-        out << bone.m_name.size() << ':' << bone.m_name << ' ' << bone.m_position.transpose() << ' '
-            << bone.m_parentBoneIndex << ' ' << static_cast<uint16_t>(bone.m_boneFlag);
-        if ((static_cast<uint16_t>(bone.m_boneFlag) & 0x400u) != 0) out << ' ' << bone.m_fixedAxis.transpose();
-        if ((static_cast<uint16_t>(bone.m_boneFlag) & 0x300u) != 0)
-            out << ' ' << bone.m_appendBoneIndex << ' ' << bone.m_appendWeight;
-        out << '\n';
-    }
-    for (const auto& vertex : model.m_vertices)
-    {
-        out << vertex.m_position.transpose() << ' ' << static_cast<int>(vertex.m_weightType);
-        const int count = vertex.m_weightType == libmmd::PMXVertexWeight::BDEF1 ? 1 :
-            (vertex.m_weightType == libmmd::PMXVertexWeight::BDEF2 || vertex.m_weightType == libmmd::PMXVertexWeight::SDEF ? 2 : 4);
-        for (int i = 0; i < count; ++i) out << ' ' << vertex.m_boneIndices[i] << ':' << vertex.m_boneWeights[i];
-        out << '\n';
-    }
-    for (const auto& body : model.m_rigidbodies)
-        out << body.m_name.size() << ':' << body.m_name << ' ' << body.m_boneIndex << ' '
-            << static_cast<int>(body.m_shape) << ' ' << static_cast<int>(body.m_op) << ' '
-            << body.m_shapeSize.transpose() << ' ' << body.m_translate.transpose() << ' ' << body.m_rotate.transpose() << '\n';
-    return out.str();
-}
 
 bool ImportStage(BaseDocument* doc, BaseObject* target, const libmmd::VMDFile& motion,
                  Float scale, bool replace, const String& name)
@@ -356,7 +327,7 @@ bool HostSession::StartBatch(const std::vector<HostInput>& inputs, const Filenam
         { error_ = GeLoadString(IDS_SIZING_ERR_SCALE); return false; }
         target->object->SetLink(input.target);
         target->document->SetLink(document);
-        target->signature = Signature(target->snapshot, target->scale);
+        target->signature = BuildBindSignature(target->snapshot, target->scale);
         character.target = target->snapshot;
         targets_.push_back(std::move(target));
         characters.push_back(std::move(character));
@@ -455,7 +426,7 @@ bool HostSession::CheckTarget(size_t index)
     { error_ = GeLoadString(IDS_SIZING_ERR_REMOVED); return false; }
     libmmd::PMXFile current;
     Float scale = 0;
-    if (!Snapshot(target, current, scale) || Signature(current, scale) != entry.signature)
+    if (!Snapshot(target, current, scale) || BuildBindSignature(current, scale) != entry.signature)
     { error_ = GeLoadString(IDS_SIZING_ERR_STALE); return false; }
     return true;
 }
