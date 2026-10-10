@@ -4,6 +4,13 @@
 name: Package
 
 on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Numeric installer version for CI artifacts (does not publish a release)
+        type: string
+        required: true
+        default: '0.0.0'
   push:
     tags:
       - 'v*'
@@ -65,11 +72,17 @@ jobs:
       - name: Install Inno Setup
         run: choco install innosetup -y
 
-      - name: Compute version from tag
+      - name: Compute package version
         id: ver
         shell: bash
+        env:
+          CI_PACKAGE_VERSION: ${{ inputs.version }}
         run: |
-          V="${GITHUB_REF_NAME#v}"
+          V="${CI_PACKAGE_VERSION:-${GITHUB_REF_NAME#v}}"
+          if [[ ! "$V" =~ ^[0-9]+\.[0-9]+\.[0-9]+(\.[0-9]+)?$ ]]; then
+            echo "Expected a numeric package version" >&2
+            exit 1
+          fi
           echo "version=$V" >> "$GITHUB_OUTPUT"
 
       - name: Run ISCC
@@ -128,9 +141,15 @@ jobs:
           merge-multiple: false
 
       - name: Zip complete per-SDK plugin artifacts
+        env:
+          CI_PACKAGE_VERSION: ${{ inputs.version }}
         run: |
           set -euo pipefail
-          version="${GITHUB_REF_NAME#v}"
+          version="${CI_PACKAGE_VERSION:-${GITHUB_REF_NAME#v}}"
+          if [[ ! "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+(\.[0-9]+)?$ ]]; then
+            echo "Expected a numeric package version" >&2
+            exit 1
+          fi
           mkdir -p dist
           for sdk in sdk_r20 sdk_r21 sdk_r23 sdk_r25 sdk_2023 sdk_2024 sdk_2025 sdk_2026; do
             # Show Cinema 4D compatibility instead of internal SDK directory names.
@@ -164,6 +183,7 @@ jobs:
           if-no-files-found: error
 
   release:
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
     needs: [package-windows, package-macos]
     runs-on: ubuntu-latest
     steps:
