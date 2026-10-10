@@ -566,7 +566,7 @@ namespace
 		if (!owner)
 			return;
 
-		BaseLink* const link = BaseLink::Alloc();
+		BaseLink* link = BaseLink::Alloc();
 		if (!link)
 			return;
 		link->SetLink(object);
