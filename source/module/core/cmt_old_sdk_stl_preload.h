@@ -9,6 +9,7 @@
 #include <chrono>
 #include <exception>
 #include <functional>
+#include <future>
 #include <ios>
 #include <iosfwd>
 #include <istream>

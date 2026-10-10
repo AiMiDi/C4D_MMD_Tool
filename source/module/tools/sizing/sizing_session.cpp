@@ -12,7 +12,7 @@
 #include <iomanip>
 #include <sstream>
 
-namespace cmt::sizing
+namespace cmt { namespace sizing
 {
 namespace
 {
@@ -477,4 +477,4 @@ String HostSession::Summary() const
     for (const auto& warning : result.analysis.warnings) report += String(warning.c_str()) + String("\n");
     return report;
 }
-}
+} }

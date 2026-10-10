@@ -6,7 +6,7 @@
 #include <future>
 #include <memory>
 
-namespace cmt::sizing
+namespace cmt { namespace sizing
 {
 struct HostInput
 {
@@ -101,4 +101,4 @@ std::shared_ptr<PanelState> MakePanelState(const std::shared_ptr<HostSession>& s
 void PublishPanelState(const std::shared_ptr<PanelState>& state);
 void WithdrawPanelState(const std::shared_ptr<PanelState>& state);
 std::shared_ptr<const PanelState> GetPanelState(UInt64& revision);
-}
+} }

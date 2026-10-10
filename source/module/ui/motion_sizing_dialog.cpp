@@ -41,7 +41,9 @@ Bool MotionSizingDialog::CreateLayout()
     AddButton(MotionBrowse, BFH_RIGHT, 0, 0, Text(IDS_SIZING_BROWSE));
     AddStaticText(105, BFH_LEFT, 0, 0, Text(IDS_SIZING_TARGET), 0);
     BaseContainer linkSettings;
+#if CMT_SDK_HAS_LINKBOX_EMPTY_TEXT
     linkSettings.SetString(LINKBOX_EMPTY_TEXT, Text(IDS_SIZING_DROP_MODEL));
+#endif
     targetBox_ = static_cast<LinkBoxGui*>(AddCustomGui(TargetName, CUSTOMGUI_LINKBOX, String(), BFH_SCALEFIT, SizePix(260), 0, linkSettings));
     AddButton(TargetPick, BFH_RIGHT, 0, 0, Text(IDS_SIZING_PICK));
     AddStaticText(122, BFH_LEFT, 0, 0, Text(IDS_SIZING_MOTION_SLOT), 0);
