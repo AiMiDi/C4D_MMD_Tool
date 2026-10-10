@@ -14,9 +14,9 @@
 
 ## 3. Native delivery
 
-- [ ] 3.1 Run focused logic and compile checks in the isolated build.
+- [x] 3.1 Run focused logic and compile checks in the isolated build.
 - [x] 3.2 Verify PMX/VMD operations, switching, Undo and save/reopen in owned C4D documents.
-- [ ] 3.3 Produce a reviewable local build/package and preserve unrelated work.
+- [x] 3.3 Produce a reviewable local build/package and preserve unrelated work.
 
 ## Workflow follow-up
 
