@@ -1,6 +1,6 @@
 {
   "date": "2026-10-10",
-  "status": "native_passed_release_pending",
+  "status": "release_ci_running",
   "cmt_branch": "codex/sizing-final-fixes",
   "core_commit": "577c46d122c1276d198e1fd9f3cedb04dab93348",
   "native_binary_sha256": "734d012adb15e4418db5907b0d4491372b9079499ac5b707c89a515217578a09",
@@ -19,10 +19,18 @@
   "native_parity_passed": true,
   "version": "0.9.3.4",
   "published": false,
-  "pending": "Merge main, full release CI and asset audit",
+  "pending": "Full CI matrix, Release assets and package audit",
   "remaining_limitations": [
     "Native checks on C4D 2026.4 Windows only",
     "Deep leg crossings and clothing collisions not universally solved",
     "Temporal candidate prototype not integrated"
-  ]
+  ],
+  "cmt_commit": "3f09f85de172d8ba15d9f4a6020c7e8d4f9626ee",
+  "tag": "v0.9.3.4",
+  "package_run": {
+    "id": 38055071831,
+    "url": "https://github.com/AiMiDi/C4D_MMD_Tool/actions/runs/38055071831"
+  },
+  "main_build_run": 38055050626,
+  "owned_native_processes_closed": true
 }
