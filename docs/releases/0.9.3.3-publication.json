@@ -1,0 +1,115 @@
+{
+  "version": "0.9.3.3",
+  "release_url": "https://github.com/AiMiDi/C4D_MMD_Tool/releases/tag/v0.9.3.3",
+  "release_id": 408759402,
+  "published_at": "2026-10-10T07:09:13Z",
+  "draft": false,
+  "prerelease": false,
+  "latest_verified": true,
+  "tag_commit": "664f5cfebc94522c09f6c368a205363933414052",
+  "binary_source_commit": "c7d9a8afba3dcc8dfc0453984f8ef0d961fb5d95",
+  "libmmd_commit": "e4aca1048af9216d65bea91ec734710e360bcdd0",
+  "ci": {
+    "run": 38027413361,
+    "url": "https://github.com/AiMiDi/C4D_MMD_Tool/actions/runs/38027413361",
+    "matrix_passed": 21,
+    "mcp_passed": 41,
+    "libmmd_passed": 15,
+    "plugin_passed": 24
+  },
+  "promotion": {
+    "source_changes_since_ci": "documentation_only",
+    "changed_paths": [
+      "CHANGELOG.md",
+      "CHANGELOG_zh.md",
+      "docs/dev/motion-sizing-numerics.md",
+      "docs/validation/vmd-sizing/submission-ci-20261010/README.md",
+      "docs/validation/vmd-sizing/submission-ci-20261010/all-specs-validation.log",
+      "docs/validation/vmd-sizing/submission-ci-20261010/archive-validation.json",
+      "docs/validation/vmd-sizing/submission-ci-20261010/archive.log",
+      "docs/validation/vmd-sizing/submission-ci-20261010/artifact-verification.json",
+      "docs/validation/vmd-sizing/submission-ci-20261010/compatibility-failures.log",
+      "docs/validation/vmd-sizing/submission-ci-20261010/functional-checks.log",
+      "docs/validation/vmd-sizing/submission-ci-20261010/receipt.json"
+    ],
+    "windows_plugin_payloads": "unchanged from eight verified CI artifacts",
+    "macos_architecture": "x86_64",
+    "macos_zip_contents": "byte-identical to CI; outer filenames updated",
+    "installer_rebuilt_locally": true,
+    "installer_product_version": "0.9.3.3",
+    "compiler": "Inno Setup 6.7.3",
+    "compiler_installer_sha256": "9c73c3bae7ed48d44112a0f48e66742c00090bdb5bef71d9d3c056c66e97b732",
+    "setup_commit": "b2b618314ef6bc76fe34a7e3df556c3abaa04bb6",
+    "installer_build_log_sha256": "d7c382bafc2d99e1ed35a4ac8e3816191129a386641c99fac3dc046c0e886fa5"
+  },
+  "assets": [
+    {
+      "name": "MMD-Tool-v0.9.3.3-Cinema4D-2023-macOS-x86_64.zip",
+      "size": 1535316,
+      "sha256": "c08b8c2e919bb3c6f7efc530b7546d6331db2d9386df77fb1b1d06d3399ddc08",
+      "github_digest_matches": true,
+      "download_url": "https://github.com/AiMiDi/C4D_MMD_Tool/releases/download/v0.9.3.3/MMD-Tool-v0.9.3.3-Cinema4D-2023-macOS-x86_64.zip"
+    },
+    {
+      "name": "MMD-Tool-v0.9.3.3-Cinema4D-2024-macOS-x86_64.zip",
+      "size": 1649188,
+      "sha256": "3e8ac919605d4244b496ac0ff86f33363113cf8b2dd35d309c7cc3cf8ad9a694",
+      "github_digest_matches": true,
+      "download_url": "https://github.com/AiMiDi/C4D_MMD_Tool/releases/download/v0.9.3.3/MMD-Tool-v0.9.3.3-Cinema4D-2024-macOS-x86_64.zip"
+    },
+    {
+      "name": "MMD-Tool-v0.9.3.3-Cinema4D-2025-macOS-x86_64.zip",
+      "size": 1594319,
+      "sha256": "9f3610114b47075fb1e637477553a6711b0f4b0bc89292b2f42567cbf7d6e64d",
+      "github_digest_matches": true,
+      "download_url": "https://github.com/AiMiDi/C4D_MMD_Tool/releases/download/v0.9.3.3/MMD-Tool-v0.9.3.3-Cinema4D-2025-macOS-x86_64.zip"
+    },
+    {
+      "name": "MMD-Tool-v0.9.3.3-Cinema4D-2026-macOS-x86_64.zip",
+      "size": 1594128,
+      "sha256": "38ecd36bc67e9006310d4e494014067acab5f8a99d593e3e6ea2888c32357f1a",
+      "github_digest_matches": true,
+      "download_url": "https://github.com/AiMiDi/C4D_MMD_Tool/releases/download/v0.9.3.3/MMD-Tool-v0.9.3.3-Cinema4D-2026-macOS-x86_64.zip"
+    },
+    {
+      "name": "MMD-Tool-v0.9.3.3-Cinema4D-R20-macOS-x86_64.zip",
+      "size": 1518297,
+      "sha256": "41bc5687514f36810edae6515080ab63f3c5b5ed7c36d6450f85b5f2da63099f",
+      "github_digest_matches": true,
+      "download_url": "https://github.com/AiMiDi/C4D_MMD_Tool/releases/download/v0.9.3.3/MMD-Tool-v0.9.3.3-Cinema4D-R20-macOS-x86_64.zip"
+    },
+    {
+      "name": "MMD-Tool-v0.9.3.3-Cinema4D-R21-S22-macOS-x86_64.zip",
+      "size": 1537266,
+      "sha256": "bfee4db9900634e673e9107fe865471e8064910c4f16f5fa28fd7a658dd7aeb6",
+      "github_digest_matches": true,
+      "download_url": "https://github.com/AiMiDi/C4D_MMD_Tool/releases/download/v0.9.3.3/MMD-Tool-v0.9.3.3-Cinema4D-R21-S22-macOS-x86_64.zip"
+    },
+    {
+      "name": "MMD-Tool-v0.9.3.3-Cinema4D-R23-S24-macOS-x86_64.zip",
+      "size": 1535389,
+      "sha256": "e1959af6af2871d63596974770b8ed05344cc6916da5e7495e00d6828f4c7ee4",
+      "github_digest_matches": true,
+      "download_url": "https://github.com/AiMiDi/C4D_MMD_Tool/releases/download/v0.9.3.3/MMD-Tool-v0.9.3.3-Cinema4D-R23-S24-macOS-x86_64.zip"
+    },
+    {
+      "name": "MMD-Tool-v0.9.3.3-Cinema4D-R25-S26-macOS-x86_64.zip",
+      "size": 1528195,
+      "sha256": "e4cea8d422c6ac827bdfb473227d3438f7922a2e9b758995919fbc4a1ff77f22",
+      "github_digest_matches": true,
+      "download_url": "https://github.com/AiMiDi/C4D_MMD_Tool/releases/download/v0.9.3.3/MMD-Tool-v0.9.3.3-Cinema4D-R25-S26-macOS-x86_64.zip"
+    },
+    {
+      "name": "MMD-Tool-v0.9.3.3-Windows-x64-Setup.exe",
+      "size": 5419852,
+      "sha256": "355a4912f33168dc9c6d87df38d95cdc2ac2eee2f77ed66be014f9412944f14c",
+      "github_digest_matches": true,
+      "download_url": "https://github.com/AiMiDi/C4D_MMD_Tool/releases/download/v0.9.3.3/MMD-Tool-v0.9.3.3-Windows-x64-Setup.exe"
+    }
+  ],
+  "pending_native_acceptance": "docs/dev/vmd-sizing-pending-validation.md",
+  "numerical_explanation": "docs/dev/motion-sizing-numerics.md",
+  "new_native_execution_or_installer_test": false,
+  "user_c4d_session_restarted": false,
+  "unrelated_dirty_changes_included": false
+}
