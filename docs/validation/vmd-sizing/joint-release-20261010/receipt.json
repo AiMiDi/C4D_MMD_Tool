@@ -32,5 +32,8 @@
     "url": "https://github.com/AiMiDi/C4D_MMD_Tool/actions/runs/38055071831"
   },
   "main_build_run": 38055050626,
-  "owned_native_processes_closed": true
+  "owned_native_processes_closed": true,
+  "initial_joint_native_max_scene_error": 0.14427601209334734,
+  "final_joint_native_max_scene_error": 0.0025946649440961563,
+  "release_source_commit": "3f09f85de172d8ba15d9f4a6020c7e8d4f9626ee"
 }
