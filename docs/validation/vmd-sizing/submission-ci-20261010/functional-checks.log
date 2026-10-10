@@ -1,0 +1,1075 @@
+﻿2026-10-10T05:25:49.5987915Z Current runner version: '2.337.0'
+2026-10-10T05:25:49.6014119Z ##[group]Runner Image Provisioner
+2026-10-10T05:25:49.6014922Z Hosted Compute Agent
+2026-10-10T05:25:49.6015517Z Version: 20261002.596
+2026-10-10T05:25:49.6016091Z Commit: c3d12f3313a95f25162a1503be624f3b0617f8c0
+2026-10-10T05:25:49.6016758Z Build Date: 2026-10-02T22:28:27Z
+2026-10-10T05:25:49.6017374Z Worker ID: {078682c0-1817-409e-a67b-70607f61d813}
+2026-10-10T05:25:49.6018016Z Region: centralus
+2026-10-10T05:25:49.6018550Z Cloud: Azure
+2026-10-10T05:25:49.6019023Z ##[endgroup]
+2026-10-10T05:25:49.6020220Z ##[group]Operating System
+2026-10-10T05:25:49.6020799Z Microsoft Windows Server 2022
+2026-10-10T05:25:49.6021352Z 10.0.20348
+2026-10-10T05:25:49.6021835Z Datacenter
+2026-10-10T05:25:49.6022306Z ##[endgroup]
+2026-10-10T05:25:49.6022777Z ##[group]Runner Image
+2026-10-10T05:25:49.6023324Z Image: windows-2022
+2026-10-10T05:25:49.6023893Z Version: 20261004.326.1
+2026-10-10T05:25:49.6025236Z Included Software: https://github.com/actions/runner-images/blob/win22/20261004.326/images/windows/Windows2022-Readme.md
+2026-10-10T05:25:49.6026660Z Image Release: https://github.com/actions/runner-images/releases/tag/win22%2F20261004.326
+2026-10-10T05:25:49.6027569Z ##[endgroup]
+2026-10-10T05:25:49.6028583Z ##[group]GITHUB_TOKEN Permissions
+2026-10-10T05:25:49.6030452Z Contents: read
+2026-10-10T05:25:49.6030954Z Metadata: read
+2026-10-10T05:25:49.6031442Z ##[endgroup]
+2026-10-10T05:25:49.6033394Z Secret source: Actions
+2026-10-10T05:25:49.6034298Z Cache mode: write
+2026-10-10T05:25:49.6035010Z Prepare workflow directory
+2026-10-10T05:25:49.6460657Z Prepare all required actions
+2026-10-10T05:25:49.6508145Z Getting action download info
+2026-10-10T05:25:49.9197128Z Download action repository 'actions/checkout@v6' (SHA:d23441a48e516b6c34aea4fa41551a30e30af803)
+2026-10-10T05:25:50.0135956Z Download action repository 'actions/setup-python@v6' (SHA:ece7cb06caefa5fff74198d8649806c4678c61a1)
+2026-10-10T05:25:50.1564589Z Download action repository 'actions/upload-artifact@v7' (SHA:cf430e030ddbb5b0abf93d22962f4752f3646cd9)
+2026-10-10T05:25:50.7342388Z Uses: AiMiDi/C4D_MMD_Tool/.github/workflows/build.yml@refs/heads/main (c7d9a8afba3dcc8dfc0453984f8ef0d961fb5d95)
+2026-10-10T05:25:50.7346759Z ##[group] Inputs
+2026-10-10T05:25:50.7347356Z   ref: c7d9a8afba3dcc8dfc0453984f8ef0d961fb5d95
+2026-10-10T05:25:50.7348019Z   version: 0.9.3.2
+2026-10-10T05:25:50.7348508Z ##[endgroup]
+2026-10-10T05:25:50.7349011Z Complete job name: Build (reusable) / checks
+2026-10-10T05:25:50.9135021Z ##[group]Run actions/checkout@v6
+2026-10-10T05:25:50.9136575Z with:
+2026-10-10T05:25:50.9137069Z   ref: c7d9a8afba3dcc8dfc0453984f8ef0d961fb5d95
+2026-10-10T05:25:50.9137680Z   fetch-depth: 0
+2026-10-10T05:25:50.9138161Z   submodules: false
+2026-10-10T05:25:50.9138635Z   repository: AiMiDi/C4D_MMD_Tool
+2026-10-10T05:25:50.9142720Z   token: ***
+2026-10-10T05:25:50.9143147Z   ssh-strict: true
+2026-10-10T05:25:50.9143621Z   ssh-user: git
+2026-10-10T05:25:50.9144106Z   persist-credentials: true
+2026-10-10T05:25:50.9144632Z   clean: true
+2026-10-10T05:25:50.9145100Z   sparse-checkout-cone-mode: true
+2026-10-10T05:25:50.9145689Z   fetch-tags: false
+2026-10-10T05:25:50.9146128Z   show-progress: true
+2026-10-10T05:25:50.9146613Z   lfs: false
+2026-10-10T05:25:50.9147138Z   set-safe-directory: true
+2026-10-10T05:25:50.9147669Z   allow-unsafe-pr-checkout: false
+2026-10-10T05:25:50.9148464Z env:
+2026-10-10T05:25:50.9148911Z   CMAKE_BUILD_PARALLEL_LEVEL: 4
+2026-10-10T05:25:50.9149591Z ##[endgroup]
+2026-10-10T05:25:51.0599112Z Syncing repository: AiMiDi/C4D_MMD_Tool
+2026-10-10T05:25:51.0600926Z ##[group]Getting Git version info
+2026-10-10T05:25:51.0601592Z Working directory is 'D:\a\C4D_MMD_Tool\C4D_MMD_Tool'
+2026-10-10T05:25:51.1410582Z [command]"C:\Program Files\Git\bin\git.exe" version
+2026-10-10T05:25:51.5171381Z git version 2.56.0.windows.1
+2026-10-10T05:25:51.5216729Z ##[endgroup]
+2026-10-10T05:25:51.5235909Z Temporarily overriding HOME='D:\a\_temp\2f273a44-58b3-400a-87be-f25e8ca0d5eb' before making global git config changes
+2026-10-10T05:25:51.5240645Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-10T05:25:51.5247578Z [command]"C:\Program Files\Git\bin\git.exe" config --global --add safe.directory D:\a\C4D_MMD_Tool\C4D_MMD_Tool
+2026-10-10T05:25:51.5862333Z Deleting the contents of 'D:\a\C4D_MMD_Tool\C4D_MMD_Tool'
+2026-10-10T05:25:51.5867896Z ##[group]Determining repository object format
+2026-10-10T05:25:51.5870246Z ##[endgroup]
+2026-10-10T05:25:51.5871888Z ##[group]Initializing the repository
+2026-10-10T05:25:51.5880205Z [command]"C:\Program Files\Git\bin\git.exe" init D:\a\C4D_MMD_Tool\C4D_MMD_Tool
+2026-10-10T05:25:51.6735658Z Initialized empty Git repository in D:/a/C4D_MMD_Tool/C4D_MMD_Tool/.git/
+2026-10-10T05:25:51.6777500Z [command]"C:\Program Files\Git\bin\git.exe" remote add origin https://github.com/AiMiDi/C4D_MMD_Tool
+2026-10-10T05:25:51.7382045Z ##[endgroup]
+2026-10-10T05:25:51.7384363Z ##[group]Disabling automatic garbage collection
+2026-10-10T05:25:51.7391412Z [command]"C:\Program Files\Git\bin\git.exe" config --local gc.auto 0
+2026-10-10T05:25:51.7698290Z ##[endgroup]
+2026-10-10T05:25:51.7700333Z ##[group]Setting up auth
+2026-10-10T05:25:51.7703048Z Removing SSH command configuration
+2026-10-10T05:25:51.7715000Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp core\.sshCommand
+2026-10-10T05:25:51.8027069Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :\""
+2026-10-10T05:25:53.2152387Z Removing HTTP extra header
+2026-10-10T05:25:53.2162490Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-10T05:25:53.2460092Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :\""
+2026-10-10T05:25:53.7205748Z Removing includeIf entries pointing to credentials config files
+2026-10-10T05:25:53.7218493Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-10T05:25:53.7512178Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "git config --local --show-origin --name-only --get-regexp remote.origin.url"
+2026-10-10T05:25:54.2089635Z [command]"C:\Program Files\Git\bin\git.exe" config --file D:\a\_temp\git-credentials-bbb0be74-aa10-4718-8ea4-018f5a68f248.config http.https://github.com/.extraheader "AUTHORIZATION: basic ***"
+2026-10-10T05:25:54.2392478Z [command]"C:\Program Files\Git\bin\git.exe" config --local includeIf.gitdir:D:/a/C4D_MMD_Tool/C4D_MMD_Tool/.git.path D:\a\_temp\git-credentials-bbb0be74-aa10-4718-8ea4-018f5a68f248.config
+2026-10-10T05:25:54.2684970Z [command]"C:\Program Files\Git\bin\git.exe" config --local includeIf.gitdir:D:/a/C4D_MMD_Tool/C4D_MMD_Tool/.git/worktrees/*.path D:\a\_temp\git-credentials-bbb0be74-aa10-4718-8ea4-018f5a68f248.config
+2026-10-10T05:25:54.3024398Z [command]"C:\Program Files\Git\bin\git.exe" config --local includeIf.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-bbb0be74-aa10-4718-8ea4-018f5a68f248.config
+2026-10-10T05:25:54.3316380Z [command]"C:\Program Files\Git\bin\git.exe" config --local includeIf.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-bbb0be74-aa10-4718-8ea4-018f5a68f248.config
+2026-10-10T05:25:54.3605759Z ##[endgroup]
+2026-10-10T05:25:54.3606578Z ##[group]Fetching the repository
+2026-10-10T05:25:54.3619949Z [command]"C:\Program Files\Git\bin\git.exe" -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules origin +refs/heads/*:refs/remotes/origin/* +refs/tags/*:refs/tags/*
+2026-10-10T05:26:16.8346928Z From https://github.com/AiMiDi/C4D_MMD_Tool
+2026-10-10T05:26:16.8349877Z  * [new branch]        13-feat-translate-project-vmd_sizing-to-c++ -> origin/13-feat-translate-project-vmd_sizing-to-c++
+2026-10-10T05:26:16.8350604Z  * [new branch]        22-feat-use-spdlog -> origin/22-feat-use-spdlog
+2026-10-10T05:26:16.8351335Z  * [new branch]        28-feat-export-pmx -> origin/28-feat-export-pmx
+2026-10-10T05:26:16.8351984Z  * [new branch]        CI_test            -> origin/CI_test
+2026-10-10T05:26:16.8353309Z  * [new branch]        feat-vmd-bone-c4d-tracks -> origin/feat-vmd-bone-c4d-tracks
+2026-10-10T05:26:16.8354050Z  * [new branch]        macos              -> origin/macos
+2026-10-10T05:26:16.8354433Z  * [new branch]        main               -> origin/main
+2026-10-10T05:26:16.8354880Z  * [new branch]        old                -> origin/old
+2026-10-10T05:26:16.8355271Z  * [new tag]           v0.3.0             -> v0.3.0
+2026-10-10T05:26:16.8355659Z  * [new tag]           v0.3.1             -> v0.3.1
+2026-10-10T05:26:16.8356244Z  * [new tag]           v0.3.2             -> v0.3.2
+2026-10-10T05:26:16.8356744Z  * [new tag]           v0.3.3             -> v0.3.3
+2026-10-10T05:26:16.8357195Z  * [new tag]           v0.3.4             -> v0.3.4
+2026-10-10T05:26:16.8357555Z  * [new tag]           v0.3.5             -> v0.3.5
+2026-10-10T05:26:16.8357892Z  * [new tag]           v0.3.6             -> v0.3.6
+2026-10-10T05:26:16.8358323Z  * [new tag]           v0.3.6.1           -> v0.3.6.1
+2026-10-10T05:26:16.8358749Z  * [new tag]           v0.3.7             -> v0.3.7
+2026-10-10T05:26:16.8359216Z  * [new tag]           v0.3.7.5           -> v0.3.7.5
+2026-10-10T05:26:16.8359579Z  * [new tag]           v0.3.8             -> v0.3.8
+2026-10-10T05:26:16.8359972Z  * [new tag]           v0.3.8.1           -> v0.3.8.1
+2026-10-10T05:26:16.8360388Z  * [new tag]           v0.3.9             -> v0.3.9
+2026-10-10T05:26:16.8360753Z  * [new tag]           v0.3.9.1           -> v0.3.9.1
+2026-10-10T05:26:16.8361147Z  * [new tag]           v0.4               -> v0.4
+2026-10-10T05:26:16.8361539Z  * [new tag]           v0.4.1             -> v0.4.1
+2026-10-10T05:26:16.8361877Z  * [new tag]           v0.4.2             -> v0.4.2
+2026-10-10T05:26:16.8362278Z  * [new tag]           v0.4.3             -> v0.4.3
+2026-10-10T05:26:16.8362613Z  * [new tag]           v0.4.4             -> v0.4.4
+2026-10-10T05:26:16.8363061Z  * [new tag]           v0.4.4.1           -> v0.4.4.1
+2026-10-10T05:26:16.8363451Z  * [new tag]           v0.4.5             -> v0.4.5
+2026-10-10T05:26:16.8364442Z  * [new tag]           v0.4.5.1           -> v0.4.5.1
+2026-10-10T05:26:16.8364824Z  * [new tag]           v0.4.6             -> v0.4.6
+2026-10-10T05:26:16.8365192Z  * [new tag]           v0.4.6.1           -> v0.4.6.1
+2026-10-10T05:26:16.8365549Z  * [new tag]           v0.9.1.0           -> v0.9.1.0
+2026-10-10T05:26:16.8365949Z  * [new tag]           v0.9.1.1           -> v0.9.1.1
+2026-10-10T05:26:16.8366317Z  * [new tag]           v0.9.1.10          -> v0.9.1.10
+2026-10-10T05:26:16.8366904Z  * [new tag]           v0.9.1.11          -> v0.9.1.11
+2026-10-10T05:26:16.8367989Z  * [new tag]           v0.9.1.12          -> v0.9.1.12
+2026-10-10T05:26:16.8368707Z  * [new tag]           v0.9.1.13          -> v0.9.1.13
+2026-10-10T05:26:16.8369089Z  * [new tag]           v0.9.1.14          -> v0.9.1.14
+2026-10-10T05:26:16.8369444Z  * [new tag]           v0.9.1.15          -> v0.9.1.15
+2026-10-10T05:26:16.8369805Z  * [new tag]           v0.9.1.16          -> v0.9.1.16
+2026-10-10T05:26:16.8370209Z  * [new tag]           v0.9.1.17          -> v0.9.1.17
+2026-10-10T05:26:16.8370634Z  * [new tag]           v0.9.1.18          -> v0.9.1.18
+2026-10-10T05:26:16.8371179Z  * [new tag]           v0.9.1.19          -> v0.9.1.19
+2026-10-10T05:26:16.8371587Z  * [new tag]           v0.9.1.2           -> v0.9.1.2
+2026-10-10T05:26:16.8372023Z  * [new tag]           v0.9.1.20          -> v0.9.1.20
+2026-10-10T05:26:16.8372415Z  * [new tag]           v0.9.1.3           -> v0.9.1.3
+2026-10-10T05:26:16.8373301Z  * [new tag]           v0.9.1.4           -> v0.9.1.4
+2026-10-10T05:26:16.8373796Z  * [new tag]           v0.9.1.5           -> v0.9.1.5
+2026-10-10T05:26:16.8374151Z  * [new tag]           v0.9.1.7           -> v0.9.1.7
+2026-10-10T05:26:16.8374526Z  * [new tag]           v0.9.1.8           -> v0.9.1.8
+2026-10-10T05:26:16.8374884Z  * [new tag]           v0.9.1.9           -> v0.9.1.9
+2026-10-10T05:26:16.8375236Z  * [new tag]           v0.9.2.0           -> v0.9.2.0
+2026-10-10T05:26:16.8375611Z  * [new tag]           v0.9.2.1           -> v0.9.2.1
+2026-10-10T05:26:16.8376017Z  * [new tag]           v0.9.2.2           -> v0.9.2.2
+2026-10-10T05:26:16.8376376Z  * [new tag]           v0.9.3.0           -> v0.9.3.0
+2026-10-10T05:26:16.8376990Z  * [new tag]           v0.9.3.1           -> v0.9.3.1
+2026-10-10T05:26:16.8377466Z  * [new tag]           v0.9.3.2           -> v0.9.3.2
+2026-10-10T05:26:16.8398363Z [command]"C:\Program Files\Git\bin\git.exe" rev-parse --verify --quiet c7d9a8afba3dcc8dfc0453984f8ef0d961fb5d95^{object}
+2026-10-10T05:26:16.8719494Z c7d9a8afba3dcc8dfc0453984f8ef0d961fb5d95
+2026-10-10T05:26:16.8749763Z ##[endgroup]
+2026-10-10T05:26:16.8750297Z ##[group]Determining the checkout info
+2026-10-10T05:26:16.8750857Z ##[endgroup]
+2026-10-10T05:26:16.8758126Z [command]"C:\Program Files\Git\bin\git.exe" sparse-checkout disable
+2026-10-10T05:26:16.9184071Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset-all extensions.worktreeConfig
+2026-10-10T05:26:16.9472034Z ##[group]Checking out the ref
+2026-10-10T05:26:16.9480896Z [command]"C:\Program Files\Git\bin\git.exe" checkout --progress --force c7d9a8afba3dcc8dfc0453984f8ef0d961fb5d95
+2026-10-10T05:26:18.1256711Z Updating files:  15% (4214/27285)
+2026-10-10T05:26:18.1839785Z Updating files:  16% (4366/27285)
+2026-10-10T05:26:18.3760360Z Updating files:  17% (4639/27285)
+2026-10-10T05:26:18.4403283Z Updating files:  18% (4912/27285)
+2026-10-10T05:26:18.4984626Z Updating files:  19% (5185/27285)
+2026-10-10T05:26:18.5630116Z Updating files:  20% (5457/27285)
+2026-10-10T05:26:18.6242518Z Updating files:  21% (5730/27285)
+2026-10-10T05:26:18.6771296Z Updating files:  22% (6003/27285)
+2026-10-10T05:26:18.9000639Z Updating files:  23% (6276/27285)
+2026-10-10T05:26:18.9579648Z Updating files:  24% (6549/27285)
+2026-10-10T05:26:19.0578677Z Updating files:  25% (6822/27285)
+2026-10-10T05:26:19.0758132Z Updating files:  25% (6890/27285)
+2026-10-10T05:26:19.0981917Z Updating files:  26% (7095/27285)
+2026-10-10T05:26:19.1239551Z Updating files:  27% (7367/27285)
+2026-10-10T05:26:19.1620523Z Updating files:  28% (7640/27285)
+2026-10-10T05:26:19.2176021Z Updating files:  29% (7913/27285)
+2026-10-10T05:26:19.2637726Z Updating files:  30% (8186/27285)
+2026-10-10T05:26:19.3802706Z Updating files:  31% (8459/27285)
+2026-10-10T05:26:19.4374607Z Updating files:  32% (8732/27285)
+2026-10-10T05:26:19.4781181Z Updating files:  33% (9005/27285)
+2026-10-10T05:26:19.5217489Z Updating files:  34% (9277/27285)
+2026-10-10T05:26:19.6013828Z Updating files:  35% (9550/27285)
+2026-10-10T05:26:19.8417655Z Updating files:  36% (9823/27285)
+2026-10-10T05:26:19.8836932Z Updating files:  37% (10096/27285)
+2026-10-10T05:26:20.0213977Z Updating files:  38% (10369/27285)
+2026-10-10T05:26:20.0377730Z Updating files:  38% (10534/27285)
+2026-10-10T05:26:20.0937040Z Updating files:  39% (10642/27285)
+2026-10-10T05:26:20.1484746Z Updating files:  40% (10914/27285)
+2026-10-10T05:26:20.2077706Z Updating files:  41% (11187/27285)
+2026-10-10T05:26:20.2716172Z Updating files:  42% (11460/27285)
+2026-10-10T05:26:20.3208280Z Updating files:  43% (11733/27285)
+2026-10-10T05:26:20.6853734Z Updating files:  44% (12006/27285)
+2026-10-10T05:26:20.7384321Z Updating files:  45% (12279/27285)
+2026-10-10T05:26:20.7612327Z Updating files:  46% (12552/27285)
+2026-10-10T05:26:20.7846613Z Updating files:  47% (12824/27285)
+2026-10-10T05:26:20.8065185Z Updating files:  48% (13097/27285)
+2026-10-10T05:26:20.8428697Z Updating files:  49% (13370/27285)
+2026-10-10T05:26:20.8901814Z Updating files:  50% (13643/27285)
+2026-10-10T05:26:20.9327767Z Updating files:  51% (13916/27285)
+2026-10-10T05:26:20.9762744Z Updating files:  52% (14189/27285)
+2026-10-10T05:26:21.0107550Z Updating files:  53% (14462/27285)
+2026-10-10T05:26:21.0177946Z Updating files:  53% (14664/27285)
+2026-10-10T05:26:21.0394027Z Updating files:  54% (14734/27285)
+2026-10-10T05:26:21.0641214Z Updating files:  55% (15007/27285)
+2026-10-10T05:26:21.0866422Z Updating files:  56% (15280/27285)
+2026-10-10T05:26:21.1195003Z Updating files:  57% (15553/27285)
+2026-10-10T05:26:21.1648753Z Updating files:  58% (15826/27285)
+2026-10-10T05:26:21.2056272Z Updating files:  59% (16099/27285)
+2026-10-10T05:26:21.2674027Z Updating files:  60% (16371/27285)
+2026-10-10T05:26:21.3121662Z Updating files:  61% (16644/27285)
+2026-10-10T05:26:21.3343465Z Updating files:  62% (16917/27285)
+2026-10-10T05:26:21.3569756Z Updating files:  63% (17190/27285)
+2026-10-10T05:26:21.3787362Z Updating files:  64% (17463/27285)
+2026-10-10T05:26:21.4403535Z Updating files:  65% (17736/27285)
+2026-10-10T05:26:21.4829150Z Updating files:  66% (18009/27285)
+2026-10-10T05:26:21.5477277Z Updating files:  67% (18281/27285)
+2026-10-10T05:26:21.6486483Z Updating files:  68% (18554/27285)
+2026-10-10T05:26:21.6901252Z Updating files:  69% (18827/27285)
+2026-10-10T05:26:21.7108342Z Updating files:  70% (19100/27285)
+2026-10-10T05:26:21.7349321Z Updating files:  71% (19373/27285)
+2026-10-10T05:26:21.7584885Z Updating files:  72% (19646/27285)
+2026-10-10T05:26:21.7996171Z Updating files:  73% (19919/27285)
+2026-10-10T05:26:21.8446871Z Updating files:  74% (20191/27285)
+2026-10-10T05:26:22.0168264Z Updating files:  75% (20464/27285)
+2026-10-10T05:26:22.2057849Z Updating files:  75% (20610/27285)
+2026-10-10T05:26:22.2481599Z Updating files:  76% (20737/27285)
+2026-10-10T05:26:22.3319947Z Updating files:  77% (21010/27285)
+2026-10-10T05:26:22.3661886Z Updating files:  78% (21283/27285)
+2026-10-10T05:26:22.3879068Z Updating files:  79% (21556/27285)
+2026-10-10T05:26:22.4115946Z Updating files:  80% (21828/27285)
+2026-10-10T05:26:22.4349379Z Updating files:  81% (22101/27285)
+2026-10-10T05:26:22.4883415Z Updating files:  82% (22374/27285)
+2026-10-10T05:26:22.5344278Z Updating files:  83% (22647/27285)
+2026-10-10T05:26:22.6380125Z Updating files:  84% (22920/27285)
+2026-10-10T05:26:22.6938668Z Updating files:  85% (23193/27285)
+2026-10-10T05:26:22.7476071Z Updating files:  86% (23466/27285)
+2026-10-10T05:26:22.8045635Z Updating files:  87% (23738/27285)
+2026-10-10T05:26:22.8509585Z Updating files:  88% (24011/27285)
+2026-10-10T05:26:22.8807840Z Updating files:  89% (24284/27285)
+2026-10-10T05:26:22.9015573Z Updating files:  90% (24557/27285)
+2026-10-10T05:26:22.9234452Z Updating files:  91% (24830/27285)
+2026-10-10T05:26:22.9452257Z Updating files:  92% (25103/27285)
+2026-10-10T05:26:22.9892452Z Updating files:  93% (25376/27285)
+2026-10-10T05:26:23.0126529Z Updating files:  94% (25648/27285)
+2026-10-10T05:26:23.0302475Z Updating files:  94% (25804/27285)
+2026-10-10T05:26:23.1385817Z Updating files:  95% (25921/27285)
+2026-10-10T05:26:23.1952705Z Updating files:  96% (26194/27285)
+2026-10-10T05:26:23.5092661Z Updating files:  97% (26467/27285)
+2026-10-10T05:26:23.5542021Z Updating files:  98% (26740/27285)
+2026-10-10T05:26:23.6143709Z Updating files:  99% (27013/27285)
+2026-10-10T05:26:23.6144597Z Updating files: 100% (27285/27285)
+2026-10-10T05:26:23.6145162Z Updating files: 100% (27285/27285), done.
+2026-10-10T05:26:23.6543842Z Note: switching to 'c7d9a8afba3dcc8dfc0453984f8ef0d961fb5d95'.
+2026-10-10T05:26:23.6544281Z 
+2026-10-10T05:26:23.6544566Z You are in 'detached HEAD' state. You can look around, make experimental
+2026-10-10T05:26:23.6545057Z changes and commit them, and you can discard any commits you make in this
+2026-10-10T05:26:23.6545647Z state without impacting any branches by switching back to a branch.
+2026-10-10T05:26:23.6545931Z 
+2026-10-10T05:26:23.6546195Z If you want to create a new branch to retain commits you create, you may
+2026-10-10T05:26:23.6547578Z do so (now or later) by using -c with the switch command. Example:
+2026-10-10T05:26:23.6547873Z 
+2026-10-10T05:26:23.6548040Z   git switch -c <new-branch-name>
+2026-10-10T05:26:23.6548245Z 
+2026-10-10T05:26:23.6548355Z Or undo this operation with:
+2026-10-10T05:26:23.6548548Z 
+2026-10-10T05:26:23.6548669Z   git switch -
+2026-10-10T05:26:23.6548819Z 
+2026-10-10T05:26:23.6549060Z Turn off this advice by setting config variable advice.detachedHead to false
+2026-10-10T05:26:23.6549348Z 
+2026-10-10T05:26:23.6549561Z HEAD is now at c7d9a8af fix(sizing): preserve R20-R25 SDK compatibility
+2026-10-10T05:26:23.6715703Z ##[endgroup]
+2026-10-10T05:26:23.7046620Z [command]"C:\Program Files\Git\bin\git.exe" log -1 --format=%H
+2026-10-10T05:26:23.7311210Z c7d9a8afba3dcc8dfc0453984f8ef0d961fb5d95
+2026-10-10T05:26:23.7661642Z ##[group]Run bash ./scripts/checkout_build_submodules.sh
+2026-10-10T05:26:23.7662317Z [36;1mbash ./scripts/checkout_build_submodules.sh[0m
+2026-10-10T05:26:23.7677434Z shell: C:\Program Files\Git\bin\bash.EXE --noprofile --norc -e -o pipefail {0}
+2026-10-10T05:26:23.7677929Z env:
+2026-10-10T05:26:23.7678267Z   CMAKE_BUILD_PARALLEL_LEVEL: 4
+2026-10-10T05:26:23.7678593Z ##[endgroup]
+2026-10-10T05:26:24.9749426Z Submodule 'dependency/bullet3' (https://github.com/bulletphysics/bullet3.git) registered for path 'dependency/bullet3'
+2026-10-10T05:26:24.9763513Z Submodule 'dependency/libMMD' (https://github.com/AiMiDi/libMMD.git) registered for path 'dependency/libMMD'
+2026-10-10T05:26:24.9970482Z Cloning into 'D:/a/C4D_MMD_Tool/C4D_MMD_Tool/dependency/bullet3'...
+2026-10-10T05:26:35.1750751Z Cloning into 'D:/a/C4D_MMD_Tool/C4D_MMD_Tool/dependency/libMMD'...
+2026-10-10T05:26:39.5714341Z Submodule path 'dependency/bullet3': checked out '63c4d67e337017f9d8b298c900e9aabdb69296e7'
+2026-10-10T05:26:39.7222462Z Submodule path 'dependency/libMMD': checked out 'e4aca1048af9216d65bea91ec734710e360bcdd0'
+2026-10-10T05:26:39.7331867Z Submodule 'external/eigen' (https://gitlab.com/libeigen/eigen.git) registered for path 'dependency/libMMD/external/eigen'
+2026-10-10T05:26:39.7342016Z Submodule 'external/spdlog' (https://github.com/gabime/spdlog.git) registered for path 'dependency/libMMD/external/spdlog'
+2026-10-10T05:26:39.7586573Z Cloning into 'D:/a/C4D_MMD_Tool/C4D_MMD_Tool/dependency/libMMD/external/eigen'...
+2026-10-10T05:26:46.4833576Z Cloning into 'D:/a/C4D_MMD_Tool/C4D_MMD_Tool/dependency/libMMD/external/spdlog'...
+2026-10-10T05:26:48.9484068Z Submodule path 'dependency/libMMD/external/eigen': checked out '0ac2a2df9ffa81f2e5575dfdb3e56ad8a5f50893'
+2026-10-10T05:26:49.0534148Z Submodule path 'dependency/libMMD/external/spdlog': checked out 'f355b3d58f7067eee1706ff3c801c2361011f3d5'
+2026-10-10T05:26:49.0911673Z ##[group]Run ./scripts/check_runtime_resources.ps1 -FixtureRoot "$env:RUNNER_TEMP/cmt-resources"
+2026-10-10T05:26:49.0912522Z [36;1m./scripts/check_runtime_resources.ps1 -FixtureRoot "$env:RUNNER_TEMP/cmt-resources"[0m
+2026-10-10T05:26:49.1031874Z shell: C:\Program Files\PowerShell\7\pwsh.EXE -command ". '{0}'"
+2026-10-10T05:26:49.1032325Z env:
+2026-10-10T05:26:49.1032625Z   CMAKE_BUILD_PARALLEL_LEVEL: 4
+2026-10-10T05:26:49.1032958Z ##[endgroup]
+2026-10-10T05:26:49.7767604Z Runtime resources copied: D:\a\_temp\cmt-resources\fe33c745f72f4fbdb95aa8d7c61d8032\build\plugin\res (config: reset)
+2026-10-10T05:26:49.9478216Z Runtime resources copied: D:\a\_temp\cmt-resources\fe33c745f72f4fbdb95aa8d7c61d8032\build\plugin\res (config: reset)
+2026-10-10T05:26:50.1026265Z Runtime resources copied: D:\a\_temp\cmt-resources\fe33c745f72f4fbdb95aa8d7c61d8032\build\plugin\res (config: preserve)
+2026-10-10T05:26:50.2889795Z Runtime resources copied: D:\a\_temp\cmt-resources\fe33c745f72f4fbdb95aa8d7c61d8032\build\plugin\res (config: reset)
+2026-10-10T05:26:50.4701727Z Runtime resources copied: D:\a\_temp\cmt-resources\fe33c745f72f4fbdb95aa8d7c61d8032\build\plugin\res (config: reset)
+2026-10-10T05:26:50.6301252Z Runtime resources copied: D:\a\_temp\cmt-resources\fe33c745f72f4fbdb95aa8d7c61d8032\build\plugin\res (config: reset)
+2026-10-10T05:26:50.6478845Z {
+2026-10-10T05:26:50.6479324Z   "passed": [
+2026-10-10T05:26:50.6479754Z     "fresh output contains complete real resources",
+2026-10-10T05:26:50.6480249Z     "repeat sync removes stale resources",
+2026-10-10T05:26:50.6480722Z     "preserve and reset config policies",
+2026-10-10T05:26:50.6481294Z     "invalid source config rejected before output replacement",
+2026-10-10T05:26:50.6482046Z     "old junction unlinked without touching source",
+2026-10-10T05:26:50.6482498Z     "linked output ancestor rejected",
+2026-10-10T05:26:50.6482893Z     "output outside build root rejected",
+2026-10-10T05:26:50.6483319Z     "legacy resource layout receives default config",
+2026-10-10T05:26:50.6483715Z     "linked resource source rejected"
+2026-10-10T05:26:50.6484041Z   ],
+2026-10-10T05:26:50.6484349Z   "count": 9,
+2026-10-10T05:26:50.6484726Z   "fixture": "D:\\a\\_temp\\cmt-resources\\fe33c745f72f4fbdb95aa8d7c61d8032"
+2026-10-10T05:26:50.6485143Z }
+2026-10-10T05:26:50.7068998Z ##[group]Run ./scripts/check_installer_resources.ps1 -FixtureRoot "$env:RUNNER_TEMP/cmt-installer-resources"
+2026-10-10T05:26:50.7069813Z [36;1m./scripts/check_installer_resources.ps1 -FixtureRoot "$env:RUNNER_TEMP/cmt-installer-resources"[0m
+2026-10-10T05:26:50.7105447Z shell: C:\Program Files\PowerShell\7\pwsh.EXE -command ". '{0}'"
+2026-10-10T05:26:50.7105891Z env:
+2026-10-10T05:26:50.7106179Z   CMAKE_BUILD_PARALLEL_LEVEL: 4
+2026-10-10T05:26:50.7106537Z ##[endgroup]
+2026-10-10T05:26:51.0998016Z Installer would consume built runtime resources: D:\a\_temp\cmt-installer-resources\ad7215f5600341c5aa2a680a3de0dd83\setup\Common\installer_script.iss
+2026-10-10T05:26:51.1092931Z Installer resource Source adapted to built output: D:\a\_temp\cmt-installer-resources\ad7215f5600341c5aa2a680a3de0dd83\setup\Common\installer_script.iss
+2026-10-10T05:26:51.1164988Z Installer already consumes built resources and MCP runtime: D:\a\_temp\cmt-installer-resources\ad7215f5600341c5aa2a680a3de0dd83\setup\Common\installer_script.iss
+2026-10-10T05:26:51.1429045Z {
+2026-10-10T05:26:51.1429605Z   "count": 6,
+2026-10-10T05:26:51.1429930Z   "passed": [
+2026-10-10T05:26:51.1430241Z     "preview does not write",
+2026-10-10T05:26:51.1430779Z     "resource Source and paired MCP runtime adapt with other bytes preserved",
+2026-10-10T05:26:51.1431270Z     "already adapted Source is idempotent",
+2026-10-10T05:26:51.1431684Z     "ambiguous old and built resource sources rejected",
+2026-10-10T05:26:51.1432116Z     "unknown Source schema rejected",
+2026-10-10T05:26:51.1432515Z     "custom installer path rejected before reading or writing"
+2026-10-10T05:26:51.1432904Z   ],
+2026-10-10T05:26:51.1433224Z   "pinnedSourceProvided": false,
+2026-10-10T05:26:51.1434085Z   "fixture": "D:\\a\\_temp\\cmt-installer-resources\\ad7215f5600341c5aa2a680a3de0dd83"
+2026-10-10T05:26:51.1434685Z }
+2026-10-10T05:26:51.2004101Z ##[group]Run actions/setup-python@v6
+2026-10-10T05:26:51.2004543Z with:
+2026-10-10T05:26:51.2004906Z   python-version: 3.11
+2026-10-10T05:26:51.2005221Z   check-latest: false
+2026-10-10T05:26:51.2007588Z   token: ***
+2026-10-10T05:26:51.2007897Z   update-environment: true
+2026-10-10T05:26:51.2008221Z   allow-prereleases: false
+2026-10-10T05:26:51.2008534Z   freethreaded: false
+2026-10-10T05:26:51.2008892Z env:
+2026-10-10T05:26:51.2009174Z   CMAKE_BUILD_PARALLEL_LEVEL: 4
+2026-10-10T05:26:51.2009508Z ##[endgroup]
+2026-10-10T05:26:51.3566619Z ##[group]Installed versions
+2026-10-10T05:26:51.3722202Z Successfully set up CPython (3.11.9)
+2026-10-10T05:26:51.3723017Z ##[endgroup]
+2026-10-10T05:26:51.3941871Z ##[group]Run python -m unittest discover -s mcp/tests -v
+2026-10-10T05:26:51.3942398Z [36;1mpython -m unittest discover -s mcp/tests -v[0m
+2026-10-10T05:26:51.4026329Z shell: C:\Program Files\PowerShell\7\pwsh.EXE -command ". '{0}'"
+2026-10-10T05:26:51.4026802Z env:
+2026-10-10T05:26:51.4027074Z   CMAKE_BUILD_PARALLEL_LEVEL: 4
+2026-10-10T05:26:51.4027600Z   pythonLocation: C:\hostedtoolcache\windows\Python\3.11.9\x64
+2026-10-10T05:26:51.4028095Z   PKG_CONFIG_PATH: C:\hostedtoolcache\windows\Python\3.11.9\x64/lib/pkgconfig
+2026-10-10T05:26:51.4028563Z   Python_ROOT_DIR: C:\hostedtoolcache\windows\Python\3.11.9\x64
+2026-10-10T05:26:51.4029022Z   Python2_ROOT_DIR: C:\hostedtoolcache\windows\Python\3.11.9\x64
+2026-10-10T05:26:51.4029457Z   Python3_ROOT_DIR: C:\hostedtoolcache\windows\Python\3.11.9\x64
+2026-10-10T05:26:51.4029858Z ##[endgroup]
+2026-10-10T05:26:53.8022823Z test_committed_export_verification_failure_is_unknown_and_not_retried (test_adapter.FixedBridgeTests.test_committed_export_verification_failure_is_unknown_and_not_retried) ... ok
+2026-10-10T05:26:53.8065764Z test_export_adds_sha256_and_checks_complete_length (test_adapter.FixedBridgeTests.test_export_adds_sha256_and_checks_complete_length) ... ok
+2026-10-10T05:26:53.8075883Z test_float_container_types_and_explicit_target (test_adapter.FixedBridgeTests.test_float_container_types_and_explicit_target) ... ok
+2026-10-10T05:26:53.8086327Z test_readonly_response_fallback_when_message_payload_is_copied (test_adapter.FixedBridgeTests.test_readonly_response_fallback_when_message_payload_is_copied) ... ok
+2026-10-10T05:26:53.8160181Z test_sizing_export_verification_uses_same_identity_boundary (test_adapter.FixedBridgeTests.test_sizing_export_verification_uses_same_identity_boundary) ... ok
+2026-10-10T05:26:53.8170081Z test_sizing_nested_container_types_and_unicode_are_data (test_adapter.FixedBridgeTests.test_sizing_nested_container_types_and_unicode_are_data) ... ok
+2026-10-10T05:26:53.8199080Z test_status_recovery_also_verifies_export_identity (test_adapter.FixedBridgeTests.test_status_recovery_also_verifies_export_identity) ... ok
+2026-10-10T05:26:53.8261160Z test_unicode_and_python_fragments_stay_encoded_data (test_adapter.FixedBridgeTests.test_unicode_and_python_fragments_stay_encoded_data) ... ok
+2026-10-10T05:26:54.3818907Z test_401_403_errors_never_echo_token_or_response_body (test_adapter.HostTransportTests.test_401_403_errors_never_echo_token_or_response_body) ... ok
+2026-10-10T05:26:54.8976783Z test_http_handshake_headers_and_wrapped_stdout (test_adapter.HostTransportTests.test_http_handshake_headers_and_wrapped_stdout) ... ok
+2026-10-10T05:26:55.3982379Z test_missing_token_and_unavailable_host_are_actionable (test_adapter.HostTransportTests.test_missing_token_and_unavailable_host_are_actionable) ... ok
+2026-10-10T05:26:55.8984106Z test_only_local_endpoints_and_no_inline_secrets (test_adapter.HostTransportTests.test_only_local_endpoints_and_no_inline_secrets) ... ok
+2026-10-10T05:26:56.4066388Z test_sse_ignores_notifications_and_matches_request_id (test_adapter.HostTransportTests.test_sse_ignores_notifications_and_matches_request_id) ... ok
+2026-10-10T05:26:56.9065897Z test_timeout_and_lost_session_are_unknown_without_retry (test_adapter.HostTransportTests.test_timeout_and_lost_session_are_unknown_without_retry) ... ok
+2026-10-10T05:26:56.9070656Z test_capacity_boundary_does_not_evict_the_repeated_operation (test_adapter.OperationTests.test_capacity_boundary_does_not_evict_the_repeated_operation) ... ok
+2026-10-10T05:26:56.9071818Z test_failed_validation_never_connects (test_adapter.OperationTests.test_failed_validation_never_connects) ... ok
+2026-10-10T05:26:56.9075247Z test_malformed_completed_mutation_is_unknown_and_not_repeated (test_adapter.OperationTests.test_malformed_completed_mutation_is_unknown_and_not_repeated) ... ok
+2026-10-10T05:26:56.9080894Z test_mutation_deduplicates_and_conflicting_reuse_rejects (test_adapter.OperationTests.test_mutation_deduplicates_and_conflicting_reuse_rejects) ... ok
+2026-10-10T05:26:56.9082043Z test_no_mutation_before_compatible_handshake (test_adapter.OperationTests.test_no_mutation_before_compatible_handshake) ... ok
+2026-10-10T05:26:56.9086764Z test_recovered_operation_is_validated_against_its_original_tool (test_adapter.OperationTests.test_recovered_operation_is_validated_against_its_original_tool) ... ok
+2026-10-10T05:26:56.9090818Z test_restart_does_not_treat_unknown_outcome_as_rollback (test_adapter.OperationTests.test_restart_does_not_treat_unknown_outcome_as_rollback) ... ok
+2026-10-10T05:26:56.9096405Z test_timeout_never_repeats_mutation_and_status_recovers (test_adapter.OperationTests.test_timeout_never_repeats_mutation_and_status_recovers) ... ok
+2026-10-10T05:26:56.9099653Z test_all_discoverable_tools_have_closed_inputs_and_outputs (test_adapter.SchemaTests.test_all_discoverable_tools_have_closed_inputs_and_outputs) ... ok
+2026-10-10T05:26:56.9121862Z test_completed_results_match_native_shapes_and_require_success_data (test_adapter.SchemaTests.test_completed_results_match_native_shapes_and_require_success_data) ... ok
+2026-10-10T05:26:56.9130871Z test_each_tool_accepts_a_valid_fixture_and_rejects_unknown_fields (test_adapter.SchemaTests.test_each_tool_accepts_a_valid_fixture_and_rejects_unknown_fields) ... ok
+2026-10-10T05:26:56.9132699Z test_fractional_offset_and_bool_number_rejected (test_adapter.SchemaTests.test_fractional_offset_and_bool_number_rejected) ... ok
+2026-10-10T05:26:56.9134274Z test_handle_uuid_page_and_local_path_limits (test_adapter.SchemaTests.test_handle_uuid_page_and_local_path_limits) ... ok
+2026-10-10T05:26:56.9140220Z test_inspection_accepts_native_slot_and_model_response_alternatives (test_adapter.SchemaTests.test_inspection_accepts_native_slot_and_model_response_alternatives) ... ok
+2026-10-10T05:26:56.9151019Z test_native_discovery_and_sizing_field_ids_match_adapter (test_adapter.SchemaTests.test_native_discovery_and_sizing_field_ids_match_adapter) ... ok
+2026-10-10T05:26:56.9152313Z test_native_unknown_top_level_and_wrong_data_type_rejected (test_adapter.SchemaTests.test_native_unknown_top_level_and_wrong_data_type_rejected) ... ok
+2026-10-10T05:26:56.9156557Z test_nested_sizing_bounds_and_absolute_paths (test_adapter.SchemaTests.test_nested_sizing_bounds_and_absolute_paths) ... ok
+2026-10-10T05:26:56.9182593Z test_noncompleted_and_failed_envelopes_do_not_require_success_data (test_adapter.SchemaTests.test_noncompleted_and_failed_envelopes_do_not_require_success_data) ... ok
+2026-10-10T05:26:56.9183869Z test_nonfinite_strength_and_out_of_range_scale_rejected (test_adapter.SchemaTests.test_nonfinite_strength_and_out_of_range_scale_rejected) ... ok
+2026-10-10T05:26:56.9187251Z test_pmx_option_dependencies_reject_before_connection (test_adapter.SchemaTests.test_pmx_option_dependencies_reject_before_connection) ... ok
+2026-10-10T05:26:56.9189030Z test_sizing_requires_one_motion_source_and_unique_models (test_adapter.SchemaTests.test_sizing_requires_one_motion_source_and_unique_models) ... ok
+2026-10-10T05:26:56.9194789Z test_handshake_discovery_and_structured_call (test_adapter.StdioTests.test_handshake_discovery_and_structured_call) ... ok
+2026-10-10T05:26:56.9196037Z test_null_request_ids_reject_before_handshake_or_mutation (test_adapter.StdioTests.test_null_request_ids_reject_before_handshake_or_mutation) ... ok
+2026-10-10T05:26:56.9197288Z test_protocol_errors_and_nonfinite_json_preserve_framing (test_adapter.StdioTests.test_protocol_errors_and_nonfinite_json_preserve_framing) ... ok
+2026-10-10T05:26:57.0185924Z test_subprocess_discovery_is_dependency_free_and_does_not_read_token (test_adapter.StdioTests.test_subprocess_discovery_is_dependency_free_and_does_not_read_token) ... ok
+2026-10-10T05:26:57.0187033Z test_unknown_tools_are_protocol_errors (test_adapter.StdioTests.test_unknown_tools_are_protocol_errors) ... ok
+2026-10-10T05:26:57.0311486Z test_old_plugin_blocks_before_owning_or_mutating_documents (test_sizing_runner.PreflightTests.test_old_plugin_blocks_before_owning_or_mutating_documents) ... ok
+2026-10-10T05:26:57.0313369Z 
+2026-10-10T05:26:57.0313707Z ----------------------------------------------------------------------
+2026-10-10T05:26:57.0314461Z Ran 41 tests in 3.243s
+2026-10-10T05:26:57.0314664Z 
+2026-10-10T05:26:57.0314790Z OK
+2026-10-10T05:26:57.1504982Z ##[group]Run cmake --preset dev-windows-deps-test
+2026-10-10T05:26:57.1505617Z [36;1mcmake --preset dev-windows-deps-test[0m
+2026-10-10T05:26:57.1541121Z shell: C:\Program Files\PowerShell\7\pwsh.EXE -command ". '{0}'"
+2026-10-10T05:26:57.1541560Z env:
+2026-10-10T05:26:57.1541861Z   CMAKE_BUILD_PARALLEL_LEVEL: 4
+2026-10-10T05:26:57.1542274Z   pythonLocation: C:\hostedtoolcache\windows\Python\3.11.9\x64
+2026-10-10T05:26:57.1542794Z   PKG_CONFIG_PATH: C:\hostedtoolcache\windows\Python\3.11.9\x64/lib/pkgconfig
+2026-10-10T05:26:57.1543298Z   Python_ROOT_DIR: C:\hostedtoolcache\windows\Python\3.11.9\x64
+2026-10-10T05:26:57.1543746Z   Python2_ROOT_DIR: C:\hostedtoolcache\windows\Python\3.11.9\x64
+2026-10-10T05:26:57.1544275Z   Python3_ROOT_DIR: C:\hostedtoolcache\windows\Python\3.11.9\x64
+2026-10-10T05:26:57.1544654Z ##[endgroup]
+2026-10-10T05:26:58.0750030Z Preset CMake variables:
+2026-10-10T05:26:58.0750376Z 
+2026-10-10T05:26:58.0750703Z   CMT_DEPS_ENABLE_LIBMMD_TESTS="ON"
+2026-10-10T05:26:58.0751235Z   CMT_ENABLE_PLUGIN_TESTS="ON"
+2026-10-10T05:26:58.0751663Z   CMT_SDK_BUILD_CONFIG="Debug"
+2026-10-10T05:26:58.0752065Z   CMT_SDK_BUILD_TARGET="mmdtool"
+2026-10-10T05:26:58.0752566Z   CMT_SDK_DIR="D:/a/C4D_MMD_Tool/C4D_MMD_Tool/sdk_2026"
+2026-10-10T05:26:58.0752892Z 
+2026-10-10T05:26:58.4517472Z -- Selecting Windows SDK version 10.0.26100.0 to target Windows 10.0.20348.
+2026-10-10T05:27:10.1514965Z -- The CXX compiler identification is MSVC 19.44.35229.0
+2026-10-10T05:27:10.2550545Z -- Detecting CXX compiler ABI info
+2026-10-10T05:27:11.3048629Z -- Detecting CXX compiler ABI info - done
+2026-10-10T05:27:11.3201288Z -- Check for working CXX compiler: C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/cl.exe - skipped
+2026-10-10T05:27:11.3217667Z -- Detecting CXX compile features
+2026-10-10T05:27:11.3276985Z -- Detecting CXX compile features - done
+2026-10-10T05:27:11.3412645Z CMake Deprecation Warning at dependency/bullet3/CMakeLists.txt:1 (cmake_minimum_required):
+2026-10-10T05:27:11.3413470Z   Compatibility with CMake < 3.10 will be removed from a future version of
+2026-10-10T05:27:11.3413898Z   CMake.
+2026-10-10T05:27:11.3414085Z 
+2026-10-10T05:27:11.3414299Z   Update the VERSION argument <min> value.  Or, use the <min>...<max> syntax
+2026-10-10T05:27:11.3414866Z   to tell CMake that the project requires at least <min> but has been updated
+2026-10-10T05:27:11.3415350Z   to work with policies introduced by <max> or earlier.
+2026-10-10T05:27:11.3415580Z 
+2026-10-10T05:27:11.3415584Z 
+2026-10-10T05:27:12.3544267Z -- The C compiler identification is MSVC 19.44.35229.0
+2026-10-10T05:27:12.3714465Z -- Detecting C compiler ABI info
+2026-10-10T05:27:13.0277634Z -- Detecting C compiler ABI info - done
+2026-10-10T05:27:13.0422027Z -- Check for working C compiler: C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/cl.exe - skipped
+2026-10-10T05:27:13.0425334Z -- Detecting C compile features
+2026-10-10T05:27:13.0431050Z -- Detecting C compile features - done
+2026-10-10T05:27:13.0456084Z CMAKE_EXE_LINKER_FLAGS_DEBUG=/INCREMENTAL:NO /debug /INCREMENTAL
+2026-10-10T05:27:13.0687007Z -- Found OpenGL: opengl32
+2026-10-10T05:27:13.0689562Z OPENGL FOUND
+2026-10-10T05:27:13.0689916Z opengl32glu32
+2026-10-10T05:27:13.0871910Z -- BULLET_ROOT=
+2026-10-10T05:27:13.0872770Z -- libMMD: using Bullet from add_subdirectory (D:/a/C4D_MMD_Tool/C4D_MMD_Tool/dependency/bullet3)
+2026-10-10T05:27:13.0873657Z -- BULLET_FOUND=TRUE
+2026-10-10T05:27:13.0874099Z -- BULLET_INCLUDE_DIRS=D:/a/C4D_MMD_Tool/C4D_MMD_Tool/dependency/bullet3/src
+2026-10-10T05:27:13.0874776Z -- BULLET_LIBRARIES=LinearMath;Bullet3Common;BulletInverseDynamics;BulletCollision;BulletDynamics;BulletSoftBody
+2026-10-10T05:27:13.4342450Z -- Found Python3: C:/hostedtoolcache/windows/Python/3.11.9/x64/python3.exe (found version "3.11.9") found components: Interpreter
+2026-10-10T05:27:13.4386481Z -- Configuring done (15.3s)
+2026-10-10T05:27:13.7042195Z -- Generating done (0.3s)
+2026-10-10T05:27:13.7047630Z -- Build files have been written to: D:/a/C4D_MMD_Tool/C4D_MMD_Tool/_build_msvc
+2026-10-10T05:27:13.8087101Z ##[group]Run cmake --build --preset cmt-deps-test
+2026-10-10T05:27:13.8087616Z [36;1mcmake --build --preset cmt-deps-test[0m
+2026-10-10T05:27:13.8121805Z shell: C:\Program Files\PowerShell\7\pwsh.EXE -command ". '{0}'"
+2026-10-10T05:27:13.8122301Z env:
+2026-10-10T05:27:13.8122639Z   CMAKE_BUILD_PARALLEL_LEVEL: 4
+2026-10-10T05:27:13.8123138Z   pythonLocation: C:\hostedtoolcache\windows\Python\3.11.9\x64
+2026-10-10T05:27:13.8123740Z   PKG_CONFIG_PATH: C:\hostedtoolcache\windows\Python\3.11.9\x64/lib/pkgconfig
+2026-10-10T05:27:13.8124313Z   Python_ROOT_DIR: C:\hostedtoolcache\windows\Python\3.11.9\x64
+2026-10-10T05:27:13.8124850Z   Python2_ROOT_DIR: C:\hostedtoolcache\windows\Python\3.11.9\x64
+2026-10-10T05:27:13.8125370Z   Python3_ROOT_DIR: C:\hostedtoolcache\windows\Python\3.11.9\x64
+2026-10-10T05:27:13.8125860Z ##[endgroup]
+2026-10-10T05:27:14.1233250Z MSBuild version 17.14.60+43b635718 for .NET Framework
+2026-10-10T05:27:14.1519804Z 
+2026-10-10T05:27:14.5495429Z   1>Checking Build System
+2026-10-10T05:27:14.8270959Z   Building Custom Rule D:/a/C4D_MMD_Tool/C4D_MMD_Tool/dependency/bullet3/src/Bullet3Common/CMakeLists.txt
+2026-10-10T05:27:15.0280541Z   b3AlignedAllocator.cpp
+2026-10-10T05:27:15.2725543Z   Building Custom Rule D:/a/C4D_MMD_Tool/C4D_MMD_Tool/dependency/bullet3/src/BulletCollision/CMakeLists.txt
+2026-10-10T05:27:15.3648957Z   Building Custom Rule D:/a/C4D_MMD_Tool/C4D_MMD_Tool/dependency/bullet3/src/BulletSoftBody/CMakeLists.txt
+2026-10-10T05:27:15.3839462Z   Building Custom Rule D:/a/C4D_MMD_Tool/C4D_MMD_Tool/dependency/bullet3/src/BulletInverseDynamics/CMakeLists.txt
+2026-10-10T05:27:15.4145763Z   btAxisSweep3.cpp
+2026-10-10T05:27:15.4217775Z   Building Custom Rule D:/a/C4D_MMD_Tool/C4D_MMD_Tool/dependency/bullet3/src/BulletDynamics/CMakeLists.txt
+2026-10-10T05:27:15.4815681Z   b3Vector3.cpp
+2026-10-10T05:27:15.5518344Z   b3Logging.cpp
+2026-10-10T05:27:16.0246496Z   btBroadphaseProxy.cpp
+2026-10-10T05:27:16.0796666Z   btCollisionAlgorithm.cpp
+2026-10-10T05:27:16.1910635Z   btDbvt.cpp
+2026-10-10T05:27:16.3163538Z   IDMath.cpp
+2026-10-10T05:27:16.3578483Z   btSoftBody.cpp
+2026-10-10T05:27:16.3688783Z   btKinematicCharacterController.cpp
+2026-10-10T05:27:16.4768428Z   btDbvtBroadphase.cpp
+2026-10-10T05:27:16.4856553Z   Building Custom Rule D:/a/C4D_MMD_Tool/C4D_MMD_Tool/dependency/bullet3/src/LinearMath/CMakeLists.txt
+2026-10-10T05:27:16.5688467Z   btAlignedAllocator.cpp
+2026-10-10T05:27:16.6171825Z   btConeTwistConstraint.cpp
+2026-10-10T05:27:16.6530816Z   btConvexHull.cpp
+2026-10-10T05:27:16.6970401Z   btDispatcher.cpp
+2026-10-10T05:27:16.7843695Z   btOverlappingPairCache.cpp
+2026-10-10T05:27:16.8018174Z   btConvexHullComputer.cpp
+2026-10-10T05:27:16.8467634Z   btContactConstraint.cpp
+2026-10-10T05:27:16.9396522Z   MultiBodyTree.cpp
+2026-10-10T05:27:16.9876659Z   btGeometryUtil.cpp
+2026-10-10T05:27:17.0225723Z   btQuantizedBvh.cpp
+2026-10-10T05:27:17.0324524Z   btFixedConstraint.cpp
+2026-10-10T05:27:17.1304368Z   btPolarDecomposition.cpp
+2026-10-10T05:27:17.2454161Z   btQuickprof.cpp
+2026-10-10T05:27:17.2643053Z   btGearConstraint.cpp
+2026-10-10T05:27:17.4695270Z   btGeneric6DofConstraint.cpp
+2026-10-10T05:27:17.4880892Z   MultiBodyTreeInitCache.cpp
+2026-10-10T05:27:17.6183769Z   btReducedVector.cpp
+2026-10-10T05:27:17.6390563Z   btSimpleBroadphase.cpp
+2026-10-10T05:27:17.6831694Z   MultiBodyTreeImpl.cpp
+2026-10-10T05:27:17.6931990Z   btGeneric6DofSpringConstraint.cpp
+2026-10-10T05:27:17.8541074Z   btActivatingCollisionAlgorithm.cpp
+2026-10-10T05:27:17.9064928Z   btGeneric6DofSpring2Constraint.cpp
+2026-10-10T05:27:17.9429978Z   Generating Code...
+2026-10-10T05:27:18.0685923Z   btBoxBoxCollisionAlgorithm.cpp
+2026-10-10T05:27:18.1611674Z   btHinge2Constraint.cpp
+2026-10-10T05:27:18.2870806Z   btSerializer.cpp
+2026-10-10T05:27:18.3020615Z   btSoftBodyConcaveCollisionAlgorithm.cpp
+2026-10-10T05:27:18.3485052Z   btBox2dBox2dCollisionAlgorithm.cpp
+2026-10-10T05:27:18.3811959Z   btSerializer64.cpp
+2026-10-10T05:27:18.4242421Z   btHingeConstraint.cpp
+2026-10-10T05:27:18.4435553Z   btThreads.cpp
+2026-10-10T05:27:18.5777516Z   Generating Code...
+2026-10-10T05:27:18.5922265Z   btBoxBoxDetector.cpp
+2026-10-10T05:27:18.6777145Z   btPoint2PointConstraint.cpp
+2026-10-10T05:27:18.7189230Z   btVector3.cpp
+2026-10-10T05:27:18.7822911Z   btCollisionDispatcher.cpp
+2026-10-10T05:27:18.8393059Z   btTaskScheduler.cpp
+2026-10-10T05:27:18.8927106Z   btSequentialImpulseConstraintSolver.cpp
+2026-10-10T05:27:19.0129981Z   btSoftBodyHelpers.cpp
+2026-10-10T05:27:19.0193313Z   btCollisionDispatcherMt.cpp
+2026-10-10T05:27:19.1807392Z   btThreadSupportPosix.cpp
+2026-10-10T05:27:19.2009980Z   btThreadSupportWin32.cpp
+2026-10-10T05:27:19.2510385Z   Generating Code...
+2026-10-10T05:27:19.2531537Z   btCollisionObject.cpp
+2026-10-10T05:27:19.2886397Z   btSequentialImpulseConstraintSolverMt.cpp
+2026-10-10T05:27:19.5301176Z   btBatchedConstraints.cpp
+2026-10-10T05:27:19.6955997Z   Bullet3Common.vcxproj -> D:\a\C4D_MMD_Tool\C4D_MMD_Tool\_build_msvc\lib\Debug\Bullet3Common_Debug.lib
+2026-10-10T05:27:19.7328363Z   BulletInverseDynamics.vcxproj -> D:\a\C4D_MMD_Tool\C4D_MMD_Tool\_build_msvc\lib\Debug\BulletInverseDynamics_Debug.lib
+2026-10-10T05:27:19.7560373Z   btCollisionWorld.cpp
+2026-10-10T05:27:19.8683115Z   LinearMath.vcxproj -> D:\a\C4D_MMD_Tool\C4D_MMD_Tool\_build_msvc\lib\Debug\LinearMath_Debug.lib
+2026-10-10T05:27:19.9303153Z   btNNCGConstraintSolver.cpp
+2026-10-10T05:27:20.0967305Z   btSliderConstraint.cpp
+2026-10-10T05:27:20.2229449Z   btSolve2LinearConstraint.cpp
+2026-10-10T05:27:20.3446832Z   btCollisionWorldImporter.cpp
+2026-10-10T05:27:20.3472939Z   btTypedConstraint.cpp
+2026-10-10T05:27:20.6914686Z   btUniversalConstraint.cpp
+2026-10-10T05:27:20.8334128Z   btCompoundCollisionAlgorithm.cpp
+2026-10-10T05:27:20.8385757Z   btDiscreteDynamicsWorld.cpp
+2026-10-10T05:27:21.0169467Z   btCompoundCompoundCollisionAlgorithm.cpp
+2026-10-10T05:27:21.1911546Z   Generating Code...
+2026-10-10T05:27:21.4594950Z   Generating Code...
+2026-10-10T05:27:21.7326960Z   btSoftBodyRigidBodyCollisionConfiguration.cpp
+2026-10-10T05:27:21.8131922Z   Compiling...
+2026-10-10T05:27:21.8132647Z   btConvexConcaveCollisionAlgorithm.cpp
+2026-10-10T05:27:21.9632033Z   btConvexConvexAlgorithm.cpp
+2026-10-10T05:27:22.0212344Z   btSoftRigidCollisionAlgorithm.cpp
+2026-10-10T05:27:22.1790938Z   Compiling...
+2026-10-10T05:27:22.1792218Z   btDiscreteDynamicsWorldMt.cpp
+2026-10-10T05:27:22.2414071Z   btConvexPlaneCollisionAlgorithm.cpp
+2026-10-10T05:27:22.4279850Z   btConvex2dConvex2dAlgorithm.cpp
+2026-10-10T05:27:22.6112523Z   btDefaultCollisionConfiguration.cpp
+2026-10-10T05:27:22.6805661Z   btSoftRigidDynamicsWorld.cpp
+2026-10-10T05:27:22.7019577Z   btSimulationIslandManagerMt.cpp
+2026-10-10T05:27:22.8128994Z   btEmptyCollisionAlgorithm.cpp
+2026-10-10T05:27:22.9022752Z   btRigidBody.cpp
+2026-10-10T05:27:22.9695326Z   btGhostObject.cpp
+2026-10-10T05:27:23.1229158Z   btHashedSimplePairCache.cpp
+2026-10-10T05:27:23.2336339Z   btInternalEdgeUtility.cpp
+2026-10-10T05:27:23.2920258Z   btSimpleDynamicsWorld.cpp
+2026-10-10T05:27:23.4389992Z   btSoftMultiBodyDynamicsWorld.cpp
+2026-10-10T05:27:23.4980379Z   btRaycastVehicle.cpp
+2026-10-10T05:27:23.6848805Z   btWheelInfo.cpp
+2026-10-10T05:27:23.6986300Z   btManifoldResult.cpp
+2026-10-10T05:27:23.8315400Z   btMultiBody.cpp
+2026-10-10T05:27:23.8535302Z   btSimulationIslandManager.cpp
+2026-10-10T05:27:24.0106153Z   btSphereBoxCollisionAlgorithm.cpp
+2026-10-10T05:27:24.1506920Z   btSphereSphereCollisionAlgorithm.cpp
+2026-10-10T05:27:24.2360147Z   btSoftSoftCollisionAlgorithm.cpp
+2026-10-10T05:27:24.2859693Z   btMultiBodyConstraint.cpp
+2026-10-10T05:27:24.3032509Z   btSphereTriangleCollisionAlgorithm.cpp
+2026-10-10T05:27:24.4701508Z   btMultiBodyConstraintSolver.cpp
+2026-10-10T05:27:24.4722666Z   btUnionFind.cpp
+2026-10-10T05:27:24.5634591Z   SphereTriangleDetector.cpp
+2026-10-10T05:27:24.6611009Z   btBoxShape.cpp
+2026-10-10T05:27:24.7538209Z   btDefaultSoftBodySolver.cpp
+2026-10-10T05:27:24.7618504Z   btBox2dShape.cpp
+2026-10-10T05:27:24.8650701Z   btBvhTriangleMeshShape.cpp
+2026-10-10T05:27:24.9481905Z   btMultiBodyDynamicsWorld.cpp
+2026-10-10T05:27:25.2395576Z   btCapsuleShape.cpp
+2026-10-10T05:27:25.2724334Z   btDeformableBackwardEulerObjective.cpp
+2026-10-10T05:27:25.3618574Z   Generating Code...
+2026-10-10T05:27:25.5575621Z   btMultiBodyFixedConstraint.cpp
+2026-10-10T05:27:25.5794499Z   Compiling...
+2026-10-10T05:27:25.5795286Z   btCollisionShape.cpp
+2026-10-10T05:27:25.9942262Z   btCompoundShape.cpp
+2026-10-10T05:27:26.0446354Z   btMultiBodyGearConstraint.cpp
+2026-10-10T05:27:26.3412893Z   btDeformableBodySolver.cpp
+2026-10-10T05:27:26.4324648Z   btConcaveShape.cpp
+2026-10-10T05:27:26.5026322Z   btMultiBodyJointLimitConstraint.cpp
+2026-10-10T05:27:26.5334382Z   btConeShape.cpp
+2026-10-10T05:27:26.6554516Z   btConvexHullShape.cpp
+2026-10-10T05:27:26.9082185Z   btMultiBodyJointMotor.cpp
+2026-10-10T05:27:27.1154410Z   btConvexInternalShape.cpp
+2026-10-10T05:27:27.2588130Z   btConvexPointCloudShape.cpp
+2026-10-10T05:27:27.4444959Z   btConvexPolyhedron.cpp
+2026-10-10T05:27:27.4513978Z   btMultiBodyMLCPConstraintSolver.cpp
+2026-10-10T05:27:27.4975099Z   btDeformableMultiBodyConstraintSolver.cpp
+2026-10-10T05:27:27.8532908Z   btConvexShape.cpp
+2026-10-10T05:27:27.9717115Z   btMultiBodyPoint2Point.cpp
+2026-10-10T05:27:28.0446642Z   btConvex2dShape.cpp
+2026-10-10T05:27:28.1661943Z   btConvexTriangleMeshShape.cpp
+2026-10-10T05:27:28.2603942Z   btCylinderShape.cpp
+2026-10-10T05:27:28.4003639Z   btEmptyShape.cpp
+2026-10-10T05:27:28.4571628Z   btMultiBodySliderConstraint.cpp
+2026-10-10T05:27:28.5859670Z   btHeightfieldTerrainShape.cpp
+2026-10-10T05:27:28.6195889Z   btDeformableContactProjection.cpp
+2026-10-10T05:27:28.8447697Z   btMiniSDF.cpp
+2026-10-10T05:27:29.2722193Z   btMinkowskiSumShape.cpp
+2026-10-10T05:27:29.4112457Z   btMultiBodySphericalJointMotor.cpp
+2026-10-10T05:27:29.4638711Z   btMultimaterialTriangleMeshShape.cpp
+2026-10-10T05:27:29.9792728Z   btMultiBodySphericalJointLimit.cpp
+2026-10-10T05:27:29.9909960Z   btMultiSphereShape.cpp
+2026-10-10T05:27:30.2976884Z   btDeformableMultiBodyDynamicsWorld.cpp
+2026-10-10T05:27:30.3986606Z   btOptimizedBvh.cpp
+2026-10-10T05:27:30.4470366Z   btDantzigLCP.cpp
+2026-10-10T05:27:30.5674334Z   btPolyhedralConvexShape.cpp
+2026-10-10T05:27:30.6127932Z   Generating Code...
+2026-10-10T05:27:30.8903687Z   Generating Code...
+2026-10-10T05:27:30.9957942Z   Compiling...
+2026-10-10T05:27:30.9958908Z   btMLCPSolver.cpp
+2026-10-10T05:27:31.1690008Z   Compiling...
+2026-10-10T05:27:31.1690876Z   btScaledBvhTriangleMeshShape.cpp
+2026-10-10T05:27:31.2287224Z   btLemkeAlgorithm.cpp
+2026-10-10T05:27:31.4732879Z   Generating Code...
+2026-10-10T05:27:31.6423537Z   btSdfCollisionShape.cpp
+2026-10-10T05:27:31.6575223Z   btDeformableContactConstraint.cpp
+2026-10-10T05:27:31.7775514Z   BulletDynamics.vcxproj -> D:\a\C4D_MMD_Tool\C4D_MMD_Tool\_build_msvc\lib\Debug\BulletDynamics_Debug.lib
+2026-10-10T05:27:31.8090918Z   btShapeHull.cpp
+2026-10-10T05:27:31.9379089Z   btSphereShape.cpp
+2026-10-10T05:27:32.0296030Z   btStaticPlaneShape.cpp
+2026-10-10T05:27:32.1057602Z   poly34.cpp
+2026-10-10T05:27:32.1073120Z   btStridingMeshInterface.cpp
+2026-10-10T05:27:32.1619761Z   btReducedDeformableBody.cpp
+2026-10-10T05:27:32.4282109Z   btTetrahedronShape.cpp
+2026-10-10T05:27:32.5071990Z   btTriangleBuffer.cpp
+2026-10-10T05:27:32.6078204Z   btTriangleCallback.cpp
+2026-10-10T05:27:32.6594839Z   btTriangleIndexVertexArray.cpp
+2026-10-10T05:27:32.7960147Z   btTriangleIndexVertexMaterialArray.cpp
+2026-10-10T05:27:32.8357020Z   btReducedDeformableBodyHelpers.cpp
+2026-10-10T05:27:32.9301265Z   btTriangleMesh.cpp
+2026-10-10T05:27:33.0781801Z   btTriangleMeshShape.cpp
+2026-10-10T05:27:33.1723683Z   btUniformScalingShape.cpp
+2026-10-10T05:27:33.2462607Z   btContactProcessing.cpp
+2026-10-10T05:27:33.3981588Z   btGenericPoolAllocator.cpp
+2026-10-10T05:27:33.4494281Z   btGImpactBvh.cpp
+2026-10-10T05:27:33.4798378Z   btReducedDeformableBodySolver.cpp
+2026-10-10T05:27:33.5947369Z   btGImpactCollisionAlgorithm.cpp
+2026-10-10T05:27:33.8266798Z   btGImpactQuantizedBvh.cpp
+2026-10-10T05:27:33.9864869Z   btGImpactShape.cpp
+2026-10-10T05:27:34.1764250Z   Generating Code...
+2026-10-10T05:27:34.3873713Z   Compiling...
+2026-10-10T05:27:34.3874184Z   btTriangleShapeEx.cpp
+2026-10-10T05:27:34.4146318Z   btReducedDeformableContactConstraint.cpp
+2026-10-10T05:27:34.5124585Z   gim_box_set.cpp
+2026-10-10T05:27:34.6086845Z   gim_contact.cpp
+2026-10-10T05:27:34.7016097Z   gim_memory.cpp
+2026-10-10T05:27:34.7519625Z   gim_tri_collision.cpp
+2026-10-10T05:27:34.8457221Z   btContinuousConvexCollision.cpp
+2026-10-10T05:27:34.9411653Z   Generating Code...
+2026-10-10T05:27:34.9499411Z   btConvexCast.cpp
+2026-10-10T05:27:35.1080120Z   btGjkConvexCast.cpp
+2026-10-10T05:27:35.3051672Z   btGjkEpa2.cpp
+2026-10-10T05:27:35.4739593Z   btGjkEpaPenetrationDepthSolver.cpp
+2026-10-10T05:27:35.6421301Z   btGjkPairDetector.cpp
+2026-10-10T05:27:35.7263838Z   btMinkowskiPenetrationDepthSolver.cpp
+2026-10-10T05:27:35.7914687Z   BulletSoftBody.vcxproj -> D:\a\C4D_MMD_Tool\C4D_MMD_Tool\_build_msvc\lib\Debug\BulletSoftBody_Debug.lib
+2026-10-10T05:27:35.8160734Z   btPersistentManifold.cpp
+2026-10-10T05:27:36.0993531Z   btRaycastCallback.cpp
+2026-10-10T05:27:36.1920900Z   btSubSimplexConvexCast.cpp
+2026-10-10T05:27:36.2821127Z   btVoronoiSimplexSolver.cpp
+2026-10-10T05:27:36.3362770Z   btPolyhedralContactClipping.cpp
+2026-10-10T05:27:36.4388110Z   Generating Code...
+2026-10-10T05:27:36.8308437Z   BulletCollision.vcxproj -> D:\a\C4D_MMD_Tool\C4D_MMD_Tool\_build_msvc\lib\Debug\BulletCollision_Debug.lib
+2026-10-10T05:27:36.8897446Z   Building Custom Rule D:/a/C4D_MMD_Tool/C4D_MMD_Tool/dependency/libMMD/src/CMakeLists.txt
+2026-10-10T05:27:36.9992887Z   File.cpp
+2026-10-10T05:27:36.9993941Z   Log.cpp
+2026-10-10T05:27:36.9999546Z   Path.cpp
+2026-10-10T05:27:37.0001753Z   Singleton.cpp
+2026-10-10T05:27:37.9760216Z   Time.cpp
+2026-10-10T05:27:37.9817511Z   UnicodeUtil.cpp
+2026-10-10T05:27:38.4035474Z   XFileModel.cpp
+2026-10-10T05:27:38.4156932Z   MMDIkSolver.cpp
+2026-10-10T05:27:39.2074812Z   MMDMaterial.cpp
+2026-10-10T05:27:40.9026854Z   MMDModel.cpp
+2026-10-10T05:27:40.9575280Z   MMDMorph.cpp
+2026-10-10T05:27:41.3585321Z   MMDNode.cpp
+2026-10-10T05:27:41.9822414Z   MMDPhysics.cpp
+2026-10-10T05:27:43.5801666Z   MMDCamera.cpp
+2026-10-10T05:27:45.5184046Z   PMDFile.cpp
+2026-10-10T05:27:45.7167751Z   PMDModel.cpp
+2026-10-10T05:27:45.7557873Z   PMXFile.cpp
+2026-10-10T05:27:46.4218160Z   PMXModel.cpp
+2026-10-10T05:27:49.3867128Z   SjisToUnicode.cpp
+2026-10-10T05:27:49.9992006Z   VMDAnimation.cpp
+2026-10-10T05:27:50.4802661Z   VMDInterpolation.cpp
+2026-10-10T05:27:50.4987781Z   VMDCameraAnimation.cpp
+2026-10-10T05:27:52.4835321Z   VMDFile.cpp
+2026-10-10T05:27:52.9854085Z   VPDFile.cpp
+2026-10-10T05:27:56.4162059Z   MMDMotionAnalysis.cpp
+2026-10-10T05:27:56.4236519Z   MMDMotionPose.cpp
+2026-10-10T05:27:56.4253324Z   MMDMotionStance.cpp
+2026-10-10T05:27:56.4257463Z   MMDMotionConstraints.cpp
+2026-10-10T05:28:00.0519509Z   MMDMotionCamera.cpp
+2026-10-10T05:28:00.5180544Z   MMDMotionSizing.cpp
+2026-10-10T05:28:02.5531675Z   MMDMotionDiagnostics.cpp
+2026-10-10T05:28:11.4063540Z   libMMD.vcxproj -> D:\a\C4D_MMD_Tool\C4D_MMD_Tool\_build_msvc\lib\Debug\libMMD_Debug.lib
+2026-10-10T05:28:11.4920720Z   Building Custom Rule D:/a/C4D_MMD_Tool/C4D_MMD_Tool/dependency/libMMD/tests/CMakeLists.txt
+2026-10-10T05:28:11.4922818Z   Building Custom Rule D:/a/C4D_MMD_Tool/C4D_MMD_Tool/dependency/libMMD/tests/CMakeLists.txt
+2026-10-10T05:28:11.4924143Z   Building Custom Rule D:/a/C4D_MMD_Tool/C4D_MMD_Tool/dependency/libMMD/tests/CMakeLists.txt
+2026-10-10T05:28:11.4925238Z   Building Custom Rule D:/a/C4D_MMD_Tool/C4D_MMD_Tool/dependency/libMMD/tests/CMakeLists.txt
+2026-10-10T05:28:11.5640103Z   Building Custom Rule D:/a/C4D_MMD_Tool/C4D_MMD_Tool/dependency/libMMD/tests/CMakeLists.txt
+2026-10-10T05:28:11.6006108Z   Building Custom Rule D:/a/C4D_MMD_Tool/C4D_MMD_Tool/dependency/libMMD/tests/CMakeLists.txt
+2026-10-10T05:28:11.6016637Z   Building Custom Rule D:/a/C4D_MMD_Tool/C4D_MMD_Tool/dependency/libMMD/tests/CMakeLists.txt
+2026-10-10T05:28:11.6289061Z   Building Custom Rule D:/a/C4D_MMD_Tool/C4D_MMD_Tool/dependency/libMMD/tests/CMakeLists.txt
+2026-10-10T05:28:11.6635581Z   Building Custom Rule D:/a/C4D_MMD_Tool/C4D_MMD_Tool/dependency/libMMD/tests/CMakeLists.txt
+2026-10-10T05:28:11.6867779Z   Building Custom Rule D:/a/C4D_MMD_Tool/C4D_MMD_Tool/dependency/libMMD/tests/CMakeLists.txt
+2026-10-10T05:28:11.7224810Z   Building Custom Rule D:/a/C4D_MMD_Tool/C4D_MMD_Tool/dependency/libMMD/tests/CMakeLists.txt
+2026-10-10T05:28:11.7685850Z   VMDInterpolation.test.cpp
+2026-10-10T05:28:11.7882612Z   MMDPhysics.test.cpp
+2026-10-10T05:28:11.9605185Z   MMDModel.test.cpp
+2026-10-10T05:28:11.9914267Z   PathUtil.test.cpp
+2026-10-10T05:28:13.4209456Z   MMDMotionSizing.test.cpp
+2026-10-10T05:28:13.8424350Z   FileBase.test.cpp
+2026-10-10T05:28:14.8406818Z   path_util_test.vcxproj -> D:\a\C4D_MMD_Tool\C4D_MMD_Tool\_build_msvc\cmt_deps\libMMD\tests\Debug\path_util_test.exe
+2026-10-10T05:28:14.9282616Z   MMDModel.test.cpp
+2026-10-10T05:28:15.2615530Z   MMDIkSolver.test.cpp
+2026-10-10T05:28:15.7028382Z   MMDModel.test.cpp
+2026-10-10T05:28:16.4507697Z   mmd_physics_test.vcxproj -> D:\a\C4D_MMD_Tool\C4D_MMD_Tool\_build_msvc\cmt_deps\libMMD\tests\Debug\mmd_physics_test.exe
+2026-10-10T05:28:16.6250658Z   file_base_test.vcxproj -> D:\a\C4D_MMD_Tool\C4D_MMD_Tool\_build_msvc\cmt_deps\libMMD\tests\Debug\file_base_test.exe
+2026-10-10T05:28:17.0507281Z   MMDMotionSizingAdvanced.test.cpp
+2026-10-10T05:28:18.7373659Z   mmd_model_test.vcxproj -> D:\a\C4D_MMD_Tool\C4D_MMD_Tool\_build_msvc\cmt_deps\libMMD\tests\Debug\mmd_model_test.exe
+2026-10-10T05:28:18.8732096Z   mmd_motion_sizing_test.vcxproj -> D:\a\C4D_MMD_Tool\C4D_MMD_Tool\_build_msvc\cmt_deps\libMMD\tests\Debug\mmd_motion_sizing_test.exe
+2026-10-10T05:28:19.0539164Z   mmd_ik_solver_test.vcxproj -> D:\a\C4D_MMD_Tool\C4D_MMD_Tool\_build_msvc\cmt_deps\libMMD\tests\Debug\mmd_ik_solver_test.exe
+2026-10-10T05:28:19.2876197Z   vmd_interpolation_test.vcxproj -> D:\a\C4D_MMD_Tool\C4D_MMD_Tool\_build_msvc\cmt_deps\libMMD\tests\Debug\vmd_interpolation_test.exe
+2026-10-10T05:28:19.4034200Z   FileRoundTrip.test.cpp
+2026-10-10T05:28:19.4629479Z   Building Custom Rule D:/a/C4D_MMD_Tool/C4D_MMD_Tool/dependency/libMMD/tests/CMakeLists.txt
+2026-10-10T05:28:19.4790238Z   mmd_model_io_test.vcxproj -> D:\a\C4D_MMD_Tool\C4D_MMD_Tool\_build_msvc\cmt_deps\libMMD\tests\Debug\mmd_model_io_test.exe
+2026-10-10T05:28:19.5982743Z   Building Custom Rule D:/a/C4D_MMD_Tool/C4D_MMD_Tool/dependency/libMMD/tests/CMakeLists.txt
+2026-10-10T05:28:19.6007000Z   PmxMaterialMorph.test.cpp
+2026-10-10T05:28:22.0404067Z   MMDMotionSizingAppendReference.cpp
+2026-10-10T05:28:22.0650394Z   PmxExportInvariants.test.cpp
+2026-10-10T05:28:22.2404081Z   Building Custom Rule D:/a/C4D_MMD_Tool/C4D_MMD_Tool/dependency/libMMD/tests/CMakeLists.txt
+2026-10-10T05:28:22.7099199Z   pmx_material_morph_test.vcxproj -> D:\a\C4D_MMD_Tool\C4D_MMD_Tool\_build_msvc\cmt_deps\libMMD\tests\Debug\pmx_material_morph_test.exe
+2026-10-10T05:28:22.7416724Z   VPDFile.test.cpp
+2026-10-10T05:28:24.9949399Z   mmd_model_regression_test.vcxproj -> D:\a\C4D_MMD_Tool\C4D_MMD_Tool\_build_msvc\cmt_deps\libMMD\tests\Debug\mmd_model_regression_test.exe
+2026-10-10T05:28:25.0767502Z   Building Custom Rule D:/a/C4D_MMD_Tool/C4D_MMD_Tool/dependency/libMMD/tests/CMakeLists.txt
+2026-10-10T05:28:25.1123679Z   file_roundtrip_test.vcxproj -> D:\a\C4D_MMD_Tool\C4D_MMD_Tool\_build_msvc\cmt_deps\libMMD\tests\Debug\file_roundtrip_test.exe
+2026-10-10T05:28:25.3229246Z   MMDModel.test.cpp
+2026-10-10T05:28:25.8417992Z   pmx_export_invariants_test.vcxproj -> D:\a\C4D_MMD_Tool\C4D_MMD_Tool\_build_msvc\cmt_deps\libMMD\tests\Debug\pmx_export_invariants_test.exe
+2026-10-10T05:28:26.0185377Z   mmd_motion_sizing_advanced_test.vcxproj -> D:\a\C4D_MMD_Tool\C4D_MMD_Tool\_build_msvc\cmt_deps\libMMD\tests\Debug\mmd_motion_sizing_advanced_test.exe
+2026-10-10T05:28:26.1339150Z   vpd_file_test.vcxproj -> D:\a\C4D_MMD_Tool\C4D_MMD_Tool\_build_msvc\cmt_deps\libMMD\tests\Debug\vpd_file_test.exe
+2026-10-10T05:28:28.6938112Z   mmd_model_animation_test.vcxproj -> D:\a\C4D_MMD_Tool\C4D_MMD_Tool\_build_msvc\cmt_deps\libMMD\tests\Debug\mmd_model_animation_test.exe
+2026-10-10T05:28:28.7532561Z   Run functional libMMD CTest (Debug)
+2026-10-10T05:28:29.2514415Z   Internal ctest changing into directory: D:/a/C4D_MMD_Tool/C4D_MMD_Tool/_build_msvc/cmt_deps/libMMD
+2026-10-10T05:28:29.3401780Z   Test project D:/a/C4D_MMD_Tool/C4D_MMD_Tool/_build_msvc/cmt_deps/libMMD
+2026-10-10T05:28:29.3870103Z         Start  1: mmd_motion_sizing_test
+2026-10-10T05:28:29.8380957Z    1/15 Test  #1: mmd_motion_sizing_test ............   Passed    0.45 sec
+2026-10-10T05:28:29.8391994Z         Start  2: mmd_motion_sizing_advanced_test
+2026-10-10T05:28:31.2479166Z    2/15 Test  #2: mmd_motion_sizing_advanced_test ...   Passed    1.41 sec
+2026-10-10T05:28:31.2482885Z         Start  3: mmd_model_test
+2026-10-10T05:28:31.2796954Z    3/15 Test  #3: mmd_model_test ....................   Passed    0.03 sec
+2026-10-10T05:28:31.2798550Z         Start  4: mmd_model_io_test
+2026-10-10T05:28:31.7585191Z    4/15 Test  #4: mmd_model_io_test .................   Passed    0.48 sec
+2026-10-10T05:28:31.7587933Z         Start  5: mmd_model_animation_test
+2026-10-10T05:28:32.6021545Z    5/15 Test  #5: mmd_model_animation_test ..........   Passed    0.84 sec
+2026-10-10T05:28:32.6024472Z         Start  6: mmd_model_regression_test
+2026-10-10T05:28:40.6764961Z    6/15 Test  #6: mmd_model_regression_test .........   Passed    8.07 sec
+2026-10-10T05:28:40.6767683Z         Start  8: file_base_test
+2026-10-10T05:28:40.6876279Z    7/15 Test  #8: file_base_test ....................   Passed    0.01 sec
+2026-10-10T05:28:40.6878061Z         Start  9: path_util_test
+2026-10-10T05:28:40.6971131Z    8/15 Test  #9: path_util_test ....................   Passed    0.01 sec
+2026-10-10T05:28:40.6972948Z         Start 10: file_roundtrip_test
+2026-10-10T05:28:40.7308853Z    9/15 Test #10: file_roundtrip_test ...............   Passed    0.03 sec
+2026-10-10T05:28:40.7311295Z         Start 11: vpd_file_test
+2026-10-10T05:28:40.7494266Z   10/15 Test #11: vpd_file_test .....................   Passed    0.02 sec
+2026-10-10T05:28:40.7496601Z         Start 12: pmx_export_invariants_test
+2026-10-10T05:28:40.7638579Z   11/15 Test #12: pmx_export_invariants_test ........   Passed    0.01 sec
+2026-10-10T05:28:40.7641907Z         Start 13: pmx_material_morph_test
+2026-10-10T05:28:40.7756257Z   12/15 Test #13: pmx_material_morph_test ...........   Passed    0.01 sec
+2026-10-10T05:28:40.7758350Z         Start 14: mmd_physics_test
+2026-10-10T05:28:40.8342910Z   13/15 Test #14: mmd_physics_test ..................   Passed    0.06 sec
+2026-10-10T05:28:40.8345392Z         Start 15: mmd_ik_solver_test
+2026-10-10T05:28:40.8665369Z   14/15 Test #15: mmd_ik_solver_test ................   Passed    0.03 sec
+2026-10-10T05:28:40.8665934Z         Start 16: vmd_interpolation_test
+2026-10-10T05:28:40.8761131Z   15/15 Test #16: vmd_interpolation_test ............   Passed    0.01 sec
+2026-10-10T05:28:40.8767350Z   
+2026-10-10T05:28:40.8768785Z   100% tests passed, 0 tests failed out of 15
+2026-10-10T05:28:40.8769399Z   
+2026-10-10T05:28:40.8769853Z   Label Time Summary:
+2026-10-10T05:28:40.8770379Z   animation      =   2.71 sec*proc (4 tests)
+2026-10-10T05:28:40.8770886Z   base           =   0.01 sec*proc (1 test)
+2026-10-10T05:28:40.8772091Z   core           =   0.03 sec*proc (1 test)
+2026-10-10T05:28:40.8772536Z   ik             =   0.03 sec*proc (1 test)
+2026-10-10T05:28:40.8773023Z   integration    =   0.06 sec*proc (1 test)
+2026-10-10T05:28:40.8773468Z   io             =   0.55 sec*proc (5 tests)
+2026-10-10T05:28:40.8773875Z   path           =   0.01 sec*proc (1 test)
+2026-10-10T05:28:40.8774329Z   regression     =   9.93 sec*proc (3 tests)
+2026-10-10T05:28:40.8774736Z   sizing         =   1.85 sec*proc (2 tests)
+2026-10-10T05:28:40.8775517Z   
+2026-10-10T05:28:40.8775821Z   Total Test time (real) =  11.54 sec
+2026-10-10T05:28:40.8982375Z   Building Custom Rule D:/a/C4D_MMD_Tool/C4D_MMD_Tool/dependency/CMakeLists.txt
+2026-10-10T05:28:41.0885817Z ##[group]Run cmake --build --preset cmt-plugin-tests
+2026-10-10T05:28:41.0886393Z [36;1mcmake --build --preset cmt-plugin-tests[0m
+2026-10-10T05:28:41.0922304Z shell: C:\Program Files\PowerShell\7\pwsh.EXE -command ". '{0}'"
+2026-10-10T05:28:41.0922757Z env:
+2026-10-10T05:28:41.0923078Z   CMAKE_BUILD_PARALLEL_LEVEL: 4
+2026-10-10T05:28:41.0923484Z   pythonLocation: C:\hostedtoolcache\windows\Python\3.11.9\x64
+2026-10-10T05:28:41.0923995Z   PKG_CONFIG_PATH: C:\hostedtoolcache\windows\Python\3.11.9\x64/lib/pkgconfig
+2026-10-10T05:28:41.0924473Z   Python_ROOT_DIR: C:\hostedtoolcache\windows\Python\3.11.9\x64
+2026-10-10T05:28:41.0924948Z   Python2_ROOT_DIR: C:\hostedtoolcache\windows\Python\3.11.9\x64
+2026-10-10T05:28:41.0925390Z   Python3_ROOT_DIR: C:\hostedtoolcache\windows\Python\3.11.9\x64
+2026-10-10T05:28:41.0925768Z ##[endgroup]
+2026-10-10T05:28:41.4069590Z MSBuild version 17.14.60+43b635718 for .NET Framework
+2026-10-10T05:28:41.4371293Z 
+2026-10-10T05:28:41.8331941Z   Building Custom Rule D:/a/C4D_MMD_Tool/C4D_MMD_Tool/tests/CMakeLists.txt
+2026-10-10T05:28:41.8338351Z   Building Custom Rule D:/a/C4D_MMD_Tool/C4D_MMD_Tool/tests/CMakeLists.txt
+2026-10-10T05:28:41.9035764Z   Generating fixtures/model.pmx, fixtures/motion_a.vmd, fixtures/motion_b.vmd, fixtures/camera.vmd, fixtures/mixed_morphs.pmx, fixtures/toon_material.pmx, fixtures/toon_white.bmp
+2026-10-10T05:28:41.9327726Z   Building Custom Rule D:/a/C4D_MMD_Tool/C4D_MMD_Tool/tests/CMakeLists.txt
+2026-10-10T05:28:41.9740548Z   Building Custom Rule D:/a/C4D_MMD_Tool/C4D_MMD_Tool/tests/CMakeLists.txt
+2026-10-10T05:28:41.9773508Z   Building Custom Rule D:/a/C4D_MMD_Tool/C4D_MMD_Tool/tests/CMakeLists.txt
+2026-10-10T05:28:41.9972936Z   {
+2026-10-10T05:28:42.0133410Z     "model.pmx": {
+2026-10-10T05:28:42.0930192Z       "path": "D:\\a\\C4D_MMD_Tool\\C4D_MMD_Tool\\_build_msvc\\tests\\runtime\\fixtures\\model.pmx",
+2026-10-10T05:28:42.0937981Z       "sha256": "cdaeb3c80fa9e0efb14d03aaa3ed7eb3ad2c033c056bcf7fd1e065efb66410d3",
+2026-10-10T05:28:42.0939408Z       "bytes": 1057
+2026-10-10T05:28:42.0960063Z     },
+2026-10-10T05:28:42.0963069Z     "mixed_morphs.pmx": {
+2026-10-10T05:28:42.1857419Z       "path": "D:\\a\\C4D_MMD_Tool\\C4D_MMD_Tool\\_build_msvc\\tests\\runtime\\fixtures\\mixed_morphs.pmx",
+2026-10-10T05:28:42.1859135Z       "sha256": "250b3aef6ab4d1311772732b289565080b4aa5cdaf99623a24fb2305ab0dd956",
+2026-10-10T05:28:42.8081775Z       "bytes": 1158
+2026-10-10T05:28:42.8747979Z     },
+2026-10-10T05:28:42.9162941Z     "toon_material.pmx": {
+2026-10-10T05:28:42.9188632Z       "path": "D:\\a\\C4D_MMD_Tool\\C4D_MMD_Tool\\_build_msvc\\tests\\runtime\\fixtures\\toon_material.pmx",
+2026-10-10T05:28:42.9318560Z       "sha256": "674306729ae5bc2ba3e7f6029aa857f3a80f709477b0ed1bf928e4656ea65da1",
+2026-10-10T05:28:42.9543788Z       "bytes": 1075
+2026-10-10T05:28:42.9549552Z     },
+2026-10-10T05:28:42.9551082Z     "toon_white.bmp": {
+2026-10-10T05:28:42.9553731Z       "path": "D:\\a\\C4D_MMD_Tool\\C4D_MMD_Tool\\_build_msvc\\tests\\runtime\\fixtures\\toon_white.bmp",
+2026-10-10T05:28:42.9555990Z       "sha256": "38670d6773c5b52fa5c15dde5d8685381f86f78e0f9c75b4da6e4920977382c3",
+2026-10-10T05:28:42.9557282Z       "bytes": 86
+2026-10-10T05:28:42.9560638Z     },
+2026-10-10T05:28:42.9575394Z     "motion_a.vmd": {
+2026-10-10T05:28:42.9579427Z       "path": "D:\\a\\C4D_MMD_Tool\\C4D_MMD_Tool\\_build_msvc\\tests\\runtime\\fixtures\\motion_a.vmd",
+2026-10-10T05:28:42.9596258Z       "sha256": "52d268b5c20ef93c4194168b3a3f5ee11bea6ad417dcc2a2b12c5eb56102d8bc",
+2026-10-10T05:28:42.9626893Z       "bytes": 372
+2026-10-10T05:28:43.0238440Z     },
+2026-10-10T05:28:43.0255974Z     "motion_b.vmd": {
+2026-10-10T05:28:43.0604556Z       "path": "D:\\a\\C4D_MMD_Tool\\C4D_MMD_Tool\\_build_msvc\\tests\\runtime\\fixtures\\motion_b.vmd",
+2026-10-10T05:28:43.0609455Z       "sha256": "be04953d66543cb107630adf74639c180d089aef0c8abfc711db963ef9a49b92",
+2026-10-10T05:28:43.0610680Z       "bytes": 372
+2026-10-10T05:28:43.0618610Z     },
+2026-10-10T05:28:43.0623656Z     "camera.vmd": {
+2026-10-10T05:28:43.0625710Z       "path": "D:\\a\\C4D_MMD_Tool\\C4D_MMD_Tool\\_build_msvc\\tests\\runtime\\fixtures\\camera.vmd",
+2026-10-10T05:28:43.0627053Z       "sha256": "b8d112cb875dd6d9ebe2d014e97ac13ef0d31107defd06756e41a5baf81f9746",
+2026-10-10T05:28:43.0633804Z       "bytes": 196
+2026-10-10T05:28:43.0639324Z     }
+2026-10-10T05:28:43.1602055Z   }
+2026-10-10T05:28:43.1966052Z   Building Custom Rule D:/a/C4D_MMD_Tool/C4D_MMD_Tool/tests/runtime/CMakeLists.txt
+2026-10-10T05:28:43.1971201Z   material_morph_runtime_test.cpp
+2026-10-10T05:28:43.1973226Z   control_role_test.cpp
+2026-10-10T05:28:43.1974580Z   Bullet3Common.vcxproj -> D:\a\C4D_MMD_Tool\C4D_MMD_Tool\_build_msvc\lib\Debug\Bullet3Common_Debug.lib
+2026-10-10T05:28:43.1976534Z   camera_fov_test.cpp
+2026-10-10T05:28:43.1977394Z   control_hit_test.cpp
+2026-10-10T05:28:43.1978952Z   BulletCollision.vcxproj -> D:\a\C4D_MMD_Tool\C4D_MMD_Tool\_build_msvc\lib\Debug\BulletCollision_Debug.lib
+2026-10-10T05:28:43.1982999Z   material_morph_runtime_test.vcxproj -> D:\a\C4D_MMD_Tool\C4D_MMD_Tool\_build_msvc\tests\Debug\material_morph_runtime_test.exe
+2026-10-10T05:28:43.1984420Z   bone_execution_plan_test.cpp
+2026-10-10T05:28:43.1985406Z   BulletDynamics.vcxproj -> D:\a\C4D_MMD_Tool\C4D_MMD_Tool\_build_msvc\lib\Debug\BulletDynamics_Debug.lib
+2026-10-10T05:28:43.1987426Z   control_role_test.vcxproj -> D:\a\C4D_MMD_Tool\C4D_MMD_Tool\_build_msvc\tests\Debug\control_role_test.exe
+2026-10-10T05:28:43.2817696Z   BulletSoftBody.vcxproj -> D:\a\C4D_MMD_Tool\C4D_MMD_Tool\_build_msvc\lib\Debug\BulletSoftBody_Debug.lib
+2026-10-10T05:28:43.2853805Z   control_hit_test.vcxproj -> D:\a\C4D_MMD_Tool\C4D_MMD_Tool\_build_msvc\tests\Debug\control_hit_test.exe
+2026-10-10T05:28:43.3013599Z   camera_fov_test.vcxproj -> D:\a\C4D_MMD_Tool\C4D_MMD_Tool\_build_msvc\tests\Debug\camera_fov_test.exe
+2026-10-10T05:28:43.3385103Z   BulletInverseDynamics.vcxproj -> D:\a\C4D_MMD_Tool\C4D_MMD_Tool\_build_msvc\lib\Debug\BulletInverseDynamics_Debug.lib
+2026-10-10T05:28:43.3754681Z   LinearMath.vcxproj -> D:\a\C4D_MMD_Tool\C4D_MMD_Tool\_build_msvc\lib\Debug\LinearMath_Debug.lib
+2026-10-10T05:28:43.6711761Z   Building Custom Rule D:/a/C4D_MMD_Tool/C4D_MMD_Tool/tests/CMakeLists.txt
+2026-10-10T05:28:43.6860788Z   Building Custom Rule D:/a/C4D_MMD_Tool/C4D_MMD_Tool/tests/CMakeLists.txt
+2026-10-10T05:28:43.6869818Z   Building Custom Rule D:/a/C4D_MMD_Tool/C4D_MMD_Tool/tests/CMakeLists.txt
+2026-10-10T05:28:43.7061434Z   Building Custom Rule D:/a/C4D_MMD_Tool/C4D_MMD_Tool/tests/CMakeLists.txt
+2026-10-10T05:28:43.7979287Z   morph_evaluation_test.cpp
+2026-10-10T05:28:43.8131901Z   pmx_export_scale_test.cpp
+2026-10-10T05:28:43.8331503Z   Building Custom Rule D:/a/C4D_MMD_Tool/C4D_MMD_Tool/tests/CMakeLists.txt
+2026-10-10T05:28:44.0723139Z   runtime_profile_test.cpp
+2026-10-10T05:28:44.5482362Z   mmd_model_info_test.cpp
+2026-10-10T05:28:44.6283898Z   mmd_motion_validation_test.cpp
+2026-10-10T05:28:45.3029170Z   Building Custom Rule D:/a/C4D_MMD_Tool/C4D_MMD_Tool/tests/CMakeLists.txt
+2026-10-10T05:28:45.3597877Z   runtime_profile_test.vcxproj -> D:\a\C4D_MMD_Tool\C4D_MMD_Tool\_build_msvc\tests\Debug\runtime_profile_test.exe
+2026-10-10T05:28:45.3602324Z   specular_conversion_test.cpp
+2026-10-10T05:28:45.4070749Z   morph_evaluation_test.vcxproj -> D:\a\C4D_MMD_Tool\C4D_MMD_Tool\_build_msvc\tests\Debug\morph_evaluation_test.exe
+2026-10-10T05:28:45.4677276Z   mmd_model_info_test.vcxproj -> D:\a\C4D_MMD_Tool\C4D_MMD_Tool\_build_msvc\tests\Debug\mmd_model_info_test.exe
+2026-10-10T05:28:45.5049953Z   Building Custom Rule D:/a/C4D_MMD_Tool/C4D_MMD_Tool/tests/CMakeLists.txt
+2026-10-10T05:28:45.7229687Z   toon_fallback_test.cpp
+2026-10-10T05:28:45.9362282Z   specular_conversion_test.vcxproj -> D:\a\C4D_MMD_Tool\C4D_MMD_Tool\_build_msvc\tests\Debug\specular_conversion_test.exe
+2026-10-10T05:28:46.1371226Z   bone_execution_plan_test.vcxproj -> D:\a\C4D_MMD_Tool\C4D_MMD_Tool\_build_msvc\tests\Debug\bone_execution_plan_test.exe
+2026-10-10T05:28:46.1484761Z   pmx_export_scale_test.vcxproj -> D:\a\C4D_MMD_Tool\C4D_MMD_Tool\_build_msvc\tests\Debug\pmx_export_scale_test.exe
+2026-10-10T05:28:46.2896081Z   mmd_motion_validation_test.vcxproj -> D:\a\C4D_MMD_Tool\C4D_MMD_Tool\_build_msvc\tests\Debug\mmd_motion_validation_test.exe
+2026-10-10T05:28:46.3670307Z   libMMD.vcxproj -> D:\a\C4D_MMD_Tool\C4D_MMD_Tool\_build_msvc\lib\Debug\libMMD_Debug.lib
+2026-10-10T05:28:46.4495143Z   Building Custom Rule D:/a/C4D_MMD_Tool/C4D_MMD_Tool/tests/runtime/CMakeLists.txt
+2026-10-10T05:28:46.4562651Z   mmd_motion_sizing_test.vcxproj -> D:\a\C4D_MMD_Tool\C4D_MMD_Tool\_build_msvc\cmt_deps\libMMD\tests\Debug\mmd_motion_sizing_test.exe
+2026-10-10T05:28:46.4983580Z   mmd_motion_sizing_advanced_test.vcxproj -> D:\a\C4D_MMD_Tool\C4D_MMD_Tool\_build_msvc\cmt_deps\libMMD\tests\Debug\mmd_motion_sizing_advanced_test.exe
+2026-10-10T05:28:46.5105000Z   toon_fallback_test.vcxproj -> D:\a\C4D_MMD_Tool\C4D_MMD_Tool\_build_msvc\tests\Debug\toon_fallback_test.exe
+2026-10-10T05:28:46.5339212Z   fixture_validation.cpp
+2026-10-10T05:28:48.4063392Z   cmt_runtime_fixture_test.vcxproj -> D:\a\C4D_MMD_Tool\C4D_MMD_Tool\_build_msvc\tests\runtime\Debug\cmt_runtime_fixture_test.exe
+2026-10-10T05:28:48.4729027Z   Run SDK-independent plugin logic regression tests
+2026-10-10T05:28:48.4865819Z   Test project D:/a/C4D_MMD_Tool/C4D_MMD_Tool/_build_msvc/tests
+2026-10-10T05:28:48.4899775Z         Start  1: bone_execution_plan_test
+2026-10-10T05:28:48.5004466Z    1/24 Test  #1: bone_execution_plan_test ............   Passed    0.01 sec
+2026-10-10T05:28:48.5010813Z         Start  2: control_role_test
+2026-10-10T05:28:48.5095028Z    2/24 Test  #2: control_role_test ...................   Passed    0.01 sec
+2026-10-10T05:28:48.5097116Z         Start  3: control_hit_test
+2026-10-10T05:28:48.5181225Z    3/24 Test  #3: control_hit_test ....................   Passed    0.01 sec
+2026-10-10T05:28:48.5183884Z         Start  4: material_morph_runtime_test
+2026-10-10T05:28:48.5270039Z    4/24 Test  #4: material_morph_runtime_test .........   Passed    0.01 sec
+2026-10-10T05:28:48.5272023Z         Start  5: morph_evaluation_test
+2026-10-10T05:28:48.5403868Z    5/24 Test  #5: morph_evaluation_test ...............   Passed    0.01 sec
+2026-10-10T05:28:48.5406071Z         Start  6: runtime_profile_test
+2026-10-10T05:28:48.5491483Z    6/24 Test  #6: runtime_profile_test ................   Passed    0.01 sec
+2026-10-10T05:28:48.5494638Z         Start  7: mmd_model_info_test
+2026-10-10T05:28:48.5578696Z    7/24 Test  #7: mmd_model_info_test .................   Passed    0.01 sec
+2026-10-10T05:28:48.5582027Z         Start  8: mmd_motion_validation_test
+2026-10-10T05:28:48.5666307Z    8/24 Test  #8: mmd_motion_validation_test ..........   Passed    0.01 sec
+2026-10-10T05:28:48.5668964Z         Start  9: camera_fov_test
+2026-10-10T05:28:48.5748809Z    9/24 Test  #9: camera_fov_test .....................   Passed    0.01 sec
+2026-10-10T05:28:48.5751282Z         Start 10: specular_conversion_test
+2026-10-10T05:28:48.5836284Z   10/24 Test #10: specular_conversion_test ............   Passed    0.01 sec
+2026-10-10T05:28:48.5839141Z         Start 11: toon_fallback_test
+2026-10-10T05:28:48.5917817Z   11/24 Test #11: toon_fallback_test ..................   Passed    0.01 sec
+2026-10-10T05:28:48.5920205Z         Start 12: pmx_export_scale_test
+2026-10-10T05:28:48.6006477Z   12/24 Test #12: pmx_export_scale_test ...............   Passed    0.01 sec
+2026-10-10T05:28:48.6009023Z         Start 13: cmt_runtime_receipt_contract
+2026-10-10T05:28:50.9797903Z   13/24 Test #13: cmt_runtime_receipt_contract ........   Passed    2.38 sec
+2026-10-10T05:28:50.9800086Z         Start 14: cmt_document_lifecycle
+2026-10-10T05:28:51.1893909Z   14/24 Test #14: cmt_document_lifecycle ..............   Passed    0.21 sec
+2026-10-10T05:28:51.1894638Z         Start 15: cmt_production_document_lifecycle
+2026-10-10T05:28:51.4464144Z   15/24 Test #15: cmt_production_document_lifecycle ...   Passed    0.26 sec
+2026-10-10T05:28:51.4467936Z         Start 16: cmt_dependency_provenance
+2026-10-10T05:28:51.7403095Z   16/24 Test #16: cmt_dependency_provenance ...........   Passed    0.29 sec
+2026-10-10T05:28:51.7403651Z         Start 17: cmt_pmx_scale_snapshot
+2026-10-10T05:28:51.8669496Z   17/24 Test #17: cmt_pmx_scale_snapshot ..............   Passed    0.13 sec
+2026-10-10T05:28:51.8670173Z         Start 18: cmt_material_fixture_matrix
+2026-10-10T05:28:52.0581096Z   18/24 Test #18: cmt_material_fixture_matrix .........   Passed    0.19 sec
+2026-10-10T05:28:52.0584126Z         Start 19: cmt_highlight_lifecycle
+2026-10-10T05:28:52.1767048Z   19/24 Test #19: cmt_highlight_lifecycle .............   Passed    0.12 sec
+2026-10-10T05:28:52.1769476Z         Start 20: cmt_highlight_analysis
+2026-10-10T05:28:52.7106208Z   20/24 Test #20: cmt_highlight_analysis ..............   Passed    0.53 sec
+2026-10-10T05:28:52.7109407Z         Start 21: cmt_production_mcp_adapter
+2026-10-10T05:28:56.0218599Z   21/24 Test #21: cmt_production_mcp_adapter ..........   Passed    3.31 sec
+2026-10-10T05:28:56.0220864Z         Start 22: cmt_motion_sizing_core
+2026-10-10T05:28:56.0507996Z   22/24 Test #22: cmt_motion_sizing_core ..............   Passed    0.03 sec
+2026-10-10T05:28:56.0509741Z         Start 23: cmt_motion_sizing_advanced
+2026-10-10T05:28:57.4691810Z   23/24 Test #23: cmt_motion_sizing_advanced ..........   Passed    1.42 sec
+2026-10-10T05:28:57.4694489Z         Start 24: cmt_runtime_fixture_test
+2026-10-10T05:28:57.4816331Z   24/24 Test #24: cmt_runtime_fixture_test ............   Passed    0.01 sec
+2026-10-10T05:28:57.4823190Z   
+2026-10-10T05:28:57.4823762Z   100% tests passed, 0 tests failed out of 24
+2026-10-10T05:28:57.4824417Z   
+2026-10-10T05:28:57.4824790Z   Label Time Summary:
+2026-10-10T05:28:57.4825352Z   fixture       =   7.42 sec*proc (10 tests)
+2026-10-10T05:28:57.4825825Z   plugin        =   8.97 sec*proc (24 tests)
+2026-10-10T05:28:57.4826252Z   regression    =   8.97 sec*proc (24 tests)
+2026-10-10T05:28:57.4826663Z   unit          =   1.55 sec*proc (14 tests)
+2026-10-10T05:28:57.4827014Z   
+2026-10-10T05:28:57.4827322Z   Total Test time (real) =   9.00 sec
+2026-10-10T05:28:57.4899815Z   Building Custom Rule D:/a/C4D_MMD_Tool/C4D_MMD_Tool/tests/CMakeLists.txt
+2026-10-10T05:28:57.6739570Z ##[group]Run actions/upload-artifact@v7
+2026-10-10T05:28:57.6739978Z with:
+2026-10-10T05:28:57.6740248Z   name: functional-test-logs
+2026-10-10T05:28:57.6740696Z   path: _build_msvc/cmt_deps/libMMD/Testing/Temporary/
+_build_msvc/tests/Testing/Temporary/
+
+2026-10-10T05:28:57.6741199Z   if-no-files-found: ignore
+2026-10-10T05:28:57.6741492Z   compression-level: 6
+2026-10-10T05:28:57.6741804Z   overwrite: false
+2026-10-10T05:28:57.6742070Z   include-hidden-files: false
+2026-10-10T05:28:57.6742355Z   archive: true
+2026-10-10T05:28:57.6742622Z env:
+2026-10-10T05:28:57.6742868Z   CMAKE_BUILD_PARALLEL_LEVEL: 4
+2026-10-10T05:28:57.6743233Z   pythonLocation: C:\hostedtoolcache\windows\Python\3.11.9\x64
+2026-10-10T05:28:57.6743722Z   PKG_CONFIG_PATH: C:\hostedtoolcache\windows\Python\3.11.9\x64/lib/pkgconfig
+2026-10-10T05:28:57.6744200Z   Python_ROOT_DIR: C:\hostedtoolcache\windows\Python\3.11.9\x64
+2026-10-10T05:28:57.6744742Z   Python2_ROOT_DIR: C:\hostedtoolcache\windows\Python\3.11.9\x64
+2026-10-10T05:28:57.6745180Z   Python3_ROOT_DIR: C:\hostedtoolcache\windows\Python\3.11.9\x64
+2026-10-10T05:28:57.6745579Z ##[endgroup]
+2026-10-10T05:28:57.8576126Z Multiple search paths detected. Calculating the least common ancestor of all paths
+2026-10-10T05:28:57.8579406Z The least common ancestor is D:\a\C4D_MMD_Tool\C4D_MMD_Tool\_build_msvc. This will be the root directory of the artifact
+2026-10-10T05:28:57.8580530Z With the provided path, there will be 4 files uploaded
+2026-10-10T05:28:57.8583789Z Artifact name is valid!
+2026-10-10T05:28:57.8585180Z Root directory input is valid!
+2026-10-10T05:28:58.1261481Z Uploading artifact: functional-test-logs.zip
+2026-10-10T05:28:58.1303133Z Beginning upload of artifact content to blob storage
+2026-10-10T05:28:58.3234600Z Uploaded bytes 10110
+2026-10-10T05:28:58.3661980Z Finished uploading artifact content to blob storage!
+2026-10-10T05:28:58.3662972Z SHA256 digest of uploaded artifact is 67e255f233a8796ccf6f6d2dd9ea91a9497832da976989090aaa16c410ce24a7
+2026-10-10T05:28:58.3663661Z Finalizing artifact upload
+2026-10-10T05:28:58.6564048Z Artifact functional-test-logs successfully finalized. Artifact ID 11660487866
+2026-10-10T05:28:58.6564811Z Artifact functional-test-logs has been successfully uploaded! Final size is 10110 bytes. Artifact ID is 11660487866
+2026-10-10T05:28:58.6570245Z Artifact download URL: https://github.com/AiMiDi/C4D_MMD_Tool/actions/runs/38027413361/artifacts/11660487866
+2026-10-10T05:28:58.6869276Z Post job cleanup.
+2026-10-10T05:28:58.8504646Z Post job cleanup.
+2026-10-10T05:28:59.0389977Z [command]"C:\Program Files\Git\bin\git.exe" version
+2026-10-10T05:28:59.0672711Z git version 2.56.0.windows.1
+2026-10-10T05:28:59.0733790Z Temporarily overriding HOME='D:\a\_temp\25d4fdcc-0b0d-4544-aa00-0826dfb321da' before making global git config changes
+2026-10-10T05:28:59.0734598Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-10T05:28:59.0745430Z [command]"C:\Program Files\Git\bin\git.exe" config --global --add safe.directory D:\a\C4D_MMD_Tool\C4D_MMD_Tool
+2026-10-10T05:28:59.1032169Z Removing SSH command configuration
+2026-10-10T05:28:59.1041952Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp core\.sshCommand
+2026-10-10T05:28:59.1344076Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :\""
+2026-10-10T05:28:59.6000176Z Entering 'dependency/bullet3'
+2026-10-10T05:28:59.6773905Z Entering 'dependency/libMMD'
+2026-10-10T05:28:59.7406029Z Entering 'dependency/libMMD/external/eigen'
+2026-10-10T05:28:59.8115138Z Entering 'dependency/libMMD/external/spdlog'
+2026-10-10T05:28:59.8846662Z Removing HTTP extra header
+2026-10-10T05:28:59.8857575Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-10T05:28:59.9157019Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :\""
+2026-10-10T05:29:00.3969098Z Entering 'dependency/bullet3'
+2026-10-10T05:29:00.4710588Z Entering 'dependency/libMMD'
+2026-10-10T05:29:00.5355317Z Entering 'dependency/libMMD/external/eigen'
+2026-10-10T05:29:00.5998250Z Entering 'dependency/libMMD/external/spdlog'
+2026-10-10T05:29:00.6716219Z Removing includeIf entries pointing to credentials config files
+2026-10-10T05:29:00.6729978Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-10T05:29:00.6986534Z includeif.gitdir:D:/a/C4D_MMD_Tool/C4D_MMD_Tool/.git.path
+2026-10-10T05:29:00.6987296Z includeif.gitdir:D:/a/C4D_MMD_Tool/C4D_MMD_Tool/.git/worktrees/*.path
+2026-10-10T05:29:00.6987904Z includeif.gitdir:/github/workspace/.git.path
+2026-10-10T05:29:00.6988464Z includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-10-10T05:29:00.7023563Z [command]"C:\Program Files\Git\bin\git.exe" config --local --get-all includeif.gitdir:D:/a/C4D_MMD_Tool/C4D_MMD_Tool/.git.path
+2026-10-10T05:29:00.7283214Z D:\a\_temp\git-credentials-bbb0be74-aa10-4718-8ea4-018f5a68f248.config
+2026-10-10T05:29:00.7322755Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset includeif.gitdir:D:/a/C4D_MMD_Tool/C4D_MMD_Tool/.git.path D:\a\_temp\git-credentials-bbb0be74-aa10-4718-8ea4-018f5a68f248.config
+2026-10-10T05:29:00.7619036Z [command]"C:\Program Files\Git\bin\git.exe" config --local --get-all includeif.gitdir:D:/a/C4D_MMD_Tool/C4D_MMD_Tool/.git/worktrees/*.path
+2026-10-10T05:29:00.7876067Z D:\a\_temp\git-credentials-bbb0be74-aa10-4718-8ea4-018f5a68f248.config
+2026-10-10T05:29:00.7913676Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset includeif.gitdir:D:/a/C4D_MMD_Tool/C4D_MMD_Tool/.git/worktrees/*.path D:\a\_temp\git-credentials-bbb0be74-aa10-4718-8ea4-018f5a68f248.config
+2026-10-10T05:29:00.8202230Z [command]"C:\Program Files\Git\bin\git.exe" config --local --get-all includeif.gitdir:/github/workspace/.git.path
+2026-10-10T05:29:00.8459904Z /github/runner_temp/git-credentials-bbb0be74-aa10-4718-8ea4-018f5a68f248.config
+2026-10-10T05:29:00.8494001Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset includeif.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-bbb0be74-aa10-4718-8ea4-018f5a68f248.config
+2026-10-10T05:29:00.8783886Z [command]"C:\Program Files\Git\bin\git.exe" config --local --get-all includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-10-10T05:29:00.9043843Z /github/runner_temp/git-credentials-bbb0be74-aa10-4718-8ea4-018f5a68f248.config
+2026-10-10T05:29:00.9080173Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset includeif.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-bbb0be74-aa10-4718-8ea4-018f5a68f248.config
+2026-10-10T05:29:00.9371452Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "git config --local --show-origin --name-only --get-regexp remote.origin.url"
+2026-10-10T05:29:01.4013469Z Entering 'dependency/bullet3'
+2026-10-10T05:29:01.4288518Z file:D:/a/C4D_MMD_Tool/C4D_MMD_Tool/.git/modules/dependency/bullet3/config	remote.origin.url
+2026-10-10T05:29:01.4455677Z Entering 'dependency/libMMD'
+2026-10-10T05:29:01.4744271Z file:D:/a/C4D_MMD_Tool/C4D_MMD_Tool/.git/modules/dependency/libMMD/config	remote.origin.url
+2026-10-10T05:29:01.4882359Z Entering 'dependency/libMMD/external/eigen'
+2026-10-10T05:29:01.5174092Z file:D:/a/C4D_MMD_Tool/C4D_MMD_Tool/.git/modules/dependency/libMMD/modules/external/eigen/config	remote.origin.url
+2026-10-10T05:29:01.5339608Z Entering 'dependency/libMMD/external/spdlog'
+2026-10-10T05:29:01.5616394Z file:D:/a/C4D_MMD_Tool/C4D_MMD_Tool/.git/modules/dependency/libMMD/modules/external/spdlog/config	remote.origin.url
+2026-10-10T05:29:01.5900868Z [command]"C:\Program Files\Git\bin\git.exe" config --file D:/a/C4D_MMD_Tool/C4D_MMD_Tool/.git/modules/dependency/bullet3/config --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-10T05:29:01.6191570Z [command]"C:\Program Files\Git\bin\git.exe" config --file D:/a/C4D_MMD_Tool/C4D_MMD_Tool/.git/modules/dependency/libMMD/config --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-10T05:29:01.6483615Z [command]"C:\Program Files\Git\bin\git.exe" config --file D:/a/C4D_MMD_Tool/C4D_MMD_Tool/.git/modules/dependency/libMMD/modules/external/eigen/config --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-10T05:29:01.6779776Z [command]"C:\Program Files\Git\bin\git.exe" config --file D:/a/C4D_MMD_Tool/C4D_MMD_Tool/.git/modules/dependency/libMMD/modules/external/spdlog/config --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-10T05:29:01.7059645Z Removing credentials config 'D:\a\_temp\git-credentials-bbb0be74-aa10-4718-8ea4-018f5a68f248.config'
+2026-10-10T05:29:01.7253330Z Cleaning up orphan processes
+2026-10-10T05:29:01.7575466Z Terminate orphan process: pid (1932) (vctip)
+2026-10-10T05:29:01.7649302Z Terminate orphan process: pid (3096) (MSBuild)
+2026-10-10T05:29:01.7723018Z Terminate orphan process: pid (7352) (MSBuild)
+2026-10-10T05:29:01.7788233Z Terminate orphan process: pid (5944) (MSBuild)
+2026-10-10T05:29:01.8114994Z Terminate orphan process: pid (5136) (mspdbsrv)

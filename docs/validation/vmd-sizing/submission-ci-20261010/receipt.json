@@ -1,0 +1,345 @@
+{
+  "date": "2026-10-10",
+  "status": "submitted_archived_ci_and_package_content_checks_passed",
+  "source_commit": "c7d9a8afba3dcc8dfc0453984f8ef0d961fb5d95",
+  "libmmd": {
+    "commit": "e4aca1048af9216d65bea91ec734710e360bcdd0",
+    "published_branch": "codex/motion-sizing",
+    "remote_reachability_verified": true
+  },
+  "cmt_commits": [
+    {
+      "sha": "dd9019767390b73acb1182aa99102845889bd03a",
+      "scope": "C4D and MCP motion sizing integration"
+    },
+    {
+      "sha": "1a355dce",
+      "scope": "OpenSpec archive, main spec synchronization, pending native acceptance"
+    },
+    {
+      "sha": "c0857881",
+      "scope": "manual CI-only packaging"
+    },
+    {
+      "sha": "244a7bef",
+      "scope": "pin package jobs to triggering commit"
+    },
+    {
+      "sha": "c7d9a8afba3dcc8dfc0453984f8ef0d961fb5d95",
+      "scope": "R20 parser, R21 STL preload, pre-2026 LinkBox compatibility"
+    }
+  ],
+  "ci": {
+    "url": "https://github.com/AiMiDi/C4D_MMD_Tool/actions/runs/38027413361",
+    "conclusion": "success",
+    "matrix_passed": 21,
+    "matrix_total": 21,
+    "mcp_tests_passed": 41,
+    "libmmd_tests_passed": 15,
+    "plugin_tests_passed": 24,
+    "jobs": [
+      {
+        "name": "Build (reusable) / checks",
+        "conclusion": "success",
+        "url": "https://github.com/AiMiDi/C4D_MMD_Tool/actions/runs/38027413361/job/114141269016"
+      },
+      {
+        "name": "Build (reusable) / benchmarks",
+        "conclusion": "skipped",
+        "url": "https://github.com/AiMiDi/C4D_MMD_Tool/actions/runs/38027413361/job/114141269606"
+      },
+      {
+        "name": "Build (reusable) / matrix-build (windows-2022, sdk_r20)",
+        "conclusion": "success",
+        "url": "https://github.com/AiMiDi/C4D_MMD_Tool/actions/runs/38027413361/job/114141811513"
+      },
+      {
+        "name": "Build (reusable) / matrix-build (macos-26-intel, sdk_r20)",
+        "conclusion": "success",
+        "url": "https://github.com/AiMiDi/C4D_MMD_Tool/actions/runs/38027413361/job/114141811522"
+      },
+      {
+        "name": "Build (reusable) / matrix-build (macos-26-intel, sdk_r23)",
+        "conclusion": "success",
+        "url": "https://github.com/AiMiDi/C4D_MMD_Tool/actions/runs/38027413361/job/114141811533"
+      },
+      {
+        "name": "Build (reusable) / matrix-build (windows-2022, sdk_2025)",
+        "conclusion": "success",
+        "url": "https://github.com/AiMiDi/C4D_MMD_Tool/actions/runs/38027413361/job/114141811534"
+      },
+      {
+        "name": "Build (reusable) / matrix-build (macos-26-intel, sdk_r21)",
+        "conclusion": "success",
+        "url": "https://github.com/AiMiDi/C4D_MMD_Tool/actions/runs/38027413361/job/114141811539"
+      },
+      {
+        "name": "Build (reusable) / matrix-build (windows-2022, sdk_r25)",
+        "conclusion": "success",
+        "url": "https://github.com/AiMiDi/C4D_MMD_Tool/actions/runs/38027413361/job/114141811561"
+      },
+      {
+        "name": "Build (reusable) / matrix-build (macos-26-intel, sdk_2023)",
+        "conclusion": "success",
+        "url": "https://github.com/AiMiDi/C4D_MMD_Tool/actions/runs/38027413361/job/114141811564"
+      },
+      {
+        "name": "Build (reusable) / matrix-build (windows-2022, sdk_2024)",
+        "conclusion": "success",
+        "url": "https://github.com/AiMiDi/C4D_MMD_Tool/actions/runs/38027413361/job/114141811574"
+      },
+      {
+        "name": "Build (reusable) / matrix-build (windows-2022, sdk_2023)",
+        "conclusion": "success",
+        "url": "https://github.com/AiMiDi/C4D_MMD_Tool/actions/runs/38027413361/job/114141811576"
+      },
+      {
+        "name": "Build (reusable) / matrix-build (windows-2022, sdk_2026)",
+        "conclusion": "success",
+        "url": "https://github.com/AiMiDi/C4D_MMD_Tool/actions/runs/38027413361/job/114141811578"
+      },
+      {
+        "name": "Build (reusable) / matrix-build (windows-2022, sdk_r23)",
+        "conclusion": "success",
+        "url": "https://github.com/AiMiDi/C4D_MMD_Tool/actions/runs/38027413361/job/114141811579"
+      },
+      {
+        "name": "Build (reusable) / matrix-build (macos-26-intel, sdk_r25)",
+        "conclusion": "success",
+        "url": "https://github.com/AiMiDi/C4D_MMD_Tool/actions/runs/38027413361/job/114141811592"
+      },
+      {
+        "name": "Build (reusable) / matrix-build (windows-2022, sdk_r21)",
+        "conclusion": "success",
+        "url": "https://github.com/AiMiDi/C4D_MMD_Tool/actions/runs/38027413361/job/114141811593"
+      },
+      {
+        "name": "Build (reusable) / matrix-build (macos-26-intel, sdk_2024)",
+        "conclusion": "success",
+        "url": "https://github.com/AiMiDi/C4D_MMD_Tool/actions/runs/38027413361/job/114141811617"
+      },
+      {
+        "name": "Build (reusable) / matrix-build (macos-26-intel, sdk_2025)",
+        "conclusion": "success",
+        "url": "https://github.com/AiMiDi/C4D_MMD_Tool/actions/runs/38027413361/job/114141812272"
+      },
+      {
+        "name": "Build (reusable) / matrix-build (macos-26, sdk_r25, release-macos, workflow-release-macos, Xcode, arm64, false)",
+        "conclusion": "success",
+        "url": "https://github.com/AiMiDi/C4D_MMD_Tool/actions/runs/38027413361/job/114141812307"
+      },
+      {
+        "name": "Build (reusable) / matrix-build (macos-26-intel, sdk_2026)",
+        "conclusion": "success",
+        "url": "https://github.com/AiMiDi/C4D_MMD_Tool/actions/runs/38027413361/job/114141812315"
+      },
+      {
+        "name": "Build (reusable) / matrix-build (macos-26, sdk_2023, release-macos, workflow-release-macos, Xcode, arm64, false)",
+        "conclusion": "success",
+        "url": "https://github.com/AiMiDi/C4D_MMD_Tool/actions/runs/38027413361/job/114141812372"
+      },
+      {
+        "name": "Build (reusable) / matrix-build (macos-26, sdk_2024, release-macos, workflow-release-macos, Xcode, arm64, false)",
+        "conclusion": "success",
+        "url": "https://github.com/AiMiDi/C4D_MMD_Tool/actions/runs/38027413361/job/114141812448"
+      },
+      {
+        "name": "Build (reusable) / matrix-build (macos-26, sdk_2025, release-macos, workflow-release-macos, Xcode, arm64, false)",
+        "conclusion": "success",
+        "url": "https://github.com/AiMiDi/C4D_MMD_Tool/actions/runs/38027413361/job/114141812462"
+      },
+      {
+        "name": "Build (reusable) / matrix-build (macos-26, sdk_2026, release-macos, workflow-release-macos, Xcode, arm64, false)",
+        "conclusion": "success",
+        "url": "https://github.com/AiMiDi/C4D_MMD_Tool/actions/runs/38027413361/job/114141812495"
+      },
+      {
+        "name": "package-macos",
+        "conclusion": "success",
+        "url": "https://github.com/AiMiDi/C4D_MMD_Tool/actions/runs/38027413361/job/114153002778"
+      },
+      {
+        "name": "package-windows",
+        "conclusion": "success",
+        "url": "https://github.com/AiMiDi/C4D_MMD_Tool/actions/runs/38027413361/job/114153002837"
+      },
+      {
+        "name": "release",
+        "conclusion": "skipped",
+        "url": "https://github.com/AiMiDi/C4D_MMD_Tool/actions/runs/38027413361/job/114153137303"
+      }
+    ],
+    "main_build_url": "https://github.com/AiMiDi/C4D_MMD_Tool/actions/runs/38027411617",
+    "main_build_conclusion": "success"
+  },
+  "earlier_failed_attempt": {
+    "url": "https://github.com/AiMiDi/C4D_MMD_Tool/actions/runs/38026584492",
+    "errors": [
+      "R20 sourceprocessor rejected nested namespace shorthand",
+      "R21 future_error conflicted with SDK exception macros",
+      "LINKBOX_EMPTY_TEXT unavailable before SDK 2026"
+    ],
+    "fixed_by": "c7d9a8afba3dcc8dfc0453984f8ef0d961fb5d95",
+    "full_matrix_rerun_passed": true
+  },
+  "artifacts": [
+    {
+      "id": 11662112564,
+      "name": "build-macOS-x86_64-sdk_2025",
+      "size_in_bytes": 1611062,
+      "digest": "sha256:b2b1954b54a93ecb5c0d8b2c638f7383fdf3d51a347df82346940cfc737d0412",
+      "expired": false
+    },
+    {
+      "id": 11662072090,
+      "name": "build-macOS-x86_64-sdk_2024",
+      "size_in_bytes": 1665956,
+      "digest": "sha256:5b816d57fe37974d052e299e131494cdde186e77e298bc21faeaea94fba6fde5",
+      "expired": false
+    },
+    {
+      "id": 11662032650,
+      "name": "build-macOS-x86_64-sdk_2023",
+      "size_in_bytes": 1550404,
+      "digest": "sha256:b7fa4a5fb583ba8586e8a576e081a08e4135899a35dec1410ba818854657795c",
+      "expired": false
+    },
+    {
+      "id": 11661953399,
+      "name": "build-macOS-x86_64-sdk_2026",
+      "size_in_bytes": 1610317,
+      "digest": "sha256:a2df785f3402907f8b9696eee523bdd5be08582502fa78326d9583224ccb48ac",
+      "expired": false
+    },
+    {
+      "id": 11661714432,
+      "name": "windows-installer",
+      "size_in_bytes": 4913556,
+      "digest": "sha256:46ca13eebdd535ef1b24d0dd76ac563f5c3de0b9f2967862de1df37ce6cc69e4",
+      "expired": false
+    },
+    {
+      "id": 11661701112,
+      "name": "build-macOS-x86_64-sdk_r25",
+      "size_in_bytes": 1542868,
+      "digest": "sha256:9571db1bc4016218cfb582671cffb382b6540f5e6c25194e38e44f70830c7aac",
+      "expired": false
+    },
+    {
+      "id": 11661684426,
+      "name": "macos-zips",
+      "size_in_bytes": 12363404,
+      "digest": "sha256:4fe363f085e5da466fb03698e614d3659153d7cc6f7adb683d0c19be602b86fc",
+      "expired": false
+    },
+    {
+      "id": 11661622230,
+      "name": "build-macOS-x86_64-sdk_r21",
+      "size_in_bytes": 1553554,
+      "digest": "sha256:afc929ee7d7dc07412f1e40eb989b913f8a1d781c19cd74d8cba23bdc9afe0ee",
+      "expired": false
+    },
+    {
+      "id": 11661291341,
+      "name": "build-Windows-x64-sdk_r23",
+      "size_in_bytes": 13803943,
+      "digest": "sha256:07a262e37c82da2a35aeac81eadd120480420aa6c8ee278f710fa29fab24347f",
+      "expired": false
+    },
+    {
+      "id": 11661228166,
+      "name": "build-macOS-x86_64-sdk_r20",
+      "size_in_bytes": 1532254,
+      "digest": "sha256:a139c2ee0f99de322da3720e117d89295941a97eff49e1bc8fb71432d42af457",
+      "expired": false
+    },
+    {
+      "id": 11661113596,
+      "name": "build-macOS-x86_64-sdk_r23",
+      "size_in_bytes": 1552565,
+      "digest": "sha256:a6c61942a99101b5e7cd0e8d2984e149e9cfd51ca8c63e65f1e21af198342388",
+      "expired": false
+    },
+    {
+      "id": 11661012190,
+      "name": "build-Windows-x64-sdk_2023",
+      "size_in_bytes": 14378850,
+      "digest": "sha256:85829c65bf67bd26482742a383e27773d32fb570c5b95c8a6a87637813a445a5",
+      "expired": false
+    },
+    {
+      "id": 11660908534,
+      "name": "build-Windows-x64-sdk_r21",
+      "size_in_bytes": 14072845,
+      "digest": "sha256:f19a74ed32bf4cfce098774d52648773c94415113e79b456fedda2a3671d8fba",
+      "expired": false
+    },
+    {
+      "id": 11660848366,
+      "name": "build-Windows-x64-sdk_r20",
+      "size_in_bytes": 12850424,
+      "digest": "sha256:3f3c3e0f5ca1c951ab7eae32a6774fa74727b6005f79dc741a47ca532efaae62",
+      "expired": false
+    },
+    {
+      "id": 11660799048,
+      "name": "build-Windows-x64-sdk_2024",
+      "size_in_bytes": 17341479,
+      "digest": "sha256:8ca88d7eb4ebe2d2c6f864e96ff10b085b96242843e4340055c2174a1ebc1555",
+      "expired": false
+    },
+    {
+      "id": 11660559724,
+      "name": "build-Windows-x64-sdk_2026",
+      "size_in_bytes": 14997450,
+      "digest": "sha256:bc809d93c056a3c674fe40f09e0bf9542cc1da86083e007eb9e2edca5e0c53d9",
+      "expired": false
+    },
+    {
+      "id": 11660487866,
+      "name": "functional-test-logs",
+      "size_in_bytes": 10110,
+      "digest": "sha256:67e255f233a8796ccf6f6d2dd9ea91a9497832da976989090aaa16c410ce24a7",
+      "expired": false
+    },
+    {
+      "id": 11660419629,
+      "name": "build-Windows-x64-sdk_2025",
+      "size_in_bytes": 15487643,
+      "digest": "sha256:43666cfe86547befd7e7e3f09848ff8cb8c7e7df741255c106e7350e3cdfb38d",
+      "expired": false
+    },
+    {
+      "id": 11660348827,
+      "name": "build-Windows-x64-sdk_r25",
+      "size_in_bytes": 13919653,
+      "digest": "sha256:e498078a14a18eb61563a61371e5f06bdaae9038e2d20d09ca70f31d65724582",
+      "expired": false
+    }
+  ],
+  "package_validation": {
+    "details": "artifact-verification.json",
+    "windows_plugin_architectures_checked": 8,
+    "macos_zip_crc_architecture_resources_license_mcp_checked": 8,
+    "installer_product_version": "0.9.3.2",
+    "installer_file": "MMD-Tool-v0.9.3.2-Windows-x64-Setup.exe",
+    "local_artifacts": "output/vmd-sizing-ci-38027413361",
+    "installation_or_native_execution_performed": false,
+    "apple_silicon": "compile validation only; ZIPs are Intel"
+  },
+  "archive": {
+    "path": "openspec/changes/archive/2026-10-10-add-vmd-motion-sizing",
+    "main_spec_synced": true,
+    "focused_strict_validation": "passed",
+    "unchecked_tasks_preserved": [
+      "8.2",
+      "12.3",
+      "13.5"
+    ],
+    "preexisting_unrelated_spec_failures": "archive-validation.json"
+  },
+  "pending_native_acceptance": "docs/dev/vmd-sizing-pending-validation.md",
+  "unrelated_dirty_work_preserved": true,
+  "user_c4d_session_restarted": false,
+  "formal_release_or_tag_created": false
+}

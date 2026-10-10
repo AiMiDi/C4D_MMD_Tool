@@ -1,0 +1,14 @@
+Failed attempt: https://github.com/AiMiDi/C4D_MMD_Tool/actions/runs/38026584492
+Fix: c7d9a8afba3dcc8dfc0453984f8ef0d961fb5d95
+
+R20
+2026-10-10T05:20:00.4640667Z D:\a\C4D_MMD_Tool\C4D_MMD_Tool\sdk_r20\plugins\mmdtool\source\module\tools\sizing\sizing_session.cpp(481,1): error : Expected ;, found  instead. [D:\a\C4D_MMD_Tool\C4D_MMD_Tool\_build_msvc\sdk_r20\plugins\mmdtool\project\mmdtool.vcxproj] [D:\a\C4D_MMD_Tool\C4D_MMD_Tool\_build_msvc\cmt-workflow.vcxproj]
+2026-10-10T05:20:00.4644822Z D:\a\C4D_MMD_Tool\C4D_MMD_Tool\sdk_r20\plugins\mmdtool\source\module\tools\sizing\sizing_session.h(105,1): error : Expected ;, found  instead. [D:\a\C4D_MMD_Tool\C4D_MMD_Tool\_build_msvc\sdk_r20\plugins\mmdtool\project\mmdtool.vcxproj] [D:\a\C4D_MMD_Tool\C4D_MMD_Tool\_build_msvc\cmt-workflow.vcxproj]
+
+R21
+2026-10-10T05:20:12.4849477Z C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\include\future(133,10): error C3668: 'std::future_error::_Doraise': method with override specifier 'override' did not override any base class methods [D:\a\C4D_MMD_Tool\C4D_MMD_Tool\_build_msvc\sdk_r21\plugins\mmdtool\project\mmdtool.vcxproj] [D:\a\C4D_MMD_Tool\C4D_MMD_Tool\_build_msvc\cmt-workflow.vcxproj]
+2026-10-10T05:20:12.4884430Z C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\include\future(134,9): error C3861: '_RAISE': identifier not found [D:\a\C4D_MMD_Tool\C4D_MMD_Tool\_build_msvc\sdk_r21\plugins\mmdtool\project\mmdtool.vcxproj] [D:\a\C4D_MMD_Tool\C4D_MMD_Tool\_build_msvc\cmt-workflow.vcxproj]
+
+R25
+2026-10-10T05:19:51.0429331Z D:\a\C4D_MMD_Tool\C4D_MMD_Tool\sdk_r25\plugins\mmdtool\source\module\ui\motion_sizing_dialog.cpp(44,28): error C2065: 'LINKBOX_EMPTY_TEXT': undeclared identifier [D:\a\C4D_MMD_Tool\C4D_MMD_Tool\_build_msvc\sdk_r25\plugins\mmdtool\project\mmdtool.vcxproj] [D:\a\C4D_MMD_Tool\C4D_MMD_Tool\_build_msvc\cmt-workflow.vcxproj]
+

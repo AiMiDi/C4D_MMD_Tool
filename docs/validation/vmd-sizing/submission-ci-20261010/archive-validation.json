@@ -1,0 +1,56 @@
+{
+  "archive": "openspec/changes/archive/2026-10-10-add-vmd-motion-sizing",
+  "main_spec_synced": true,
+  "main_spec_strict": "passed",
+  "unfinished_tasks_preserved": [
+    "8.2",
+    "12.3",
+    "13.5"
+  ],
+  "whole_repository_validation": {
+    "passed": 25,
+    "failed": 8,
+    "preexisting_failures": [
+      {
+        "spec": "bone-c4d-track-animation",
+        "unchanged_from_pre_submission": true,
+        "blob": "db721cb8545a6a46583f80331ac89d1293230910"
+      },
+      {
+        "spec": "export-vpd-pose",
+        "unchanged_from_pre_submission": true,
+        "blob": "30ce7811a75ff46fdd5f03d2f51fe34e000cda81"
+      },
+      {
+        "spec": "import-vpd-pose",
+        "unchanged_from_pre_submission": true,
+        "blob": "e860cb694352aef2c8c5d8970965666a496b8b29"
+      },
+      {
+        "spec": "libmmd-immdnode-abstraction",
+        "unchanged_from_pre_submission": true,
+        "blob": "73bd1c99d1891fee5941ef499e883f66b1e54cfb"
+      },
+      {
+        "spec": "libmmd-physics-external-binding",
+        "unchanged_from_pre_submission": true,
+        "blob": "11600bc41ef99a88913c45d7f6200e134af3cb2a"
+      },
+      {
+        "spec": "libmmd-vmd-interpolation-module",
+        "unchanged_from_pre_submission": true,
+        "blob": "102e52a4649f1ac52c3a0e4d089da2972a0720a3"
+      },
+      {
+        "spec": "motion-vmd-animation-persistence",
+        "unchanged_from_pre_submission": true,
+        "blob": "184304457829dc2a44c050e7788cb5837f5e18c4"
+      },
+      {
+        "spec": "pmx-model-export",
+        "unchanged_from_pre_submission": true,
+        "blob": "80f7c5d832c6c7a2a51af9bcd8238075250215ed"
+      }
+    ]
+  }
+}

@@ -1,0 +1,192 @@
+{
+  "commit": "c7d9a8afba3dcc8dfc0453984f8ef0d961fb5d95",
+  "macos_packages": [
+    {
+      "file": "MMD-Tool-v0.9.3.2-Cinema4D-2023-macOS-x86_64.zip",
+      "sha256": "c08b8c2e919bb3c6f7efc530b7546d6331db2d9386df77fb1b1d06d3399ddc08",
+      "size": 1535316,
+      "zip_crc_passed": true,
+      "real_resources": true,
+      "license_match": true,
+      "mcp_matches_commit": true,
+      "binaries": [
+        {
+          "path": "mmdtool/mmdtool.xlib",
+          "sha256": "745c1623c2527efb6298360ce98c90be21600fd7df3d03fff5f379af7c546d83",
+          "cpu": "x86_64"
+        }
+      ]
+    },
+    {
+      "file": "MMD-Tool-v0.9.3.2-Cinema4D-2024-macOS-x86_64.zip",
+      "sha256": "3e8ac919605d4244b496ac0ff86f33363113cf8b2dd35d309c7cc3cf8ad9a694",
+      "size": 1649188,
+      "zip_crc_passed": true,
+      "real_resources": true,
+      "license_match": true,
+      "mcp_matches_commit": true,
+      "binaries": [
+        {
+          "path": "mmdtool/mmdtool.xlib",
+          "sha256": "86eced055faabe638299b789f91b92615b1cfd06383ad229598a0074d4a414a0",
+          "cpu": "x86_64"
+        }
+      ]
+    },
+    {
+      "file": "MMD-Tool-v0.9.3.2-Cinema4D-2025-macOS-x86_64.zip",
+      "sha256": "9f3610114b47075fb1e637477553a6711b0f4b0bc89292b2f42567cbf7d6e64d",
+      "size": 1594319,
+      "zip_crc_passed": true,
+      "real_resources": true,
+      "license_match": true,
+      "mcp_matches_commit": true,
+      "binaries": [
+        {
+          "path": "mmdtool/mmdtool.xlib",
+          "sha256": "0fc6c24d0a2e5c9ebca6365b195256d67f956b4c9c63f6097359ea47773ce976",
+          "cpu": "x86_64"
+        }
+      ]
+    },
+    {
+      "file": "MMD-Tool-v0.9.3.2-Cinema4D-2026-macOS-x86_64.zip",
+      "sha256": "38ecd36bc67e9006310d4e494014067acab5f8a99d593e3e6ea2888c32357f1a",
+      "size": 1594128,
+      "zip_crc_passed": true,
+      "real_resources": true,
+      "license_match": true,
+      "mcp_matches_commit": true,
+      "binaries": [
+        {
+          "path": "mmdtool/mmdtool.xlib",
+          "sha256": "9f5d686e792be5d775128803b4a29f4fb56d83b60990e9a8c0a9ebc313e6b434",
+          "cpu": "x86_64"
+        }
+      ]
+    },
+    {
+      "file": "MMD-Tool-v0.9.3.2-Cinema4D-R20-macOS-x86_64.zip",
+      "sha256": "41bc5687514f36810edae6515080ab63f3c5b5ed7c36d6450f85b5f2da63099f",
+      "size": 1518297,
+      "zip_crc_passed": true,
+      "real_resources": true,
+      "license_match": true,
+      "mcp_matches_commit": true,
+      "binaries": [
+        {
+          "path": "mmdtool/mmdtool.xlib",
+          "sha256": "dae741a6506aee09b9418dd19ce3ce198c814afcde7464fbbdf016d58c492a69",
+          "cpu": "x86_64"
+        }
+      ]
+    },
+    {
+      "file": "MMD-Tool-v0.9.3.2-Cinema4D-R21-S22-macOS-x86_64.zip",
+      "sha256": "bfee4db9900634e673e9107fe865471e8064910c4f16f5fa28fd7a658dd7aeb6",
+      "size": 1537266,
+      "zip_crc_passed": true,
+      "real_resources": true,
+      "license_match": true,
+      "mcp_matches_commit": true,
+      "binaries": [
+        {
+          "path": "mmdtool/mmdtool.xlib",
+          "sha256": "8809f1c059655cd06abb5680ea7c09072317da8b0f6e92b9c589fef69ea52f7d",
+          "cpu": "x86_64"
+        }
+      ]
+    },
+    {
+      "file": "MMD-Tool-v0.9.3.2-Cinema4D-R23-S24-macOS-x86_64.zip",
+      "sha256": "e1959af6af2871d63596974770b8ed05344cc6916da5e7495e00d6828f4c7ee4",
+      "size": 1535389,
+      "zip_crc_passed": true,
+      "real_resources": true,
+      "license_match": true,
+      "mcp_matches_commit": true,
+      "binaries": [
+        {
+          "path": "mmdtool/mmdtool.xlib",
+          "sha256": "e6705fa521d4fb012e44e07179e02fac23ffdf9eadd25af4ba94b14cbde4e1a6",
+          "cpu": "x86_64"
+        }
+      ]
+    },
+    {
+      "file": "MMD-Tool-v0.9.3.2-Cinema4D-R25-S26-macOS-x86_64.zip",
+      "sha256": "e4cea8d422c6ac827bdfb473227d3438f7922a2e9b758995919fbc4a1ff77f22",
+      "size": 1528195,
+      "zip_crc_passed": true,
+      "real_resources": true,
+      "license_match": true,
+      "mcp_matches_commit": true,
+      "binaries": [
+        {
+          "path": "mmdtool/mmdtool.xlib",
+          "sha256": "33a259b8186fa39558573b709a7fdf5e2f48bf6bfcc9ae00e2287ad0df742158",
+          "cpu": "x86_64"
+        }
+      ]
+    }
+  ],
+  "windows_builds": [
+    {
+      "file": "build-Windows-x64-sdk_2023\\mmdtool.xdl64",
+      "sha256": "74b03b596e6c9f2fc744d715f4d9e08361862ee5c591cf6e3904d2c080188309",
+      "cpu": "x64",
+      "resources_license_mcp_checked": true
+    },
+    {
+      "file": "build-Windows-x64-sdk_2024\\mmdtool.xdl64",
+      "sha256": "ec2e54c2d6189668c87c478f303b1f3ea95c8e4d28464bbec8d878101a69200c",
+      "cpu": "x64",
+      "resources_license_mcp_checked": true
+    },
+    {
+      "file": "build-Windows-x64-sdk_2025\\mmdtool.xdl64",
+      "sha256": "cfe6be8843c535e71abee17582326f02c4304f3c168b098a13ca1cbe0642d9d3",
+      "cpu": "x64",
+      "resources_license_mcp_checked": true
+    },
+    {
+      "file": "build-Windows-x64-sdk_2026\\mmdtool.xdl64",
+      "sha256": "ed9fd3722b6b51f08752d9aebaf7b3acbede7867a8b5b184b1626a595c1cf960",
+      "cpu": "x64",
+      "resources_license_mcp_checked": true
+    },
+    {
+      "file": "build-Windows-x64-sdk_r20\\mmdtool.xdl64",
+      "sha256": "3af699c1a9df16f9bcb63b05d677648cedbbe7e3cd3dd26b105d09d484f2e92d",
+      "cpu": "x64",
+      "resources_license_mcp_checked": true
+    },
+    {
+      "file": "build-Windows-x64-sdk_r21\\mmdtool.xdl64",
+      "sha256": "6da57e9d483144d2d0b31f62e4742497e7567d01784ac742aae63eabf99ab347",
+      "cpu": "x64",
+      "resources_license_mcp_checked": true
+    },
+    {
+      "file": "build-Windows-x64-sdk_r23\\mmdtool.xdl64",
+      "sha256": "5b8d49380ab7aa46b79a37695132361928b7826eb0c180d49f205c764a2c5adc",
+      "cpu": "x64",
+      "resources_license_mcp_checked": true
+    },
+    {
+      "file": "build-Windows-x64-sdk_r25\\mmdtool.xdl64",
+      "sha256": "2a0574e8363f3a8146d3a8ed7adee609c075a5bb50e94a9236eeacfcd729e199",
+      "cpu": "x64",
+      "resources_license_mcp_checked": true
+    }
+  ],
+  "installers": [
+    {
+      "file": "MMD-Tool-v0.9.3.2-Windows-x64-Setup.exe",
+      "size": 5418858,
+      "sha256": "54f5e3ad80411f776895c2e0294f89b92d26e32ed1ec1cbf86f6209cf880a067"
+    }
+  ],
+  "passed": true,
+  "installed_or_executed_binaries": false
+}

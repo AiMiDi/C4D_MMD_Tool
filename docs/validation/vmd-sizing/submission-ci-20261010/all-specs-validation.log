@@ -1,0 +1,49 @@
+- Validating...
+✗ spec/bone-c4d-track-animation
+  ⚠ [WARNING] overview: Purpose section is still a placeholder rather than a Purpose anyone wrote (the sentence `openspec archive` writes for a new capability, or a `TBD`/`TODO` marker left in its place). Replace it with what this capability is for, editing the main spec directly: a `## Purpose` in a delta is read only when the capability is created, so it cannot replace this one.
+  ⚠ [WARNING] requirements[0]: Requirement text is very long (>500 characters). Move examples and edge cases into scenarios, or split it into separate requirements that each state one behavior.
+  ⚠ [WARNING] requirements[1]: Requirement text is very long (>500 characters). Move examples and edge cases into scenarios, or split it into separate requirements that each state one behavior.
+  ⚠ [WARNING] requirements[3]: Requirement text is very long (>500 characters). Move examples and edge cases into scenarios, or split it into separate requirements that each state one behavior.
+✓ spec/build-multi-sdk-cmake
+  ⚠ [WARNING] requirements[6]: Requirement text is very long (>500 characters). Move examples and edge cases into scenarios, or split it into separate requirements that each state one behavior.
+✓ spec/ci-multi-platform-build
+✓ spec/ci-release-packaging
+✓ spec/core-config-json-storage
+✓ spec/core-name-conversion
+✓ spec/core-plugin-infrastructure
+✗ spec/export-vpd-pose
+✓ spec/import-model-import
+  ⚠ [WARNING] overview: Purpose section is still a placeholder rather than a Purpose anyone wrote (the sentence `openspec archive` writes for a new capability, or a `TBD`/`TODO` marker left in its place). Replace it with what this capability is for, editing the main spec directly: a `## Purpose` in a delta is read only when the capability is created, so it cannot replace this one.
+✓ spec/import-object-hierarchy
+✗ spec/import-vpd-pose
+✓ spec/import-pmx-parameter-mapping
+  ⚠ [WARNING] overview: Purpose section is still a placeholder rather than a Purpose anyone wrote (the sentence `openspec archive` writes for a new capability, or a `TBD`/`TODO` marker left in its place). Replace it with what this capability is for, editing the main spec directly: a `## Purpose` in a delta is read only when the capability is created, so it cannot replace this one.
+✗ spec/libmmd-immdnode-abstraction
+  ⚠ [WARNING] overview: Purpose section is still a placeholder rather than a Purpose anyone wrote (the sentence `openspec archive` writes for a new capability, or a `TBD`/`TODO` marker left in its place). Replace it with what this capability is for, editing the main spec directly: a `## Purpose` in a delta is read only when the capability is created, so it cannot replace this one.
+  ⚠ [WARNING] requirements[0]: Requirement text is very long (>500 characters). Move examples and edge cases into scenarios, or split it into separate requirements that each state one behavior.
+✗ spec/libmmd-physics-external-binding
+  ⚠ [WARNING] overview: Purpose section is still a placeholder rather than a Purpose anyone wrote (the sentence `openspec archive` writes for a new capability, or a `TBD`/`TODO` marker left in its place). Replace it with what this capability is for, editing the main spec directly: a `## Purpose` in a delta is read only when the capability is created, so it cannot replace this one.
+✗ spec/libmmd-vmd-interpolation-module
+✓ spec/material-system
+✓ spec/mcp-mmd-operations
+✓ spec/morph-c4d-track-animation
+✓ spec/motion-model-runtime-reconstruction
+  ⚠ [WARNING] overview: Purpose section is still a placeholder rather than a Purpose anyone wrote (the sentence `openspec archive` writes for a new capability, or a `TBD`/`TODO` marker left in its place). Replace it with what this capability is for, editing the main spec directly: a `## Purpose` in a delta is read only when the capability is created, so it cannot replace this one.
+✗ spec/motion-vmd-animation-persistence
+  ⚠ [WARNING] requirements[0]: Requirement text is very long (>500 characters). Move examples and edge cases into scenarios, or split it into separate requirements that each state one behavior.
+✓ spec/motion-vmd-camera
+✓ spec/motion-vmd-motion
+✓ spec/motion-vmd-sizing
+✓ spec/object-bone-hierarchy-sync
+✓ spec/object-display-frame-manager
+✓ spec/object-ik-solver-control
+✓ spec/object-morph-system
+✓ spec/object-physics
+✗ spec/pmx-model-export
+✓ spec/rs-toon-material
+  ⚠ [WARNING] overview: Purpose section is still a placeholder rather than a Purpose anyone wrote (the sentence `openspec archive` writes for a new capability, or a `TBD`/`TODO` marker left in its place). Replace it with what this capability is for, editing the main spec directly: a `## Purpose` in a delta is read only when the capability is created, so it cannot replace this one.
+✓ spec/runtime-regression-evidence
+✓ spec/shader-driven-material-morph
+✓ spec/uv-morph
+Totals: 25 passed, 8 failed (33 items)
+Details: openspec validate bone-c4d-track-animation --type spec
