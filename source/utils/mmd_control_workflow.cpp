@@ -88,6 +88,7 @@ void SetLink(BaseTag *tag, Int32 parameter, BaseObject *object)
         return;
     link->SetLink(object);
     tag->SetParameter(CreateDescID(DescLevel(parameter)), GeData(link), DESCFLAGS_SET::NONE);
+    BaseLink::Free(link); // GeData copies the link value.
 }
 Int32 ModeParameter(Part part)
 {

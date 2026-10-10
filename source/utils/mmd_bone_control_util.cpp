@@ -571,6 +571,7 @@ namespace
 			return;
 		link->SetLink(object);
 		owner->SetParameter(CreateDescID(DescLevel(parameter_id)), GeData(link), DESCFLAGS_SET::NONE);
+		BaseLink::Free(link); // GeData copies the link value.
 	}
 
 	void ClearLinkedObjectParameter(BaseList2D* owner, const Int32 parameter_id)
