@@ -1,0 +1,397 @@
+{
+  "pid": 51796,
+  "c4d": 2026400,
+  "kind": "synthetic-native",
+  "checks": [
+    {
+      "name": "batch_target_import_0",
+      "passed": true,
+      "result": {
+        "ok": true,
+        "error": "",
+        "running": false,
+        "ready": false,
+        "summary": null
+      }
+    },
+    {
+      "name": "batch_original_import_0",
+      "passed": true
+    },
+    {
+      "name": "batch_target_import_1",
+      "passed": true,
+      "result": {
+        "ok": true,
+        "error": "",
+        "running": false,
+        "ready": false,
+        "summary": null
+      }
+    },
+    {
+      "name": "batch_original_import_1",
+      "passed": true
+    },
+    {
+      "name": "batch_background_start",
+      "passed": true,
+      "result": {
+        "ok": true,
+        "error": "",
+        "running": true,
+        "ready": false,
+        "summary": "正在计算调整阶段…"
+      }
+    },
+    {
+      "name": "batch_background_complete",
+      "passed": true,
+      "result": {
+        "ok": true,
+        "error": "",
+        "running": false,
+        "ready": true,
+        "summary": "已完成角色 1 / 2 | XZ 1.2 | Y 1.35 | 3.3927 ms\n最大残差 / 未收敛约束 0 | 0 / 72\nTwist skipped (missing chain): 左腕捩\nTwist skipped (missing chain): 左手捩\nTwist skipped (missing chain): 右腕捩\nTwist skipped (missing chain): 右手捩\nConstraint skipped (missing/unsupported arm chain): 左親指２\nConstraint skipped (missing/unsupported arm chain): 左人指３\nConstraint skipped (missing/unsupported arm chain): 左中指３\nConstraint skipped (missing/unsupported arm chain): 左薬指３\nConstraint skipped (missing/unsupported arm chain): 左小指３\nConstraint skipped (missing/unsupported arm chain): 右親指２\nConstraint skipped (missing/unsupported arm chain): 右人指３\nConstraint skipped (missing/unsupported arm chain): 右中指３\nConstraint skipped (missing/unsupported arm chain): 右薬指３\nConstraint skipped (missing/unsupported arm chain): 右小指３\nAvoidance has no eligible rigid bodies\nConstraint skipped (missing/unsupported arm chain): 左親指２\nConstraint skipped (missing/unsupported arm chain): 左人指３\nConstraint skipped (missing/unsupported arm chain): 左中指３\nConstraint skipped (missing/unsupported arm chain): 左薬指３\nConstraint skipped (missing/unsupported arm chain): 左小指３\nConstraint skipped (missing/unsupported arm chain): 右親指２\nConstraint skipped (missing/unsupported arm chain): 右人指３\nConstraint skipped (missing/unsupported arm chain): 右中指３\nConstraint skipped (missing/unsupported arm chain): 右薬指３\nConstraint skipped (missing/unsupported arm chain): 右小指３\n"
+      }
+    },
+    {
+      "name": "localized_status",
+      "passed": true
+    },
+    {
+      "name": "batch_preview_0",
+      "passed": true,
+      "result": {
+        "ok": true,
+        "error": "",
+        "running": false,
+        "ready": true,
+        "summary": "已完成角色 1 / 2 | XZ 1.2 | Y 1.35 | 3.3927 ms\n最大残差 / 未收敛约束 0 | 0 / 72\nTwist skipped (missing chain): 左腕捩\nTwist skipped (missing chain): 左手捩\nTwist skipped (missing chain): 右腕捩\nTwist skipped (missing chain): 右手捩\nConstraint skipped (missing/unsupported arm chain): 左親指２\nConstraint skipped (missing/unsupported arm chain): 左人指３\nConstraint skipped (missing/unsupported arm chain): 左中指３\nConstraint skipped (missing/unsupported arm chain): 左薬指３\nConstraint skipped (missing/unsupported arm chain): 左小指３\nConstraint skipped (missing/unsupported arm chain): 右親指２\nConstraint skipped (missing/unsupported arm chain): 右人指３\nConstraint skipped (missing/unsupported arm chain): 右中指３\nConstraint skipped (missing/unsupported arm chain): 右薬指３\nConstraint skipped (missing/unsupported arm chain): 右小指３\nAvoidance has no eligible rigid bodies\nConstraint skipped (missing/unsupported arm chain): 左親指２\nConstraint skipped (missing/unsupported arm chain): 左人指３\nConstraint skipped (missing/unsupported arm chain): 左中指３\nConstraint skipped (missing/unsupported arm chain): 左薬指３\nConstraint skipped (missing/unsupported arm chain): 左小指３\nConstraint skipped (missing/unsupported arm chain): 右親指２\nConstraint skipped (missing/unsupported arm chain): 右人指３\nConstraint skipped (missing/unsupported arm chain): 右中指３\nConstraint skipped (missing/unsupported arm chain): 右薬指３\nConstraint skipped (missing/unsupported arm chain): 右小指３\n"
+      }
+    },
+    {
+      "name": "four_preview_models_0",
+      "passed": true
+    },
+    {
+      "name": "preview_preserves_source_0",
+      "passed": true
+    },
+    {
+      "name": "batch_preview_1",
+      "passed": true,
+      "result": {
+        "ok": true,
+        "error": "",
+        "running": false,
+        "ready": true,
+        "summary": "已完成角色 1 / 2 | XZ 1.2 | Y 1.35 | 3.3927 ms\n最大残差 / 未收敛约束 0 | 0 / 72\nTwist skipped (missing chain): 左腕捩\nTwist skipped (missing chain): 左手捩\nTwist skipped (missing chain): 右腕捩\nTwist skipped (missing chain): 右手捩\nConstraint skipped (missing/unsupported arm chain): 左親指２\nConstraint skipped (missing/unsupported arm chain): 左人指３\nConstraint skipped (missing/unsupported arm chain): 左中指３\nConstraint skipped (missing/unsupported arm chain): 左薬指３\nConstraint skipped (missing/unsupported arm chain): 左小指３\nConstraint skipped (missing/unsupported arm chain): 右親指２\nConstraint skipped (missing/unsupported arm chain): 右人指３\nConstraint skipped (missing/unsupported arm chain): 右中指３\nConstraint skipped (missing/unsupported arm chain): 右薬指３\nConstraint skipped (missing/unsupported arm chain): 右小指３\nAvoidance has no eligible rigid bodies\nConstraint skipped (missing/unsupported arm chain): 左親指２\nConstraint skipped (missing/unsupported arm chain): 左人指３\nConstraint skipped (missing/unsupported arm chain): 左中指３\nConstraint skipped (missing/unsupported arm chain): 左薬指３\nConstraint skipped (missing/unsupported arm chain): 左小指３\nConstraint skipped (missing/unsupported arm chain): 右親指２\nConstraint skipped (missing/unsupported arm chain): 右人指３\nConstraint skipped (missing/unsupported arm chain): 右中指３\nConstraint skipped (missing/unsupported arm chain): 右薬指３\nConstraint skipped (missing/unsupported arm chain): 右小指３\n"
+      }
+    },
+    {
+      "name": "four_preview_models_1",
+      "passed": true
+    },
+    {
+      "name": "preview_preserves_source_1",
+      "passed": true
+    },
+    {
+      "name": "batch_preview_2",
+      "passed": true,
+      "result": {
+        "ok": true,
+        "error": "",
+        "running": false,
+        "ready": true,
+        "summary": "已完成角色 1 / 2 | XZ 1.2 | Y 1.35 | 3.3927 ms\n最大残差 / 未收敛约束 0 | 0 / 72\nTwist skipped (missing chain): 左腕捩\nTwist skipped (missing chain): 左手捩\nTwist skipped (missing chain): 右腕捩\nTwist skipped (missing chain): 右手捩\nConstraint skipped (missing/unsupported arm chain): 左親指２\nConstraint skipped (missing/unsupported arm chain): 左人指３\nConstraint skipped (missing/unsupported arm chain): 左中指３\nConstraint skipped (missing/unsupported arm chain): 左薬指３\nConstraint skipped (missing/unsupported arm chain): 左小指３\nConstraint skipped (missing/unsupported arm chain): 右親指２\nConstraint skipped (missing/unsupported arm chain): 右人指３\nConstraint skipped (missing/unsupported arm chain): 右中指３\nConstraint skipped (missing/unsupported arm chain): 右薬指３\nConstraint skipped (missing/unsupported arm chain): 右小指３\nAvoidance has no eligible rigid bodies\nConstraint skipped (missing/unsupported arm chain): 左親指２\nConstraint skipped (missing/unsupported arm chain): 左人指３\nConstraint skipped (missing/unsupported arm chain): 左中指３\nConstraint skipped (missing/unsupported arm chain): 左薬指３\nConstraint skipped (missing/unsupported arm chain): 左小指３\nConstraint skipped (missing/unsupported arm chain): 右親指２\nConstraint skipped (missing/unsupported arm chain): 右人指３\nConstraint skipped (missing/unsupported arm chain): 右中指３\nConstraint skipped (missing/unsupported arm chain): 右薬指３\nConstraint skipped (missing/unsupported arm chain): 右小指３\n"
+      }
+    },
+    {
+      "name": "four_preview_models_2",
+      "passed": true
+    },
+    {
+      "name": "preview_preserves_source_2",
+      "passed": true
+    },
+    {
+      "name": "batch_preview_3",
+      "passed": true,
+      "result": {
+        "ok": true,
+        "error": "",
+        "running": false,
+        "ready": true,
+        "summary": "已完成角色 1 / 2 | XZ 1.2 | Y 1.35 | 3.3927 ms\n最大残差 / 未收敛约束 0 | 0 / 72\nTwist skipped (missing chain): 左腕捩\nTwist skipped (missing chain): 左手捩\nTwist skipped (missing chain): 右腕捩\nTwist skipped (missing chain): 右手捩\nConstraint skipped (missing/unsupported arm chain): 左親指２\nConstraint skipped (missing/unsupported arm chain): 左人指３\nConstraint skipped (missing/unsupported arm chain): 左中指３\nConstraint skipped (missing/unsupported arm chain): 左薬指３\nConstraint skipped (missing/unsupported arm chain): 左小指３\nConstraint skipped (missing/unsupported arm chain): 右親指２\nConstraint skipped (missing/unsupported arm chain): 右人指３\nConstraint skipped (missing/unsupported arm chain): 右中指３\nConstraint skipped (missing/unsupported arm chain): 右薬指３\nConstraint skipped (missing/unsupported arm chain): 右小指３\nAvoidance has no eligible rigid bodies\nConstraint skipped (missing/unsupported arm chain): 左親指２\nConstraint skipped (missing/unsupported arm chain): 左人指３\nConstraint skipped (missing/unsupported arm chain): 左中指３\nConstraint skipped (missing/unsupported arm chain): 左薬指３\nConstraint skipped (missing/unsupported arm chain): 左小指３\nConstraint skipped (missing/unsupported arm chain): 右親指２\nConstraint skipped (missing/unsupported arm chain): 右人指３\nConstraint skipped (missing/unsupported arm chain): 右中指３\nConstraint skipped (missing/unsupported arm chain): 右薬指３\nConstraint skipped (missing/unsupported arm chain): 右小指３\n"
+      }
+    },
+    {
+      "name": "four_preview_models_3",
+      "passed": true
+    },
+    {
+      "name": "preview_preserves_source_3",
+      "passed": true
+    },
+    {
+      "name": "batch_preview_4",
+      "passed": true,
+      "result": {
+        "ok": true,
+        "error": "",
+        "running": false,
+        "ready": true,
+        "summary": "已完成角色 1 / 2 | XZ 1.2 | Y 1.35 | 3.3927 ms\n最大残差 / 未收敛约束 0 | 0 / 72\nTwist skipped (missing chain): 左腕捩\nTwist skipped (missing chain): 左手捩\nTwist skipped (missing chain): 右腕捩\nTwist skipped (missing chain): 右手捩\nConstraint skipped (missing/unsupported arm chain): 左親指２\nConstraint skipped (missing/unsupported arm chain): 左人指３\nConstraint skipped (missing/unsupported arm chain): 左中指３\nConstraint skipped (missing/unsupported arm chain): 左薬指３\nConstraint skipped (missing/unsupported arm chain): 左小指３\nConstraint skipped (missing/unsupported arm chain): 右親指２\nConstraint skipped (missing/unsupported arm chain): 右人指３\nConstraint skipped (missing/unsupported arm chain): 右中指３\nConstraint skipped (missing/unsupported arm chain): 右薬指３\nConstraint skipped (missing/unsupported arm chain): 右小指３\nAvoidance has no eligible rigid bodies\nConstraint skipped (missing/unsupported arm chain): 左親指２\nConstraint skipped (missing/unsupported arm chain): 左人指３\nConstraint skipped (missing/unsupported arm chain): 左中指３\nConstraint skipped (missing/unsupported arm chain): 左薬指３\nConstraint skipped (missing/unsupported arm chain): 左小指３\nConstraint skipped (missing/unsupported arm chain): 右親指２\nConstraint skipped (missing/unsupported arm chain): 右人指３\nConstraint skipped (missing/unsupported arm chain): 右中指３\nConstraint skipped (missing/unsupported arm chain): 右薬指３\nConstraint skipped (missing/unsupported arm chain): 右小指３\n"
+      }
+    },
+    {
+      "name": "four_preview_models_4",
+      "passed": true
+    },
+    {
+      "name": "preview_preserves_source_4",
+      "passed": true
+    },
+    {
+      "name": "batch_preview_5",
+      "passed": true,
+      "result": {
+        "ok": true,
+        "error": "",
+        "running": false,
+        "ready": true,
+        "summary": "已完成角色 1 / 2 | XZ 1.2 | Y 1.35 | 3.3927 ms\n最大残差 / 未收敛约束 0 | 0 / 72\nTwist skipped (missing chain): 左腕捩\nTwist skipped (missing chain): 左手捩\nTwist skipped (missing chain): 右腕捩\nTwist skipped (missing chain): 右手捩\nConstraint skipped (missing/unsupported arm chain): 左親指２\nConstraint skipped (missing/unsupported arm chain): 左人指３\nConstraint skipped (missing/unsupported arm chain): 左中指３\nConstraint skipped (missing/unsupported arm chain): 左薬指３\nConstraint skipped (missing/unsupported arm chain): 左小指３\nConstraint skipped (missing/unsupported arm chain): 右親指２\nConstraint skipped (missing/unsupported arm chain): 右人指３\nConstraint skipped (missing/unsupported arm chain): 右中指３\nConstraint skipped (missing/unsupported arm chain): 右薬指３\nConstraint skipped (missing/unsupported arm chain): 右小指３\nAvoidance has no eligible rigid bodies\nConstraint skipped (missing/unsupported arm chain): 左親指２\nConstraint skipped (missing/unsupported arm chain): 左人指３\nConstraint skipped (missing/unsupported arm chain): 左中指３\nConstraint skipped (missing/unsupported arm chain): 左薬指３\nConstraint skipped (missing/unsupported arm chain): 左小指３\nConstraint skipped (missing/unsupported arm chain): 右親指２\nConstraint skipped (missing/unsupported arm chain): 右人指３\nConstraint skipped (missing/unsupported arm chain): 右中指３\nConstraint skipped (missing/unsupported arm chain): 右薬指３\nConstraint skipped (missing/unsupported arm chain): 右小指３\n"
+      }
+    },
+    {
+      "name": "four_preview_models_5",
+      "passed": true
+    },
+    {
+      "name": "preview_preserves_source_5",
+      "passed": true
+    },
+    {
+      "name": "batch_preview_6",
+      "passed": true,
+      "result": {
+        "ok": true,
+        "error": "",
+        "running": false,
+        "ready": true,
+        "summary": "已完成角色 1 / 2 | XZ 1.2 | Y 1.35 | 3.3927 ms\n最大残差 / 未收敛约束 0 | 0 / 72\nTwist skipped (missing chain): 左腕捩\nTwist skipped (missing chain): 左手捩\nTwist skipped (missing chain): 右腕捩\nTwist skipped (missing chain): 右手捩\nConstraint skipped (missing/unsupported arm chain): 左親指２\nConstraint skipped (missing/unsupported arm chain): 左人指３\nConstraint skipped (missing/unsupported arm chain): 左中指３\nConstraint skipped (missing/unsupported arm chain): 左薬指３\nConstraint skipped (missing/unsupported arm chain): 左小指３\nConstraint skipped (missing/unsupported arm chain): 右親指２\nConstraint skipped (missing/unsupported arm chain): 右人指３\nConstraint skipped (missing/unsupported arm chain): 右中指３\nConstraint skipped (missing/unsupported arm chain): 右薬指３\nConstraint skipped (missing/unsupported arm chain): 右小指３\nAvoidance has no eligible rigid bodies\nConstraint skipped (missing/unsupported arm chain): 左親指２\nConstraint skipped (missing/unsupported arm chain): 左人指３\nConstraint skipped (missing/unsupported arm chain): 左中指３\nConstraint skipped (missing/unsupported arm chain): 左薬指３\nConstraint skipped (missing/unsupported arm chain): 左小指３\nConstraint skipped (missing/unsupported arm chain): 右親指２\nConstraint skipped (missing/unsupported arm chain): 右人指３\nConstraint skipped (missing/unsupported arm chain): 右中指３\nConstraint skipped (missing/unsupported arm chain): 右薬指３\nConstraint skipped (missing/unsupported arm chain): 右小指３\n"
+      }
+    },
+    {
+      "name": "four_preview_models_6",
+      "passed": true
+    },
+    {
+      "name": "preview_preserves_source_6",
+      "passed": true
+    },
+    {
+      "name": "batch_preview_7",
+      "passed": true,
+      "result": {
+        "ok": true,
+        "error": "",
+        "running": false,
+        "ready": true,
+        "summary": "已完成角色 1 / 2 | XZ 1.2 | Y 1.35 | 3.3927 ms\n最大残差 / 未收敛约束 0 | 0 / 72\nTwist skipped (missing chain): 左腕捩\nTwist skipped (missing chain): 左手捩\nTwist skipped (missing chain): 右腕捩\nTwist skipped (missing chain): 右手捩\nConstraint skipped (missing/unsupported arm chain): 左親指２\nConstraint skipped (missing/unsupported arm chain): 左人指３\nConstraint skipped (missing/unsupported arm chain): 左中指３\nConstraint skipped (missing/unsupported arm chain): 左薬指３\nConstraint skipped (missing/unsupported arm chain): 左小指３\nConstraint skipped (missing/unsupported arm chain): 右親指２\nConstraint skipped (missing/unsupported arm chain): 右人指３\nConstraint skipped (missing/unsupported arm chain): 右中指３\nConstraint skipped (missing/unsupported arm chain): 右薬指３\nConstraint skipped (missing/unsupported arm chain): 右小指３\nAvoidance has no eligible rigid bodies\nConstraint skipped (missing/unsupported arm chain): 左親指２\nConstraint skipped (missing/unsupported arm chain): 左人指３\nConstraint skipped (missing/unsupported arm chain): 左中指３\nConstraint skipped (missing/unsupported arm chain): 左薬指３\nConstraint skipped (missing/unsupported arm chain): 左小指３\nConstraint skipped (missing/unsupported arm chain): 右親指２\nConstraint skipped (missing/unsupported arm chain): 右人指３\nConstraint skipped (missing/unsupported arm chain): 右中指３\nConstraint skipped (missing/unsupported arm chain): 右薬指３\nConstraint skipped (missing/unsupported arm chain): 右小指３\n"
+      }
+    },
+    {
+      "name": "four_preview_models_7",
+      "passed": true
+    },
+    {
+      "name": "preview_preserves_source_7",
+      "passed": true
+    },
+    {
+      "name": "batch_preview_3",
+      "passed": true,
+      "result": {
+        "ok": true,
+        "error": "",
+        "running": false,
+        "ready": true,
+        "summary": "已完成角色 1 / 2 | XZ 1.2 | Y 1.35 | 3.3927 ms\n最大残差 / 未收敛约束 0 | 0 / 72\nTwist skipped (missing chain): 左腕捩\nTwist skipped (missing chain): 左手捩\nTwist skipped (missing chain): 右腕捩\nTwist skipped (missing chain): 右手捩\nConstraint skipped (missing/unsupported arm chain): 左親指２\nConstraint skipped (missing/unsupported arm chain): 左人指３\nConstraint skipped (missing/unsupported arm chain): 左中指３\nConstraint skipped (missing/unsupported arm chain): 左薬指３\nConstraint skipped (missing/unsupported arm chain): 左小指３\nConstraint skipped (missing/unsupported arm chain): 右親指２\nConstraint skipped (missing/unsupported arm chain): 右人指３\nConstraint skipped (missing/unsupported arm chain): 右中指３\nConstraint skipped (missing/unsupported arm chain): 右薬指３\nConstraint skipped (missing/unsupported arm chain): 右小指３\nAvoidance has no eligible rigid bodies\nConstraint skipped (missing/unsupported arm chain): 左親指２\nConstraint skipped (missing/unsupported arm chain): 左人指３\nConstraint skipped (missing/unsupported arm chain): 左中指３\nConstraint skipped (missing/unsupported arm chain): 左薬指３\nConstraint skipped (missing/unsupported arm chain): 左小指３\nConstraint skipped (missing/unsupported arm chain): 右親指２\nConstraint skipped (missing/unsupported arm chain): 右人指３\nConstraint skipped (missing/unsupported arm chain): 右中指３\nConstraint skipped (missing/unsupported arm chain): 右薬指３\nConstraint skipped (missing/unsupported arm chain): 右小指３\n"
+      }
+    },
+    {
+      "name": "four_preview_models_3",
+      "passed": true
+    },
+    {
+      "name": "preview_preserves_source_3",
+      "passed": true
+    },
+    {
+      "name": "batch_preview_7",
+      "passed": true,
+      "result": {
+        "ok": true,
+        "error": "",
+        "running": false,
+        "ready": true,
+        "summary": "已完成角色 1 / 2 | XZ 1.2 | Y 1.35 | 3.3927 ms\n最大残差 / 未收敛约束 0 | 0 / 72\nTwist skipped (missing chain): 左腕捩\nTwist skipped (missing chain): 左手捩\nTwist skipped (missing chain): 右腕捩\nTwist skipped (missing chain): 右手捩\nConstraint skipped (missing/unsupported arm chain): 左親指２\nConstraint skipped (missing/unsupported arm chain): 左人指３\nConstraint skipped (missing/unsupported arm chain): 左中指３\nConstraint skipped (missing/unsupported arm chain): 左薬指３\nConstraint skipped (missing/unsupported arm chain): 左小指３\nConstraint skipped (missing/unsupported arm chain): 右親指２\nConstraint skipped (missing/unsupported arm chain): 右人指３\nConstraint skipped (missing/unsupported arm chain): 右中指３\nConstraint skipped (missing/unsupported arm chain): 右薬指３\nConstraint skipped (missing/unsupported arm chain): 右小指３\nAvoidance has no eligible rigid bodies\nConstraint skipped (missing/unsupported arm chain): 左親指２\nConstraint skipped (missing/unsupported arm chain): 左人指３\nConstraint skipped (missing/unsupported arm chain): 左中指３\nConstraint skipped (missing/unsupported arm chain): 左薬指３\nConstraint skipped (missing/unsupported arm chain): 左小指３\nConstraint skipped (missing/unsupported arm chain): 右親指２\nConstraint skipped (missing/unsupported arm chain): 右人指３\nConstraint skipped (missing/unsupported arm chain): 右中指３\nConstraint skipped (missing/unsupported arm chain): 右薬指３\nConstraint skipped (missing/unsupported arm chain): 右小指３\n"
+      }
+    },
+    {
+      "name": "four_preview_models_7",
+      "passed": true
+    },
+    {
+      "name": "preview_preserves_source_7",
+      "passed": true
+    },
+    {
+      "name": "preview_camera_exists",
+      "passed": true
+    },
+    {
+      "name": "preview_localized_name",
+      "passed": true
+    },
+    {
+      "name": "select_character_0",
+      "passed": true
+    },
+    {
+      "name": "export_character_0",
+      "passed": true
+    },
+    {
+      "name": "apply_character_0",
+      "passed": true
+    },
+    {
+      "name": "new_slot_0",
+      "passed": true
+    },
+    {
+      "name": "undo_0",
+      "passed": true
+    },
+    {
+      "name": "undo_slot_0",
+      "passed": true
+    },
+    {
+      "name": "redo_0",
+      "passed": true
+    },
+    {
+      "name": "redo_slot_0",
+      "passed": true
+    },
+    {
+      "name": "select_character_1",
+      "passed": true
+    },
+    {
+      "name": "export_character_1",
+      "passed": true
+    },
+    {
+      "name": "apply_character_1",
+      "passed": true
+    },
+    {
+      "name": "new_slot_1",
+      "passed": true
+    },
+    {
+      "name": "undo_1",
+      "passed": true
+    },
+    {
+      "name": "undo_slot_1",
+      "passed": true
+    },
+    {
+      "name": "redo_1",
+      "passed": true
+    },
+    {
+      "name": "redo_slot_1",
+      "passed": true
+    },
+    {
+      "name": "export_camera",
+      "passed": true
+    },
+    {
+      "name": "apply_camera",
+      "passed": true
+    },
+    {
+      "name": "camera_added",
+      "passed": true
+    },
+    {
+      "name": "camera_undo",
+      "passed": true
+    },
+    {
+      "name": "camera_redo",
+      "passed": true
+    },
+    {
+      "name": "batch_save",
+      "passed": true
+    },
+    {
+      "name": "batch_reopen",
+      "passed": true
+    },
+    {
+      "name": "batch_reopened_model_camera_count",
+      "passed": true
+    },
+    {
+      "name": "batch_reopened_slots",
+      "passed": true
+    },
+    {
+      "name": "scene_slot_start",
+      "passed": true
+    },
+    {
+      "name": "scene_slot_complete",
+      "passed": true,
+      "result": {
+        "ok": true,
+        "error": "",
+        "running": false,
+        "ready": true,
+        "summary": "已完成角色 1 / 1 | XZ 1.3512 | Y 1.35 | 4.7231 ms\n最大残差 / 未收敛约束 0 | 0 / 62\nTwist skipped (missing chain): 左腕捩\nTwist skipped (missing chain): 左手捩\nTwist skipped (missing chain): 右腕捩\nTwist skipped (missing chain): 右手捩\nConstraint skipped (missing/unsupported arm chain): 左親指２\nConstraint skipped (missing/unsupported arm chain): 左人指３\nConstraint skipped (missing/unsupported arm chain): 左中指３\nConstraint skipped (missing/unsupported arm chain): 左薬指３\nConstraint skipped (missing/unsupported arm chain): 左小指３\nConstraint skipped (missing/unsupported arm chain): 右親指２\nConstraint skipped (missing/unsupported arm chain): 右人指３\nConstraint skipped (missing/unsupported arm chain): 右中指３\nConstraint skipped (missing/unsupported arm chain): 右薬指３\nConstraint skipped (missing/unsupported arm chain): 右小指３\nAvoidance has no eligible rigid bodies\n"
+      }
+    },
+    {
+      "name": "scene_slot_does_not_select_source",
+      "passed": true
+    },
+    {
+      "name": "scene_slot_preserves_time",
+      "passed": true
+    },
+    {
+      "name": "scene_slot_export",
+      "passed": true
+    },
+    {
+      "name": "scene_slot_preview",
+      "passed": true
+    }
+  ],
+  "original_document_restored": true,
+  "remaining_owned_documents": [],
+  "documents_after_cleanup": [
+    "未标题 1"
+  ]
+}

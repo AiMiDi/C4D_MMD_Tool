@@ -1,0 +1,170 @@
+[
+  {
+    "from": "libraries/cmt_motion_sizing/include/cmt/sizing/motion_sizing.h",
+    "to": "dependency/libMMD/src/libMMD/Model/MMD/MMDMotionSizing.h",
+    "before_sha256": "95b209282510f4a8a531463573bdf73b08d10d343e6c1da6b4120b875aba8944",
+    "after_sha256": "624c3bc1d37b5bbcdae9fd9c7ebc4474be35b8ef0b29ab6567850ac97d0913b5"
+  },
+  {
+    "from": "libraries/cmt_motion_sizing/src/analysis/model_analysis.cpp",
+    "to": "dependency/libMMD/src/MotionSizing/Analysis/MMDMotionAnalysis.cpp",
+    "before_sha256": "bcc09e61d3b2eeb32cf347c973bd729dcbff05fbbbdc4555ae65a0fee8ac7c5d",
+    "after_sha256": "703aeac0eb198f460bb84980cd094edc592f8698ec568d2dcfbc31eb1f06953c"
+  },
+  {
+    "from": "libraries/cmt_motion_sizing/src/pose/sizing_pose.cpp",
+    "to": "dependency/libMMD/src/MotionSizing/Pose/MMDMotionPose.cpp",
+    "before_sha256": "ab90ce666f8bdd16ed69178639cd1ee161d6665f327c3190d769c7a3b59bd397",
+    "after_sha256": "119cf1e0f675d8769879d1e1fc98afac5d7f4df95e0f1627bbf4d16d67365ad9"
+  },
+  {
+    "from": "libraries/cmt_motion_sizing/src/pose/sizing_pose.h",
+    "to": "dependency/libMMD/src/MotionSizing/Pose/MMDMotionPose.h",
+    "before_sha256": "35f974381de2d9e9daa0372e934e1069e309a413239623f501a04717e6d7ead4",
+    "after_sha256": "6fe1edb77e426fc4311f1bf5725c2bda51d6321136e1befde12daff5fedbefea"
+  },
+  {
+    "from": "libraries/cmt_motion_sizing/src/solvers/sizing_stance.cpp",
+    "to": "dependency/libMMD/src/MotionSizing/Solvers/MMDMotionStance.cpp",
+    "before_sha256": "fc70a6dad0583aac22ca3ca78472569afec2a87ec38ff716a914976baa327922",
+    "after_sha256": "dc6ac7bd9d0c6c70d6798e6ecbebc864fd30a31d7270f3e6a2f22b6643508514"
+  },
+  {
+    "from": "libraries/cmt_motion_sizing/src/solvers/sizing_constraints.cpp",
+    "to": "dependency/libMMD/src/MotionSizing/Solvers/MMDMotionConstraints.cpp",
+    "before_sha256": "f1c68161d474cc8e8d9128d043e688668788cc3579026e4fbd5982808d1a19ba",
+    "after_sha256": "01c8f68d031f24e8b6aec3b57ece607be31d8be64e7645efa6af668c139f9657"
+  },
+  {
+    "from": "libraries/cmt_motion_sizing/src/solvers/sizing_constraints.h",
+    "to": "dependency/libMMD/src/MotionSizing/Solvers/MMDMotionConstraints.h",
+    "before_sha256": "181c21d96bb30526e64d0ab834f6b6a7a8fd5eab22632e424147effb17a93871",
+    "after_sha256": "ec95606218778107d17551e71064130337ec6e7f5850b2f04786a46f76e917c6"
+  },
+  {
+    "from": "libraries/cmt_motion_sizing/src/solvers/sizing_camera.cpp",
+    "to": "dependency/libMMD/src/MotionSizing/Solvers/MMDMotionCamera.cpp",
+    "before_sha256": "bdcf3883e75141fb0c6b2892afc87f306fef3e3b8cc2f60ce4300663d6a5514f",
+    "after_sha256": "7c0a065474c3e8ac8bf0e37734e49fc305c4e8c5c0501a223bfdd5ff6a26d76b"
+  },
+  {
+    "from": "libraries/cmt_motion_sizing/src/pipeline/motion_sizing.cpp",
+    "to": "dependency/libMMD/src/MotionSizing/Pipeline/MMDMotionSizing.cpp",
+    "before_sha256": "ca260cbc856c4eeb715cf477a7332759e8e4a7a6edf2c6d513733f84aa5ae91b",
+    "after_sha256": "bee8c6f8be16976019e5bfb67e9aa52d1a9b28922b9cfc9caaaeca134f108324"
+  },
+  {
+    "from": "libraries/cmt_motion_sizing/src/diagnostics/diagnostics.cpp",
+    "to": "dependency/libMMD/src/MotionSizing/Diagnostics/MMDMotionDiagnostics.cpp",
+    "before_sha256": "4823e21ab49634b13869102672e7b4f285796cc631f3b6b939e24f25f9142e04",
+    "after_sha256": "f52c73530028eb1899ad966c077b971967fc0d538e43852c5d831c383de4037a"
+  },
+  {
+    "from": "tests/motion_sizing_test.cpp",
+    "to": "dependency/libMMD/tests/MMDMotionSizing.test.cpp",
+    "before_sha256": "b6d2758c2cac27fb8903c108bd554ea2a095fb2405a7f25de1eb4ed6d85ad971",
+    "after_sha256": "0e9450f9a83454741b671ec2dabc212ce6a8a71d9844d3d4f0bff6ec1f8a02cd"
+  },
+  {
+    "from": "tests/motion_sizing_advanced_test.cpp",
+    "to": "dependency/libMMD/tests/MMDMotionSizingAdvanced.test.cpp",
+    "before_sha256": "b6de18542c26a61604c5443dda3b5fe7dc52084c1147869bd650992f90accb8d",
+    "after_sha256": "234a6a9f1a954c5f70815152007d786a10a63bcda762fb68b4b439f86497f9d6"
+  },
+  {
+    "from": "tests/motion_sizing_append_reference.cpp",
+    "to": "dependency/libMMD/tests/MMDMotionSizingAppendReference.cpp",
+    "before_sha256": "ba188460c0ae96f97c29d44f12cfd8647fb51f8035c693dbc55ad755dfad1fc2",
+    "after_sha256": "ba188460c0ae96f97c29d44f12cfd8647fb51f8035c693dbc55ad755dfad1fc2"
+  },
+  {
+    "from": "tests/motion_sizing_assets_probe.cpp",
+    "to": "dependency/libMMD/tests/MMDMotionSizingAssetsProbe.cpp",
+    "before_sha256": "a627a7e7afa9ce1e0f2bae53c28a36d836267c2040da9016dfad5c506d8f5137",
+    "after_sha256": "03c9c7a95e7afda6b83568e14bfda0cf3a496930198c1fbf6e6e78f52a0513f7"
+  },
+  {
+    "from": "tests/fixtures/vmd-sizing/motion-staggered.vmd",
+    "to": "dependency/libMMD/tests/fixtures/vmd-sizing/motion-staggered.vmd",
+    "before_sha256": "6118b46f9528b474cbdb1970e03dbfaa559733b134b9c35a4b40dcde9f9beffc",
+    "after_sha256": "6118b46f9528b474cbdb1970e03dbfaa559733b134b9c35a4b40dcde9f9beffc"
+  },
+  {
+    "from": "tests/fixtures/vmd-sizing/motion.vmd",
+    "to": "dependency/libMMD/tests/fixtures/vmd-sizing/motion.vmd",
+    "before_sha256": "12dc36afacd02051dbdf2a9b211b08cc0723fbf6f5119e065c5c25e985b429cf",
+    "after_sha256": "12dc36afacd02051dbdf2a9b211b08cc0723fbf6f5119e065c5c25e985b429cf"
+  },
+  {
+    "from": "tests/fixtures/vmd-sizing/source.pmx",
+    "to": "dependency/libMMD/tests/fixtures/vmd-sizing/source.pmx",
+    "before_sha256": "f3227794cf3ccbe831d0391148a0071cc4ad207cf47dde7539d6d5cff935d766",
+    "after_sha256": "f3227794cf3ccbe831d0391148a0071cc4ad207cf47dde7539d6d5cff935d766"
+  },
+  {
+    "from": "tests/fixtures/vmd-sizing/target.pmx",
+    "to": "dependency/libMMD/tests/fixtures/vmd-sizing/target.pmx",
+    "before_sha256": "0d16f4b1dc6b14dac1a0b4b4306e0adabedeabf08276d6a769b96d4f2d13e168",
+    "after_sha256": "0d16f4b1dc6b14dac1a0b4b4306e0adabedeabf08276d6a769b96d4f2d13e168"
+  },
+  {
+    "from": "tests/fixtures/vmd-sizing/baseline/reference.json",
+    "to": "dependency/libMMD/tests/fixtures/vmd-sizing/baseline/reference.json",
+    "before_sha256": "ef97f6efeba9c7565392f015e285602456c034fba13a4469ae01a67009f6fd16",
+    "after_sha256": "ef97f6efeba9c7565392f015e285602456c034fba13a4469ae01a67009f6fd16"
+  },
+  {
+    "from": "tests/fixtures/vmd-sizing/baseline/reference.tsv",
+    "to": "dependency/libMMD/tests/fixtures/vmd-sizing/baseline/reference.tsv",
+    "before_sha256": "d66b5fb86142fc166dc30f0bcd9fb191c80392a8515188a4c31d3652fb78a117",
+    "after_sha256": "d66b5fb86142fc166dc30f0bcd9fb191c80392a8515188a4c31d3652fb78a117"
+  },
+  {
+    "from": "tests/fixtures/vmd-sizing/baseline-staggered/reference.json",
+    "to": "dependency/libMMD/tests/fixtures/vmd-sizing/baseline-staggered/reference.json",
+    "before_sha256": "5986332476ceafa6a97158060afdda43fc7511e68b47fc0f298a73f5a6663889",
+    "after_sha256": "5986332476ceafa6a97158060afdda43fc7511e68b47fc0f298a73f5a6663889"
+  },
+  {
+    "from": "tests/fixtures/vmd-sizing/baseline-staggered/reference.tsv",
+    "to": "dependency/libMMD/tests/fixtures/vmd-sizing/baseline-staggered/reference.tsv",
+    "before_sha256": "9b96aaa22f16fb0bb876b7e0f73d3f3d5221c4645f9f0a505abad385d20b3b67",
+    "after_sha256": "9b96aaa22f16fb0bb876b7e0f73d3f3d5221c4645f9f0a505abad385d20b3b67"
+  },
+  {
+    "from": "tests/fixtures/vmd-sizing-advanced/camera.vmd",
+    "to": "dependency/libMMD/tests/fixtures/vmd-sizing-advanced/camera.vmd",
+    "before_sha256": "2833126092c53269386e37c7bc20e18971c17f0c9e2f02d9a41fc343abdc9307",
+    "after_sha256": "2833126092c53269386e37c7bc20e18971c17f0c9e2f02d9a41fc343abdc9307"
+  },
+  {
+    "from": "tests/fixtures/vmd-sizing-advanced/motion.vmd",
+    "to": "dependency/libMMD/tests/fixtures/vmd-sizing-advanced/motion.vmd",
+    "before_sha256": "6d6be36a8973d5a848fc782181e5f093e474d318b20317938c43fb427f36b0e5",
+    "after_sha256": "6d6be36a8973d5a848fc782181e5f093e474d318b20317938c43fb427f36b0e5"
+  },
+  {
+    "from": "tests/fixtures/vmd-sizing-advanced/source.pmx",
+    "to": "dependency/libMMD/tests/fixtures/vmd-sizing-advanced/source.pmx",
+    "before_sha256": "c282fae2c35c0f2a8bd713c562439fdade7f0e641fa0ea36bc8dfd0c7a451684",
+    "after_sha256": "c282fae2c35c0f2a8bd713c562439fdade7f0e641fa0ea36bc8dfd0c7a451684"
+  },
+  {
+    "from": "tests/fixtures/vmd-sizing-advanced/target.pmx",
+    "to": "dependency/libMMD/tests/fixtures/vmd-sizing-advanced/target.pmx",
+    "before_sha256": "d68045feb5115a450bf60051ca72e207c4d72a7efdd69d6cb22bf4dfee9677f4",
+    "after_sha256": "d68045feb5115a450bf60051ca72e207c4d72a7efdd69d6cb22bf4dfee9677f4"
+  },
+  {
+    "from": "tests/fixtures/vmd-sizing-advanced/baseline-stance/reference.json",
+    "to": "dependency/libMMD/tests/fixtures/vmd-sizing-advanced/baseline-stance/reference.json",
+    "before_sha256": "e23922628593c8606011650f073ce3094109ebf882ba5c0d8dcb96d5255fff60",
+    "after_sha256": "e23922628593c8606011650f073ce3094109ebf882ba5c0d8dcb96d5255fff60"
+  },
+  {
+    "from": "tests/fixtures/vmd-sizing-advanced/baseline-stance/reference.tsv",
+    "to": "dependency/libMMD/tests/fixtures/vmd-sizing-advanced/baseline-stance/reference.tsv",
+    "before_sha256": "b754e7ce919e7a48f50a6a71f1de33ed2b80df72f63b7ab5aa5bb5d66bd69021",
+    "after_sha256": "b754e7ce919e7a48f50a6a71f1de33ed2b80df72f63b7ab5aa5bb5d66bd69021"
+  }
+]

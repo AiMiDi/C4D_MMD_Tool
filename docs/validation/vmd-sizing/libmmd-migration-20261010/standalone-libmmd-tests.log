@@ -1,0 +1,14 @@
+Test project C:/code/C4D_MMD_Tool/_build_msvc/libmmd-sizing-standalone
+    Start 1: mmd_motion_sizing_test
+1/2 Test #1: mmd_motion_sizing_test ............   Passed    0.35 sec
+    Start 2: mmd_motion_sizing_advanced_test
+2/2 Test #2: mmd_motion_sizing_advanced_test ...   Passed    0.32 sec
+
+100% tests passed out of 2
+
+Label Time Summary:
+animation     =   0.67 sec*proc (2 tests)
+regression    =   0.67 sec*proc (2 tests)
+sizing        =   0.67 sec*proc (2 tests)
+
+Total Test time (real) =   0.67 sec

@@ -1,0 +1,245 @@
+适用于 .NET Framework MSBuild 版本 18.9.1+a81b43525
+
+  1>Copy production MCP adapter runtime
+  1>Copy and verify mmdtool runtime resources
+  Runtime resources copied: C:\code\C4D_MMD_Tool\_build_msvc\vmd-sizing-production\sdk_2026\bin\Release\plugins\mmdtool\res (config: reset)
+  Maxon Generate File List	Maxon Source Processor
+  Loading generator module cppgenerator from C:/code/C4D_MMD_Tool/sdk_2026/frameworks/settings/sourceprocessor\generators\cppgenerator.py...
+  Loading generator module dumpgenerator from C:/code/C4D_MMD_Tool/sdk_2026/frameworks/settings/sourceprocessor\generators\dumpgenerator.py...
+  Loading generator module phgenerator from C:/code/C4D_MMD_Tool/sdk_2026/frameworks/settings/sourceprocessor\generators\phgenerator.py...
+  Loading generator module summarygenerator from C:/code/C4D_MMD_Tool/sdk_2026/frameworks/settings/sourceprocessor\generators\summarygenerator.py...
+  Looking for source files in C:\code\C4D_MMD_Tool\sdk_2026\frameworks\core.framework...
+  core.framework.vcxproj -> C:\code\C4D_MMD_Tool\_build_msvc\vmd-sizing-production\sdk_2026\bin\Release\libs\core.framework.lib
+  Maxon Generate File List	Maxon Source Processor
+  Loading generator module cppgenerator from C:/code/C4D_MMD_Tool/sdk_2026/frameworks/settings/sourceprocessor\generators\cppgenerator.py...
+  Loading generator module dumpgenerator from C:/code/C4D_MMD_Tool/sdk_2026/frameworks/settings/sourceprocessor\generators\dumpgenerator.py...
+  Loading generator module phgenerator from C:/code/C4D_MMD_Tool/sdk_2026/frameworks/settings/sourceprocessor\generators\phgenerator.py...
+  Loading generator module summarygenerator from C:/code/C4D_MMD_Tool/sdk_2026/frameworks/settings/sourceprocessor\generators\summarygenerator.py...
+  Looking for source files in C:\code\C4D_MMD_Tool\sdk_2026\frameworks\asset.framework...
+  asset.framework.vcxproj -> C:\code\C4D_MMD_Tool\_build_msvc\vmd-sizing-production\sdk_2026\bin\Release\libs\asset.framework.lib
+  Maxon Generate File List	Maxon Source Processor
+  Loading generator module cppgenerator from C:/code/C4D_MMD_Tool/sdk_2026/frameworks/settings/sourceprocessor\generators\cppgenerator.py...
+  Loading generator module dumpgenerator from C:/code/C4D_MMD_Tool/sdk_2026/frameworks/settings/sourceprocessor\generators\dumpgenerator.py...
+  Loading generator module phgenerator from C:/code/C4D_MMD_Tool/sdk_2026/frameworks/settings/sourceprocessor\generators\phgenerator.py...
+  Loading generator module summarygenerator from C:/code/C4D_MMD_Tool/sdk_2026/frameworks/settings/sourceprocessor\generators\summarygenerator.py...
+  Looking for source files in C:\code\C4D_MMD_Tool\sdk_2026\frameworks\math.framework...
+  math.framework.vcxproj -> C:\code\C4D_MMD_Tool\_build_msvc\vmd-sizing-production\sdk_2026\bin\Release\libs\math.framework.lib
+  Maxon Generate File List	Maxon Source Processor
+  Loading generator module cppgenerator from C:/code/C4D_MMD_Tool/sdk_2026/frameworks/settings/sourceprocessor\generators\cppgenerator.py...
+  Loading generator module dumpgenerator from C:/code/C4D_MMD_Tool/sdk_2026/frameworks/settings/sourceprocessor\generators\dumpgenerator.py...
+  Loading generator module phgenerator from C:/code/C4D_MMD_Tool/sdk_2026/frameworks/settings/sourceprocessor\generators\phgenerator.py...
+  Loading generator module summarygenerator from C:/code/C4D_MMD_Tool/sdk_2026/frameworks/settings/sourceprocessor\generators\summarygenerator.py...
+  Looking for source files in C:\code\C4D_MMD_Tool\sdk_2026\frameworks\modeling_geom.framework...
+  modeling_geom.framework.vcxproj -> C:\code\C4D_MMD_Tool\_build_msvc\vmd-sizing-production\sdk_2026\bin\Release\libs\modeling_geom.framework.lib
+  Maxon Generate File List	Maxon Source Processor
+  Loading generator module cppgenerator from C:/code/C4D_MMD_Tool/sdk_2026/frameworks/settings/sourceprocessor\generators\cppgenerator.py...
+  Loading generator module dumpgenerator from C:/code/C4D_MMD_Tool/sdk_2026/frameworks/settings/sourceprocessor\generators\dumpgenerator.py...
+  Loading generator module phgenerator from C:/code/C4D_MMD_Tool/sdk_2026/frameworks/settings/sourceprocessor\generators\phgenerator.py...
+  Loading generator module summarygenerator from C:/code/C4D_MMD_Tool/sdk_2026/frameworks/settings/sourceprocessor\generators\summarygenerator.py...
+  Looking for source files in C:\code\C4D_MMD_Tool\sdk_2026\frameworks\mesh_misc.framework...
+  mesh_misc.framework.vcxproj -> C:\code\C4D_MMD_Tool\_build_msvc\vmd-sizing-production\sdk_2026\bin\Release\libs\mesh_misc.framework.lib
+  Maxon Generate File List	Maxon Source Processor
+  Loading generator module cppgenerator from C:/code/C4D_MMD_Tool/sdk_2026/frameworks/settings/sourceprocessor\generators\cppgenerator.py...
+  Loading generator module dumpgenerator from C:/code/C4D_MMD_Tool/sdk_2026/frameworks/settings/sourceprocessor\generators\dumpgenerator.py...
+  Loading generator module phgenerator from C:/code/C4D_MMD_Tool/sdk_2026/frameworks/settings/sourceprocessor\generators\phgenerator.py...
+  Loading generator module summarygenerator from C:/code/C4D_MMD_Tool/sdk_2026/frameworks/settings/sourceprocessor\generators\summarygenerator.py...
+  Looking for source files in C:\code\C4D_MMD_Tool\sdk_2026\frameworks\cinema.framework...
+  cinema.framework.vcxproj -> C:\code\C4D_MMD_Tool\_build_msvc\vmd-sizing-production\sdk_2026\bin\Release\libs\cinema.framework.lib
+  cmt_motion_sizing.vcxproj -> C:\code\C4D_MMD_Tool\_build_msvc\vmd-sizing-production\sdk_2026\bin\Release\libs\cmt_motion_sizing.lib
+  Maxon Generate File List	Maxon Source Processor
+  Loading generator module cppgenerator from C:/code/C4D_MMD_Tool/sdk_2026/frameworks/settings/sourceprocessor\generators\cppgenerator.py...
+  Loading generator module dumpgenerator from C:/code/C4D_MMD_Tool/sdk_2026/frameworks/settings/sourceprocessor\generators\dumpgenerator.py...
+  Loading generator module phgenerator from C:/code/C4D_MMD_Tool/sdk_2026/frameworks/settings/sourceprocessor\generators\phgenerator.py...
+  Loading generator module summarygenerator from C:/code/C4D_MMD_Tool/sdk_2026/frameworks/settings/sourceprocessor\generators\summarygenerator.py...
+  Looking for source files in C:\code\C4D_MMD_Tool\sdk_2026\frameworks\misc.framework...
+  misc.framework.vcxproj -> C:\code\C4D_MMD_Tool\_build_msvc\vmd-sizing-production\sdk_2026\bin\Release\libs\misc.framework.lib
+  Maxon Generate File List	Maxon Source Processor
+  Loading generator module cppgenerator from C:/code/C4D_MMD_Tool/sdk_2026/frameworks/settings/sourceprocessor\generators\cppgenerator.py...
+  Loading generator module dumpgenerator from C:/code/C4D_MMD_Tool/sdk_2026/frameworks/settings/sourceprocessor\generators\dumpgenerator.py...
+  Loading generator module phgenerator from C:/code/C4D_MMD_Tool/sdk_2026/frameworks/settings/sourceprocessor\generators\phgenerator.py...
+  Loading generator module summarygenerator from C:/code/C4D_MMD_Tool/sdk_2026/frameworks/settings/sourceprocessor\generators\summarygenerator.py...
+  Looking for source files in C:\code\C4D_MMD_Tool\sdk_2026\frameworks\graph.framework...
+  graph.framework.vcxproj -> C:\code\C4D_MMD_Tool\_build_msvc\vmd-sizing-production\sdk_2026\bin\Release\libs\graph.framework.lib
+  Maxon Generate File List	Maxon Source Processor
+  Loading generator module cppgenerator from C:/code/C4D_MMD_Tool/sdk_2026/frameworks/settings/sourceprocessor\generators\cppgenerator.py...
+  Loading generator module dumpgenerator from C:/code/C4D_MMD_Tool/sdk_2026/frameworks/settings/sourceprocessor\generators\dumpgenerator.py...
+  Loading generator module phgenerator from C:/code/C4D_MMD_Tool/sdk_2026/frameworks/settings/sourceprocessor\generators\phgenerator.py...
+  Loading generator module summarygenerator from C:/code/C4D_MMD_Tool/sdk_2026/frameworks/settings/sourceprocessor\generators\summarygenerator.py...
+  Looking for source files in C:\code\C4D_MMD_Tool\sdk_2026\frameworks\image.framework...
+  image.framework.vcxproj -> C:\code\C4D_MMD_Tool\_build_msvc\vmd-sizing-production\sdk_2026\bin\Release\libs\image.framework.lib
+  Maxon Generate File List	Maxon Source Processor
+  Loading generator module cppgenerator from C:/code/C4D_MMD_Tool/sdk_2026/frameworks/settings/sourceprocessor\generators\cppgenerator.py...
+  Loading generator module dumpgenerator from C:/code/C4D_MMD_Tool/sdk_2026/frameworks/settings/sourceprocessor\generators\dumpgenerator.py...
+  Loading generator module phgenerator from C:/code/C4D_MMD_Tool/sdk_2026/frameworks/settings/sourceprocessor\generators\phgenerator.py...
+  Loading generator module summarygenerator from C:/code/C4D_MMD_Tool/sdk_2026/frameworks/settings/sourceprocessor\generators\summarygenerator.py...
+  Looking for source files in C:\code\C4D_MMD_Tool\sdk_2026\frameworks\nodes.framework...
+  nodes.framework.vcxproj -> C:\code\C4D_MMD_Tool\_build_msvc\vmd-sizing-production\sdk_2026\bin\Release\libs\nodes.framework.lib
+  Maxon Generate File List	Maxon Source Processor
+  Loading generator module cppgenerator from C:/code/C4D_MMD_Tool/sdk_2026/frameworks/settings/sourceprocessor\generators\cppgenerator.py...
+  Loading generator module dumpgenerator from C:/code/C4D_MMD_Tool/sdk_2026/frameworks/settings/sourceprocessor\generators\dumpgenerator.py...
+  Loading generator module phgenerator from C:/code/C4D_MMD_Tool/sdk_2026/frameworks/settings/sourceprocessor\generators\phgenerator.py...
+  Loading generator module summarygenerator from C:/code/C4D_MMD_Tool/sdk_2026/frameworks/settings/sourceprocessor\generators\summarygenerator.py...
+  Looking for source files in C:\code\C4D_MMD_Tool\sdk_2026\frameworks\nodespace.framework...
+  nodespace.framework.vcxproj -> C:\code\C4D_MMD_Tool\_build_msvc\vmd-sizing-production\sdk_2026\bin\Release\libs\nodespace.framework.lib
+  Maxon Generate File List	Maxon Source Processor
+  Loading generator module cppgenerator from C:/code/C4D_MMD_Tool/sdk_2026/frameworks/settings/sourceprocessor\generators\cppgenerator.py...
+  Loading generator module dumpgenerator from C:/code/C4D_MMD_Tool/sdk_2026/frameworks/settings/sourceprocessor\generators\dumpgenerator.py...
+  Loading generator module phgenerator from C:/code/C4D_MMD_Tool/sdk_2026/frameworks/settings/sourceprocessor\generators\phgenerator.py...
+  Loading generator module summarygenerator from C:/code/C4D_MMD_Tool/sdk_2026/frameworks/settings/sourceprocessor\generators\summarygenerator.py...
+  Looking for source files in C:\code\C4D_MMD_Tool\sdk_2026\plugins\mmdtool...
+    Parsing C:\code\C4D_MMD_Tool\sdk_2026\plugins\mmdtool\source\module\ui\motion_sizing_dialog.cpp...
+    Parsing C:\code\C4D_MMD_Tool\sdk_2026\plugins\mmdtool\source\module\ui\motion_sizing_dialog.h...
+  mmd_model_morph_runtime.cpp
+  mmd_bone_manager.cpp
+  mmd_rigid.cpp
+  mmd_display_frame.cpp
+  main.cpp
+  mmd_morph.cpp
+  mmd_automation.cpp
+  mmd_mesh_manager.cpp
+  mmd_bone_control_util.cpp
+  register_entity.cpp
+  mmd_material_morph_shader.cpp
+  CMTSceneManager.cpp
+  vmd_loader.cpp
+  mmd_model_manager.cpp
+  cmt_tools_manager.cpp
+  mmd_model_runtime.cpp
+  vmd_loader_camera_dialog.cpp
+  cmt_name_conversion_dialog.cpp
+  mmd_joint_manager.cpp
+  cmt_tools_dialog.cpp
+  mmd_model_material_conversion.cpp
+  mmd_bone.cpp
+  motion_sizing_dialog.cpp
+  mmd_rigid_manager.cpp
+C:\code\C4D_MMD_Tool\sdk_2026\frameworks\core.framework\source\maxon\apibase.h(562,20): warning C5285: 无法声明 'std::is_constructible' 的专用化: Specializing this standard library template is forbidden by N5014 [meta.rqmts]/4 [C:\code\C4D_MMD_Tool\_build_msvc\vmd-sizing-production\sdk_2026\plugins\mmdtool\project\mmdtool.vcxproj]
+  (编译源文件“../../../../../../sdk_2026/plugins/mmdtool/source/module/tools/object/mmd_bone_manager.cpp”)
+      C:\Program Files\Microsoft Visual Studio\18\Community\VC\Tools\MSVC\14.51.36231\include\type_traits(814,43):
+      参见“std::is_constructible”的声明
+  
+  sizing_session.cpp
+C:\code\C4D_MMD_Tool\sdk_2026\frameworks\core.framework\source\maxon\apibase.h(562,20): warning C5285: 无法声明 'std::is_constructible' 的专用化: Specializing this standard library template is forbidden by N5014 [meta.rqmts]/4 [C:\code\C4D_MMD_Tool\_build_msvc\vmd-sizing-production\sdk_2026\plugins\mmdtool\project\mmdtool.vcxproj]
+  (编译源文件“../../../../../../sdk_2026/plugins/mmdtool/source/module/tools/loader/vmd_loader.cpp”)
+      C:\Program Files\Microsoft Visual Studio\18\Community\VC\Tools\MSVC\14.51.36231\include\type_traits(814,43):
+      参见“std::is_constructible”的声明
+  
+C:\code\C4D_MMD_Tool\sdk_2026\frameworks\core.framework\source\maxon\apibase.h(562,20): warning C5285: 无法声明 'std::is_constructible' 的专用化: Specializing this standard library template is forbidden by N5014 [meta.rqmts]/4 [C:\code\C4D_MMD_Tool\_build_msvc\vmd-sizing-production\sdk_2026\plugins\mmdtool\project\mmdtool.vcxproj]
+  (编译源文件“../../../../../../sdk_2026/plugins/mmdtool/source/register_entity.cpp”)
+      C:\Program Files\Microsoft Visual Studio\18\Community\VC\Tools\MSVC\14.51.36231\include\type_traits(814,43):
+      参见“std::is_constructible”的声明
+  
+C:\code\C4D_MMD_Tool\sdk_2026\frameworks\core.framework\source\maxon\apibase.h(562,20): warning C5285: 无法声明 'std::is_constructible' 的专用化: Specializing this standard library template is forbidden by N5014 [meta.rqmts]/4 [C:\code\C4D_MMD_Tool\_build_msvc\vmd-sizing-production\sdk_2026\plugins\mmdtool\project\mmdtool.vcxproj]
+  (编译源文件“../../../../../../sdk_2026/plugins/mmdtool/source/module/tools/object/mmd_mesh_manager.cpp”)
+      C:\Program Files\Microsoft Visual Studio\18\Community\VC\Tools\MSVC\14.51.36231\include\type_traits(814,43):
+      参见“std::is_constructible”的声明
+  
+C:\code\C4D_MMD_Tool\sdk_2026\frameworks\core.framework\source\maxon\apibase.h(562,20): warning C5285: 无法声明 'std::is_constructible' 的专用化: Specializing this standard library template is forbidden by N5014 [meta.rqmts]/4 [C:\code\C4D_MMD_Tool\_build_msvc\vmd-sizing-production\sdk_2026\plugins\mmdtool\project\mmdtool.vcxproj]
+  (编译源文件“../../../../../../sdk_2026/plugins/mmdtool/source/main.cpp”)
+      C:\Program Files\Microsoft Visual Studio\18\Community\VC\Tools\MSVC\14.51.36231\include\type_traits(814,43):
+      参见“std::is_constructible”的声明
+  
+C:\code\C4D_MMD_Tool\sdk_2026\frameworks\core.framework\source\maxon\apibase.h(562,20): warning C5285: 无法声明 'std::is_constructible' 的专用化: Specializing this standard library template is forbidden by N5014 [meta.rqmts]/4 [C:\code\C4D_MMD_Tool\_build_msvc\vmd-sizing-production\sdk_2026\plugins\mmdtool\project\mmdtool.vcxproj]
+  (编译源文件“../../../../../../sdk_2026/plugins/mmdtool/source/module/ui/vmd_loader_camera_dialog.cpp”)
+      C:\Program Files\Microsoft Visual Studio\18\Community\VC\Tools\MSVC\14.51.36231\include\type_traits(814,43):
+      参见“std::is_constructible”的声明
+  
+C:\code\C4D_MMD_Tool\sdk_2026\frameworks\core.framework\source\maxon\apibase.h(562,20): warning C5285: 无法声明 'std::is_constructible' 的专用化: Specializing this standard library template is forbidden by N5014 [meta.rqmts]/4 [C:\code\C4D_MMD_Tool\_build_msvc\vmd-sizing-production\sdk_2026\plugins\mmdtool\project\mmdtool.vcxproj]
+  (编译源文件“../../../../../../sdk_2026/plugins/mmdtool/source/cmt_tools_manager.cpp”)
+      C:\Program Files\Microsoft Visual Studio\18\Community\VC\Tools\MSVC\14.51.36231\include\type_traits(814,43):
+      参见“std::is_constructible”的声明
+  
+C:\code\C4D_MMD_Tool\sdk_2026\frameworks\core.framework\source\maxon\apibase.h(562,20): warning C5285: 无法声明 'std::is_constructible' 的专用化: Specializing this standard library template is forbidden by N5014 [meta.rqmts]/4 [C:\code\C4D_MMD_Tool\_build_msvc\vmd-sizing-production\sdk_2026\plugins\mmdtool\project\mmdtool.vcxproj]
+  (编译源文件“../../../../../../sdk_2026/plugins/mmdtool/source/module/ui/cmt_name_conversion_dialog.cpp”)
+      C:\Program Files\Microsoft Visual Studio\18\Community\VC\Tools\MSVC\14.51.36231\include\type_traits(814,43):
+      参见“std::is_constructible”的声明
+  
+C:\code\C4D_MMD_Tool\sdk_2026\frameworks\core.framework\source\maxon\apibase.h(562,20): warning C5285: 无法声明 'std::is_constructible' 的专用化: Specializing this standard library template is forbidden by N5014 [meta.rqmts]/4 [C:\code\C4D_MMD_Tool\_build_msvc\vmd-sizing-production\sdk_2026\plugins\mmdtool\project\mmdtool.vcxproj]
+  (编译源文件“../../../../../../sdk_2026/plugins/mmdtool/source/module/ui/cmt_tools_dialog.cpp”)
+      C:\Program Files\Microsoft Visual Studio\18\Community\VC\Tools\MSVC\14.51.36231\include\type_traits(814,43):
+      参见“std::is_constructible”的声明
+  
+C:\code\C4D_MMD_Tool\sdk_2026\frameworks\core.framework\source\maxon\apibase.h(562,20): warning C5285: 无法声明 'std::is_constructible' 的专用化: Specializing this standard library template is forbidden by N5014 [meta.rqmts]/4 [C:\code\C4D_MMD_Tool\_build_msvc\vmd-sizing-production\sdk_2026\plugins\mmdtool\project\mmdtool.vcxproj]
+  (编译源文件“../../../../../../sdk_2026/plugins/mmdtool/source/module/tools/object/mmd_joint_manager.cpp”)
+      C:\Program Files\Microsoft Visual Studio\18\Community\VC\Tools\MSVC\14.51.36231\include\type_traits(814,43):
+      参见“std::is_constructible”的声明
+  
+C:\code\C4D_MMD_Tool\sdk_2026\frameworks\core.framework\source\maxon\apibase.h(562,20): warning C5285: 无法声明 'std::is_constructible' 的专用化: Specializing this standard library template is forbidden by N5014 [meta.rqmts]/4 [C:\code\C4D_MMD_Tool\_build_msvc\vmd-sizing-production\sdk_2026\plugins\mmdtool\project\mmdtool.vcxproj]
+  (编译源文件“../../../../../../sdk_2026/plugins/mmdtool/source/module/tools/tag/mmd_bone.cpp”)
+      C:\Program Files\Microsoft Visual Studio\18\Community\VC\Tools\MSVC\14.51.36231\include\type_traits(814,43):
+      参见“std::is_constructible”的声明
+  
+C:\code\C4D_MMD_Tool\sdk_2026\frameworks\core.framework\source\maxon\apibase.h(562,20): warning C5285: 无法声明 'std::is_constructible' 的专用化: Specializing this standard library template is forbidden by N5014 [meta.rqmts]/4 [C:\code\C4D_MMD_Tool\_build_msvc\vmd-sizing-production\sdk_2026\plugins\mmdtool\project\mmdtool.vcxproj]
+  (编译源文件“../../../../../../sdk_2026/plugins/mmdtool/source/module/ui/motion_sizing_dialog.cpp”)
+      C:\Program Files\Microsoft Visual Studio\18\Community\VC\Tools\MSVC\14.51.36231\include\type_traits(814,43):
+      参见“std::is_constructible”的声明
+  
+C:\code\C4D_MMD_Tool\sdk_2026\frameworks\core.framework\source\maxon\apibase.h(562,20): warning C5285: 无法声明 'std::is_constructible' 的专用化: Specializing this standard library template is forbidden by N5014 [meta.rqmts]/4 [C:\code\C4D_MMD_Tool\_build_msvc\vmd-sizing-production\sdk_2026\plugins\mmdtool\project\mmdtool.vcxproj]
+  (编译源文件“../../../../../../sdk_2026/plugins/mmdtool/source/module/tools/sizing/sizing_session.cpp”)
+      C:\Program Files\Microsoft Visual Studio\18\Community\VC\Tools\MSVC\14.51.36231\include\type_traits(814,43):
+      参见“std::is_constructible”的声明
+  
+C:\code\C4D_MMD_Tool\sdk_2026\frameworks\core.framework\source\maxon\apibase.h(562,20): warning C5285: 无法声明 'std::is_constructible' 的专用化: Specializing this standard library template is forbidden by N5014 [meta.rqmts]/4 [C:\code\C4D_MMD_Tool\_build_msvc\vmd-sizing-production\sdk_2026\plugins\mmdtool\project\mmdtool.vcxproj]
+  (编译源文件“../../../../../../sdk_2026/plugins/mmdtool/source/module/tools/material/mmd_material_morph_shader.cpp”)
+      C:\Program Files\Microsoft Visual Studio\18\Community\VC\Tools\MSVC\14.51.36231\include\type_traits(814,43):
+      参见“std::is_constructible”的声明
+  
+C:\code\C4D_MMD_Tool\sdk_2026\frameworks\core.framework\source\maxon\apibase.h(562,20): warning C5285: 无法声明 'std::is_constructible' 的专用化: Specializing this standard library template is forbidden by N5014 [meta.rqmts]/4 [C:\code\C4D_MMD_Tool\_build_msvc\vmd-sizing-production\sdk_2026\plugins\mmdtool\project\mmdtool.vcxproj]
+  (编译源文件“../../../../../../sdk_2026/plugins/mmdtool/source/utils/mmd_bone_control_util.cpp”)
+      C:\Program Files\Microsoft Visual Studio\18\Community\VC\Tools\MSVC\14.51.36231\include\type_traits(814,43):
+      参见“std::is_constructible”的声明
+  
+C:\code\C4D_MMD_Tool\sdk_2026\frameworks\core.framework\source\maxon\apibase.h(562,20): warning C5285: 无法声明 'std::is_constructible' 的专用化: Specializing this standard library template is forbidden by N5014 [meta.rqmts]/4 [C:\code\C4D_MMD_Tool\_build_msvc\vmd-sizing-production\sdk_2026\plugins\mmdtool\project\mmdtool.vcxproj]
+  (编译源文件“../../../../../../sdk_2026/plugins/mmdtool/source/module/automation/mmd_automation.cpp”)
+      C:\Program Files\Microsoft Visual Studio\18\Community\VC\Tools\MSVC\14.51.36231\include\type_traits(814,43):
+      参见“std::is_constructible”的声明
+  
+C:\code\C4D_MMD_Tool\sdk_2026\frameworks\core.framework\source\maxon\apibase.h(562,20): warning C5285: 无法声明 'std::is_constructible' 的专用化: Specializing this standard library template is forbidden by N5014 [meta.rqmts]/4 [C:\code\C4D_MMD_Tool\_build_msvc\vmd-sizing-production\sdk_2026\plugins\mmdtool\project\mmdtool.vcxproj]
+  (编译源文件“../../../../../../sdk_2026/plugins/mmdtool/source/CMTSceneManager.cpp”)
+      C:\Program Files\Microsoft Visual Studio\18\Community\VC\Tools\MSVC\14.51.36231\include\type_traits(814,43):
+      参见“std::is_constructible”的声明
+  
+C:\code\C4D_MMD_Tool\sdk_2026\frameworks\core.framework\source\maxon\apibase.h(562,20): warning C5285: 无法声明 'std::is_constructible' 的专用化: Specializing this standard library template is forbidden by N5014 [meta.rqmts]/4 [C:\code\C4D_MMD_Tool\_build_msvc\vmd-sizing-production\sdk_2026\plugins\mmdtool\project\mmdtool.vcxproj]
+  (编译源文件“../../../../../../sdk_2026/plugins/mmdtool/source/module/tools/object/mmd_rigid_manager.cpp”)
+      C:\Program Files\Microsoft Visual Studio\18\Community\VC\Tools\MSVC\14.51.36231\include\type_traits(814,43):
+      参见“std::is_constructible”的声明
+  
+C:\code\C4D_MMD_Tool\sdk_2026\frameworks\core.framework\source\maxon\apibase.h(562,20): warning C5285: 无法声明 'std::is_constructible' 的专用化: Specializing this standard library template is forbidden by N5014 [meta.rqmts]/4 [C:\code\C4D_MMD_Tool\_build_msvc\vmd-sizing-production\sdk_2026\plugins\mmdtool\project\mmdtool.vcxproj]
+  (编译源文件“../../../../../../sdk_2026/plugins/mmdtool/source/module/tools/object/mmd_model_morph_runtime.cpp”)
+      C:\Program Files\Microsoft Visual Studio\18\Community\VC\Tools\MSVC\14.51.36231\include\type_traits(814,43):
+      参见“std::is_constructible”的声明
+  
+C:\code\C4D_MMD_Tool\sdk_2026\frameworks\core.framework\source\maxon\apibase.h(562,20): warning C5285: 无法声明 'std::is_constructible' 的专用化: Specializing this standard library template is forbidden by N5014 [meta.rqmts]/4 [C:\code\C4D_MMD_Tool\_build_msvc\vmd-sizing-production\sdk_2026\plugins\mmdtool\project\mmdtool.vcxproj]
+  (编译源文件“../../../../../../sdk_2026/plugins/mmdtool/source/module/tools/object/mmd_model_manager.cpp”)
+      C:\Program Files\Microsoft Visual Studio\18\Community\VC\Tools\MSVC\14.51.36231\include\type_traits(814,43):
+      参见“std::is_constructible”的声明
+  
+C:\code\C4D_MMD_Tool\sdk_2026\frameworks\core.framework\source\maxon\apibase.h(562,20): warning C5285: 无法声明 'std::is_constructible' 的专用化: Specializing this standard library template is forbidden by N5014 [meta.rqmts]/4 [C:\code\C4D_MMD_Tool\_build_msvc\vmd-sizing-production\sdk_2026\plugins\mmdtool\project\mmdtool.vcxproj]
+  (编译源文件“../../../../../../sdk_2026/plugins/mmdtool/source/module/tools/object/mmd_rigid.cpp”)
+      C:\Program Files\Microsoft Visual Studio\18\Community\VC\Tools\MSVC\14.51.36231\include\type_traits(814,43):
+      参见“std::is_constructible”的声明
+  
+C:\code\C4D_MMD_Tool\sdk_2026\frameworks\core.framework\source\maxon\apibase.h(562,20): warning C5285: 无法声明 'std::is_constructible' 的专用化: Specializing this standard library template is forbidden by N5014 [meta.rqmts]/4 [C:\code\C4D_MMD_Tool\_build_msvc\vmd-sizing-production\sdk_2026\plugins\mmdtool\project\mmdtool.vcxproj]
+  (编译源文件“../../../../../../sdk_2026/plugins/mmdtool/source/module/tools/object/mmd_model_runtime.cpp”)
+      C:\Program Files\Microsoft Visual Studio\18\Community\VC\Tools\MSVC\14.51.36231\include\type_traits(814,43):
+      参见“std::is_constructible”的声明
+  
+C:\code\C4D_MMD_Tool\sdk_2026\frameworks\core.framework\source\maxon\apibase.h(562,20): warning C5285: 无法声明 'std::is_constructible' 的专用化: Specializing this standard library template is forbidden by N5014 [meta.rqmts]/4 [C:\code\C4D_MMD_Tool\_build_msvc\vmd-sizing-production\sdk_2026\plugins\mmdtool\project\mmdtool.vcxproj]
+  (编译源文件“../../../../../../sdk_2026/plugins/mmdtool/source/module/tools/object/mmd_morph.cpp”)
+      C:\Program Files\Microsoft Visual Studio\18\Community\VC\Tools\MSVC\14.51.36231\include\type_traits(814,43):
+      参见“std::is_constructible”的声明
+  
+C:\code\C4D_MMD_Tool\sdk_2026\frameworks\core.framework\source\maxon\apibase.h(562,20): warning C5285: 无法声明 'std::is_constructible' 的专用化: Specializing this standard library template is forbidden by N5014 [meta.rqmts]/4 [C:\code\C4D_MMD_Tool\_build_msvc\vmd-sizing-production\sdk_2026\plugins\mmdtool\project\mmdtool.vcxproj]
+  (编译源文件“../../../../../../sdk_2026/plugins/mmdtool/source/module/tools/object/mmd_model_material_conversion.cpp”)
+      C:\Program Files\Microsoft Visual Studio\18\Community\VC\Tools\MSVC\14.51.36231\include\type_traits(814,43):
+      参见“std::is_constructible”的声明
+  
+C:\code\C4D_MMD_Tool\sdk_2026\frameworks\core.framework\source\maxon\apibase.h(562,20): warning C5285: 无法声明 'std::is_constructible' 的专用化: Specializing this standard library template is forbidden by N5014 [meta.rqmts]/4 [C:\code\C4D_MMD_Tool\_build_msvc\vmd-sizing-production\sdk_2026\plugins\mmdtool\project\mmdtool.vcxproj]
+  (编译源文件“../../../../../../sdk_2026/plugins/mmdtool/source/module/tools/object/mmd_display_frame.cpp”)
+      C:\Program Files\Microsoft Visual Studio\18\Community\VC\Tools\MSVC\14.51.36231\include\type_traits(814,43):
+      参见“std::is_constructible”的声明
+  
+    正在创建库 C:/code/C4D_MMD_Tool/_build_msvc/vmd-sizing-production/sdk_2026/bin/Release/libs/mmdtool.lib 和对象 C:/code/C4D_MMD_Tool/_build_msvc/vmd-sizing-production/sdk_2026/bin/Release/libs/mmdtool.exp
+  mmdtool.vcxproj -> C:\code\C4D_MMD_Tool\_build_msvc\vmd-sizing-production\sdk_2026\bin\Release\plugins\mmdtool\mmdtool.xdl64
+  Create symlinks to runtime resources for plugins.
+  Runtime resources copied: C:\code\C4D_MMD_Tool\_build_msvc\vmd-sizing-production\sdk_2026\bin\Release\plugins\mmdtool\res (config: reset)

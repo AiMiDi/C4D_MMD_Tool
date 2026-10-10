@@ -1,0 +1,16 @@
+{
+  "pid": 47412,
+  "resource_labels": {
+    "sizing": "VMD 动作适配...",
+    "panel": "工具面板..."
+  },
+  "native_resource_load_passed": true,
+  "native_menu_execution_verified": false,
+  "c4d_restarted": false,
+  "command_id": 1056563,
+  "subcommands": {
+    "tools_panel": 1000,
+    "motion_sizing": 1001
+  },
+  "sdk_2026_release_build_passed": true
+}

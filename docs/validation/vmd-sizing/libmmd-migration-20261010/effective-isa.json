@@ -1,0 +1,65 @@
+[
+  {
+    "file": "C:\\code\\C4D_MMD_Tool\\dependency\\libMMD\\src\\MotionSizing\\Analysis\\MMDMotionAnalysis.cpp",
+    "instruction_sets": [
+      "StreamingSIMDExtensions2",
+      "StreamingSIMDExtensions2",
+      "StreamingSIMDExtensions2",
+      "StreamingSIMDExtensions2"
+    ]
+  },
+  {
+    "file": "C:\\code\\C4D_MMD_Tool\\dependency\\libMMD\\src\\MotionSizing\\Pose\\MMDMotionPose.cpp",
+    "instruction_sets": [
+      "StreamingSIMDExtensions2",
+      "StreamingSIMDExtensions2",
+      "StreamingSIMDExtensions2",
+      "StreamingSIMDExtensions2"
+    ]
+  },
+  {
+    "file": "C:\\code\\C4D_MMD_Tool\\dependency\\libMMD\\src\\MotionSizing\\Solvers\\MMDMotionStance.cpp",
+    "instruction_sets": [
+      "StreamingSIMDExtensions2",
+      "StreamingSIMDExtensions2",
+      "StreamingSIMDExtensions2",
+      "StreamingSIMDExtensions2"
+    ]
+  },
+  {
+    "file": "C:\\code\\C4D_MMD_Tool\\dependency\\libMMD\\src\\MotionSizing\\Solvers\\MMDMotionConstraints.cpp",
+    "instruction_sets": [
+      "StreamingSIMDExtensions2",
+      "StreamingSIMDExtensions2",
+      "StreamingSIMDExtensions2",
+      "StreamingSIMDExtensions2"
+    ]
+  },
+  {
+    "file": "C:\\code\\C4D_MMD_Tool\\dependency\\libMMD\\src\\MotionSizing\\Solvers\\MMDMotionCamera.cpp",
+    "instruction_sets": [
+      "StreamingSIMDExtensions2",
+      "StreamingSIMDExtensions2",
+      "StreamingSIMDExtensions2",
+      "StreamingSIMDExtensions2"
+    ]
+  },
+  {
+    "file": "C:\\code\\C4D_MMD_Tool\\dependency\\libMMD\\src\\MotionSizing\\Pipeline\\MMDMotionSizing.cpp",
+    "instruction_sets": [
+      "StreamingSIMDExtensions2",
+      "StreamingSIMDExtensions2",
+      "StreamingSIMDExtensions2",
+      "StreamingSIMDExtensions2"
+    ]
+  },
+  {
+    "file": "C:\\code\\C4D_MMD_Tool\\dependency\\libMMD\\src\\MotionSizing\\Diagnostics\\MMDMotionDiagnostics.cpp",
+    "instruction_sets": [
+      "StreamingSIMDExtensions2",
+      "StreamingSIMDExtensions2",
+      "StreamingSIMDExtensions2",
+      "StreamingSIMDExtensions2"
+    ]
+  }
+]

@@ -1,0 +1,29 @@
+{
+  "reviewer": "sizing_code_review subagent",
+  "status": "passed_no_blocking_source_findings",
+  "independent_execution": false,
+  "scope": "Source and build integration review; test results executed by parent and inspected by reviewer.",
+  "resolved": [
+    {
+      "priority": "P1",
+      "issue": "New target overwrote queued member before Add",
+      "fix": "Explicit draft selection; do not write queued input or compute until added."
+    },
+    {
+      "priority": "P2",
+      "issue": "Remove left editor fields from removed role",
+      "fix": "Load selected remaining entry; clear fields and pending automatic request after last removal."
+    },
+    {
+      "priority": "P2",
+      "issue": "Plugin tests used hardcoded libMMD checkout with override builds",
+      "fix": "Derive root from actual libMMD target SOURCE_DIR."
+    },
+    {
+      "priority": "P1",
+      "issue": "Migration inherited AVX2 and changed contact output by 0.02463595 rad",
+      "fix": "Preserve source-level SSE2; private tests match, PMXNode reference retains playback ISA. Nine output hashes now identical."
+    }
+  ],
+  "native_ui_validation": "pending"
+}

@@ -1,0 +1,47 @@
+{
+  "pid": 72544,
+  "documents": [
+    {
+      "backup": "S:\\tmp\\cmt-ui-sync-reload-backup\\document-00.c4d",
+      "name": "VMD 动作适配预览（临时）",
+      "path": "",
+      "active": true,
+      "frame": 372
+    },
+    {
+      "backup": "S:\\tmp\\cmt-ui-sync-reload-backup\\document-01.c4d",
+      "name": "刚体避让-前后对比-8.5.c4d",
+      "path": "C:\\code\\C4D_MMD_Tool\\output\\vmd-sizing-p4-20261009\\live-demo-8.5",
+      "active": false,
+      "frame": 853
+    },
+    {
+      "backup": "S:\\tmp\\cmt-ui-sync-reload-backup\\document-02.c4d",
+      "name": "高级动作适配演示 - 阿芙 8.5",
+      "path": "",
+      "active": false,
+      "frame": 0
+    },
+    {
+      "backup": "S:\\tmp\\cmt-ui-sync-reload-backup\\document-03.c4d",
+      "name": "VMD 动作适配预览（临时）",
+      "path": "",
+      "active": false,
+      "frame": 0
+    },
+    {
+      "backup": "S:\\tmp\\cmt-ui-sync-reload-backup\\document-04.c4d",
+      "name": "高级动作适配演示 - 阿芙 Stay Tonight",
+      "path": "",
+      "active": false,
+      "frame": 0
+    },
+    {
+      "backup": "S:\\tmp\\cmt-ui-sync-reload-backup\\document-05.c4d",
+      "name": "未标题 1",
+      "path": "",
+      "active": false,
+      "frame": 0
+    }
+  ]
+}

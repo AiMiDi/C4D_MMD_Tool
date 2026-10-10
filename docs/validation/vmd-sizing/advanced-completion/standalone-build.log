@@ -1,0 +1,19 @@
+CMake is re-running because C:/code/C4D_MMD_Tool/_build_msvc/vmd-sizing-standalone/CMakeFiles/generate.stamp is out-of-date.
+  the file 'C:/code/C4D_MMD_Tool/libraries/cmt_motion_sizing/CMakeLists.txt'
+  is newer than 'C:/code/C4D_MMD_Tool/_build_msvc/vmd-sizing-standalone/CMakeFiles/generate.stamp.depend'
+  result='-1'
+-- Configuring done (0.0s)
+-- Generating done (0.0s)
+-- Build files have been written to: C:/code/C4D_MMD_Tool/_build_msvc/vmd-sizing-standalone
+适用于 .NET Framework MSBuild 版本 18.9.1+a81b43525
+
+  1>Checking Build System
+  Building Custom Rule C:/code/C4D_MMD_Tool/libraries/cmt_motion_sizing/CMakeLists.txt
+  diagnostics.cpp
+  motion_sizing.cpp
+  sizing_pose.cpp
+  sizing_camera.cpp
+  sizing_constraints.cpp
+  sizing_stance.cpp
+  正在生成代码...
+  cmt_motion_sizing.vcxproj -> C:\code\C4D_MMD_Tool\_build_msvc\vmd-sizing-standalone\Release\cmt_motion_sizing.lib

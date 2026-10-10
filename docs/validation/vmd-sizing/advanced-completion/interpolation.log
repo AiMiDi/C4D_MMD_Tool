@@ -1,0 +1,10 @@
+Test project C:/code/C4D_MMD_Tool/_build_msvc/vmd-sizing/cmt_deps/libMMD/tests
+    Start 14: vmd_interpolation_test
+1/1 Test #14: vmd_interpolation_test ...........   Passed    0.19 sec
+
+100% tests passed out of 1
+
+Label Time Summary:
+animation    =   0.19 sec*proc (1 test)
+
+Total Test time (real) =   0.19 sec

@@ -1,0 +1,143 @@
+{
+  "date": "2026-10-10",
+  "status": "migration_complete_source_review_and_windows_checks_passed",
+  "core_namespace": "libmmd::sizing",
+  "public_header": "libMMD/Model/MMD/MMDMotionSizing.h",
+  "target": "libMMD",
+  "host_namespace": "cmt::sizing",
+  "git": {
+    "parent_head": "51651645d08fe41435e6edf7dce96869b1f1544d",
+    "libmmd_head": "ecbbaed832377582a3e0f7296febc5186f9d82dd",
+    "uncommitted_changes": true,
+    "committed_or_pushed_this_turn": false,
+    "shared_pe_sync_work_preserved": true
+  },
+  "checks": {
+    "pre_migration_plugin_regression": {
+      "passed": 24,
+      "total": 24
+    },
+    "post_migration_plugin_regression": {
+      "passed": 24,
+      "total": 24
+    },
+    "libmmd_functional_ctest": {
+      "passed": 18,
+      "total": 18,
+      "benchmarks_excluded": true
+    },
+    "standalone_libmmd_sizing_ctest": {
+      "passed": 2,
+      "total": 2,
+      "playback_avx2": false
+    },
+    "installed_public_consumer": {
+      "passed": true,
+      "calls": [
+        "Run",
+        "RunBatch"
+      ],
+      "c4d_sdk_required": false
+    },
+    "sdk_2026_release": {
+      "passed": true,
+      "dependency_mode": "source",
+      "runtime_regression_bridge": false
+    },
+    "assets_probe_build": {
+      "passed": true,
+      "build_directory": "_build_msvc/vmd-sizing/cmt_deps/libMMD/tests"
+    },
+    "real_assets_comparison": {
+      "passed": true,
+      "byte_identical_outputs": 9,
+      "total_outputs": 9
+    },
+    "generated_isa_checked": {
+      "passed": true,
+      "core_translation_units": 7,
+      "isa": "SSE2"
+    },
+    "openspec_strict": {
+      "passed": true
+    },
+    "scoped_git_diff_check": {
+      "passed": true
+    }
+  },
+  "resolved_build_attempts": [
+    "Initial SDK link with stale prebuilt libMMD lacked current PMX writer symbols; switched task SDK cache to source dependencies and linked successfully.",
+    "Opt-in EXCLUDE_FROM_ALL probe is not in the VS root solution; building from generated libMMD/tests project succeeded.",
+    "AVX2 candidate rejected and retained in avx2-candidate-rejected.json; final SSE2 sizing matches pre-migration output byte for byte."
+  ],
+  "runtime_boundary": {
+    "current_c4d_pid_observed": 13708,
+    "current_session": "PE sync validation prefs",
+    "restarted_or_modified_current_session": false,
+    "new_module_loaded_for_this_turn": false,
+    "native_queue_and_mcp_ui_validation": "pending",
+    "extensions_menu_flat_layout": "pending",
+    "all_plan_tasks_complete": false,
+    "macos_and_older_sdk_tested": false
+  },
+  "artifacts": {
+    "plugin": {
+      "path": "C:\\code\\C4D_MMD_Tool\\_build_msvc\\vmd-sizing-ui-sync-sdk\\bin\\Release\\plugins\\mmdtool\\mmdtool.xdl64",
+      "sha256": "20d979bdde10f48ddae7f17115d206747d8acda298cdd586cd5d35dc8e88cb13"
+    },
+    "core_library": {
+      "path": "C:\\code\\C4D_MMD_Tool\\_build_msvc\\vmd-sizing\\lib\\Release\\libMMD.lib",
+      "sha256": "0b2034ae64de04e968f4e86f9c36e7cf61003e7a6b529213afe38ab955c7c653"
+    },
+    "standalone_library": {
+      "path": "C:\\code\\C4D_MMD_Tool\\_build_msvc\\libmmd-sizing-standalone\\src\\Release\\libMMD.lib",
+      "sha256": "763e56784d4e472cb35ded254300c3a663739af27794a8e0970c2aa42000ae73"
+    },
+    "pre_migration_probe": {
+      "path": "C:\\code\\C4D_MMD_Tool\\_build_msvc\\vmd-sizing\\tests\\Release\\motion_sizing_assets_probe.exe",
+      "sha256": "b4cc436310c9f3160e15233dc20f1d3b490463c50dde5695e9261c88218dd63c"
+    },
+    "post_migration_probe": {
+      "path": "C:\\code\\C4D_MMD_Tool\\_build_msvc\\vmd-sizing\\cmt_deps\\libMMD\\tests\\Release\\mmd_motion_sizing_assets_probe.exe",
+      "sha256": "e9e3548268f848909377c97b2256944203efa5b01c421d04c6ea81a8b3a8125b"
+    }
+  },
+  "source_sha256": {
+    "dependency/libMMD/src/libMMD/Model/MMD/MMDMotionSizing.h": "73c7f4de499816b2727a23176d68225b53101b3dbfcbd1c7242c8a3a68d848ee",
+    "dependency/libMMD/src/CMakeLists.txt": "310009773666e206e615087339ab33f86306273f2fce177ca8273709c7553e6c",
+    "dependency/libMMD/tests/MotionSizing.cmake": "420a7facf236f4cbc56a251ba747ea2b6f390ccf9a1109b5b5687ad5e8fe497d",
+    "dependency/libMMD/tests/CMakeLists.txt": "f5a4a877a606a91206544314e0783feb9434fbc5cfb128db45fafba5c98b89e8",
+    "dependency/libMMD/CMakeLists.txt": "a3b74e48da11ca0ae7a518672f83ede77ed10f36e8f6a1badeb946121aecb016",
+    "source/module/ui/motion_sizing_dialog.cpp": "fb42736a46908bf5d7ccaf683d78343824a601dedfd2629d33188266a4cce669",
+    "source/module/ui/motion_sizing_dialog.h": "81c1ed40e21a4ba34f97f270b6bd50fa08334bcfa90b90dcfdc38c0ec811dcfd",
+    "source/module/tools/sizing/sizing_session.cpp": "fb8d6b92249211bb3fe4271b4fae5f9dfaafcea2acea68beca9824aee917e059",
+    "source/module/tools/sizing/sizing_session.h": "92a78b2e8662c15aa770272b66e36bfe77dfcfdeb1fe4dbc15a55be1247873cf",
+    "source/module/automation/mmd_automation.cpp": "b2e4179e2f1006116c3b1e88a68145db4ce758425fdbb9b0efd6c6a0f83d6e4c",
+    "source/CMTSceneManager.cpp": "cccfa536cc8d2bb5d0393c049cad83d7c715aa11efbd52dc98c8abc217ac5808",
+    "tests/CMakeLists.txt": "ab506adbffc55614d4d83a4d4b464b45d5a1e11b172b90352f8bfc5d89ec61c1",
+    "CMakeLists.txt": "6430083fdbe91198504302bd5fb6b209667b908d9e3e07f3bd1e1e2fe02db405",
+    "cmake/mmdtool_plugin_common.cmake": "4e621a905df65f07c29692010f79263a56c6d806a13aded0ba59d5e9f88cf0f7",
+    "dependency/CMakeLists.txt": "d5870fb5f4e131db4f2d9b5e77c3b4d58e029bc65b8dad765a2b3e151e62b4cb",
+    "dependency/libMMD/src/MotionSizing/Analysis/MMDMotionAnalysis.cpp": "703aeac0eb198f460bb84980cd094edc592f8698ec568d2dcfbc31eb1f06953c",
+    "dependency/libMMD/src/MotionSizing/Diagnostics/MMDMotionDiagnostics.cpp": "f52c73530028eb1899ad966c077b971967fc0d538e43852c5d831c383de4037a",
+    "dependency/libMMD/src/MotionSizing/Pipeline/MMDMotionSizing.cpp": "bee8c6f8be16976019e5bfb67e9aa52d1a9b28922b9cfc9caaaeca134f108324",
+    "dependency/libMMD/src/MotionSizing/Pose/MMDMotionPose.cpp": "119cf1e0f675d8769879d1e1fc98afac5d7f4df95e0f1627bbf4d16d67365ad9",
+    "dependency/libMMD/src/MotionSizing/Pose/MMDMotionPose.h": "6fe1edb77e426fc4311f1bf5725c2bda51d6321136e1befde12daff5fedbefea",
+    "dependency/libMMD/src/MotionSizing/Solvers/MMDMotionCamera.cpp": "7c0a065474c3e8ac8bf0e37734e49fc305c4e8c5c0501a223bfdd5ff6a26d76b",
+    "dependency/libMMD/src/MotionSizing/Solvers/MMDMotionConstraints.cpp": "01c8f68d031f24e8b6aec3b57ece607be31d8be64e7645efa6af668c139f9657",
+    "dependency/libMMD/src/MotionSizing/Solvers/MMDMotionConstraints.h": "ec95606218778107d17551e71064130337ec6e7f5850b2f04786a46f76e917c6",
+    "dependency/libMMD/src/MotionSizing/Solvers/MMDMotionStance.cpp": "dc6ac7bd9d0c6c70d6798e6ecbebc864fd30a31d7270f3e6a2f22b6643508514",
+    "dependency/libMMD/tests/MMDMotionSizing.test.cpp": "0e9450f9a83454741b671ec2dabc212ce6a8a71d9844d3d4f0bff6ec1f8a02cd",
+    "dependency/libMMD/tests/MMDMotionSizingAdvanced.test.cpp": "234a6a9f1a954c5f70815152007d786a10a63bcda762fb68b4b439f86497f9d6",
+    "dependency/libMMD/tests/MMDMotionSizingAppendReference.cpp": "ba188460c0ae96f97c29d44f12cfd8647fb51f8035c693dbc55ad755dfad1fc2",
+    "dependency/libMMD/tests/MMDMotionSizingAssetsProbe.cpp": "03c9c7a95e7afda6b83568e14bfda0cf3a496930198c1fbf6e6e78f52a0513f7"
+  },
+  "log_sha256": {
+    "pre-migration-tests.log": "08c38db465c98486e05a97c265a55e837d9a86088e9537e34e502783dd91ef13",
+    "plugin-and-libmmd-tests.log": "b4916a2c24938c89510aff9f398d3594e87873e3f25857ef03e52a48077526d4",
+    "sdk-release-build.log": "7ea799a5a04fdff954679ccf5e35770a5b044265682df6dee92d475ed3e1cd20",
+    "standalone-libmmd-tests.log": "d577f7f155df7f893f56c37cb57ea14e1fe6c171d88a3e1b53769cdf76bbd834",
+    "installed-consumer-run.log": "3269f54f4be4d509feadf8eaa8eaf1d9d4e9e17304425c8dfbf096f5f07eea39",
+    "openspec-validation.log": "5cb8dd16a9cda512c6e2e608b177e4b0af5754a49a1a432a24ca20f80dd7c4ab"
+  }
+}

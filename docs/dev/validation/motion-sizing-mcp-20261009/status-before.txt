@@ -1,0 +1,41 @@
+ M CMakeLists.txt
+ M cmake/mmdtool_plugin_common.cmake
+ M res/R20-S24/c4d_symbols.h
+ M res/R20-S24/strings_en-US/c4d_strings.str
+ M res/R20-S24/strings_zh-CN/c4d_strings.str
+ M res/S24_up/c4d_symbols.h
+ M res/S24_up/dialogs/DLG_CMT_TOOL.res
+ M res/S24_up/strings_en-US/c4d_strings.str
+ M res/S24_up/strings_en-US/dialogs/DLG_CMT_TOOL.str
+ M res/S24_up/strings_zh-CN/c4d_strings.str
+ M res/S24_up/strings_zh-CN/dialogs/DLG_CMT_TOOL.str
+ M source/CMTSceneManager.cpp
+ M source/CMTSceneManager.h
+ M source/module/ui/cmt_tools_dialog.cpp
+ M source/module/ui/cmt_tools_dialog.h
+ M source/utils/cmt_automation_protocol.hpp
+ M source/utils/cmt_runtime_regression_protocol.hpp
+ M source/utils/images_user_area_util.hpp
+ M tests/CMakeLists.txt
+?? docs/dev/receipts/controllers-eye-hover-20261009/run-native.response.json
+?? docs/dev/receipts/controllers-eye-hover-20261009/run-transformed.response.json
+?? docs/dev/vmd-sizing.md
+?? docs/licenses/
+?? docs/validation/
+?? libraries/
+?? openspec/changes/add-vmd-motion-sizing/
+?? output/
+?? res/R20-S24/licenses/
+?? res/S24_up/licenses/
+?? scripts/vmd_sizing_fixtures.py
+?? scripts/vmd_sizing_reference.py
+?? scripts/vmd_sizing_reference_setup.py
+?? source/module/tools/sizing/
+?? source/module/ui/motion_sizing_dialog.cpp
+?? source/module/ui/motion_sizing_dialog.h
+?? tests/fixtures/
+?? tests/motion_sizing_advanced_test.cpp
+?? tests/motion_sizing_test.cpp
+?? tests/runtime/native_motion_sizing_advanced_test.py
+?? tests/runtime/native_motion_sizing_assets_test.py
+?? tests/runtime/native_motion_sizing_test.py

@@ -1,0 +1,49 @@
+{
+  "date": "2026-10-10",
+  "status": "changes_required",
+  "scope": "VMD sizing plan audit and independent read-only code review",
+  "reviewer": "sizing_code_review subagent; findings cross-checked by parent",
+  "plan": {
+    "total": 34,
+    "checked": 32,
+    "open": [
+      "8.2 native menu acceptance",
+      "12.3 native MCP/UI synchronization and lifecycle validation"
+    ],
+    "all_complete": false
+  },
+  "findings": [
+    {
+      "priority": "P1",
+      "file": "C:\\code\\C4D_MMD_Tool\\source\\module\\ui\\motion_sizing_dialog.cpp",
+      "line": 282,
+      "title": "Selecting a new target overwrites the queued member before Add",
+      "trigger": "Queue A, select B, then Add. MarkDirty rewrites A to B, so Add finds B already present and cannot append it.",
+      "impact": "Normal UI cannot build a multi-character queue; existing member is silently replaced.",
+      "validation": "Source control-flow review, not a new C4D interaction run."
+    },
+    {
+      "priority": "P2",
+      "file": "C:\\code\\C4D_MMD_Tool\\source\\module\\ui\\motion_sizing_dialog.cpp",
+      "line": 304,
+      "title": "Removing a member leaves editor fields bound to the removed member",
+      "trigger": "With A/B queued, select and remove B. RefreshQueue selects A without LoadEntry. Calculate uses A while fields show B; a parameter edit overwrites A with B.",
+      "impact": "Displayed inputs differ from calculation inputs and remaining member configuration can be overwritten.",
+      "validation": "Source control-flow review, not a new C4D interaction run."
+    }
+  ],
+  "source_sha256": "0ad320e1adfd5fdf47fa75694f3d8532e5b679c06187b33ef2f19b8e4bdcc1f2",
+  "evidence": {
+    "advanced_native": "../advanced-completion/production-native/receipt.json",
+    "ui_sync": "../ui-sync-20261009/receipt.json",
+    "advanced_core_hashes_match_receipt": true,
+    "ui_sync_source_hashes_match_receipt": true
+  },
+  "new_native_tests_run": false,
+  "production_files_changed": false,
+  "recommended_followup": [
+    "Fix queue input identity and selection/editor synchronization",
+    "Validate add/remove/edit scenarios in the loaded synchronization build",
+    "Complete menu peer-entry acceptance and update plan receipts"
+  ]
+}

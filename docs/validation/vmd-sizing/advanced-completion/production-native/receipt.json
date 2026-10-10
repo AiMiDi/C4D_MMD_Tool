@@ -1,0 +1,132 @@
+{
+  "run_id": "3c5da10f-612a-4a5b-8551-a67388a8cd3c",
+  "kind": "synthetic-production-sizing-mcp",
+  "status": "passed",
+  "checks": [
+    {
+      "name": "stdio_sizing_discovery",
+      "passed": true
+    },
+    {
+      "name": "runtime_regression_off",
+      "passed": true
+    },
+    {
+      "name": "normal_release_identity",
+      "passed": true
+    },
+    {
+      "name": "start_deduplication",
+      "passed": true
+    },
+    {
+      "name": "nested_option_conflict",
+      "passed": true
+    },
+    {
+      "name": "batch_completed",
+      "passed": true
+    },
+    {
+      "name": "paged_summary",
+      "passed": true
+    },
+    {
+      "name": "paged_stages",
+      "passed": true
+    },
+    {
+      "name": "paged_warnings",
+      "passed": true
+    },
+    {
+      "name": "paged_constraints",
+      "passed": true
+    },
+    {
+      "name": "preview_source_unchanged_original",
+      "passed": true
+    },
+    {
+      "name": "preview_source_unchanged_scale",
+      "passed": true
+    },
+    {
+      "name": "preview_source_unchanged_offset",
+      "passed": true
+    },
+    {
+      "name": "preview_source_unchanged_stance",
+      "passed": true
+    },
+    {
+      "name": "preview_source_unchanged_twist",
+      "passed": true
+    },
+    {
+      "name": "preview_source_unchanged_avoidance",
+      "passed": true
+    },
+    {
+      "name": "preview_source_unchanged_contact",
+      "passed": true
+    },
+    {
+      "name": "preview_source_unchanged_multi_character",
+      "passed": true
+    },
+    {
+      "name": "export_preserves_existing",
+      "passed": true
+    },
+    {
+      "name": "new_slot",
+      "passed": true
+    },
+    {
+      "name": "single_undo",
+      "passed": true
+    },
+    {
+      "name": "single_redo",
+      "passed": true
+    },
+    {
+      "name": "save_reload_slots",
+      "passed": true
+    },
+    {
+      "name": "stale_binding_rejected",
+      "passed": true
+    },
+    {
+      "name": "released_handle_rejected",
+      "passed": true
+    },
+    {
+      "name": "cancel_terminal_state",
+      "passed": true
+    },
+    {
+      "name": "cancel_does_not_apply",
+      "passed": true
+    }
+  ],
+  "native_executed": true,
+  "remaining_owned_documents": [],
+  "host": {
+    "pid": 72544,
+    "c4d_version": 2026400,
+    "loaded_binary": {
+      "path": "C:\\code\\C4D_MMD_Tool\\_build_msvc\\vmd-sizing-p4-sdk\\bin\\Release\\plugins\\mmdtool\\mmdtool.xdl64",
+      "sha256": "de6759b521d4a47a697222945fdebda1b87e30f63bffa32fa1fa6ca2c025b5b2"
+    }
+  },
+  "build_cache": {
+    "path": "C:\\code\\C4D_MMD_Tool\\_build_msvc\\vmd-sizing-p4-sdk\\CMakeCache.txt",
+    "sha256": "5f85eccee0002690aac4f9844809b359a256749fca3e0668c55c804f262d7171"
+  },
+  "cancel_terminal_state": "completed",
+  "original_document_restored": true,
+  "cleanup_errors": []
+}

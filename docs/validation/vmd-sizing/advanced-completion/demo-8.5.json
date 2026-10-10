@@ -1,0 +1,93 @@
+{
+  "status": "native_demo_saved_and_playing",
+  "pid": 72544,
+  "scale": {
+    "pmx": 8.5,
+    "vmd": 8.5,
+    "verified_model_position_multiple": [
+      8.5,
+      8.5
+    ]
+  },
+  "summary": {
+    "horizontal_ratio": 0.9229330782213544,
+    "vertical_ratio": 0.9230068029199213,
+    "local_offsets": [
+      {
+        "bone": "センター",
+        "offset": [
+          0,
+          0,
+          0.03967676032742343
+        ]
+      },
+      {
+        "bone": "右足IK親",
+        "offset": [
+          -0.40856493990363457,
+          0,
+          0
+        ]
+      },
+      {
+        "bone": "左足IK親",
+        "offset": [
+          0.40857487409160836,
+          0,
+          0
+        ]
+      }
+    ],
+    "matched_tracks": 91,
+    "modified_keys": 481,
+    "constraints": 175694,
+    "unresolved": 95,
+    "max_residual": 0.22494768614842045,
+    "warning_count": 449,
+    "stored_samples": 20000,
+    "elapsed_ms": 14253.186
+  },
+  "comparison": {
+    "left": "twist",
+    "right": "avoidance",
+    "sample_frame": 854,
+    "bone_position_delta_c4d_units": {
+      "右ひじ": 2.217778180736061,
+      "右手首": 1.5381278526846212,
+      "左ひじ": 0.0,
+      "左手首": 2.0097183471152322e-14
+    }
+  },
+  "playback": {
+    "initial_frame": 854,
+    "observed_frame": 843,
+    "time_advanced": true,
+    "document": "刚体避让-前后对比-8.5.c4d",
+    "frame": 843,
+    "playing": true,
+    "fps": 30,
+    "loop": [
+      760,
+      900
+    ]
+  },
+  "projects": [
+    {
+      "path": "C:\\code\\C4D_MMD_Tool\\output\\vmd-sizing-p4-20261009\\live-demo-8.5\\阿芙-高级动作适配.c4d",
+      "size": 45307368,
+      "sha256": "0c5a8592eb9406c4bf2b71abfca5925a47b03f3b14b07b3cca2255d7364ec5ff"
+    },
+    {
+      "path": "C:\\code\\C4D_MMD_Tool\\output\\vmd-sizing-p4-20261009\\live-demo-8.5\\刚体避让-前后对比-8.5.c4d",
+      "size": 44217361,
+      "sha256": "cc83bd6746d14723b2229f62dc7d2c56a3137fd938b4056b561153cd2f36b7f7"
+    }
+  ],
+  "retained_for_user": true,
+  "window_state": "minimized; activation stopped on user-input guard",
+  "physics_enabled": false,
+  "limitations": [
+    "95 constraints remain outside tolerance",
+    "Point-based kinematic rigid-body avoidance, not full mesh collision or dynamic simulation"
+  ]
+}

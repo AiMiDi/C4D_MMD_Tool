@@ -1,0 +1,24 @@
+{
+  "status": "compiled_native_reload_pending",
+  "binary": {
+    "path": "C:\\code\\C4D_MMD_Tool\\_build_msvc\\vmd-sizing-ui-sync-sdk\\bin\\Release\\plugins\\mmdtool\\mmdtool.xdl64",
+    "sha256": "815aab8c1289616e44897cfe559088534c302b590df0eee5c5230d7bac512b72"
+  },
+  "checks": {
+    "release_build": "passed",
+    "runtime_regression_bridge": false,
+    "existing_mcp_tests": "41/41 passed; does not prove dialog synchronization",
+    "openspec_strict": "passed",
+    "native_ui_sync": "pending"
+  },
+  "running_pid": 72544,
+  "current_session_preserved": true,
+  "backup_manifest": "S:/tmp/cmt-ui-sync-reload-backup/manifest.json",
+  "source_hashes": {
+    "source/module/tools/sizing/sizing_session.h": "7f850088486c5a6a3eaf8745a8825d15f3a9ff33d33cff75b566545373ab2058",
+    "source/module/tools/sizing/sizing_session.cpp": "9b8635f2fbb007992792d33a86713af7ba35fdd2ea00d99752dc580ad09c7b5e",
+    "source/module/ui/motion_sizing_dialog.h": "1c75d60d4491086281ab92372ebed64dc88fe0732d71f6c585752ed884e643b6",
+    "source/module/ui/motion_sizing_dialog.cpp": "0ad320e1adfd5fdf47fa75694f3d8532e5b679c06187b33ef2f19b8e4bdcc1f2",
+    "source/module/automation/mmd_automation.cpp": "edddac70daaa9252fb2359ddf334dafce39ab4cc63b8eb729ac973db9ac662f6"
+  }
+}

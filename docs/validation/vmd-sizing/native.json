@@ -1,0 +1,296 @@
+{
+  "pid": 47412,
+  "c4d": 2026400,
+  "kind": "synthetic-native",
+  "checks": [
+    {
+      "name": "native_target_import",
+      "passed": true,
+      "result": {
+        "ok": true,
+        "error": "",
+        "running": false,
+        "ready": false,
+        "summary": null
+      }
+    },
+    {
+      "name": "original_motion_import",
+      "passed": true,
+      "result": {
+        "ok": true,
+        "error": "",
+        "running": false,
+        "ready": false,
+        "summary": null
+      }
+    },
+    {
+      "name": "background_started",
+      "passed": true,
+      "result": {
+        "ok": true,
+        "error": "",
+        "running": true,
+        "ready": false,
+        "summary": "Calculating movement stages..."
+      }
+    },
+    {
+      "name": "background_completed",
+      "passed": true,
+      "result": {
+        "ok": true,
+        "error": "",
+        "running": false,
+        "ready": true,
+        "summary": "P1 movement only | XZ 1.3512 | Y 1.35 | 27 movement keys | 0.1578 ms\nセンター:          0 -0.0745315     -0.125\n右足IK親: 0.3   0   0\n左足IK親: -0.3    0    0\nStance / twist / collision / contact / camera correction: not included in P1."
+      }
+    },
+    {
+      "name": "preview_stage_0",
+      "passed": true,
+      "result": {
+        "ok": true,
+        "error": "",
+        "running": false,
+        "ready": true,
+        "summary": "P1 movement only | XZ 1.3512 | Y 1.35 | 27 movement keys | 0.1578 ms\nセンター:          0 -0.0745315     -0.125\n右足IK親: 0.3   0   0\n左足IK親: -0.3    0    0\nStance / twist / collision / contact / camera correction: not included in P1."
+      }
+    },
+    {
+      "name": "preview_isolated_0",
+      "passed": true
+    },
+    {
+      "name": "preview_preserves_source_0",
+      "passed": true
+    },
+    {
+      "name": "preview_stage_1",
+      "passed": true,
+      "result": {
+        "ok": true,
+        "error": "",
+        "running": false,
+        "ready": true,
+        "summary": "P1 movement only | XZ 1.3512 | Y 1.35 | 27 movement keys | 0.1578 ms\nセンター:          0 -0.0745315     -0.125\n右足IK親: 0.3   0   0\n左足IK親: -0.3    0    0\nStance / twist / collision / contact / camera correction: not included in P1."
+      }
+    },
+    {
+      "name": "preview_isolated_1",
+      "passed": true
+    },
+    {
+      "name": "preview_preserves_source_1",
+      "passed": true
+    },
+    {
+      "name": "preview_stage_2",
+      "passed": true,
+      "result": {
+        "ok": true,
+        "error": "",
+        "running": false,
+        "ready": true,
+        "summary": "P1 movement only | XZ 1.3512 | Y 1.35 | 27 movement keys | 0.1578 ms\nセンター:          0 -0.0745315     -0.125\n右足IK親: 0.3   0   0\n左足IK親: -0.3    0    0\nStance / twist / collision / contact / camera correction: not included in P1."
+      }
+    },
+    {
+      "name": "preview_isolated_2",
+      "passed": true
+    },
+    {
+      "name": "preview_preserves_source_2",
+      "passed": true
+    },
+    {
+      "name": "preview_stage_0",
+      "passed": true,
+      "result": {
+        "ok": true,
+        "error": "",
+        "running": false,
+        "ready": true,
+        "summary": "P1 movement only | XZ 1.3512 | Y 1.35 | 27 movement keys | 0.1578 ms\nセンター:          0 -0.0745315     -0.125\n右足IK親: 0.3   0   0\n左足IK親: -0.3    0    0\nStance / twist / collision / contact / camera correction: not included in P1."
+      }
+    },
+    {
+      "name": "preview_isolated_0",
+      "passed": true
+    },
+    {
+      "name": "preview_preserves_source_0",
+      "passed": true
+    },
+    {
+      "name": "preview_stage_2",
+      "passed": true,
+      "result": {
+        "ok": true,
+        "error": "",
+        "running": false,
+        "ready": true,
+        "summary": "P1 movement only | XZ 1.3512 | Y 1.35 | 27 movement keys | 0.1578 ms\nセンター:          0 -0.0745315     -0.125\n右足IK親: 0.3   0   0\n左足IK親: -0.3    0    0\nStance / twist / collision / contact / camera correction: not included in P1."
+      }
+    },
+    {
+      "name": "preview_isolated_2",
+      "passed": true
+    },
+    {
+      "name": "preview_preserves_source_2",
+      "passed": true
+    },
+    {
+      "name": "export_stage",
+      "passed": true
+    },
+    {
+      "name": "native_scale_8_5_matches_upstream",
+      "passed": true,
+      "max_error": 8.068927748183796e-08
+    },
+    {
+      "name": "overlay_preview",
+      "passed": true
+    },
+    {
+      "name": "overlay_shared_origin",
+      "passed": true
+    },
+    {
+      "name": "preview_color_separation",
+      "passed": true
+    },
+    {
+      "name": "original_ghost",
+      "passed": true
+    },
+    {
+      "name": "native_dialog_layout_open",
+      "passed": true
+    },
+    {
+      "name": "native_dialog_closed",
+      "passed": true
+    },
+    {
+      "name": "new_slot_apply",
+      "passed": true
+    },
+    {
+      "name": "new_slot_selected",
+      "passed": true,
+      "before": 0,
+      "after": 1
+    },
+    {
+      "name": "bind_preserved_on_apply",
+      "passed": true
+    },
+    {
+      "name": "undo",
+      "passed": true
+    },
+    {
+      "name": "undo_restores_slot",
+      "passed": true
+    },
+    {
+      "name": "redo",
+      "passed": true
+    },
+    {
+      "name": "redo_restores_adjusted_slot",
+      "passed": true
+    },
+    {
+      "name": "export_applied",
+      "passed": true
+    },
+    {
+      "name": "export_original",
+      "passed": true
+    },
+    {
+      "name": "slots_independent",
+      "passed": true
+    },
+    {
+      "name": "save",
+      "passed": true
+    },
+    {
+      "name": "reopen",
+      "passed": true
+    },
+    {
+      "name": "reopened_adjusted_slot",
+      "passed": true
+    },
+    {
+      "name": "export_reopened",
+      "passed": true
+    },
+    {
+      "name": "reopened_keys_equal",
+      "passed": true
+    },
+    {
+      "name": "export_reopened-original",
+      "passed": true
+    },
+    {
+      "name": "reopened_original_equal",
+      "passed": true
+    },
+    {
+      "name": "stale_bind_rejected",
+      "passed": true,
+      "result": {
+        "ok": false,
+        "error": "Target bind model changed. Recalculate before applying.",
+        "running": false,
+        "ready": true,
+        "summary": "P1 movement only | XZ 1.3512 | Y 1.35 | 27 movement keys | 0.1578 ms\nセンター:          0 -0.0745315     -0.125\n右足IK親: 0.3   0   0\n左足IK親: -0.3    0    0\nStance / twist / collision / contact / camera correction: not included in P1."
+      }
+    },
+    {
+      "name": "removed_target_rejected",
+      "passed": true,
+      "result": {
+        "ok": false,
+        "error": "Target document/model was closed or removed. Recalculate.",
+        "running": false,
+        "ready": true,
+        "summary": "P1 movement only | XZ 1.3512 | Y 1.35 | 27 movement keys | 0.1578 ms\nセンター:          0 -0.0745315     -0.125\n右足IK親: 0.3   0   0\n左足IK親: -0.3    0    0\nStance / twist / collision / contact / camera correction: not included in P1."
+      }
+    },
+    {
+      "name": "cancel_job_start",
+      "passed": true
+    },
+    {
+      "name": "cancel_does_not_publish",
+      "passed": true,
+      "result": {
+        "ok": true,
+        "error": "",
+        "running": false,
+        "ready": false,
+        "summary": "Cancelled. No motion applied."
+      }
+    },
+    {
+      "name": "cancel_preserves_slot",
+      "passed": true
+    },
+    {
+      "name": "harness_document_cleanup",
+      "passed": true
+    }
+  ],
+  "original_document_restored": true,
+  "remaining_owned_documents": []
+}

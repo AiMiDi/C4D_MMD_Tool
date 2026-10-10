@@ -1,0 +1,67 @@
+{
+  "models": [
+    {
+      "path": "C:\\pmx\\Sour式初音ミクVer.1.02_by_Sour暄\\Black.pmx",
+      "name": "Sour_Miku_Black",
+      "sha256": "04fbfe59e4ea8ef1704b32bef71516b20afbd1e4abf1880dbc4f107e225a90ea",
+      "vertices": 33608,
+      "bones": 319,
+      "unsupported_ancestors": {
+        "左腕": [
+          {
+            "name": "左肩C",
+            "flags": "0x112"
+          }
+        ],
+        "右腕": [
+          {
+            "name": "右肩C",
+            "flags": "0x112"
+          }
+        ],
+        "左手首": [
+          {
+            "name": "左肩C",
+            "flags": "0x112"
+          }
+        ]
+      }
+    },
+    {
+      "path": "C:\\pmx\\白银之城—阿芙2.0\\阿芙2.0.pmx",
+      "name": "阿芙",
+      "sha256": "18d5e76cb248e46448dcc62d4f747f1331d2834df144d103b3c6d9e01e8c3ebd",
+      "vertices": 70222,
+      "bones": 625,
+      "unsupported_ancestors": {
+        "左腕": [
+          {
+            "name": "左肩C",
+            "flags": "0x112"
+          }
+        ],
+        "右腕": [
+          {
+            "name": "右肩C",
+            "flags": "0x112"
+          }
+        ],
+        "左手首": [
+          {
+            "name": "左肩C",
+            "flags": "0x112"
+          }
+        ]
+      }
+    }
+  ],
+  "output_checks": {
+    "morphs_preserved": true,
+    "ik_preserved": true,
+    "camera_count_preserved": true,
+    "finite_motion": true,
+    "duplicate_keys": 0,
+    "motion_key_count": 10450,
+    "camera_rotation_fov_perspective_preserved": true
+  }
+}

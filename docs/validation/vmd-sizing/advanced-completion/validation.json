@@ -1,0 +1,86 @@
+{
+  "status": "core_import_playback_and_production_native_passed_demo_retained",
+  "date": "2026-10-09",
+  "checks": {
+    "ctest": "24/24",
+    "libmmd_interpolation": "1/1",
+    "openspec": "strict_passed",
+    "regression_bridge_enabled": false,
+    "native_pose_samples": 90,
+    "native_pose_max_error": 1.003724587943325e-06,
+    "standalone_build": "passed"
+  },
+  "inputs": [
+    {
+      "path": "C:\\pmx\\Sour式初音ミクVer.1.02_by_Sour暄\\Black.pmx",
+      "sha256": "04fbfe59e4ea8ef1704b32bef71516b20afbd1e4abf1880dbc4f107e225a90ea"
+    },
+    {
+      "path": "C:\\pmx\\白银之城—阿芙2.0\\阿芙2.0.pmx",
+      "sha256": "18d5e76cb248e46448dcc62d4f747f1331d2834df144d103b3c6d9e01e8c3ebd"
+    },
+    {
+      "path": "C:\\vmd\\Stay Tonight Heaven Lee Ver. 动作.vmd",
+      "sha256": "db7d3a542359c92d057d28be4b38e89c3368de1185bf23d1bbbd4d0e67eb187d"
+    },
+    {
+      "path": "C:\\vmd\\Stay Tonight Heaven Lee Ver. cam.vmd",
+      "sha256": "a7cdc17139a2105e837958f47a86e660624a595f1e37c400e64c738c25936d53"
+    }
+  ],
+  "plugin": {
+    "path": "C:\\code\\C4D_MMD_Tool\\_build_msvc\\vmd-sizing-p4-sdk\\bin\\Release\\plugins\\mmdtool\\mmdtool.xdl64",
+    "sha256": "de6759b521d4a47a697222945fdebda1b87e30f63bffa32fa1fa6ca2c025b5b2"
+  },
+  "core_sources": {
+    "libraries\\cmt_motion_sizing\\CMakeLists.txt": "ac7f073564d380c0fa2bb2119490c7ca3e7d48a8d3b923b34322151d9500cc5d",
+    "libraries\\cmt_motion_sizing\\src\\analysis\\model_analysis.cpp": "bcc09e61d3b2eeb32cf347c973bd729dcbff05fbbbdc4555ae65a0fee8ac7c5d",
+    "libraries\\cmt_motion_sizing\\src\\diagnostics\\diagnostics.cpp": "4823e21ab49634b13869102672e7b4f285796cc631f3b6b939e24f25f9142e04",
+    "libraries\\cmt_motion_sizing\\src\\pipeline\\motion_sizing.cpp": "ca260cbc856c4eeb715cf477a7332759e8e4a7a6edf2c6d513733f84aa5ae91b",
+    "libraries\\cmt_motion_sizing\\src\\pose\\sizing_pose.cpp": "ab90ce666f8bdd16ed69178639cd1ee161d6665f327c3190d769c7a3b59bd397",
+    "libraries\\cmt_motion_sizing\\src\\pose\\sizing_pose.h": "35f974381de2d9e9daa0372e934e1069e309a413239623f501a04717e6d7ead4",
+    "libraries\\cmt_motion_sizing\\src\\solvers\\sizing_camera.cpp": "bdcf3883e75141fb0c6b2892afc87f306fef3e3b8cc2f60ce4300663d6a5514f",
+    "libraries\\cmt_motion_sizing\\src\\solvers\\sizing_constraints.cpp": "f1c68161d474cc8e8d9128d043e688668788cc3579026e4fbd5982808d1a19ba",
+    "libraries\\cmt_motion_sizing\\src\\solvers\\sizing_constraints.h": "181c21d96bb30526e64d0ab834f6b6a7a8fd5eab22632e424147effb17a93871",
+    "libraries\\cmt_motion_sizing\\src\\solvers\\sizing_stance.cpp": "fc70a6dad0583aac22ca3ca78472569afec2a87ec38ff716a914976baa327922",
+    "libraries\\cmt_motion_sizing\\include\\cmt\\sizing\\motion_sizing.h": "95b209282510f4a8a531463573bdf73b08d10d343e6c1da6b4120b875aba8944"
+  },
+  "outputs": "C:\\code\\C4D_MMD_Tool\\output\\vmd-sizing-p4-20261009",
+  "limitations": [
+    "Residuals are not all converged",
+    "Coincident repeated-motion batch is a stress case, not a duet quality pass",
+    "IK, bone morph and physics are outside offline FK",
+    "Full upstream Python parity not claimed",
+    "Direct peer entries under Extensions remain unverified: the live menu showed a Mmdtool wrapper"
+  ],
+  "integration_sources": {
+    "source\\module\\tools\\sizing\\sizing_session.cpp": "43ef062d8d374390b8aa2f253d5bc360c5c6e4a022d627df4ee228d386aa46ab",
+    "source\\module\\tools\\sizing\\sizing_session.h": "8b58356a5b6cde264ca041cd562030f810caf614ea022456488c345ec0666247",
+    "source\\module\\automation\\mmd_automation.cpp": "3d484918b810df192c59a36900b10ee86efd541f425404fda4bcad4433e4b453",
+    "source\\module\\ui\\motion_sizing_dialog.cpp": "721d4e5fc8cdaf52d95935300a085723c33bf941afc360dee1a8d21d38f31da4"
+  },
+  "native_import_playback_history": {
+    "pid": 51796,
+    "new_generated_motion_imported": true,
+    "new_solver_binary_loaded": false,
+    "restart_approval": "pending",
+    "document_backup_manifest": "S:/tmp/cmt-sizing-reload-backup/manifest.json",
+    "owned_pose_test_document_cleaned": true,
+    "original_document_restored": true,
+    "retained_review_documents": 5
+  },
+  "native": {
+    "pid": 72544,
+    "new_solver_binary_loaded": true,
+    "production_mcp_checks": "27/27",
+    "regression_bridge_enabled": false,
+    "receipt": "production-native/receipt.json",
+    "original_document_restored": true,
+    "remaining_owned_documents": [],
+    "cleanup_errors": [],
+    "demo_retained_at_user_request": true,
+    "demo_scale": 8.5,
+    "demo_session": "../../../../output/vmd-sizing-p4-20261009/live-demo-8.5/session.json",
+    "demo_receipt": "demo-8.5.json"
+  }
+}

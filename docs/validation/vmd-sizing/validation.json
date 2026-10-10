@@ -1,0 +1,69 @@
+{
+  "date": "2026-10-09T16:42:29.034776+08:00",
+  "scope": "P0 reproducible upstream movement reference and P1 single-character movement sizing",
+  "git_head": "aa03a80dc7ce48db98f8ea8fcfa59e21e21ebbdb",
+  "libMMD_head": "ecbbaed832377582a3e0f7296febc5186f9d82dd",
+  "upstream_revision": "e5c30358696f688c96544e3af33ea9871961487d",
+  "core_source_sha256": {
+    "source/module/tools/sizing/motion_sizing.cpp": "5214ccf54375b645e6b819089385c05b25caf1bcf783167c38b1d7b09d1b13ab",
+    "source/module/tools/sizing/motion_sizing.h": "4fab999d0c92fa125c2cd6ce9ea730c34db19b6480fe89cebcddddac8e94ad48",
+    "source/module/tools/sizing/sizing_session.cpp": "004087a2f326994af8fc3f0e526177cebe6e737664e25522419f9e11178534f7",
+    "source/module/tools/sizing/sizing_session.h": "98c0f2932f7dd38a073a56f6017ab2be7e82b51164209b3bf6f9e6b09d48f28f",
+    "source/module/ui/motion_sizing_dialog.cpp": "15a110ed0489797f9377d5daf3a9713c48a4e69903018d1602157277b13ad8f9",
+    "source/module/ui/motion_sizing_dialog.h": "a68da05f13ef29bec1029db69288b145e572f91bb10a05e5d1286cbef8172987"
+  },
+  "baseline": {
+    "kind": "synthetic actual upstream MoveService",
+    "motions": 2,
+    "compared_input_keys": 60,
+    "maximum_position_error": 8.49983e-08,
+    "tolerance": 2e-05,
+    "log": "core.log"
+  },
+  "plugin_tests": {
+    "passed": 23,
+    "failed": 0,
+    "log": "tests.log"
+  },
+  "native": {
+    "passed_checks": 50,
+    "failed_checks": 0,
+    "receipt": "native.json",
+    "cinema4d_version": 2026400,
+    "pid": 47412,
+    "plugin_path": "C:\\code\\C4D_MMD_Tool\\_build_msvc\\vmd-sizing\\sdk_2026\\bin\\Release\\plugins\\mmdtool\\mmdtool.xdl64",
+    "plugin_sha256": "c77889fe462721d1f03eec11b4e811bcb8b09a6f4d7f80b7fc225d5de6a5f63f",
+    "runtime_regression_enabled": true,
+    "host_import_scale": 8.5,
+    "visuals": [
+      "comparison.png",
+      "overlay.png"
+    ],
+    "synthetic_only": true,
+    "layout_visually_inspected": true,
+    "dialog_button_workflow_automated": false,
+    "source_protection_and_cleanup_verified": true,
+    "process_left_open": true
+  },
+  "production_build": {
+    "path": "C:\\code\\C4D_MMD_Tool\\_build_msvc\\vmd-sizing-production\\sdk_2026\\bin\\Release\\plugins\\mmdtool\\mmdtool.xdl64",
+    "sha256": "49f57b88781a7f0e7b774917dd5b5c955899b8e644a9719535f4907ba8b043c1",
+    "configuration": "Release",
+    "sdk": 2026,
+    "compiler": "Visual Studio 18 2026 / v145",
+    "runtime_regression_enabled": false,
+    "build_passed": true,
+    "native_loaded": false
+  },
+  "limitations": [
+    "No real production character art acceptance",
+    "No macOS or older SDK native validation",
+    "No P2 stance/twist, collision, contact, multi-character or camera sizing",
+    "Native service workflow tested through regression bridge; GUI layout inspected; full button workflow not automated",
+    "Initial snapshot/file I/O and preview construction still use the main thread"
+  ],
+  "adapter_note": "The built-in exec_python wrapper reports a post-script ReferenceError when the originally active owned document is closed. Persistent assertions and follow-up document inspection confirm completion; this is not counted as a plugin failure.",
+  "shared_worktree_note": "Concurrent controller/hover changes were preserved. No commit or user-session replacement was performed.",
+  "menu_update_receipt": "ui-menu-entry.json",
+  "menu_update_native_execution_verified": false
+}

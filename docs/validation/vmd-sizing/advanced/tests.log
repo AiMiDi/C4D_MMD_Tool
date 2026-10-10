@@ -1,0 +1,86 @@
+适用于 .NET Framework MSBuild 版本 18.9.1+a81b43525
+
+  bone_execution_plan_test.vcxproj -> C:\code\C4D_MMD_Tool\_build_msvc\vmd-sizing\tests\Release\bone_execution_plan_test.exe
+  camera_fov_test.vcxproj -> C:\code\C4D_MMD_Tool\_build_msvc\vmd-sizing\tests\Release\camera_fov_test.exe
+  Bullet3Common.vcxproj -> C:\code\C4D_MMD_Tool\_build_msvc\vmd-sizing\lib\Release\Bullet3Common.lib
+  BulletCollision.vcxproj -> C:\code\C4D_MMD_Tool\_build_msvc\vmd-sizing\lib\Release\BulletCollision.lib
+  BulletDynamics.vcxproj -> C:\code\C4D_MMD_Tool\_build_msvc\vmd-sizing\lib\Release\BulletDynamics.lib
+  BulletInverseDynamics.vcxproj -> C:\code\C4D_MMD_Tool\_build_msvc\vmd-sizing\lib\Release\BulletInverseDynamics.lib
+  BulletSoftBody.vcxproj -> C:\code\C4D_MMD_Tool\_build_msvc\vmd-sizing\lib\Release\BulletSoftBody.lib
+  LinearMath.vcxproj -> C:\code\C4D_MMD_Tool\_build_msvc\vmd-sizing\lib\Release\LinearMath.lib
+  libMMD.vcxproj -> C:\code\C4D_MMD_Tool\_build_msvc\vmd-sizing\lib\Release\libMMD.lib
+  cmt_runtime_fixture_test.vcxproj -> C:\code\C4D_MMD_Tool\_build_msvc\vmd-sizing\tests\runtime\Release\cmt_runtime_fixture_test.exe
+  control_hit_test.vcxproj -> C:\code\C4D_MMD_Tool\_build_msvc\vmd-sizing\tests\Release\control_hit_test.exe
+  control_role_test.vcxproj -> C:\code\C4D_MMD_Tool\_build_msvc\vmd-sizing\tests\Release\control_role_test.exe
+  material_morph_runtime_test.vcxproj -> C:\code\C4D_MMD_Tool\_build_msvc\vmd-sizing\tests\Release\material_morph_runtime_test.exe
+  mmd_model_info_test.vcxproj -> C:\code\C4D_MMD_Tool\_build_msvc\vmd-sizing\tests\Release\mmd_model_info_test.exe
+  mmd_motion_validation_test.vcxproj -> C:\code\C4D_MMD_Tool\_build_msvc\vmd-sizing\tests\Release\mmd_motion_validation_test.exe
+  morph_evaluation_test.vcxproj -> C:\code\C4D_MMD_Tool\_build_msvc\vmd-sizing\tests\Release\morph_evaluation_test.exe
+  sizing_stance.cpp
+  cmt_motion_sizing.vcxproj -> C:\code\C4D_MMD_Tool\_build_msvc\vmd-sizing\lib\Release\cmt_motion_sizing.lib
+  motion_sizing_advanced_test.vcxproj -> C:\code\C4D_MMD_Tool\_build_msvc\vmd-sizing\tests\Release\motion_sizing_advanced_test.exe
+  motion_sizing_test.vcxproj -> C:\code\C4D_MMD_Tool\_build_msvc\vmd-sizing\tests\Release\motion_sizing_test.exe
+  pmx_export_scale_test.vcxproj -> C:\code\C4D_MMD_Tool\_build_msvc\vmd-sizing\tests\Release\pmx_export_scale_test.exe
+  runtime_profile_test.vcxproj -> C:\code\C4D_MMD_Tool\_build_msvc\vmd-sizing\tests\Release\runtime_profile_test.exe
+  specular_conversion_test.vcxproj -> C:\code\C4D_MMD_Tool\_build_msvc\vmd-sizing\tests\Release\specular_conversion_test.exe
+  toon_fallback_test.vcxproj -> C:\code\C4D_MMD_Tool\_build_msvc\vmd-sizing\tests\Release\toon_fallback_test.exe
+  Run SDK-independent plugin logic regression tests
+  Test project C:/code/C4D_MMD_Tool/_build_msvc/vmd-sizing/tests
+        Start  1: bone_execution_plan_test
+   1/24 Test  #1: bone_execution_plan_test ............   Passed    0.03 sec
+        Start  2: control_role_test
+   2/24 Test  #2: control_role_test ...................   Passed    0.02 sec
+        Start  3: control_hit_test
+   3/24 Test  #3: control_hit_test ....................   Passed    0.06 sec
+        Start  4: material_morph_runtime_test
+   4/24 Test  #4: material_morph_runtime_test .........   Passed    0.04 sec
+        Start  5: morph_evaluation_test
+   5/24 Test  #5: morph_evaluation_test ...............   Passed    0.03 sec
+        Start  6: runtime_profile_test
+   6/24 Test  #6: runtime_profile_test ................   Passed    0.02 sec
+        Start  7: mmd_model_info_test
+   7/24 Test  #7: mmd_model_info_test .................   Passed    0.02 sec
+        Start  8: mmd_motion_validation_test
+   8/24 Test  #8: mmd_motion_validation_test ..........   Passed    0.02 sec
+        Start  9: camera_fov_test
+   9/24 Test  #9: camera_fov_test .....................   Passed    0.05 sec
+        Start 10: specular_conversion_test
+  10/24 Test #10: specular_conversion_test ............   Passed    0.12 sec
+        Start 11: toon_fallback_test
+  11/24 Test #11: toon_fallback_test ..................   Passed    0.12 sec
+        Start 12: pmx_export_scale_test
+  12/24 Test #12: pmx_export_scale_test ...............   Passed    0.03 sec
+        Start 13: cmt_runtime_receipt_contract
+  13/24 Test #13: cmt_runtime_receipt_contract ........   Passed    2.42 sec
+        Start 14: cmt_document_lifecycle
+  14/24 Test #14: cmt_document_lifecycle ..............   Passed    0.44 sec
+        Start 15: cmt_production_document_lifecycle
+  15/24 Test #15: cmt_production_document_lifecycle ...   Passed    0.59 sec
+        Start 16: cmt_dependency_provenance
+  16/24 Test #16: cmt_dependency_provenance ...........   Passed    0.48 sec
+        Start 17: cmt_pmx_scale_snapshot
+  17/24 Test #17: cmt_pmx_scale_snapshot ..............   Passed    0.36 sec
+        Start 18: cmt_material_fixture_matrix
+  18/24 Test #18: cmt_material_fixture_matrix .........   Passed    0.34 sec
+        Start 19: cmt_highlight_lifecycle
+  19/24 Test #19: cmt_highlight_lifecycle .............   Passed    0.30 sec
+        Start 20: cmt_highlight_analysis
+  20/24 Test #20: cmt_highlight_analysis ..............   Passed    0.70 sec
+        Start 21: cmt_production_mcp_adapter
+  21/24 Test #21: cmt_production_mcp_adapter ..........   Passed    3.66 sec
+        Start 22: motion_sizing_test
+  22/24 Test #22: motion_sizing_test ..................   Passed    0.86 sec
+        Start 23: motion_sizing_advanced_test
+  23/24 Test #23: motion_sizing_advanced_test .........   Passed    0.34 sec
+        Start 24: cmt_runtime_fixture_test
+  24/24 Test #24: cmt_runtime_fixture_test ............   Passed    0.01 sec
+  
+  100% tests passed out of 24
+  
+  Label Time Summary:
+  fixture       =   9.30 sec*proc (10 tests)
+  plugin        =  11.05 sec*proc (24 tests)
+  regression    =  11.05 sec*proc (24 tests)
+  unit          =   1.75 sec*proc (14 tests)
+  
+  Total Test time (real) =  11.08 sec

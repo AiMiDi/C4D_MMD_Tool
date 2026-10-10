@@ -1,0 +1,48 @@
+{
+  "date": "2026-10-09",
+  "core_regressions": {
+    "passed": 24,
+    "total": 24
+  },
+  "synthetic_native": {
+    "passed": 70,
+    "total": 70,
+    "pid": 51796,
+    "original_document_restored": true,
+    "remaining_owned_documents": []
+  },
+  "real_assets_native": {
+    "passed": 53,
+    "total": 53,
+    "pid": 51796,
+    "source_model_name": "Sour_Miku_Black",
+    "target_model_name": "阿芙",
+    "horizontal_ratio": 0.922933,
+    "vertical_ratio": 0.923007,
+    "advanced_solve_observed_ms": 3248.45,
+    "constraints": 2957,
+    "constraints_scope": "Supported constraints only; shoulder append chains, non-collinear twists and hand contacts skipped. Zero residual is not full-body quality acceptance.",
+    "retained_scene": "S:/tmp/cmt-vmd-sizing-real/real-roundtrip.c4d",
+    "cleanup": "User is interacting with the real model panel; source, comparison and saved/reopened test documents are retained for use, not claimed cleaned."
+  },
+  "ui": {
+    "unicode_labels_observed": true,
+    "aspect_preserving_logo_observed": true,
+    "model_slot_dropdown_observed": true,
+    "automatic_calculation_from_scene_slot_observed": true,
+    "resize_mouse_verification": false,
+    "menu_mouse_verification": false
+  },
+  "production_mcp": "Not implemented in this task; user assigned a different agent. Internal SceneHook bridge requires regression build.",
+  "scope": "Windows C4D 2026.4, synthetic and supplied assets; not macOS, older SDK or full upstream parity",
+  "binaries": {
+    "native": {
+      "path": "C:\\code\\C4D_MMD_Tool\\_build_msvc\\vmd-sizing\\sdk_2026\\bin\\Release\\plugins\\mmdtool\\mmdtool.xdl64",
+      "sha256": "d5c0ec49d20c6857af7fc5798a9235ed5ca5e6f77d2a6f19ccafe876ef7ca994"
+    },
+    "production": {
+      "path": "C:\\code\\C4D_MMD_Tool\\_build_msvc\\vmd-sizing-production\\sdk_2026\\bin\\Release\\plugins\\mmdtool\\mmdtool.xdl64",
+      "sha256": "33dd8833dc860cec01e5b47afb5fe7859ffb6fa8c806b38f27247cd57b1c3955"
+    }
+  }
+}

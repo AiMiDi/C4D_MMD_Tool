@@ -1,0 +1,14 @@
+{
+  "run_id": "f1961c53-ab4b-4f35-8f22-d2b6f5771f8c",
+  "kind": "synthetic-production-sizing-mcp",
+  "status": "blocked",
+  "checks": [
+    {
+      "name": "stdio_sizing_discovery",
+      "passed": true
+    }
+  ],
+  "native_executed": false,
+  "reason": "Loaded plugin does not expose sizing; load the new ordinary Release first.",
+  "cleanup_errors": []
+}

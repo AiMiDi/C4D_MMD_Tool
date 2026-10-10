@@ -1,0 +1,9 @@
+{
+  "pid": 47412,
+  "opened": true,
+  "button_label": "VMD 动作适配...",
+  "resource": "res/S24_up/strings_zh-CN/dialogs/DLG_CMT_TOOL.str",
+  "restarted": false,
+  "superseded_by": "ui-menu-entry.json",
+  "note": "Intermediate diagnosis of the panel button. The final design removes that button and uses the command menu."
+}

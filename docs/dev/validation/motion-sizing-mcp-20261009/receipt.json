@@ -1,0 +1,112 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-09",
+  "scope": "production motion sizing MCP implementation",
+  "implementation_complete": true,
+  "native_business_verified": false,
+  "validation": {
+    "python_protocol_tests": {
+      "passed": 41,
+      "total": 41
+    },
+    "plugin_regression_tests": {
+      "passed": 24,
+      "total": 24
+    },
+    "sdk_2026_release": "passed",
+    "runtime_regression": "OFF",
+    "openspec_strict": "passed",
+    "git_diff_check": "passed",
+    "real_stdio_discovery": {
+      "sizing_tools": 11,
+      "total_tools": 27,
+      "passed": true
+    },
+    "native_business": "not_run_loaded_host_has_old_module"
+  },
+  "binary": {
+    "path": "C:\\code\\C4D_MMD_Tool\\_build_msvc\\vmd-sizing-production\\sdk_2026\\bin\\Release\\plugins\\mmdtool\\mmdtool.xdl64",
+    "size": 3401728,
+    "sha256": "f2df46ae6c22b7fad4eb96a8a0e26badbe78c559dcc61f913cffd5163fb2b950"
+  },
+  "frozen_binary": {
+    "path": "C:\\code\\C4D_MMD_Tool\\_build_msvc\\validation\\motion-sizing-mcp-20261009\\plugins\\mmdtool\\mmdtool.xdl64",
+    "size": 3401728,
+    "sha256": "f2df46ae6c22b7fad4eb96a8a0e26badbe78c559dcc61f913cffd5163fb2b950"
+  },
+  "build_cache": {
+    "path": "C:\\code\\C4D_MMD_Tool\\_build_msvc\\vmd-sizing-production\\sdk_2026\\CMakeCache.txt",
+    "size": 16632,
+    "sha256": "91428120e456bab2ea943345dfe1e215f7a90935ea9b5c396063454e5d0be6a2"
+  },
+  "implementation_files": [
+    {
+      "path": "C:\\code\\C4D_MMD_Tool\\source\\module\\automation\\mmd_automation.cpp",
+      "size": 82254,
+      "sha256": "3d484918b810df192c59a36900b10ee86efd541f425404fda4bcad4433e4b453"
+    },
+    {
+      "path": "C:\\code\\C4D_MMD_Tool\\source\\utils\\cmt_automation_protocol.hpp",
+      "size": 2112,
+      "sha256": "bb1083d7470830a4810c5bb08c3229b9141f4cc2f633f468502c543af7cecc2d"
+    },
+    {
+      "path": "C:\\code\\C4D_MMD_Tool\\source\\module\\tools\\sizing\\sizing_session.h",
+      "size": 2398,
+      "sha256": "8b58356a5b6cde264ca041cd562030f810caf614ea022456488c345ec0666247"
+    },
+    {
+      "path": "C:\\code\\C4D_MMD_Tool\\mcp\\mmdtool_mcp\\schema.py",
+      "size": 28605,
+      "sha256": "e35bd000bcbb292c9429ad991894969bdbad6494996b3a06430b53902f2ee26b"
+    },
+    {
+      "path": "C:\\code\\C4D_MMD_Tool\\mcp\\mmdtool_mcp\\host.py",
+      "size": 17674,
+      "sha256": "7bec73ebed6f101b79a249b232871a48613936ae0bfefd74de576518939f0e24"
+    },
+    {
+      "path": "C:\\code\\C4D_MMD_Tool\\mcp\\tests\\test_adapter.py",
+      "size": 39384,
+      "sha256": "9ebc3ddd13093d22ad55ccb069d276ea318d549bf54097c921168d6e3f78567e"
+    },
+    {
+      "path": "C:\\code\\C4D_MMD_Tool\\mcp\\tests\\test_sizing_runner.py",
+      "size": 2469,
+      "sha256": "7667701f3b2417b0b59cb1d5113066d27bdc2886f6eee481749b9c06c7e5d86b"
+    },
+    {
+      "path": "C:\\code\\C4D_MMD_Tool\\scripts\\c4d_sizing_mcp_validation.py",
+      "size": 14605,
+      "sha256": "6beb57f94b5f61d680ac430807baa384a393279b7dcf9c79739211946b39dcc1"
+    }
+  ],
+  "git_head": "51651645d08fe41435e6edf7dce96869b1f1544d",
+  "submodules": [
+    "63c4d67e337017f9d8b298c900e9aabdb69296e7 dependency/bullet3 (3.25-27-g63c4d67e3)",
+    " ecbbaed832377582a3e0f7296febc5186f9d82dd dependency/libMMD (heads/codex/physics-diagnostics)",
+    " b2b618314ef6bc76fe34a7e3df556c3abaa04bb6 setup (heads/codex/installer-resources)"
+  ],
+  "preserved_existing_host_pid": 51796,
+  "isolated_launch_pid": 17192,
+  "isolated_launch_exited": true,
+  "native_preflight": {
+    "run_id": "f1961c53-ab4b-4f35-8f22-d2b6f5771f8c",
+    "kind": "synthetic-production-sizing-mcp",
+    "status": "blocked",
+    "checks": [
+      {
+        "name": "stdio_sizing_discovery",
+        "passed": true
+      }
+    ],
+    "native_executed": false,
+    "reason": "Loaded plugin does not expose sizing; load the new ordinary Release first.",
+    "cleanup_errors": []
+  },
+  "limitations": [
+    "No native business validation on the newly built module",
+    "No macOS or older SDK validation",
+    "No visual quality acceptance"
+  ]
+}

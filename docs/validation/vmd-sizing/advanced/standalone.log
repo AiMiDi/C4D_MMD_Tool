@@ -1,0 +1,22 @@
+-- The CXX compiler identification is MSVC 19.51.36256.0
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: C:/Program Files/Microsoft Visual Studio/18/Community/VC/Tools/MSVC/14.51.36231/bin/Hostx64/x64/cl.exe - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Configuring done (1.8s)
+-- Generating done (0.0s)
+-- Build files have been written to: C:/code/C4D_MMD_Tool/_build_msvc/vmd-sizing-standalone
+适用于 .NET Framework MSBuild 版本 18.9.1+a81b43525
+
+  1>Checking Build System
+  Building Custom Rule C:/code/C4D_MMD_Tool/libraries/cmt_motion_sizing/CMakeLists.txt
+  model_analysis.cpp
+  sizing_pose.cpp
+  sizing_stance.cpp
+  sizing_constraints.cpp
+  sizing_camera.cpp
+  motion_sizing.cpp
+  diagnostics.cpp
+  正在生成代码...
+  cmt_motion_sizing.vcxproj -> C:\code\C4D_MMD_Tool\_build_msvc\vmd-sizing-standalone\Release\cmt_motion_sizing.lib

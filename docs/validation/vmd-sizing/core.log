@@ -1,0 +1,5 @@
+[2026-10-09 16:41:45.681] [default] [info] PMX File Read Successed. tests/fixtures/vmd-sizing/source.pmx
+[2026-10-09 16:41:45.682] [default] [info] PMX File Read Successed. tests/fixtures/vmd-sizing/target.pmx
+baseline upstream_keys=30 max_position_error=8.49983e-08 cpp_ms=0.0884
+baseline-staggered upstream_keys=30 max_position_error=8.49983e-08 cpp_ms=0.065
+movement sizing regression passed
