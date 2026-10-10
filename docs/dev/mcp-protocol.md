@@ -7,7 +7,7 @@
 
 | 层次 | 维护入口 | 职责 |
 | --- | --- | --- |
-| 客户端协议 | `mcp/run_mmdtool_mcp.py`、`mcp/mmdtool_mcp/server.py` | UTF-8 单行 stdio JSON-RPC、16 工具发现、输入校验、会话去重 |
+| 客户端协议 | `mcp/run_mmdtool_mcp.py`、`mcp/mmdtool_mcp/server.py` | UTF-8 单行 stdio JSON-RPC、27 工具发现、输入校验、会话去重 |
 | 工具契约 | `mcp/mmdtool_mcp/schema.py` | 工具名称、input/output Schema、默认值和 option 编号 |
 | 宿主连接 | `mcp/mmdtool_mcp/host.py` | 本地 HTTP(S)、token-file、宿主握手、固定 Python 调用及最终导出 SHA-256 |
 | C4D 消息入口 | `source/CMTSceneManager.cpp` | 消费 caller-owned production packet，提供只读响应 fallback |
@@ -72,6 +72,10 @@ Python 固定 wrapper 优先读取 packet 的 `2000001`。某些 Python 绑定�
 | 134 | `english_check` | 135 | `material_type` |
 | 136 | `query_operation_id` | | |
 
+动作适配追加编号 140–168：140 来源 PMX、141 角色列表、142 任务句柄、143 阶段、144 求解参数容器、145 相机路径、146 最大相机距离倍率、147 角色序号、148 叠加显示；149–167 为求解参数，168 为刚体名称列表。角色容器中的 200 为模型句柄，100 / 112 为动作文件路径 / 动画槽句柄。列表编码为从零连续编号的子容器。实际字段名与顺序以 `Option` 和 `OPTION_IDS` 为准，协议测试核对两者一致。
+
+固定 wrapper 递归编码这些维护字段的容器；原生端复验每层允许字段、类型、数量和预算。操作 fingerprint 递归包含嵌套参数，不能把不同角色或求解配置当成同一次请求。
+
 Python 与原生端分别校验工具允许的字段、类型、有限数、枚举及 PMX 选项依赖，拒绝未知选项。
 `time_offset` 是整数 30 fps VMD 帧；`evaluate_frame` 的 `unit` 必须明确提供。
 新增工具/选项时同时更新两端契约、默认值、错误结果、capabilities 和测试；不复用现有编号表示不同含义。
@@ -122,8 +126,7 @@ Motion 使用不同的模型倍率 `M` 与动作倍率 `s`，检查 `s/M`、`M/s
 
 capabilities 当前声明 `execution=synchronous-main-thread`。dispatcher 检查 `GeIsMainThread()`，
 非主线程返回 `main_thread_required`；执行中的重入请求返回 `dispatcher_busy`。
-当前没有异步工作队列、后台作业或取消入口。结果契约保留 `queued`/`running` 状态，
-不能据此承诺已实现排队执行；未来新增队列时必须在出队后重新核对目标。
+普通场景操作继续同步执行；新增动作适配工具在主线程快照后通过 `HostSession` 后台计算，并提供显式取消。启动请求的外层状态表示请求完成，计算状态使用独立 `job_state`；没有通用异步操作队列。完整契约与当前验证边界见 [动作适配 MCP](motion-sizing-mcp.md)。结果契约中的 `queued`/`running` 不能据此解释为所有场景操作都可异步排队。
 
 文档和对象句柄绑定宿主会话及实例，原生端通过 BaseLink、当前打开文档列表和对象文档归属复查目标。
 模型派生的动画槽和表情句柄还包含运行期 identity，并在修改前验证仍存在。

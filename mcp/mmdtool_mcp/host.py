@@ -244,19 +244,22 @@ else:
     _request.SetString(2, _payload["operation_id"])
     _request.SetString(3, _payload.get("document", ""))
     _request.SetString(4, _payload.get("target", ""))
-    _options = c4d.BaseContainer()
-    for _key, _value in _payload["options"].items():
-        _field = int(_key)
-        if isinstance(_value, bool):
-            _options.SetBool(_field, _value)
-        elif _field in (101, 116, 117):
-            _options.SetFloat(_field, float(_value))
-        elif isinstance(_value, int):
-            _options.SetInt32(_field, _value)
-        elif isinstance(_value, float):
-            _options.SetFloat(_field, _value)
-        else:
-            _options.SetString(_field, _value)
+    def _container(_values):
+        _bc = c4d.BaseContainer()
+        for _key, _value in _values.items():
+            _field = int(_key)
+            if isinstance(_value, dict):
+                _bc.SetContainer(_field, _container(_value))
+            elif isinstance(_value, bool):
+                _bc.SetBool(_field, _value)
+            elif isinstance(_value, int) and _field not in (101, 116, 117, 146, 149, 150, 160, 161, 162, 163):
+                _bc.SetInt32(_field, _value)
+            elif isinstance(_value, (int, float)):
+                _bc.SetFloat(_field, float(_value))
+            else:
+                _bc.SetString(_field, _value)
+        return _bc
+    _options = _container(_payload["options"])
     _request.SetContainer(5, _options)
     _packet = c4d.BaseContainer(1057017)
     _packet.SetContainer(2000000, _request)
@@ -300,7 +303,7 @@ def _verify_export_identity(_export):
         _export["message"] = "Export completed but destination identity could not be verified; inspect the output file before retrying."
         _export["state"] = "outcome_unknown"
         _export.setdefault("warnings", []).append("The destination may already contain the exported file.")
-if _result.get("success") and _payload["operation"] in ("mmdtool_export_pmx", "mmdtool_export_motion", "mmdtool_export_camera"):
+if _result.get("success") and _payload["operation"] in ("mmdtool_export_pmx", "mmdtool_export_motion", "mmdtool_export_camera", "mmdtool_sizing_export", "mmdtool_sizing_export_camera"):
     _verify_export_identity(_result)
 if _result.get("success") and _payload["operation"] == "mmdtool_operation_status":
     _original = _result.get("data", {}).get("operation")
@@ -311,10 +314,16 @@ print("CMT_MCP_RESULT:" + json.dumps(_result, ensure_ascii=False, allow_nan=Fals
 
 
 def fixed_host_code(name: str, arguments: dict[str, Any], operation_id: str) -> str:
+    def encode_options(value):
+        if isinstance(value, dict):
+            return {str(OPTION_IDS[key]): encode_options(item) for key, item in value.items()
+                    if key in OPTION_IDS}
+        if isinstance(value, list):
+            return {str(i): encode_options(item) for i, item in enumerate(value)}
+        return value
     payload = {"protocol": PROTOCOL_VERSION, "operation": name, "operation_id": operation_id,
                "document": arguments.get("document", ""),
                "target": arguments.get("model", arguments.get("camera", "")),
-               "options": {str(OPTION_IDS[key]): value for key, value in arguments.items()
-                           if key in OPTION_IDS}}
+               "options": encode_options({key: value for key, value in arguments.items() if key not in ("model", "camera")})}
     encoded = base64.b64encode(json.dumps(payload, ensure_ascii=False, allow_nan=False).encode("utf-8")).decode("ascii")
     return _HOST_CODE.replace("__PAYLOAD__", encoded)

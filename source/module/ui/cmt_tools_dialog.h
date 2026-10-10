@@ -15,6 +15,7 @@ Description:	CMT tools main dialog.
 #include "plugin_resource.h"
 #include "module/core/cmt_marco.h"
 #include "utils/images_user_area_util.hpp"
+#include "motion_sizing_dialog.h"
 
 class CMTToolDialog final : public GeDialog
 {
@@ -39,30 +40,27 @@ public:
 class CMTToolCommand final : public CommandData
 {
 	CMTToolDialog cmd_tool_dialog;
+	MotionSizingDialog sizing_dialog_;
+	Bool TogglePanel();
+	Bool ExecuteMenuItem(Int32 subid);
+	Bool BuildSubmenu(BaseContainer& submenu);
 
 public:
-	Bool RestoreLayout(void* secret) override
-	{
-		return cmd_tool_dialog.RestoreLayout(g_cmt_command_id, 0, secret);
-	}
+	Bool RestoreLayout(void* secret) override;
 #if CMT_SDK_HAS_COMMANDDATA_EXECUTE_WITH_PARENT
 	Bool Execute(BaseDocument* doc, GeDialog* parentManager) override
-	{
-		if (cmd_tool_dialog.IsOpen() == false)
-			cmd_tool_dialog.Open(DLG_TYPE::ASYNC, DLG_CMT_TOOL);
-		else
-			cmd_tool_dialog.Close();
-		return(true);
-	}
+	{ return TogglePanel(); }
+	Bool GetSubContainer(BaseDocument* doc, BaseContainer& submenu, GeDialog* parentManager) override
+	{ return BuildSubmenu(submenu); }
+	Bool ExecuteSubID(BaseDocument* doc, Int32 subid, GeDialog* parentManager) override
+	{ return ExecuteMenuItem(subid); }
 #else
 	Bool Execute(BaseDocument* doc) override
-	{
-		if (cmd_tool_dialog.IsOpen() == false)
-			cmd_tool_dialog.Open(DLG_TYPE::ASYNC, DLG_CMT_TOOL);
-		else
-			cmd_tool_dialog.Close();
-		return(true);
-	}
+	{ return TogglePanel(); }
+	Bool GetSubContainer(BaseDocument* doc, BaseContainer& submenu) override
+	{ return BuildSubmenu(submenu); }
+	Bool ExecuteSubID(BaseDocument* doc, Int32 subid) override
+	{ return ExecuteMenuItem(subid); }
 #endif
 };
 

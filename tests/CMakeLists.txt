@@ -50,6 +50,19 @@ cmt_add_python_fixture_test(cmt_highlight_analysis material/test_highlight_analy
 cmt_add_python_fixture_test(cmt_production_mcp_adapter ../mcp/tests/test_adapter.py)
 
 if(TARGET libMMD)
+  get_target_property(_cmt_libmmd_source_dir libMMD SOURCE_DIR)
+  get_filename_component(_cmt_libmmd_root "${_cmt_libmmd_source_dir}/.." ABSOLUTE)
+  include("${_cmt_libmmd_root}/tests/MotionSizing.cmake")
+  libmmd_add_motion_sizing_targets("${_cmt_libmmd_root}")
+  add_test(NAME cmt_motion_sizing_core COMMAND mmd_motion_sizing_test
+    "${_cmt_libmmd_root}/tests/fixtures/vmd-sizing")
+  add_test(NAME cmt_motion_sizing_advanced COMMAND mmd_motion_sizing_advanced_test
+    "${_cmt_libmmd_root}/tests/fixtures/vmd-sizing"
+    "${_cmt_libmmd_root}/tests/fixtures/vmd-sizing-advanced")
+  set_tests_properties(cmt_motion_sizing_core cmt_motion_sizing_advanced
+    PROPERTIES LABELS "plugin;unit;regression")
+  set_property(GLOBAL APPEND PROPERTY CMT_PLUGIN_TEST_TARGETS
+    mmd_motion_sizing_test mmd_motion_sizing_advanced_test)
   add_subdirectory(runtime)
 endif()
 

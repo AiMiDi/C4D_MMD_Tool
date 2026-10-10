@@ -15,6 +15,52 @@ Description:	CMT tools main dialog.
 #include "cmt_tools_manager.h"
 #include "utils/filename_util.hpp"
 
+namespace
+{
+	constexpr Int32 kPanelCommand = 1000;
+	constexpr Int32 kSizingCommand = 1001;
+	constexpr Int32 kSizingDialog = 1;
+}
+
+Bool CMTToolCommand::TogglePanel()
+{
+	if (cmd_tool_dialog.IsOpen())
+		return cmd_tool_dialog.Close();
+	return cmd_tool_dialog.Open(DLG_TYPE::ASYNC, g_cmt_command_id);
+}
+
+Bool CMTToolCommand::BuildSubmenu(BaseContainer& submenu)
+{
+	// Subcommands reuse the registered command ID, including legacy toolbar
+	// shortcuts which still execute TogglePanel through Execute().
+	// Top-level entries expand at the command's position in Extensions.
+	submenu.SetString(kPanelCommand, String("MMD Tools - ") + GeLoadString(IDS_CMT_TOOL_PANEL));
+	submenu.SetString(kSizingCommand, String("MMD Tools - ") + GeLoadString(IDS_CMT_TOOL_MOTION_SIZING));
+	return true;
+}
+
+Bool CMTToolCommand::ExecuteMenuItem(const Int32 subid)
+{
+	switch (subid)
+	{
+	case kPanelCommand:
+		return TogglePanel();
+	case kSizingCommand:
+		return sizing_dialog_.Open(DLG_TYPE::ASYNC, g_cmt_command_id, -1, -1, 720, 760, kSizingDialog);
+	default:
+		return false;
+	}
+}
+
+Bool CMTToolCommand::RestoreLayout(void* secret)
+{
+	if (!secret) return false;
+	const auto* restore = static_cast<RestoreLayoutSecret*>(secret);
+	if (restore->subid == kSizingDialog)
+		return sizing_dialog_.RestoreLayout(g_cmt_command_id, kSizingDialog, secret);
+	return cmd_tool_dialog.RestoreLayout(g_cmt_command_id, 0, secret);
+}
+
 inline void CMTToolDialog::GetItem(const Int32 id, Float& value) const
 {
 	GetFloat(id, value);

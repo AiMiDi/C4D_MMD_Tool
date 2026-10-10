@@ -35,7 +35,16 @@ enum Option : Int32
 	Materials = 126, Bones = 127, Weights = 128, IK = 129,
 	Inherit = 130, Expressions = 131, Multipart = 132,
 	English = 133, EnglishCheck = 134, MaterialType = 135,
-	QueryOperationId = 136
+	QueryOperationId = 136,
+	SizingSource = 140, SizingCharacters, SizingJob, SizingStage, SizingOptions,
+	SizingCameraPath, SizingCameraRatio, SizingMember, SizingOverlay,
+	SizingMovement, SizingLegOffset, SizingCenterOffsets, SizingLegOffsets,
+	SizingStance, SizingTwist, SizingAvoidance, SizingWristContact,
+	SizingFingerContact, SizingFloorContact, SizingMultiContact,
+	SizingContactDistance, SizingFloorHeight, SizingCollisionMargin, SizingTolerance,
+	SizingIterations, SizingMaxFrames, SizingMaxKeys, SizingMaxDiagnostics,
+	SizingAvoidanceBodies,
+	SizingModel = 200 // Only inside a character input container.
 };
 
 } }

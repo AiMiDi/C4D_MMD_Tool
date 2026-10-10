@@ -12,6 +12,7 @@
 #include <vector>
 
 #include "mmd_automation.h"
+#include "module/tools/sizing/sizing_session.h"
 #include "CMTSceneManager.h"
 #include "plugin_resource.h"
 #include "module/tools/object/mmd_bone_manager.h"
@@ -99,7 +100,9 @@ enum class Operation
 {
 	Capabilities, ListModels, InspectModel, ImportPmx, ExportPmx,
 	ImportMotion, ExportMotion, ImportCamera, ExportCamera,
-	ListSlots, SelectSlot, SetMode, SetPhysics, SetMorph, Evaluate, Status, Invalid
+	ListSlots, SelectSlot, SetMode, SetPhysics, SetMorph, Evaluate, Status,
+    SizingStart, SizingStatus, SizingResult, SizingCancel, SizingPreview, SizingClosePreview,
+    SizingApply, SizingExport, SizingApplyCamera, SizingExportCamera, SizingRelease, Invalid
 };
 
 const char* const kOperationNames[] = {
@@ -108,12 +111,15 @@ const char* const kOperationNames[] = {
 	"mmdtool_export_motion", "mmdtool_import_camera", "mmdtool_export_camera",
 	"mmdtool_list_animation_slots", "mmdtool_select_animation_slot",
 	"mmdtool_set_mode", "mmdtool_set_physics_enabled", "mmdtool_set_morph_strength",
-	"mmdtool_evaluate_frame", "mmdtool_operation_status"
+	"mmdtool_evaluate_frame", "mmdtool_operation_status",
+    "mmdtool_sizing_start", "mmdtool_sizing_status", "mmdtool_sizing_result", "mmdtool_sizing_cancel",
+    "mmdtool_sizing_preview", "mmdtool_sizing_close_preview", "mmdtool_sizing_apply", "mmdtool_sizing_export",
+    "mmdtool_sizing_apply_camera", "mmdtool_sizing_export_camera", "mmdtool_sizing_release"
 };
 
 Operation ParseOperation(const std::string& name)
 {
-	for (Int32 index = 0; index < 16; ++index)
+	for (Int32 index = 0; index < static_cast<Int32>(Operation::Invalid); ++index)
 		if (name == kOperationNames[index]) return static_cast<Operation>(index);
 	return Operation::Invalid;
 }
@@ -141,6 +147,14 @@ std::vector<Int32> AllowedOptions(Operation operation)
 		case Operation::SetMorph: return {MorphHandle, Strength};
 		case Operation::Evaluate: return {Frame, Unit, SetPlayhead};
 		case Operation::Status: return {QueryOperationId};
+        case Operation::SizingStart: return {SizingCharacters, SizingOptions, SizingCameraPath, SizingCameraRatio};
+        case Operation::SizingStatus: case Operation::SizingCancel: case Operation::SizingClosePreview:
+        case Operation::SizingApplyCamera: case Operation::SizingRelease: return {SizingJob};
+        case Operation::SizingResult: return {SizingJob, SizingMember, Section, Offset, Limit};
+        case Operation::SizingPreview: return {SizingJob, SizingMember, SizingStage, SizingOverlay};
+        case Operation::SizingApply: return {SizingJob, SizingMember, SizingStage};
+        case Operation::SizingExport: return {SizingJob, SizingMember, SizingStage, Path, Overwrite};
+        case Operation::SizingExportCamera: return {SizingJob, Path, Overwrite};
 		default: return {};
 	}
 }
@@ -198,6 +212,86 @@ Bool IsBooleanOption(Int32 field)
 		field == SetPlayhead || (field >= Polygon && field <= EnglishCheck);
 }
 
+Bool ValidateSizingOptions(const BaseContainer& options, std::string& error)
+{
+    for (Int32 i = 0, field; (field = options.GetIndexId(i)) != NOTOK; ++i)
+    {
+        const Int32 type = options.GetData(field).GetType();
+        if (field >= SizingCenterOffsets && field <= SizingMultiContact)
+        {
+            if (type != DA_LONG || (options.GetInt32(field) != 0 && options.GetInt32(field) != 1))
+            { error = "Sizing switch must be boolean"; return false; }
+        }
+        else if (field == SizingAvoidanceBodies)
+        {
+            const auto* bodies = options.GetContainerInstance(field);
+            if (!bodies) { error = "avoidance_bodies must be a container"; return false; }
+            for (Int32 j = 0, key; (key = bodies->GetIndexId(j)) != NOTOK; ++j)
+                if (key != j || j >= 256 || bodies->GetData(key).GetType() != DA_STRING ||
+                    Text(*bodies, key).empty() || Text(*bodies, key).size() > 1024)
+                { error = "Invalid avoidance body list"; return false; }
+        }
+        else if (field >= SizingIterations && field <= SizingMaxDiagnostics)
+        {
+            const Int32 upper = field == SizingIterations ? 1000 : field == SizingMaxFrames ? 18000 :
+                field == SizingMaxKeys ? 2000000 : 20000;
+            if (type != DA_LONG || options.GetInt32(field) < (field == SizingMaxDiagnostics ? 0 : 1) || options.GetInt32(field) > upper)
+            { error = "Sizing integer budget exceeds bounds"; return false; }
+        }
+        else if (field == SizingMovement || field == SizingLegOffset ||
+                 (field >= SizingContactDistance && field <= SizingTolerance))
+        {
+            const double value = Number(options, field);
+            const double maximum = field == SizingMovement || field == SizingTolerance ? 1000 : 10000;
+            const double minimum = field == SizingLegOffset || field == SizingFloorHeight ? -10000 : 0;
+            if ((type != DA_REAL && type != DA_LONG) || !std::isfinite(value) || value < minimum || value > maximum ||
+                ((field == SizingMovement || field == SizingContactDistance || field == SizingTolerance) && value == 0))
+            { error = "Sizing numeric option exceeds bounds"; return false; }
+        }
+        else { error = "Unknown sizing option"; return false; }
+    }
+    return true;
+}
+
+Bool ValidateSizingCharacters(const BaseContainer& characters, std::string& error)
+{
+    Int32 count = 0;
+    for (Int32 key; (key = characters.GetIndexId(count)) != NOTOK; ++count)
+    {
+        const auto* input = characters.GetContainerInstance(key);
+        if (key != count || count >= 16 || !input)
+        { error = "Expected 1-16 ordered character containers"; return false; }
+        for (Int32 j = 0, field; (field = input->GetIndexId(j)) != NOTOK; ++j)
+        {
+            if (field == SizingOptions)
+            {
+                const auto* values = input->GetContainerInstance(field);
+                if (!values || !ValidateSizingOptions(*values, error)) return false;
+            }
+            else if (field == SizingModel || field == SizingSource || field == Path || field == Slot)
+            {
+                if (input->GetData(field).GetType() != DA_STRING || Text(*input, field).empty() ||
+                    Text(*input, field).size() > (field == Path || field == SizingSource ? 4096u : 1024u))
+                { error = "Invalid character handle or path"; return false; }
+            }
+            else { error = "Unknown character field"; return false; }
+        }
+        if (!Has(*input, SizingModel) || !Has(*input, SizingSource) || Has(*input, Path) == Has(*input, Slot))
+        { error = "Each character requires model, source_pmx and exactly one of path/slot"; return false; }
+    }
+    if (count == 0) { error = "At least one character is required"; return false; }
+    return true;
+}
+
+const char* const kSizingStages[] = {"original", "scale", "offset", "stance", "twist", "avoidance", "contact", "multi_character"};
+size_t SizingStageIndex(const BaseContainer& options)
+{
+    const std::string name = Text(options, SizingStage, "multi_character");
+    for (size_t i = 0; i < static_cast<size_t>(libmmd::sizing::Stage::Count); ++i)
+        if (name == kSizingStages[i]) return i;
+    return static_cast<size_t>(libmmd::sizing::Stage::Count);
+}
+
 Bool ValidateRequest(const BaseContainer& request, Operation operation, std::string& error)
 {
 	for (Int32 index = 0, field; (field = request.GetIndexId(index)) != NOTOK; ++index)
@@ -217,24 +311,36 @@ Bool ValidateRequest(const BaseContainer& request, Operation operation, std::str
 		if (std::find(allowed.begin(), allowed.end(), field) == allowed.end())
 		{ error = "Unknown option for this operation"; return false; }
 		const Int32 type = options->GetData(field).GetType();
-		if (IsBooleanOption(field))
+		if (field == SizingOptions || field == SizingCharacters)
+        {
+            const auto* values = options->GetContainerInstance(field);
+            if (!values || !(field == SizingOptions ? ValidateSizingOptions(*values, error) : ValidateSizingCharacters(*values, error)))
+                return false;
+        }
+        else if (IsBooleanOption(field) || field == SizingOverlay)
 		{
 			if (type != DA_LONG || (options->GetInt32(field) != 0 && options->GetInt32(field) != 1))
 			{ error = "Boolean option must be true or false"; return false; }
 		}
-		else if (field == PositionMultiple || field == Strength || field == Frame)
+		else if (field == PositionMultiple || field == Strength || field == Frame || field == SizingCameraRatio)
 		{
 			if ((type != DA_REAL && type != DA_LONG) || !std::isfinite(Number(*options, field)))
 			{ error = "Numeric option must be finite"; return false; }
 		}
-		else if (field == TimeOffset || field == Offset || field == Limit)
+		else if (field == TimeOffset || field == Offset || field == Limit || field == SizingMember)
 		{
 			if (type != DA_LONG) { error = "Frame offset and paging require integer values"; return false; }
 		}
 		else if (type != DA_STRING || Text(*options, field).empty() ||
-			Text(*options, field).size() > (field == Path ? 4096u : 1024u))
+			Text(*options, field).size() > (field == Path || field == SizingCameraPath ? 4096u : 1024u))
 		{ error = "String option is missing or too long"; return false; }
 	}
+    if (Has(*options, SizingCameraRatio) && (Number(*options, SizingCameraRatio) < 1 || Number(*options, SizingCameraRatio) > 100))
+    { error = "Invalid camera distance ratio"; return false; }
+    if (options->GetInt32(SizingMember, 0) < 0 || options->GetInt32(SizingMember, 0) > 15)
+    { error = "Invalid character member"; return false; }
+    if (Has(*options, SizingStage) && SizingStageIndex(*options) == static_cast<size_t>(libmmd::sizing::Stage::Count))
+    { error = "Unknown sizing stage"; return false; }
 	if (Has(*options, PositionMultiple) && (Number(*options, PositionMultiple) <= 0 || Number(*options, PositionMultiple) > 1000000))
 	{ error = "position_multiple must be positive and bounded"; return false; }
 	if (Has(*options, Strength) && std::abs(Number(*options, Strength)) > 1000000)
@@ -249,7 +355,7 @@ Bool ValidateRequest(const BaseContainer& request, Operation operation, std::str
 	for (const auto& item : std::vector<std::pair<Int32, std::vector<std::string>>>{
 		{Strategy, {"append", "replace", "merge"}}, {Rotation, {"quaternion", "euler"}},
 		{Mode, {"edit", "anim"}}, {Unit, {"vmd_frames", "document_frames", "seconds"}},
-		{Section, {"summary", "bones", "morphs", "slots"}},
+		{Section, operation == Operation::SizingResult ? std::vector<std::string>{"summary", "stages", "warnings", "constraints"} : std::vector<std::string>{"summary", "bones", "morphs", "slots"}},
 		{MaterialType, {"standard", "redshift", "octane", "corona", "redshift_toon"}}})
 		if (Has(*options, item.first) && std::find(item.second.begin(), item.second.end(), Text(*options, item.first)) == item.second.end())
 		{ error = "Unsupported enumeration value"; return false; }
@@ -264,6 +370,11 @@ Bool ValidateRequest(const BaseContainer& request, Operation operation, std::str
 		case Operation::SetMorph: required = {MorphHandle, Strength}; break;
 		case Operation::Evaluate: required = {Frame, Unit}; break;
 		case Operation::Status: required = {QueryOperationId}; break;
+        case Operation::SizingStart: required = {SizingCharacters}; break;
+        case Operation::SizingExport: case Operation::SizingExportCamera: required = {SizingJob, Path}; break;
+        case Operation::SizingStatus: case Operation::SizingResult: case Operation::SizingCancel:
+        case Operation::SizingPreview: case Operation::SizingClosePreview: case Operation::SizingApply:
+        case Operation::SizingApplyCamera: case Operation::SizingRelease: required = {SizingJob}; break;
 		default: break;
 	}
 	for (Int32 field : required)
@@ -301,12 +412,23 @@ struct Record
 	double accepted_at = 0;
 };
 
+struct SizingJobEntry
+{
+    std::string handle;
+    std::string document;
+    std::vector<std::string> models;
+    std::shared_ptr<sizing::HostSession> session;
+    std::shared_ptr<sizing::PanelState> panel;
+    double last_access = 0;
+};
+
 struct State
 {
 	std::string session;
 	UInt64 sequence = 0;
 	std::vector<HandleEntry> handles;
 	std::vector<Record> records;
+    std::vector<SizingJobEntry> sizing_jobs;
 	Bool executing = false;
 	Bool rollback_failed = false;
 	State()
@@ -680,18 +802,312 @@ Json WriteExport(const std::string& operation_id, const BaseContainer& options, 
 	return Envelope(operation_id, true, "ok", "", Json::Object({{"path", Json::StringValue(path)}, {"bytes", Json::Integer(bytes)}}));
 }
 
+Json ContainerFingerprint(const BaseContainer& container)
+{
+    std::vector<Int32> ids;
+    for (Int32 i = 0, field; (field = container.GetIndexId(i)) != NOTOK; ++i) ids.push_back(field);
+    std::sort(ids.begin(), ids.end());
+    std::vector<std::pair<std::string, Json>> fields;
+    for (Int32 field : ids)
+    {
+        const auto* nested = container.GetContainerInstance(field);
+        const Json value = nested ? ContainerFingerprint(*nested) : container.GetData(field).GetType() == DA_STRING ?
+            Json::StringValue(container.GetString(field)) : Json::Number(Number(container, field));
+        fields.push_back({std::to_string(field), value});
+    }
+    return Json::Object(fields);
+}
+
 std::string Fingerprint(const BaseContainer& request)
 {
-	std::vector<std::pair<std::string, Json>> fields;
-	for (Int32 field : {OperationName, DocumentHandle, TargetHandle}) fields.push_back({std::to_string(field), Json::StringValue(request.GetString(field))});
-	const BaseContainer options = request.GetContainer(Options);
-	std::vector<Int32> ids;
-	for (Int32 index = 0, id; (id = options.GetIndexId(index)) != NOTOK; ++index) ids.push_back(id);
-	std::sort(ids.begin(), ids.end());
-	for (Int32 id : ids)
-		fields.push_back({std::to_string(id), options.GetData(id).GetType() == DA_STRING
-			? Json::StringValue(options.GetString(id)) : Json::Number(Number(options, id))});
-	return Json::Object(fields).text;
+    return Json::Object({{"operation", Json::StringValue(request.GetString(OperationName))},
+        {"document", Json::StringValue(request.GetString(DocumentHandle))},
+        {"target", Json::StringValue(request.GetString(TargetHandle))},
+        {"options", ContainerFingerprint(request.GetContainer(Options))}}).text;
+}
+
+// Production sizing operations share the serial dispatcher and its handle registry.
+// Worker state is owned by HostSession; no worker callback touches C4D objects.
+void ApplySizingOptions(const BaseContainer& values, libmmd::sizing::Options& options)
+{
+    options.movementMultiplier = Number(values, SizingMovement, options.movementMultiplier);
+    options.legOffset = Number(values, SizingLegOffset, options.legOffset);
+    options.centerOffsets = values.GetBool(SizingCenterOffsets, options.centerOffsets);
+    options.legOffsets = values.GetBool(SizingLegOffsets, options.legOffsets);
+    options.stance = values.GetBool(SizingStance, options.stance);
+    options.twist = values.GetBool(SizingTwist, options.twist);
+    options.avoidance = values.GetBool(SizingAvoidance, options.avoidance);
+    options.wristContact = values.GetBool(SizingWristContact, options.wristContact);
+    options.fingerContact = values.GetBool(SizingFingerContact, options.fingerContact);
+    options.floorContact = values.GetBool(SizingFloorContact, options.floorContact);
+    options.multiContact = values.GetBool(SizingMultiContact, options.multiContact);
+    options.contactDistance = Number(values, SizingContactDistance, options.contactDistance);
+    options.floorHeight = Number(values, SizingFloorHeight, options.floorHeight);
+    options.collisionMargin = Number(values, SizingCollisionMargin, options.collisionMargin);
+    options.tolerance = Number(values, SizingTolerance, options.tolerance);
+    options.iterations = static_cast<unsigned>(values.GetInt32(SizingIterations, options.iterations));
+    options.maxBakeFrames = static_cast<uint32_t>(values.GetInt32(SizingMaxFrames, options.maxBakeFrames));
+    options.maxBakedKeys = static_cast<size_t>(values.GetInt32(SizingMaxKeys, static_cast<Int32>(options.maxBakedKeys)));
+    options.maxDiagnostics = static_cast<size_t>(values.GetInt32(SizingMaxDiagnostics, static_cast<Int32>(options.maxDiagnostics)));
+    if (const auto* bodies = values.GetContainerInstance(SizingAvoidanceBodies))
+    {
+        options.avoidanceBodies.clear();
+        for (Int32 i = 0, field; (field = bodies->GetIndexId(i)) != NOTOK; ++i)
+            options.avoidanceBodies.push_back(Text(*bodies, field));
+    }
+}
+
+bool SizingInputFile(const std::string& path, const char* suffix)
+{
+    const Filename filename(String(path.c_str()));
+    if (!IsAbsolutePath(path) || !filename_util::CheckSuffix(filename, String(suffix))) return false;
+    AutoAlloc<BaseFile> file;
+    if (!file || !file->Open(filename, FILEOPEN::READ, FILEDIALOG::NONE, BYTEORDER::V_INTEL)) return false;
+    return file->GetLength() > 0 && file->GetLength() <= kMaxInputBytes;
+}
+
+const char* SizingState(const SizingJobEntry& entry)
+{
+    const auto& batch = entry.session->GetBatchResult();
+    if (entry.session->IsRunning()) return entry.session->IsCancelling() ? "cancelling" : "running";
+    if (batch.cancelled) return "cancelled";
+    return batch.success ? "completed" : "failed";
+}
+
+Json SizingJobData(const SizingJobEntry& entry, const std::vector<std::pair<std::string, Json>>& extra = {})
+{
+    BaseDocument* preview = entry.session->GetPreviewDocument();
+    std::vector<std::pair<std::string, Json>> fields{{"job", Json::StringValue(entry.handle)},
+        {"job_state", Json::StringValue(std::string(SizingState(entry)))},
+        {"character_count", Json::Integer(entry.models.size())},
+        {"has_camera", Json::Boolean(entry.session->HasCamera())},
+        {"preview_document", Json::StringValue(preview ? RegisterHandle(preview, preview, true) : std::string())},
+        {"error", Json::StringValue(entry.session->GetError())}};
+    fields.insert(fields.end(), extra.begin(), extra.end());
+    return Json::Object(fields);
+}
+
+void PruneSizingJobs()
+{
+    const double now = GeGetMilliSeconds() / 1000.;
+    auto& jobs = GetState().sizing_jobs;
+    for (auto it = jobs.begin(); it != jobs.end();)
+    {
+        it->session->Poll();
+        const bool expired = now - it->last_access > kRetentionSeconds || !ResolveDocument(it->document);
+        if (expired && it->session->IsRunning())
+        {
+            it->session->Cancel();
+        }
+        // Destroy only completed workers; never wait on the main thread.
+        if (expired && !it->session->IsRunning())
+        {
+            sizing::WithdrawPanelState(it->panel);
+            it = jobs.erase(it);
+        }
+        else ++it;
+    }
+}
+
+Json SizingVector(const Eigen::Vector3d& value)
+{
+    return Json::Array({Json::Number(value.x()), Json::Number(value.y()), Json::Number(value.z())});
+}
+
+Json SizingResultData(const SizingJobEntry& entry, size_t member, const BaseContainer& options)
+{
+    const auto& result = entry.session->GetBatchResult().characters[member];
+    const auto& analysis = result.analysis;
+    std::vector<Json> offsets;
+    for (const auto& offset : analysis.localOffsets)
+        offsets.push_back(Json::Object({{"bone", Json::StringValue(offset.first)}, {"offset", SizingVector(offset.second)}}));
+    const Json summary = Json::Object({{"horizontal_ratio", Json::Number(analysis.horizontalRatio)},
+        {"vertical_ratio", Json::Number(analysis.verticalRatio)}, {"local_offsets", Json::Array(offsets)},
+        {"matched_tracks", Json::Integer(analysis.matchedTracks)}, {"modified_keys", Json::Integer(analysis.modifiedKeys)},
+        {"constraints", Json::Integer(analysis.constraints)}, {"unresolved", Json::Integer(analysis.unresolved)},
+        {"max_residual", Json::Number(analysis.maxResidual)}, {"warning_count", Json::Integer(analysis.warnings.size())},
+        {"stored_samples", Json::Integer(analysis.samples.size())}, {"elapsed_ms", Json::Number(result.elapsedMilliseconds)}});
+    const std::string section = Text(options, Section, "summary");
+    const size_t offset = static_cast<size_t>(options.GetInt32(Offset, 0)), limit = static_cast<size_t>(options.GetInt32(Limit, 64));
+    size_t total = 0;
+    std::vector<Json> items;
+    if (section == "warnings")
+    {
+        total = analysis.warnings.size();
+        for (size_t i = offset; i < std::min(total, offset + limit); ++i) items.push_back(Json::StringValue(analysis.warnings[i]));
+    }
+    else if (section == "constraints")
+    {
+        total = analysis.samples.size();
+        for (size_t i = offset; i < std::min(total, offset + limit); ++i)
+        {
+            const auto& sample = analysis.samples[i];
+            items.push_back(Json::Object({{"stage", Json::StringValue(std::string(kSizingStages[static_cast<size_t>(sample.stage)]))},
+                {"frame", Json::Integer(sample.frame)}, {"bone", Json::StringValue(sample.bone)},
+                {"target", SizingVector(sample.target)}, {"actual", SizingVector(sample.actual)}, {"error", Json::Number(sample.error)}}));
+        }
+    }
+    else if (section == "stages")
+    {
+        total = result.stages.size();
+        for (size_t i = offset; i < std::min(total, offset + limit); ++i)
+        {
+            const auto& motion = result.stages[i];
+            uint32_t maxFrame = 0;
+            for (const auto& key : motion.m_motions) maxFrame = std::max(maxFrame, key.m_frame);
+            for (const auto& key : motion.m_morphs) maxFrame = std::max(maxFrame, key.m_frame);
+            items.push_back(Json::Object({{"stage", Json::StringValue(std::string(kSizingStages[i]))},
+                {"bone_keys", Json::Integer(motion.m_motions.size())}, {"morph_keys", Json::Integer(motion.m_morphs.size())},
+                {"max_frame", Json::Integer(maxFrame)}}));
+        }
+    }
+    return Json::Object({{"job", Json::StringValue(entry.handle)}, {"member", Json::Integer(member)},
+        {"section", Json::StringValue(section)}, {"summary", summary}, {"items", Json::Array(items)},
+        {"total", Json::Integer(total)}, {"next_offset", Json::Number(offset + items.size() < total ? static_cast<double>(offset + items.size()) : -1)}});
+}
+
+Json ExecuteSizing(Operation operation, BaseDocument* document, const std::string& documentHandle,
+                   const std::string& id, const BaseContainer& options)
+{
+    PruneSizingJobs();
+    auto& jobs = GetState().sizing_jobs;
+    if (operation == Operation::SizingStart)
+    {
+        if (jobs.size() >= 4) return Envelope(id, false, "sizing_capacity", "Release finished sizing jobs; at most four jobs are retained.");
+        std::vector<sizing::HostInput> inputs;
+        std::vector<std::string> modelHandles;
+        const auto* characters = options.GetContainerInstance(SizingCharacters);
+        for (Int32 i = 0, field; (field = characters->GetIndexId(i)) != NOTOK; ++i)
+        {
+            const auto& character = *characters->GetContainerInstance(field);
+            const std::string handle = Text(character, SizingModel);
+            BaseObject* target = ResolveObject(document, documentHandle, handle);
+            if (!target || !target->IsInstanceOf(g_mmd_model_manager_object_id))
+                return Envelope(id, false, "stale_handle", "Sizing target is not a live MMD model in the selected document.");
+            if (std::find(modelHandles.begin(), modelHandles.end(), handle) != modelHandles.end())
+                return Envelope(id, false, "invalid_argument", "Sizing targets must be unique.");
+            auto* model = target->GetNodeData<MMDModelManagerObject>();
+            if (!model) return Envelope(id, false, "invalid_target", "Sizing model runtime is unavailable.");
+            const std::string source = Text(character, SizingSource), motion = Text(character, Path);
+            if (!SizingInputFile(source, "pmx") || (Has(character, Path) && !SizingInputFile(motion, "vmd")))
+                return Envelope(id, false, "invalid_file", "Sizing input must be an absolute, readable PMX/VMD within the input size limit.");
+            UInt64 slotIdentity = 0;
+            if (Has(character, Slot))
+            {
+                slotIdentity = ResolveDerived(handle, "slot", Text(character, Slot));
+                bool exists = false;
+                for (const auto& slot : model->GetAutomationAnimationSlots()) exists = exists || (slotIdentity != 0 && slot.runtime_identity == slotIdentity);
+                if (!exists) return Envelope(id, false, "stale_handle", "Sizing animation slot no longer exists on its target model.");
+            }
+            libmmd::sizing::Options solverOptions;
+            if (const auto* shared = options.GetContainerInstance(SizingOptions)) ApplySizingOptions(*shared, solverOptions);
+            if (const auto* local = character.GetContainerInstance(SizingOptions)) ApplySizingOptions(*local, solverOptions);
+            inputs.push_back({target, Filename(String(source.c_str())), Filename(String(motion.c_str())), solverOptions, slotIdentity});
+            modelHandles.push_back(handle);
+        }
+        const std::string cameraPath = Text(options, SizingCameraPath);
+        if (!cameraPath.empty() && !SizingInputFile(cameraPath, "vmd"))
+            return Envelope(id, false, "invalid_file", "Sizing camera input is not a readable bounded VMD.");
+        libmmd::sizing::CameraOptions cameraOptions;
+        cameraOptions.enabled = !cameraPath.empty();
+        cameraOptions.maxDistanceRatio = Number(options, SizingCameraRatio, 5.);
+        SizingJobEntry entry;
+        entry.handle = GetState().session + ":sizing:" + std::to_string(++GetState().sequence);
+        entry.document = documentHandle;
+        entry.models = std::move(modelHandles);
+        entry.last_access = GeGetMilliSeconds() / 1000.;
+        entry.session = std::make_shared<sizing::HostSession>();
+        entry.panel = sizing::MakePanelState(entry.session, inputs, Filename(String(cameraPath.c_str())), cameraOptions);
+        if (!entry.session->StartBatch(inputs, Filename(String(cameraPath.c_str())), cameraOptions))
+            return Envelope(id, false, "sizing_input_failed", string_util::GetStdString(entry.session->GetError()));
+        jobs.push_back(std::move(entry));
+        sizing::PublishPanelState(jobs.back().panel);
+        return Envelope(id, true, "ok", "Sizing started; query the job handle for completion.", SizingJobData(jobs.back()));
+    }
+    const std::string handle = Text(options, SizingJob);
+    auto found = std::find_if(jobs.begin(), jobs.end(), [&handle, &documentHandle](const SizingJobEntry& entry)
+        { return entry.handle == handle && entry.document == documentHandle; });
+    if (found == jobs.end()) return Envelope(id, false, "stale_handle", "Sizing job is released, expired or belongs to another document/host session.");
+    auto& entry = *found;
+    auto& session = *entry.session;
+    entry.last_access = GeGetMilliSeconds() / 1000.;
+    session.Poll();
+    if (operation == Operation::SizingStatus) return Envelope(id, true, "ok", "", SizingJobData(entry));
+    if (operation == Operation::SizingCancel)
+    {
+        if (session.IsRunning()) session.Cancel();
+        sizing::PublishPanelState(entry.panel);
+        return Envelope(id, true, "ok", "", SizingJobData(entry));
+    }
+    if (operation == Operation::SizingClosePreview)
+    {
+        session.ClosePreview();
+        sizing::PublishPanelState(entry.panel);
+        return Envelope(id, true, "ok", "", SizingJobData(entry));
+    }
+    if (operation == Operation::SizingRelease)
+    {
+        if (session.IsRunning()) return Envelope(id, false, "sizing_busy", "Cancel and poll until the worker finishes before releasing its job.");
+        sizing::WithdrawPanelState(entry.panel);
+        jobs.erase(found);
+        return Envelope(id, true, "ok", "", Json::Object({{"job", Json::StringValue(handle)}, {"released", Json::Boolean(true)}}));
+    }
+    if (session.IsRunning() || !session.GetBatchResult().success)
+        return Envelope(id, false, "sizing_not_ready", "Sizing has no completed successful result.", SizingJobData(entry));
+    const size_t member = static_cast<size_t>(options.GetInt32(SizingMember, 0));
+    if (member >= session.CharacterCount()) return Envelope(id, false, "invalid_argument", "Sizing member is out of range.");
+    session.SelectCharacter(member);
+    const size_t stage = SizingStageIndex(options);
+    if (operation == Operation::SizingResult)
+        return Envelope(id, true, "ok", "", SizingResultData(entry, member, options));
+    if (operation == Operation::SizingPreview)
+    {
+        if (!session.Preview(stage, options.GetBool(SizingOverlay, false)))
+            return Envelope(id, false, "sizing_preview_failed", string_util::GetStdString(session.GetError()));
+        entry.panel->member = member;
+        entry.panel->stage = stage;
+        entry.panel->overlay = options.GetBool(SizingOverlay, false);
+        sizing::PublishPanelState(entry.panel);
+        return Envelope(id, true, "ok", "", SizingJobData(entry, {
+            {"stage", Json::StringValue(std::string(kSizingStages[stage]))}, {"member", Json::Integer(member)}}));
+    }
+    if (operation == Operation::SizingExport || operation == Operation::SizingExportCamera)
+    {
+        if (operation == Operation::SizingExportCamera && !session.HasCamera())
+            return Envelope(id, false, "sizing_no_camera", "This job has no adapted camera.");
+        const auto& motion = operation == Operation::SizingExport ? session.GetResult().stages[stage] : session.GetBatchResult().camera;
+        return WriteExport(id, options, "vmd", [&motion](const std::string& path) { return libmmd::WriteVMDFile(&motion, path.c_str()); });
+    }
+    // Resolve every batch member again before host application, then let
+    // HostSession validate the immutable binding signature of every target.
+    for (const auto& modelHandle : entry.models)
+        if (!ResolveObject(document, documentHandle, modelHandle))
+            return Envelope(id, false, "stale_handle", "A sizing target was deleted or moved out of the source document.");
+    if (operation == Operation::SizingApplyCamera)
+    {
+        if (!session.HasCamera()) return Envelope(id, false, "sizing_no_camera", "This job has no adapted camera.");
+        if (!session.ApplyCamera()) return Envelope(id, false, "sizing_apply_failed", string_util::GetStdString(session.GetError()));
+        sizing::PublishPanelState(entry.panel);
+        auto* camera = document->GetActiveObject();
+        return Envelope(id, true, "ok", "", Json::Object({{"job", Json::StringValue(handle)}, {"camera", Json::StringValue(RegisterHandle(document, camera))}}));
+    }
+    if (operation == Operation::SizingApply)
+    {
+        if (!session.Apply(stage)) return Envelope(id, false, "sizing_apply_failed", string_util::GetStdString(session.GetError()));
+        entry.panel->member = member;
+        entry.panel->stage = stage;
+        sizing::PublishPanelState(entry.panel);
+        auto* target = ResolveObject(document, documentHandle, entry.models[member]);
+        auto* model = target->GetNodeData<MMDModelManagerObject>();
+        const auto& slots = model->GetAutomationAnimationSlots();
+        const Int32 active = model->GetAutomationActiveAnimationSlot();
+        if (active < 0 || active >= slots.GetCount())
+            return Envelope(id, false, "sizing_apply_failed", "Applied result slot could not be identified.", Json(), "outcome_unknown");
+        return Envelope(id, true, "ok", "", Json::Object({{"job", Json::StringValue(handle)},
+            {"model", Json::StringValue(entry.models[member])}, {"slot", Json::StringValue(DerivedHandle(entry.models[member], "slot", slots[active].runtime_identity))},
+            {"member", Json::Integer(member)}, {"stage", Json::StringValue(std::string(kSizingStages[stage]))}}));
+    }
+    return Envelope(id, false, "unsupported_operation", "Unknown sizing operation.");
 }
 
 Json Execute(Operation operation, const BaseContainer& request);
@@ -771,6 +1187,7 @@ Json Execute(Operation operation, const BaseContainer& request)
 			{"record_capacity", Json::Integer(kRecordCapacity)}, {"max_page_size", Json::Integer(kMaxPageSize)},
 			{"max_input_bytes", Json::Integer(kMaxInputBytes)}, {"transport_supported", Json::Boolean(GetC4DVersion() >= 2026400)},
 			{"material_types", Json::Array(material_types)},
+			{"sizing_job_capacity", Json::Integer(4)}, {"sizing_execution", Json::StringValue(std::string("main-thread-snapshot-background-solve"))},
 			{"execution", Json::StringValue(std::string("synchronous-main-thread"))}}));
 	}
 	if (operation == Operation::Status)
@@ -782,6 +1199,8 @@ Json Execute(Operation operation, const BaseContainer& request)
 	}
 	BaseDocument* document = ResolveDocument(document_handle);
 	if (!document) return Envelope(id, false, "stale_handle", "The target document is closed or belongs to another host session.");
+    if (operation >= Operation::SizingStart && operation <= Operation::SizingRelease)
+        return ExecuteSizing(operation, document, document_handle, id, options);
 	if (operation == Operation::ListModels)
 	{
 		std::vector<BaseObject*> objects;

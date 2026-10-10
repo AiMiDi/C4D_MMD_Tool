@@ -21,6 +21,10 @@ Description:	scene manager
 #include "c4d_baselinkarray.h"
 #include "cmt_tools_setting.h"
 #include "module/core/cmt_marco.h"
+#if defined(CMT_ENABLE_RUNTIME_REGRESSION)
+#include "module/tools/sizing/sizing_session.h"
+#include "module/ui/motion_sizing_dialog.h"
+#endif
 
 struct IOLog
 {
@@ -181,5 +185,9 @@ private:
 	// Python message bindings can copy the caller's BaseContainer. This
 	// non-serialized cache supplies the same reply through a readonly parameter.
 	String production_response_;
+#if defined(CMT_ENABLE_RUNTIME_REGRESSION)
+	std::unique_ptr<cmt::sizing::HostSession> sizing_test_session_;
+    std::unique_ptr<MotionSizingDialog> sizing_test_dialog_;
+#endif
 
 };

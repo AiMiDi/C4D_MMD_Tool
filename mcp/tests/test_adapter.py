@@ -9,6 +9,7 @@ import io
 import json
 import math
 import os
+import re
 from pathlib import Path
 import subprocess
 import sys
@@ -65,6 +66,22 @@ def native_result_data(name, arguments=None):
                                    "fps": 30, "finite": True, "bone_count": 4},
         "mmdtool_operation_status": {"operation": envelope("original", {"mode": "anim"})},
     }
+    job = {"job": "session:sizing:1", "job_state": "completed", "character_count": 2,
+           "has_camera": True, "preview_document": "", "error": ""}
+    for tool_name in ("start", "status", "cancel", "close_preview"):
+        samples["mmdtool_sizing_" + tool_name] = job
+    samples.update({
+        "mmdtool_sizing_result": {"job": job["job"], "member": 0, "section": "summary",
+                                  "summary": {"horizontal_ratio": 1.2, "vertical_ratio": 1.1, "local_offsets": [],
+                                              "matched_tracks": 4, "modified_keys": 30, "constraints": 3,
+                                              "unresolved": 1, "warning_count": 2, "stored_samples": 3,
+                                              "max_residual": .01, "elapsed_ms": 30}, "items": [], "total": 0, "next_offset": -1},
+        "mmdtool_sizing_preview": {**job, "stage": "offset", "member": 0},
+        "mmdtool_sizing_apply": {"job": job["job"], "model": "m", "slot": "s", "member": 0, "stage": "offset"},
+        "mmdtool_sizing_export": exported, "mmdtool_sizing_export_camera": exported,
+        "mmdtool_sizing_apply_camera": {"job": job["job"], "camera": "c"},
+        "mmdtool_sizing_release": {"job": job["job"], "released": True},
+    })
     if name == "mmdtool_inspect_model" and arguments.get("section") == "slots":
         return slots
     return samples[name]
@@ -145,9 +162,9 @@ class SchemaTests(unittest.TestCase):
         pending = {**envelope("original"), "state": "running"}
         validate(envelope("fixture", {"operation": pending}), TOOL_BY_NAME["mmdtool_operation_status"]["outputSchema"])
 
-    def test_all_sixteen_discoverable_tools_have_closed_inputs_and_outputs(self):
-        self.assertEqual(len(TOOLS), 16)
-        self.assertEqual(len(TOOL_BY_NAME), 16)
+    def test_all_discoverable_tools_have_closed_inputs_and_outputs(self):
+        self.assertEqual(len(TOOLS), 27)
+        self.assertEqual(len(TOOL_BY_NAME), 27)
         for item in TOOLS:
             with self.subTest(tool=item["name"]):
                 self.assertFalse(item["inputSchema"]["additionalProperties"])
@@ -161,13 +178,66 @@ class SchemaTests(unittest.TestCase):
         samples = {"document": "d:session:1", "model": "m:session:2", "camera": "c:session:3",
                    "path": r"C:\test\阿芙.pmx", "slot": "s:session:4", "mode": "anim", "enabled": True,
                    "morph_handle": "f:session:5", "strength": 0.5, "frame": 30, "unit": "vmd_frames",
-                   "query_operation_id": str(uuid.uuid4())}
+                   "query_operation_id": str(uuid.uuid4()), "job": "session:sizing:1",
+                   "characters": [{"model": "m", "source_pmx": r"C:\test\source.pmx", "path": r"C:\test\motion.vmd"}]}
         for item in TOOLS:
             with self.subTest(tool=item["name"]):
                 arguments = {key: samples[key] for key in item["inputSchema"]["required"]}
                 validated_arguments(item["name"], arguments)
                 with self.assertRaises(ValidationError):
                     validated_arguments(item["name"], {**arguments, "private_sdk_parameter": 1})
+
+    def test_native_discovery_and_sizing_field_ids_match_adapter(self):
+        root = Path(__file__).resolve().parents[2]
+        native = (root / "source/module/automation/mmd_automation.cpp").read_text(encoding="utf-8")
+        catalog = native.split("kOperationNames[] = {", 1)[1].split("};", 1)[0]
+        self.assertEqual(set(re.findall(r'"(mmdtool_[a-z_]+)"', catalog)), set(TOOL_BY_NAME))
+        protocol = (root / "source/utils/cmt_automation_protocol.hpp").read_text(encoding="utf-8")
+        enum = re.sub(r"//[^\n]*", "", protocol.split("enum Option : Int32", 1)[1].split("};", 1)[0])
+        fields = {}
+        current = -1
+        for name, number in re.findall(r"(\w+)\s*(?:=\s*(\d+))?\s*(?:,|$)", enum.split("{", 1)[1].strip()):
+            current = int(number) if number else current + 1
+            fields[name] = current
+        names = ["source_pmx", "characters", "job", "stage", "sizing_options", "camera_path",
+                 "max_camera_distance_ratio", "member", "overlay", "movement_multiplier", "leg_offset",
+                 "center_offsets", "leg_offsets", "stance", "twist", "avoidance", "wrist_contact", "finger_contact",
+                 "floor_contact", "multi_contact", "contact_distance", "floor_height", "collision_margin",
+                 "tolerance", "iterations", "max_bake_frames", "max_baked_keys", "max_diagnostics", "avoidance_bodies"]
+        native_names = [name for name in fields if name.startswith("Sizing") and name != "SizingModel"]
+        self.assertEqual(len(names), len(native_names))
+        for name, native_name in zip(names, native_names):
+            self.assertEqual(OPTION_IDS[name], fields[native_name], name)
+        self.assertEqual(OPTION_IDS["model"], fields["SizingModel"])
+
+    def test_sizing_requires_one_motion_source_and_unique_models(self):
+        character = {"model": "m", "source_pmx": r"C:\source.pmx", "path": r"C:\motion.vmd"}
+        for bad in ({k: v for k, v in character.items() if k != "path"},
+                    {**character, "slot": "s"}):
+            with self.assertRaises(ValidationError):
+                validated_arguments("mmdtool_sizing_start", {"document": "d", "characters": [bad]})
+        for characters in ([], [character] * 17, [character, character]):
+            with self.assertRaises(ValidationError):
+                validated_arguments("mmdtool_sizing_start", {"document": "d", "characters": characters})
+        slot = {k: v for k, v in character.items() if k != "path"}
+        self.assertEqual(validated_arguments("mmdtool_sizing_start", {
+            "document": "d", "characters": [{**slot, "slot": "stable-slot"}]} )["characters"][0]["slot"], "stable-slot")
+
+    def test_nested_sizing_bounds_and_absolute_paths(self):
+        base = {"document": "d", "characters": [{"model": "m", "source_pmx": r"C:\source.pmx", "path": r"C:\motion.vmd"}]}
+        for values in ({"iterations": True}, {"iterations": 1001}, {"max_bake_frames": 18001},
+                       {"max_baked_keys": 2000001}, {"max_diagnostics": -1}, {"tolerance": 0},
+                       {"floor_height": float("nan")}, {"avoidance_bodies": ["body"] * 257},
+                       {"unknown": 0}):
+            with self.subTest(values=values), self.assertRaises(ValidationError):
+                validated_arguments("mmdtool_sizing_start", {**base, "sizing_options": values})
+        for key in ("path", "source_pmx"):
+            with self.assertRaises(ValidationError):
+                validated_arguments("mmdtool_sizing_start", {**base, "characters": [{**base["characters"][0], key: "relative.pmx"}]})
+        with self.assertRaises(ValidationError):
+            validated_arguments("mmdtool_sizing_result", {"document": "d", "job": "j", "limit": 257})
+        with self.assertRaises(ValidationError):
+            validated_arguments("mmdtool_sizing_preview", {"document": "d", "job": "j", "stage": "invalid"})
 
     def test_fractional_offset_and_bool_number_rejected(self):
         base = {"document": "d", "model": "m", "path": r"C:\a.vmd"}
@@ -322,7 +392,7 @@ class StdioTests(unittest.TestCase):
         self.assertEqual(early["error"]["code"], -32600)
         self.initialize()
         listed = self.server.handle({"jsonrpc": "2.0", "id": 2, "method": "tools/list"})
-        self.assertEqual(len(listed["result"]["tools"]), 16)
+        self.assertEqual(len(listed["result"]["tools"]), 27)
         called = self.server.handle({"jsonrpc": "2.0", "id": 3, "method": "tools/call",
                                      "params": {"name": "mmdtool_capabilities", "arguments": {}}})
         self.assertEqual(json.loads(called["result"]["content"][0]["text"]), called["result"]["structuredContent"])
@@ -353,7 +423,7 @@ class StdioTests(unittest.TestCase):
         self.assertFalse(process.stderr)
         responses = [json.loads(line) for line in process.stdout.splitlines()]
         self.assertEqual(len(responses), 2)
-        self.assertEqual(len(responses[-1]["result"]["tools"]), 16)
+        self.assertEqual(len(responses[-1]["result"]["tools"]), 27)
 
 
 class HostTransportTests(unittest.TestCase):
@@ -494,6 +564,33 @@ class FixedBridgeTests(unittest.TestCase):
                                   "morph_handle": "morph", "strength": 1})
         self.assertIsInstance(request[5][116], float)
         self.assertEqual(request[4], "model")
+
+    def test_sizing_nested_container_types_and_unicode_are_data(self):
+        body = "胸'); raise Exception('unexpected') #"
+        request, _ = self.execute("mmdtool_sizing_start", {
+            "document": "d", "characters": [{"model": "m", "source_pmx": "C:/来源.pmx", "slot": "m:slot:9",
+                "sizing_options": {"movement_multiplier": 2, "avoidance_bodies": [body]}}],
+            "sizing_options": {"stance": True, "iterations": 12}, "max_camera_distance_ratio": 5})
+        self.assertEqual(request[4], "")
+        character = request[5][141][0]
+        self.assertEqual(character[200], "m")
+        self.assertEqual(character[140], "C:/来源.pmx")
+        self.assertEqual(character[112], "m:slot:9")
+        self.assertIsInstance(character[144][149], float)
+        self.assertEqual(character[144][168][0], body)
+        self.assertIs(request[5][144][153], True)
+        self.assertIsInstance(request[5][144][164], int)
+        self.assertIsInstance(request[5][146], float)
+
+    def test_sizing_export_verification_uses_same_identity_boundary(self):
+        with temporary_directory() as folder:
+            path = Path(folder) / "结果.vmd"
+            path.write_bytes(b"fixture")
+            for name in ("mmdtool_sizing_export", "mmdtool_sizing_export_camera"):
+                _, result = self.execute(name, {}, {"path": str(path), "bytes": 7})
+                self.assertEqual(result["data"]["sha256"], hashlib.sha256(b"fixture").hexdigest())
+                _, bad = self.execute(name, {}, {"path": str(path), "bytes": 6})
+                self.assertEqual(bad["state"], "outcome_unknown")
 
     def test_readonly_response_fallback_when_message_payload_is_copied(self):
         request, result = self.execute("mmdtool_capabilities", {}, copy_message_data=True)

@@ -31,6 +31,17 @@ OPTION_IDS = {
     "inherit": 130, "expressions": 131, "multipart": 132,
     "english": 133, "english_check": 134, "material_type": 135,
     "query_operation_id": 136,
+    "source_pmx": 140, "characters": 141, "job": 142, "stage": 143,
+    "sizing_options": 144, "camera_path": 145, "max_camera_distance_ratio": 146,
+    "member": 147, "overlay": 148,
+    "movement_multiplier": 149, "leg_offset": 150, "center_offsets": 151,
+    "leg_offsets": 152, "stance": 153, "twist": 154, "avoidance": 155,
+    "wrist_contact": 156, "finger_contact": 157, "floor_contact": 158,
+    "multi_contact": 159, "contact_distance": 160, "floor_height": 161,
+    "collision_margin": 162, "tolerance": 163, "iterations": 164,
+    "max_bake_frames": 165, "max_baked_keys": 166, "max_diagnostics": 167,
+    "avoidance_bodies": 168, "model": 200,
+
 }
 
 
@@ -151,6 +162,41 @@ def tool(name: str, description: str, schema: dict[str, Any],
                             "idempotentHint": read_only, "openWorldHint": False}}
 
 
+STAGE = choice("original", "scale", "offset", "stance", "twist", "avoidance", "contact",
+               "multi_character", default="multi_character")
+SIZING_OPTIONS = obj({
+    "movement_multiplier": {"type": "number", "exclusiveMinimum": 0, "maximum": 1000},
+    "leg_offset": {"type": "number", "minimum": -10000, "maximum": 10000},
+    **{name: {"type": "boolean"} for name in (
+        "center_offsets", "leg_offsets", "stance", "twist", "avoidance", "wrist_contact",
+        "finger_contact", "floor_contact", "multi_contact")},
+    "contact_distance": {"type": "number", "exclusiveMinimum": 0, "maximum": 10000},
+    "floor_height": {"type": "number", "minimum": -10000, "maximum": 10000},
+    "collision_margin": {"type": "number", "minimum": 0, "maximum": 10000},
+    "tolerance": {"type": "number", "exclusiveMinimum": 0, "maximum": 1000},
+    "iterations": {"type": "integer", "minimum": 1, "maximum": 1000},
+    "max_bake_frames": {"type": "integer", "minimum": 1, "maximum": 18000},
+    "max_baked_keys": {"type": "integer", "minimum": 1, "maximum": 2000000},
+    "max_diagnostics": {"type": "integer", "minimum": 0, "maximum": 20000},
+    "avoidance_bodies": {**array(string(maximum=1024)), "maxItems": 256},
+})
+SIZING_CHARACTER = obj({"model": HANDLE, "source_pmx": PATH, "path": PATH, "slot": HANDLE,
+                        "sizing_options": SIZING_OPTIONS}, ("model", "source_pmx"))
+JOB_DATA = {"job": HANDLE, "job_state": choice("running", "cancelling", "completed", "cancelled", "failed"),
+            "character_count": {"type": "integer"}, "has_camera": {"type": "boolean"},
+            "preview_document": {"type": "string"}, "error": {"type": "string"}}
+SIZING_SUMMARY = obj({
+    "horizontal_ratio": {"type": "number"}, "vertical_ratio": {"type": "number"},
+    "local_offsets": array(obj({"bone": {"type": "string"}, "offset": array({"type": "number"})}, ("bone", "offset"))),
+    **{key: {"type": "integer", "minimum": 0} for key in (
+        "matched_tracks", "modified_keys", "constraints", "unresolved", "warning_count", "stored_samples")},
+    "max_residual": {"type": "number", "minimum": 0}, "elapsed_ms": {"type": "number", "minimum": 0},
+}, ("horizontal_ratio", "vertical_ratio", "local_offsets", "matched_tracks", "modified_keys",
+    "constraints", "unresolved", "warning_count", "stored_samples", "max_residual", "elapsed_ms"))
+MEMBER = {"type": "integer", "minimum": 0, "maximum": 15, "default": 0}
+JOB_INPUT = {"job": HANDLE}
+MEMBER_INPUT = {**JOB_INPUT, "member": MEMBER}
+
 TOOLS = [
     tool("mmdtool_capabilities", "Check host/plugin/API compatibility and discover live document handles.",
          input_schema(document=False),
@@ -244,6 +290,43 @@ TOOLS = [
                       required=("query_operation_id",)),
          {"operation": output_schema({})}, read_only=True),
 ]
+TOOLS += [
+    tool("mmdtool_sizing_start", "Snapshot 1-16 scene models and start a background sizing job. Each character uses a VMD path OR a stable slot handle. Shared options may be overridden per character; distances use PMX units.",
+         input_schema(properties={
+             "characters": {**array(SIZING_CHARACTER), "minItems": 1, "maxItems": 16},
+             "sizing_options": SIZING_OPTIONS, "camera_path": PATH,
+             "max_camera_distance_ratio": {"type": "number", "minimum": 1, "maximum": 100,
+                                             "default": 5}}, required=("characters",)), JOB_DATA),
+    tool("mmdtool_sizing_status", "Poll a job without waiting on the C4D thread. Use a fresh operation_id per poll. No iteration progress percentage is estimated.",
+         input_schema(properties=JOB_INPUT, required=("job",)), JOB_DATA, read_only=True),
+    tool("mmdtool_sizing_result", "Read one completed member: summary, stages, paged warnings or constraint samples. Samples may be truncated by max_diagnostics; totals remain available.",
+         input_schema(properties={**MEMBER_INPUT, **PAGING, "section": choice(
+             "summary", "stages", "warnings", "constraints", default="summary")}, required=("job",)),
+         {"job": HANDLE, "member": {"type": "integer"}, "section": {"type": "string"},
+          "summary": SIZING_SUMMARY, "items": array({"type": ["string", "object"]}),
+          "total": {"type": "integer"}, "next_offset": {"type": "integer"}}, read_only=True),
+    tool("mmdtool_sizing_cancel", "Request cooperative cancellation; query status until cancelled, then release. Never applies a partial result.",
+         input_schema(properties=JOB_INPUT, required=("job",)), JOB_DATA),
+    tool("mmdtool_sizing_preview", "Show all members before/after the selected stage in a disposable document. Select member for viewport focus; retain preview time.",
+         input_schema(properties={**MEMBER_INPUT, "stage": STAGE, "overlay": boolean(False)}, required=("job",)),
+         {**JOB_DATA, "stage": STAGE, "member": {"type": "integer"}}),
+    tool("mmdtool_sizing_close_preview", "Close only this job's disposable comparison document, retaining computed results.",
+         input_schema(properties=JOB_INPUT, required=("job",)), JOB_DATA),
+    tool("mmdtool_sizing_apply", "Append the selected member/stage as a new Undoable slot after checking every target bind snapshot.",
+         input_schema(properties={**MEMBER_INPUT, "stage": STAGE}, required=("job",)),
+         {"job": HANDLE, "model": HANDLE, "slot": HANDLE, "member": {"type": "integer"}, "stage": STAGE}),
+    tool("mmdtool_sizing_export", "Export a completed member/stage using a staged VMD write and overwrite protection.",
+         input_schema(properties={**MEMBER_INPUT, "stage": STAGE, "path": PATH,
+                                   "overwrite": boolean(False)}, required=("job", "path")), FILE_IDENTITY),
+    tool("mmdtool_sizing_apply_camera", "Add the completed adapted camera as a new Undoable scene object after checking all target snapshots.",
+         input_schema(properties=JOB_INPUT, required=("job",)), {"job": HANDLE, "camera": HANDLE}),
+    tool("mmdtool_sizing_export_camera", "Export the adapted camera using a staged VMD write and overwrite protection.",
+         input_schema(properties={**JOB_INPUT, "path": PATH, "overwrite": boolean(False)},
+                      required=("job", "path")), FILE_IDENTITY),
+    tool("mmdtool_sizing_release", "Release a finished job and close its preview. Running jobs require cancel and polling first. Handles expire after release or host restart.",
+         input_schema(properties=JOB_INPUT, required=("job",)), {"job": HANDLE, "released": {"type": "boolean"}}),
+]
+
 TOOL_BY_NAME = {item["name"]: item for item in TOOLS}
 
 
@@ -282,6 +365,9 @@ def validate(value: Any, schema: dict[str, Any], field: str = "arguments") -> No
         if schema.get("format") == "uuid" and not re.fullmatch(
                 r"[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}", value):
             raise ValidationError(f"{field}: expected UUID")
+    if isinstance(value, list):
+        if len(value) < schema.get("minItems", 0) or len(value) > schema.get("maxItems", 2**31):
+            raise ValidationError(f"{field}: invalid array length")
     if isinstance(value, dict):
         properties = schema.get("properties", {})
         for name in schema.get("required", []):
@@ -320,8 +406,25 @@ def validated_arguments(name: str, arguments: Any) -> dict[str, Any]:
         raise ValidationError("name: unknown tool")
     definition = TOOL_BY_NAME[name]["inputSchema"]
     validate(arguments, definition)
-    if "path" in arguments and not (ntpath.isabs(arguments["path"]) or posixpath.isabs(arguments["path"])):
-        raise ValidationError("arguments.path: expected an absolute local file path")
+    def check_paths(value, field="arguments"):
+        if isinstance(value, dict):
+            for key, item in value.items():
+                if key in ("path", "source_pmx", "camera_path") and not (
+                        ntpath.isabs(item) or posixpath.isabs(item)):
+                    raise ValidationError(f"{field}.{key}: expected an absolute local file path")
+                check_paths(item, f"{field}.{key}")
+        elif isinstance(value, list):
+            for i, item in enumerate(value):
+                check_paths(item, f"{field}[{i}]")
+    check_paths(arguments)
+    if name == "mmdtool_sizing_start":
+        models = set()
+        for i, character in enumerate(arguments["characters"]):
+            if ("path" in character) == ("slot" in character):
+                raise ValidationError(f"arguments.characters[{i}]: supply exactly one of path or slot")
+            if character["model"] in models:
+                raise ValidationError("arguments.characters: duplicate target model")
+            models.add(character["model"])
     result = copy.deepcopy(arguments)
     for key, definition in definition["properties"].items():
         if key not in result and "default" in definition:

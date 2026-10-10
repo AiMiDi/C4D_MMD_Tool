@@ -680,6 +680,88 @@ Bool CMTSceneManager::Message(GeListNode* node, Int32 type, void* data)
 		request->SetString(cmt_regression::Error, String());
 		return true;
 	}
+	if ((operation >= cmt_regression::Operation::SizingStart && operation <= cmt_regression::Operation::SizingDialogClose) ||
+        (operation >= cmt_regression::Operation::SizingBatchStart && operation <= cmt_regression::Operation::SizingSceneSlotStart))
+	{
+		try
+		{
+			if (!sizing_test_session_) sizing_test_session_ = std::make_unique<cmt::sizing::HostSession>();
+			auto& session = *sizing_test_session_;
+			const size_t stage = static_cast<size_t>(request->GetInt32(cmt_regression::SizingStage, 2));
+			Bool success = true;
+            libmmd::sizing::Options sizingOptions;
+            const Int32 sizingFlags = request->GetInt32(cmt_regression::SizingFlags);
+            sizingOptions.stance = (sizingFlags & 1) != 0;
+            sizingOptions.twist = (sizingFlags & 2) != 0;
+            sizingOptions.avoidance = (sizingFlags & 4) != 0;
+            sizingOptions.wristContact = (sizingFlags & 8) != 0;
+            sizingOptions.fingerContact = (sizingFlags & 16) != 0;
+            sizingOptions.floorContact = (sizingFlags & 32) != 0;
+            sizingOptions.multiContact = (sizingFlags & 64) != 0;
+			switch (operation)
+			{
+			case cmt_regression::Operation::SizingStart:
+				success = session.Start(document->GetActiveObject(), Filename(request->GetString(cmt_regression::SizingSourcePath)),
+					Filename(request->GetString(cmt_regression::Path)), sizingOptions); break;
+            case cmt_regression::Operation::SizingBatchStart:
+            {
+                std::vector<cmt::sizing::HostInput> inputs;
+                for (auto* object = document->GetFirstObject(); object; object = object->GetNext())
+                    if (object->IsInstanceOf(g_mmd_model_manager_object_id))
+                        inputs.push_back({object, Filename(request->GetString(cmt_regression::SizingSourcePath)),
+                            Filename(request->GetString(cmt_regression::Path)), sizingOptions});
+                const String camera = request->GetString(cmt_regression::SizingCameraPath);
+                success = session.StartBatch(inputs, Filename(camera), {camera.IsPopulated(), 5.});
+                break;
+            }
+            case cmt_regression::Operation::SizingSelectCharacter:
+                success = session.SelectCharacter(static_cast<size_t>(request->GetInt32(cmt_regression::SizingMember))); break;
+            case cmt_regression::Operation::SizingExportCamera:
+                success = session.ExportCamera(Filename(request->GetString(cmt_regression::Path))); break;
+            case cmt_regression::Operation::SizingApplyCamera: success = session.ApplyCamera(); break;
+            case cmt_regression::Operation::SizingSceneSlotStart:
+            {
+                BaseObject* object = document->GetActiveObject();
+                auto* model = object ? object->GetNodeData<MMDModelManagerObject>() : nullptr;
+                const Int32 slot = request->GetInt32(cmt_regression::SizingMember);
+                if (!model || slot < 0 || slot >= model->GetAutomationAnimationSlots().GetCount())
+                { success = false; break; }
+                const UInt64 identity = model->GetAutomationAnimationSlots()[slot].runtime_identity;
+                success = session.StartBatch({{object, Filename(request->GetString(cmt_regression::SizingSourcePath)),
+                    Filename(), sizingOptions, identity}}, Filename(), {});
+                break;
+            }
+			case cmt_regression::Operation::SizingPoll: session.Poll(); break;
+			case cmt_regression::Operation::SizingPreview:
+				success = session.Preview(stage, request->GetBool(cmt_regression::SizingOverlay)); break;
+			case cmt_regression::Operation::SizingApply: success = session.Apply(stage); break;
+			case cmt_regression::Operation::SizingExport:
+				success = session.Export(stage, Filename(request->GetString(cmt_regression::Path))); break;
+			case cmt_regression::Operation::SizingCancel: session.Cancel(); break;
+			case cmt_regression::Operation::SizingClose: session.ClosePreview(); break;
+            case cmt_regression::Operation::SizingDialogOpen:
+                if (!sizing_test_dialog_) sizing_test_dialog_ = std::make_unique<MotionSizingDialog>();
+                  success = sizing_test_dialog_->Open(DLG_TYPE::ASYNC, g_cmt_command_id, -1, -1, 720, 760, 1);
+                break;
+            case cmt_regression::Operation::SizingDialogClose:
+                if (sizing_test_dialog_) sizing_test_dialog_->Close();
+                sizing_test_dialog_.reset();
+                break;
+			default: break;
+			}
+			request->SetBool(cmt_regression::SizingRunning, session.IsRunning());
+			request->SetBool(cmt_regression::SizingReady, session.GetResult().success);
+			request->SetString(cmt_regression::SizingSummary, session.Summary());
+			request->SetBool(cmt_regression::Success, success);
+			request->SetString(cmt_regression::Error, session.GetError());
+			return success;
+		}
+		catch (const std::exception& error)
+		{
+			request->SetString(cmt_regression::Error, String(error.what()));
+			return false;
+		}
+	}
 	if (operation == cmt_regression::Operation::Handshake)
 	{
 		request->SetBool(cmt_regression::Success, true);
@@ -708,7 +790,7 @@ Bool CMTSceneManager::Message(GeListNode* node, Int32 type, void* data)
 			}
 			CMTToolsSetting::ModelImport setting(document);
 			setting.fn = filename;
-			setting.position_multiple = 1.;
+			setting.position_multiple = request->GetFloat(cmt_regression::ImportScale, 1.);
 			setting.import_polygon = setting.import_normal = setting.import_uv = true;
 			setting.import_material = setting.import_bone = setting.import_weights = true;
 			setting.import_ik = setting.import_inherit = setting.import_expression = true;
