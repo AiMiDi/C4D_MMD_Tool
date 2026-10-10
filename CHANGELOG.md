@@ -4,6 +4,18 @@
 
 Entries for 0.9.1.x were reconstructed from tagged source changes and release dates. Intermediate build tags are grouped below; original entries through 0.4.6.1 are retained.
 
+### 0.9.3.3 · VMD motion adaptation (2026-10-10)
+
+1. Add staged VMD motion adaptation with body-scale and movement offsets, stance and twist adjustment, rigid-shape avoidance, contact constraints, multi-character processing and camera fitting.
+2. Add a localized C4D panel with scene-model selection, existing animation-slot input, before/after stage previews, queued characters and apply/export controls.
+3. Add typed production MCP motion-sizing tools with asynchronous jobs, cancellation, preview, apply/export and shared panel state.
+4. Move reusable calculation into libMMD under `libmmd::sizing`, independent of the C4D SDK, with public APIs, regression fixtures and documented solver limits.
+5. Fix R20 source processing, R21 STL compatibility and pre-2026 LinkBox API support. Preserve SSE2 compilation for sizing to keep the validated numerical baseline.
+
+Validation: 21 SDK/platform builds, 41 MCP tests, 15 libMMD tests and 24 plugin tests passed. Native acceptance of the latest menu placement, MCP/dialog synchronization and queue interactions remains pending. Avoidance uses rigid-shape sample constraints rather than whole-mesh collision guarantees; macOS and older-host runtime behavior remain unverified. Published macOS ZIPs are Intel builds.
+
+[Changes since 0.9.3.2](https://github.com/AiMiDi/C4D_MMD_Tool/compare/v0.9.3.2...v0.9.3.3) · [Validation record](docs/validation/vmd-sizing/submission-ci-20261010/README.md) · [Numerical compatibility](docs/dev/motion-sizing-numerics.md)
+
 ### 0.9.3.2 · Controller placement and hover names (2026-10-09)
 
 1. Fix eye controller placement on fresh PMX import; align the shared eye outline with the actual eye pair while retaining its authored rotation pivot and model scale.
