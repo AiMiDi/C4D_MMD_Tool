@@ -57,6 +57,11 @@ def run(source, ids, output, frame=0):
         extras = [named(side + suffix) for side in ('左', '右')
                   for suffix in ('手IK_ctrl', '腕方向_ctrl', '膝方向_ctrl')]
         check('extra_handle_coverage', len(extras) == 6)
+        for side in ('左','右'):
+            length = (bones[side+'ひじ'].GetMg().off-bones[side+'腕'].GetMg().off).GetLength() + (bones[side+'手首'].GetMg().off-bones[side+'ひじ'].GetMg().off).GetLength()
+            goal = named(side+'手IK_ctrl')
+            width = goal.GetRad().x*goal.GetMg().v1.GetLength()*2
+            check(side+'_goal_size_matches_limb', width < length*0.12, width=width, limb_length=length)
         check('fingers_generated', all(control(side + finger + digit)
               for side in ('左', '右') for finger, digits in
               [('親指', '０１２'), ('人指', '１２３'), ('中指', '１２３'),

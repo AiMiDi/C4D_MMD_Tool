@@ -455,7 +455,8 @@ void mmd_control_workflow::CreateArmControls(MMDBoneManagerObject &manager, Base
             const Bool pole = parameter == kArmPoleLink;
             if (BaseObject *existing = Link(owner, parameter))
             {
-                SplineObject *style = NewHandle(pole, pole ? radius * 0.55 : radius);
+                const Float existing_scale=std::max(existing->GetMg().sqmat.v1.GetLength(),Float(1e-8));
+                SplineObject *style = NewHandle(pole, (pole ? radius * 0.55 : radius)/existing_scale);
                 if (style && existing->IsInstanceOf(Ospline))
                 {
                     SplineObject *spline = ToSpline(existing);
@@ -478,7 +479,7 @@ void mmd_control_workflow::CreateArmControls(MMDBoneManagerObject &manager, Base
             control->SetName(String(side == Side::Left ? (pole ? "左腕方向_ctrl" : "左手IK_ctrl")
                                                        : (pole ? "右腕方向_ctrl" : "右手IK_ctrl")));
             control->InsertUnderLast(root);
-            Matrix pose = chain.wrist->GetMg();
+            Matrix pose = Normalized(chain.wrist->GetMg());
             if (pole)
                 pose.off = DefaultPole(chain);
             control->SetMg(pose);
@@ -511,7 +512,8 @@ void mmd_control_workflow::CreateArmControls(MMDBoneManagerObject &manager, Base
         {
             if (existing->IsInstanceOf(Ospline))
             {
-                SplineObject *style = NewHandle(true, radius);
+                const Float existing_scale=std::max(existing->GetMg().sqmat.v1.GetLength(),Float(1e-8));
+                SplineObject *style = NewHandle(true, radius/existing_scale);
                 SplineObject *spline = ToSpline(existing);
                 if (style && spline->ResizeObject(style->GetPointCount(), style->GetSegmentCount()))
                 {
@@ -531,7 +533,7 @@ void mmd_control_workflow::CreateArmControls(MMDBoneManagerObject &manager, Base
             continue;
         pole->InsertUnderLast(root);
         pole->SetName(String(side == Side::Left ? "左膝方向_ctrl" : "右膝方向_ctrl"));
-        Matrix pose = chain.wrist->GetMg();
+        Matrix pose = Normalized(chain.wrist->GetMg());
         pose.off = DefaultPole(chain);
         pole->SetMg(pose);
         const Matrix local = pole->GetMl();
