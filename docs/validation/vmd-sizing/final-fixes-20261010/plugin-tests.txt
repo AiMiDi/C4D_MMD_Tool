@@ -93,14 +93,14 @@ CMake is re-running because S:/tmp/cmt-sizing-final-fixes-20261010/plugin-tests/
   21/22 Test #21: cmt_highlight_analysis ..............   Passed    0.37 sec
         Start 22: cmt_production_mcp_adapter
   22/22 Test #22: cmt_production_mcp_adapter ..........   Passed    3.46 sec
-  
+
   100% tests passed out of 22
-  
+
   Label Time Summary:
   fixture       =   5.99 sec*proc (9 tests)
   plugin        =   8.99 sec*proc (22 tests)
   regression    =   8.99 sec*proc (22 tests)
   unit          =   3.00 sec*proc (13 tests)
-  
+
   Total Test time (real) =   9.01 sec
   Building Custom Rule C:/code/C4D_MMD_Tool/tests/CMakeLists.txt
