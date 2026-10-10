@@ -108,7 +108,7 @@ Windows development: `cmake --preset dev-windows` then `cmake --build --preset w
 
 The three most recent version entries are shown below. See the [complete changelog](CHANGELOG.md) for earlier changes.
 
-### 0.9.3.4 · Motion adaptation fixes and controller workflow (2026-10-10)
+### 0.9.3.5 · Motion adaptation fixes and controller workflow (2026-10-10)
 
 Joint native validation with the PMX controller work passed; release CI and package verification are pending.
 

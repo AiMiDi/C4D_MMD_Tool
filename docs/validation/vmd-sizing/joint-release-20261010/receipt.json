@@ -1,6 +1,6 @@
 {
   "date": "2026-10-10",
-  "status": "release_ci_running",
+  "status": "release_ci_dependency_repair",
   "cmt_branch": "codex/sizing-final-fixes",
   "core_commit": "577c46d122c1276d198e1fd9f3cedb04dab93348",
   "native_binary_sha256": "734d012adb15e4418db5907b0d4491372b9079499ac5b707c89a515217578a09",
@@ -17,9 +17,9 @@
   "native_physics_checks": 90,
   "control_input_preservation_passed": true,
   "native_parity_passed": true,
-  "version": "0.9.3.4",
+  "version": "0.9.3.5",
   "published": false,
-  "pending": "Full CI matrix, Release assets and package audit",
+  "pending": "Full CI matrix and v0.9.3.5 package audit",
   "remaining_limitations": [
     "Native checks on C4D 2026.4 Windows only",
     "Deep leg crossings and clothing collisions not universally solved",
@@ -35,5 +35,16 @@
   "owned_native_processes_closed": true,
   "initial_joint_native_max_scene_error": 0.14427601209334734,
   "final_joint_native_max_scene_error": 0.0025946649440961563,
-  "release_source_commit": "3f09f85de172d8ba15d9f4a6020c7e8d4f9626ee"
+  "release_source_commit": "3f09f85de172d8ba15d9f4a6020c7e8d4f9626ee",
+  "failed_release_attempts": [
+    {
+      "tag": "v0.9.3.4",
+      "run": 38055071831,
+      "published": false,
+      "reason": "pmx_vertex_weights_test registered with CTest but missing from root cmt-deps-test build dependencies"
+    }
+  ],
+  "root_ci_debug_core_passed": 16,
+  "root_ci_debug_plugin_passed": 26,
+  "root_ci_avx2": true
 }

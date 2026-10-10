@@ -4,7 +4,7 @@
 
 Entries for 0.9.1.x were reconstructed from tagged source changes and release dates. Intermediate build tags are grouped below; original entries through 0.4.6.1 are retained.
 
-### 0.9.3.4 · Motion adaptation fixes and controller workflow (2026-10-10)
+### 0.9.3.5 · Motion adaptation fixes and controller workflow (2026-10-10)
 
 Joint native validation with the PMX controller work passed; release CI and package verification are pending.
 

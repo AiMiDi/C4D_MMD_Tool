@@ -29,6 +29,7 @@ if(CMT_DEPS_ENABLE_LIBMMD_TESTS)
     file_roundtrip_test
     vpd_file_test
     pmx_export_invariants_test
+    pmx_vertex_weights_test
     pmx_material_morph_test
     mmd_physics_test
     mmd_ik_solver_test

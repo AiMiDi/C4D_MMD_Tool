@@ -1,0 +1,13 @@
+checks	Run functional libMMD CTest	2026-10-10T13:19:18.5918871Z         Start 13: pmx_vertex_weights_test
+checks	Run functional libMMD CTest	2026-10-10T13:19:18.5921316Z   Could not find executable D:/a/C4D_MMD_Tool/C4D_MMD_Tool/_build_msvc/cmt_deps/libMMD/tests/Debug/pmx_vertex_weights_test.exe
+checks	Run functional libMMD CTest	2026-10-10T13:19:18.5923299Z   D:/a/C4D_MMD_Tool/C4D_MMD_Tool/_build_msvc/cmt_deps/libMMD/tests/Debug/pmx_vertex_weights_test.exe
+checks	Run functional libMMD CTest	2026-10-10T13:19:18.5923992Z   D:/a/C4D_MMD_Tool/C4D_MMD_Tool/_build_msvc/cmt_deps/libMMD/tests/Debug/pmx_vertex_weights_test.exe.exe
+checks	Run functional libMMD CTest	2026-10-10T13:19:18.5925387Z   D:/a/C4D_MMD_Tool/C4D_MMD_Tool/_build_msvc/cmt_deps/libMMD/tests/Debug/Debug/pmx_vertex_weights_test.exe
+checks	Run functional libMMD CTest	2026-10-10T13:19:18.5926305Z   D:/a/C4D_MMD_Tool/C4D_MMD_Tool/_build_msvc/cmt_deps/libMMD/tests/Debug/Debug/pmx_vertex_weights_test.exe.exe
+checks	Run functional libMMD CTest	2026-10-10T13:19:18.5926990Z   Debug/D:/a/C4D_MMD_Tool/C4D_MMD_Tool/_build_msvc/cmt_deps/libMMD/tests/Debug/pmx_vertex_weights_test.exe
+checks	Run functional libMMD CTest	2026-10-10T13:19:18.5927676Z   Debug/D:/a/C4D_MMD_Tool/C4D_MMD_Tool/_build_msvc/cmt_deps/libMMD/tests/Debug/pmx_vertex_weights_test.exe.exe
+checks	Run functional libMMD CTest	2026-10-10T13:19:18.5928456Z   Unable to find executable: D:/a/C4D_MMD_Tool/C4D_MMD_Tool/_build_msvc/cmt_deps/libMMD/tests/Debug/pmx_vertex_weights_test.exe
+checks	Run functional libMMD CTest	2026-10-10T13:19:18.5929123Z   12/16 Test #13: pmx_vertex_weights_test ...........***Not Run   0.00 sec
+checks	Run functional libMMD CTest	2026-10-10T13:19:18.7100231Z   The following tests FAILED:
+checks	Run functional libMMD CTest	2026-10-10T13:19:18.7100536Z   	 13 - pmx_vertex_weights_test (Not Run)                 io
+checks	Run functional libMMD CTest	2026-10-10T13:19:18.7102818Z   Errors while running CTest

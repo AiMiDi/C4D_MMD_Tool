@@ -1,0 +1,33 @@
+  Run functional libMMD CTest (Debug)
+   9/16 Test #10: file_roundtrip_test ...............   Passed    0.72 sec
+  10/16 Test #11: vpd_file_test .....................   Passed    0.49 sec
+  11/16 Test #12: pmx_export_invariants_test ........   Passed    0.49 sec
+  12/16 Test #13: pmx_vertex_weights_test ...........   Passed    0.46 sec
+  13/16 Test #14: pmx_material_morph_test ...........   Passed    0.56 sec
+  14/16 Test #15: mmd_physics_test ..................   Passed    0.69 sec
+  15/16 Test #16: mmd_ik_solver_test ................   Passed    0.28 sec
+  16/16 Test #17: vmd_interpolation_test ............   Passed    0.23 sec
+  100% tests passed out of 16
+  Label Time Summary:
+  Total Test time (real) =  31.67 sec
+  Run SDK-independent plugin logic regression tests
+  10/26 Test #10: camera_fov_test .....................   Passed    0.18 sec
+  11/26 Test #11: specular_conversion_test ............   Passed    0.16 sec
+  12/26 Test #12: toon_fallback_test ..................   Passed    0.17 sec
+  13/26 Test #13: pmx_export_scale_test ...............   Passed    0.22 sec
+  14/26 Test #14: pmx_vertex_identity_test ............   Passed    0.21 sec
+  15/26 Test #15: cmt_runtime_receipt_contract ........   Passed    0.79 sec
+  16/26 Test #16: cmt_document_lifecycle ..............   Passed    0.24 sec
+  17/26 Test #17: cmt_production_document_lifecycle ...   Passed    0.23 sec
+  18/26 Test #18: cmt_dependency_provenance ...........   Passed    0.20 sec
+  19/26 Test #19: cmt_pmx_scale_snapshot ..............   Passed    0.13 sec
+  20/26 Test #20: cmt_material_fixture_matrix .........   Passed    0.15 sec
+  21/26 Test #21: cmt_highlight_lifecycle .............   Passed    0.12 sec
+  22/26 Test #22: cmt_highlight_analysis ..............   Passed    0.32 sec
+  23/26 Test #23: cmt_production_mcp_adapter ..........   Passed    3.44 sec
+  24/26 Test #24: cmt_motion_sizing_core ..............   Passed    0.03 sec
+  25/26 Test #25: cmt_motion_sizing_advanced ..........   Passed   16.37 sec
+  26/26 Test #26: cmt_runtime_fixture_test ............   Passed    0.47 sec
+  100% tests passed out of 26
+  Label Time Summary:
+  Total Test time (real) =  25.44 sec
