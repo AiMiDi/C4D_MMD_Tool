@@ -1,0 +1,12 @@
+--- baseline/src/MotionSizing/Solvers/MMDMotionConstraints.cpp
++++ candidate/src/MotionSizing/Solvers/MMDMotionConstraints.cpp
+@@ -290,6 +290,10 @@ void ApplyConstraints(const Rig& source, const Rig& target, const Options& options,
+     contact = avoid;
+     if (options.wristContact || options.fingerContact || options.floorContact)
+         Contact(source, target, result.stages[0], contact, effectors, options, result.analysis, cancel);
++    // Audit experiment only. This breaks the previously solved contact.
++    if (options.avoidance && (options.wristContact || options.fingerContact || options.floorContact))
++        Avoid(target, contact, effectors, options, result.analysis, cancel);
++
+     result.stages[static_cast<size_t>(Stage::MultiCharacter)] = contact;
+ }

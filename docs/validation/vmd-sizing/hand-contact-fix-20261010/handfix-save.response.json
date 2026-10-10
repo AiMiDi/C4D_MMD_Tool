@@ -1,0 +1,15 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\n  \"stdout\": \"{\\\"path\\\": \\\"C:/code/C4D_MMD_Tool/output/hand-contact-fix-20261010/hand-contact-comparison.c4d\\\", \\\"frame\\\": 258, \\\"models\\\": [\\\"03 - Gesture preserving contact\\\", \\\"02 - Previous contact\\\", \\\"01 - Before avoidance\\\"], \\\"saved\\\": true}\\n\",\n  \"warnings\": [\n    \"RuntimeWarning: not undoable: the document changed and no undo step was registered, so Ctrl-Z will not bring it back and the next undo reverts whatever the user did before this call. Pass undo=true, then add_undo_change(node) before each change.\"\n  ]\n}"
+    }
+  ],
+  "structuredContent": {
+    "stdout": "{\"path\": \"C:/code/C4D_MMD_Tool/output/hand-contact-fix-20261010/hand-contact-comparison.c4d\", \"frame\": 258, \"models\": [\"03 - Gesture preserving contact\", \"02 - Previous contact\", \"01 - Before avoidance\"], \"saved\": true}\n",
+    "warnings": [
+      "RuntimeWarning: not undoable: the document changed and no undo step was registered, so Ctrl-Z will not bring it back and the next undo reverts whatever the user did before this call. Pass undo=true, then add_undo_change(node) before each change."
+    ]
+  },
+  "isError": false
+}

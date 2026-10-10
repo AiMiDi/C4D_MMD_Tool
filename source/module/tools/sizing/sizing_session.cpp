@@ -11,9 +11,126 @@
 #include <chrono>
 #include <iomanip>
 #include <sstream>
+#include <mutex>
+#include "maxon/job.h"
 
 namespace cmt { namespace sizing
 {
+namespace { std::weak_ptr<StatusProgress> statusOwner; }
+
+// The solver owns no SDK objects. Coalesced, asynchronous main-thread jobs
+// present its latest progress even when the dialog and MCP polling are idle.
+// Queued jobs hold weak references, never a HostSession or document pointer.
+class StatusProgress : public std::enable_shared_from_this<StatusProgress>
+{
+public:
+    static std::shared_ptr<StatusProgress> Begin(Int32 label)
+    {
+        auto status = std::make_shared<StatusProgress>();
+        status->label_ = label;
+        statusOwner = status; // Main-thread-only ownership of C4D's shared bar.
+        status->Draw();
+        return status;
+    }
+
+    void SetLabel(Int32 label)
+    {
+        { std::lock_guard<std::mutex> lock(mutex_); label_ = label; }
+        Schedule();
+    }
+
+    void Publish(const libmmd::sizing::Progress& value)
+    {
+        { std::lock_guard<std::mutex> lock(mutex_); value_ = value; label_ = 0; }
+        const auto now = std::chrono::steady_clock::now();
+        // Only the worker calls Publish. Bound UI queue traffic, not solver work.
+        if (now - lastPublished_ >= std::chrono::milliseconds(100))
+        { lastPublished_ = now; Schedule(); }
+    }
+
+    void Cancel() { cancelling_.store(true); Schedule(); }
+    void Finish() { finished_.store(true); Schedule(); }
+    libmmd::sizing::Progress Snapshot()
+    {
+        std::lock_guard<std::mutex> lock(mutex_);
+        return value_;
+    }
+
+private:
+    void Schedule()
+    {
+        if (GeIsMainThread()) { Draw(); return; }
+        if (queued_.exchange(true)) return;
+        const std::weak_ptr<StatusProgress> weak = shared_from_this();
+        iferr (maxon::JobRef::Enqueue([weak]() {
+            if (const auto status = weak.lock())
+            {
+                status->queued_.store(false);
+                status->Draw();
+            }
+        }, maxon::JobQueueInterface::GetMainThreadQueue()))
+        {
+            // Presentation allocation must not fail or block a calculation.
+            // Poll()/destruction still clears the bar on the main thread.
+            queued_.store(false);
+        }
+    }
+
+    void Draw()
+    {
+        if (!GeIsMainThread()) return;
+        if (finished_.load())
+        {
+            if (statusOwner.lock().get() == this) { StatusClear(); statusOwner.reset(); }
+            return;
+        }
+        if (statusOwner.expired()) statusOwner = shared_from_this();
+        if (statusOwner.lock().get() != this) return;
+        libmmd::sizing::Progress value;
+        Int32 label = 0;
+        { std::lock_guard<std::mutex> lock(mutex_); value = value_; label = label_; }
+        if (cancelling_.load()) label = IDS_SIZING_PROGRESS_CANCELLING;
+        const Int32 phaseLabels[] = {IDS_SIZING_PROGRESS_VALIDATION, IDS_SIZING_PROGRESS_MOVEMENT,
+            IDS_SIZING_STAGE_STANCE, IDS_SIZING_STAGE_TWIST, IDS_SIZING_STAGE_AVOIDANCE,
+            IDS_SIZING_STAGE_CONTACT, IDS_SIZING_STAGE_MULTI, IDS_SIZING_CAMERA, IDS_SIZING_LEG_AVOIDANCE};
+        String text = GeLoadString(IDS_SIZING_TITLE) + String(" | ") +
+            GeLoadString(label ? label : phaseLabels[static_cast<size_t>(value.phase)]);
+        if (!label)
+        {
+            if (value.characterIndex)
+                text += String(" | ") + String::IntToString(static_cast<Int32>(value.characterIndex)) +
+                    String(" / ") + String::IntToString(static_cast<Int32>(value.characterCount));
+            if (value.total)
+                text += String(" | ") + String::UIntToString(value.completed) + String(" / ") + String::UIntToString(value.total);
+        }
+        StatusSetText(text);
+        if (label || !value.total) StatusSetSpin();
+        else StatusSetBar(static_cast<Int32>(100. * std::min(value.completed, value.total) / value.total));
+    }
+
+    std::mutex mutex_;
+    libmmd::sizing::Progress value_;
+    Int32 label_ = 0;
+    std::atomic_bool queued_{false};
+    std::atomic_bool finished_{false};
+    std::atomic_bool cancelling_{false};
+    std::chrono::steady_clock::time_point lastPublished_{};
+};
+
+namespace
+{
+class ScopedStatus
+{
+public:
+    explicit ScopedStatus(Int32 label) : status_(StatusProgress::Begin(label)) {}
+    explicit ScopedStatus(std::shared_ptr<StatusProgress> status) : status_(std::move(status)) {}
+    ~ScopedStatus() { status_->Finish(); }
+    void SetLabel(Int32 label) { status_->SetLabel(label); }
+private:
+    std::shared_ptr<StatusProgress> status_;
+};
+}
+
 namespace
 {
 std::weak_ptr<PanelState> publishedPanel;
@@ -190,6 +307,7 @@ HostSession::~HostSession()
 {
     Cancel();
     if (job_.valid()) job_.wait();
+    if (progress_) progress_->Finish();
     ClosePreview();
 }
 
@@ -201,6 +319,7 @@ bool HostSession::Start(BaseObject* target, const Filename& source, const Filena
 bool HostSession::StartBatch(const std::vector<HostInput>& inputs, const Filename& cameraPath, const libmmd::sizing::CameraOptions& options)
 {
     if (!GeIsMainThread() || running_) return false;
+    ScopedStatus preparing(IDS_SIZING_PROGRESS_READING);
     error_ = String();
     ClosePreview();
     batch_ = libmmd::sizing::BatchResult();
@@ -214,6 +333,7 @@ bool HostSession::StartBatch(const std::vector<HostInput>& inputs, const Filenam
     BaseDocument* document = nullptr;
     for (const auto& input : inputs)
     {
+        preparing.SetLabel(IDS_SIZING_PROGRESS_READING);
         if (!input.target || !input.target->GetDocument() || !unique.insert(input.target).second ||
             (document && document != input.target->GetDocument()))
         { error_ = GeLoadString(IDS_SIZING_ERR_TARGETS); return false; }
@@ -227,6 +347,7 @@ bool HostSession::StartBatch(const std::vector<HostInput>& inputs, const Filenam
             (!filename_util::ReadFileData(input.motion, bytes) || !libmmd::ReadVMDFile(&character.motion, bytes.data(), bytes.size())))
         { error_ = GeLoadString(IDS_SIZING_ERR_MOTION); return false; }
         auto target = std::make_unique<Target>();
+        preparing.SetLabel(IDS_SIZING_PROGRESS_SNAPSHOT);
         if (!target->object || !target->document || !target->before || !target->after ||
             !Snapshot(input.target, target->snapshot, target->scale,
                       input.motionSlotIdentity ? &character.motion : nullptr, input.motionSlotIdentity))
@@ -243,14 +364,27 @@ bool HostSession::StartBatch(const std::vector<HostInput>& inputs, const Filenam
     libmmd::VMDFile camera;
     if (options.enabled)
     {
+        preparing.SetLabel(IDS_SIZING_PROGRESS_READING);
         std::vector<uint8_t> bytes;
         if (!filename_util::ReadFileData(cameraPath, bytes) || !libmmd::ReadVMDFile(&camera, bytes.data(), bytes.size()) || camera.m_cameras.empty())
         { error_ = GeLoadString(IDS_SIZING_ERR_CAMERA); return false; }
     }
     cancel_.store(false);
-    job_ = std::async(std::launch::async, [characters = std::move(characters), camera = std::move(camera), options, this]() {
-        return libmmd::sizing::RunBatch(characters, camera, options, &cancel_);
-    });
+    progress_ = StatusProgress::Begin(IDS_SIZING_RUNNING);
+    try
+    {
+        job_ = std::async(std::launch::async, [characters = std::move(characters), camera = std::move(camera), options, this, status = progress_]() {
+            ScopedStatus completion(status);
+            return libmmd::sizing::RunBatch(characters, camera, options, &cancel_,
+                [status](const libmmd::sizing::Progress& progress) { status->Publish(progress); });
+        });
+    }
+    catch (const std::exception& error)
+    {
+        progress_->Finish();
+        error_ = GeLoadString(IDS_SIZING_ERR_SOLVE) + String("\n") + String(error.what());
+        return false;
+    }
     running_ = true;
     return true;
 }
@@ -261,12 +395,22 @@ bool HostSession::Poll()
     try { batch_ = job_.get(); }
     catch (const std::exception& error) { batch_ = libmmd::sizing::BatchResult(); batch_.error = error.what(); }
     running_ = false;
+    if (progress_) progress_->Finish();
     if (cancel_.load()) { batch_ = libmmd::sizing::BatchResult(); batch_.cancelled = true; }
     if (!batch_.error.empty()) error_ = GeLoadString(IDS_SIZING_ERR_SOLVE) + String("\n") + String(batch_.error.c_str());
     return true;
 }
 
-void HostSession::Cancel() { cancel_.store(true); }
+void HostSession::Cancel()
+{
+    cancel_.store(true);
+    if (running_ && progress_) progress_->Cancel();
+}
+
+libmmd::sizing::Progress HostSession::GetProgress() const
+{
+    return progress_ ? progress_->Snapshot() : libmmd::sizing::Progress();
+}
 
 bool HostSession::SelectCharacter(size_t index)
 {
@@ -332,6 +476,7 @@ BaseObject* ImportCamera(BaseDocument* document, const libmmd::VMDFile& data, Fl
 bool HostSession::Preview(size_t stage, bool overlay)
 {
     if (!GeIsMainThread() || !ValidStage(stage)) return false;
+    ScopedStatus status(IDS_SIZING_PROGRESS_PREVIEW);
     BaseDocument* preview = GetPreviewDocument();
     bool valid = preview != nullptr;
     for (const auto& target : targets_)
@@ -410,6 +555,7 @@ bool HostSession::Preview(size_t stage, bool overlay)
 bool HostSession::Apply(size_t stage)
 {
     if (!GeIsMainThread() || !ValidStage(stage)) return false;
+    ScopedStatus status(IDS_SIZING_PROGRESS_APPLY);
     // A batch result depends on every member, even when applying one slot.
     for (size_t i = 0; i < targets_.size(); ++i) if (!CheckTarget(i)) return false;
     auto& entry = *targets_[selected_];
@@ -428,7 +574,8 @@ bool HostSession::Apply(size_t stage)
 
 bool HostSession::Export(size_t stage, const Filename& path)
 {
-    if (!ValidStage(stage)) return false;
+    if (!GeIsMainThread() || !ValidStage(stage)) return false;
+    ScopedStatus status(IDS_SIZING_PROGRESS_EXPORT);
     if (!libmmd::WriteVMDFile(&GetResult().stages[stage], string_util::GetStdString(path.GetString()).c_str()))
     { error_ = GeLoadString(IDS_SIZING_ERR_EXPORT); return false; }
     return true;
@@ -436,7 +583,9 @@ bool HostSession::Export(size_t stage, const Filename& path)
 
 bool HostSession::ExportCamera(const Filename& path)
 {
+    if (!GeIsMainThread()) return false;
     if (running_ || !HasCamera()) { error_ = GeLoadString(IDS_SIZING_ERR_CAMERA); return false; }
+    ScopedStatus status(IDS_SIZING_PROGRESS_EXPORT);
     if (!libmmd::WriteVMDFile(&batch_.camera, string_util::GetStdString(path.GetString()).c_str()))
     { error_ = GeLoadString(IDS_SIZING_ERR_EXPORT); return false; }
     return true;
@@ -445,6 +594,7 @@ bool HostSession::ExportCamera(const Filename& path)
 bool HostSession::ApplyCamera()
 {
     if (!GeIsMainThread() || running_ || !HasCamera()) return false;
+    ScopedStatus status(IDS_SIZING_PROGRESS_APPLY);
     for (size_t i = 0; i < targets_.size(); ++i) if (!CheckTarget(i)) return false;
     auto* document = static_cast<BaseDocument*>(targets_.front()->document->GetLink(nullptr, Tbasedocument));
     document->StartUndo();

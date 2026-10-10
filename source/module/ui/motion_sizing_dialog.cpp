@@ -15,10 +15,10 @@ enum : Int32
     Overlay, Preview, ClosePreview, Apply, Export, Report,
     Stance = 2200, Twist, Avoidance, Wrist, Finger, FloorContact, Multi, Distance, Margin,
     FloorHeight, CameraPath, CameraBrowse, CameraEnabled, CameraLimit, CameraApply, CameraExport,
-    Queue, QueueAdd, QueueRemove, MotionSlot, LivePreview
+    Queue, QueueAdd, QueueRemove, MotionSlot, LivePreview, LegAvoidance
 };
 const Int32 Editable[] = {SourcePath, SourceBrowse, MotionPath, MotionBrowse, TargetPick, Movement,
-    LegOffset, CenterOffsets, LegOffsets, Calculate, Stance, Twist, Avoidance, Wrist, Finger, FloorContact,
+    LegOffset, CenterOffsets, LegOffsets, Calculate, Stance, Twist, Avoidance, LegAvoidance, Wrist, Finger, FloorContact,
     Multi, Distance, Margin, FloorHeight, CameraPath, CameraBrowse, CameraEnabled, CameraLimit, QueueAdd, QueueRemove, TargetName, MotionSlot};
 String Text(Int32 id) { return GeLoadString(id); }
 }
@@ -65,6 +65,10 @@ Bool MotionSizingDialog::CreateLayout()
     AddCheckbox(Wrist, BFH_LEFT, 0, 0, Text(IDS_SIZING_WRIST));
     AddCheckbox(Finger, BFH_LEFT, 0, 0, Text(IDS_SIZING_FINGER));
     AddCheckbox(FloorContact, BFH_LEFT, 0, 0, Text(IDS_SIZING_FLOOR));
+    AddCheckbox(LegAvoidance, BFH_LEFT, 0, 0, Text(IDS_SIZING_LEG_AVOIDANCE));
+    AddStaticText(124, BFH_LEFT, 0, 0, String(), 0);
+    AddStaticText(125, BFH_LEFT, 0, 0, String(), 0);
+    AddStaticText(126, BFH_LEFT, 0, 0, String(), 0);
     AddStaticText(114, BFH_LEFT, 0, 0, Text(IDS_SIZING_DISTANCE), 0); AddEditNumberArrows(Distance, BFH_SCALEFIT);
     AddStaticText(115, BFH_LEFT, 0, 0, Text(IDS_SIZING_MARGIN), 0); AddEditNumberArrows(Margin, BFH_SCALEFIT);
     AddStaticText(116, BFH_LEFT, 0, 0, Text(IDS_SIZING_FLOOR_HEIGHT), 0); AddEditNumberArrows(FloorHeight, BFH_SCALEFIT);
@@ -114,7 +118,7 @@ Bool MotionSizingDialog::InitValues()
     SetFloat(FloorHeight, 0., -10000., 10000., .01);
     SetFloat(CameraLimit, 5., 1., 100., .1);
     for (Int32 id : {CenterOffsets, LegOffsets, Stance, Twist}) SetBool(id, true);
-    for (Int32 id : {Avoidance, Wrist, Finger, FloorContact, Multi, CameraEnabled, Overlay}) SetBool(id, false);
+    for (Int32 id : {Avoidance, LegAvoidance, Wrist, Finger, FloorContact, Multi, CameraEnabled, Overlay}) SetBool(id, false);
     SetInt32(Stage, 7);
     SetBool(LivePreview, true);
     pendingCalculation_ = false;
@@ -144,6 +148,7 @@ void MotionSizingDialog::WriteOptions(const libmmd::sizing::Options& options)
     SetBool(Stance, options.stance); SetBool(Twist, options.twist);
     SetBool(Avoidance, options.avoidance); SetBool(Wrist, options.wristContact);
     SetBool(Finger, options.fingerContact); SetBool(FloorContact, options.floorContact);
+    SetBool(LegAvoidance, options.legAvoidance);
     SetBool(Multi, options.multiContact); SetFloat(Distance, options.contactDistance);
     SetFloat(Margin, options.collisionMargin); SetFloat(FloorHeight, options.floorHeight);
 }
@@ -239,6 +244,7 @@ libmmd::sizing::Options MotionSizingDialog::ReadOptions() const
     options.movementMultiplier = number(Movement); options.legOffset = number(LegOffset);
     options.centerOffsets = flag(CenterOffsets); options.legOffsets = flag(LegOffsets);
     options.stance = flag(Stance); options.twist = flag(Twist); options.avoidance = flag(Avoidance);
+    options.legAvoidance = flag(LegAvoidance);
     options.wristContact = flag(Wrist); options.fingerContact = flag(Finger); options.floorContact = flag(FloorContact);
     options.multiContact = flag(Multi); options.contactDistance = number(Distance);
     options.collisionMargin = number(Margin); options.floorHeight = number(FloorHeight);
@@ -257,7 +263,7 @@ void MotionSizingDialog::Refresh()
     // Solver options stay editable while a job runs; a newer change cancels
     // that job and is debounced into one replacement request.
     for (Int32 id : {Movement, LegOffset, CenterOffsets, LegOffsets, Stance, Twist, Avoidance,
-                     Wrist, Finger, FloorContact, Multi, Distance, Margin, FloorHeight}) Enable(id, true);
+                     LegAvoidance, Wrist, Finger, FloorContact, Multi, Distance, Margin, FloorHeight}) Enable(id, true);
     const bool fileMotion = SelectedMotionSlot() == 0;
     Enable(MotionPath, !running && fileMotion); Enable(MotionBrowse, !running && fileMotion);
     Enable(Queue, !running);

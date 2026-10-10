@@ -135,6 +135,20 @@ class FakeHost:
 
 
 class SchemaTests(unittest.TestCase):
+    def test_sizing_progress_is_optional_for_old_hosts_and_validated_when_present(self):
+        definition = TOOL_BY_NAME["mmdtool_sizing_status"]["outputSchema"]
+        data = native_result_data("mmdtool_sizing_status")
+        validate(envelope("fixture", data), definition)
+        data["progress"] = {"phase": "contact", "completed": 64, "total": 257,
+                            "character_index": 1, "character_count": 2,
+                            "phase_percent": 100 * 64 / 257, "indeterminate": False}
+        validate(envelope("fixture", data), definition)
+        for field, invalid in (("phase", "unknown"), ("completed", -1), ("phase_percent", 101)):
+            with self.subTest(field=field):
+                broken = {**data, "progress": {**data["progress"], field: invalid}}
+                with self.assertRaises(ValidationError):
+                    validate(envelope("fixture", broken), definition)
+
     def test_completed_results_match_native_shapes_and_require_success_data(self):
         for name, definition in TOOL_BY_NAME.items():
             with self.subTest(tool=name):
@@ -203,7 +217,7 @@ class SchemaTests(unittest.TestCase):
                  "max_camera_distance_ratio", "member", "overlay", "movement_multiplier", "leg_offset",
                  "center_offsets", "leg_offsets", "stance", "twist", "avoidance", "wrist_contact", "finger_contact",
                  "floor_contact", "multi_contact", "contact_distance", "floor_height", "collision_margin",
-                 "tolerance", "iterations", "max_bake_frames", "max_baked_keys", "max_diagnostics", "avoidance_bodies"]
+                 "tolerance", "iterations", "max_bake_frames", "max_baked_keys", "max_diagnostics", "avoidance_bodies", "leg_avoidance"]
         native_names = [name for name in fields if name.startswith("Sizing") and name != "SizingModel"]
         self.assertEqual(len(names), len(native_names))
         for name, native_name in zip(names, native_names):

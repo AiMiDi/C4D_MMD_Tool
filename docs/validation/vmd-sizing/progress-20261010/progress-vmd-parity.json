@@ -1,0 +1,89 @@
+{
+  "files": [
+    {
+      "file": "all\\stage-4.vmd",
+      "identical": true
+    },
+    {
+      "file": "all\\stage-5.vmd",
+      "identical": true
+    },
+    {
+      "file": "all\\stage-6.vmd",
+      "identical": true
+    },
+    {
+      "file": "avoidance\\stage-4.vmd",
+      "identical": true
+    },
+    {
+      "file": "avoidance\\stage-5.vmd",
+      "identical": true
+    },
+    {
+      "file": "avoidance\\stage-6.vmd",
+      "identical": true
+    },
+    {
+      "file": "avoidance-wrist\\stage-4.vmd",
+      "identical": true
+    },
+    {
+      "file": "avoidance-wrist\\stage-5.vmd",
+      "identical": true
+    },
+    {
+      "file": "avoidance-wrist\\stage-6.vmd",
+      "identical": true
+    },
+    {
+      "file": "base\\stage-4.vmd",
+      "identical": true
+    },
+    {
+      "file": "base\\stage-5.vmd",
+      "identical": true
+    },
+    {
+      "file": "base\\stage-6.vmd",
+      "identical": true
+    },
+    {
+      "file": "distance06\\stage-4.vmd",
+      "identical": true
+    },
+    {
+      "file": "distance06\\stage-5.vmd",
+      "identical": true
+    },
+    {
+      "file": "distance06\\stage-6.vmd",
+      "identical": true
+    },
+    {
+      "file": "iterations160\\stage-4.vmd",
+      "identical": true
+    },
+    {
+      "file": "iterations160\\stage-5.vmd",
+      "identical": true
+    },
+    {
+      "file": "iterations160\\stage-6.vmd",
+      "identical": true
+    },
+    {
+      "file": "wrist\\stage-4.vmd",
+      "identical": true
+    },
+    {
+      "file": "wrist\\stage-5.vmd",
+      "identical": true
+    },
+    {
+      "file": "wrist\\stage-6.vmd",
+      "identical": true
+    }
+  ],
+  "all_identical": true
+}

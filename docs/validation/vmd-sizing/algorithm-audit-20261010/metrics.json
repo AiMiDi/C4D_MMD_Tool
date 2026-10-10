@@ -1,0 +1,3814 @@
+{
+  "baseline-results": {
+    "all": {
+      "4": {
+        "frames": 1719,
+        "point_pair_violations": 190,
+        "frames_with_point_violations": 123,
+        "point_max_depth_pmx": 0.531011407206,
+        "segment_sample_pair_violations": 1137,
+        "segment_max_depth_pmx": 0.556361133319,
+        "wrist_trigger_frames": 13,
+        "active_wrist_gap_max_pmx": 0.520061888996,
+        "active_wrist_gap_mean_pmx": 0.41556704334353844,
+        "selected_frames": {
+          "167": {
+            "stage": "4",
+            "frame": "167",
+            "point_hits": "3",
+            "point_max": "0.19346047296",
+            "segment_hits": "4",
+            "segment_max": "0.218200759565",
+            "source_wrists": "0.226751030552",
+            "target_wrists": "0.322074231036",
+            "wrist_active": "1"
+          },
+          "258": {
+            "stage": "4",
+            "frame": "258",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "0",
+            "segment_max": "0",
+            "source_wrists": "1.21561042111",
+            "target_wrists": "0.741916710122",
+            "wrist_active": "0"
+          },
+          "264": {
+            "stage": "4",
+            "frame": "264",
+            "point_hits": "1",
+            "point_max": "0.0526505441686",
+            "segment_hits": "0",
+            "segment_max": "0",
+            "source_wrists": "0.811707676542",
+            "target_wrists": "0.319277151849",
+            "wrist_active": "0"
+          },
+          "313": {
+            "stage": "4",
+            "frame": "313",
+            "point_hits": "1",
+            "point_max": "0.10171286293",
+            "segment_hits": "5",
+            "segment_max": "0.556361133319",
+            "source_wrists": "6.42184459273",
+            "target_wrists": "6.56795312148",
+            "wrist_active": "0"
+          },
+          "776": {
+            "stage": "4",
+            "frame": "776",
+            "point_hits": "2",
+            "point_max": "0.244133230132",
+            "segment_hits": "4",
+            "segment_max": "0.192949326623",
+            "source_wrists": "0.206521380416",
+            "target_wrists": "0.387804954579",
+            "wrist_active": "1"
+          },
+          "854": {
+            "stage": "4",
+            "frame": "854",
+            "point_hits": "2",
+            "point_max": "0.290054868257",
+            "segment_hits": "2",
+            "segment_max": "0.108204994622",
+            "source_wrists": "0.384927154471",
+            "target_wrists": "0.365611509799",
+            "wrist_active": "0"
+          },
+          "1609": {
+            "stage": "4",
+            "frame": "1609",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "1",
+            "segment_max": "0.0605141144837",
+            "source_wrists": "1.32558959649",
+            "target_wrists": "1.79489913411",
+            "wrist_active": "0"
+          }
+        }
+      },
+      "5": {
+        "frames": 1719,
+        "point_pair_violations": 5,
+        "frames_with_point_violations": 5,
+        "point_max_depth_pmx": 0.0493838647992,
+        "segment_sample_pair_violations": 1113,
+        "segment_max_depth_pmx": 0.50767566171,
+        "wrist_trigger_frames": 13,
+        "active_wrist_gap_max_pmx": 0.790117118921,
+        "active_wrist_gap_mean_pmx": 0.7040321049749231,
+        "selected_frames": {
+          "167": {
+            "stage": "5",
+            "frame": "167",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "3",
+            "segment_max": "0.117865800341",
+            "source_wrists": "0.226751030552",
+            "target_wrists": "0.462342361075",
+            "wrist_active": "1"
+          },
+          "258": {
+            "stage": "5",
+            "frame": "258",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "0",
+            "segment_max": "0",
+            "source_wrists": "1.21561042111",
+            "target_wrists": "0.741916710122",
+            "wrist_active": "0"
+          },
+          "264": {
+            "stage": "5",
+            "frame": "264",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "0",
+            "segment_max": "0",
+            "source_wrists": "0.811707676542",
+            "target_wrists": "0.356046906752",
+            "wrist_active": "0"
+          },
+          "313": {
+            "stage": "5",
+            "frame": "313",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "5",
+            "segment_max": "0.50767566171",
+            "source_wrists": "6.42184459273",
+            "target_wrists": "6.63721758049",
+            "wrist_active": "0"
+          },
+          "776": {
+            "stage": "5",
+            "frame": "776",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "5",
+            "segment_max": "0.163746363053",
+            "source_wrists": "0.206521380416",
+            "target_wrists": "0.589017163444",
+            "wrist_active": "1"
+          },
+          "854": {
+            "stage": "5",
+            "frame": "854",
+            "point_hits": "1",
+            "point_max": "0.0193814676138",
+            "segment_hits": "0",
+            "segment_max": "0",
+            "source_wrists": "0.384927154471",
+            "target_wrists": "0.707886800694",
+            "wrist_active": "0"
+          },
+          "1609": {
+            "stage": "5",
+            "frame": "1609",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "1",
+            "segment_max": "0.0605141144837",
+            "source_wrists": "1.32558959649",
+            "target_wrists": "1.79489913411",
+            "wrist_active": "0"
+          }
+        }
+      },
+      "6": {
+        "frames": 1719,
+        "point_pair_violations": 131,
+        "frames_with_point_violations": 60,
+        "point_max_depth_pmx": 0.348098262028,
+        "segment_sample_pair_violations": 1317,
+        "segment_max_depth_pmx": 0.67474092569,
+        "wrist_trigger_frames": 13,
+        "active_wrist_gap_max_pmx": 0.105670403824,
+        "active_wrist_gap_mean_pmx": 0.019580433399136492,
+        "selected_frames": {
+          "167": {
+            "stage": "6",
+            "frame": "167",
+            "point_hits": "4",
+            "point_max": "0.234680297009",
+            "segment_hits": "3",
+            "segment_max": "0.173751011936",
+            "source_wrists": "0.226751030552",
+            "target_wrists": "1.80813045761e-05",
+            "wrist_active": "1"
+          },
+          "258": {
+            "stage": "6",
+            "frame": "258",
+            "point_hits": "3",
+            "point_max": "0.287277291111",
+            "segment_hits": "19",
+            "segment_max": "0.67474092569",
+            "source_wrists": "1.21561042111",
+            "target_wrists": "0.835919729269",
+            "wrist_active": "0"
+          },
+          "264": {
+            "stage": "6",
+            "frame": "264",
+            "point_hits": "1",
+            "point_max": "0.343242348707",
+            "segment_hits": "8",
+            "segment_max": "0.406607379172",
+            "source_wrists": "0.811707676542",
+            "target_wrists": "0.622820811917",
+            "wrist_active": "0"
+          },
+          "313": {
+            "stage": "6",
+            "frame": "313",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "5",
+            "segment_max": "0.50767566171",
+            "source_wrists": "6.42184459273",
+            "target_wrists": "6.63721758049",
+            "wrist_active": "0"
+          },
+          "776": {
+            "stage": "6",
+            "frame": "776",
+            "point_hits": "4",
+            "point_max": "0.236656346746",
+            "segment_hits": "1",
+            "segment_max": "0.0124844497779",
+            "source_wrists": "0.206521380416",
+            "target_wrists": "0.000101733978372",
+            "wrist_active": "1"
+          },
+          "854": {
+            "stage": "6",
+            "frame": "854",
+            "point_hits": "1",
+            "point_max": "0.0193814676138",
+            "segment_hits": "0",
+            "segment_max": "0",
+            "source_wrists": "0.384927154471",
+            "target_wrists": "0.707886800694",
+            "wrist_active": "0"
+          },
+          "1609": {
+            "stage": "6",
+            "frame": "1609",
+            "point_hits": "4",
+            "point_max": "0.348098262028",
+            "segment_hits": "2",
+            "segment_max": "0.114773766379",
+            "source_wrists": "1.32558959649",
+            "target_wrists": "0.188899611176",
+            "wrist_active": "0"
+          }
+        }
+      }
+    },
+    "avoidance": {
+      "4": {
+        "frames": 1719,
+        "point_pair_violations": 190,
+        "frames_with_point_violations": 123,
+        "point_max_depth_pmx": 0.531011407206,
+        "segment_sample_pair_violations": 1137,
+        "segment_max_depth_pmx": 0.556361133319,
+        "wrist_trigger_frames": 13,
+        "active_wrist_gap_max_pmx": 0.520061888996,
+        "active_wrist_gap_mean_pmx": 0.41556704334353844,
+        "selected_frames": {
+          "167": {
+            "stage": "4",
+            "frame": "167",
+            "point_hits": "3",
+            "point_max": "0.19346047296",
+            "segment_hits": "4",
+            "segment_max": "0.218200759565",
+            "source_wrists": "0.226751030552",
+            "target_wrists": "0.322074231036",
+            "wrist_active": "1"
+          },
+          "258": {
+            "stage": "4",
+            "frame": "258",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "0",
+            "segment_max": "0",
+            "source_wrists": "1.21561042111",
+            "target_wrists": "0.741916710122",
+            "wrist_active": "0"
+          },
+          "264": {
+            "stage": "4",
+            "frame": "264",
+            "point_hits": "1",
+            "point_max": "0.0526505441686",
+            "segment_hits": "0",
+            "segment_max": "0",
+            "source_wrists": "0.811707676542",
+            "target_wrists": "0.319277151849",
+            "wrist_active": "0"
+          },
+          "313": {
+            "stage": "4",
+            "frame": "313",
+            "point_hits": "1",
+            "point_max": "0.10171286293",
+            "segment_hits": "5",
+            "segment_max": "0.556361133319",
+            "source_wrists": "6.42184459273",
+            "target_wrists": "6.56795312148",
+            "wrist_active": "0"
+          },
+          "776": {
+            "stage": "4",
+            "frame": "776",
+            "point_hits": "2",
+            "point_max": "0.244133230132",
+            "segment_hits": "4",
+            "segment_max": "0.192949326623",
+            "source_wrists": "0.206521380416",
+            "target_wrists": "0.387804954579",
+            "wrist_active": "1"
+          },
+          "854": {
+            "stage": "4",
+            "frame": "854",
+            "point_hits": "2",
+            "point_max": "0.290054868257",
+            "segment_hits": "2",
+            "segment_max": "0.108204994622",
+            "source_wrists": "0.384927154471",
+            "target_wrists": "0.365611509799",
+            "wrist_active": "0"
+          },
+          "1609": {
+            "stage": "4",
+            "frame": "1609",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "1",
+            "segment_max": "0.0605141144837",
+            "source_wrists": "1.32558959649",
+            "target_wrists": "1.79489913411",
+            "wrist_active": "0"
+          }
+        }
+      },
+      "5": {
+        "frames": 1719,
+        "point_pair_violations": 5,
+        "frames_with_point_violations": 5,
+        "point_max_depth_pmx": 0.0493838647992,
+        "segment_sample_pair_violations": 1113,
+        "segment_max_depth_pmx": 0.50767566171,
+        "wrist_trigger_frames": 13,
+        "active_wrist_gap_max_pmx": 0.790117118921,
+        "active_wrist_gap_mean_pmx": 0.7040321049749231,
+        "selected_frames": {
+          "167": {
+            "stage": "5",
+            "frame": "167",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "3",
+            "segment_max": "0.117865800341",
+            "source_wrists": "0.226751030552",
+            "target_wrists": "0.462342361075",
+            "wrist_active": "1"
+          },
+          "258": {
+            "stage": "5",
+            "frame": "258",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "0",
+            "segment_max": "0",
+            "source_wrists": "1.21561042111",
+            "target_wrists": "0.741916710122",
+            "wrist_active": "0"
+          },
+          "264": {
+            "stage": "5",
+            "frame": "264",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "0",
+            "segment_max": "0",
+            "source_wrists": "0.811707676542",
+            "target_wrists": "0.356046906752",
+            "wrist_active": "0"
+          },
+          "313": {
+            "stage": "5",
+            "frame": "313",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "5",
+            "segment_max": "0.50767566171",
+            "source_wrists": "6.42184459273",
+            "target_wrists": "6.63721758049",
+            "wrist_active": "0"
+          },
+          "776": {
+            "stage": "5",
+            "frame": "776",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "5",
+            "segment_max": "0.163746363053",
+            "source_wrists": "0.206521380416",
+            "target_wrists": "0.589017163444",
+            "wrist_active": "1"
+          },
+          "854": {
+            "stage": "5",
+            "frame": "854",
+            "point_hits": "1",
+            "point_max": "0.0193814676138",
+            "segment_hits": "0",
+            "segment_max": "0",
+            "source_wrists": "0.384927154471",
+            "target_wrists": "0.707886800694",
+            "wrist_active": "0"
+          },
+          "1609": {
+            "stage": "5",
+            "frame": "1609",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "1",
+            "segment_max": "0.0605141144837",
+            "source_wrists": "1.32558959649",
+            "target_wrists": "1.79489913411",
+            "wrist_active": "0"
+          }
+        }
+      },
+      "6": {
+        "frames": 1719,
+        "point_pair_violations": 5,
+        "frames_with_point_violations": 5,
+        "point_max_depth_pmx": 0.0493838647992,
+        "segment_sample_pair_violations": 1113,
+        "segment_max_depth_pmx": 0.50767566171,
+        "wrist_trigger_frames": 13,
+        "active_wrist_gap_max_pmx": 0.790117118921,
+        "active_wrist_gap_mean_pmx": 0.7040321049749231,
+        "selected_frames": {
+          "167": {
+            "stage": "6",
+            "frame": "167",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "3",
+            "segment_max": "0.117865800341",
+            "source_wrists": "0.226751030552",
+            "target_wrists": "0.462342361075",
+            "wrist_active": "1"
+          },
+          "258": {
+            "stage": "6",
+            "frame": "258",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "0",
+            "segment_max": "0",
+            "source_wrists": "1.21561042111",
+            "target_wrists": "0.741916710122",
+            "wrist_active": "0"
+          },
+          "264": {
+            "stage": "6",
+            "frame": "264",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "0",
+            "segment_max": "0",
+            "source_wrists": "0.811707676542",
+            "target_wrists": "0.356046906752",
+            "wrist_active": "0"
+          },
+          "313": {
+            "stage": "6",
+            "frame": "313",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "5",
+            "segment_max": "0.50767566171",
+            "source_wrists": "6.42184459273",
+            "target_wrists": "6.63721758049",
+            "wrist_active": "0"
+          },
+          "776": {
+            "stage": "6",
+            "frame": "776",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "5",
+            "segment_max": "0.163746363053",
+            "source_wrists": "0.206521380416",
+            "target_wrists": "0.589017163444",
+            "wrist_active": "1"
+          },
+          "854": {
+            "stage": "6",
+            "frame": "854",
+            "point_hits": "1",
+            "point_max": "0.0193814676138",
+            "segment_hits": "0",
+            "segment_max": "0",
+            "source_wrists": "0.384927154471",
+            "target_wrists": "0.707886800694",
+            "wrist_active": "0"
+          },
+          "1609": {
+            "stage": "6",
+            "frame": "1609",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "1",
+            "segment_max": "0.0605141144837",
+            "source_wrists": "1.32558959649",
+            "target_wrists": "1.79489913411",
+            "wrist_active": "0"
+          }
+        }
+      }
+    },
+    "avoidance-wrist": {
+      "4": {
+        "frames": 1719,
+        "point_pair_violations": 190,
+        "frames_with_point_violations": 123,
+        "point_max_depth_pmx": 0.531011407206,
+        "segment_sample_pair_violations": 1137,
+        "segment_max_depth_pmx": 0.556361133319,
+        "wrist_trigger_frames": 13,
+        "active_wrist_gap_max_pmx": 0.520061888996,
+        "active_wrist_gap_mean_pmx": 0.41556704334353844,
+        "selected_frames": {
+          "167": {
+            "stage": "4",
+            "frame": "167",
+            "point_hits": "3",
+            "point_max": "0.19346047296",
+            "segment_hits": "4",
+            "segment_max": "0.218200759565",
+            "source_wrists": "0.226751030552",
+            "target_wrists": "0.322074231036",
+            "wrist_active": "1"
+          },
+          "258": {
+            "stage": "4",
+            "frame": "258",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "0",
+            "segment_max": "0",
+            "source_wrists": "1.21561042111",
+            "target_wrists": "0.741916710122",
+            "wrist_active": "0"
+          },
+          "264": {
+            "stage": "4",
+            "frame": "264",
+            "point_hits": "1",
+            "point_max": "0.0526505441686",
+            "segment_hits": "0",
+            "segment_max": "0",
+            "source_wrists": "0.811707676542",
+            "target_wrists": "0.319277151849",
+            "wrist_active": "0"
+          },
+          "313": {
+            "stage": "4",
+            "frame": "313",
+            "point_hits": "1",
+            "point_max": "0.10171286293",
+            "segment_hits": "5",
+            "segment_max": "0.556361133319",
+            "source_wrists": "6.42184459273",
+            "target_wrists": "6.56795312148",
+            "wrist_active": "0"
+          },
+          "776": {
+            "stage": "4",
+            "frame": "776",
+            "point_hits": "2",
+            "point_max": "0.244133230132",
+            "segment_hits": "4",
+            "segment_max": "0.192949326623",
+            "source_wrists": "0.206521380416",
+            "target_wrists": "0.387804954579",
+            "wrist_active": "1"
+          },
+          "854": {
+            "stage": "4",
+            "frame": "854",
+            "point_hits": "2",
+            "point_max": "0.290054868257",
+            "segment_hits": "2",
+            "segment_max": "0.108204994622",
+            "source_wrists": "0.384927154471",
+            "target_wrists": "0.365611509799",
+            "wrist_active": "0"
+          },
+          "1609": {
+            "stage": "4",
+            "frame": "1609",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "1",
+            "segment_max": "0.0605141144837",
+            "source_wrists": "1.32558959649",
+            "target_wrists": "1.79489913411",
+            "wrist_active": "0"
+          }
+        }
+      },
+      "5": {
+        "frames": 1719,
+        "point_pair_violations": 5,
+        "frames_with_point_violations": 5,
+        "point_max_depth_pmx": 0.0493838647992,
+        "segment_sample_pair_violations": 1113,
+        "segment_max_depth_pmx": 0.50767566171,
+        "wrist_trigger_frames": 13,
+        "active_wrist_gap_max_pmx": 0.790117118921,
+        "active_wrist_gap_mean_pmx": 0.7040321049749231,
+        "selected_frames": {
+          "167": {
+            "stage": "5",
+            "frame": "167",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "3",
+            "segment_max": "0.117865800341",
+            "source_wrists": "0.226751030552",
+            "target_wrists": "0.462342361075",
+            "wrist_active": "1"
+          },
+          "258": {
+            "stage": "5",
+            "frame": "258",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "0",
+            "segment_max": "0",
+            "source_wrists": "1.21561042111",
+            "target_wrists": "0.741916710122",
+            "wrist_active": "0"
+          },
+          "264": {
+            "stage": "5",
+            "frame": "264",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "0",
+            "segment_max": "0",
+            "source_wrists": "0.811707676542",
+            "target_wrists": "0.356046906752",
+            "wrist_active": "0"
+          },
+          "313": {
+            "stage": "5",
+            "frame": "313",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "5",
+            "segment_max": "0.50767566171",
+            "source_wrists": "6.42184459273",
+            "target_wrists": "6.63721758049",
+            "wrist_active": "0"
+          },
+          "776": {
+            "stage": "5",
+            "frame": "776",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "5",
+            "segment_max": "0.163746363053",
+            "source_wrists": "0.206521380416",
+            "target_wrists": "0.589017163444",
+            "wrist_active": "1"
+          },
+          "854": {
+            "stage": "5",
+            "frame": "854",
+            "point_hits": "1",
+            "point_max": "0.0193814676138",
+            "segment_hits": "0",
+            "segment_max": "0",
+            "source_wrists": "0.384927154471",
+            "target_wrists": "0.707886800694",
+            "wrist_active": "0"
+          },
+          "1609": {
+            "stage": "5",
+            "frame": "1609",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "1",
+            "segment_max": "0.0605141144837",
+            "source_wrists": "1.32558959649",
+            "target_wrists": "1.79489913411",
+            "wrist_active": "0"
+          }
+        }
+      },
+      "6": {
+        "frames": 1719,
+        "point_pair_violations": 57,
+        "frames_with_point_violations": 18,
+        "point_max_depth_pmx": 0.236656346746,
+        "segment_sample_pair_violations": 1094,
+        "segment_max_depth_pmx": 0.50767566171,
+        "wrist_trigger_frames": 13,
+        "active_wrist_gap_max_pmx": 0.000304905900337,
+        "active_wrist_gap_mean_pmx": 0.0001772410588332154,
+        "selected_frames": {
+          "167": {
+            "stage": "6",
+            "frame": "167",
+            "point_hits": "4",
+            "point_max": "0.234680297009",
+            "segment_hits": "3",
+            "segment_max": "0.173751011936",
+            "source_wrists": "0.226751030552",
+            "target_wrists": "1.80813045761e-05",
+            "wrist_active": "1"
+          },
+          "258": {
+            "stage": "6",
+            "frame": "258",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "0",
+            "segment_max": "0",
+            "source_wrists": "1.21561042111",
+            "target_wrists": "0.741916710122",
+            "wrist_active": "0"
+          },
+          "264": {
+            "stage": "6",
+            "frame": "264",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "0",
+            "segment_max": "0",
+            "source_wrists": "0.811707676542",
+            "target_wrists": "0.356046906752",
+            "wrist_active": "0"
+          },
+          "313": {
+            "stage": "6",
+            "frame": "313",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "5",
+            "segment_max": "0.50767566171",
+            "source_wrists": "6.42184459273",
+            "target_wrists": "6.63721758049",
+            "wrist_active": "0"
+          },
+          "776": {
+            "stage": "6",
+            "frame": "776",
+            "point_hits": "4",
+            "point_max": "0.236656346746",
+            "segment_hits": "1",
+            "segment_max": "0.0124844497779",
+            "source_wrists": "0.206521380416",
+            "target_wrists": "0.000101733978372",
+            "wrist_active": "1"
+          },
+          "854": {
+            "stage": "6",
+            "frame": "854",
+            "point_hits": "1",
+            "point_max": "0.0193814676138",
+            "segment_hits": "0",
+            "segment_max": "0",
+            "source_wrists": "0.384927154471",
+            "target_wrists": "0.707886800694",
+            "wrist_active": "0"
+          },
+          "1609": {
+            "stage": "6",
+            "frame": "1609",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "1",
+            "segment_max": "0.0605141144837",
+            "source_wrists": "1.32558959649",
+            "target_wrists": "1.79489913411",
+            "wrist_active": "0"
+          }
+        }
+      }
+    },
+    "base": {
+      "4": {
+        "frames": 1719,
+        "point_pair_violations": 190,
+        "frames_with_point_violations": 123,
+        "point_max_depth_pmx": 0.531011407206,
+        "segment_sample_pair_violations": 1137,
+        "segment_max_depth_pmx": 0.556361133319,
+        "wrist_trigger_frames": 13,
+        "active_wrist_gap_max_pmx": 0.520061888996,
+        "active_wrist_gap_mean_pmx": 0.41556704334353844,
+        "selected_frames": {
+          "167": {
+            "stage": "4",
+            "frame": "167",
+            "point_hits": "3",
+            "point_max": "0.19346047296",
+            "segment_hits": "4",
+            "segment_max": "0.218200759565",
+            "source_wrists": "0.226751030552",
+            "target_wrists": "0.322074231036",
+            "wrist_active": "1"
+          },
+          "258": {
+            "stage": "4",
+            "frame": "258",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "0",
+            "segment_max": "0",
+            "source_wrists": "1.21561042111",
+            "target_wrists": "0.741916710122",
+            "wrist_active": "0"
+          },
+          "264": {
+            "stage": "4",
+            "frame": "264",
+            "point_hits": "1",
+            "point_max": "0.0526505441686",
+            "segment_hits": "0",
+            "segment_max": "0",
+            "source_wrists": "0.811707676542",
+            "target_wrists": "0.319277151849",
+            "wrist_active": "0"
+          },
+          "313": {
+            "stage": "4",
+            "frame": "313",
+            "point_hits": "1",
+            "point_max": "0.10171286293",
+            "segment_hits": "5",
+            "segment_max": "0.556361133319",
+            "source_wrists": "6.42184459273",
+            "target_wrists": "6.56795312148",
+            "wrist_active": "0"
+          },
+          "776": {
+            "stage": "4",
+            "frame": "776",
+            "point_hits": "2",
+            "point_max": "0.244133230132",
+            "segment_hits": "4",
+            "segment_max": "0.192949326623",
+            "source_wrists": "0.206521380416",
+            "target_wrists": "0.387804954579",
+            "wrist_active": "1"
+          },
+          "854": {
+            "stage": "4",
+            "frame": "854",
+            "point_hits": "2",
+            "point_max": "0.290054868257",
+            "segment_hits": "2",
+            "segment_max": "0.108204994622",
+            "source_wrists": "0.384927154471",
+            "target_wrists": "0.365611509799",
+            "wrist_active": "0"
+          },
+          "1609": {
+            "stage": "4",
+            "frame": "1609",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "1",
+            "segment_max": "0.0605141144837",
+            "source_wrists": "1.32558959649",
+            "target_wrists": "1.79489913411",
+            "wrist_active": "0"
+          }
+        }
+      },
+      "5": {
+        "frames": 1719,
+        "point_pair_violations": 190,
+        "frames_with_point_violations": 123,
+        "point_max_depth_pmx": 0.531011407206,
+        "segment_sample_pair_violations": 1137,
+        "segment_max_depth_pmx": 0.556361133319,
+        "wrist_trigger_frames": 13,
+        "active_wrist_gap_max_pmx": 0.520061888996,
+        "active_wrist_gap_mean_pmx": 0.41556704334353844,
+        "selected_frames": {
+          "167": {
+            "stage": "5",
+            "frame": "167",
+            "point_hits": "3",
+            "point_max": "0.19346047296",
+            "segment_hits": "4",
+            "segment_max": "0.218200759565",
+            "source_wrists": "0.226751030552",
+            "target_wrists": "0.322074231036",
+            "wrist_active": "1"
+          },
+          "258": {
+            "stage": "5",
+            "frame": "258",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "0",
+            "segment_max": "0",
+            "source_wrists": "1.21561042111",
+            "target_wrists": "0.741916710122",
+            "wrist_active": "0"
+          },
+          "264": {
+            "stage": "5",
+            "frame": "264",
+            "point_hits": "1",
+            "point_max": "0.0526505441686",
+            "segment_hits": "0",
+            "segment_max": "0",
+            "source_wrists": "0.811707676542",
+            "target_wrists": "0.319277151849",
+            "wrist_active": "0"
+          },
+          "313": {
+            "stage": "5",
+            "frame": "313",
+            "point_hits": "1",
+            "point_max": "0.10171286293",
+            "segment_hits": "5",
+            "segment_max": "0.556361133319",
+            "source_wrists": "6.42184459273",
+            "target_wrists": "6.56795312148",
+            "wrist_active": "0"
+          },
+          "776": {
+            "stage": "5",
+            "frame": "776",
+            "point_hits": "2",
+            "point_max": "0.244133230132",
+            "segment_hits": "4",
+            "segment_max": "0.192949326623",
+            "source_wrists": "0.206521380416",
+            "target_wrists": "0.387804954579",
+            "wrist_active": "1"
+          },
+          "854": {
+            "stage": "5",
+            "frame": "854",
+            "point_hits": "2",
+            "point_max": "0.290054868257",
+            "segment_hits": "2",
+            "segment_max": "0.108204994622",
+            "source_wrists": "0.384927154471",
+            "target_wrists": "0.365611509799",
+            "wrist_active": "0"
+          },
+          "1609": {
+            "stage": "5",
+            "frame": "1609",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "1",
+            "segment_max": "0.0605141144837",
+            "source_wrists": "1.32558959649",
+            "target_wrists": "1.79489913411",
+            "wrist_active": "0"
+          }
+        }
+      },
+      "6": {
+        "frames": 1719,
+        "point_pair_violations": 190,
+        "frames_with_point_violations": 123,
+        "point_max_depth_pmx": 0.531011407206,
+        "segment_sample_pair_violations": 1137,
+        "segment_max_depth_pmx": 0.556361133319,
+        "wrist_trigger_frames": 13,
+        "active_wrist_gap_max_pmx": 0.520061888996,
+        "active_wrist_gap_mean_pmx": 0.41556704334353844,
+        "selected_frames": {
+          "167": {
+            "stage": "6",
+            "frame": "167",
+            "point_hits": "3",
+            "point_max": "0.19346047296",
+            "segment_hits": "4",
+            "segment_max": "0.218200759565",
+            "source_wrists": "0.226751030552",
+            "target_wrists": "0.322074231036",
+            "wrist_active": "1"
+          },
+          "258": {
+            "stage": "6",
+            "frame": "258",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "0",
+            "segment_max": "0",
+            "source_wrists": "1.21561042111",
+            "target_wrists": "0.741916710122",
+            "wrist_active": "0"
+          },
+          "264": {
+            "stage": "6",
+            "frame": "264",
+            "point_hits": "1",
+            "point_max": "0.0526505441686",
+            "segment_hits": "0",
+            "segment_max": "0",
+            "source_wrists": "0.811707676542",
+            "target_wrists": "0.319277151849",
+            "wrist_active": "0"
+          },
+          "313": {
+            "stage": "6",
+            "frame": "313",
+            "point_hits": "1",
+            "point_max": "0.10171286293",
+            "segment_hits": "5",
+            "segment_max": "0.556361133319",
+            "source_wrists": "6.42184459273",
+            "target_wrists": "6.56795312148",
+            "wrist_active": "0"
+          },
+          "776": {
+            "stage": "6",
+            "frame": "776",
+            "point_hits": "2",
+            "point_max": "0.244133230132",
+            "segment_hits": "4",
+            "segment_max": "0.192949326623",
+            "source_wrists": "0.206521380416",
+            "target_wrists": "0.387804954579",
+            "wrist_active": "1"
+          },
+          "854": {
+            "stage": "6",
+            "frame": "854",
+            "point_hits": "2",
+            "point_max": "0.290054868257",
+            "segment_hits": "2",
+            "segment_max": "0.108204994622",
+            "source_wrists": "0.384927154471",
+            "target_wrists": "0.365611509799",
+            "wrist_active": "0"
+          },
+          "1609": {
+            "stage": "6",
+            "frame": "1609",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "1",
+            "segment_max": "0.0605141144837",
+            "source_wrists": "1.32558959649",
+            "target_wrists": "1.79489913411",
+            "wrist_active": "0"
+          }
+        }
+      }
+    },
+    "distance06": {
+      "4": {
+        "frames": 1719,
+        "point_pair_violations": 190,
+        "frames_with_point_violations": 123,
+        "point_max_depth_pmx": 0.531011407206,
+        "segment_sample_pair_violations": 1137,
+        "segment_max_depth_pmx": 0.556361133319,
+        "wrist_trigger_frames": 70,
+        "active_wrist_gap_max_pmx": 1.56316067236,
+        "active_wrist_gap_mean_pmx": 0.6188826311964729,
+        "selected_frames": {
+          "167": {
+            "stage": "4",
+            "frame": "167",
+            "point_hits": "3",
+            "point_max": "0.19346047296",
+            "segment_hits": "4",
+            "segment_max": "0.218200759565",
+            "source_wrists": "0.226751030552",
+            "target_wrists": "0.322074231036",
+            "wrist_active": "1"
+          },
+          "258": {
+            "stage": "4",
+            "frame": "258",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "0",
+            "segment_max": "0",
+            "source_wrists": "1.21561042111",
+            "target_wrists": "0.741916710122",
+            "wrist_active": "0"
+          },
+          "264": {
+            "stage": "4",
+            "frame": "264",
+            "point_hits": "1",
+            "point_max": "0.0526505441686",
+            "segment_hits": "0",
+            "segment_max": "0",
+            "source_wrists": "0.811707676542",
+            "target_wrists": "0.319277151849",
+            "wrist_active": "0"
+          },
+          "313": {
+            "stage": "4",
+            "frame": "313",
+            "point_hits": "1",
+            "point_max": "0.10171286293",
+            "segment_hits": "5",
+            "segment_max": "0.556361133319",
+            "source_wrists": "6.42184459273",
+            "target_wrists": "6.56795312148",
+            "wrist_active": "0"
+          },
+          "776": {
+            "stage": "4",
+            "frame": "776",
+            "point_hits": "2",
+            "point_max": "0.244133230132",
+            "segment_hits": "4",
+            "segment_max": "0.192949326623",
+            "source_wrists": "0.206521380416",
+            "target_wrists": "0.387804954579",
+            "wrist_active": "1"
+          },
+          "854": {
+            "stage": "4",
+            "frame": "854",
+            "point_hits": "2",
+            "point_max": "0.290054868257",
+            "segment_hits": "2",
+            "segment_max": "0.108204994622",
+            "source_wrists": "0.384927154471",
+            "target_wrists": "0.365611509799",
+            "wrist_active": "1"
+          },
+          "1609": {
+            "stage": "4",
+            "frame": "1609",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "1",
+            "segment_max": "0.0605141144837",
+            "source_wrists": "1.32558959649",
+            "target_wrists": "1.79489913411",
+            "wrist_active": "0"
+          }
+        }
+      },
+      "5": {
+        "frames": 1719,
+        "point_pair_violations": 5,
+        "frames_with_point_violations": 5,
+        "point_max_depth_pmx": 0.0493838647992,
+        "segment_sample_pair_violations": 1113,
+        "segment_max_depth_pmx": 0.50767566171,
+        "wrist_trigger_frames": 70,
+        "active_wrist_gap_max_pmx": 1.56316067236,
+        "active_wrist_gap_mean_pmx": 0.7435622741646428,
+        "selected_frames": {
+          "167": {
+            "stage": "5",
+            "frame": "167",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "3",
+            "segment_max": "0.117865800341",
+            "source_wrists": "0.226751030552",
+            "target_wrists": "0.462342361075",
+            "wrist_active": "1"
+          },
+          "258": {
+            "stage": "5",
+            "frame": "258",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "0",
+            "segment_max": "0",
+            "source_wrists": "1.21561042111",
+            "target_wrists": "0.741916710122",
+            "wrist_active": "0"
+          },
+          "264": {
+            "stage": "5",
+            "frame": "264",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "0",
+            "segment_max": "0",
+            "source_wrists": "0.811707676542",
+            "target_wrists": "0.356046906752",
+            "wrist_active": "0"
+          },
+          "313": {
+            "stage": "5",
+            "frame": "313",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "5",
+            "segment_max": "0.50767566171",
+            "source_wrists": "6.42184459273",
+            "target_wrists": "6.63721758049",
+            "wrist_active": "0"
+          },
+          "776": {
+            "stage": "5",
+            "frame": "776",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "5",
+            "segment_max": "0.163746363053",
+            "source_wrists": "0.206521380416",
+            "target_wrists": "0.589017163444",
+            "wrist_active": "1"
+          },
+          "854": {
+            "stage": "5",
+            "frame": "854",
+            "point_hits": "1",
+            "point_max": "0.0193814676138",
+            "segment_hits": "0",
+            "segment_max": "0",
+            "source_wrists": "0.384927154471",
+            "target_wrists": "0.707886800694",
+            "wrist_active": "1"
+          },
+          "1609": {
+            "stage": "5",
+            "frame": "1609",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "1",
+            "segment_max": "0.0605141144837",
+            "source_wrists": "1.32558959649",
+            "target_wrists": "1.79489913411",
+            "wrist_active": "0"
+          }
+        }
+      },
+      "6": {
+        "frames": 1719,
+        "point_pair_violations": 284,
+        "frames_with_point_violations": 74,
+        "point_max_depth_pmx": 0.271918254435,
+        "segment_sample_pair_violations": 1040,
+        "segment_max_depth_pmx": 0.50767566171,
+        "wrist_trigger_frames": 70,
+        "active_wrist_gap_max_pmx": 0.23538057505,
+        "active_wrist_gap_mean_pmx": 0.005446601025524058,
+        "selected_frames": {
+          "167": {
+            "stage": "6",
+            "frame": "167",
+            "point_hits": "4",
+            "point_max": "0.234680297009",
+            "segment_hits": "3",
+            "segment_max": "0.173751011936",
+            "source_wrists": "0.226751030552",
+            "target_wrists": "1.80813045761e-05",
+            "wrist_active": "1"
+          },
+          "258": {
+            "stage": "6",
+            "frame": "258",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "0",
+            "segment_max": "0",
+            "source_wrists": "1.21561042111",
+            "target_wrists": "0.741916710122",
+            "wrist_active": "0"
+          },
+          "264": {
+            "stage": "6",
+            "frame": "264",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "0",
+            "segment_max": "0",
+            "source_wrists": "0.811707676542",
+            "target_wrists": "0.356046906752",
+            "wrist_active": "0"
+          },
+          "313": {
+            "stage": "6",
+            "frame": "313",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "5",
+            "segment_max": "0.50767566171",
+            "source_wrists": "6.42184459273",
+            "target_wrists": "6.63721758049",
+            "wrist_active": "0"
+          },
+          "776": {
+            "stage": "6",
+            "frame": "776",
+            "point_hits": "4",
+            "point_max": "0.236656346746",
+            "segment_hits": "1",
+            "segment_max": "0.0124844497779",
+            "source_wrists": "0.206521380416",
+            "target_wrists": "0.000101733978372",
+            "wrist_active": "1"
+          },
+          "854": {
+            "stage": "6",
+            "frame": "854",
+            "point_hits": "4",
+            "point_max": "0.271918254435",
+            "segment_hits": "1",
+            "segment_max": "0.0491098121791",
+            "source_wrists": "0.384927154471",
+            "target_wrists": "0.23538057505",
+            "wrist_active": "1"
+          },
+          "1609": {
+            "stage": "6",
+            "frame": "1609",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "1",
+            "segment_max": "0.0605141144837",
+            "source_wrists": "1.32558959649",
+            "target_wrists": "1.79489913411",
+            "wrist_active": "0"
+          }
+        }
+      }
+    },
+    "iterations160": {
+      "4": {
+        "frames": 1719,
+        "point_pair_violations": 190,
+        "frames_with_point_violations": 123,
+        "point_max_depth_pmx": 0.531011407206,
+        "segment_sample_pair_violations": 1137,
+        "segment_max_depth_pmx": 0.556361133319,
+        "wrist_trigger_frames": 13,
+        "active_wrist_gap_max_pmx": 0.520061888996,
+        "active_wrist_gap_mean_pmx": 0.41556704334353844,
+        "selected_frames": {
+          "167": {
+            "stage": "4",
+            "frame": "167",
+            "point_hits": "3",
+            "point_max": "0.19346047296",
+            "segment_hits": "4",
+            "segment_max": "0.218200759565",
+            "source_wrists": "0.226751030552",
+            "target_wrists": "0.322074231036",
+            "wrist_active": "1"
+          },
+          "258": {
+            "stage": "4",
+            "frame": "258",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "0",
+            "segment_max": "0",
+            "source_wrists": "1.21561042111",
+            "target_wrists": "0.741916710122",
+            "wrist_active": "0"
+          },
+          "264": {
+            "stage": "4",
+            "frame": "264",
+            "point_hits": "1",
+            "point_max": "0.0526505441686",
+            "segment_hits": "0",
+            "segment_max": "0",
+            "source_wrists": "0.811707676542",
+            "target_wrists": "0.319277151849",
+            "wrist_active": "0"
+          },
+          "313": {
+            "stage": "4",
+            "frame": "313",
+            "point_hits": "1",
+            "point_max": "0.10171286293",
+            "segment_hits": "5",
+            "segment_max": "0.556361133319",
+            "source_wrists": "6.42184459273",
+            "target_wrists": "6.56795312148",
+            "wrist_active": "0"
+          },
+          "776": {
+            "stage": "4",
+            "frame": "776",
+            "point_hits": "2",
+            "point_max": "0.244133230132",
+            "segment_hits": "4",
+            "segment_max": "0.192949326623",
+            "source_wrists": "0.206521380416",
+            "target_wrists": "0.387804954579",
+            "wrist_active": "1"
+          },
+          "854": {
+            "stage": "4",
+            "frame": "854",
+            "point_hits": "2",
+            "point_max": "0.290054868257",
+            "segment_hits": "2",
+            "segment_max": "0.108204994622",
+            "source_wrists": "0.384927154471",
+            "target_wrists": "0.365611509799",
+            "wrist_active": "0"
+          },
+          "1609": {
+            "stage": "4",
+            "frame": "1609",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "1",
+            "segment_max": "0.0605141144837",
+            "source_wrists": "1.32558959649",
+            "target_wrists": "1.79489913411",
+            "wrist_active": "0"
+          }
+        }
+      },
+      "5": {
+        "frames": 1719,
+        "point_pair_violations": 4,
+        "frames_with_point_violations": 4,
+        "point_max_depth_pmx": 0.0493838647992,
+        "segment_sample_pair_violations": 1113,
+        "segment_max_depth_pmx": 0.50767566171,
+        "wrist_trigger_frames": 13,
+        "active_wrist_gap_max_pmx": 0.790117118921,
+        "active_wrist_gap_mean_pmx": 0.7040321049749231,
+        "selected_frames": {
+          "167": {
+            "stage": "5",
+            "frame": "167",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "3",
+            "segment_max": "0.117865800341",
+            "source_wrists": "0.226751030552",
+            "target_wrists": "0.462342361075",
+            "wrist_active": "1"
+          },
+          "258": {
+            "stage": "5",
+            "frame": "258",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "0",
+            "segment_max": "0",
+            "source_wrists": "1.21561042111",
+            "target_wrists": "0.741916710122",
+            "wrist_active": "0"
+          },
+          "264": {
+            "stage": "5",
+            "frame": "264",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "0",
+            "segment_max": "0",
+            "source_wrists": "0.811707676542",
+            "target_wrists": "0.356046906752",
+            "wrist_active": "0"
+          },
+          "313": {
+            "stage": "5",
+            "frame": "313",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "5",
+            "segment_max": "0.50767566171",
+            "source_wrists": "6.42184459273",
+            "target_wrists": "6.63721758049",
+            "wrist_active": "0"
+          },
+          "776": {
+            "stage": "5",
+            "frame": "776",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "5",
+            "segment_max": "0.163746363053",
+            "source_wrists": "0.206521380416",
+            "target_wrists": "0.589017163444",
+            "wrist_active": "1"
+          },
+          "854": {
+            "stage": "5",
+            "frame": "854",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "0",
+            "segment_max": "0",
+            "source_wrists": "0.384927154471",
+            "target_wrists": "0.684051687146",
+            "wrist_active": "0"
+          },
+          "1609": {
+            "stage": "5",
+            "frame": "1609",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "1",
+            "segment_max": "0.0605141144837",
+            "source_wrists": "1.32558959649",
+            "target_wrists": "1.79489913411",
+            "wrist_active": "0"
+          }
+        }
+      },
+      "6": {
+        "frames": 1719,
+        "point_pair_violations": 56,
+        "frames_with_point_violations": 17,
+        "point_max_depth_pmx": 0.236656346746,
+        "segment_sample_pair_violations": 1094,
+        "segment_max_depth_pmx": 0.50767566171,
+        "wrist_trigger_frames": 13,
+        "active_wrist_gap_max_pmx": 0.000304905900337,
+        "active_wrist_gap_mean_pmx": 0.0001772410588332154,
+        "selected_frames": {
+          "167": {
+            "stage": "6",
+            "frame": "167",
+            "point_hits": "4",
+            "point_max": "0.234680297009",
+            "segment_hits": "3",
+            "segment_max": "0.173751011936",
+            "source_wrists": "0.226751030552",
+            "target_wrists": "1.80813045761e-05",
+            "wrist_active": "1"
+          },
+          "258": {
+            "stage": "6",
+            "frame": "258",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "0",
+            "segment_max": "0",
+            "source_wrists": "1.21561042111",
+            "target_wrists": "0.741916710122",
+            "wrist_active": "0"
+          },
+          "264": {
+            "stage": "6",
+            "frame": "264",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "0",
+            "segment_max": "0",
+            "source_wrists": "0.811707676542",
+            "target_wrists": "0.356046906752",
+            "wrist_active": "0"
+          },
+          "313": {
+            "stage": "6",
+            "frame": "313",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "5",
+            "segment_max": "0.50767566171",
+            "source_wrists": "6.42184459273",
+            "target_wrists": "6.63721758049",
+            "wrist_active": "0"
+          },
+          "776": {
+            "stage": "6",
+            "frame": "776",
+            "point_hits": "4",
+            "point_max": "0.236656346746",
+            "segment_hits": "1",
+            "segment_max": "0.0124844497779",
+            "source_wrists": "0.206521380416",
+            "target_wrists": "0.000101733978372",
+            "wrist_active": "1"
+          },
+          "854": {
+            "stage": "6",
+            "frame": "854",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "0",
+            "segment_max": "0",
+            "source_wrists": "0.384927154471",
+            "target_wrists": "0.684051687146",
+            "wrist_active": "0"
+          },
+          "1609": {
+            "stage": "6",
+            "frame": "1609",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "1",
+            "segment_max": "0.0605141144837",
+            "source_wrists": "1.32558959649",
+            "target_wrists": "1.79489913411",
+            "wrist_active": "0"
+          }
+        }
+      }
+    },
+    "wrist": {
+      "4": {
+        "frames": 1719,
+        "point_pair_violations": 190,
+        "frames_with_point_violations": 123,
+        "point_max_depth_pmx": 0.531011407206,
+        "segment_sample_pair_violations": 1137,
+        "segment_max_depth_pmx": 0.556361133319,
+        "wrist_trigger_frames": 13,
+        "active_wrist_gap_max_pmx": 0.520061888996,
+        "active_wrist_gap_mean_pmx": 0.41556704334353844,
+        "selected_frames": {
+          "167": {
+            "stage": "4",
+            "frame": "167",
+            "point_hits": "3",
+            "point_max": "0.19346047296",
+            "segment_hits": "4",
+            "segment_max": "0.218200759565",
+            "source_wrists": "0.226751030552",
+            "target_wrists": "0.322074231036",
+            "wrist_active": "1"
+          },
+          "258": {
+            "stage": "4",
+            "frame": "258",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "0",
+            "segment_max": "0",
+            "source_wrists": "1.21561042111",
+            "target_wrists": "0.741916710122",
+            "wrist_active": "0"
+          },
+          "264": {
+            "stage": "4",
+            "frame": "264",
+            "point_hits": "1",
+            "point_max": "0.0526505441686",
+            "segment_hits": "0",
+            "segment_max": "0",
+            "source_wrists": "0.811707676542",
+            "target_wrists": "0.319277151849",
+            "wrist_active": "0"
+          },
+          "313": {
+            "stage": "4",
+            "frame": "313",
+            "point_hits": "1",
+            "point_max": "0.10171286293",
+            "segment_hits": "5",
+            "segment_max": "0.556361133319",
+            "source_wrists": "6.42184459273",
+            "target_wrists": "6.56795312148",
+            "wrist_active": "0"
+          },
+          "776": {
+            "stage": "4",
+            "frame": "776",
+            "point_hits": "2",
+            "point_max": "0.244133230132",
+            "segment_hits": "4",
+            "segment_max": "0.192949326623",
+            "source_wrists": "0.206521380416",
+            "target_wrists": "0.387804954579",
+            "wrist_active": "1"
+          },
+          "854": {
+            "stage": "4",
+            "frame": "854",
+            "point_hits": "2",
+            "point_max": "0.290054868257",
+            "segment_hits": "2",
+            "segment_max": "0.108204994622",
+            "source_wrists": "0.384927154471",
+            "target_wrists": "0.365611509799",
+            "wrist_active": "0"
+          },
+          "1609": {
+            "stage": "4",
+            "frame": "1609",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "1",
+            "segment_max": "0.0605141144837",
+            "source_wrists": "1.32558959649",
+            "target_wrists": "1.79489913411",
+            "wrist_active": "0"
+          }
+        }
+      },
+      "5": {
+        "frames": 1719,
+        "point_pair_violations": 190,
+        "frames_with_point_violations": 123,
+        "point_max_depth_pmx": 0.531011407206,
+        "segment_sample_pair_violations": 1137,
+        "segment_max_depth_pmx": 0.556361133319,
+        "wrist_trigger_frames": 13,
+        "active_wrist_gap_max_pmx": 0.520061888996,
+        "active_wrist_gap_mean_pmx": 0.41556704334353844,
+        "selected_frames": {
+          "167": {
+            "stage": "5",
+            "frame": "167",
+            "point_hits": "3",
+            "point_max": "0.19346047296",
+            "segment_hits": "4",
+            "segment_max": "0.218200759565",
+            "source_wrists": "0.226751030552",
+            "target_wrists": "0.322074231036",
+            "wrist_active": "1"
+          },
+          "258": {
+            "stage": "5",
+            "frame": "258",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "0",
+            "segment_max": "0",
+            "source_wrists": "1.21561042111",
+            "target_wrists": "0.741916710122",
+            "wrist_active": "0"
+          },
+          "264": {
+            "stage": "5",
+            "frame": "264",
+            "point_hits": "1",
+            "point_max": "0.0526505441686",
+            "segment_hits": "0",
+            "segment_max": "0",
+            "source_wrists": "0.811707676542",
+            "target_wrists": "0.319277151849",
+            "wrist_active": "0"
+          },
+          "313": {
+            "stage": "5",
+            "frame": "313",
+            "point_hits": "1",
+            "point_max": "0.10171286293",
+            "segment_hits": "5",
+            "segment_max": "0.556361133319",
+            "source_wrists": "6.42184459273",
+            "target_wrists": "6.56795312148",
+            "wrist_active": "0"
+          },
+          "776": {
+            "stage": "5",
+            "frame": "776",
+            "point_hits": "2",
+            "point_max": "0.244133230132",
+            "segment_hits": "4",
+            "segment_max": "0.192949326623",
+            "source_wrists": "0.206521380416",
+            "target_wrists": "0.387804954579",
+            "wrist_active": "1"
+          },
+          "854": {
+            "stage": "5",
+            "frame": "854",
+            "point_hits": "2",
+            "point_max": "0.290054868257",
+            "segment_hits": "2",
+            "segment_max": "0.108204994622",
+            "source_wrists": "0.384927154471",
+            "target_wrists": "0.365611509799",
+            "wrist_active": "0"
+          },
+          "1609": {
+            "stage": "5",
+            "frame": "1609",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "1",
+            "segment_max": "0.0605141144837",
+            "source_wrists": "1.32558959649",
+            "target_wrists": "1.79489913411",
+            "wrist_active": "0"
+          }
+        }
+      },
+      "6": {
+        "frames": 1719,
+        "point_pair_violations": 212,
+        "frames_with_point_violations": 123,
+        "point_max_depth_pmx": 0.531011407206,
+        "segment_sample_pair_violations": 1118,
+        "segment_max_depth_pmx": 0.556361133319,
+        "wrist_trigger_frames": 13,
+        "active_wrist_gap_max_pmx": 0.0052673754746,
+        "active_wrist_gap_mean_pmx": 0.0014102706223134693,
+        "selected_frames": {
+          "167": {
+            "stage": "6",
+            "frame": "167",
+            "point_hits": "4",
+            "point_max": "0.232995205661",
+            "segment_hits": "3",
+            "segment_max": "0.16059693122",
+            "source_wrists": "0.226751030552",
+            "target_wrists": "0.0052673754746",
+            "wrist_active": "1"
+          },
+          "258": {
+            "stage": "6",
+            "frame": "258",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "0",
+            "segment_max": "0",
+            "source_wrists": "1.21561042111",
+            "target_wrists": "0.741916710122",
+            "wrist_active": "0"
+          },
+          "264": {
+            "stage": "6",
+            "frame": "264",
+            "point_hits": "1",
+            "point_max": "0.0526505441686",
+            "segment_hits": "0",
+            "segment_max": "0",
+            "source_wrists": "0.811707676542",
+            "target_wrists": "0.319277151849",
+            "wrist_active": "0"
+          },
+          "313": {
+            "stage": "6",
+            "frame": "313",
+            "point_hits": "1",
+            "point_max": "0.10171286293",
+            "segment_hits": "5",
+            "segment_max": "0.556361133319",
+            "source_wrists": "6.42184459273",
+            "target_wrists": "6.56795312148",
+            "wrist_active": "0"
+          },
+          "776": {
+            "stage": "6",
+            "frame": "776",
+            "point_hits": "4",
+            "point_max": "0.236656916616",
+            "segment_hits": "0",
+            "segment_max": "0",
+            "source_wrists": "0.206521380416",
+            "target_wrists": "6.75646265518e-05",
+            "wrist_active": "1"
+          },
+          "854": {
+            "stage": "6",
+            "frame": "854",
+            "point_hits": "2",
+            "point_max": "0.290054868257",
+            "segment_hits": "2",
+            "segment_max": "0.108204994622",
+            "source_wrists": "0.384927154471",
+            "target_wrists": "0.365611509799",
+            "wrist_active": "0"
+          },
+          "1609": {
+            "stage": "6",
+            "frame": "1609",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "1",
+            "segment_max": "0.0605141144837",
+            "source_wrists": "1.32558959649",
+            "target_wrists": "1.79489913411",
+            "wrist_active": "0"
+          }
+        }
+      }
+    }
+  },
+  "cleanup-results": {
+    "all": {
+      "4": {
+        "frames": 1719,
+        "point_pair_violations": 190,
+        "frames_with_point_violations": 123,
+        "point_max_depth_pmx": 0.531011407206,
+        "segment_sample_pair_violations": 1137,
+        "segment_max_depth_pmx": 0.556361133319,
+        "wrist_trigger_frames": 13,
+        "active_wrist_gap_max_pmx": 0.520061888996,
+        "active_wrist_gap_mean_pmx": 0.41556704334353844,
+        "selected_frames": {
+          "167": {
+            "stage": "4",
+            "frame": "167",
+            "point_hits": "3",
+            "point_max": "0.19346047296",
+            "segment_hits": "4",
+            "segment_max": "0.218200759565",
+            "source_wrists": "0.226751030552",
+            "target_wrists": "0.322074231036",
+            "wrist_active": "1"
+          },
+          "258": {
+            "stage": "4",
+            "frame": "258",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "0",
+            "segment_max": "0",
+            "source_wrists": "1.21561042111",
+            "target_wrists": "0.741916710122",
+            "wrist_active": "0"
+          },
+          "264": {
+            "stage": "4",
+            "frame": "264",
+            "point_hits": "1",
+            "point_max": "0.0526505441686",
+            "segment_hits": "0",
+            "segment_max": "0",
+            "source_wrists": "0.811707676542",
+            "target_wrists": "0.319277151849",
+            "wrist_active": "0"
+          },
+          "313": {
+            "stage": "4",
+            "frame": "313",
+            "point_hits": "1",
+            "point_max": "0.10171286293",
+            "segment_hits": "5",
+            "segment_max": "0.556361133319",
+            "source_wrists": "6.42184459273",
+            "target_wrists": "6.56795312148",
+            "wrist_active": "0"
+          },
+          "776": {
+            "stage": "4",
+            "frame": "776",
+            "point_hits": "2",
+            "point_max": "0.244133230132",
+            "segment_hits": "4",
+            "segment_max": "0.192949326623",
+            "source_wrists": "0.206521380416",
+            "target_wrists": "0.387804954579",
+            "wrist_active": "1"
+          },
+          "854": {
+            "stage": "4",
+            "frame": "854",
+            "point_hits": "2",
+            "point_max": "0.290054868257",
+            "segment_hits": "2",
+            "segment_max": "0.108204994622",
+            "source_wrists": "0.384927154471",
+            "target_wrists": "0.365611509799",
+            "wrist_active": "0"
+          },
+          "1609": {
+            "stage": "4",
+            "frame": "1609",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "1",
+            "segment_max": "0.0605141144837",
+            "source_wrists": "1.32558959649",
+            "target_wrists": "1.79489913411",
+            "wrist_active": "0"
+          }
+        }
+      },
+      "5": {
+        "frames": 1719,
+        "point_pair_violations": 5,
+        "frames_with_point_violations": 5,
+        "point_max_depth_pmx": 0.0493838647992,
+        "segment_sample_pair_violations": 1113,
+        "segment_max_depth_pmx": 0.50767566171,
+        "wrist_trigger_frames": 13,
+        "active_wrist_gap_max_pmx": 0.790117118921,
+        "active_wrist_gap_mean_pmx": 0.7040321049749231,
+        "selected_frames": {
+          "167": {
+            "stage": "5",
+            "frame": "167",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "3",
+            "segment_max": "0.117865800341",
+            "source_wrists": "0.226751030552",
+            "target_wrists": "0.462342361075",
+            "wrist_active": "1"
+          },
+          "258": {
+            "stage": "5",
+            "frame": "258",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "0",
+            "segment_max": "0",
+            "source_wrists": "1.21561042111",
+            "target_wrists": "0.741916710122",
+            "wrist_active": "0"
+          },
+          "264": {
+            "stage": "5",
+            "frame": "264",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "0",
+            "segment_max": "0",
+            "source_wrists": "0.811707676542",
+            "target_wrists": "0.356046906752",
+            "wrist_active": "0"
+          },
+          "313": {
+            "stage": "5",
+            "frame": "313",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "5",
+            "segment_max": "0.50767566171",
+            "source_wrists": "6.42184459273",
+            "target_wrists": "6.63721758049",
+            "wrist_active": "0"
+          },
+          "776": {
+            "stage": "5",
+            "frame": "776",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "5",
+            "segment_max": "0.163746363053",
+            "source_wrists": "0.206521380416",
+            "target_wrists": "0.589017163444",
+            "wrist_active": "1"
+          },
+          "854": {
+            "stage": "5",
+            "frame": "854",
+            "point_hits": "1",
+            "point_max": "0.0193814676138",
+            "segment_hits": "0",
+            "segment_max": "0",
+            "source_wrists": "0.384927154471",
+            "target_wrists": "0.707886800694",
+            "wrist_active": "0"
+          },
+          "1609": {
+            "stage": "5",
+            "frame": "1609",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "1",
+            "segment_max": "0.0605141144837",
+            "source_wrists": "1.32558959649",
+            "target_wrists": "1.79489913411",
+            "wrist_active": "0"
+          }
+        }
+      },
+      "6": {
+        "frames": 1719,
+        "point_pair_violations": 18,
+        "frames_with_point_violations": 18,
+        "point_max_depth_pmx": 0.0667059423252,
+        "segment_sample_pair_violations": 1293,
+        "segment_max_depth_pmx": 0.5875155716,
+        "wrist_trigger_frames": 13,
+        "active_wrist_gap_max_pmx": 0.537158554141,
+        "active_wrist_gap_mean_pmx": 0.37309940588307694,
+        "selected_frames": {
+          "167": {
+            "stage": "6",
+            "frame": "167",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "0",
+            "segment_max": "0",
+            "source_wrists": "0.226751030552",
+            "target_wrists": "0.537158554141",
+            "wrist_active": "1"
+          },
+          "258": {
+            "stage": "6",
+            "frame": "258",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "16",
+            "segment_max": "0.5875155716",
+            "source_wrists": "1.21561042111",
+            "target_wrists": "0.79851625017",
+            "wrist_active": "0"
+          },
+          "264": {
+            "stage": "6",
+            "frame": "264",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "7",
+            "segment_max": "0.436979467375",
+            "source_wrists": "0.811707676542",
+            "target_wrists": "0.801828799776",
+            "wrist_active": "0"
+          },
+          "313": {
+            "stage": "6",
+            "frame": "313",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "5",
+            "segment_max": "0.50767566171",
+            "source_wrists": "6.42184459273",
+            "target_wrists": "6.63721758049",
+            "wrist_active": "0"
+          },
+          "776": {
+            "stage": "6",
+            "frame": "776",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "2",
+            "segment_max": "0.0593574111658",
+            "source_wrists": "0.206521380416",
+            "target_wrists": "0.481570581961",
+            "wrist_active": "1"
+          },
+          "854": {
+            "stage": "6",
+            "frame": "854",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "0",
+            "segment_max": "0",
+            "source_wrists": "0.384927154471",
+            "target_wrists": "0.722999109128",
+            "wrist_active": "0"
+          },
+          "1609": {
+            "stage": "6",
+            "frame": "1609",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "4",
+            "segment_max": "0.321389414082",
+            "source_wrists": "1.32558959649",
+            "target_wrists": "0.506170302063",
+            "wrist_active": "0"
+          }
+        }
+      }
+    },
+    "avoidance": {
+      "4": {
+        "frames": 1719,
+        "point_pair_violations": 190,
+        "frames_with_point_violations": 123,
+        "point_max_depth_pmx": 0.531011407206,
+        "segment_sample_pair_violations": 1137,
+        "segment_max_depth_pmx": 0.556361133319,
+        "wrist_trigger_frames": 13,
+        "active_wrist_gap_max_pmx": 0.520061888996,
+        "active_wrist_gap_mean_pmx": 0.41556704334353844,
+        "selected_frames": {
+          "167": {
+            "stage": "4",
+            "frame": "167",
+            "point_hits": "3",
+            "point_max": "0.19346047296",
+            "segment_hits": "4",
+            "segment_max": "0.218200759565",
+            "source_wrists": "0.226751030552",
+            "target_wrists": "0.322074231036",
+            "wrist_active": "1"
+          },
+          "258": {
+            "stage": "4",
+            "frame": "258",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "0",
+            "segment_max": "0",
+            "source_wrists": "1.21561042111",
+            "target_wrists": "0.741916710122",
+            "wrist_active": "0"
+          },
+          "264": {
+            "stage": "4",
+            "frame": "264",
+            "point_hits": "1",
+            "point_max": "0.0526505441686",
+            "segment_hits": "0",
+            "segment_max": "0",
+            "source_wrists": "0.811707676542",
+            "target_wrists": "0.319277151849",
+            "wrist_active": "0"
+          },
+          "313": {
+            "stage": "4",
+            "frame": "313",
+            "point_hits": "1",
+            "point_max": "0.10171286293",
+            "segment_hits": "5",
+            "segment_max": "0.556361133319",
+            "source_wrists": "6.42184459273",
+            "target_wrists": "6.56795312148",
+            "wrist_active": "0"
+          },
+          "776": {
+            "stage": "4",
+            "frame": "776",
+            "point_hits": "2",
+            "point_max": "0.244133230132",
+            "segment_hits": "4",
+            "segment_max": "0.192949326623",
+            "source_wrists": "0.206521380416",
+            "target_wrists": "0.387804954579",
+            "wrist_active": "1"
+          },
+          "854": {
+            "stage": "4",
+            "frame": "854",
+            "point_hits": "2",
+            "point_max": "0.290054868257",
+            "segment_hits": "2",
+            "segment_max": "0.108204994622",
+            "source_wrists": "0.384927154471",
+            "target_wrists": "0.365611509799",
+            "wrist_active": "0"
+          },
+          "1609": {
+            "stage": "4",
+            "frame": "1609",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "1",
+            "segment_max": "0.0605141144837",
+            "source_wrists": "1.32558959649",
+            "target_wrists": "1.79489913411",
+            "wrist_active": "0"
+          }
+        }
+      },
+      "5": {
+        "frames": 1719,
+        "point_pair_violations": 5,
+        "frames_with_point_violations": 5,
+        "point_max_depth_pmx": 0.0493838647992,
+        "segment_sample_pair_violations": 1113,
+        "segment_max_depth_pmx": 0.50767566171,
+        "wrist_trigger_frames": 13,
+        "active_wrist_gap_max_pmx": 0.790117118921,
+        "active_wrist_gap_mean_pmx": 0.7040321049749231,
+        "selected_frames": {
+          "167": {
+            "stage": "5",
+            "frame": "167",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "3",
+            "segment_max": "0.117865800341",
+            "source_wrists": "0.226751030552",
+            "target_wrists": "0.462342361075",
+            "wrist_active": "1"
+          },
+          "258": {
+            "stage": "5",
+            "frame": "258",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "0",
+            "segment_max": "0",
+            "source_wrists": "1.21561042111",
+            "target_wrists": "0.741916710122",
+            "wrist_active": "0"
+          },
+          "264": {
+            "stage": "5",
+            "frame": "264",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "0",
+            "segment_max": "0",
+            "source_wrists": "0.811707676542",
+            "target_wrists": "0.356046906752",
+            "wrist_active": "0"
+          },
+          "313": {
+            "stage": "5",
+            "frame": "313",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "5",
+            "segment_max": "0.50767566171",
+            "source_wrists": "6.42184459273",
+            "target_wrists": "6.63721758049",
+            "wrist_active": "0"
+          },
+          "776": {
+            "stage": "5",
+            "frame": "776",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "5",
+            "segment_max": "0.163746363053",
+            "source_wrists": "0.206521380416",
+            "target_wrists": "0.589017163444",
+            "wrist_active": "1"
+          },
+          "854": {
+            "stage": "5",
+            "frame": "854",
+            "point_hits": "1",
+            "point_max": "0.0193814676138",
+            "segment_hits": "0",
+            "segment_max": "0",
+            "source_wrists": "0.384927154471",
+            "target_wrists": "0.707886800694",
+            "wrist_active": "0"
+          },
+          "1609": {
+            "stage": "5",
+            "frame": "1609",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "1",
+            "segment_max": "0.0605141144837",
+            "source_wrists": "1.32558959649",
+            "target_wrists": "1.79489913411",
+            "wrist_active": "0"
+          }
+        }
+      },
+      "6": {
+        "frames": 1719,
+        "point_pair_violations": 5,
+        "frames_with_point_violations": 5,
+        "point_max_depth_pmx": 0.0493838647992,
+        "segment_sample_pair_violations": 1113,
+        "segment_max_depth_pmx": 0.50767566171,
+        "wrist_trigger_frames": 13,
+        "active_wrist_gap_max_pmx": 0.790117118921,
+        "active_wrist_gap_mean_pmx": 0.7040321049749231,
+        "selected_frames": {
+          "167": {
+            "stage": "6",
+            "frame": "167",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "3",
+            "segment_max": "0.117865800341",
+            "source_wrists": "0.226751030552",
+            "target_wrists": "0.462342361075",
+            "wrist_active": "1"
+          },
+          "258": {
+            "stage": "6",
+            "frame": "258",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "0",
+            "segment_max": "0",
+            "source_wrists": "1.21561042111",
+            "target_wrists": "0.741916710122",
+            "wrist_active": "0"
+          },
+          "264": {
+            "stage": "6",
+            "frame": "264",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "0",
+            "segment_max": "0",
+            "source_wrists": "0.811707676542",
+            "target_wrists": "0.356046906752",
+            "wrist_active": "0"
+          },
+          "313": {
+            "stage": "6",
+            "frame": "313",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "5",
+            "segment_max": "0.50767566171",
+            "source_wrists": "6.42184459273",
+            "target_wrists": "6.63721758049",
+            "wrist_active": "0"
+          },
+          "776": {
+            "stage": "6",
+            "frame": "776",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "5",
+            "segment_max": "0.163746363053",
+            "source_wrists": "0.206521380416",
+            "target_wrists": "0.589017163444",
+            "wrist_active": "1"
+          },
+          "854": {
+            "stage": "6",
+            "frame": "854",
+            "point_hits": "1",
+            "point_max": "0.0193814676138",
+            "segment_hits": "0",
+            "segment_max": "0",
+            "source_wrists": "0.384927154471",
+            "target_wrists": "0.707886800694",
+            "wrist_active": "0"
+          },
+          "1609": {
+            "stage": "6",
+            "frame": "1609",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "1",
+            "segment_max": "0.0605141144837",
+            "source_wrists": "1.32558959649",
+            "target_wrists": "1.79489913411",
+            "wrist_active": "0"
+          }
+        }
+      }
+    },
+    "avoidance-wrist": {
+      "4": {
+        "frames": 1719,
+        "point_pair_violations": 190,
+        "frames_with_point_violations": 123,
+        "point_max_depth_pmx": 0.531011407206,
+        "segment_sample_pair_violations": 1137,
+        "segment_max_depth_pmx": 0.556361133319,
+        "wrist_trigger_frames": 13,
+        "active_wrist_gap_max_pmx": 0.520061888996,
+        "active_wrist_gap_mean_pmx": 0.41556704334353844,
+        "selected_frames": {
+          "167": {
+            "stage": "4",
+            "frame": "167",
+            "point_hits": "3",
+            "point_max": "0.19346047296",
+            "segment_hits": "4",
+            "segment_max": "0.218200759565",
+            "source_wrists": "0.226751030552",
+            "target_wrists": "0.322074231036",
+            "wrist_active": "1"
+          },
+          "258": {
+            "stage": "4",
+            "frame": "258",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "0",
+            "segment_max": "0",
+            "source_wrists": "1.21561042111",
+            "target_wrists": "0.741916710122",
+            "wrist_active": "0"
+          },
+          "264": {
+            "stage": "4",
+            "frame": "264",
+            "point_hits": "1",
+            "point_max": "0.0526505441686",
+            "segment_hits": "0",
+            "segment_max": "0",
+            "source_wrists": "0.811707676542",
+            "target_wrists": "0.319277151849",
+            "wrist_active": "0"
+          },
+          "313": {
+            "stage": "4",
+            "frame": "313",
+            "point_hits": "1",
+            "point_max": "0.10171286293",
+            "segment_hits": "5",
+            "segment_max": "0.556361133319",
+            "source_wrists": "6.42184459273",
+            "target_wrists": "6.56795312148",
+            "wrist_active": "0"
+          },
+          "776": {
+            "stage": "4",
+            "frame": "776",
+            "point_hits": "2",
+            "point_max": "0.244133230132",
+            "segment_hits": "4",
+            "segment_max": "0.192949326623",
+            "source_wrists": "0.206521380416",
+            "target_wrists": "0.387804954579",
+            "wrist_active": "1"
+          },
+          "854": {
+            "stage": "4",
+            "frame": "854",
+            "point_hits": "2",
+            "point_max": "0.290054868257",
+            "segment_hits": "2",
+            "segment_max": "0.108204994622",
+            "source_wrists": "0.384927154471",
+            "target_wrists": "0.365611509799",
+            "wrist_active": "0"
+          },
+          "1609": {
+            "stage": "4",
+            "frame": "1609",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "1",
+            "segment_max": "0.0605141144837",
+            "source_wrists": "1.32558959649",
+            "target_wrists": "1.79489913411",
+            "wrist_active": "0"
+          }
+        }
+      },
+      "5": {
+        "frames": 1719,
+        "point_pair_violations": 5,
+        "frames_with_point_violations": 5,
+        "point_max_depth_pmx": 0.0493838647992,
+        "segment_sample_pair_violations": 1113,
+        "segment_max_depth_pmx": 0.50767566171,
+        "wrist_trigger_frames": 13,
+        "active_wrist_gap_max_pmx": 0.790117118921,
+        "active_wrist_gap_mean_pmx": 0.7040321049749231,
+        "selected_frames": {
+          "167": {
+            "stage": "5",
+            "frame": "167",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "3",
+            "segment_max": "0.117865800341",
+            "source_wrists": "0.226751030552",
+            "target_wrists": "0.462342361075",
+            "wrist_active": "1"
+          },
+          "258": {
+            "stage": "5",
+            "frame": "258",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "0",
+            "segment_max": "0",
+            "source_wrists": "1.21561042111",
+            "target_wrists": "0.741916710122",
+            "wrist_active": "0"
+          },
+          "264": {
+            "stage": "5",
+            "frame": "264",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "0",
+            "segment_max": "0",
+            "source_wrists": "0.811707676542",
+            "target_wrists": "0.356046906752",
+            "wrist_active": "0"
+          },
+          "313": {
+            "stage": "5",
+            "frame": "313",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "5",
+            "segment_max": "0.50767566171",
+            "source_wrists": "6.42184459273",
+            "target_wrists": "6.63721758049",
+            "wrist_active": "0"
+          },
+          "776": {
+            "stage": "5",
+            "frame": "776",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "5",
+            "segment_max": "0.163746363053",
+            "source_wrists": "0.206521380416",
+            "target_wrists": "0.589017163444",
+            "wrist_active": "1"
+          },
+          "854": {
+            "stage": "5",
+            "frame": "854",
+            "point_hits": "1",
+            "point_max": "0.0193814676138",
+            "segment_hits": "0",
+            "segment_max": "0",
+            "source_wrists": "0.384927154471",
+            "target_wrists": "0.707886800694",
+            "wrist_active": "0"
+          },
+          "1609": {
+            "stage": "5",
+            "frame": "1609",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "1",
+            "segment_max": "0.0605141144837",
+            "source_wrists": "1.32558959649",
+            "target_wrists": "1.79489913411",
+            "wrist_active": "0"
+          }
+        }
+      },
+      "6": {
+        "frames": 1719,
+        "point_pair_violations": 1,
+        "frames_with_point_violations": 1,
+        "point_max_depth_pmx": 0.0141141779319,
+        "segment_sample_pair_violations": 1089,
+        "segment_max_depth_pmx": 0.50767566171,
+        "wrist_trigger_frames": 13,
+        "active_wrist_gap_max_pmx": 0.537158554141,
+        "active_wrist_gap_mean_pmx": 0.3686074890242308,
+        "selected_frames": {
+          "167": {
+            "stage": "6",
+            "frame": "167",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "0",
+            "segment_max": "0",
+            "source_wrists": "0.226751030552",
+            "target_wrists": "0.537158554141",
+            "wrist_active": "1"
+          },
+          "258": {
+            "stage": "6",
+            "frame": "258",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "0",
+            "segment_max": "0",
+            "source_wrists": "1.21561042111",
+            "target_wrists": "0.741916710122",
+            "wrist_active": "0"
+          },
+          "264": {
+            "stage": "6",
+            "frame": "264",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "0",
+            "segment_max": "0",
+            "source_wrists": "0.811707676542",
+            "target_wrists": "0.356046906752",
+            "wrist_active": "0"
+          },
+          "313": {
+            "stage": "6",
+            "frame": "313",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "5",
+            "segment_max": "0.50767566171",
+            "source_wrists": "6.42184459273",
+            "target_wrists": "6.63721758049",
+            "wrist_active": "0"
+          },
+          "776": {
+            "stage": "6",
+            "frame": "776",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "2",
+            "segment_max": "0.0593574111658",
+            "source_wrists": "0.206521380416",
+            "target_wrists": "0.481570581961",
+            "wrist_active": "1"
+          },
+          "854": {
+            "stage": "6",
+            "frame": "854",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "0",
+            "segment_max": "0",
+            "source_wrists": "0.384927154471",
+            "target_wrists": "0.722999109128",
+            "wrist_active": "0"
+          },
+          "1609": {
+            "stage": "6",
+            "frame": "1609",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "1",
+            "segment_max": "0.0605141144837",
+            "source_wrists": "1.32558959649",
+            "target_wrists": "1.79489913411",
+            "wrist_active": "0"
+          }
+        }
+      }
+    },
+    "base": {
+      "4": {
+        "frames": 1719,
+        "point_pair_violations": 190,
+        "frames_with_point_violations": 123,
+        "point_max_depth_pmx": 0.531011407206,
+        "segment_sample_pair_violations": 1137,
+        "segment_max_depth_pmx": 0.556361133319,
+        "wrist_trigger_frames": 13,
+        "active_wrist_gap_max_pmx": 0.520061888996,
+        "active_wrist_gap_mean_pmx": 0.41556704334353844,
+        "selected_frames": {
+          "167": {
+            "stage": "4",
+            "frame": "167",
+            "point_hits": "3",
+            "point_max": "0.19346047296",
+            "segment_hits": "4",
+            "segment_max": "0.218200759565",
+            "source_wrists": "0.226751030552",
+            "target_wrists": "0.322074231036",
+            "wrist_active": "1"
+          },
+          "258": {
+            "stage": "4",
+            "frame": "258",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "0",
+            "segment_max": "0",
+            "source_wrists": "1.21561042111",
+            "target_wrists": "0.741916710122",
+            "wrist_active": "0"
+          },
+          "264": {
+            "stage": "4",
+            "frame": "264",
+            "point_hits": "1",
+            "point_max": "0.0526505441686",
+            "segment_hits": "0",
+            "segment_max": "0",
+            "source_wrists": "0.811707676542",
+            "target_wrists": "0.319277151849",
+            "wrist_active": "0"
+          },
+          "313": {
+            "stage": "4",
+            "frame": "313",
+            "point_hits": "1",
+            "point_max": "0.10171286293",
+            "segment_hits": "5",
+            "segment_max": "0.556361133319",
+            "source_wrists": "6.42184459273",
+            "target_wrists": "6.56795312148",
+            "wrist_active": "0"
+          },
+          "776": {
+            "stage": "4",
+            "frame": "776",
+            "point_hits": "2",
+            "point_max": "0.244133230132",
+            "segment_hits": "4",
+            "segment_max": "0.192949326623",
+            "source_wrists": "0.206521380416",
+            "target_wrists": "0.387804954579",
+            "wrist_active": "1"
+          },
+          "854": {
+            "stage": "4",
+            "frame": "854",
+            "point_hits": "2",
+            "point_max": "0.290054868257",
+            "segment_hits": "2",
+            "segment_max": "0.108204994622",
+            "source_wrists": "0.384927154471",
+            "target_wrists": "0.365611509799",
+            "wrist_active": "0"
+          },
+          "1609": {
+            "stage": "4",
+            "frame": "1609",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "1",
+            "segment_max": "0.0605141144837",
+            "source_wrists": "1.32558959649",
+            "target_wrists": "1.79489913411",
+            "wrist_active": "0"
+          }
+        }
+      },
+      "5": {
+        "frames": 1719,
+        "point_pair_violations": 190,
+        "frames_with_point_violations": 123,
+        "point_max_depth_pmx": 0.531011407206,
+        "segment_sample_pair_violations": 1137,
+        "segment_max_depth_pmx": 0.556361133319,
+        "wrist_trigger_frames": 13,
+        "active_wrist_gap_max_pmx": 0.520061888996,
+        "active_wrist_gap_mean_pmx": 0.41556704334353844,
+        "selected_frames": {
+          "167": {
+            "stage": "5",
+            "frame": "167",
+            "point_hits": "3",
+            "point_max": "0.19346047296",
+            "segment_hits": "4",
+            "segment_max": "0.218200759565",
+            "source_wrists": "0.226751030552",
+            "target_wrists": "0.322074231036",
+            "wrist_active": "1"
+          },
+          "258": {
+            "stage": "5",
+            "frame": "258",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "0",
+            "segment_max": "0",
+            "source_wrists": "1.21561042111",
+            "target_wrists": "0.741916710122",
+            "wrist_active": "0"
+          },
+          "264": {
+            "stage": "5",
+            "frame": "264",
+            "point_hits": "1",
+            "point_max": "0.0526505441686",
+            "segment_hits": "0",
+            "segment_max": "0",
+            "source_wrists": "0.811707676542",
+            "target_wrists": "0.319277151849",
+            "wrist_active": "0"
+          },
+          "313": {
+            "stage": "5",
+            "frame": "313",
+            "point_hits": "1",
+            "point_max": "0.10171286293",
+            "segment_hits": "5",
+            "segment_max": "0.556361133319",
+            "source_wrists": "6.42184459273",
+            "target_wrists": "6.56795312148",
+            "wrist_active": "0"
+          },
+          "776": {
+            "stage": "5",
+            "frame": "776",
+            "point_hits": "2",
+            "point_max": "0.244133230132",
+            "segment_hits": "4",
+            "segment_max": "0.192949326623",
+            "source_wrists": "0.206521380416",
+            "target_wrists": "0.387804954579",
+            "wrist_active": "1"
+          },
+          "854": {
+            "stage": "5",
+            "frame": "854",
+            "point_hits": "2",
+            "point_max": "0.290054868257",
+            "segment_hits": "2",
+            "segment_max": "0.108204994622",
+            "source_wrists": "0.384927154471",
+            "target_wrists": "0.365611509799",
+            "wrist_active": "0"
+          },
+          "1609": {
+            "stage": "5",
+            "frame": "1609",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "1",
+            "segment_max": "0.0605141144837",
+            "source_wrists": "1.32558959649",
+            "target_wrists": "1.79489913411",
+            "wrist_active": "0"
+          }
+        }
+      },
+      "6": {
+        "frames": 1719,
+        "point_pair_violations": 190,
+        "frames_with_point_violations": 123,
+        "point_max_depth_pmx": 0.531011407206,
+        "segment_sample_pair_violations": 1137,
+        "segment_max_depth_pmx": 0.556361133319,
+        "wrist_trigger_frames": 13,
+        "active_wrist_gap_max_pmx": 0.520061888996,
+        "active_wrist_gap_mean_pmx": 0.41556704334353844,
+        "selected_frames": {
+          "167": {
+            "stage": "6",
+            "frame": "167",
+            "point_hits": "3",
+            "point_max": "0.19346047296",
+            "segment_hits": "4",
+            "segment_max": "0.218200759565",
+            "source_wrists": "0.226751030552",
+            "target_wrists": "0.322074231036",
+            "wrist_active": "1"
+          },
+          "258": {
+            "stage": "6",
+            "frame": "258",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "0",
+            "segment_max": "0",
+            "source_wrists": "1.21561042111",
+            "target_wrists": "0.741916710122",
+            "wrist_active": "0"
+          },
+          "264": {
+            "stage": "6",
+            "frame": "264",
+            "point_hits": "1",
+            "point_max": "0.0526505441686",
+            "segment_hits": "0",
+            "segment_max": "0",
+            "source_wrists": "0.811707676542",
+            "target_wrists": "0.319277151849",
+            "wrist_active": "0"
+          },
+          "313": {
+            "stage": "6",
+            "frame": "313",
+            "point_hits": "1",
+            "point_max": "0.10171286293",
+            "segment_hits": "5",
+            "segment_max": "0.556361133319",
+            "source_wrists": "6.42184459273",
+            "target_wrists": "6.56795312148",
+            "wrist_active": "0"
+          },
+          "776": {
+            "stage": "6",
+            "frame": "776",
+            "point_hits": "2",
+            "point_max": "0.244133230132",
+            "segment_hits": "4",
+            "segment_max": "0.192949326623",
+            "source_wrists": "0.206521380416",
+            "target_wrists": "0.387804954579",
+            "wrist_active": "1"
+          },
+          "854": {
+            "stage": "6",
+            "frame": "854",
+            "point_hits": "2",
+            "point_max": "0.290054868257",
+            "segment_hits": "2",
+            "segment_max": "0.108204994622",
+            "source_wrists": "0.384927154471",
+            "target_wrists": "0.365611509799",
+            "wrist_active": "0"
+          },
+          "1609": {
+            "stage": "6",
+            "frame": "1609",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "1",
+            "segment_max": "0.0605141144837",
+            "source_wrists": "1.32558959649",
+            "target_wrists": "1.79489913411",
+            "wrist_active": "0"
+          }
+        }
+      }
+    },
+    "distance06": {
+      "4": {
+        "frames": 1719,
+        "point_pair_violations": 190,
+        "frames_with_point_violations": 123,
+        "point_max_depth_pmx": 0.531011407206,
+        "segment_sample_pair_violations": 1137,
+        "segment_max_depth_pmx": 0.556361133319,
+        "wrist_trigger_frames": 70,
+        "active_wrist_gap_max_pmx": 1.56316067236,
+        "active_wrist_gap_mean_pmx": 0.6188826311964729,
+        "selected_frames": {
+          "167": {
+            "stage": "4",
+            "frame": "167",
+            "point_hits": "3",
+            "point_max": "0.19346047296",
+            "segment_hits": "4",
+            "segment_max": "0.218200759565",
+            "source_wrists": "0.226751030552",
+            "target_wrists": "0.322074231036",
+            "wrist_active": "1"
+          },
+          "258": {
+            "stage": "4",
+            "frame": "258",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "0",
+            "segment_max": "0",
+            "source_wrists": "1.21561042111",
+            "target_wrists": "0.741916710122",
+            "wrist_active": "0"
+          },
+          "264": {
+            "stage": "4",
+            "frame": "264",
+            "point_hits": "1",
+            "point_max": "0.0526505441686",
+            "segment_hits": "0",
+            "segment_max": "0",
+            "source_wrists": "0.811707676542",
+            "target_wrists": "0.319277151849",
+            "wrist_active": "0"
+          },
+          "313": {
+            "stage": "4",
+            "frame": "313",
+            "point_hits": "1",
+            "point_max": "0.10171286293",
+            "segment_hits": "5",
+            "segment_max": "0.556361133319",
+            "source_wrists": "6.42184459273",
+            "target_wrists": "6.56795312148",
+            "wrist_active": "0"
+          },
+          "776": {
+            "stage": "4",
+            "frame": "776",
+            "point_hits": "2",
+            "point_max": "0.244133230132",
+            "segment_hits": "4",
+            "segment_max": "0.192949326623",
+            "source_wrists": "0.206521380416",
+            "target_wrists": "0.387804954579",
+            "wrist_active": "1"
+          },
+          "854": {
+            "stage": "4",
+            "frame": "854",
+            "point_hits": "2",
+            "point_max": "0.290054868257",
+            "segment_hits": "2",
+            "segment_max": "0.108204994622",
+            "source_wrists": "0.384927154471",
+            "target_wrists": "0.365611509799",
+            "wrist_active": "1"
+          },
+          "1609": {
+            "stage": "4",
+            "frame": "1609",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "1",
+            "segment_max": "0.0605141144837",
+            "source_wrists": "1.32558959649",
+            "target_wrists": "1.79489913411",
+            "wrist_active": "0"
+          }
+        }
+      },
+      "5": {
+        "frames": 1719,
+        "point_pair_violations": 5,
+        "frames_with_point_violations": 5,
+        "point_max_depth_pmx": 0.0493838647992,
+        "segment_sample_pair_violations": 1113,
+        "segment_max_depth_pmx": 0.50767566171,
+        "wrist_trigger_frames": 70,
+        "active_wrist_gap_max_pmx": 1.56316067236,
+        "active_wrist_gap_mean_pmx": 0.7435622741646428,
+        "selected_frames": {
+          "167": {
+            "stage": "5",
+            "frame": "167",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "3",
+            "segment_max": "0.117865800341",
+            "source_wrists": "0.226751030552",
+            "target_wrists": "0.462342361075",
+            "wrist_active": "1"
+          },
+          "258": {
+            "stage": "5",
+            "frame": "258",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "0",
+            "segment_max": "0",
+            "source_wrists": "1.21561042111",
+            "target_wrists": "0.741916710122",
+            "wrist_active": "0"
+          },
+          "264": {
+            "stage": "5",
+            "frame": "264",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "0",
+            "segment_max": "0",
+            "source_wrists": "0.811707676542",
+            "target_wrists": "0.356046906752",
+            "wrist_active": "0"
+          },
+          "313": {
+            "stage": "5",
+            "frame": "313",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "5",
+            "segment_max": "0.50767566171",
+            "source_wrists": "6.42184459273",
+            "target_wrists": "6.63721758049",
+            "wrist_active": "0"
+          },
+          "776": {
+            "stage": "5",
+            "frame": "776",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "5",
+            "segment_max": "0.163746363053",
+            "source_wrists": "0.206521380416",
+            "target_wrists": "0.589017163444",
+            "wrist_active": "1"
+          },
+          "854": {
+            "stage": "5",
+            "frame": "854",
+            "point_hits": "1",
+            "point_max": "0.0193814676138",
+            "segment_hits": "0",
+            "segment_max": "0",
+            "source_wrists": "0.384927154471",
+            "target_wrists": "0.707886800694",
+            "wrist_active": "1"
+          },
+          "1609": {
+            "stage": "5",
+            "frame": "1609",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "1",
+            "segment_max": "0.0605141144837",
+            "source_wrists": "1.32558959649",
+            "target_wrists": "1.79489913411",
+            "wrist_active": "0"
+          }
+        }
+      },
+      "6": {
+        "frames": 1719,
+        "point_pair_violations": 3,
+        "frames_with_point_violations": 3,
+        "point_max_depth_pmx": 0.0439674781457,
+        "segment_sample_pair_violations": 1003,
+        "segment_max_depth_pmx": 0.50767566171,
+        "wrist_trigger_frames": 70,
+        "active_wrist_gap_max_pmx": 0.615653915633,
+        "active_wrist_gap_mean_pmx": 0.4313166800557143,
+        "selected_frames": {
+          "167": {
+            "stage": "6",
+            "frame": "167",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "0",
+            "segment_max": "0",
+            "source_wrists": "0.226751030552",
+            "target_wrists": "0.537158554141",
+            "wrist_active": "1"
+          },
+          "258": {
+            "stage": "6",
+            "frame": "258",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "0",
+            "segment_max": "0",
+            "source_wrists": "1.21561042111",
+            "target_wrists": "0.741916710122",
+            "wrist_active": "0"
+          },
+          "264": {
+            "stage": "6",
+            "frame": "264",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "0",
+            "segment_max": "0",
+            "source_wrists": "0.811707676542",
+            "target_wrists": "0.356046906752",
+            "wrist_active": "0"
+          },
+          "313": {
+            "stage": "6",
+            "frame": "313",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "5",
+            "segment_max": "0.50767566171",
+            "source_wrists": "6.42184459273",
+            "target_wrists": "6.63721758049",
+            "wrist_active": "0"
+          },
+          "776": {
+            "stage": "6",
+            "frame": "776",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "2",
+            "segment_max": "0.0593574111658",
+            "source_wrists": "0.206521380416",
+            "target_wrists": "0.481570581961",
+            "wrist_active": "1"
+          },
+          "854": {
+            "stage": "6",
+            "frame": "854",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "1",
+            "segment_max": "0.0132506140298",
+            "source_wrists": "0.384927154471",
+            "target_wrists": "0.582975668042",
+            "wrist_active": "1"
+          },
+          "1609": {
+            "stage": "6",
+            "frame": "1609",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "1",
+            "segment_max": "0.0605141144837",
+            "source_wrists": "1.32558959649",
+            "target_wrists": "1.79489913411",
+            "wrist_active": "0"
+          }
+        }
+      }
+    },
+    "iterations160": {
+      "4": {
+        "frames": 1719,
+        "point_pair_violations": 190,
+        "frames_with_point_violations": 123,
+        "point_max_depth_pmx": 0.531011407206,
+        "segment_sample_pair_violations": 1137,
+        "segment_max_depth_pmx": 0.556361133319,
+        "wrist_trigger_frames": 13,
+        "active_wrist_gap_max_pmx": 0.520061888996,
+        "active_wrist_gap_mean_pmx": 0.41556704334353844,
+        "selected_frames": {
+          "167": {
+            "stage": "4",
+            "frame": "167",
+            "point_hits": "3",
+            "point_max": "0.19346047296",
+            "segment_hits": "4",
+            "segment_max": "0.218200759565",
+            "source_wrists": "0.226751030552",
+            "target_wrists": "0.322074231036",
+            "wrist_active": "1"
+          },
+          "258": {
+            "stage": "4",
+            "frame": "258",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "0",
+            "segment_max": "0",
+            "source_wrists": "1.21561042111",
+            "target_wrists": "0.741916710122",
+            "wrist_active": "0"
+          },
+          "264": {
+            "stage": "4",
+            "frame": "264",
+            "point_hits": "1",
+            "point_max": "0.0526505441686",
+            "segment_hits": "0",
+            "segment_max": "0",
+            "source_wrists": "0.811707676542",
+            "target_wrists": "0.319277151849",
+            "wrist_active": "0"
+          },
+          "313": {
+            "stage": "4",
+            "frame": "313",
+            "point_hits": "1",
+            "point_max": "0.10171286293",
+            "segment_hits": "5",
+            "segment_max": "0.556361133319",
+            "source_wrists": "6.42184459273",
+            "target_wrists": "6.56795312148",
+            "wrist_active": "0"
+          },
+          "776": {
+            "stage": "4",
+            "frame": "776",
+            "point_hits": "2",
+            "point_max": "0.244133230132",
+            "segment_hits": "4",
+            "segment_max": "0.192949326623",
+            "source_wrists": "0.206521380416",
+            "target_wrists": "0.387804954579",
+            "wrist_active": "1"
+          },
+          "854": {
+            "stage": "4",
+            "frame": "854",
+            "point_hits": "2",
+            "point_max": "0.290054868257",
+            "segment_hits": "2",
+            "segment_max": "0.108204994622",
+            "source_wrists": "0.384927154471",
+            "target_wrists": "0.365611509799",
+            "wrist_active": "0"
+          },
+          "1609": {
+            "stage": "4",
+            "frame": "1609",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "1",
+            "segment_max": "0.0605141144837",
+            "source_wrists": "1.32558959649",
+            "target_wrists": "1.79489913411",
+            "wrist_active": "0"
+          }
+        }
+      },
+      "5": {
+        "frames": 1719,
+        "point_pair_violations": 4,
+        "frames_with_point_violations": 4,
+        "point_max_depth_pmx": 0.0493838647992,
+        "segment_sample_pair_violations": 1113,
+        "segment_max_depth_pmx": 0.50767566171,
+        "wrist_trigger_frames": 13,
+        "active_wrist_gap_max_pmx": 0.790117118921,
+        "active_wrist_gap_mean_pmx": 0.7040321049749231,
+        "selected_frames": {
+          "167": {
+            "stage": "5",
+            "frame": "167",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "3",
+            "segment_max": "0.117865800341",
+            "source_wrists": "0.226751030552",
+            "target_wrists": "0.462342361075",
+            "wrist_active": "1"
+          },
+          "258": {
+            "stage": "5",
+            "frame": "258",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "0",
+            "segment_max": "0",
+            "source_wrists": "1.21561042111",
+            "target_wrists": "0.741916710122",
+            "wrist_active": "0"
+          },
+          "264": {
+            "stage": "5",
+            "frame": "264",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "0",
+            "segment_max": "0",
+            "source_wrists": "0.811707676542",
+            "target_wrists": "0.356046906752",
+            "wrist_active": "0"
+          },
+          "313": {
+            "stage": "5",
+            "frame": "313",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "5",
+            "segment_max": "0.50767566171",
+            "source_wrists": "6.42184459273",
+            "target_wrists": "6.63721758049",
+            "wrist_active": "0"
+          },
+          "776": {
+            "stage": "5",
+            "frame": "776",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "5",
+            "segment_max": "0.163746363053",
+            "source_wrists": "0.206521380416",
+            "target_wrists": "0.589017163444",
+            "wrist_active": "1"
+          },
+          "854": {
+            "stage": "5",
+            "frame": "854",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "0",
+            "segment_max": "0",
+            "source_wrists": "0.384927154471",
+            "target_wrists": "0.684051687146",
+            "wrist_active": "0"
+          },
+          "1609": {
+            "stage": "5",
+            "frame": "1609",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "1",
+            "segment_max": "0.0605141144837",
+            "source_wrists": "1.32558959649",
+            "target_wrists": "1.79489913411",
+            "wrist_active": "0"
+          }
+        }
+      },
+      "6": {
+        "frames": 1719,
+        "point_pair_violations": 1,
+        "frames_with_point_violations": 1,
+        "point_max_depth_pmx": 0.0141141779319,
+        "segment_sample_pair_violations": 1089,
+        "segment_max_depth_pmx": 0.50767566171,
+        "wrist_trigger_frames": 13,
+        "active_wrist_gap_max_pmx": 0.537158554141,
+        "active_wrist_gap_mean_pmx": 0.3686074890242308,
+        "selected_frames": {
+          "167": {
+            "stage": "6",
+            "frame": "167",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "0",
+            "segment_max": "0",
+            "source_wrists": "0.226751030552",
+            "target_wrists": "0.537158554141",
+            "wrist_active": "1"
+          },
+          "258": {
+            "stage": "6",
+            "frame": "258",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "0",
+            "segment_max": "0",
+            "source_wrists": "1.21561042111",
+            "target_wrists": "0.741916710122",
+            "wrist_active": "0"
+          },
+          "264": {
+            "stage": "6",
+            "frame": "264",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "0",
+            "segment_max": "0",
+            "source_wrists": "0.811707676542",
+            "target_wrists": "0.356046906752",
+            "wrist_active": "0"
+          },
+          "313": {
+            "stage": "6",
+            "frame": "313",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "5",
+            "segment_max": "0.50767566171",
+            "source_wrists": "6.42184459273",
+            "target_wrists": "6.63721758049",
+            "wrist_active": "0"
+          },
+          "776": {
+            "stage": "6",
+            "frame": "776",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "2",
+            "segment_max": "0.0593574111658",
+            "source_wrists": "0.206521380416",
+            "target_wrists": "0.481570581961",
+            "wrist_active": "1"
+          },
+          "854": {
+            "stage": "6",
+            "frame": "854",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "0",
+            "segment_max": "0",
+            "source_wrists": "0.384927154471",
+            "target_wrists": "0.684051687146",
+            "wrist_active": "0"
+          },
+          "1609": {
+            "stage": "6",
+            "frame": "1609",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "1",
+            "segment_max": "0.0605141144837",
+            "source_wrists": "1.32558959649",
+            "target_wrists": "1.79489913411",
+            "wrist_active": "0"
+          }
+        }
+      }
+    },
+    "wrist": {
+      "4": {
+        "frames": 1719,
+        "point_pair_violations": 190,
+        "frames_with_point_violations": 123,
+        "point_max_depth_pmx": 0.531011407206,
+        "segment_sample_pair_violations": 1137,
+        "segment_max_depth_pmx": 0.556361133319,
+        "wrist_trigger_frames": 13,
+        "active_wrist_gap_max_pmx": 0.520061888996,
+        "active_wrist_gap_mean_pmx": 0.41556704334353844,
+        "selected_frames": {
+          "167": {
+            "stage": "4",
+            "frame": "167",
+            "point_hits": "3",
+            "point_max": "0.19346047296",
+            "segment_hits": "4",
+            "segment_max": "0.218200759565",
+            "source_wrists": "0.226751030552",
+            "target_wrists": "0.322074231036",
+            "wrist_active": "1"
+          },
+          "258": {
+            "stage": "4",
+            "frame": "258",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "0",
+            "segment_max": "0",
+            "source_wrists": "1.21561042111",
+            "target_wrists": "0.741916710122",
+            "wrist_active": "0"
+          },
+          "264": {
+            "stage": "4",
+            "frame": "264",
+            "point_hits": "1",
+            "point_max": "0.0526505441686",
+            "segment_hits": "0",
+            "segment_max": "0",
+            "source_wrists": "0.811707676542",
+            "target_wrists": "0.319277151849",
+            "wrist_active": "0"
+          },
+          "313": {
+            "stage": "4",
+            "frame": "313",
+            "point_hits": "1",
+            "point_max": "0.10171286293",
+            "segment_hits": "5",
+            "segment_max": "0.556361133319",
+            "source_wrists": "6.42184459273",
+            "target_wrists": "6.56795312148",
+            "wrist_active": "0"
+          },
+          "776": {
+            "stage": "4",
+            "frame": "776",
+            "point_hits": "2",
+            "point_max": "0.244133230132",
+            "segment_hits": "4",
+            "segment_max": "0.192949326623",
+            "source_wrists": "0.206521380416",
+            "target_wrists": "0.387804954579",
+            "wrist_active": "1"
+          },
+          "854": {
+            "stage": "4",
+            "frame": "854",
+            "point_hits": "2",
+            "point_max": "0.290054868257",
+            "segment_hits": "2",
+            "segment_max": "0.108204994622",
+            "source_wrists": "0.384927154471",
+            "target_wrists": "0.365611509799",
+            "wrist_active": "0"
+          },
+          "1609": {
+            "stage": "4",
+            "frame": "1609",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "1",
+            "segment_max": "0.0605141144837",
+            "source_wrists": "1.32558959649",
+            "target_wrists": "1.79489913411",
+            "wrist_active": "0"
+          }
+        }
+      },
+      "5": {
+        "frames": 1719,
+        "point_pair_violations": 190,
+        "frames_with_point_violations": 123,
+        "point_max_depth_pmx": 0.531011407206,
+        "segment_sample_pair_violations": 1137,
+        "segment_max_depth_pmx": 0.556361133319,
+        "wrist_trigger_frames": 13,
+        "active_wrist_gap_max_pmx": 0.520061888996,
+        "active_wrist_gap_mean_pmx": 0.41556704334353844,
+        "selected_frames": {
+          "167": {
+            "stage": "5",
+            "frame": "167",
+            "point_hits": "3",
+            "point_max": "0.19346047296",
+            "segment_hits": "4",
+            "segment_max": "0.218200759565",
+            "source_wrists": "0.226751030552",
+            "target_wrists": "0.322074231036",
+            "wrist_active": "1"
+          },
+          "258": {
+            "stage": "5",
+            "frame": "258",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "0",
+            "segment_max": "0",
+            "source_wrists": "1.21561042111",
+            "target_wrists": "0.741916710122",
+            "wrist_active": "0"
+          },
+          "264": {
+            "stage": "5",
+            "frame": "264",
+            "point_hits": "1",
+            "point_max": "0.0526505441686",
+            "segment_hits": "0",
+            "segment_max": "0",
+            "source_wrists": "0.811707676542",
+            "target_wrists": "0.319277151849",
+            "wrist_active": "0"
+          },
+          "313": {
+            "stage": "5",
+            "frame": "313",
+            "point_hits": "1",
+            "point_max": "0.10171286293",
+            "segment_hits": "5",
+            "segment_max": "0.556361133319",
+            "source_wrists": "6.42184459273",
+            "target_wrists": "6.56795312148",
+            "wrist_active": "0"
+          },
+          "776": {
+            "stage": "5",
+            "frame": "776",
+            "point_hits": "2",
+            "point_max": "0.244133230132",
+            "segment_hits": "4",
+            "segment_max": "0.192949326623",
+            "source_wrists": "0.206521380416",
+            "target_wrists": "0.387804954579",
+            "wrist_active": "1"
+          },
+          "854": {
+            "stage": "5",
+            "frame": "854",
+            "point_hits": "2",
+            "point_max": "0.290054868257",
+            "segment_hits": "2",
+            "segment_max": "0.108204994622",
+            "source_wrists": "0.384927154471",
+            "target_wrists": "0.365611509799",
+            "wrist_active": "0"
+          },
+          "1609": {
+            "stage": "5",
+            "frame": "1609",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "1",
+            "segment_max": "0.0605141144837",
+            "source_wrists": "1.32558959649",
+            "target_wrists": "1.79489913411",
+            "wrist_active": "0"
+          }
+        }
+      },
+      "6": {
+        "frames": 1719,
+        "point_pair_violations": 212,
+        "frames_with_point_violations": 123,
+        "point_max_depth_pmx": 0.531011407206,
+        "segment_sample_pair_violations": 1118,
+        "segment_max_depth_pmx": 0.556361133319,
+        "wrist_trigger_frames": 13,
+        "active_wrist_gap_max_pmx": 0.0052673754746,
+        "active_wrist_gap_mean_pmx": 0.0014102706223134693,
+        "selected_frames": {
+          "167": {
+            "stage": "6",
+            "frame": "167",
+            "point_hits": "4",
+            "point_max": "0.232995205661",
+            "segment_hits": "3",
+            "segment_max": "0.16059693122",
+            "source_wrists": "0.226751030552",
+            "target_wrists": "0.0052673754746",
+            "wrist_active": "1"
+          },
+          "258": {
+            "stage": "6",
+            "frame": "258",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "0",
+            "segment_max": "0",
+            "source_wrists": "1.21561042111",
+            "target_wrists": "0.741916710122",
+            "wrist_active": "0"
+          },
+          "264": {
+            "stage": "6",
+            "frame": "264",
+            "point_hits": "1",
+            "point_max": "0.0526505441686",
+            "segment_hits": "0",
+            "segment_max": "0",
+            "source_wrists": "0.811707676542",
+            "target_wrists": "0.319277151849",
+            "wrist_active": "0"
+          },
+          "313": {
+            "stage": "6",
+            "frame": "313",
+            "point_hits": "1",
+            "point_max": "0.10171286293",
+            "segment_hits": "5",
+            "segment_max": "0.556361133319",
+            "source_wrists": "6.42184459273",
+            "target_wrists": "6.56795312148",
+            "wrist_active": "0"
+          },
+          "776": {
+            "stage": "6",
+            "frame": "776",
+            "point_hits": "4",
+            "point_max": "0.236656916616",
+            "segment_hits": "0",
+            "segment_max": "0",
+            "source_wrists": "0.206521380416",
+            "target_wrists": "6.75646265518e-05",
+            "wrist_active": "1"
+          },
+          "854": {
+            "stage": "6",
+            "frame": "854",
+            "point_hits": "2",
+            "point_max": "0.290054868257",
+            "segment_hits": "2",
+            "segment_max": "0.108204994622",
+            "source_wrists": "0.384927154471",
+            "target_wrists": "0.365611509799",
+            "wrist_active": "0"
+          },
+          "1609": {
+            "stage": "6",
+            "frame": "1609",
+            "point_hits": "0",
+            "point_max": "0",
+            "segment_hits": "1",
+            "segment_max": "0.0605141144837",
+            "source_wrists": "1.32558959649",
+            "target_wrists": "1.79489913411",
+            "wrist_active": "0"
+          }
+        }
+      }
+    }
+  }
+}

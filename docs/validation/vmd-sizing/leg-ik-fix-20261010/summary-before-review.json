@@ -1,0 +1,52 @@
+{
+  "before": {
+    "capsule_pair_frame_hits": 332,
+    "affected_frames": 141,
+    "maximum_penetration_pmx": 1.19656
+  },
+  "after": {
+    "capsule_pair_frame_hits": 175,
+    "affected_frames": 107,
+    "maximum_penetration_pmx": 1.19656
+  },
+  "max_depth_increase_pmx": 0.0,
+  "examples": {
+    "258": {
+      "before": 1.03573,
+      "after": 0.188789
+    },
+    "589": {
+      "before": 1.19656,
+      "after": 1.19656
+    },
+    "593": {
+      "before": 1.18746,
+      "after": 0.356294
+    }
+  },
+  "max_foot_translation_change_pmx": 0.7509737348479949,
+  "max_foot_correction_step_pmx": 0.28955890341345675,
+  "max_foot_height_change_pmx": 0.273237943649292,
+  "unsmoothed_prototype_max_correction_step_pmx": 1.503172496949523,
+  "finger_quaternions_unchanged": true,
+  "final_audit_matches_native_import": true,
+  "scene_scale": 8.5,
+  "frames": 1719,
+  "tolerance_pmx": 0.01,
+  "collision_margin_pmx": 0.05,
+  "source_model_author_confirmed": false,
+  "native_leg_pose_max_error_scene": 0.05572583511092278,
+  "old_fk_pose_max_error_scene": 100.59959955564777,
+  "native_sample_count": 80,
+  "plugin_ui_mcp_loaded_validation": false,
+  "candidate_sha256": "d8045709513b18df6e37a30df6b165827640e60b0bc988b235b52c78638a9661",
+  "all_arm_samples": {
+    "wrist_elbow_hits": 5,
+    "segment_sample_hits": 1108
+  },
+  "legs_arm_samples": {
+    "wrist_elbow_hits": 5,
+    "segment_sample_hits": 1108
+  },
+  "max_foot_height_change_note": "Final-stage difference includes rejected floor snaps; the leg avoidance pass itself only changes world XZ."
+}

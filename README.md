@@ -60,6 +60,33 @@ Captured in Cinema 4D 2026.4.0 on 2026-10-06, these screenshots show the current
 - **Export motion**: Save bone animation, morph animation and model information as VMD, with rotation-curve and bake options.
 - **Pose**: Import a VPD pose, or export the selected MMD model's pose at the current frame as VPD.
 
+#### VMD motion adaptation · Body proportions and stage previews
+
+Adapt a VMD made for one character to another. Source and target PMX proportions drive movement correction, with optional stance, twist, arm avoidance, wrist/finger contact, floor contact and leg self-collision correction. Character queues and camera fitting are supported. The reusable C++ core lives in [libMMD](https://github.com/AiMiDi/libMMD) under `libmmd::sizing`, without a C4D SDK or Python runtime dependency.
+
+1. Find **MMD Tools - VMD Motion Sizing** in the Extensions menu.
+2. Select the **source PMX used to author the motion**, then drag an imported **target MMD model manager** from the scene into the model field.
+3. Select a VMD file or an existing VMD animation slot on the target model. Use the same import scale for the model and motion; this example uses **8.5**.
+4. Check scale and offset results first, then enable constraints as needed. Wrist/finger contact preserves the relative arrangement of nearby source hand landmarks; it does not generate grips or finger curls. Leg self-collision avoidance makes bounded adjustments to foot IK goals.
+5. Calculate and watch progress in the C4D status bar; long operations can be cancelled. Select stages and scrub the timeline to compare original, scale, offset, stance, twist, avoidance and contact results. Side-by-side/overlay previews and automatic refresh after parameter changes are available.
+6. Inspect residuals and important poses, then **apply as a new animation slot** or export VMD. The original slot is retained.
+
+Afu 2.0 with Stay Tonight Heaven Lee Ver., captured in the native C4D viewport with physics disabled.
+
+**Legs and overall pose: the original, unadapted VMD on the left and the complete adaptation result on the right.** Both use the same import scale, animation frame and camera view.
+
+![Leg pose comparison: original VMD on the left, complete adaptation on the right](docs/images/motion-sizing-comparison.png)
+
+**Wrist contact: the previous contact solver on the left and the correction that preserves the hand pose on the right.** This image shows the change in handling overlapping hands.
+
+![Wrist contact comparison: previous contact result on the left, corrected result on the right](docs/images/motion-sizing-wrist-comparison.png)
+
+**Current limits:** Avoidance uses standard bone chains and rigid shapes. It does not guarantee mesh-level separation, full physics simulation or foot locking. Deep crossings and conflicting goals may still need manual adjustment; inspect important poses in the stage preview.
+
+**Reference project:** Body-proportion and movement compensation adapts formulae from [miu200521358/vmd_sizing](https://github.com/miu200521358/vmd_sizing), revision `e5c30358696f688c96544e3af33ea9871961487d`. Its [MIT license and copyright notice](res/S24_up/licenses/vmd_sizing-MIT.txt) are retained. Advanced constraints are this project's C++ implementation; full feature or numerical equivalence with the Python tool is not claimed.
+
+[Usage and solver limits](docs/dev/vmd-sizing.md) · [MCP interface](docs/dev/motion-sizing-mcp.md) · [Real-asset validation](docs/validation/vmd-sizing/leg-ik-fix-20261010/README.md)
+
 #### Model · PMX import and export
 
 | Model import | Model export |
@@ -79,7 +106,25 @@ Windows development: `cmake --preset dev-windows` then `cmake --build --preset w
 
 ## Changelog
 
-The latest three releases are listed here. See the [complete changelog](CHANGELOG.md) for older versions and intermediate build tags.
+The three most recent version entries are shown below. See the [complete changelog](CHANGELOG.md) for earlier changes.
+
+### 0.9.3.4 · Motion pose preservation and IK correction (2026-10-10)
+
+1. Fix destructive wrist/finger contact adjustments while preserving finger curls, palm orientation and source contact relationships.
+2. Reuse playback IK for offline poses, including PMX link limits, iteration counts and VMD IK switches; skip driven channels that cannot accept direct animation.
+3. Add optional leg self-collision avoidance with foot IK target protection, temporal filtering and rollback for conflicting floor constraints.
+4. Add C4D status-bar progress and cancellation feedback for long calculations, with shared MCP and panel options.
+5. Document motion adaptation, wrist/leg effect comparisons and the reference project.
+
+Inspect complex contacts in the stage preview. [Validation and known limits](docs/validation/vmd-sizing/leg-ik-fix-20261010/README.md)
+
+### 0.9.3.3 · VMD motion adaptation (2026-10-10)
+
+1. Add staged VMD motion adaptation with body-scale and movement offsets, stance and twist adjustment, rigid-shape avoidance, contact constraints, multi-character processing and camera fitting.
+2. Add a localized C4D panel with scene-model selection, existing animation-slot input, before/after stage previews, queued characters and apply/export controls.
+3. Add typed production MCP motion-sizing tools with asynchronous jobs, cancellation, preview, apply/export and shared panel state.
+4. Move reusable calculation into libMMD under `libmmd::sizing`, independent of the C4D SDK, with public APIs, regression fixtures and documented solver limits.
+5. Fix R20 source processing, R21 STL compatibility and pre-2026 LinkBox API support. Preserve SSE2 compilation for sizing to keep the validated numerical baseline.
 
 ### 0.9.3.2 · Controller placement and hover names (2026-10-09)
 
@@ -90,31 +135,6 @@ The latest three releases are listed here. See the [complete changelog](CHANGELO
 5. Avoid transient GitLab Eigen checkout failures in CI by using a mirror of the same pinned commit and bounded checkout retries.
 
 [Changes since 0.9.3.0](https://github.com/AiMiDi/C4D_MMD_Tool/compare/v0.9.3.0...v0.9.3.2) · [Validation scope](docs/dev/controllers-eye-hover-20261009.md)
-
-### 0.9.3.0 · MMD controller hierarchy and silhouettes (2026-10-09)
-
-1. Support native PSR position/rotation constraints on imported MMD bones, including IK target motion and direct FK ownership. Stabilize repeated evaluation and retain registered FK poses.
-2. Add leg, knee, ankle, toe, foot IK and IK-parent controllers, plus root, center, groove, waist, torso, neck and head controls.
-3. Give shoulders, wrists, eyes, central bones and IK goals distinct silhouettes and consistent left/right colors. Reduce auxiliary/twist controls and exclude them from Primary display.
-4. Add model-level controller generation, visible-control selection, Primary/All/Hidden display, proportional sizing and continuous outlines through meshes.
-5. Preserve controller identities, transforms, animation tracks, links and bind poses when refreshing, changing size or saving and reopening.
-
-[Changes since 0.9.2.2](https://github.com/AiMiDi/C4D_MMD_Tool/compare/v0.9.2.2...v0.9.3.0) · [Controller acceptance](docs/dev/controllers-acceptance-20261008.md)
-
-### 0.9.2.2 · Architecture, Morph and materials (2026-10-08)
-
-Changes since `v0.9.1.20`, grouped by module:
-
-1. **Model runtime and bones:** Split IK/physics rebuilding, frame evaluation, Morph evaluation and material conversion into dedicated modules. Clarify EDIT / ANIM bind-pose transitions and rebuild after reopening, cloning and animation-slot changes. Synchronize hierarchy/index changes, cache layered execution plans and restore stored bone display settings.
-2. **Motion and camera:** Complete VMD append, replace, merge and channel options, with per-slot Morph animation, IK switches and visibility. Improve baked export, scale conversion and source-state restoration. Correct camera vertical field of view and unit conversion, migrate legacy tracks and fix export success reporting and temporary-object cleanup.
-3. **Morph and persistence:** Classify UV/Additional UV Morphs separately and preserve their PMX offsets. Persist impulse offsets and expression panels. Consolidate Group/Flip expansion and mixed preview. Repair stale mesh-tag references and derived-cache serialization so Undo/Redo followed by immediate save/reopen can rebuild safely.
-4. **Material Morph:** Add versioned Standard shader and fixed Redshift node bindings. Keep texture Multiply/Add RGBA factors separate, evaluate them after sampling and separate factor Alpha from image opacity. Add mixed preview, reset, support diagnostics, explicit upgrade/repair and independent material copies, with transactional Undo/Redo and ownership checks.
-5. **Standard and Redshift materials:** Add MMD-style RS Toon conversion using native Toon/Contour nodes, including main-texture transparency, Toon fallback, stylized specular, outlines and Sphere Multiply/Add. Improve Standard Sphere rendering and ordinary RS specular color/Power conversion and reverse synchronization. Preserve user connections and sampler color-space choices.
-6. **PMX export:** Apply length scaling consistently, enforce PMX 2.0/2.1 softbody serialization boundaries and improve write-failure cleanup while preserving source-scene state.
-7. **Production MCP:** Add 16 typed tools and a stdio adapter for inspection, PMX/VMD import/export, animation slots, modes, physics, Morphs and frame evaluation, including `redshift_toon` import. Host integration requires Cinema 4D 2026.4 or later. Windows acceptance includes real operations, timeout recovery and host restart; see the [acceptance record](docs/dev/mcp-acceptance-20261008.md).
-8. **Build, packaging and documentation:** Share source, resources and CMake setup across SDKs, with explicit Debug/Release/test presets and real runtime resource copies. Package Windows x64 for R20–2026 and separate macOS Intel ZIPs by compatible C4D version. Include platform/architecture/version in artifact names, expand regression tooling and refresh development guides and feature screenshots.
-
-**Compatibility and limits:** RS Toon needs the required native Redshift nodes; unsupported hosts report the reason. Material Morph binding v1 requires an explicit upgrade to v2; older Toon graph revisions require explicit conversion. Toon lighting/specular and some outlines remain approximations; native MMD image equivalence is unverified. macOS/older-host runtime execution and full real-model physics replay remain unverified. Published macOS assets are Intel builds; Apple Silicon builds are CI validation only.
 
 ## Author
 

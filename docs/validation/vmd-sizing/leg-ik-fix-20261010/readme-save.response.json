@@ -1,0 +1,15 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\n  \"stdout\": \"{\\\"saved\\\": true, \\\"path\\\": \\\"C:/code/C4D_MMD_Tool/output/leg-ik-fix-20261010/motion-sizing-comparison.c4d\\\", \\\"frame\\\": 258, \\\"active_document\\\": \\\"motion-sizing-comparison.c4d\\\"}\\n\",\n  \"warnings\": [\n    \"RuntimeWarning: not undoable: the document changed and no undo step was registered, so Ctrl-Z will not bring it back and the next undo reverts whatever the user did before this call. Pass undo=true, then add_undo_change(node) before each change.\"\n  ]\n}"
+    }
+  ],
+  "structuredContent": {
+    "stdout": "{\"saved\": true, \"path\": \"C:/code/C4D_MMD_Tool/output/leg-ik-fix-20261010/motion-sizing-comparison.c4d\", \"frame\": 258, \"active_document\": \"motion-sizing-comparison.c4d\"}\n",
+    "warnings": [
+      "RuntimeWarning: not undoable: the document changed and no undo step was registered, so Ctrl-Z will not bring it back and the next undo reverts whatever the user did before this call. Pass undo=true, then add_undo_change(node) before each change."
+    ]
+  },
+  "isError": false
+}

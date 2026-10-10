@@ -1,0 +1,184 @@
+{
+  "frames": 1719,
+  "candidates_per_frame": 321,
+  "tolerance": 0.01,
+  "margin": 0.05,
+  "baseline": {
+    "max_penetration": 1.1965554292,
+    "affected_frames": 140,
+    "capsule_pair_frame_hits": 329
+  },
+  "production_guarded": {
+    "max_penetration": 1.13687787102,
+    "affected_frames": 116,
+    "capsule_pair_frame_hits": 245
+  },
+  "prototype": {
+    "max_penetration": 0.837456429915,
+    "affected_frames": 92,
+    "capsule_pair_frame_hits": 170
+  },
+  "max_depth_increase": 0.0,
+  "max_ik_error_increase": 0.009769430666999979,
+  "max_foot_displacement": 0.752697448731035,
+  "max_correction_step": 0.2483849836067045,
+  "max_correction_acceleration": 0.3064674265687886,
+  "frames_worse_than_production": 34,
+  "frames_better_than_production": 96,
+  "frames_changed": 138,
+  "min_admissible_candidates": 1,
+  "only_zero_candidate_frames": 1,
+  "source_ik_disabled_frames": 0,
+  "sum_squared_penetration_before": 92.14922208695933,
+  "sum_squared_penetration_production": 58.98375903995884,
+  "sum_squared_penetration_prototype": 13.256204146933019,
+  "examples": {
+    "258": {
+      "before": 1.0357262049,
+      "production": 0.943961883872,
+      "prototype": 0.276030210116,
+      "left_x": 0.663819885656,
+      "left_z": 0.354819121149,
+      "input_ik": [
+        0.102233378634,
+        0.087470444586
+      ],
+      "production_ik": [
+        0.086115911379,
+        0.0958233107795
+      ],
+      "prototype_ik": [
+        0.0905492092409,
+        0.0939531087213
+      ]
+    },
+    "588": {
+      "before": 1.12609713137,
+      "production": 0.737995410962,
+      "prototype": 0.309969828961,
+      "left_x": 4.60894260657e-17,
+      "left_z": 0.75269744873,
+      "input_ik": [
+        0.206000521057,
+        0.00341692150287
+      ],
+      "production_ik": [
+        0.137800664557,
+        0.00180801404842
+      ],
+      "prototype_ik": [
+        0.0733472041633,
+        0.00326367583593
+      ]
+    },
+    "589": {
+      "before": 1.1965554292,
+      "production": 1.06070756739,
+      "prototype": 0.574912016362,
+      "left_x": -0.146843987654,
+      "left_z": 0.738234578312,
+      "input_ik": [
+        0.203069035398,
+        0.00192091140525
+      ],
+      "production_ik": [
+        0.138137318913,
+        0.00230700311357
+      ],
+      "prototype_ik": [
+        0.0657489108376,
+        0.000586562735688
+      ]
+    },
+    "590": {
+      "before": 1.09734668324,
+      "production": 1.09734668324,
+      "prototype": 0.837456429915,
+      "left_x": -0.288044843213,
+      "left_z": 0.695401767056,
+      "input_ik": [
+        0.169392378726,
+        0.001699887223
+      ],
+      "production_ik": [
+        0.169392378726,
+        0.001699887223
+      ],
+      "prototype_ik": [
+        0.048893385585,
+        0.001618538891
+      ]
+    },
+    "591": {
+      "before": 1.07104191769,
+      "production": 1.07104191769,
+      "prototype": 0.817959905362,
+      "left_x": -0.288044843213,
+      "left_z": 0.695401767056,
+      "input_ik": [
+        0.15684754505,
+        0.00137456036622
+      ],
+      "production_ik": [
+        0.15684754505,
+        0.00137456036622
+      ],
+      "prototype_ik": [
+        0.044079762424,
+        0.00171822466229
+      ]
+    },
+    "592": {
+      "before": 1.13716106455,
+      "production": 1.13687787102,
+      "prototype": 0.671517406186,
+      "left_x": -0.354819121149,
+      "left_z": 0.663819885656,
+      "input_ik": [
+        0.171521076461,
+        0.00214332195287
+      ],
+      "production_ik": [
+        0.172847338276,
+        0.00128090752452
+      ],
+      "prototype_ik": [
+        0.0559100094306,
+        0.00107925465067
+      ]
+    },
+    "593": {
+      "before": 1.18745965463,
+      "production": 1.12510940971,
+      "prototype": 0.495162471931,
+      "left_x": -0.532237470179,
+      "left_z": 0.532237470179,
+      "input_ik": [
+        0.218182782724,
+        0.0018108655813
+      ],
+      "production_ik": [
+        0.227372330915,
+        0.00183941456649
+      ],
+      "prototype_ik": [
+        0.116288533332,
+        0.00149796628154
+      ]
+    }
+  },
+  "roundtrip": {
+    "capsule_pair_frame_hits": 170,
+    "affected_frames": 92,
+    "max_penetration": 0.837456429915,
+    "max_depth_increase": 0.0,
+    "max_ik_error_increase": 0.00976944514624,
+    "max_displacement": 0.752697831284,
+    "max_goal_height_change": 0.0,
+    "max_correction_step": 0.248384901781,
+    "max_knee_correction_step": 0.30147868019
+  },
+  "verification_scope": "1719 integer frames, leg pass before arm/floor contact; no native C4D or subframe verification",
+  "native_playback_verified": false,
+  "production_integrated": false
+}

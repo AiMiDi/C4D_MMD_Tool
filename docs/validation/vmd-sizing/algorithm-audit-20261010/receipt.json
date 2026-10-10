@@ -1,0 +1,38 @@
+{
+  "date": "2026-10-10",
+  "cmt_head": "591d9460",
+  "libmmd_revision": "e4aca1048af9216d65bea91ec734710e360bcdd0",
+  "baseline_source": "Clean git archive, seven sizing translation units rebuilt with MSVC 19.51 /arch:SSE2",
+  "io_library": "C:\\code\\C4D_MMD_Tool\\_build_msvc\\libmmd-sizing-standalone\\src\\Release\\libMMD.lib",
+  "io_library_sha256": "763e56784d4e472cb35ded254300c3a663739af27794a8e0970c2aa42000ae73",
+  "assets": [
+    {
+      "path": "C:/pmx/Sour式初音ミクVer.1.02_by_Sour暄/Black.pmx",
+      "sha256": "04fbfe59e4ea8ef1704b32bef71516b20afbd1e4abf1880dbc4f107e225a90ea"
+    },
+    {
+      "path": "C:/pmx/白银之城—阿芙2.0/阿芙2.0.pmx",
+      "sha256": "18d5e76cb248e46448dcc62d4f747f1331d2834df144d103b3c6d9e01e8c3ebd"
+    },
+    {
+      "path": "C:/vmd/Stay Tonight Heaven Lee Ver. 动作.vmd",
+      "sha256": "db7d3a542359c92d057d28be4b38e89c3368de1185bf23d1bbbd4d0e67eb187d"
+    }
+  ],
+  "source_model_author_match_verified": false,
+  "frames": [
+    0,
+    1718
+  ],
+  "fps": 30,
+  "host_scale": 8.5,
+  "collision_margin_pmx": 0.05,
+  "tolerance_pmx": 0.01,
+  "contact_distance_pmx": 0.3,
+  "default_iterations": 40,
+  "native_physics": false,
+  "published_plugin_sha256": "ed9fd3722b6b51f08752d9aebaf7b3acbede7867a8b5b184b1626a595c1cf960",
+  "candidate": "Isolated experiment: repeat Avoid after Contact; not merged, not a joint solver",
+  "metric_definition": "Counts are point-rigid-body pairs with positive projection depth greater than tolerance, not unique frames or mesh intersections. Segment samples at 25%, 50%, 75% of upper/lower arm; own-arm subtree excluded; only eligible static rigid bodies.",
+  "shared_project_changes_preserved": true
+}

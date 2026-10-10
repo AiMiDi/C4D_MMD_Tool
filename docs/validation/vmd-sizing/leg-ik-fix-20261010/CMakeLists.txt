@@ -1,0 +1,20 @@
+cmake_minimum_required(VERSION 3.20)
+project(LegIKAudit LANGUAGES CXX)
+set(CMAKE_CXX_STANDARD 17)
+get_filename_component(REPO "${CMAKE_CURRENT_SOURCE_DIR}/../../../.." ABSOLUTE)
+set(CORE_ROOT "${REPO}/dependency/libMMD" CACHE PATH "libMMD source matching the built library")
+set(LIBMMD_LIBRARY "${REPO}/_build_msvc/libmmd-sizing-standalone/src/Release/libMMD.lib"
+    CACHE FILEPATH "Built libMMD library")
+set(BULLET_LIBRARY_DIR "" CACHE PATH "Directory containing matching Bullet static libraries")
+add_executable(sizing_audit ik-audit.cpp)
+target_include_directories(sizing_audit PRIVATE
+    "${CORE_ROOT}/src" "${CORE_ROOT}/src/MotionSizing/Pose"
+    "${CORE_ROOT}/src/MotionSizing/Solvers" "${CORE_ROOT}/external/eigen")
+if(MSVC)
+    target_compile_options(sizing_audit PRIVATE /utf-8 /arch:SSE2 /EHsc /bigobj)
+endif()
+target_link_libraries(sizing_audit PRIVATE "${LIBMMD_LIBRARY}")
+foreach(component BulletDynamics BulletCollision LinearMath BulletSoftBody)
+    find_library(${component}_LIBRARY NAMES ${component} PATHS "${BULLET_LIBRARY_DIR}" NO_DEFAULT_PATH REQUIRED)
+    target_link_libraries(sizing_audit PRIVATE "${${component}_LIBRARY}")
+endforeach()

@@ -183,4 +183,13 @@ STRINGTABLE
 	IDS_SIZING_FILE_MOTION "Use VMD file above";
 	IDS_SIZING_LIVE_PREVIEW "Auto update model comparison after parameter changes";
 	IDS_SIZING_QUEUE_DRAFT "New character (add to queue)";
+	IDS_SIZING_PROGRESS_VALIDATION "Validating models and motion";
+	IDS_SIZING_PROGRESS_MOVEMENT "Movement scale and offsets";
+	IDS_SIZING_PROGRESS_READING "Reading source model / VMD";
+	IDS_SIZING_PROGRESS_SNAPSHOT "Preparing scene model snapshot";
+	IDS_SIZING_PROGRESS_PREVIEW "Building motion comparison preview";
+	IDS_SIZING_PROGRESS_APPLY "Applying motion result";
+	IDS_SIZING_PROGRESS_EXPORT "Exporting VMD result";
+	IDS_SIZING_PROGRESS_CANCELLING "Cancelling calculation...";
+	IDS_SIZING_LEG_AVOIDANCE "Leg self-collision avoidance";
 }

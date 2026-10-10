@@ -1,0 +1,34 @@
+{
+  "date": "2026-10-10",
+  "native_binary_sha256": "dc9a86356fcff933bf74a111db3af5f23b1435a50c57556d464abe210bdd7fd1",
+  "sdk2026_release_build": "passed",
+  "core_ctest": {
+    "passed": 2,
+    "includes": "progress callback identity, cancellation, exception, camera, exact key stability"
+  },
+  "mcp_tests": {
+    "passed": 42
+  },
+  "real_asset_vmd_byte_parity": {
+    "passed": 21,
+    "total": 21
+  },
+  "native_progress_states": [
+    "completed",
+    "cancelled",
+    "failed"
+  ],
+  "native_observations": 144,
+  "native_preview_export_release": "passed",
+  "native_apply": "blocked by target-binding-changed guard after preview; root/change ownership not established",
+  "native_status_bar_screenshot": false,
+  "r20_full_build": "blocked by pre-existing uncommitted PE sync const compatibility errors",
+  "r20_errors": [
+    "source/utils/pmx_mesh_provenance.hpp:48 GetPolygonCount const",
+    "source/utils/pmx_mesh_provenance.hpp:50 GetPolygonR const",
+    "source/module/tools/object/mmd_mesh_manager.cpp:2012 GetDown const"
+  ],
+  "comparison_scene": "C:\\code\\C4D_MMD_Tool\\output\\motion-sizing-audit-20261010\\avoidance-contact-comparison.c4d",
+  "comparison_reopened_frame": 258,
+  "release_published": false
+}

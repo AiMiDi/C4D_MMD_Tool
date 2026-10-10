@@ -4,6 +4,16 @@
 
 Entries for 0.9.1.x were reconstructed from tagged source changes and release dates. Intermediate build tags are grouped below; original entries through 0.4.6.1 are retained.
 
+### 0.9.3.4 · Motion pose preservation and IK correction (2026-10-10)
+
+1. Fix destructive wrist/finger contact adjustments while preserving finger curls, palm orientation and source contact relationships.
+2. Reuse playback IK for offline poses, including PMX link limits, iteration counts and VMD IK switches; skip driven channels that cannot accept direct animation.
+3. Add optional leg self-collision avoidance with foot IK target protection, temporal filtering and rollback for conflicting floor constraints.
+4. Add C4D status-bar progress and cancellation feedback for long calculations, with shared MCP and panel options.
+5. Document motion adaptation, wrist/leg effect comparisons and the reference project.
+
+Inspect complex contacts in the stage preview. [Validation and known limits](docs/validation/vmd-sizing/leg-ik-fix-20261010/README.md)
+
 ### 0.9.3.3 · VMD motion adaptation (2026-10-10)
 
 1. Add staged VMD motion adaptation with body-scale and movement offsets, stance and twist adjustment, rigid-shape avoidance, contact constraints, multi-character processing and camera fitting.

@@ -40,7 +40,7 @@ OPTION_IDS = {
     "multi_contact": 159, "contact_distance": 160, "floor_height": 161,
     "collision_margin": 162, "tolerance": 163, "iterations": 164,
     "max_bake_frames": 165, "max_baked_keys": 166, "max_diagnostics": 167,
-    "avoidance_bodies": 168, "model": 200,
+    "avoidance_bodies": 168, "leg_avoidance": 169, "model": 200,
 
 }
 
@@ -133,7 +133,7 @@ def output_schema(data: dict[str, Any], *, completed_required: tuple[str, ...] =
                 "message": {"type": "string"}, "operation_id": {"type": "string"},
                 "state": choice("queued", "running", "completed", "failed", "outcome_unknown"),
                 "host_session": {"type": "string"},
-                "data": {"type": "object", "properties": data, "additionalProperties": True},
+                "data": {"type": "object", "properties": dict(data), "additionalProperties": True},
                 "warnings": array({"type": "string"})},
                ("success", "code", "message", "operation_id", "state", "data", "warnings"))
     if completed_required or completed_alternatives:
@@ -153,10 +153,14 @@ def tool(name: str, description: str, schema: dict[str, Any],
          data: dict[str, Any], *, read_only: bool = False,
          completed_required: tuple[str, ...] | None = None,
          completed_alternatives: tuple[tuple[str, ...], ...] = ()) -> dict[str, Any]:
+    response = output_schema(data,
+        completed_required=tuple(data) if completed_required is None else completed_required,
+        completed_alternatives=completed_alternatives)
+    if "job_state" in data:
+        # Additive: older native binaries can still return jobs without progress.
+        response["properties"]["data"]["properties"]["progress"] = SIZING_PROGRESS
     return {"name": name, "description": description, "inputSchema": schema,
-            "outputSchema": output_schema(data,
-                completed_required=tuple(data) if completed_required is None else completed_required,
-                completed_alternatives=completed_alternatives),
+            "outputSchema": response,
             "annotations": {"readOnlyHint": read_only,
                             "destructiveHint": not read_only,
                             "idempotentHint": read_only, "openWorldHint": False}}
@@ -169,7 +173,7 @@ SIZING_OPTIONS = obj({
     "leg_offset": {"type": "number", "minimum": -10000, "maximum": 10000},
     **{name: {"type": "boolean"} for name in (
         "center_offsets", "leg_offsets", "stance", "twist", "avoidance", "wrist_contact",
-        "finger_contact", "floor_contact", "multi_contact")},
+        "finger_contact", "floor_contact", "multi_contact", "leg_avoidance")},
     "contact_distance": {"type": "number", "exclusiveMinimum": 0, "maximum": 10000},
     "floor_height": {"type": "number", "minimum": -10000, "maximum": 10000},
     "collision_margin": {"type": "number", "minimum": 0, "maximum": 10000},
@@ -185,6 +189,14 @@ SIZING_CHARACTER = obj({"model": HANDLE, "source_pmx": PATH, "path": PATH, "slot
 JOB_DATA = {"job": HANDLE, "job_state": choice("running", "cancelling", "completed", "cancelled", "failed"),
             "character_count": {"type": "integer"}, "has_camera": {"type": "boolean"},
             "preview_document": {"type": "string"}, "error": {"type": "string"}}
+SIZING_PROGRESS = obj({
+    "phase": choice("validation", "movement", "stance", "twist", "avoidance", "contact", "multi_character", "camera", "leg_avoidance"),
+    "completed": {"type": "integer", "minimum": 0}, "total": {"type": "integer", "minimum": 0},
+    "character_index": {"type": "integer", "minimum": 0, "maximum": 16},
+    "character_count": {"type": "integer", "minimum": 1, "maximum": 16},
+    "phase_percent": {"type": "number", "minimum": 0, "maximum": 100},
+    "indeterminate": {"type": "boolean"},
+}, ("phase", "completed", "total", "character_index", "character_count", "phase_percent", "indeterminate"))
 SIZING_SUMMARY = obj({
     "horizontal_ratio": {"type": "number"}, "vertical_ratio": {"type": "number"},
     "local_offsets": array(obj({"bone": {"type": "string"}, "offset": array({"type": "number"})}, ("bone", "offset"))),
@@ -297,7 +309,7 @@ TOOLS += [
              "sizing_options": SIZING_OPTIONS, "camera_path": PATH,
              "max_camera_distance_ratio": {"type": "number", "minimum": 1, "maximum": 100,
                                              "default": 5}}, required=("characters",)), JOB_DATA),
-    tool("mmdtool_sizing_status", "Poll a job without waiting on the C4D thread. Use a fresh operation_id per poll. No iteration progress percentage is estimated.",
+    tool("mmdtool_sizing_status", "Poll a job without waiting on the C4D thread. Use a fresh operation_id per poll. New hosts report completed work and percentage within the current phase, not an overall time estimate.",
          input_schema(properties=JOB_INPUT, required=("job",)), JOB_DATA, read_only=True),
     tool("mmdtool_sizing_result", "Read one completed member: summary, stages, paged warnings or constraint samples. Samples may be truncated by max_diagnostics; totals remain available.",
          input_schema(properties={**MEMBER_INPUT, **PAGING, "section": choice(

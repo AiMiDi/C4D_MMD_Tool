@@ -8,6 +8,7 @@
 
 namespace cmt { namespace sizing
 {
+class StatusProgress;
 struct HostInput
 {
     BaseObject* target = nullptr;
@@ -41,6 +42,7 @@ public:
     bool HasCamera() const { return batch_.success && cameraEnabled_ && !batch_.camera.m_cameras.empty(); }
     bool IsRunning() const { return running_; }
     bool IsCancelling() const { return running_ && cancel_.load(); }
+    libmmd::sizing::Progress GetProgress() const;
     const libmmd::sizing::Result& GetResult() const { return selected_ < batch_.characters.size() ? batch_.characters[selected_] : emptyResult_; }
     const libmmd::sizing::BatchResult& GetBatchResult() const { return batch_; }
     const String& GetError() const { return error_; }
@@ -65,6 +67,7 @@ private:
     AutoAlloc<BaseLink> previewCamera_;
     std::future<libmmd::sizing::BatchResult> job_;
     std::atomic_bool cancel_{false};
+    std::shared_ptr<StatusProgress> progress_;
     bool running_ = false;
     libmmd::sizing::BatchResult batch_;
     libmmd::sizing::Result emptyResult_;

@@ -9,7 +9,7 @@
 | 工具 | 输入 / 行为 |
 | --- | --- |
 | `mmdtool_sizing_start` | `characters`：1–16 个目标模型，每项含 `model`、`source_pmx`，以及二选一的动作 `path` 或 `slot`；返回任务句柄 |
-| `mmdtool_sizing_status` | 非阻塞轮询 `job_state`、角色数、相机是否可用、预览文档句柄与失败原因 |
+| `mmdtool_sizing_status` | 非阻塞轮询 `job_state`、当前阶段进度、角色数、相机是否可用、预览文档句柄与失败原因 |
 | `mmdtool_sizing_result` | `member` 选择角色；`section` 为 `summary` / `stages` / `warnings` / `constraints`；`offset` / `limit` 分页 |
 | `mmdtool_sizing_cancel` | 请求协作取消；继续轮询到终态，不发布或应用部分结果 |
 | `mmdtool_sizing_preview` | `stage`、`member`、`overlay`；在临时文档显示整个角色批次的前后对比，角色选择决定焦点 |
@@ -23,6 +23,10 @@
 `member` 为从零开始的批次序号，默认 0。阶段名称为 `original`、`scale`、`offset`、`stance`、`twist`、`avoidance`、`contact`、`multi_character`，默认最终阶段 `multi_character`。禁用的算法阶段沿用前一个阶段的结果。
 
 启动还接受共享 `sizing_options`、可选 `camera_path` 和 `max_camera_distance_ratio`（默认 5，范围 1–100）。每个角色的 `sizing_options` 覆盖共享参数。所有角色要求同一来源文档、不同模型和相同模型导入倍率；算法空间及距离统一为 PMX/VMD 单位。
+
+新宿主在任务数据中附带可选 `progress`：`phase`、`completed`、`total`、`phase_percent`、`indeterminate`、`character_index` 和 `character_count`。百分比只表示当前阶段的工作量，切换阶段会重新计数，不是总体进度或剩余时间估算。`total=0` 表示暂时无法细分；角色序号从 1 开始，0 表示整个批次（与从 0 开始的结果选择参数 `member` 不同）。旧二进制可以不返回该字段。
+
+同一份进度通过异步主线程消息显示在 C4D 状态栏；不要求面板保持打开，也不依赖客户端持续轮询。计算、取消和异常结束会清除状态栏。读取来源、创建模型快照、建立预览、应用和导出阶段使用忙碌指示。第三方 MCP 自己的视口捕获/渲染不属于动作适配进度通道。
 
 ## 调用示例
 
@@ -70,6 +74,7 @@
 | `movement_multiplier` / `leg_offset` | 1 / 0 | (0,1000] / [-10000,10000] |
 | `center_offsets` / `leg_offsets` | true / true | 布尔值 |
 | `stance` / `twist` / `avoidance` | false | 布尔值 |
+| `leg_avoidance` | false | 布尔值；独立的腿部自碰撞避让 |
 | `wrist_contact` / `finger_contact` / `floor_contact` / `multi_contact` | false | 布尔值 |
 | `contact_distance` / `floor_height` | 0.3 / 0 | (0,10000] / [-10000,10000] |
 | `collision_margin` / `tolerance` | 0.05 / 0.01 | [0,10000] / (0,1000] |

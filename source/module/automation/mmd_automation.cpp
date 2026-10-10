@@ -217,7 +217,7 @@ Bool ValidateSizingOptions(const BaseContainer& options, std::string& error)
     for (Int32 i = 0, field; (field = options.GetIndexId(i)) != NOTOK; ++i)
     {
         const Int32 type = options.GetData(field).GetType();
-        if (field >= SizingCenterOffsets && field <= SizingMultiContact)
+        if ((field >= SizingCenterOffsets && field <= SizingMultiContact) || field == SizingLegAvoidance)
         {
             if (type != DA_LONG || (options.GetInt32(field) != 0 && options.GetInt32(field) != 1))
             { error = "Sizing switch must be boolean"; return false; }
@@ -837,6 +837,7 @@ void ApplySizingOptions(const BaseContainer& values, libmmd::sizing::Options& op
     options.stance = values.GetBool(SizingStance, options.stance);
     options.twist = values.GetBool(SizingTwist, options.twist);
     options.avoidance = values.GetBool(SizingAvoidance, options.avoidance);
+    options.legAvoidance = values.GetBool(SizingLegAvoidance, options.legAvoidance);
     options.wristContact = values.GetBool(SizingWristContact, options.wristContact);
     options.fingerContact = values.GetBool(SizingFingerContact, options.fingerContact);
     options.floorContact = values.GetBool(SizingFloorContact, options.floorContact);
@@ -877,12 +878,20 @@ const char* SizingState(const SizingJobEntry& entry)
 Json SizingJobData(const SizingJobEntry& entry, const std::vector<std::pair<std::string, Json>>& extra = {})
 {
     BaseDocument* preview = entry.session->GetPreviewDocument();
+    const auto progress = entry.session->GetProgress();
+    const char* const progressPhases[] = {"validation", "movement", "stance", "twist", "avoidance", "contact", "multi_character", "camera", "leg_avoidance"};
+    const Json progressData = Json::Object({
+        {"phase", Json::StringValue(std::string(progressPhases[static_cast<size_t>(progress.phase)]))},
+        {"completed", Json::Integer(progress.completed)}, {"total", Json::Integer(progress.total)},
+        {"character_index", Json::Integer(progress.characterIndex)}, {"character_count", Json::Integer(progress.characterCount)},
+        {"phase_percent", Json::Number(progress.total ? 100. * std::min(progress.completed, progress.total) / progress.total : 0.)},
+        {"indeterminate", Json::Boolean(progress.total == 0)}});
     std::vector<std::pair<std::string, Json>> fields{{"job", Json::StringValue(entry.handle)},
         {"job_state", Json::StringValue(std::string(SizingState(entry)))},
         {"character_count", Json::Integer(entry.models.size())},
         {"has_camera", Json::Boolean(entry.session->HasCamera())},
         {"preview_document", Json::StringValue(preview ? RegisterHandle(preview, preview, true) : std::string())},
-        {"error", Json::StringValue(entry.session->GetError())}};
+        {"error", Json::StringValue(entry.session->GetError())}, {"progress", progressData}};
     fields.insert(fields.end(), extra.begin(), extra.end());
     return Json::Object(fields);
 }

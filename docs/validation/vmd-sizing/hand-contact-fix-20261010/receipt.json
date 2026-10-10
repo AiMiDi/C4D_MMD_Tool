@@ -1,0 +1,62 @@
+{
+  "native_points": 48,
+  "native_max_error_scene_units": 5.523726651230307e-06,
+  "pre_final_vmd_parity": {
+    "base\\stage-4.vmd": true,
+    "base\\stage-5.vmd": true,
+    "base\\stage-6.vmd": true,
+    "avoidance\\stage-4.vmd": true,
+    "avoidance\\stage-5.vmd": true,
+    "avoidance\\stage-6.vmd": true,
+    "wrist\\stage-4.vmd": true,
+    "wrist\\stage-5.vmd": true,
+    "wrist\\stage-6.vmd": true,
+    "avoidance-wrist\\stage-4.vmd": true,
+    "avoidance-wrist\\stage-5.vmd": true,
+    "avoidance-wrist\\stage-6.vmd": true,
+    "all\\stage-4.vmd": true,
+    "all\\stage-5.vmd": true,
+    "all\\stage-6.vmd": true,
+    "iterations160\\stage-4.vmd": true,
+    "iterations160\\stage-5.vmd": true,
+    "iterations160\\stage-6.vmd": true,
+    "distance06\\stage-4.vmd": true,
+    "distance06\\stage-5.vmd": true,
+    "distance06\\stage-6.vmd": true
+  },
+  "plugin_built": true,
+  "plugin_loaded_in_current_host": false,
+  "current_host_pid": 54832,
+  "current_host_restarted": false,
+  "core_ctest": {
+    "passed": 2,
+    "failed": 0
+  },
+  "visual_frames": [
+    258,
+    373,
+    776
+  ],
+  "candidate_plugin_path": "C:\\code\\C4D_MMD_Tool\\output\\hand-contact-fix-20261010\\plugins\\mmdtool\\mmdtool.xdl64",
+  "candidate_plugin_sha256": "82e731f3f3bd47edac652846ea9ed2c1c03064348321676e5b1ecb91b2abf1cb",
+  "loaded_plugin_sha256": "dc9a86356fcff933bf74a111db3af5f23b1435a50c57556d464abe210bdd7fd1",
+  "candidate_resources_copied": true,
+  "cmt_head": "591d946014761ab4d6f67e8c8ad47d89e0d7d5f4",
+  "libmmd_head": "e4aca1048af9216d65bea91ec734710e360bcdd0",
+  "source_sha256": {
+    "src/MotionSizing/Pose/MMDMotionPose.cpp": "528dc79156abe7e484143038d08d80021eff22e7e6df32dffcd20aac29fe5837",
+    "src/MotionSizing/Pose/MMDMotionPose.h": "e5b8d676bfb6011086759dc978bf4d42a2a45f3431fd04f54b319cdcf35cb0d1",
+    "src/MotionSizing/Solvers/MMDMotionConstraints.cpp": "0cf1d28587e66d02673c5209ba6328e91ab21cdea59560ffb7f4d82b2797fc5f",
+    "src/MotionSizing/Solvers/MMDMotionConstraints.h": "c75d82600260fc8b00051cda8f739bf5fc105c4ff6ce7b7fc151961ededca9e1",
+    "tests/MMDMotionSizingAdvanced.test.cpp": "b9ca1c976f49eda5beb9f97a6546d28d975593047bbe42b05397cc0624fd0875"
+  },
+  "artifact_sha256": {
+    "frame-0258.png": "8c7382ab951d894d2c59b7aa2c93660f2d37745030a511fe23ecf635a8f8c021",
+    "frame-0373.png": "b2632bb3f6a7f7e3c54d93d9c6ebe31dbfbf8e588855837a9ea8af728252d16c",
+    "frame-0776.png": "63ad29d90cd2956f16edafead95c1dfa2783d09f1af29423a2d86a8fd6176696",
+    "corrected-all.vmd": "44f5fff6500999024600230e4b6c6c7ec13a9b75ef6e4352243770af8d9bb967",
+    "previous-all.vmd": "3e1d62baa1d05520a4408a20fa31eaf5a1ac250123211f44e1638b956d6b5f9d",
+    "hand-contact-comparison.c4d": "ebcbe2649c913de200702274c45c1834edaac45d1c643c5d6487a6b72abd5e51"
+  },
+  "scene_saved": true
+}

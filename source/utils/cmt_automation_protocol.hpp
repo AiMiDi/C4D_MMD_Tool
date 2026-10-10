@@ -44,6 +44,7 @@ enum Option : Int32
 	SizingContactDistance, SizingFloorHeight, SizingCollisionMargin, SizingTolerance,
 	SizingIterations, SizingMaxFrames, SizingMaxKeys, SizingMaxDiagnostics,
 	SizingAvoidanceBodies,
+	SizingLegAvoidance = 169,
 	SizingModel = 200 // Only inside a character input container.
 };
 

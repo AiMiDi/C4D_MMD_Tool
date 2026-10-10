@@ -1,0 +1,972 @@
+{
+  "baseline-gesture-results": {
+    "base": {
+      "point_body_pairs": 190,
+      "point_max_depth_pmx": 0.531011407206,
+      "segment_body_pairs": 1137,
+      "gesture_max": {
+        "finger_local_delta_deg": 0.0,
+        "palm_world_delta_deg": 0.0,
+        "joint_delta_deg": 0.0,
+        "wrist_displacement": 0.0
+      },
+      "changed_hand_frames": 0,
+      "selected_frames": {
+        "258": {
+          "stage": "6",
+          "frame": "258",
+          "point_hits": "0",
+          "point_max": "0",
+          "segment_hits": "0",
+          "segment_max": "0",
+          "source_wrists": "1.21561042111",
+          "target_wrists": "0.741916710122",
+          "wrist_active": "0"
+        },
+        "373": {
+          "stage": "6",
+          "frame": "373",
+          "point_hits": "0",
+          "point_max": "0",
+          "segment_hits": "4",
+          "segment_max": "0.145727482296",
+          "source_wrists": "0.421048387865",
+          "target_wrists": "0.593738336456",
+          "wrist_active": "0"
+        },
+        "776": {
+          "stage": "6",
+          "frame": "776",
+          "point_hits": "2",
+          "point_max": "0.244133230132",
+          "segment_hits": "4",
+          "segment_max": "0.192949326623",
+          "source_wrists": "0.206521380416",
+          "target_wrists": "0.387804954579",
+          "wrist_active": "1"
+        },
+        "854": {
+          "stage": "6",
+          "frame": "854",
+          "point_hits": "2",
+          "point_max": "0.290054868257",
+          "segment_hits": "2",
+          "segment_max": "0.108204994622",
+          "source_wrists": "0.384927154471",
+          "target_wrists": "0.365611509799",
+          "wrist_active": "0"
+        },
+        "1070": {
+          "stage": "6",
+          "frame": "1070",
+          "point_hits": "0",
+          "point_max": "0",
+          "segment_hits": "0",
+          "segment_max": "0",
+          "source_wrists": "0.945075768773",
+          "target_wrists": "0.422047520996",
+          "wrist_active": "0"
+        }
+      }
+    },
+    "avoidance": {
+      "point_body_pairs": 5,
+      "point_max_depth_pmx": 0.0493838647992,
+      "segment_body_pairs": 1113,
+      "gesture_max": {
+        "finger_local_delta_deg": 0.0,
+        "palm_world_delta_deg": 0.0,
+        "joint_delta_deg": 0.0,
+        "wrist_displacement": 0.0
+      },
+      "changed_hand_frames": 0,
+      "selected_frames": {
+        "258": {
+          "stage": "6",
+          "frame": "258",
+          "point_hits": "0",
+          "point_max": "0",
+          "segment_hits": "0",
+          "segment_max": "0",
+          "source_wrists": "1.21561042111",
+          "target_wrists": "0.741916710122",
+          "wrist_active": "0"
+        },
+        "373": {
+          "stage": "6",
+          "frame": "373",
+          "point_hits": "0",
+          "point_max": "0",
+          "segment_hits": "4",
+          "segment_max": "0.145727482296",
+          "source_wrists": "0.421048387865",
+          "target_wrists": "0.593738336456",
+          "wrist_active": "0"
+        },
+        "776": {
+          "stage": "6",
+          "frame": "776",
+          "point_hits": "0",
+          "point_max": "0",
+          "segment_hits": "5",
+          "segment_max": "0.163746363053",
+          "source_wrists": "0.206521380416",
+          "target_wrists": "0.589017163444",
+          "wrist_active": "1"
+        },
+        "854": {
+          "stage": "6",
+          "frame": "854",
+          "point_hits": "1",
+          "point_max": "0.0193814676138",
+          "segment_hits": "0",
+          "segment_max": "0",
+          "source_wrists": "0.384927154471",
+          "target_wrists": "0.707886800694",
+          "wrist_active": "0"
+        },
+        "1070": {
+          "stage": "6",
+          "frame": "1070",
+          "point_hits": "0",
+          "point_max": "0",
+          "segment_hits": "0",
+          "segment_max": "0",
+          "source_wrists": "0.945075768773",
+          "target_wrists": "0.422047522453",
+          "wrist_active": "0"
+        }
+      }
+    },
+    "wrist": {
+      "point_body_pairs": 212,
+      "point_max_depth_pmx": 0.531011407206,
+      "segment_body_pairs": 1118,
+      "gesture_max": {
+        "finger_local_delta_deg": 0.0,
+        "palm_world_delta_deg": 4.50156271768,
+        "joint_delta_deg": 6.04876297829,
+        "wrist_displacement": 0.260068752014
+      },
+      "changed_hand_frames": 13,
+      "selected_frames": {
+        "258": {
+          "stage": "6",
+          "frame": "258",
+          "point_hits": "0",
+          "point_max": "0",
+          "segment_hits": "0",
+          "segment_max": "0",
+          "source_wrists": "1.21561042111",
+          "target_wrists": "0.741916710122",
+          "wrist_active": "0"
+        },
+        "373": {
+          "stage": "6",
+          "frame": "373",
+          "point_hits": "0",
+          "point_max": "0",
+          "segment_hits": "4",
+          "segment_max": "0.145727482296",
+          "source_wrists": "0.421048387865",
+          "target_wrists": "0.593738336456",
+          "wrist_active": "0"
+        },
+        "776": {
+          "stage": "6",
+          "frame": "776",
+          "point_hits": "4",
+          "point_max": "0.236656916616",
+          "segment_hits": "0",
+          "segment_max": "0",
+          "source_wrists": "0.206521380416",
+          "target_wrists": "6.75646265518e-05",
+          "wrist_active": "1"
+        },
+        "854": {
+          "stage": "6",
+          "frame": "854",
+          "point_hits": "2",
+          "point_max": "0.290054868257",
+          "segment_hits": "2",
+          "segment_max": "0.108204994622",
+          "source_wrists": "0.384927154471",
+          "target_wrists": "0.365611509799",
+          "wrist_active": "0"
+        },
+        "1070": {
+          "stage": "6",
+          "frame": "1070",
+          "point_hits": "0",
+          "point_max": "0",
+          "segment_hits": "0",
+          "segment_max": "0",
+          "source_wrists": "0.945075768773",
+          "target_wrists": "0.422047522453",
+          "wrist_active": "0"
+        }
+      }
+    },
+    "avoidance-wrist": {
+      "point_body_pairs": 57,
+      "point_max_depth_pmx": 0.236656346746,
+      "segment_body_pairs": 1094,
+      "gesture_max": {
+        "finger_local_delta_deg": 0.0,
+        "palm_world_delta_deg": 7.9520360807,
+        "joint_delta_deg": 8.23679840761,
+        "wrist_displacement": 0.395191297217
+      },
+      "changed_hand_frames": 13,
+      "selected_frames": {
+        "258": {
+          "stage": "6",
+          "frame": "258",
+          "point_hits": "0",
+          "point_max": "0",
+          "segment_hits": "0",
+          "segment_max": "0",
+          "source_wrists": "1.21561042111",
+          "target_wrists": "0.741916710122",
+          "wrist_active": "0"
+        },
+        "373": {
+          "stage": "6",
+          "frame": "373",
+          "point_hits": "0",
+          "point_max": "0",
+          "segment_hits": "4",
+          "segment_max": "0.145727482296",
+          "source_wrists": "0.421048387865",
+          "target_wrists": "0.593738336456",
+          "wrist_active": "0"
+        },
+        "776": {
+          "stage": "6",
+          "frame": "776",
+          "point_hits": "4",
+          "point_max": "0.236656346746",
+          "segment_hits": "1",
+          "segment_max": "0.0124844497779",
+          "source_wrists": "0.206521380416",
+          "target_wrists": "0.000101733978372",
+          "wrist_active": "1"
+        },
+        "854": {
+          "stage": "6",
+          "frame": "854",
+          "point_hits": "1",
+          "point_max": "0.0193814676138",
+          "segment_hits": "0",
+          "segment_max": "0",
+          "source_wrists": "0.384927154471",
+          "target_wrists": "0.707886800694",
+          "wrist_active": "0"
+        },
+        "1070": {
+          "stage": "6",
+          "frame": "1070",
+          "point_hits": "0",
+          "point_max": "0",
+          "segment_hits": "0",
+          "segment_max": "0",
+          "source_wrists": "0.945075768773",
+          "target_wrists": "0.422047523911",
+          "wrist_active": "0"
+        }
+      }
+    },
+    "all": {
+      "point_body_pairs": 131,
+      "point_max_depth_pmx": 0.348098262028,
+      "segment_body_pairs": 1317,
+      "gesture_max": {
+        "finger_local_delta_deg": 102.824738324,
+        "palm_world_delta_deg": 100.557519455,
+        "joint_delta_deg": 102.824738324,
+        "wrist_displacement": 1.17640530318
+      },
+      "changed_hand_frames": 96,
+      "selected_frames": {
+        "258": {
+          "stage": "6",
+          "frame": "258",
+          "point_hits": "3",
+          "point_max": "0.287277291111",
+          "segment_hits": "19",
+          "segment_max": "0.67474092569",
+          "source_wrists": "1.21561042111",
+          "target_wrists": "0.835919729269",
+          "wrist_active": "0"
+        },
+        "373": {
+          "stage": "6",
+          "frame": "373",
+          "point_hits": "3",
+          "point_max": "0.29171575018",
+          "segment_hits": "5",
+          "segment_max": "0.431995862242",
+          "source_wrists": "0.421048387865",
+          "target_wrists": "0.249964848095",
+          "wrist_active": "0"
+        },
+        "776": {
+          "stage": "6",
+          "frame": "776",
+          "point_hits": "4",
+          "point_max": "0.236656346746",
+          "segment_hits": "1",
+          "segment_max": "0.0124844497779",
+          "source_wrists": "0.206521380416",
+          "target_wrists": "0.000101733978372",
+          "wrist_active": "1"
+        },
+        "854": {
+          "stage": "6",
+          "frame": "854",
+          "point_hits": "1",
+          "point_max": "0.0193814676138",
+          "segment_hits": "0",
+          "segment_max": "0",
+          "source_wrists": "0.384927154471",
+          "target_wrists": "0.707886800694",
+          "wrist_active": "0"
+        },
+        "1070": {
+          "stage": "6",
+          "frame": "1070",
+          "point_hits": "0",
+          "point_max": "0",
+          "segment_hits": "0",
+          "segment_max": "0",
+          "source_wrists": "0.945075768773",
+          "target_wrists": "1.27479183462",
+          "wrist_active": "0"
+        }
+      }
+    },
+    "iterations160": {
+      "point_body_pairs": 56,
+      "point_max_depth_pmx": 0.236656346746,
+      "segment_body_pairs": 1094,
+      "gesture_max": {
+        "finger_local_delta_deg": 0.0,
+        "palm_world_delta_deg": 7.9520360807,
+        "joint_delta_deg": 8.23679840761,
+        "wrist_displacement": 0.395191297217
+      },
+      "changed_hand_frames": 13,
+      "selected_frames": {
+        "258": {
+          "stage": "6",
+          "frame": "258",
+          "point_hits": "0",
+          "point_max": "0",
+          "segment_hits": "0",
+          "segment_max": "0",
+          "source_wrists": "1.21561042111",
+          "target_wrists": "0.741916710122",
+          "wrist_active": "0"
+        },
+        "373": {
+          "stage": "6",
+          "frame": "373",
+          "point_hits": "0",
+          "point_max": "0",
+          "segment_hits": "4",
+          "segment_max": "0.145727482296",
+          "source_wrists": "0.421048387865",
+          "target_wrists": "0.593738336456",
+          "wrist_active": "0"
+        },
+        "776": {
+          "stage": "6",
+          "frame": "776",
+          "point_hits": "4",
+          "point_max": "0.236656346746",
+          "segment_hits": "1",
+          "segment_max": "0.0124844497779",
+          "source_wrists": "0.206521380416",
+          "target_wrists": "0.000101733978372",
+          "wrist_active": "1"
+        },
+        "854": {
+          "stage": "6",
+          "frame": "854",
+          "point_hits": "0",
+          "point_max": "0",
+          "segment_hits": "0",
+          "segment_max": "0",
+          "source_wrists": "0.384927154471",
+          "target_wrists": "0.684051687146",
+          "wrist_active": "0"
+        },
+        "1070": {
+          "stage": "6",
+          "frame": "1070",
+          "point_hits": "0",
+          "point_max": "0",
+          "segment_hits": "0",
+          "segment_max": "0",
+          "source_wrists": "0.945075768773",
+          "target_wrists": "0.422047523911",
+          "wrist_active": "0"
+        }
+      }
+    },
+    "distance06": {
+      "point_body_pairs": 284,
+      "point_max_depth_pmx": 0.271918254435,
+      "segment_body_pairs": 1040,
+      "gesture_max": {
+        "finger_local_delta_deg": 0.0,
+        "palm_world_delta_deg": 14.8548138855,
+        "joint_delta_deg": 26.0167082086,
+        "wrist_displacement": 0.782722324712
+      },
+      "changed_hand_frames": 70,
+      "selected_frames": {
+        "258": {
+          "stage": "6",
+          "frame": "258",
+          "point_hits": "0",
+          "point_max": "0",
+          "segment_hits": "0",
+          "segment_max": "0",
+          "source_wrists": "1.21561042111",
+          "target_wrists": "0.741916710122",
+          "wrist_active": "0"
+        },
+        "373": {
+          "stage": "6",
+          "frame": "373",
+          "point_hits": "4",
+          "point_max": "0.231578576335",
+          "segment_hits": "2",
+          "segment_max": "0.171106006405",
+          "source_wrists": "0.421048387865",
+          "target_wrists": "0.00524391793009",
+          "wrist_active": "1"
+        },
+        "776": {
+          "stage": "6",
+          "frame": "776",
+          "point_hits": "4",
+          "point_max": "0.236656346746",
+          "segment_hits": "1",
+          "segment_max": "0.0124844497779",
+          "source_wrists": "0.206521380416",
+          "target_wrists": "0.000101733978372",
+          "wrist_active": "1"
+        },
+        "854": {
+          "stage": "6",
+          "frame": "854",
+          "point_hits": "4",
+          "point_max": "0.271918254435",
+          "segment_hits": "1",
+          "segment_max": "0.0491098121791",
+          "source_wrists": "0.384927154471",
+          "target_wrists": "0.23538057505",
+          "wrist_active": "1"
+        },
+        "1070": {
+          "stage": "6",
+          "frame": "1070",
+          "point_hits": "0",
+          "point_max": "0",
+          "segment_hits": "0",
+          "segment_max": "0",
+          "source_wrists": "0.945075768773",
+          "target_wrists": "0.422047523911",
+          "wrist_active": "0"
+        }
+      }
+    }
+  },
+  "handfix-final-results": {
+    "base": {
+      "point_body_pairs": 190,
+      "point_max_depth_pmx": 0.531011407206,
+      "segment_body_pairs": 1137,
+      "gesture_max": {
+        "finger_local_delta_deg": 0.0,
+        "palm_world_delta_deg": 0.0,
+        "joint_delta_deg": 0.0,
+        "wrist_displacement": 0.0
+      },
+      "changed_hand_frames": 0,
+      "selected_frames": {
+        "258": {
+          "stage": "6",
+          "frame": "258",
+          "point_hits": "0",
+          "point_max": "0",
+          "segment_hits": "0",
+          "segment_max": "0",
+          "source_wrists": "1.21561042111",
+          "target_wrists": "0.741916710122",
+          "wrist_active": "0"
+        },
+        "373": {
+          "stage": "6",
+          "frame": "373",
+          "point_hits": "0",
+          "point_max": "0",
+          "segment_hits": "4",
+          "segment_max": "0.145727482296",
+          "source_wrists": "0.421048387865",
+          "target_wrists": "0.593738336456",
+          "wrist_active": "0"
+        },
+        "776": {
+          "stage": "6",
+          "frame": "776",
+          "point_hits": "2",
+          "point_max": "0.244133230132",
+          "segment_hits": "4",
+          "segment_max": "0.192949326623",
+          "source_wrists": "0.206521380416",
+          "target_wrists": "0.387804954579",
+          "wrist_active": "1"
+        },
+        "854": {
+          "stage": "6",
+          "frame": "854",
+          "point_hits": "2",
+          "point_max": "0.290054868257",
+          "segment_hits": "2",
+          "segment_max": "0.108204994622",
+          "source_wrists": "0.384927154471",
+          "target_wrists": "0.365611509799",
+          "wrist_active": "0"
+        },
+        "1070": {
+          "stage": "6",
+          "frame": "1070",
+          "point_hits": "0",
+          "point_max": "0",
+          "segment_hits": "0",
+          "segment_max": "0",
+          "source_wrists": "0.945075768773",
+          "target_wrists": "0.422047520996",
+          "wrist_active": "0"
+        }
+      }
+    },
+    "avoidance": {
+      "point_body_pairs": 5,
+      "point_max_depth_pmx": 0.0493838647992,
+      "segment_body_pairs": 1113,
+      "gesture_max": {
+        "finger_local_delta_deg": 0.0,
+        "palm_world_delta_deg": 0.0,
+        "joint_delta_deg": 0.0,
+        "wrist_displacement": 0.0
+      },
+      "changed_hand_frames": 0,
+      "selected_frames": {
+        "258": {
+          "stage": "6",
+          "frame": "258",
+          "point_hits": "0",
+          "point_max": "0",
+          "segment_hits": "0",
+          "segment_max": "0",
+          "source_wrists": "1.21561042111",
+          "target_wrists": "0.741916710122",
+          "wrist_active": "0"
+        },
+        "373": {
+          "stage": "6",
+          "frame": "373",
+          "point_hits": "0",
+          "point_max": "0",
+          "segment_hits": "4",
+          "segment_max": "0.145727482296",
+          "source_wrists": "0.421048387865",
+          "target_wrists": "0.593738336456",
+          "wrist_active": "0"
+        },
+        "776": {
+          "stage": "6",
+          "frame": "776",
+          "point_hits": "0",
+          "point_max": "0",
+          "segment_hits": "5",
+          "segment_max": "0.163746363053",
+          "source_wrists": "0.206521380416",
+          "target_wrists": "0.589017163444",
+          "wrist_active": "1"
+        },
+        "854": {
+          "stage": "6",
+          "frame": "854",
+          "point_hits": "1",
+          "point_max": "0.0193814676138",
+          "segment_hits": "0",
+          "segment_max": "0",
+          "source_wrists": "0.384927154471",
+          "target_wrists": "0.707886800694",
+          "wrist_active": "0"
+        },
+        "1070": {
+          "stage": "6",
+          "frame": "1070",
+          "point_hits": "0",
+          "point_max": "0",
+          "segment_hits": "0",
+          "segment_max": "0",
+          "source_wrists": "0.945075768773",
+          "target_wrists": "0.422047522453",
+          "wrist_active": "0"
+        }
+      }
+    },
+    "wrist": {
+      "point_body_pairs": 208,
+      "point_max_depth_pmx": 0.531011407206,
+      "segment_body_pairs": 1119,
+      "gesture_max": {
+        "finger_local_delta_deg": 0.0,
+        "palm_world_delta_deg": 9.42827624531e-06,
+        "joint_delta_deg": 6.02262337844,
+        "wrist_displacement": 0.292539914103
+      },
+      "changed_hand_frames": 13,
+      "selected_frames": {
+        "258": {
+          "stage": "6",
+          "frame": "258",
+          "point_hits": "0",
+          "point_max": "0",
+          "segment_hits": "0",
+          "segment_max": "0",
+          "source_wrists": "1.21561042111",
+          "target_wrists": "0.741916710122",
+          "wrist_active": "0"
+        },
+        "373": {
+          "stage": "6",
+          "frame": "373",
+          "point_hits": "0",
+          "point_max": "0",
+          "segment_hits": "4",
+          "segment_max": "0.145727482296",
+          "source_wrists": "0.421048387865",
+          "target_wrists": "0.593738336456",
+          "wrist_active": "0"
+        },
+        "776": {
+          "stage": "6",
+          "frame": "776",
+          "point_hits": "4",
+          "point_max": "0.294946230366",
+          "segment_hits": "0",
+          "segment_max": "0",
+          "source_wrists": "0.206521380416",
+          "target_wrists": "0.206787331233",
+          "wrist_active": "1"
+        },
+        "854": {
+          "stage": "6",
+          "frame": "854",
+          "point_hits": "2",
+          "point_max": "0.290054868257",
+          "segment_hits": "2",
+          "segment_max": "0.108204994622",
+          "source_wrists": "0.384927154471",
+          "target_wrists": "0.365611509799",
+          "wrist_active": "0"
+        },
+        "1070": {
+          "stage": "6",
+          "frame": "1070",
+          "point_hits": "0",
+          "point_max": "0",
+          "segment_hits": "0",
+          "segment_max": "0",
+          "source_wrists": "0.945075768773",
+          "target_wrists": "0.422047522453",
+          "wrist_active": "0"
+        }
+      }
+    },
+    "avoidance-wrist": {
+      "point_body_pairs": 5,
+      "point_max_depth_pmx": 0.0493838647992,
+      "segment_body_pairs": 1113,
+      "gesture_max": {
+        "finger_local_delta_deg": 0.0,
+        "palm_world_delta_deg": 1.10021150005e-05,
+        "joint_delta_deg": 9.29955300351,
+        "wrist_displacement": 0.478385412382
+      },
+      "changed_hand_frames": 11,
+      "selected_frames": {
+        "258": {
+          "stage": "6",
+          "frame": "258",
+          "point_hits": "0",
+          "point_max": "0",
+          "segment_hits": "0",
+          "segment_max": "0",
+          "source_wrists": "1.21561042111",
+          "target_wrists": "0.741916710122",
+          "wrist_active": "0"
+        },
+        "373": {
+          "stage": "6",
+          "frame": "373",
+          "point_hits": "0",
+          "point_max": "0",
+          "segment_hits": "4",
+          "segment_max": "0.145727482296",
+          "source_wrists": "0.421048387865",
+          "target_wrists": "0.593738336456",
+          "wrist_active": "0"
+        },
+        "776": {
+          "stage": "6",
+          "frame": "776",
+          "point_hits": "0",
+          "point_max": "0",
+          "segment_hits": "5",
+          "segment_max": "0.163678151662",
+          "source_wrists": "0.206521380416",
+          "target_wrists": "0.585188663813",
+          "wrist_active": "1"
+        },
+        "854": {
+          "stage": "6",
+          "frame": "854",
+          "point_hits": "1",
+          "point_max": "0.0193814676138",
+          "segment_hits": "0",
+          "segment_max": "0",
+          "source_wrists": "0.384927154471",
+          "target_wrists": "0.707886800694",
+          "wrist_active": "0"
+        },
+        "1070": {
+          "stage": "6",
+          "frame": "1070",
+          "point_hits": "0",
+          "point_max": "0",
+          "segment_hits": "0",
+          "segment_max": "0",
+          "source_wrists": "0.945075768773",
+          "target_wrists": "0.422047523911",
+          "wrist_active": "0"
+        }
+      }
+    },
+    "all": {
+      "point_body_pairs": 5,
+      "point_max_depth_pmx": 0.0493838647992,
+      "segment_body_pairs": 1107,
+      "gesture_max": {
+        "finger_local_delta_deg": 0.0,
+        "palm_world_delta_deg": 8.70745850811e-06,
+        "joint_delta_deg": 20.1907811592,
+        "wrist_displacement": 0.414441603217
+      },
+      "changed_hand_frames": 86,
+      "selected_frames": {
+        "258": {
+          "stage": "6",
+          "frame": "258",
+          "point_hits": "0",
+          "point_max": "0",
+          "segment_hits": "0",
+          "segment_max": "0",
+          "source_wrists": "1.21561042111",
+          "target_wrists": "1.29964621094",
+          "wrist_active": "0"
+        },
+        "373": {
+          "stage": "6",
+          "frame": "373",
+          "point_hits": "0",
+          "point_max": "0",
+          "segment_hits": "4",
+          "segment_max": "0.145727482296",
+          "source_wrists": "0.421048387865",
+          "target_wrists": "0.593738336456",
+          "wrist_active": "0"
+        },
+        "776": {
+          "stage": "6",
+          "frame": "776",
+          "point_hits": "0",
+          "point_max": "0",
+          "segment_hits": "5",
+          "segment_max": "0.163678151662",
+          "source_wrists": "0.206521380416",
+          "target_wrists": "0.585188663813",
+          "wrist_active": "1"
+        },
+        "854": {
+          "stage": "6",
+          "frame": "854",
+          "point_hits": "1",
+          "point_max": "0.0193814676138",
+          "segment_hits": "0",
+          "segment_max": "0",
+          "source_wrists": "0.384927154471",
+          "target_wrists": "0.707886800694",
+          "wrist_active": "0"
+        },
+        "1070": {
+          "stage": "6",
+          "frame": "1070",
+          "point_hits": "0",
+          "point_max": "0",
+          "segment_hits": "0",
+          "segment_max": "0",
+          "source_wrists": "0.945075768773",
+          "target_wrists": "0.938254474515",
+          "wrist_active": "0"
+        }
+      }
+    },
+    "iterations160": {
+      "point_body_pairs": 4,
+      "point_max_depth_pmx": 0.0493838647992,
+      "segment_body_pairs": 1113,
+      "gesture_max": {
+        "finger_local_delta_deg": 0.0,
+        "palm_world_delta_deg": 1.10021150005e-05,
+        "joint_delta_deg": 9.29955300351,
+        "wrist_displacement": 0.478385412382
+      },
+      "changed_hand_frames": 11,
+      "selected_frames": {
+        "258": {
+          "stage": "6",
+          "frame": "258",
+          "point_hits": "0",
+          "point_max": "0",
+          "segment_hits": "0",
+          "segment_max": "0",
+          "source_wrists": "1.21561042111",
+          "target_wrists": "0.741916710122",
+          "wrist_active": "0"
+        },
+        "373": {
+          "stage": "6",
+          "frame": "373",
+          "point_hits": "0",
+          "point_max": "0",
+          "segment_hits": "4",
+          "segment_max": "0.145727482296",
+          "source_wrists": "0.421048387865",
+          "target_wrists": "0.593738336456",
+          "wrist_active": "0"
+        },
+        "776": {
+          "stage": "6",
+          "frame": "776",
+          "point_hits": "0",
+          "point_max": "0",
+          "segment_hits": "5",
+          "segment_max": "0.163678151662",
+          "source_wrists": "0.206521380416",
+          "target_wrists": "0.585188663813",
+          "wrist_active": "1"
+        },
+        "854": {
+          "stage": "6",
+          "frame": "854",
+          "point_hits": "0",
+          "point_max": "0",
+          "segment_hits": "0",
+          "segment_max": "0",
+          "source_wrists": "0.384927154471",
+          "target_wrists": "0.684051687146",
+          "wrist_active": "0"
+        },
+        "1070": {
+          "stage": "6",
+          "frame": "1070",
+          "point_hits": "0",
+          "point_max": "0",
+          "segment_hits": "0",
+          "segment_max": "0",
+          "source_wrists": "0.945075768773",
+          "target_wrists": "0.422047523911",
+          "wrist_active": "0"
+        }
+      }
+    },
+    "distance06": {
+      "point_body_pairs": 5,
+      "point_max_depth_pmx": 0.0493838647992,
+      "segment_body_pairs": 1105,
+      "gesture_max": {
+        "finger_local_delta_deg": 0.0,
+        "palm_world_delta_deg": 1.10021150005e-05,
+        "joint_delta_deg": 9.29955300351,
+        "wrist_displacement": 0.478385412382
+      },
+      "changed_hand_frames": 51,
+      "selected_frames": {
+        "258": {
+          "stage": "6",
+          "frame": "258",
+          "point_hits": "0",
+          "point_max": "0",
+          "segment_hits": "0",
+          "segment_max": "0",
+          "source_wrists": "1.21561042111",
+          "target_wrists": "0.741916710122",
+          "wrist_active": "0"
+        },
+        "373": {
+          "stage": "6",
+          "frame": "373",
+          "point_hits": "0",
+          "point_max": "0",
+          "segment_hits": "4",
+          "segment_max": "0.137688495371",
+          "source_wrists": "0.421048387865",
+          "target_wrists": "0.569047276034",
+          "wrist_active": "1"
+        },
+        "776": {
+          "stage": "6",
+          "frame": "776",
+          "point_hits": "0",
+          "point_max": "0",
+          "segment_hits": "5",
+          "segment_max": "0.163678151662",
+          "source_wrists": "0.206521380416",
+          "target_wrists": "0.585188663813",
+          "wrist_active": "1"
+        },
+        "854": {
+          "stage": "6",
+          "frame": "854",
+          "point_hits": "1",
+          "point_max": "0.0193814676138",
+          "segment_hits": "0",
+          "segment_max": "0",
+          "source_wrists": "0.384927154471",
+          "target_wrists": "0.707886800694",
+          "wrist_active": "1"
+        },
+        "1070": {
+          "stage": "6",
+          "frame": "1070",
+          "point_hits": "0",
+          "point_max": "0",
+          "segment_hits": "0",
+          "segment_max": "0",
+          "source_wrists": "0.945075768773",
+          "target_wrists": "0.422047523911",
+          "wrist_active": "0"
+        }
+      }
+    }
+  }
+}
