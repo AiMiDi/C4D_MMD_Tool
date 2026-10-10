@@ -6,7 +6,7 @@ Entries for 0.9.1.x were reconstructed from tagged source changes and release da
 
 ### 0.9.3.5 · Motion adaptation fixes and controller workflow (2026-10-10)
 
-Joint native validation with the PMX controller work passed; release CI and package verification are pending.
+Published as [v0.9.3.5](https://github.com/AiMiDi/C4D_MMD_Tool/releases/tag/v0.9.3.5) after joint native validation, release CI and package verification. [Validation record](docs/validation/vmd-sizing/joint-release-20261010/README.md).
 
 1. Fix destructive wrist/finger contact adjustments while preserving finger curls, palm orientation and source contact relationships.
 2. Reuse playback IK for offline poses, including PMX link limits, iteration counts and VMD IK switches; skip driven channels that cannot accept direct animation.

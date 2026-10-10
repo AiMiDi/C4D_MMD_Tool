@@ -30,3 +30,17 @@
 ## 发布流水线补漏
 
 首次标签 `v0.9.3.4` 的功能检查发现，新 `pmx_vertex_weights_test` 已注册到 CTest，但根 `cmt-deps-test` 没有构建该可执行文件。该尝试未生成 Release。现已补入构建依赖；用全新 Debug / AVX2 根构建实际执行聚合目标，核心 16 项和插件 26 项全部通过。插件聚合包含两项核心 sizing 和 runtime fixture，不能与核心数量相加当作独立覆盖。使用新版本 `v0.9.3.5` 重跑，不覆盖失败标签。
+
+`v0.9.3.5` 的 Main Build 已成功；Package 首次运行中，Mac Intel R25 的编译成功，但 GitHub 托管 runner 上传 artifact 时发生 `ENOTFOUND` DNS 错误。原始步骤见 [ci-artifact-upload-failure.txt](ci-artifact-upload-failure.txt)。当时活动流水线拒绝单项重跑；待全部结束后，在同一标签和源码上重跑失败任务成功，没有更换标签或修改算法来处理基础设施错误。
+
+## 正式发布核验
+
+正式发布 [v0.9.3.5](https://github.com/AiMiDi/C4D_MMD_Tool/releases/tag/v0.9.3.5)，来源提交 `a15230c7156221e45cded3afbcf1ccf12228f51b`，libMMD `577c46d122c1276d198e1fd9f3cedb04dab93348` 已核验远端可达。
+
+Main Build 与 Package attempt 2 均成功，21 个 SDK/platform 矩阵全部通过。首次 R25 artifact 上传 DNS 失败在同源码重跑后恢复，没有修改或覆盖标签。完整作业记录见 [release-ci.json](release-ci.json)。
+
+下载并核验正式 Release 的 9 个资产，文件大小和 SHA256 全部与 GitHub digest 一致。Windows 安装包 ProductVersion 为 `0.9.3.5`；8 个 Mac Intel ZIP 的 CRC、Mach-O x86_64 架构、真实资源、许可证通过；8 个 Windows SDK 输入的 PE x64 架构、真实资源、许可证及全部 MCP 入口源码与发布提交一致。见 [artifact-audit.json](artifact-audit.json)。本轮未执行正式安装包，也未安装至用户 C4D；发布核验不扩大上文原生测试范围。
+
+源码文本核验只统一 Windows Git 检出的 CRLF 为 LF，其余字节必须一致；资产 SHA256 按原始字节核验。Inno 版本资源带有尾部填充空格，回执同时保留原值和去除填充后的 ProductVersion。
+
+本地包位于 `output/release-audit-0.9.3.5-20261010/`；实际测试工程为 `output/joint-release-20261010/Afu-motion-sizing.c4d`。双语 Release 说明及 README／CHANGELOG 发布状态已补齐。

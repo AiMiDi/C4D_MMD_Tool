@@ -1,0 +1,24 @@
+2026-10-10T14:03:23.4690750Z ##[group]Run actions/upload-artifact@v7
+2026-10-10T14:03:23.4691090Z with:
+2026-10-10T14:03:23.4691430Z   name: build-macOS-x86_64-sdk_r25
+2026-10-10T14:03:23.4691930Z   path: _build_msvc/sdk_r25/bin/Release/plugins/mmdtool/
+2026-10-10T14:03:23.4692220Z   retention-days: 7
+2026-10-10T14:03:23.4692540Z   if-no-files-found: error
+2026-10-10T14:03:23.4692830Z   compression-level: 6
+2026-10-10T14:03:23.4693130Z   overwrite: false
+2026-10-10T14:03:23.4693450Z   include-hidden-files: false
+2026-10-10T14:03:23.4711660Z   archive: true
+2026-10-10T14:03:23.4712000Z env:
+2026-10-10T14:03:23.4712330Z   CMAKE_BUILD_PARALLEL_LEVEL: 4
+2026-10-10T14:03:23.4712530Z ##[endgroup]
+2026-10-10T14:03:23.9783930Z With the provided path, there will be 80 files uploaded
+2026-10-10T14:03:23.9793480Z Artifact name is valid!
+2026-10-10T14:03:23.9794960Z Root directory input is valid!
+2026-10-10T14:03:54.1884270Z ##[error]Failed to CreateArtifact: Unable to make request: ENOTFOUND
+If you are using self-hosted runners, please make sure your runner has access to all GitHub endpoints: https://docs.github.com/en/actions/hosting-your-own-runners/managing-self-hosted-runners/about-self-hosted-runners#communication-between-self-hosted-runners-and-github
+2026-10-10T14:03:54.2331270Z Post job cleanup.
+2026-10-10T14:03:54.4257230Z [command]/usr/local/bin/git version
+2026-10-10T14:03:54.4829780Z git version 2.55.0
+2026-10-10T14:03:54.4888010Z Copying '/Users/runner/.gitconfig' to '/Users/runner/work/_temp/94e9123a-6c69-45dc-b5eb-12374e2e2330/.gitconfig'
+2026-10-10T14:03:54.4910210Z Temporarily overriding HOME='/Users/runner/work/_temp/94e9123a-6c69-45dc-b5eb-12374e2e2330' before making global git config changes
+2026-10-10T14:03:54.4914280Z Adding repository directory to the temporary git global config as a safe directory

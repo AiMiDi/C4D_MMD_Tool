@@ -1,6 +1,6 @@
 {
   "date": "2026-10-10",
-  "status": "release_ci_running",
+  "status": "published_verified",
   "cmt_branch": "codex/sizing-final-fixes",
   "core_commit": "577c46d122c1276d198e1fd9f3cedb04dab93348",
   "native_binary_sha256": "734d012adb15e4418db5907b0d4491372b9079499ac5b707c89a515217578a09",
@@ -18,8 +18,8 @@
   "control_input_preservation_passed": true,
   "native_parity_passed": true,
   "version": "0.9.3.5",
-  "published": false,
-  "pending": "Full CI matrix, v0.9.3.5 Release assets and audit",
+  "published": true,
+  "pending": null,
   "remaining_limitations": [
     "Native checks on C4D 2026.4 Windows only",
     "Deep leg crossings and clothing collisions not universally solved",
@@ -46,5 +46,32 @@
   ],
   "root_ci_debug_core_passed": 16,
   "root_ci_debug_plugin_passed": 26,
-  "root_ci_avx2": true
+  "root_ci_avx2": true,
+  "main_build_status": "completed_success",
+  "package_transient_failure": {
+    "job": 114224170958,
+    "platform": "macos-26-intel",
+    "sdk": "sdk_r25",
+    "build_conclusion": "success",
+    "failed_step": "Upload plugin output",
+    "reason": "Failed to CreateArtifact: Unable to make request: ENOTFOUND",
+    "classification": "GitHub hosted runner artifact service DNS failure",
+    "rerun_request_while_run_active": "job cannot be rerun",
+    "next_action": "Resolved by same-source attempt 2; full matrix and package/release jobs passed.",
+    "rerun_requested_at": "2026-10-10T14:42:21Z",
+    "rerun_accepted": true,
+    "resolved": true
+  },
+  "package_attempt": 2,
+  "package_conclusion": "success",
+  "release_url": "https://github.com/AiMiDi/C4D_MMD_Tool/releases/tag/v0.9.3.5",
+  "published_at": "2026-10-10T14:58:47Z",
+  "release_assets_verified": 9,
+  "matrix_builds_passed": 21,
+  "github_asset_digests_match": true,
+  "release_notes_bilingual": true,
+  "installer_executed": false,
+  "submodule_remote_verified": "577c46d122c1276d198e1fd9f3cedb04dab93348",
+  "local_release_folder": "output/release-audit-0.9.3.5-20261010",
+  "saved_example_scene": "output/joint-release-20261010/Afu-motion-sizing.c4d"
 }

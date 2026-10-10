@@ -1,0 +1,2614 @@
+{
+  "package": {
+    "attempt": 2,
+    "conclusion": "success",
+    "headSha": "a15230c7156221e45cded3afbcf1ccf12228f51b",
+    "jobs": [
+      {
+        "completedAt": "2026-10-10T13:39:19Z",
+        "conclusion": "success",
+        "databaseId": 114238176935,
+        "name": "Build (reusable) / matrix-build (windows-2022, sdk_r21)",
+        "startedAt": "2026-10-10T13:28:47Z",
+        "status": "completed",
+        "steps": [
+          {
+            "completedAt": "2026-10-10T13:28:49Z",
+            "conclusion": "success",
+            "name": "Set up job",
+            "number": 1,
+            "startedAt": "2026-10-10T13:28:48Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:29:14Z",
+            "conclusion": "success",
+            "name": "Checkout",
+            "number": 2,
+            "startedAt": "2026-10-10T13:28:49Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:29:37Z",
+            "conclusion": "success",
+            "name": "Checkout build submodules",
+            "number": 3,
+            "startedAt": "2026-10-10T13:29:14Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:29:40Z",
+            "conclusion": "success",
+            "name": "Identify dependency toolchain and revisions",
+            "number": 4,
+            "startedAt": "2026-10-10T13:29:37Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:29:40Z",
+            "conclusion": "success",
+            "name": "Cache prebuilt dependencies",
+            "number": 5,
+            "startedAt": "2026-10-10T13:29:40Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:32:18Z",
+            "conclusion": "success",
+            "name": "Build dependencies (on cache miss)",
+            "number": 6,
+            "startedAt": "2026-10-10T13:29:40Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:32:18Z",
+            "conclusion": "success",
+            "name": "Configure root (preset + prebuilt deps)",
+            "number": 7,
+            "startedAt": "2026-10-10T13:32:18Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:39:10Z",
+            "conclusion": "success",
+            "name": "Build cmt-workflow (Release)",
+            "number": 8,
+            "startedAt": "2026-10-10T13:32:18Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:39:14Z",
+            "conclusion": "success",
+            "name": "Upload plugin output",
+            "number": 9,
+            "startedAt": "2026-10-10T13:39:10Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:39:15Z",
+            "conclusion": "success",
+            "name": "Post Cache prebuilt dependencies",
+            "number": 17,
+            "startedAt": "2026-10-10T13:39:14Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:39:17Z",
+            "conclusion": "success",
+            "name": "Post Checkout",
+            "number": 18,
+            "startedAt": "2026-10-10T13:39:15Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:39:17Z",
+            "conclusion": "success",
+            "name": "Complete job",
+            "number": 19,
+            "startedAt": "2026-10-10T13:39:17Z",
+            "status": "completed"
+          }
+        ],
+        "url": "https://github.com/AiMiDi/C4D_MMD_Tool/actions/runs/38055599355/job/114238176935"
+      },
+      {
+        "completedAt": "2026-10-10T13:28:45Z",
+        "conclusion": "success",
+        "databaseId": 114238177044,
+        "name": "Build (reusable) / checks",
+        "startedAt": "2026-10-10T13:24:38Z",
+        "status": "completed",
+        "steps": [
+          {
+            "completedAt": "2026-10-10T13:24:39Z",
+            "conclusion": "success",
+            "name": "Set up job",
+            "number": 1,
+            "startedAt": "2026-10-10T13:24:38Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:25:04Z",
+            "conclusion": "success",
+            "name": "Checkout",
+            "number": 2,
+            "startedAt": "2026-10-10T13:24:39Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:25:26Z",
+            "conclusion": "success",
+            "name": "Checkout build submodules",
+            "number": 3,
+            "startedAt": "2026-10-10T13:25:04Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:25:28Z",
+            "conclusion": "success",
+            "name": "Verify runtime resource copying",
+            "number": 4,
+            "startedAt": "2026-10-10T13:25:26Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:25:28Z",
+            "conclusion": "success",
+            "name": "Verify pinned installer resource adaptation",
+            "number": 5,
+            "startedAt": "2026-10-10T13:25:28Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:25:29Z",
+            "conclusion": "success",
+            "name": "Select Python for production MCP checks",
+            "number": 6,
+            "startedAt": "2026-10-10T13:25:28Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:25:34Z",
+            "conclusion": "success",
+            "name": "Verify typed MCP transport and operation handling",
+            "number": 7,
+            "startedAt": "2026-10-10T13:25:29Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:25:49Z",
+            "conclusion": "success",
+            "name": "Configure functional tests",
+            "number": 8,
+            "startedAt": "2026-10-10T13:25:34Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:27:59Z",
+            "conclusion": "success",
+            "name": "Run functional libMMD CTest",
+            "number": 9,
+            "startedAt": "2026-10-10T13:25:49Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:28:39Z",
+            "conclusion": "success",
+            "name": "Run plugin algorithm CTest",
+            "number": 10,
+            "startedAt": "2026-10-10T13:27:59Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:28:39Z",
+            "conclusion": "skipped",
+            "name": "Configure latest SDK Release",
+            "number": 11,
+            "startedAt": "2026-10-10T13:28:39Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:28:39Z",
+            "conclusion": "skipped",
+            "name": "Compile latest SDK Release",
+            "number": 12,
+            "startedAt": "2026-10-10T13:28:39Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:28:40Z",
+            "conclusion": "success",
+            "name": "Upload functional test logs",
+            "number": 13,
+            "startedAt": "2026-10-10T13:28:39Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:28:40Z",
+            "conclusion": "success",
+            "name": "Post Select Python for production MCP checks",
+            "number": 25,
+            "startedAt": "2026-10-10T13:28:40Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:28:43Z",
+            "conclusion": "success",
+            "name": "Post Checkout",
+            "number": 26,
+            "startedAt": "2026-10-10T13:28:40Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:28:43Z",
+            "conclusion": "success",
+            "name": "Complete job",
+            "number": 27,
+            "startedAt": "2026-10-10T13:28:43Z",
+            "status": "completed"
+          }
+        ],
+        "url": "https://github.com/AiMiDi/C4D_MMD_Tool/actions/runs/38055599355/job/114238177044"
+      },
+      {
+        "completedAt": "2026-10-10T13:36:33Z",
+        "conclusion": "success",
+        "databaseId": 114238177351,
+        "name": "Build (reusable) / matrix-build (windows-2022, sdk_r25)",
+        "startedAt": "2026-10-10T13:28:47Z",
+        "status": "completed",
+        "steps": [
+          {
+            "completedAt": "2026-10-10T13:28:49Z",
+            "conclusion": "success",
+            "name": "Set up job",
+            "number": 1,
+            "startedAt": "2026-10-10T13:28:48Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:29:12Z",
+            "conclusion": "success",
+            "name": "Checkout",
+            "number": 2,
+            "startedAt": "2026-10-10T13:28:49Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:29:34Z",
+            "conclusion": "success",
+            "name": "Checkout build submodules",
+            "number": 3,
+            "startedAt": "2026-10-10T13:29:12Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:29:37Z",
+            "conclusion": "success",
+            "name": "Identify dependency toolchain and revisions",
+            "number": 4,
+            "startedAt": "2026-10-10T13:29:34Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:29:38Z",
+            "conclusion": "success",
+            "name": "Cache prebuilt dependencies",
+            "number": 5,
+            "startedAt": "2026-10-10T13:29:37Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:31:37Z",
+            "conclusion": "success",
+            "name": "Build dependencies (on cache miss)",
+            "number": 6,
+            "startedAt": "2026-10-10T13:29:38Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:31:37Z",
+            "conclusion": "success",
+            "name": "Configure root (preset + prebuilt deps)",
+            "number": 7,
+            "startedAt": "2026-10-10T13:31:37Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:36:24Z",
+            "conclusion": "success",
+            "name": "Build cmt-workflow (Release)",
+            "number": 8,
+            "startedAt": "2026-10-10T13:31:37Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:36:27Z",
+            "conclusion": "success",
+            "name": "Upload plugin output",
+            "number": 9,
+            "startedAt": "2026-10-10T13:36:24Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:36:29Z",
+            "conclusion": "success",
+            "name": "Post Cache prebuilt dependencies",
+            "number": 17,
+            "startedAt": "2026-10-10T13:36:27Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:36:32Z",
+            "conclusion": "success",
+            "name": "Post Checkout",
+            "number": 18,
+            "startedAt": "2026-10-10T13:36:29Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:36:32Z",
+            "conclusion": "success",
+            "name": "Complete job",
+            "number": 19,
+            "startedAt": "2026-10-10T13:36:32Z",
+            "status": "completed"
+          }
+        ],
+        "url": "https://github.com/AiMiDi/C4D_MMD_Tool/actions/runs/38055599355/job/114238177351"
+      },
+      {
+        "completedAt": "2026-10-10T13:38:10Z",
+        "conclusion": "success",
+        "databaseId": 114238177507,
+        "name": "Build (reusable) / matrix-build (windows-2022, sdk_r23)",
+        "startedAt": "2026-10-10T13:28:47Z",
+        "status": "completed",
+        "steps": [
+          {
+            "completedAt": "2026-10-10T13:28:49Z",
+            "conclusion": "success",
+            "name": "Set up job",
+            "number": 1,
+            "startedAt": "2026-10-10T13:28:48Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:29:15Z",
+            "conclusion": "success",
+            "name": "Checkout",
+            "number": 2,
+            "startedAt": "2026-10-10T13:28:49Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:29:40Z",
+            "conclusion": "success",
+            "name": "Checkout build submodules",
+            "number": 3,
+            "startedAt": "2026-10-10T13:29:15Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:29:43Z",
+            "conclusion": "success",
+            "name": "Identify dependency toolchain and revisions",
+            "number": 4,
+            "startedAt": "2026-10-10T13:29:40Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:29:44Z",
+            "conclusion": "success",
+            "name": "Cache prebuilt dependencies",
+            "number": 5,
+            "startedAt": "2026-10-10T13:29:43Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:32:12Z",
+            "conclusion": "success",
+            "name": "Build dependencies (on cache miss)",
+            "number": 6,
+            "startedAt": "2026-10-10T13:29:44Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:32:12Z",
+            "conclusion": "success",
+            "name": "Configure root (preset + prebuilt deps)",
+            "number": 7,
+            "startedAt": "2026-10-10T13:32:12Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:38:01Z",
+            "conclusion": "success",
+            "name": "Build cmt-workflow (Release)",
+            "number": 8,
+            "startedAt": "2026-10-10T13:32:12Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:38:05Z",
+            "conclusion": "success",
+            "name": "Upload plugin output",
+            "number": 9,
+            "startedAt": "2026-10-10T13:38:01Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:38:05Z",
+            "conclusion": "success",
+            "name": "Post Cache prebuilt dependencies",
+            "number": 17,
+            "startedAt": "2026-10-10T13:38:05Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:38:08Z",
+            "conclusion": "success",
+            "name": "Post Checkout",
+            "number": 18,
+            "startedAt": "2026-10-10T13:38:05Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:38:08Z",
+            "conclusion": "success",
+            "name": "Complete job",
+            "number": 19,
+            "startedAt": "2026-10-10T13:38:08Z",
+            "status": "completed"
+          }
+        ],
+        "url": "https://github.com/AiMiDi/C4D_MMD_Tool/actions/runs/38055599355/job/114238177507"
+      },
+      {
+        "completedAt": "2026-10-10T14:57:50Z",
+        "conclusion": "success",
+        "databaseId": 114238177529,
+        "name": "Build (reusable) / matrix-build (macos-26-intel, sdk_r25)",
+        "startedAt": "2026-10-10T14:42:44Z",
+        "status": "completed",
+        "steps": [
+          {
+            "completedAt": "2026-10-10T14:42:48Z",
+            "conclusion": "success",
+            "name": "Set up job",
+            "number": 1,
+            "startedAt": "2026-10-10T14:42:46Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:43:22Z",
+            "conclusion": "success",
+            "name": "Checkout",
+            "number": 2,
+            "startedAt": "2026-10-10T14:42:48Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:43:51Z",
+            "conclusion": "success",
+            "name": "Checkout build submodules",
+            "number": 3,
+            "startedAt": "2026-10-10T14:43:22Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:43:57Z",
+            "conclusion": "success",
+            "name": "Identify dependency toolchain and revisions",
+            "number": 4,
+            "startedAt": "2026-10-10T14:43:51Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:44:00Z",
+            "conclusion": "success",
+            "name": "Cache prebuilt dependencies",
+            "number": 5,
+            "startedAt": "2026-10-10T14:43:57Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:44:00Z",
+            "conclusion": "skipped",
+            "name": "Build dependencies (on cache miss)",
+            "number": 6,
+            "startedAt": "2026-10-10T14:44:00Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:44:05Z",
+            "conclusion": "success",
+            "name": "Configure root (preset + prebuilt deps)",
+            "number": 7,
+            "startedAt": "2026-10-10T14:44:00Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:57:37Z",
+            "conclusion": "success",
+            "name": "Build cmt-workflow (Release)",
+            "number": 8,
+            "startedAt": "2026-10-10T14:44:05Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:57:42Z",
+            "conclusion": "success",
+            "name": "Upload plugin output",
+            "number": 9,
+            "startedAt": "2026-10-10T14:57:37Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:57:43Z",
+            "conclusion": "success",
+            "name": "Post Cache prebuilt dependencies",
+            "number": 17,
+            "startedAt": "2026-10-10T14:57:42Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:57:46Z",
+            "conclusion": "success",
+            "name": "Post Checkout",
+            "number": 18,
+            "startedAt": "2026-10-10T14:57:43Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:57:48Z",
+            "conclusion": "success",
+            "name": "Complete job",
+            "number": 19,
+            "startedAt": "2026-10-10T14:57:46Z",
+            "status": "completed"
+          }
+        ],
+        "url": "https://github.com/AiMiDi/C4D_MMD_Tool/actions/runs/38055599355/job/114238177529"
+      },
+      {
+        "completedAt": "2026-10-10T13:44:57Z",
+        "conclusion": "success",
+        "databaseId": 114238177597,
+        "name": "Build (reusable) / matrix-build (windows-2022, sdk_2024)",
+        "startedAt": "2026-10-10T13:38:12Z",
+        "status": "completed",
+        "steps": [
+          {
+            "completedAt": "2026-10-10T13:38:14Z",
+            "conclusion": "success",
+            "name": "Set up job",
+            "number": 1,
+            "startedAt": "2026-10-10T13:38:13Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:38:38Z",
+            "conclusion": "success",
+            "name": "Checkout",
+            "number": 2,
+            "startedAt": "2026-10-10T13:38:14Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:39:01Z",
+            "conclusion": "success",
+            "name": "Checkout build submodules",
+            "number": 3,
+            "startedAt": "2026-10-10T13:38:38Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:39:04Z",
+            "conclusion": "success",
+            "name": "Identify dependency toolchain and revisions",
+            "number": 4,
+            "startedAt": "2026-10-10T13:39:01Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:39:06Z",
+            "conclusion": "success",
+            "name": "Cache prebuilt dependencies",
+            "number": 5,
+            "startedAt": "2026-10-10T13:39:04Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:39:06Z",
+            "conclusion": "skipped",
+            "name": "Build dependencies (on cache miss)",
+            "number": 6,
+            "startedAt": "2026-10-10T13:39:06Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:39:13Z",
+            "conclusion": "success",
+            "name": "Configure root (preset + prebuilt deps)",
+            "number": 7,
+            "startedAt": "2026-10-10T13:39:06Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:44:50Z",
+            "conclusion": "success",
+            "name": "Build cmt-workflow (Release)",
+            "number": 8,
+            "startedAt": "2026-10-10T13:39:13Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:44:53Z",
+            "conclusion": "success",
+            "name": "Upload plugin output",
+            "number": 9,
+            "startedAt": "2026-10-10T13:44:50Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:44:53Z",
+            "conclusion": "success",
+            "name": "Post Cache prebuilt dependencies",
+            "number": 17,
+            "startedAt": "2026-10-10T13:44:53Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:44:56Z",
+            "conclusion": "success",
+            "name": "Post Checkout",
+            "number": 18,
+            "startedAt": "2026-10-10T13:44:53Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:44:56Z",
+            "conclusion": "success",
+            "name": "Complete job",
+            "number": 19,
+            "startedAt": "2026-10-10T13:44:56Z",
+            "status": "completed"
+          }
+        ],
+        "url": "https://github.com/AiMiDi/C4D_MMD_Tool/actions/runs/38055599355/job/114238177597"
+      },
+      {
+        "completedAt": "2026-10-10T13:59:49Z",
+        "conclusion": "success",
+        "databaseId": 114238177612,
+        "name": "Build (reusable) / matrix-build (macos-26-intel, sdk_r23)",
+        "startedAt": "2026-10-10T13:46:56Z",
+        "status": "completed",
+        "steps": [
+          {
+            "completedAt": "2026-10-10T13:46:59Z",
+            "conclusion": "success",
+            "name": "Set up job",
+            "number": 1,
+            "startedAt": "2026-10-10T13:46:57Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:47:27Z",
+            "conclusion": "success",
+            "name": "Checkout",
+            "number": 2,
+            "startedAt": "2026-10-10T13:46:59Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:48:03Z",
+            "conclusion": "success",
+            "name": "Checkout build submodules",
+            "number": 3,
+            "startedAt": "2026-10-10T13:47:27Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:48:12Z",
+            "conclusion": "success",
+            "name": "Identify dependency toolchain and revisions",
+            "number": 4,
+            "startedAt": "2026-10-10T13:48:03Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:48:13Z",
+            "conclusion": "success",
+            "name": "Cache prebuilt dependencies",
+            "number": 5,
+            "startedAt": "2026-10-10T13:48:12Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:52:08Z",
+            "conclusion": "success",
+            "name": "Build dependencies (on cache miss)",
+            "number": 6,
+            "startedAt": "2026-10-10T13:48:13Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:52:10Z",
+            "conclusion": "success",
+            "name": "Configure root (preset + prebuilt deps)",
+            "number": 7,
+            "startedAt": "2026-10-10T13:52:08Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:59:39Z",
+            "conclusion": "success",
+            "name": "Build cmt-workflow (Release)",
+            "number": 8,
+            "startedAt": "2026-10-10T13:52:10Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:59:42Z",
+            "conclusion": "success",
+            "name": "Upload plugin output",
+            "number": 9,
+            "startedAt": "2026-10-10T13:59:39Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:59:44Z",
+            "conclusion": "success",
+            "name": "Post Cache prebuilt dependencies",
+            "number": 17,
+            "startedAt": "2026-10-10T13:59:42Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:59:46Z",
+            "conclusion": "success",
+            "name": "Post Checkout",
+            "number": 18,
+            "startedAt": "2026-10-10T13:59:44Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:59:47Z",
+            "conclusion": "success",
+            "name": "Complete job",
+            "number": 19,
+            "startedAt": "2026-10-10T13:59:46Z",
+            "status": "completed"
+          }
+        ],
+        "url": "https://github.com/AiMiDi/C4D_MMD_Tool/actions/runs/38055599355/job/114238177612"
+      },
+      {
+        "completedAt": "2026-10-10T13:44:50Z",
+        "conclusion": "success",
+        "databaseId": 114238177628,
+        "name": "Build (reusable) / matrix-build (windows-2022, sdk_2023)",
+        "startedAt": "2026-10-10T13:36:35Z",
+        "status": "completed",
+        "steps": [
+          {
+            "completedAt": "2026-10-10T13:36:36Z",
+            "conclusion": "success",
+            "name": "Set up job",
+            "number": 1,
+            "startedAt": "2026-10-10T13:36:35Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:37:00Z",
+            "conclusion": "success",
+            "name": "Checkout",
+            "number": 2,
+            "startedAt": "2026-10-10T13:36:36Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:37:22Z",
+            "conclusion": "success",
+            "name": "Checkout build submodules",
+            "number": 3,
+            "startedAt": "2026-10-10T13:37:00Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:37:25Z",
+            "conclusion": "success",
+            "name": "Identify dependency toolchain and revisions",
+            "number": 4,
+            "startedAt": "2026-10-10T13:37:22Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:37:26Z",
+            "conclusion": "success",
+            "name": "Cache prebuilt dependencies",
+            "number": 5,
+            "startedAt": "2026-10-10T13:37:25Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:37:26Z",
+            "conclusion": "skipped",
+            "name": "Build dependencies (on cache miss)",
+            "number": 6,
+            "startedAt": "2026-10-10T13:37:26Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:37:33Z",
+            "conclusion": "success",
+            "name": "Configure root (preset + prebuilt deps)",
+            "number": 7,
+            "startedAt": "2026-10-10T13:37:26Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:44:43Z",
+            "conclusion": "success",
+            "name": "Build cmt-workflow (Release)",
+            "number": 8,
+            "startedAt": "2026-10-10T13:37:33Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:44:45Z",
+            "conclusion": "success",
+            "name": "Upload plugin output",
+            "number": 9,
+            "startedAt": "2026-10-10T13:44:43Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:44:46Z",
+            "conclusion": "success",
+            "name": "Post Cache prebuilt dependencies",
+            "number": 17,
+            "startedAt": "2026-10-10T13:44:45Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:44:49Z",
+            "conclusion": "success",
+            "name": "Post Checkout",
+            "number": 18,
+            "startedAt": "2026-10-10T13:44:46Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:44:49Z",
+            "conclusion": "success",
+            "name": "Complete job",
+            "number": 19,
+            "startedAt": "2026-10-10T13:44:49Z",
+            "status": "completed"
+          }
+        ],
+        "url": "https://github.com/AiMiDi/C4D_MMD_Tool/actions/runs/38055599355/job/114238177628"
+      },
+      {
+        "completedAt": "2026-10-10T14:12:36Z",
+        "conclusion": "success",
+        "databaseId": 114238177631,
+        "name": "Build (reusable) / matrix-build (macos-26-intel, sdk_2023)",
+        "startedAt": "2026-10-10T13:59:51Z",
+        "status": "completed",
+        "steps": [
+          {
+            "completedAt": "2026-10-10T13:59:53Z",
+            "conclusion": "success",
+            "name": "Set up job",
+            "number": 1,
+            "startedAt": "2026-10-10T13:59:51Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:00:23Z",
+            "conclusion": "success",
+            "name": "Checkout",
+            "number": 2,
+            "startedAt": "2026-10-10T13:59:53Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:00:54Z",
+            "conclusion": "success",
+            "name": "Checkout build submodules",
+            "number": 3,
+            "startedAt": "2026-10-10T14:00:23Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:00:56Z",
+            "conclusion": "success",
+            "name": "Identify dependency toolchain and revisions",
+            "number": 4,
+            "startedAt": "2026-10-10T14:00:54Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:00:57Z",
+            "conclusion": "success",
+            "name": "Cache prebuilt dependencies",
+            "number": 5,
+            "startedAt": "2026-10-10T14:00:56Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:00:57Z",
+            "conclusion": "skipped",
+            "name": "Build dependencies (on cache miss)",
+            "number": 6,
+            "startedAt": "2026-10-10T14:00:57Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:01:01Z",
+            "conclusion": "success",
+            "name": "Configure root (preset + prebuilt deps)",
+            "number": 7,
+            "startedAt": "2026-10-10T14:00:57Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:12:30Z",
+            "conclusion": "success",
+            "name": "Build cmt-workflow (Release)",
+            "number": 8,
+            "startedAt": "2026-10-10T14:01:01Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:12:31Z",
+            "conclusion": "success",
+            "name": "Upload plugin output",
+            "number": 9,
+            "startedAt": "2026-10-10T14:12:30Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:12:31Z",
+            "conclusion": "success",
+            "name": "Post Cache prebuilt dependencies",
+            "number": 17,
+            "startedAt": "2026-10-10T14:12:31Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:12:33Z",
+            "conclusion": "success",
+            "name": "Post Checkout",
+            "number": 18,
+            "startedAt": "2026-10-10T14:12:31Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:12:35Z",
+            "conclusion": "success",
+            "name": "Complete job",
+            "number": 19,
+            "startedAt": "2026-10-10T14:12:33Z",
+            "status": "completed"
+          }
+        ],
+        "url": "https://github.com/AiMiDi/C4D_MMD_Tool/actions/runs/38055599355/job/114238177631"
+      },
+      {
+        "completedAt": "2026-10-10T14:00:59Z",
+        "conclusion": "success",
+        "databaseId": 114238177685,
+        "name": "Build (reusable) / matrix-build (macos-26-intel, sdk_r20)",
+        "startedAt": "2026-10-10T13:44:55Z",
+        "status": "completed",
+        "steps": [
+          {
+            "completedAt": "2026-10-10T13:44:58Z",
+            "conclusion": "success",
+            "name": "Set up job",
+            "number": 1,
+            "startedAt": "2026-10-10T13:44:55Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:45:42Z",
+            "conclusion": "success",
+            "name": "Checkout",
+            "number": 2,
+            "startedAt": "2026-10-10T13:44:58Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:46:32Z",
+            "conclusion": "success",
+            "name": "Checkout build submodules",
+            "number": 3,
+            "startedAt": "2026-10-10T13:45:42Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:46:41Z",
+            "conclusion": "success",
+            "name": "Identify dependency toolchain and revisions",
+            "number": 4,
+            "startedAt": "2026-10-10T13:46:32Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:46:44Z",
+            "conclusion": "success",
+            "name": "Cache prebuilt dependencies",
+            "number": 5,
+            "startedAt": "2026-10-10T13:46:41Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:53:12Z",
+            "conclusion": "success",
+            "name": "Build dependencies (on cache miss)",
+            "number": 6,
+            "startedAt": "2026-10-10T13:46:44Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:53:14Z",
+            "conclusion": "success",
+            "name": "Configure root (preset + prebuilt deps)",
+            "number": 7,
+            "startedAt": "2026-10-10T13:53:12Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:00:52Z",
+            "conclusion": "success",
+            "name": "Build cmt-workflow (Release)",
+            "number": 8,
+            "startedAt": "2026-10-10T13:53:14Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:00:54Z",
+            "conclusion": "success",
+            "name": "Upload plugin output",
+            "number": 9,
+            "startedAt": "2026-10-10T14:00:52Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:00:55Z",
+            "conclusion": "success",
+            "name": "Post Cache prebuilt dependencies",
+            "number": 17,
+            "startedAt": "2026-10-10T14:00:54Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:00:57Z",
+            "conclusion": "success",
+            "name": "Post Checkout",
+            "number": 18,
+            "startedAt": "2026-10-10T14:00:55Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:00:57Z",
+            "conclusion": "success",
+            "name": "Complete job",
+            "number": 19,
+            "startedAt": "2026-10-10T14:00:57Z",
+            "status": "completed"
+          }
+        ],
+        "url": "https://github.com/AiMiDi/C4D_MMD_Tool/actions/runs/38055599355/job/114238177685"
+      },
+      {
+        "completedAt": "2026-10-10T14:05:23Z",
+        "conclusion": "success",
+        "databaseId": 114238177933,
+        "name": "Build (reusable) / matrix-build (macos-26-intel, sdk_r21)",
+        "startedAt": "2026-10-10T13:45:01Z",
+        "status": "completed",
+        "steps": [
+          {
+            "completedAt": "2026-10-10T13:45:05Z",
+            "conclusion": "success",
+            "name": "Set up job",
+            "number": 1,
+            "startedAt": "2026-10-10T13:45:02Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:46:02Z",
+            "conclusion": "success",
+            "name": "Checkout",
+            "number": 2,
+            "startedAt": "2026-10-10T13:45:06Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:46:45Z",
+            "conclusion": "success",
+            "name": "Checkout build submodules",
+            "number": 3,
+            "startedAt": "2026-10-10T13:46:02Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:46:54Z",
+            "conclusion": "success",
+            "name": "Identify dependency toolchain and revisions",
+            "number": 4,
+            "startedAt": "2026-10-10T13:46:45Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:46:57Z",
+            "conclusion": "success",
+            "name": "Cache prebuilt dependencies",
+            "number": 5,
+            "startedAt": "2026-10-10T13:46:54Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:51:55Z",
+            "conclusion": "success",
+            "name": "Build dependencies (on cache miss)",
+            "number": 6,
+            "startedAt": "2026-10-10T13:46:57Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:51:58Z",
+            "conclusion": "success",
+            "name": "Configure root (preset + prebuilt deps)",
+            "number": 7,
+            "startedAt": "2026-10-10T13:51:55Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:05:15Z",
+            "conclusion": "success",
+            "name": "Build cmt-workflow (Release)",
+            "number": 8,
+            "startedAt": "2026-10-10T13:51:58Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:05:17Z",
+            "conclusion": "success",
+            "name": "Upload plugin output",
+            "number": 9,
+            "startedAt": "2026-10-10T14:05:15Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:05:18Z",
+            "conclusion": "success",
+            "name": "Post Cache prebuilt dependencies",
+            "number": 17,
+            "startedAt": "2026-10-10T14:05:17Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:05:20Z",
+            "conclusion": "success",
+            "name": "Post Checkout",
+            "number": 18,
+            "startedAt": "2026-10-10T14:05:18Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:05:21Z",
+            "conclusion": "success",
+            "name": "Complete job",
+            "number": 19,
+            "startedAt": "2026-10-10T14:05:20Z",
+            "status": "completed"
+          }
+        ],
+        "url": "https://github.com/AiMiDi/C4D_MMD_Tool/actions/runs/38055599355/job/114238177933"
+      },
+      {
+        "completedAt": "2026-10-10T14:15:37Z",
+        "conclusion": "success",
+        "databaseId": 114238178005,
+        "name": "Build (reusable) / matrix-build (macos-26-intel, sdk_2026)",
+        "startedAt": "2026-10-10T14:05:25Z",
+        "status": "completed",
+        "steps": [
+          {
+            "completedAt": "2026-10-10T14:05:28Z",
+            "conclusion": "success",
+            "name": "Set up job",
+            "number": 1,
+            "startedAt": "2026-10-10T14:05:26Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:05:53Z",
+            "conclusion": "success",
+            "name": "Checkout",
+            "number": 2,
+            "startedAt": "2026-10-10T14:05:28Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:06:29Z",
+            "conclusion": "success",
+            "name": "Checkout build submodules",
+            "number": 3,
+            "startedAt": "2026-10-10T14:05:53Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:06:32Z",
+            "conclusion": "success",
+            "name": "Identify dependency toolchain and revisions",
+            "number": 4,
+            "startedAt": "2026-10-10T14:06:29Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:06:35Z",
+            "conclusion": "success",
+            "name": "Cache prebuilt dependencies",
+            "number": 5,
+            "startedAt": "2026-10-10T14:06:32Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:06:35Z",
+            "conclusion": "skipped",
+            "name": "Build dependencies (on cache miss)",
+            "number": 6,
+            "startedAt": "2026-10-10T14:06:35Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:06:39Z",
+            "conclusion": "success",
+            "name": "Configure root (preset + prebuilt deps)",
+            "number": 7,
+            "startedAt": "2026-10-10T14:06:35Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:15:29Z",
+            "conclusion": "success",
+            "name": "Build cmt-workflow (Release)",
+            "number": 8,
+            "startedAt": "2026-10-10T14:06:39Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:15:32Z",
+            "conclusion": "success",
+            "name": "Upload plugin output",
+            "number": 9,
+            "startedAt": "2026-10-10T14:15:29Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:15:32Z",
+            "conclusion": "success",
+            "name": "Post Cache prebuilt dependencies",
+            "number": 17,
+            "startedAt": "2026-10-10T14:15:32Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:15:34Z",
+            "conclusion": "success",
+            "name": "Post Checkout",
+            "number": 18,
+            "startedAt": "2026-10-10T14:15:32Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:15:34Z",
+            "conclusion": "success",
+            "name": "Complete job",
+            "number": 19,
+            "startedAt": "2026-10-10T14:15:34Z",
+            "status": "completed"
+          }
+        ],
+        "url": "https://github.com/AiMiDi/C4D_MMD_Tool/actions/runs/38055599355/job/114238178005"
+      },
+      {
+        "completedAt": "2026-10-10T14:18:22Z",
+        "conclusion": "success",
+        "databaseId": 114238178146,
+        "name": "Build (reusable) / matrix-build (macos-26-intel, sdk_2024)",
+        "startedAt": "2026-10-10T14:01:01Z",
+        "status": "completed",
+        "steps": [
+          {
+            "completedAt": "2026-10-10T14:00:58Z",
+            "conclusion": "success",
+            "name": "Set up job",
+            "number": 1,
+            "startedAt": "2026-10-10T14:00:56Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:01:31Z",
+            "conclusion": "success",
+            "name": "Checkout",
+            "number": 2,
+            "startedAt": "2026-10-10T14:00:58Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:02:07Z",
+            "conclusion": "success",
+            "name": "Checkout build submodules",
+            "number": 3,
+            "startedAt": "2026-10-10T14:01:31Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:02:13Z",
+            "conclusion": "success",
+            "name": "Identify dependency toolchain and revisions",
+            "number": 4,
+            "startedAt": "2026-10-10T14:02:07Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:02:14Z",
+            "conclusion": "success",
+            "name": "Cache prebuilt dependencies",
+            "number": 5,
+            "startedAt": "2026-10-10T14:02:13Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:02:14Z",
+            "conclusion": "skipped",
+            "name": "Build dependencies (on cache miss)",
+            "number": 6,
+            "startedAt": "2026-10-10T14:02:14Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:02:19Z",
+            "conclusion": "success",
+            "name": "Configure root (preset + prebuilt deps)",
+            "number": 7,
+            "startedAt": "2026-10-10T14:02:14Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:18:05Z",
+            "conclusion": "success",
+            "name": "Build cmt-workflow (Release)",
+            "number": 8,
+            "startedAt": "2026-10-10T14:02:19Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:18:09Z",
+            "conclusion": "success",
+            "name": "Upload plugin output",
+            "number": 9,
+            "startedAt": "2026-10-10T14:18:05Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:18:10Z",
+            "conclusion": "success",
+            "name": "Post Cache prebuilt dependencies",
+            "number": 17,
+            "startedAt": "2026-10-10T14:18:09Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:18:13Z",
+            "conclusion": "success",
+            "name": "Post Checkout",
+            "number": 18,
+            "startedAt": "2026-10-10T14:18:10Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:18:14Z",
+            "conclusion": "success",
+            "name": "Complete job",
+            "number": 19,
+            "startedAt": "2026-10-10T14:18:13Z",
+            "status": "completed"
+          }
+        ],
+        "url": "https://github.com/AiMiDi/C4D_MMD_Tool/actions/runs/38055599355/job/114238178146"
+      },
+      {
+        "completedAt": "2026-10-10T14:19:35Z",
+        "conclusion": "success",
+        "databaseId": 114238178235,
+        "name": "Build (reusable) / matrix-build (macos-26-intel, sdk_2025)",
+        "startedAt": "2026-10-10T14:05:10Z",
+        "status": "completed",
+        "steps": [
+          {
+            "completedAt": "2026-10-10T14:05:13Z",
+            "conclusion": "success",
+            "name": "Set up job",
+            "number": 1,
+            "startedAt": "2026-10-10T14:05:11Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:05:45Z",
+            "conclusion": "success",
+            "name": "Checkout",
+            "number": 2,
+            "startedAt": "2026-10-10T14:05:13Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:06:17Z",
+            "conclusion": "success",
+            "name": "Checkout build submodules",
+            "number": 3,
+            "startedAt": "2026-10-10T14:05:45Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:06:21Z",
+            "conclusion": "success",
+            "name": "Identify dependency toolchain and revisions",
+            "number": 4,
+            "startedAt": "2026-10-10T14:06:17Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:06:24Z",
+            "conclusion": "success",
+            "name": "Cache prebuilt dependencies",
+            "number": 5,
+            "startedAt": "2026-10-10T14:06:21Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:06:24Z",
+            "conclusion": "skipped",
+            "name": "Build dependencies (on cache miss)",
+            "number": 6,
+            "startedAt": "2026-10-10T14:06:24Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:06:28Z",
+            "conclusion": "success",
+            "name": "Configure root (preset + prebuilt deps)",
+            "number": 7,
+            "startedAt": "2026-10-10T14:06:24Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:19:24Z",
+            "conclusion": "success",
+            "name": "Build cmt-workflow (Release)",
+            "number": 8,
+            "startedAt": "2026-10-10T14:06:28Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:19:28Z",
+            "conclusion": "success",
+            "name": "Upload plugin output",
+            "number": 9,
+            "startedAt": "2026-10-10T14:19:24Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:19:29Z",
+            "conclusion": "success",
+            "name": "Post Cache prebuilt dependencies",
+            "number": 17,
+            "startedAt": "2026-10-10T14:19:28Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:19:32Z",
+            "conclusion": "success",
+            "name": "Post Checkout",
+            "number": 18,
+            "startedAt": "2026-10-10T14:19:29Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:19:33Z",
+            "conclusion": "success",
+            "name": "Complete job",
+            "number": 19,
+            "startedAt": "2026-10-10T14:19:32Z",
+            "status": "completed"
+          }
+        ],
+        "url": "https://github.com/AiMiDi/C4D_MMD_Tool/actions/runs/38055599355/job/114238178235"
+      },
+      {
+        "completedAt": "2026-10-10T14:24:45Z",
+        "conclusion": "success",
+        "databaseId": 114238178295,
+        "name": "Build (reusable) / matrix-build (macos-26, sdk_2023, release-macos, workflow-release-macos, Xcode, arm64, false)",
+        "startedAt": "2026-10-10T14:15:44Z",
+        "status": "completed",
+        "steps": [
+          {
+            "completedAt": "2026-10-10T14:15:45Z",
+            "conclusion": "success",
+            "name": "Set up job",
+            "number": 1,
+            "startedAt": "2026-10-10T14:15:44Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:16:03Z",
+            "conclusion": "success",
+            "name": "Checkout",
+            "number": 2,
+            "startedAt": "2026-10-10T14:15:45Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:16:30Z",
+            "conclusion": "success",
+            "name": "Checkout build submodules",
+            "number": 3,
+            "startedAt": "2026-10-10T14:16:03Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:16:34Z",
+            "conclusion": "success",
+            "name": "Identify dependency toolchain and revisions",
+            "number": 4,
+            "startedAt": "2026-10-10T14:16:30Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:16:35Z",
+            "conclusion": "success",
+            "name": "Cache prebuilt dependencies",
+            "number": 5,
+            "startedAt": "2026-10-10T14:16:34Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:18:31Z",
+            "conclusion": "success",
+            "name": "Build dependencies (on cache miss)",
+            "number": 6,
+            "startedAt": "2026-10-10T14:16:35Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:18:36Z",
+            "conclusion": "success",
+            "name": "Configure root (preset + prebuilt deps)",
+            "number": 7,
+            "startedAt": "2026-10-10T14:18:31Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:24:38Z",
+            "conclusion": "success",
+            "name": "Build cmt-workflow (Release)",
+            "number": 8,
+            "startedAt": "2026-10-10T14:18:36Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:24:38Z",
+            "conclusion": "skipped",
+            "name": "Upload plugin output",
+            "number": 9,
+            "startedAt": "2026-10-10T14:24:38Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:24:40Z",
+            "conclusion": "success",
+            "name": "Post Cache prebuilt dependencies",
+            "number": 17,
+            "startedAt": "2026-10-10T14:24:38Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:24:41Z",
+            "conclusion": "success",
+            "name": "Post Checkout",
+            "number": 18,
+            "startedAt": "2026-10-10T14:24:40Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:24:43Z",
+            "conclusion": "success",
+            "name": "Complete job",
+            "number": 19,
+            "startedAt": "2026-10-10T14:24:41Z",
+            "status": "completed"
+          }
+        ],
+        "url": "https://github.com/AiMiDi/C4D_MMD_Tool/actions/runs/38055599355/job/114238178295"
+      },
+      {
+        "completedAt": "2026-10-10T14:21:10Z",
+        "conclusion": "success",
+        "databaseId": 114238178354,
+        "name": "Build (reusable) / matrix-build (macos-26, sdk_r25, release-macos, workflow-release-macos, Xcode, arm64, false)",
+        "startedAt": "2026-10-10T14:12:44Z",
+        "status": "completed",
+        "steps": [
+          {
+            "completedAt": "2026-10-10T14:12:46Z",
+            "conclusion": "success",
+            "name": "Set up job",
+            "number": 1,
+            "startedAt": "2026-10-10T14:12:45Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:13:11Z",
+            "conclusion": "success",
+            "name": "Checkout",
+            "number": 2,
+            "startedAt": "2026-10-10T14:12:46Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:13:37Z",
+            "conclusion": "success",
+            "name": "Checkout build submodules",
+            "number": 3,
+            "startedAt": "2026-10-10T14:13:11Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:13:41Z",
+            "conclusion": "success",
+            "name": "Identify dependency toolchain and revisions",
+            "number": 4,
+            "startedAt": "2026-10-10T14:13:37Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:13:42Z",
+            "conclusion": "success",
+            "name": "Cache prebuilt dependencies",
+            "number": 5,
+            "startedAt": "2026-10-10T14:13:41Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:15:37Z",
+            "conclusion": "success",
+            "name": "Build dependencies (on cache miss)",
+            "number": 6,
+            "startedAt": "2026-10-10T14:13:42Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:15:39Z",
+            "conclusion": "success",
+            "name": "Configure root (preset + prebuilt deps)",
+            "number": 7,
+            "startedAt": "2026-10-10T14:15:37Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:20:58Z",
+            "conclusion": "success",
+            "name": "Build cmt-workflow (Release)",
+            "number": 8,
+            "startedAt": "2026-10-10T14:15:39Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:20:58Z",
+            "conclusion": "skipped",
+            "name": "Upload plugin output",
+            "number": 9,
+            "startedAt": "2026-10-10T14:20:58Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:21:01Z",
+            "conclusion": "success",
+            "name": "Post Cache prebuilt dependencies",
+            "number": 17,
+            "startedAt": "2026-10-10T14:20:58Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:21:04Z",
+            "conclusion": "success",
+            "name": "Post Checkout",
+            "number": 18,
+            "startedAt": "2026-10-10T14:21:01Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:21:08Z",
+            "conclusion": "success",
+            "name": "Complete job",
+            "number": 19,
+            "startedAt": "2026-10-10T14:21:04Z",
+            "status": "completed"
+          }
+        ],
+        "url": "https://github.com/AiMiDi/C4D_MMD_Tool/actions/runs/38055599355/job/114238178354"
+      },
+      {
+        "completedAt": "2026-10-10T14:30:11Z",
+        "conclusion": "success",
+        "databaseId": 114238178406,
+        "name": "Build (reusable) / matrix-build (macos-26, sdk_2024, release-macos, workflow-release-macos, Xcode, arm64, false)",
+        "startedAt": "2026-10-10T14:18:28Z",
+        "status": "completed",
+        "steps": [
+          {
+            "completedAt": "2026-10-10T14:18:30Z",
+            "conclusion": "success",
+            "name": "Set up job",
+            "number": 1,
+            "startedAt": "2026-10-10T14:18:29Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:18:55Z",
+            "conclusion": "success",
+            "name": "Checkout",
+            "number": 2,
+            "startedAt": "2026-10-10T14:18:30Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:19:23Z",
+            "conclusion": "success",
+            "name": "Checkout build submodules",
+            "number": 3,
+            "startedAt": "2026-10-10T14:18:55Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:19:27Z",
+            "conclusion": "success",
+            "name": "Identify dependency toolchain and revisions",
+            "number": 4,
+            "startedAt": "2026-10-10T14:19:23Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:19:29Z",
+            "conclusion": "success",
+            "name": "Cache prebuilt dependencies",
+            "number": 5,
+            "startedAt": "2026-10-10T14:19:27Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:22:10Z",
+            "conclusion": "success",
+            "name": "Build dependencies (on cache miss)",
+            "number": 6,
+            "startedAt": "2026-10-10T14:19:29Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:22:15Z",
+            "conclusion": "success",
+            "name": "Configure root (preset + prebuilt deps)",
+            "number": 7,
+            "startedAt": "2026-10-10T14:22:10Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:30:01Z",
+            "conclusion": "success",
+            "name": "Build cmt-workflow (Release)",
+            "number": 8,
+            "startedAt": "2026-10-10T14:22:15Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:30:01Z",
+            "conclusion": "skipped",
+            "name": "Upload plugin output",
+            "number": 9,
+            "startedAt": "2026-10-10T14:30:01Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:30:04Z",
+            "conclusion": "success",
+            "name": "Post Cache prebuilt dependencies",
+            "number": 17,
+            "startedAt": "2026-10-10T14:30:01Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:30:07Z",
+            "conclusion": "success",
+            "name": "Post Checkout",
+            "number": 18,
+            "startedAt": "2026-10-10T14:30:04Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:30:09Z",
+            "conclusion": "success",
+            "name": "Complete job",
+            "number": 19,
+            "startedAt": "2026-10-10T14:30:07Z",
+            "status": "completed"
+          }
+        ],
+        "url": "https://github.com/AiMiDi/C4D_MMD_Tool/actions/runs/38055599355/job/114238178406"
+      },
+      {
+        "completedAt": "2026-10-10T14:29:33Z",
+        "conclusion": "success",
+        "databaseId": 114238178573,
+        "name": "Build (reusable) / matrix-build (macos-26, sdk_2025, release-macos, workflow-release-macos, Xcode, arm64, false)",
+        "startedAt": "2026-10-10T14:19:42Z",
+        "status": "completed",
+        "steps": [
+          {
+            "completedAt": "2026-10-10T14:19:44Z",
+            "conclusion": "success",
+            "name": "Set up job",
+            "number": 1,
+            "startedAt": "2026-10-10T14:19:42Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:20:11Z",
+            "conclusion": "success",
+            "name": "Checkout",
+            "number": 2,
+            "startedAt": "2026-10-10T14:19:44Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:20:42Z",
+            "conclusion": "success",
+            "name": "Checkout build submodules",
+            "number": 3,
+            "startedAt": "2026-10-10T14:20:11Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:20:45Z",
+            "conclusion": "success",
+            "name": "Identify dependency toolchain and revisions",
+            "number": 4,
+            "startedAt": "2026-10-10T14:20:42Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:20:46Z",
+            "conclusion": "success",
+            "name": "Cache prebuilt dependencies",
+            "number": 5,
+            "startedAt": "2026-10-10T14:20:45Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:22:59Z",
+            "conclusion": "success",
+            "name": "Build dependencies (on cache miss)",
+            "number": 6,
+            "startedAt": "2026-10-10T14:20:46Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:23:05Z",
+            "conclusion": "success",
+            "name": "Configure root (preset + prebuilt deps)",
+            "number": 7,
+            "startedAt": "2026-10-10T14:22:59Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:29:25Z",
+            "conclusion": "success",
+            "name": "Build cmt-workflow (Release)",
+            "number": 8,
+            "startedAt": "2026-10-10T14:23:05Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:29:25Z",
+            "conclusion": "skipped",
+            "name": "Upload plugin output",
+            "number": 9,
+            "startedAt": "2026-10-10T14:29:25Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:29:27Z",
+            "conclusion": "success",
+            "name": "Post Cache prebuilt dependencies",
+            "number": 17,
+            "startedAt": "2026-10-10T14:29:25Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:29:29Z",
+            "conclusion": "success",
+            "name": "Post Checkout",
+            "number": 18,
+            "startedAt": "2026-10-10T14:29:27Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:29:32Z",
+            "conclusion": "success",
+            "name": "Complete job",
+            "number": 19,
+            "startedAt": "2026-10-10T14:29:29Z",
+            "status": "completed"
+          }
+        ],
+        "url": "https://github.com/AiMiDi/C4D_MMD_Tool/actions/runs/38055599355/job/114238178573"
+      },
+      {
+        "completedAt": "2026-10-10T14:26:42Z",
+        "conclusion": "success",
+        "databaseId": 114238178612,
+        "name": "Build (reusable) / matrix-build (macos-26, sdk_2026, release-macos, workflow-release-macos, Xcode, arm64, false)",
+        "startedAt": "2026-10-10T14:21:16Z",
+        "status": "completed",
+        "steps": [
+          {
+            "completedAt": "2026-10-10T14:21:18Z",
+            "conclusion": "success",
+            "name": "Set up job",
+            "number": 1,
+            "startedAt": "2026-10-10T14:21:16Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:21:38Z",
+            "conclusion": "success",
+            "name": "Checkout",
+            "number": 2,
+            "startedAt": "2026-10-10T14:21:18Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:22:00Z",
+            "conclusion": "success",
+            "name": "Checkout build submodules",
+            "number": 3,
+            "startedAt": "2026-10-10T14:21:38Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:22:02Z",
+            "conclusion": "success",
+            "name": "Identify dependency toolchain and revisions",
+            "number": 4,
+            "startedAt": "2026-10-10T14:22:00Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:22:04Z",
+            "conclusion": "success",
+            "name": "Cache prebuilt dependencies",
+            "number": 5,
+            "startedAt": "2026-10-10T14:22:02Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:22:04Z",
+            "conclusion": "skipped",
+            "name": "Build dependencies (on cache miss)",
+            "number": 6,
+            "startedAt": "2026-10-10T14:22:04Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:22:06Z",
+            "conclusion": "success",
+            "name": "Configure root (preset + prebuilt deps)",
+            "number": 7,
+            "startedAt": "2026-10-10T14:22:04Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:26:35Z",
+            "conclusion": "success",
+            "name": "Build cmt-workflow (Release)",
+            "number": 8,
+            "startedAt": "2026-10-10T14:22:06Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:26:35Z",
+            "conclusion": "skipped",
+            "name": "Upload plugin output",
+            "number": 9,
+            "startedAt": "2026-10-10T14:26:35Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:26:36Z",
+            "conclusion": "success",
+            "name": "Post Cache prebuilt dependencies",
+            "number": 17,
+            "startedAt": "2026-10-10T14:26:35Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:26:37Z",
+            "conclusion": "success",
+            "name": "Post Checkout",
+            "number": 18,
+            "startedAt": "2026-10-10T14:26:36Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:26:40Z",
+            "conclusion": "success",
+            "name": "Complete job",
+            "number": 19,
+            "startedAt": "2026-10-10T14:26:37Z",
+            "status": "completed"
+          }
+        ],
+        "url": "https://github.com/AiMiDi/C4D_MMD_Tool/actions/runs/38055599355/job/114238178612"
+      },
+      {
+        "completedAt": "2026-10-10T13:38:13Z",
+        "conclusion": "success",
+        "databaseId": 114238194369,
+        "name": "Build (reusable) / matrix-build (windows-2022, sdk_r20)",
+        "startedAt": "2026-10-10T13:28:47Z",
+        "status": "completed",
+        "steps": [
+          {
+            "completedAt": "2026-10-10T13:28:49Z",
+            "conclusion": "success",
+            "name": "Set up job",
+            "number": 1,
+            "startedAt": "2026-10-10T13:28:48Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:29:15Z",
+            "conclusion": "success",
+            "name": "Checkout",
+            "number": 2,
+            "startedAt": "2026-10-10T13:28:49Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:29:38Z",
+            "conclusion": "success",
+            "name": "Checkout build submodules",
+            "number": 3,
+            "startedAt": "2026-10-10T13:29:15Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:29:41Z",
+            "conclusion": "success",
+            "name": "Identify dependency toolchain and revisions",
+            "number": 4,
+            "startedAt": "2026-10-10T13:29:38Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:29:42Z",
+            "conclusion": "success",
+            "name": "Cache prebuilt dependencies",
+            "number": 5,
+            "startedAt": "2026-10-10T13:29:41Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:32:27Z",
+            "conclusion": "success",
+            "name": "Build dependencies (on cache miss)",
+            "number": 6,
+            "startedAt": "2026-10-10T13:29:42Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:32:28Z",
+            "conclusion": "success",
+            "name": "Configure root (preset + prebuilt deps)",
+            "number": 7,
+            "startedAt": "2026-10-10T13:32:27Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:38:05Z",
+            "conclusion": "success",
+            "name": "Build cmt-workflow (Release)",
+            "number": 8,
+            "startedAt": "2026-10-10T13:32:28Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:38:08Z",
+            "conclusion": "success",
+            "name": "Upload plugin output",
+            "number": 9,
+            "startedAt": "2026-10-10T13:38:05Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:38:09Z",
+            "conclusion": "success",
+            "name": "Post Cache prebuilt dependencies",
+            "number": 17,
+            "startedAt": "2026-10-10T13:38:08Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:38:12Z",
+            "conclusion": "success",
+            "name": "Post Checkout",
+            "number": 18,
+            "startedAt": "2026-10-10T13:38:09Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:38:12Z",
+            "conclusion": "success",
+            "name": "Complete job",
+            "number": 19,
+            "startedAt": "2026-10-10T13:38:12Z",
+            "status": "completed"
+          }
+        ],
+        "url": "https://github.com/AiMiDi/C4D_MMD_Tool/actions/runs/38055599355/job/114238194369"
+      },
+      {
+        "completedAt": "2026-10-10T13:24:36Z",
+        "conclusion": "skipped",
+        "databaseId": 114238205270,
+        "name": "Build (reusable) / benchmarks",
+        "startedAt": "2026-10-10T14:42:49Z",
+        "status": "completed",
+        "steps": [],
+        "url": "https://github.com/AiMiDi/C4D_MMD_Tool/actions/runs/38055599355/job/114238205270"
+      },
+      {
+        "completedAt": "2026-10-10T13:46:51Z",
+        "conclusion": "success",
+        "databaseId": 114238206257,
+        "name": "Build (reusable) / matrix-build (windows-2022, sdk_2025)",
+        "startedAt": "2026-10-10T13:38:15Z",
+        "status": "completed",
+        "steps": [
+          {
+            "completedAt": "2026-10-10T13:38:17Z",
+            "conclusion": "success",
+            "name": "Set up job",
+            "number": 1,
+            "startedAt": "2026-10-10T13:38:16Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:38:42Z",
+            "conclusion": "success",
+            "name": "Checkout",
+            "number": 2,
+            "startedAt": "2026-10-10T13:38:17Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:39:04Z",
+            "conclusion": "success",
+            "name": "Checkout build submodules",
+            "number": 3,
+            "startedAt": "2026-10-10T13:38:42Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:39:07Z",
+            "conclusion": "success",
+            "name": "Identify dependency toolchain and revisions",
+            "number": 4,
+            "startedAt": "2026-10-10T13:39:04Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:39:09Z",
+            "conclusion": "success",
+            "name": "Cache prebuilt dependencies",
+            "number": 5,
+            "startedAt": "2026-10-10T13:39:07Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:39:09Z",
+            "conclusion": "skipped",
+            "name": "Build dependencies (on cache miss)",
+            "number": 6,
+            "startedAt": "2026-10-10T13:39:09Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:39:19Z",
+            "conclusion": "success",
+            "name": "Configure root (preset + prebuilt deps)",
+            "number": 7,
+            "startedAt": "2026-10-10T13:39:09Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:46:44Z",
+            "conclusion": "success",
+            "name": "Build cmt-workflow (Release)",
+            "number": 8,
+            "startedAt": "2026-10-10T13:39:19Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:46:47Z",
+            "conclusion": "success",
+            "name": "Upload plugin output",
+            "number": 9,
+            "startedAt": "2026-10-10T13:46:44Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:46:47Z",
+            "conclusion": "success",
+            "name": "Post Cache prebuilt dependencies",
+            "number": 17,
+            "startedAt": "2026-10-10T13:46:47Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:46:49Z",
+            "conclusion": "success",
+            "name": "Post Checkout",
+            "number": 18,
+            "startedAt": "2026-10-10T13:46:47Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:46:49Z",
+            "conclusion": "success",
+            "name": "Complete job",
+            "number": 19,
+            "startedAt": "2026-10-10T13:46:49Z",
+            "status": "completed"
+          }
+        ],
+        "url": "https://github.com/AiMiDi/C4D_MMD_Tool/actions/runs/38055599355/job/114238206257"
+      },
+      {
+        "completedAt": "2026-10-10T13:50:57Z",
+        "conclusion": "success",
+        "databaseId": 114238207819,
+        "name": "Build (reusable) / matrix-build (windows-2022, sdk_2026)",
+        "startedAt": "2026-10-10T13:39:21Z",
+        "status": "completed",
+        "steps": [
+          {
+            "completedAt": "2026-10-10T13:39:24Z",
+            "conclusion": "success",
+            "name": "Set up job",
+            "number": 1,
+            "startedAt": "2026-10-10T13:39:22Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:39:52Z",
+            "conclusion": "success",
+            "name": "Checkout",
+            "number": 2,
+            "startedAt": "2026-10-10T13:39:24Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:40:16Z",
+            "conclusion": "success",
+            "name": "Checkout build submodules",
+            "number": 3,
+            "startedAt": "2026-10-10T13:39:52Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:40:19Z",
+            "conclusion": "success",
+            "name": "Identify dependency toolchain and revisions",
+            "number": 4,
+            "startedAt": "2026-10-10T13:40:16Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:40:21Z",
+            "conclusion": "success",
+            "name": "Cache prebuilt dependencies",
+            "number": 5,
+            "startedAt": "2026-10-10T13:40:19Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:40:21Z",
+            "conclusion": "skipped",
+            "name": "Build dependencies (on cache miss)",
+            "number": 6,
+            "startedAt": "2026-10-10T13:40:21Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:40:39Z",
+            "conclusion": "success",
+            "name": "Configure root (preset + prebuilt deps)",
+            "number": 7,
+            "startedAt": "2026-10-10T13:40:21Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:50:48Z",
+            "conclusion": "success",
+            "name": "Build cmt-workflow (Release)",
+            "number": 8,
+            "startedAt": "2026-10-10T13:40:39Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:50:51Z",
+            "conclusion": "success",
+            "name": "Upload plugin output",
+            "number": 9,
+            "startedAt": "2026-10-10T13:50:48Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:50:52Z",
+            "conclusion": "success",
+            "name": "Post Cache prebuilt dependencies",
+            "number": 17,
+            "startedAt": "2026-10-10T13:50:51Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:50:55Z",
+            "conclusion": "success",
+            "name": "Post Checkout",
+            "number": 18,
+            "startedAt": "2026-10-10T13:50:52Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T13:50:55Z",
+            "conclusion": "success",
+            "name": "Complete job",
+            "number": 19,
+            "startedAt": "2026-10-10T13:50:55Z",
+            "status": "completed"
+          }
+        ],
+        "url": "https://github.com/AiMiDi/C4D_MMD_Tool/actions/runs/38055599355/job/114238207819"
+      },
+      {
+        "completedAt": "2026-10-10T14:58:38Z",
+        "conclusion": "success",
+        "databaseId": 114241079611,
+        "name": "package-windows",
+        "startedAt": "2026-10-10T14:57:52Z",
+        "status": "completed",
+        "steps": [
+          {
+            "completedAt": "2026-10-10T14:57:53Z",
+            "conclusion": "success",
+            "name": "Set up job",
+            "number": 1,
+            "startedAt": "2026-10-10T14:57:53Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:58:11Z",
+            "conclusion": "success",
+            "name": "Checkout (resources for installer)",
+            "number": 2,
+            "startedAt": "2026-10-10T14:57:53Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:58:14Z",
+            "conclusion": "success",
+            "name": "Checkout installer setup submodule",
+            "number": 3,
+            "startedAt": "2026-10-10T14:58:11Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:58:17Z",
+            "conclusion": "success",
+            "name": "Download Windows build artifacts",
+            "number": 4,
+            "startedAt": "2026-10-10T14:58:14Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:58:18Z",
+            "conclusion": "success",
+            "name": "Layout _build_msvc for installer_script.iss",
+            "number": 5,
+            "startedAt": "2026-10-10T14:58:17Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:58:24Z",
+            "conclusion": "success",
+            "name": "Install Inno Setup",
+            "number": 6,
+            "startedAt": "2026-10-10T14:58:18Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:58:24Z",
+            "conclusion": "success",
+            "name": "Compute package version",
+            "number": 7,
+            "startedAt": "2026-10-10T14:58:24Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:58:33Z",
+            "conclusion": "success",
+            "name": "Run ISCC",
+            "number": 8,
+            "startedAt": "2026-10-10T14:58:24Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:58:34Z",
+            "conclusion": "success",
+            "name": "Upload installer artifact",
+            "number": 9,
+            "startedAt": "2026-10-10T14:58:33Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:58:37Z",
+            "conclusion": "success",
+            "name": "Post Checkout (resources for installer)",
+            "number": 18,
+            "startedAt": "2026-10-10T14:58:34Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:58:37Z",
+            "conclusion": "success",
+            "name": "Complete job",
+            "number": 19,
+            "startedAt": "2026-10-10T14:58:37Z",
+            "status": "completed"
+          }
+        ],
+        "url": "https://github.com/AiMiDi/C4D_MMD_Tool/actions/runs/38055599355/job/114241079611"
+      },
+      {
+        "completedAt": "2026-10-10T14:58:10Z",
+        "conclusion": "success",
+        "databaseId": 114241079674,
+        "name": "package-macos",
+        "startedAt": "2026-10-10T14:57:58Z",
+        "status": "completed",
+        "steps": [
+          {
+            "completedAt": "2026-10-10T14:58:01Z",
+            "conclusion": "success",
+            "name": "Set up job",
+            "number": 1,
+            "startedAt": "2026-10-10T14:57:59Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:58:04Z",
+            "conclusion": "success",
+            "name": "Download macOS build artifacts",
+            "number": 2,
+            "startedAt": "2026-10-10T14:58:01Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:58:05Z",
+            "conclusion": "success",
+            "name": "Zip complete per-SDK plugin artifacts",
+            "number": 3,
+            "startedAt": "2026-10-10T14:58:04Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:58:08Z",
+            "conclusion": "success",
+            "name": "Upload macOS zip artifacts",
+            "number": 4,
+            "startedAt": "2026-10-10T14:58:05Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:58:08Z",
+            "conclusion": "success",
+            "name": "Complete job",
+            "number": 5,
+            "startedAt": "2026-10-10T14:58:08Z",
+            "status": "completed"
+          }
+        ],
+        "url": "https://github.com/AiMiDi/C4D_MMD_Tool/actions/runs/38055599355/job/114241079674"
+      },
+      {
+        "completedAt": "2026-10-10T14:58:49Z",
+        "conclusion": "success",
+        "databaseId": 114241231614,
+        "name": "release",
+        "startedAt": "2026-10-10T14:58:40Z",
+        "status": "completed",
+        "steps": [
+          {
+            "completedAt": "2026-10-10T14:58:42Z",
+            "conclusion": "success",
+            "name": "Set up job",
+            "number": 1,
+            "startedAt": "2026-10-10T14:58:41Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:58:42Z",
+            "conclusion": "success",
+            "name": "Download installer",
+            "number": 2,
+            "startedAt": "2026-10-10T14:58:42Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:58:43Z",
+            "conclusion": "success",
+            "name": "Download macOS zips",
+            "number": 3,
+            "startedAt": "2026-10-10T14:58:42Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:58:48Z",
+            "conclusion": "success",
+            "name": "Create GitHub Release",
+            "number": 4,
+            "startedAt": "2026-10-10T14:58:43Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-10T14:58:48Z",
+            "conclusion": "success",
+            "name": "Complete job",
+            "number": 5,
+            "startedAt": "2026-10-10T14:58:48Z",
+            "status": "completed"
+          }
+        ],
+        "url": "https://github.com/AiMiDi/C4D_MMD_Tool/actions/runs/38055599355/job/114241231614"
+      }
+    ],
+    "status": "completed",
+    "url": "https://github.com/AiMiDi/C4D_MMD_Tool/actions/runs/38055599355"
+  },
+  "main_build": {
+    "conclusion": "success",
+    "headSha": "a15230c7156221e45cded3afbcf1ccf12228f51b",
+    "status": "completed",
+    "url": "https://github.com/AiMiDi/C4D_MMD_Tool/actions/runs/38055587273"
+  }
+}
