@@ -28,7 +28,7 @@ jobs:
     uses: ./.github/workflows/build.yml
     secrets: inherit
     with:
-      ref: ${{ github.ref }}
+      ref: ${{ github.sha }}
 
   package-windows:
     needs: build
@@ -40,7 +40,7 @@ jobs:
       - name: Checkout (resources for installer)
         uses: actions/checkout@v6
         with:
-          ref: ${{ github.ref }}
+          ref: ${{ github.sha }}
           submodules: false
 
       - name: Checkout installer setup submodule
