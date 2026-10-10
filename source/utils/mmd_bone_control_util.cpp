@@ -30,6 +30,7 @@ Description:	MMD bone control utilities
 #include "utils/io_util.hpp"
 #include "utils/string_util.hpp"
 #include "utils/cmt_control_role.hpp"
+#include "utils/mmd_control_workflow.hpp"
 #include "utils/cmt_control_hit_test.hpp"
 
 namespace
@@ -49,6 +50,10 @@ namespace
 		Oval,
 		Triangle,
 		Foot,
+		RingTicks,
+		Groove,
+		Bowl,
+		Visor,
 		RoundedSquare
 	};
 
@@ -265,8 +270,11 @@ namespace
 
 	bool IsBoneControlEligible(const BaseContainer* bc)
 	{
-		return bc && (bc->GetBool(PMX_BONE_LOCAL_IS_COORDINATE) || bc->GetBool(PMX_BONE_IS_FIXED_AXIS)
-			|| GetControlRole(bc) != cmt::controls::Role::None);
+        if (!bc) return false;
+        const auto kind = mmd_control_workflow::ClassifyBone(bc);
+        return bc->GetBool(PMX_BONE_LOCAL_IS_COORDINATE) || bc->GetBool(PMX_BONE_IS_FIXED_AXIS) ||
+            GetControlRole(bc) != cmt::controls::Role::None ||
+            (!kind.secondary && kind.part != cmt::controls::Part::Other);
 	}
 
 	bool ShouldUseTailPosition(const BaseContainer* bc)
@@ -437,7 +445,8 @@ namespace
 	{
 		const Float hierarchy_scale = std::clamp(1.0 - Float(GetBoneHierarchyDepth(bone_object)) * 0.025, 0.65, 1.0);
 		const auto purpose = GetControlPurpose(bc);
-		const Float radius = span * 0.055 * hierarchy_scale * size * cmt::controls::PurposeRadiusScale(purpose);
+		const Bool finger = mmd_control_workflow::ClassifyBone(bc).finger;
+		const Float radius = (finger ? 0.18 : 1.0) * span * 0.033 * hierarchy_scale * size * cmt::controls::PurposeRadiusScale(purpose);
 		// Explicit PMX axes take precedence over an anatomical name, including
 		// knees authored as hinges in models other than the validation sample.
 		if (bc && bc->GetBool(PMX_BONE_IS_FIXED_AXIS))
@@ -477,26 +486,27 @@ namespace
 			return visual;
 		}
 		if (purpose == cmt::controls::Purpose::Wrist)
-			return { ControlShape::Box, radius, 1.0 };
+			return { ControlShape::Circle, radius, 1.0, 0.0, false };
 		switch (GetControlRole(bc))
 		{
 		case cmt::controls::Role::Root: return { ControlShape::Circle, radius * 3.5, 1.0 };
-		case cmt::controls::Role::Center: return { ControlShape::RoundedSquare, radius * 2.4, 1.0 };
-		case cmt::controls::Role::Groove: return { ControlShape::Oval, radius * 1.85, 1.1 };
+		case cmt::controls::Role::Center: return { ControlShape::RingTicks, radius * 2.15, 1.0 };
+		case cmt::controls::Role::Groove: return { ControlShape::Groove, radius * 1.05, 1.0 };
 		case cmt::controls::Role::Waist: return { ControlShape::Triangle, radius * 1.15, 1.0 };
 		case cmt::controls::Role::Pelvis: return { ControlShape::Pelvis, radius * 1.35, 1.0 };
 		case cmt::controls::Role::Spine: return { ControlShape::Circle, radius * 1.5, 1.0 };
 		case cmt::controls::Role::Neck: return { ControlShape::Circle, radius * 0.65, 1.0 };
 		case cmt::controls::Role::Head: return { ControlShape::Circle, radius * 1.1, 1.0, span * 0.16 };
 		case cmt::controls::Role::IkGoal: return { ControlShape::Foot, radius * 0.9, 0.8 };
-		case cmt::controls::Role::ToeIk: return { ControlShape::Triangle, radius * 0.55, 1.0 };
-		case cmt::controls::Role::IkParent: return { ControlShape::RoundedSquare, radius * 1.3, 0.5 };
+		case cmt::controls::Role::ToeIk: return { ControlShape::Visor, radius * 0.55, 1.0 };
+		case cmt::controls::Role::IkParent: return { ControlShape::Bowl, radius * 1.3, 0.5 };
 		case cmt::controls::Role::Leg: return { ControlShape::Circle, radius * 0.85, 1.0 };
 		case cmt::controls::Role::Knee: return { ControlShape::Circle, radius * 0.65, 1.0 };
 		case cmt::controls::Role::Ankle: return { ControlShape::Circle, radius * 0.6, 1.0 };
 		case cmt::controls::Role::Toe: return { ControlShape::Circle, radius * 0.4, 1.0 };
 		default: break;
 		}
+		if (finger) return { ControlShape::Circle, radius, 1.0, 0.0, false };
 		if (!IsPrimaryControl(bc))
 			return { ControlShape::Circle, radius * 0.55, 1.0 };
 		if (bc && bc->GetBool(PMX_BONE_TRANSLATABLE))
@@ -701,6 +711,34 @@ namespace
 		const Float r = spec.radius;
 		switch (spec.shape)
 		{
+        case ControlShape::Groove:
+            for (Int32 i=0; i<kCircleControlPointCount; ++i)
+            {
+                const Float angle=kTwoPi*Float(i)/kCircleControlPointCount;
+                points.emplace_back(r*2.5+std::cos(angle)*r*0.55,std::sin(angle)*r*0.55,0);
+            }
+            break;
+        case ControlShape::Bowl:
+            // A shallow saddle outline identifies the shared foot IK parent.
+            for (Int32 i=0; i<32; ++i)
+            {
+                const Float angle=kTwoPi*Float(i)/32;
+                points.emplace_back(std::cos(angle)*r,std::sin(angle)*r,std::sin(angle)*std::sin(angle)*r*0.35);
+            }
+            break;
+        case ControlShape::Visor:
+            // Rounded open-ended toe visor, closed as one narrow ribbon.
+            for (Int32 i=0; i<=12; ++i)
+            {
+                const Float angle=kTwoPi*(Float(i)/24+0.5);
+                points.emplace_back(std::cos(angle)*r*1.4,std::sin(angle)*r,0);
+            }
+            for (Int32 i=12; i>=0; --i)
+            {
+                const Float angle=kTwoPi*(Float(i)/24+0.5);
+                points.emplace_back(std::cos(angle)*r*1.18,std::sin(angle)*r*.78,0);
+            }
+            break;
 		case ControlShape::Foot:
 			points = { Vector(-r * 0.55, -r * 0.65, 0), Vector(r * 0.55, -r * 0.65, 0),
 				Vector(r * 0.7, r * 0.95, 0), Vector(r * 0.4, r * 1.65, 0),
@@ -751,6 +789,7 @@ namespace
 				Vector(-r * 0.92, -r * 0.58, 0.0)
 			};
 			break;
+		case ControlShape::RingTicks:
 		case ControlShape::Oval:
 		case ControlShape::Circle:
 		default:
@@ -759,7 +798,8 @@ namespace
 			{
 				const Float angle = kTwoPi * static_cast<Float>(i) / static_cast<Float>(kCircleControlPointCount);
 				const Float aspect = spec.shape == ControlShape::Oval ? spec.aspect : 1.0;
-				points.emplace_back(std::cos(angle) * r * aspect, std::sin(angle) * r, 0.0);
+                const Float ring_radius=spec.shape==ControlShape::RingTicks?r*0.56:r;
+				points.emplace_back(std::cos(angle) * ring_radius * aspect, std::sin(angle) * ring_radius, 0.0);
 			}
 			break;
 		}
@@ -798,6 +838,39 @@ namespace
 			contours.push_back(top);
 			for (const Vector& point : points) contours.push_back({ point, point + depth });
 		}
+        else if (spec.shape == ControlShape::RingTicks)
+        {
+            // Four separated curved pads identify the centre without covering
+            // it in concentric rings. All geometry remains independently authored.
+            for (Int32 quadrant=0; quadrant<4; ++quadrant)
+            {
+                std::vector<Vector> arc;
+                for (Int32 step=0; step<=6; ++step)
+                {
+                    const Float angle=kTwoPi*(Float(quadrant)/4+(Float(step)/6-.5)*.16);
+                    arc.emplace_back(std::cos(angle)*spec.radius,std::sin(angle)*spec.radius,0);
+                }
+                for (Int32 step=6; step>=0; --step)
+                {
+                    const Float angle=kTwoPi*(Float(quadrant)/4+(Float(step)/6-.5)*.16);
+                    arc.emplace_back(std::cos(angle)*spec.radius*.89,std::sin(angle)*spec.radius*.89,0);
+                }
+                arc.push_back(arc.front());
+                contours.push_back(std::move(arc));
+            }
+        }
+        else if (spec.shape==ControlShape::Groove)
+        {
+            for (const Float direction : {Float(-1),Float(1)})
+            {
+                const Float r=spec.radius;
+                const Vector offset(r*2.5,0,0);
+                contours.push_back({offset+Vector(-r*.12,direction*r*.5,0),offset+Vector(-r*.12,direction*r*.82,0),
+                    offset+Vector(-r*.32,direction*r*.82,0),offset+Vector(0,direction*r*1.12,0),
+                    offset+Vector(r*.32,direction*r*.82,0),offset+Vector(r*.12,direction*r*.82,0),
+                    offset+Vector(r*.12,direction*r*.5,0),offset+Vector(-r*.12,direction*r*.5,0)});
+            }
+        }
 		Int32 point_count = 0;
 		for (const auto& contour : contours) point_count += static_cast<Int32>(contour.size());
 		const Int32 segment_count = static_cast<Int32>(contours.size());
@@ -1087,6 +1160,7 @@ Bool mmd_bone_control_util::CreateOrRefreshControls(MMDBoneManagerObject& bone_m
 		MarkSceneNodeDirty(entry.control);
 	}
 
+	mmd_control_workflow::CreateArmControls(bone_manager, controls_root);
 	bone_manager_object->SetDirty(DIRTYFLAGS::DATA | DIRTYFLAGS::DESCRIPTION);
 	controls_root->SetDirty(DIRTYFLAGS::DATA | DIRTYFLAGS::MATRIX);
 	if (GeIsMainThread())
@@ -1113,6 +1187,8 @@ void mmd_bone_control_util::RefreshControlVisuals(MMDBoneManagerObject& bone_man
 		ApplyControlSplineShape(control, GetControlVisualSpec(bc, bone, span, size), bone);
 		SetControlObjectColor(control, GetControlColor(bc->GetString(PMX_BONE_NAME_LOCAL)));
 	}
+    if (BaseObject* root = io_util::ResolveObjectLink(bone_manager.controls_root_link_))
+        mmd_control_workflow::CreateArmControls(bone_manager, root);
 }
 
 Bool mmd_bone_control_util::IsControlVisible(BaseTag* bone_tag, BaseObject* manager, const Int32 bone_display_type)
@@ -1128,6 +1204,7 @@ Bool mmd_bone_control_util::IsControlVisible(BaseTag* bone_tag, BaseObject* mana
 		return false;
 	const Int32 display = model ? model->GetDataInstance()->GetInt32(MODEL_CONTROLS_DISPLAY) : MODEL_CONTROLS_DISPLAY_PRIMARY;
 	return display != MODEL_CONTROLS_DISPLAY_HIDDEN &&
+        mmd_control_workflow::IsVisible(bone_tag, manager) &&
 		(display == MODEL_CONTROLS_DISPLAY_ALL || IsPrimaryControl(bone_tag->GetDataInstance()));
 }
 
@@ -1140,6 +1217,7 @@ void mmd_bone_control_util::SelectVisibleControls(MMDBoneManagerObject& bone_man
 	maxon::BaseArray<BaseObject*> bones;
 	bone_manager.BuildOrderedBoneObjectList(bones);
 	Bool first = true;
+	doc->SetActiveObject(nullptr, SELECTION_NEW);
 	for (BaseObject* bone : bones)
 	{
 		BaseTag* const tag = bone->GetTag(g_mmd_bone_tag_id);
@@ -1150,6 +1228,14 @@ void mmd_bone_control_util::SelectVisibleControls(MMDBoneManagerObject& bone_man
 		doc->SetActiveObject(control, first ? SELECTION_NEW : SELECTION_ADD);
 		first = false;
 	}
+    std::vector<mmd_control_workflow::ExtraControl> extras;
+    mmd_control_workflow::CollectExtraControls(bone_manager, extras);
+    for (const auto& extra : extras)
+        if (extra.object->GetEditorMode() != MODE_OFF)
+        {
+            doc->SetActiveObject(extra.object, first ? SELECTION_NEW : SELECTION_ADD);
+            first = false;
+        }
 	EventAdd();
 }
 
@@ -1177,12 +1263,20 @@ DRAWRESULT mmd_bone_control_util::DrawControls(MMDBoneManagerObject& bone_manage
 	// and light skin. A narrow dark under-stroke separates it from the material;
 	// these viewport strokes never change native spline geometry or rig input.
 	bd->SetDrawParam(DRAW_PARAMETER_SETZ, GeData(DRAW_Z_ALWAYS));
+	std::vector<std::pair<BaseTag*, BaseObject*>> handles;
 	for (BaseObject* bone : bones)
 	{
-		BaseTag* const tag = bone->GetTag(g_mmd_bone_tag_id);
-		BaseObject* const control = ResolveLinkedObjectParameter(tag, PMX_BONE_CONTROL_LINK);
-		if (!control || control->GetEditorMode() == MODE_OFF || !control->IsInstanceOf(Ospline) || !IsSameOrDescendantOf(control, op)
-			|| !IsControlVisible(tag, op, display))
+		BaseTag* tag = bone->GetTag(g_mmd_bone_tag_id);
+		if (IsControlVisible(tag, op, display)) handles.emplace_back(tag, ResolveLinkedObjectParameter(tag, PMX_BONE_CONTROL_LINK));
+	}
+	std::vector<mmd_control_workflow::ExtraControl> extras;
+	mmd_control_workflow::CollectExtraControls(bone_manager, extras);
+	for (const auto& extra : extras) if (extra.object->GetEditorMode() != MODE_OFF) handles.emplace_back(extra.owner, extra.object);
+	for (const auto& handle : handles)
+	{
+		BaseTag* const tag = handle.first;
+		BaseObject* const control = handle.second;
+		if (!control || control->GetEditorMode() == MODE_OFF || !control->IsInstanceOf(Ospline) || !IsSameOrDescendantOf(control, op))
 			continue;
 		SplineObject* const spline = ToSpline(control);
 		const Vector* const points = spline->GetPointR();
@@ -1236,12 +1330,20 @@ String mmd_bone_control_util::GetHoveredControlName(BaseDocument* doc, BaseDraw*
 		const Int32 display = object->GetDataInstance()->GetInt32(BONE_DISPLAY_TYPE, BONE_DISPLAY_TYPE_OFF);
 		maxon::BaseArray<BaseObject*> bones;
 		manager->BuildOrderedBoneObjectList(bones);
+		std::vector<std::pair<BaseTag*, BaseObject*>> handles;
 		for (BaseObject* bone : bones)
 		{
-			BaseTag* const tag = bone->GetTag(g_mmd_bone_tag_id);
-			BaseObject* const control = ResolveLinkedObjectParameter(tag, PMX_BONE_CONTROL_LINK);
-			if (!control || !control->IsInstanceOf(Ospline) || !IsSameOrDescendantOf(control, object)
-				|| !IsControlVisible(tag, object, display)) continue;
+			BaseTag* tag = bone->GetTag(g_mmd_bone_tag_id);
+			if (IsControlVisible(tag, object, display)) handles.emplace_back(tag, ResolveLinkedObjectParameter(tag, PMX_BONE_CONTROL_LINK));
+		}
+		std::vector<mmd_control_workflow::ExtraControl> extras;
+		mmd_control_workflow::CollectExtraControls(*manager, extras);
+		for (const auto& extra : extras) if (extra.object->GetEditorMode() != MODE_OFF) handles.emplace_back(extra.owner, extra.object);
+		for (const auto& handle : handles)
+		{
+			BaseTag* const tag = handle.first;
+			BaseObject* const control = handle.second;
+			if (!control || !control->IsInstanceOf(Ospline) || !IsSameOrDescendantOf(control, object)) continue;
 			Bool hidden = false;
 			for (BaseObject* ancestor = control; ancestor && ancestor != object; ancestor = ancestor->GetUp())
 				if (ancestor->GetEditorMode() == MODE_OFF) { hidden = true; break; }
@@ -1268,7 +1370,8 @@ String mmd_bone_control_util::GetHoveredControlName(BaseDocument* doc, BaseDraw*
 					if (distance < nearest_distance)
 					{
 						nearest_distance = distance;
-						name = GetControlBaseName(tag, manager->FindBoneIndex(tag));
+						name = control == ResolveLinkedObjectParameter(tag, PMX_BONE_CONTROL_LINK)
+                            ? GetControlBaseName(tag, manager->FindBoneIndex(tag)) : control->GetName();
 					}
 				}
 				offset += segment.cnt;
@@ -1280,6 +1383,10 @@ String mmd_bone_control_util::GetHoveredControlName(BaseDocument* doc, BaseDraw*
 
 Bool mmd_bone_control_util::HasActiveControlDelta(MMDBoneManagerObject& bone_manager)
 {
+    std::vector<mmd_control_workflow::ExtraControl> extras;
+    mmd_control_workflow::CollectExtraControls(bone_manager, extras);
+    for (const auto& extra : extras) if (mmd_control_workflow::IsForcedIK(extra.owner)) return true;
+
 	for (const auto& entry : bone_manager.bone_list_)
 	{
 		BaseTag* const bone_tag = bone_manager.FindBone(static_cast<Int32>(entry.GetKey()));
@@ -1295,6 +1402,10 @@ Bool mmd_bone_control_util::HasActiveControlDelta(MMDBoneManagerObject& bone_man
 
 Bool mmd_bone_control_util::HasActiveControlRotation(BaseTag* bone_tag)
 {
+    if (mmd_control_workflow::IsForcedFK(bone_tag)) return true;
+    const auto kind = mmd_control_workflow::ClassifyBone(bone_tag ? bone_tag->GetDataInstance() : nullptr);
+    if (mmd_control_workflow::IsForcedIK(bone_tag))
+        return kind.limb_fk;
 	if (!bone_tag || !bone_tag->GetDataInstance()->GetBool(PMX_BONE_ROTATABLE))
 		return false;
 	Vector translation;
@@ -1325,6 +1436,11 @@ UInt32 mmd_bone_control_util::GetControlStateChecksum(MMDBoneManagerObject& bone
 		hash = MixHash(hash, static_cast<UInt32>(bone_index));
 		hash = HashMatrix(hash, NormalizeMatrixBasis(control->GetRelMl()));
 	}
+    BaseObject* model = GetControlModel(reinterpret_cast<BaseObject*>(bone_manager.Get()));
+    hash = MixHash(hash, mmd_control_workflow::RuntimeChecksum(model));
+    std::vector<mmd_control_workflow::ExtraControl> extras;
+    mmd_control_workflow::CollectExtraControls(bone_manager, extras);
+    for (const auto& extra : extras) hash = HashMatrix(hash, NormalizeMatrixBasis(extra.object->GetRelMl()));
 	return hash;
 }
 
@@ -1363,6 +1479,7 @@ void mmd_bone_control_util::SyncControlsToCurrentPose(MMDBoneManagerObject& bone
 		if (!bone_tag || !bone_object || !control || !IsBoneControlEligible(bc))
 			continue;
 
+        if (mmd_control_workflow::IsForcedIK(bone_tag) && mmd_control_workflow::ClassifyBone(bc).limb_ik) continue;
 		SyncControlEntry entry;
 		entry.bone_index = bone_index;
 		entry.bone_object = bone_object;
@@ -1386,7 +1503,7 @@ void mmd_bone_control_util::SyncControlsToCurrentPose(MMDBoneManagerObject& bone
 }
 
 Bool mmd_bone_control_util::GetControlDeltaInBoneSpace(BaseTag* bone_tag, BaseObject* bone_object, Vector& translation, std::array<Float32, 4>& rotation,
-	const std::array<Float32, 4>& animation_rotation)
+	const std::array<Float32, 4>& animation_rotation, const Vector& animation_translation)
 {
 	const BaseContainer* const bc = bone_tag ? bone_tag->GetDataInstance() : nullptr;
 	if (!IsBoneControlEligible(bc))
@@ -1395,6 +1512,9 @@ Bool mmd_bone_control_util::GetControlDeltaInBoneSpace(BaseTag* bone_tag, BaseOb
 	BaseObject* const control = ResolveLinkedObjectParameter(bone_tag, PMX_BONE_CONTROL_LINK);
 	if (!control || !bone_object)
 		return false;
+
+    if (mmd_control_workflow::GetDirectGoalDelta(bone_tag,bone_object,animation_translation,animation_rotation,translation,rotation)) return true;
+    if (!mmd_control_workflow::IsInputEnabled(bone_tag)) return false;
 
 	// An inactive control contributes no animation delta. Projecting identity
 	// through float bases can introduce a rotation that depends on the last

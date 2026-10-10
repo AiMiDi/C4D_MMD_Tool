@@ -14,6 +14,7 @@
 #include "description/tcaconstraint.h"
 #include "customgui_priority.h"
 #include "utils/mmd_bone_control_util.hpp"
+#include "utils/mmd_control_workflow.hpp"
 #include "utils/string_util.hpp"
 #include "utils/cmt_runtime_profile.hpp"
 #include "utils/cmt_anim_flow_debug.hpp"
@@ -285,6 +286,8 @@ Int32 MMDModelManagerObject::SolveStandaloneIKForLayer(const Int32 layer, const 
 
 	auto ik_chain_has_authored_pose = [this, &has_static_pose_keyframe_at_time](MMDBoneTag* ik_bone_tag, const BaseDocument* doc) -> Bool
 	{
+		if (ik_bone_tag && mmd_control_workflow::OwnsLegSolver(static_cast<BaseTag*>(ik_bone_tag->Get()))) return true;
+		if (ik_bone_tag && mmd_control_workflow::IsForcedIK(static_cast<BaseTag*>(ik_bone_tag->Get()))) return false;
 		if (!ik_bone_tag || !doc)
 			return false;
 
@@ -389,8 +392,10 @@ Bool MMDModelManagerObject::RunLayeredBonePass(BaseDocument* doc, const Bool aft
 			anim_count = bone_manager_data_->PrepareSceneForPhysicsPlaybackLayer(doc, layer, after_physics);
 			SyncStandaloneBoneAdaptersFromScene(true);
 		}
+		const Int32 control_ik_count=mmd_control_workflow::SolveLayer(*bone_manager_data_,doc,layer,after_physics);
+		if (control_ik_count>0) SyncStandaloneBoneAdaptersFromScene(true);
 		const Int32 ik_count = SolveStandaloneIKForLayer(layer, after_physics, false);
-		touched = touched || anim_count > 0 || ik_count > 0;
+		touched = touched || anim_count > 0 || ik_count > 0 || control_ik_count > 0;
 	}
 	return touched;
 }

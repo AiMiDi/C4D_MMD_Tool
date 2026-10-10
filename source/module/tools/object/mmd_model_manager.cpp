@@ -32,6 +32,7 @@ Description:	MMD model object
 #include "maxon/queue.h"
 #include "utils/filename_util.hpp"
 #include "utils/mmd_bone_control_util.hpp"
+#include "utils/mmd_control_workflow.hpp"
 #include "utils/cmt_motion_validation.hpp"
 #include "utils/string_util.hpp"
 #include "utils/cmt_runtime_profile.hpp"
@@ -1344,6 +1345,10 @@ SDK2024_Init(MMDModelManagerObject)
 	bc->SetInt32(MODEL_CONTROLS_DISPLAY, MODEL_CONTROLS_DISPLAY_PRIMARY);
 	bc->SetFloat(MODEL_CONTROLS_SIZE, 1.0);
 	bc->SetBool(MODEL_CONTROLS_OCCLUDED, true);
+    bc->SetInt32(MODEL_CONTROLS_WORKFLOW, MODEL_CONTROLS_WORKFLOW_MMD);
+    bc->SetInt32(MODEL_CONTROLS_SOLO, 0);
+    for (Int32 parameter=MODEL_CONTROLS_ROOT; parameter<=MODEL_CONTROLS_HELPERS; ++parameter) bc->SetBool(parameter,true);
+    for (Int32 parameter=MODEL_CONTROLS_ARM_L_MODE; parameter<=MODEL_CONTROLS_LEG_R_MODE; ++parameter) bc->SetInt32(parameter,MODEL_CONTROLS_LIMB_AUTO);
 	bc->SetBool(MODEL_PHYSICS_ENABLED, true);
 	bc->SetFloat(MODEL_PHYSICS_GRAVITY_STRENGTH, 98.0);
 	bc->SetVector(MODEL_PHYSICS_GRAVITY_DIRECTION, Vector(0, -1, 0));
@@ -1609,6 +1614,9 @@ Bool MMDModelManagerObject::Read(GeListNode* node, HyperFile* hf, Int32 level) {
 			bc->SetFloat(MODEL_CONTROLS_SIZE, 1.0);
 		if (bc->GetData(MODEL_CONTROLS_OCCLUDED).GetType() == DA_NIL)
 			bc->SetBool(MODEL_CONTROLS_OCCLUDED, true);
+        for (Int32 parameter=MODEL_CONTROLS_ROOT; parameter<=MODEL_CONTROLS_HELPERS; ++parameter)
+            if (bc->GetData(parameter).GetType()==DA_NIL) bc->SetBool(parameter,true);
+
 	}
 	else
 	{
@@ -2405,7 +2413,7 @@ EXECUTIONRESULT MMDModelManagerObject::Execute(BaseObject* op, BaseDocument* doc
 
 			ApplyIKSolverFromParameters(op);
 			ApplyPhysicsConfigToRuntime(op);
-			if ((bone_morph_state_changed || control_state_changed) && !time_changed)
+			if ((bone_morph_state_changed || control_state_changed || control_delta_active) && !time_changed)
 				PrepareSameFrameReevaluation(doc);
 			RunLayeredBonePass(doc, false);
 
@@ -4771,7 +4779,7 @@ Bool MMDModelManagerObject::RegisterCurrentStateKeyframe(BaseDocument* doc)
 			{
 				Vector control_translation;
 				std::array<Float32, 4> control_rotation { 0.F, 0.F, 0.F, 1.F };
-				if (mmd_bone_control_util::GetControlDeltaInBoneSpace(bone_tag_base, bone_object, control_translation, control_rotation, base_rotation))
+				if (mmd_bone_control_util::GetControlDeltaInBoneSpace(bone_tag_base, bone_object, control_translation, control_rotation, base_rotation, base_translation))
 				{
 					const BaseContainer* const bc = bone_tag_base->GetDataInstance();
 					if (!bc || bc->GetBool(PMX_BONE_TRANSLATABLE))
@@ -5453,9 +5461,15 @@ Bool MMDModelManagerObject::Message(GeListNode* node, Int32 type, void* data)
 			switch (const auto id = dc->_descId[0].id)
 			{
 			case MODEL_CONTROLS_CREATE:
-				if (bone_manager_data_)
-					bone_manager_data_->CreateOrRefreshControls(GetBoneManagerObject());
+				if (auto* manager=GetBoneManagerData())
+					manager->CreateOrRefreshControls(GetBoneManagerObject());
 				break;
+            case MODEL_CONTROLS_RESET_SELECTED:
+                if (bone_manager_data_) mmd_control_workflow::ResetSelected(*bone_manager_data_,static_cast<BaseObject*>(node));
+                break;
+            case MODEL_CONTROLS_KEY_SELECTED:
+                if (bone_manager_data_) mmd_control_workflow::KeySelected(*bone_manager_data_,static_cast<BaseObject*>(node));
+                break;
 			case MODEL_CONTROLS_SELECT:
 				if (bone_manager_data_)
 					mmd_bone_control_util::SelectVisibleControls(*bone_manager_data_, GetBoneManagerObject());
@@ -6234,6 +6248,46 @@ Bool MMDModelManagerObject::SetDParameter(GeListNode* node, const DescID& id, co
 {
 	switch (id[0].id)
 	{
+        case MODEL_CONTROLS_WORKFLOW:
+        case MODEL_CONTROLS_SOLO:
+        case MODEL_CONTROLS_ROOT:
+        case MODEL_CONTROLS_TORSO:
+        case MODEL_CONTROLS_FACE:
+        case MODEL_CONTROLS_ARM_L:
+        case MODEL_CONTROLS_ARM_R:
+        case MODEL_CONTROLS_LEG_L:
+        case MODEL_CONTROLS_LEG_R:
+        case MODEL_CONTROLS_FINGERS:
+        case MODEL_CONTROLS_HELPERS:
+        case MODEL_CONTROLS_ARM_L_MODE:
+        case MODEL_CONTROLS_ARM_R_MODE:
+        case MODEL_CONTROLS_LEG_L_MODE:
+        case MODEL_CONTROLS_LEG_R_MODE:
+        {
+            BaseObject* model=static_cast<BaseObject*>(node);
+            BaseContainer* data=model->GetDataInstance();
+            const Int32 parameter=id[0].id;
+            bone_manager_data_=GetBoneManagerData();
+            if (parameter>=MODEL_CONTROLS_ARM_L_MODE && parameter<=MODEL_CONTROLS_LEG_R_MODE)
+            {
+                if (bone_manager_data_ && !mmd_control_workflow::SetLimbMode(*bone_manager_data_,model,parameter,t_data.GetInt32())) return false;
+                if (!bone_manager_data_) data->SetInt32(parameter,std::clamp(t_data.GetInt32(),0,2));
+                data->SetInt32(MODEL_CONTROLS_WORKFLOW,MODEL_CONTROLS_WORKFLOW_CUSTOM);
+            }
+            else if (parameter==MODEL_CONTROLS_WORKFLOW)
+            {
+                const Int32 preset=std::clamp(t_data.GetInt32(),0,3);
+                if (preset!=MODEL_CONTROLS_WORKFLOW_CUSTOM && bone_manager_data_)
+                    mmd_control_workflow::ApplyPreset(*bone_manager_data_,model,preset);
+                data->SetInt32(parameter,preset);
+            }
+            else if (parameter==MODEL_CONTROLS_SOLO) data->SetInt32(parameter,std::clamp(t_data.GetInt32(),0,8));
+            else { data->SetBool(parameter,t_data.GetBool()); data->SetInt32(MODEL_CONTROLS_WORKFLOW,MODEL_CONTROLS_WORKFLOW_CUSTOM); }
+            if (bone_manager_data_) bone_manager_data_->SynchronizeControlPresentation(GetBoneManagerObject());
+            flags|=DESCFLAGS_SET::PARAM_SET;
+            if (GeIsMainThread()) EventAdd();
+            return true;
+        }
 		case MODEL_CONTROLS_DISPLAY:
 		case MODEL_CONTROLS_SIZE:
 		case MODEL_CONTROLS_OCCLUDED:

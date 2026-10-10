@@ -25,6 +25,7 @@ Description:	DESC
 #include "maxon/queue.h"
 #include "module/tools/tag/mmd_bone.h"
 #include "utils/mmd_bone_control_util.hpp"
+#include "utils/mmd_control_workflow.hpp"
 #include "description/OMMDModelManager.h"
 #include "utils/string_util.hpp"
 #include "libMMD/Model/MMD/PMXFile.h"
@@ -774,6 +775,7 @@ SDK2024_CopyTo(MMDBoneManagerObject)
 	dest_object->control_visual_size_ = -1.0;
 	dest_object->control_visual_display_ = NOTOK;
 	dest_object->control_visual_mode_ = NOTOK;
+    dest_object->control_workflow_checksum_ = 0;
 	dest_object->has_hierarchy_checksum_ = false;
 	dest_object->bone_index_lookup_.Reset();
 	dest_object->bone_items_.FlushAll();
@@ -799,6 +801,7 @@ Bool MMDBoneManagerObject::Read(GeListNode* node, HyperFile* hf, Int32 level)
 	control_visual_size_ = -1.0;
 	control_visual_display_ = NOTOK;
 	control_visual_mode_ = NOTOK;
+    control_workflow_checksum_ = 0;
 	iferr_scope_handler{
 		return false;
 	};
@@ -935,6 +938,7 @@ void MMDBoneManagerObject::HandleDescriptionCommandMessage(GeListNode* node, voi
 
 Bool MMDBoneManagerObject::CreateOrRefreshControls(BaseObject* bone_manager_object)
 {
+	if (!EnsureBoneHierarchyCurrent()) return false;
 	if (!mmd_bone_control_util::CreateOrRefreshControls(*this, bone_manager_object))
 		return false;
 	BaseObject* const model = io_util::ResolveObjectLink(model_manager_);
@@ -963,7 +967,8 @@ void MMDBoneManagerObject::SynchronizeControlPresentation(BaseObject* manager)
 		mmd_bone_control_util::RefreshControlVisuals(*this, manager);
 		control_visual_size_ = size;
 	}
-	if (display != control_visual_display_ || mode != control_visual_mode_)
+	const UInt32 workflow = mmd_control_workflow::PresentationChecksum(model);
+    if (display != control_visual_display_ || mode != control_visual_mode_ || workflow != control_workflow_checksum_)
 	{
 		// Read/CopyTo already synchronize the stored bone display. Thereafter,
 		// model attribute Undo and direct container edits must update visibility.
@@ -976,6 +981,7 @@ void MMDBoneManagerObject::SynchronizeControlPresentation(BaseObject* manager)
 		}
 		control_visual_display_ = display;
 		control_visual_mode_ = mode;
+        control_workflow_checksum_ = workflow;
 	}
 }
 
@@ -2450,6 +2456,7 @@ void MMDBoneManagerObject::ApplyBoneDisplayType(BaseObject* const bone_manager_o
 	MMDBoneManagerObjectMsg message{MMDBoneManagerObjectMsgType::SET_BONE_DISPLAY_UPDATE, display_type, bone_manager_object};
 	bone_manager_object->MultiMessage(MULTIMSG_ROUTE::BROADCAST, g_mmd_bone_manager_object_id, &message);
 	bone_display_sync_pending_ = false;
+    mmd_control_workflow::RefreshExtraVisibility(*this, bone_manager_object, display_type);
 }
 
 void MMDBoneManagerObject::ApplyStoredBoneDisplayType(BaseObject* const bone_manager_object)

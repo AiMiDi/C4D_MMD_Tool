@@ -62,8 +62,8 @@ def run(source, ids, output, base_frame=0, physics_enabled=False):
         # Outline counts include the explicit closing point; do not confuse
         # the orientation fin with the foot/toe/parent silhouette itself.
         check('lower_body_shapes', controls['左足ＩＫ'].GetSegment(0)['cnt'] == 7
-              and controls['左つま先ＩＫ'].GetSegment(0)['cnt'] == 4
-              and controls['左足IK親'].GetSegment(0)['cnt'] == 25)
+              and controls['左つま先ＩＫ'].GetSegment(0)['cnt'] == 27
+              and controls['左足IK親'].GetSegment(0)['cnt'] == 33)
         bind = {name: matrix_values(bone.GetFrozenMln()) for name, bone in bones.items()}
 
         # Moving each native IK target must reach its solver and the deformed
@@ -134,6 +134,12 @@ def run(source, ids, output, base_frame=0, physics_enabled=False):
         control.SetRelRot(c4d.Vector(0, 0, 0.22))
         evaluate(base_frame+30)
         registered_pose = bones['左足'].GetMg()
+        # The native model command intentionally asks for an animation name
+        # when no slot exists. Automation must select a VMD slot beforehand.
+        active_slot = model[ids['MODEL_ANIM_LIST']]
+        check('registration_fixture_has_active_slot', active_slot is not None and active_slot >= 0, active_slot=active_slot)
+        if active_slot is None or active_slot < 0:
+            raise RuntimeError('Select an animation slot before the native registration regression.')
         c4d.CallButton(model, ids['MODEL_ANIM_REGISTER_CURRENT_BUTTON'])
         evaluate(base_frame+30)
         check('fk_register_resets_input', control.GetRelRot().GetLength()<1e-6)

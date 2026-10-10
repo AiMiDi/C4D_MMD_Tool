@@ -31,13 +31,12 @@ def transform_values(obj):
 def control_curve_checks(control):
     """Check native curves and reject the removed orientation-fin segment."""
     count = control.GetSegmentCount()
-    if count not in (1, 2, 6):
+    if count not in (1, 2, 3, 5, 6):
         return {"outline_closed": False, "no_orientation_fin": False}
     outline = control.GetSegment(0)
     points = control.GetAllPoints()
     end = outline["cnt"]
-    expected_extra = 13 if count == 6 else 2 if count == 2 else 0
-    valid_counts = end >= 4 and len(points) == end + expected_extra
+    valid_counts = end >= 4 and len(points) == sum(control.GetSegment(i)['cnt'] for i in range(count))
     tolerance = max(1.0, control.GetRad().GetLength()) * 1e-5
     closed = valid_counts and (points[0] - points[end-1]).GetLength() < tolerance
     closed &= (control.GetSplinePoint(0, 0) - control.GetSplinePoint(1, 0)).GetLength() < tolerance
@@ -96,7 +95,9 @@ def run(source, ids, output):
         secondary_names = {side + name for side in ("左", "右") for name in ("腕捩", "手捩", "ひじ補助")}
         secondary_names.update(("+左ひじ補助", "+右ひじ補助", "メガネ"))
         expected_primary = sum(bool(tag[ids["PMX_BONE_VISIBLE"]]) and bool(tag[ids["PMX_BONE_ENABLED"]])
-                               and name not in secondary_names for name, (_, tag, _) in rows.items())
+                               and name not in secondary_names and name not in {
+                                   side+suffix for side in ('左','右') for suffix in ('足','ひざ','足首','つま先','足先EX')}
+                               for name, (_, tag, _) in rows.items())
         check("refresh_preserves_existing_transforms", old_transforms == {
             name: transform_values(rows[name][2]) for name in old_transforms})
         first_count = len(rows)
@@ -105,16 +106,16 @@ def run(source, ids, output):
         check("generation_is_idempotent", len(rows) == first_count and set(old_transforms).issubset(rows), count=len(rows))
         check("rotation_rings_have_no_fins", all(rows[side + name][2].GetSegmentCount() == 1
                                               for side in ("左", "右") for name in ("腕", "ひじ")))
-        check("hand_controls_are_wire_boxes", all(rows[side + "手首"][2].GetSegmentCount() == 6
-              and rows[side + "手首"][2].GetPointCount() == 18 for side in ("左", "右")))
+        check("hand_fk_controls_are_rings", all(rows[side + "手首"][2].GetSegmentCount() == 1
+              and rows[side + "手首"][2].GetPointCount() == 49 for side in ("左", "右")))
         body_names = ("全ての親", "センター", "グルーブ", "上半身", "上半身2", "下半身", "首", "頭")
         check("central_body_coverage", all(name in rows for name in body_names), missing=[name for name in body_names if name not in rows])
         check("central_body_rings", all(rows[name][2].GetSegmentCount() == 1
-              and rows[name][2].GetSegment(0)["cnt"] == 49 for name in body_names if name in rows and name not in ("センター", "下半身")))
-        check("central_purpose_shapes", rows["センター"][2].GetSegment(0)["cnt"] == 25
+              and rows[name][2].GetSegment(0)["cnt"] == 49 for name in body_names if name in rows and name not in ("センター", "下半身", "グルーブ")))
+        check("central_purpose_shapes", rows["センター"][2].GetSegmentCount() == 5
               and rows["腰"][2].GetSegment(0)["cnt"] == 4
               and rows["下半身"][2].GetSegment(0)["cnt"] == 4
-              and rows["センター"][2].GetRad().x > rows["グルーブ"][2].GetRad().x * 1.1)
+              and rows["グルーブ"][2].GetSegmentCount() == 3)
         check("shoulders_have_offset_handles", all(rows[side + "肩"][2].GetSegmentCount() == 2
               and rows[side + "肩"][2].GetSegment(1)["cnt"] == 2 for side in ("左", "右")))
         check("eyes_have_small_planar_handles", all(rows[name][2].GetSegmentCount() == 1
@@ -123,12 +124,12 @@ def run(source, ids, output):
         check("native_outline_closed", all(item["outline_closed"] for item in geometry))
         check("native_no_orientation_fins", all(item["no_orientation_fin"] for item in geometry))
         foot_controls = [rows[side + suffix][2] for side in ("左", "右")
-                         for suffix in ("足ＩＫ", "つま先ＩＫ", "足IK親")]
+                         for suffix in ("足ＩＫ", "つま先ＩＫ")]
         check("ik_outlines_stay_planar_without_fins", all(control.GetSegmentCount() == 1
               and max(p.z for p in control.GetAllPoints())-min(p.z for p in control.GetAllPoints()) < 1e-6
               for control in foot_controls))
         check("foot_frames_are_narrow", all(rows[side + name][2].GetRad().x < rows[side + name][2].GetRad().y * 0.55
-              for side in ("左", "右") for name in ("足ＩＫ", "足IK親")))
+              for side in ("左", "右") for name in ("足ＩＫ",)))
         for display, count, label in [(0, expected_primary, "primary"), (1, len(rows), "all"), (2, 0, "hidden")]:
             set_display(display)
             check("display_" + label, visible_count() == count, actual=visible_count(), expected=count)

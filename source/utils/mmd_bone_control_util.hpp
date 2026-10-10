@@ -30,6 +30,6 @@ namespace mmd_bone_control_util
 	UInt32 GetControlStateChecksum(MMDBoneManagerObject& bone_manager);
 	void SyncControlsToCurrentPose(MMDBoneManagerObject& bone_manager);
 	Bool GetControlDeltaInBoneSpace(BaseTag* bone_tag, BaseObject* bone_object, Vector& translation, std::array<Float32, 4>& rotation,
-		const std::array<Float32, 4>& animation_rotation = { 0.F, 0.F, 0.F, 1.F });
+		const std::array<Float32, 4>& animation_rotation = { 0.F, 0.F, 0.F, 1.F }, const Vector& animation_translation = Vector());
 	void ResetControlRelativeTransform(BaseTag* bone_tag);
 }

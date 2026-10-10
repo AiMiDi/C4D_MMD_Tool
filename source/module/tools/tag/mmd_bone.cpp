@@ -29,6 +29,7 @@ Description:	DESC
 #include "libMMD/Model/MMD/VMDInterpolation.h"
 #include "utils/math_util.hpp"
 #include "utils/mmd_bone_control_util.hpp"
+#include "utils/mmd_control_workflow.hpp"
 #include "utils/string_util.hpp"
 
 namespace
@@ -2636,6 +2637,7 @@ void MMDBoneTag::CacheIKSolveRuntimeOverrides(const BaseDocument* doc)
 
 Bool MMDBoneTag::RunIKSolveAnimMode(BaseObject* op, const Bool mark_prephysics_chain, const Bool allow_same_frame_resolve)
 {
+	if (mmd_control_workflow::OwnsLegSolver(static_cast<BaseTag*>(Get()))) return false;
 	if (!op || bone_mode_ != BONE_MODE_ANIM || !is_IK)
 		return false;
 
@@ -3410,7 +3412,7 @@ Bool MMDBoneTag::ApplyActiveAnimation(BaseObject* op, BaseDocument* doc, const B
 
 	Vector control_translation;
 	std::array<Float32, 4> control_rotation { 0.F, 0.F, 0.F, 1.F };
-	if (mmd_bone_control_util::GetControlDeltaInBoneSpace(static_cast<BaseTag*>(Get()), op, control_translation, control_rotation, rotation))
+	if (mmd_bone_control_util::GetControlDeltaInBoneSpace(static_cast<BaseTag*>(Get()), op, control_translation, control_rotation, rotation, translation))
 	{
 		if (!bc || bc->GetBool(PMX_BONE_TRANSLATABLE))
 			translation += control_translation;

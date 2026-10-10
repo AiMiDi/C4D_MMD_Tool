@@ -25,6 +25,7 @@ class MMDBoneManagerObject;
 
 namespace mmd_bone_control_util
 {
+    void RefreshControlVisuals(MMDBoneManagerObject& bone_manager, BaseObject* bone_manager_object);
 	Bool CreateOrRefreshControls(MMDBoneManagerObject& bone_manager, BaseObject* bone_manager_object);
 	Bool HasActiveControlDelta(MMDBoneManagerObject& bone_manager);
 	UInt32 GetControlStateChecksum(MMDBoneManagerObject& bone_manager);
@@ -112,6 +113,7 @@ class MMDBoneManagerObject final : public MMDManagerObject
 	maxon::HashMap<Int32, PhysicsOverrideState> physics_overrides_;
 	friend MMDModelManagerObject;
 	friend class MMDMeshManagerObject;
+	friend void mmd_bone_control_util::RefreshControlVisuals(MMDBoneManagerObject& bone_manager, BaseObject* bone_manager_object);
 	friend Bool mmd_bone_control_util::CreateOrRefreshControls(MMDBoneManagerObject& bone_manager, BaseObject* bone_manager_object);
 	friend Bool mmd_bone_control_util::HasActiveControlDelta(MMDBoneManagerObject& bone_manager);
 	friend UInt32 mmd_bone_control_util::GetControlStateChecksum(MMDBoneManagerObject& bone_manager);
@@ -175,6 +177,7 @@ private:
 	Float control_visual_size_ = -1.0;
 	Int32 control_visual_display_ = NOTOK;
 	Int32 control_visual_mode_ = NOTOK;
+    UInt32 control_workflow_checksum_ = 0;
 	void ApplyBoneDisplayType(BaseObject* bone_manager_object, Int32 display_type);
 	void ApplyStoredBoneDisplayType(BaseObject* bone_manager_object);
 	void CreateDisplayTag(GeListNode* node) override;
