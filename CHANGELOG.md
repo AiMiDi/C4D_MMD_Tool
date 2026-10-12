@@ -13,6 +13,7 @@ These development-branch changes are undergoing local joint validation. A new in
 3. Add original/adjusted VMD comparison cameras, with blue/orange viewport and icon colors. Stage changes preserve camera roles, and adding both cameras supports one undo step.
 4. Restore queued inputs when reopening the panel. Keep deleted animation slots visibly invalid instead of silently switching to a file VMD, and preserve manual edits against older MCP state when reopening.
 5. Fix C4D type assertions caused by reading scalar MCP fingerprint fields as containers. Check malformed nested requests before typed reads and return clear errors.
+6. Defer preview document destruction so MCP close/release from an active preview preserves the executing SceneHook and Python document wrapper until the call returns.
 
 ### 0.9.3.5 · Motion adaptation fixes and controller workflow (2026-10-10)
 

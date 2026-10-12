@@ -198,7 +198,9 @@ else:
     if not state or not live(state["doc"]): raise RuntimeError("Owned source is unavailable")
     doc = state["doc"]
     models = [o for o in doc.GetObjects() if o.GetType() == 1056724]
-    if action == "activate_source":
+    if action == "active_name":
+        result = {"name": c4d.documents.GetActiveDocument().GetDocumentName()}
+    elif action == "activate_source":
         c4d.documents.SetActiveDocument(doc)
         result = {"activated": True}
     elif action == "invalid_packets":
@@ -686,7 +688,6 @@ class SizingValidation:
                         self.check(label + "_" + stage + "_playhead", observed["time"] == 75)
                     self.helper("preview_snapshot", name=preview_name, frame=75)
                     self.check(label + "_" + stage + "_source_unchanged", self.helper("snapshot") == source_before)
-                self.helper("activate_source")
                 self.call("sizing_close_preview", base)
                 self.call("sizing_release", base)
                 self.jobs.remove(job)
@@ -817,10 +818,14 @@ class SizingValidation:
                 self.check("camera_view_retained_" + stage, observed["viewed_role"] == previous_camera_role)
             previous_camera_role = role
             self.check("preview_source_unchanged_" + stage, self.helper("snapshot") == before)
-        # The host exec wrapper inspects the document it captured at entry.
-        # Switch in a separate request before closing that preview document.
-        self.helper("activate_source")
-        self.call("sizing_close_preview", base)
+        # Closing an active preview must preserve its SceneHook receiver and
+        # the outer exec_python wrapper until the current call returns.
+        self.check("close_preview_was_active", self.helper("active_name")["name"] == preview_name)
+        close_id = str(uuid.uuid4())
+        self.call("sizing_close_preview", base, operation_id=close_id)
+        self.check("closed_preview_removed", all(d["name"] != preview_name for d in self.call("capabilities")["data"]["documents"]))
+        self.check("close_deduplication", self.call("sizing_close_preview", base, operation_id=close_id)["success"])
+        self.check("close_source_unchanged", self.helper("snapshot") == before)
         destination = str(self.output / "result.vmd")
         first_export = self.call("sizing_export", {**base, "path": destination})
         protected = self.call("sizing_export", {**base, "path": destination}, expected=False)
@@ -849,6 +854,16 @@ class SizingValidation:
         self.receipt["cancel_terminal_state"] = terminal
         self.check("cancel_terminal_state", terminal in ("cancelled", "completed"))
         self.check("cancel_does_not_apply", self.helper("snapshot")["slots"] == after["slots"])
+        release_job = self.call("sizing_start", {**arguments, "characters": arguments["characters"][:1]})["data"]["job"]
+        self.jobs.append(release_job)
+        self.check("release_fixture_completed", self.wait_job(release_job)["job_state"] == "completed")
+        release_base = {"document": self.doc, "job": release_job}
+        release_preview = self.call("sizing_preview", release_base)["data"]["preview_document"]
+        release_id = str(uuid.uuid4())
+        self.call("sizing_release", release_base, operation_id=release_id)
+        self.jobs.remove(release_job)
+        self.check("active_preview_release_removed", all(d["handle"] != release_preview for d in self.call("capabilities")["data"]["documents"]))
+        self.check("release_deduplication", self.call("sizing_release", release_base, operation_id=release_id)["success"])
         self.receipt["status"] = "passed"
 
     def cleanup(self):

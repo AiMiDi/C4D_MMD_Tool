@@ -926,9 +926,15 @@ void PruneSizingJobs()
             it->session->Cancel();
         }
         // Destroy only completed workers; never wait on the main thread.
-        if (expired && !it->session->IsRunning())
-        {
-            sizing::WithdrawPanelState(it->panel);
+          if (expired && !it->session->IsRunning())
+          {
+              it->session->ClosePreview();
+              if (it->session->GetPreviewDocument())
+              {
+                  ++it; // Keep ownership and retry retirement on the next prune.
+                  continue;
+              }
+              sizing::WithdrawPanelState(it->panel);
             it = jobs.erase(it);
         }
         else ++it;
@@ -1068,12 +1074,17 @@ Json ExecuteSizing(Operation operation, BaseDocument* document, const std::strin
     if (operation == Operation::SizingClosePreview)
     {
         session.ClosePreview();
+        if (session.GetPreviewDocument())
+            return Envelope(id, false, "sizing_close_failed", string_util::GetStdString(session.GetError()));
         sizing::PublishPanelState(entry.panel);
         return Envelope(id, true, "ok", "", SizingJobData(entry));
     }
     if (operation == Operation::SizingRelease)
     {
         if (session.IsRunning()) return Envelope(id, false, "sizing_busy", "Cancel and poll until the worker finishes before releasing its job.");
+        session.ClosePreview();
+        if (session.GetPreviewDocument())
+            return Envelope(id, false, "sizing_close_failed", string_util::GetStdString(session.GetError()));
         sizing::WithdrawPanelState(entry.panel);
         jobs.erase(found);
         return Envelope(id, true, "ok", "", Json::Object({{"job", Json::StringValue(handle)}, {"released", Json::Boolean(true)}}));

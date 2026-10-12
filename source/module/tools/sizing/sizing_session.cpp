@@ -15,7 +15,43 @@
 
 namespace cmt { namespace sizing
 {
-namespace { std::weak_ptr<StatusProgress> statusOwner; }
+namespace
+{
+std::weak_ptr<StatusProgress> statusOwner;
+
+bool RetirePreviewDocument(BaseDocument* document)
+{
+    // A production message can be executing on this document's SceneHook,
+    // and exec_python can still hold its document wrapper after our return.
+    // Keep the document alive until the next main-thread job, independently
+    // of the HostSession lifetime. A BaseLink also guards manual closure.
+    try
+    {
+        const auto link = std::shared_ptr<BaseLink>(BaseLink::Alloc(),
+            [](BaseLink* value) { BaseLink::Free(value); });
+        if (!link) return false;
+        link->SetLink(document);
+        iferr (maxon::JobRef::Enqueue([link]() {
+            if (auto* retired = static_cast<BaseDocument*>(link->GetLink(nullptr, Tbasedocument)))
+            {
+                if (GetActiveDocument() == retired)
+                {
+                    auto* replacement = GetFirstDocument();
+                    while (replacement == retired) replacement = replacement->GetNext();
+                    if (replacement) SetActiveDocument(replacement);
+                }
+                KillDocument(retired);
+            }
+        }, maxon::JobQueueInterface::GetMainThreadQueue()))
+            return false; // Preserve ownership; never fall back to synchronous destruction.
+        return true;
+    }
+    catch (const std::bad_alloc&)
+    {
+        return false; // shared_ptr control-block allocation can throw, including during session destruction.
+    }
+}
+}
 
 // The solver owns no SDK objects. Coalesced, asynchronous main-thread jobs
 // present its latest progress even when the dialog and MCP polling are idle.
@@ -301,6 +337,7 @@ bool HostSession::StartBatch(const std::vector<HostInput>& inputs, const Filenam
     ScopedStatus preparing(IDS_SIZING_PROGRESS_READING);
     error_ = String();
     ClosePreview();
+    if (GetPreviewDocument()) return false;
     batch_ = libmmd::sizing::BatchResult();
     targets_.clear();
     selected_ = 0;
@@ -407,9 +444,13 @@ void HostSession::ClosePreview()
 {
     if (BaseDocument* preview = GetPreviewDocument())
     {
+        if (!RetirePreviewDocument(preview))
+        {
+            error_ = GeLoadString(IDS_SIZING_ERR_PREVIEW);
+            return;
+        }
         if (GetActiveDocument() == preview && !targets_.empty())
             if (auto* source = static_cast<BaseDocument*>(targets_.front()->document->GetLink(nullptr, Tbasedocument))) SetActiveDocument(source);
-        KillDocument(preview);
     }
     if (preview_) preview_->SetLink(nullptr);
     if (previewOriginalCamera_) previewOriginalCamera_->SetLink(nullptr);
@@ -473,6 +514,7 @@ bool HostSession::Preview(size_t stage, bool overlay)
     if (!valid)
     {
         ClosePreview();
+        if (GetPreviewDocument()) return false;
         DocumentOwner owned(BaseDocument::Alloc(), [](BaseDocument* doc) { BaseDocument::Free(doc); });
         if (!owned) { error_ = GeLoadString(IDS_SIZING_ERR_PREVIEW); return false; }
         BaseObject* previous = nullptr;
