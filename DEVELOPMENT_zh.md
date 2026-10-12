@@ -8,7 +8,7 @@
 
 ### CI（GitHub Actions）
 
-- **`.github/workflows/build.yml`** — PR 和 `main` push 在 Windows 2022 上运行资源复制安全检查、libMMD 功能 CTest、插件算法 CTest，并编译 `sdk_2026` Release。手动触发和 tag 发布调用还执行 **21 个 Release job**（八个 Windows、八个 Intel macOS、五个 Apple Silicon SDK），使用 `release-windows` / `release-macos` configure 预设。Windows 与 Intel macOS 上传完整插件产物，Apple Silicon 仅验证。依赖缓存包含工具链版本、架构、构建选项和嵌套子模块版本。Benchmark 通过手动输入 `run_benchmarks` 单独运行并保留日志。
+- **`.github/workflows/build.yml`** — PR 和 `main` push 在 Windows 2022 上编译 `sdk_2026` Release。CI 不运行自动化测试或 Benchmark；下文的本地测试预设继续保留。手动触发和 tag 发布调用执行 **21 个 Release job**（八个 Windows、八个 Intel macOS、五个 Apple Silicon SDK），使用 `release-windows` / `release-macos` configure 预设并关闭测试目标。Windows 与 Intel macOS 上传完整插件产物，Apple Silicon 仅编译。依赖缓存包含工具链版本、架构、构建选项和嵌套子模块版本。
 - **`.github/workflows/package.yml`** — 推送 `v*` 标签时调用 `build.yml`，将完整 Windows 产物铺到 `_build_msvc/` 后运行 Inno，macOS 直接把每个完整产物（已包含 `res/`）打包一次，再创建 **GitHub Release**。两端打包都消费已构建资源，不额外嵌套第二层资源目录。
 
 本机 Inno 打包仍用下文 `package-windows` + `inno-installer` / `CMakeUserPresets.json`。

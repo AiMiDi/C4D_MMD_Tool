@@ -4,6 +4,17 @@
 
 Entries for 0.9.1.x were reconstructed from tagged source changes and release dates. Intermediate build tags are grouped below; original entries through 0.4.6.1 are retained.
 
+### Unreleased · Constraint continuity and comparison cameras
+
+These development-branch changes are undergoing local joint validation. A new installer has not been published.
+
+1. Improve the release of added floor corrections across frames and strengthen continuity guards for leg avoidance and contact adjustments.
+2. Check computation budgets only for actual multi-character contact participants, so unrelated characters cannot block a batch.
+3. Add original/adjusted VMD comparison cameras, with blue/orange viewport and icon colors. Stage changes preserve camera roles, and adding both cameras supports one undo step.
+4. Restore queued inputs when reopening the panel. Keep deleted animation slots visibly invalid instead of silently switching to a file VMD, and preserve manual edits against older MCP state when reopening.
+5. Fix C4D type assertions caused by reading scalar MCP fingerprint fields as containers. Check malformed nested requests before typed reads and return clear errors.
+6. Defer preview document destruction so MCP close/release from an active preview preserves the executing SceneHook and Python document wrapper until the call returns.
+
 ### 0.9.3.5 · Motion adaptation fixes and controller workflow (2026-10-10)
 
 Published as [v0.9.3.5](https://github.com/AiMiDi/C4D_MMD_Tool/releases/tag/v0.9.3.5) after joint native validation, release CI and package verification. [Validation record](docs/validation/vmd-sizing/joint-release-20261010/README.md).

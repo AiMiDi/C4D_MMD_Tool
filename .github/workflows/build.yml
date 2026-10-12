@@ -1,5 +1,6 @@
 # Root CMake workflow: same presets as locally (CMakePresets.json), override CMT_SDK_DIR per matrix cell.
-# PR/main: functional tests + latest SDK. Release/dispatch: full 21-job matrix.
+# PR/main: latest SDK Release compile. Release/dispatch: full 21-job matrix.
+# Automated tests and benchmarks are run locally, outside CI.
 
 name: Build
 
@@ -8,11 +9,6 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
-    inputs:
-      run_benchmarks:
-        description: Run the separate libMMD benchmark job
-        type: boolean
-        default: false
   workflow_call:
     inputs:
       ref:
@@ -46,31 +42,6 @@ jobs:
         shell: bash
         run: bash ./scripts/checkout_build_submodules.sh
 
-      - name: Verify runtime resource copying
-        shell: pwsh
-        run: ./scripts/check_runtime_resources.ps1 -FixtureRoot "$env:RUNNER_TEMP/cmt-resources"
-
-      - name: Verify pinned installer resource adaptation
-        shell: pwsh
-        run: ./scripts/check_installer_resources.ps1 -FixtureRoot "$env:RUNNER_TEMP/cmt-installer-resources"
-
-      - name: Select Python for production MCP checks
-        uses: actions/setup-python@v6
-        with:
-          python-version: '3.11'
-
-      - name: Verify typed MCP transport and operation handling
-        run: python -m unittest discover -s mcp/tests -v
-
-      - name: Configure functional tests
-        run: cmake --preset dev-windows-deps-test
-
-      - name: Run functional libMMD CTest
-        run: cmake --build --preset cmt-deps-test
-
-      - name: Run plugin algorithm CTest
-        run: cmake --build --preset cmt-plugin-tests
-
       - name: Configure latest SDK Release
         if: github.event_name == 'pull_request' || (github.event_name == 'push' && github.ref == 'refs/heads/main')
         run: cmake --preset release-windows -D CMT_DEPS_ENABLE_LIBMMD_TESTS=OFF -D CMT_ENABLE_PLUGIN_TESTS=OFF -D CMT_ENABLE_RUNTIME_REGRESSION=OFF
@@ -78,35 +49,6 @@ jobs:
       - name: Compile latest SDK Release
         if: github.event_name == 'pull_request' || (github.event_name == 'push' && github.ref == 'refs/heads/main')
         run: cmake --build --preset workflow-release
-
-      - name: Upload functional test logs
-        if: always()
-        uses: actions/upload-artifact@v7
-        with:
-          name: functional-test-logs
-          path: |
-            _build_msvc/cmt_deps/libMMD/Testing/Temporary/
-            _build_msvc/tests/Testing/Temporary/
-          if-no-files-found: ignore
-
-  benchmarks:
-    if: github.event_name == 'workflow_dispatch' && inputs.run_benchmarks
-    runs-on: windows-2022
-    steps:
-      - uses: actions/checkout@v6
-        with:
-          fetch-depth: 0
-          submodules: false
-      - shell: bash
-        run: bash ./scripts/checkout_build_submodules.sh
-      - run: cmake --preset dev-windows-deps-test
-      - run: cmake --build --preset cmt-deps-benchmark
-      - uses: actions/upload-artifact@v7
-        if: always()
-        with:
-          name: benchmark-logs
-          path: _build_msvc/cmt_deps/libMMD/Testing/Temporary/
-          if-no-files-found: ignore
 
   matrix-build:
     if: github.event_name != 'pull_request' && !(github.event_name == 'push' && github.ref == 'refs/heads/main')
@@ -239,6 +181,7 @@ jobs:
           fi
           cmake -S dependency -B _build_msvc/cmt_deps \
             -G "${{ matrix.deps_generator }}" \
+            -D CMT_DEPS_ENABLE_LIBMMD_TESTS=OFF \
             "${deps_extra[@]}" \
             "-DCMAKE_ARCHIVE_OUTPUT_DIRECTORY_RELEASE=${{ github.workspace }}/_build_msvc/cmt_deps_prebuilt/lib" \
             "-DCMAKE_ARCHIVE_OUTPUT_DIRECTORY_DEBUG=${{ github.workspace }}/_build_msvc/cmt_deps_prebuilt/lib"
@@ -255,6 +198,8 @@ jobs:
             -D "CMT_SDK_DIR=${{ github.workspace }}/${{ matrix.sdk }}" \
             -D CMT_SDK_BUILD_CONFIG=Release \
             -D CMT_WITH_DEPENDENCY_SUBDIR=OFF \
+            -D CMT_DEPS_ENABLE_LIBMMD_TESTS=OFF \
+            -D CMT_ENABLE_PLUGIN_TESTS=OFF \
             -D CMT_ENABLE_RUNTIME_REGRESSION=OFF \
             -D CMT_RUNTIME_RESOURCE_CONFIG_POLICY=reset \
             -D "CMT_DEPS_PREBUILT_DIR=${{ github.workspace }}/_build_msvc/cmt_deps_prebuilt" \

@@ -176,13 +176,26 @@ Bool IsUuid(const std::string& value)
 
 std::string Text(const BaseContainer& container, Int32 field, const char* fallback = "")
 {
-	return Has(container, field) ? string_util::GetStdString(container.GetString(field)) : std::string(fallback);
+	return container.GetData(field).GetType() == DA_STRING ?
+		string_util::GetStdString(container.GetString(field)) : std::string(fallback);
 }
 
 double Number(const BaseContainer& container, Int32 field, double fallback = 0)
 {
-	if (!Has(container, field)) return fallback;
-	return container.GetData(field).GetType() == DA_LONG ? container.GetInt32(field) : container.GetFloat(field);
+	switch (container.GetData(field).GetType())
+	{
+		case DA_LONG: return container.GetInt32(field);
+		case DA_REAL: return container.GetFloat(field);
+		default: return fallback;
+	}
+}
+
+// An existing scalar must never be probed with a container getter. C4D asserts
+// on that type mismatch, even when the getter would otherwise return nullptr.
+const BaseContainer* NestedContainer(const BaseContainer& container, Int32 field)
+{
+	return container.GetData(field).GetType() == DA_CONTAINER ?
+		container.GetContainerInstance(field) : nullptr;
 }
 
 Bool TryEvaluationTime(double value, Int32 rate, BaseTime& time)
@@ -224,7 +237,7 @@ Bool ValidateSizingOptions(const BaseContainer& options, std::string& error)
         }
         else if (field == SizingAvoidanceBodies)
         {
-            const auto* bodies = options.GetContainerInstance(field);
+            const auto* bodies = NestedContainer(options, field);
             if (!bodies) { error = "avoidance_bodies must be a container"; return false; }
             for (Int32 j = 0, key; (key = bodies->GetIndexId(j)) != NOTOK; ++j)
                 if (key != j || j >= 256 || bodies->GetData(key).GetType() != DA_STRING ||
@@ -241,10 +254,12 @@ Bool ValidateSizingOptions(const BaseContainer& options, std::string& error)
         else if (field == SizingMovement || field == SizingLegOffset ||
                  (field >= SizingContactDistance && field <= SizingTolerance))
         {
+            if (type != DA_REAL && type != DA_LONG)
+            { error = "Sizing numeric option must be a number"; return false; }
             const double value = Number(options, field);
             const double maximum = field == SizingMovement || field == SizingTolerance ? 1000 : 10000;
             const double minimum = field == SizingLegOffset || field == SizingFloorHeight ? -10000 : 0;
-            if ((type != DA_REAL && type != DA_LONG) || !std::isfinite(value) || value < minimum || value > maximum ||
+            if (!std::isfinite(value) || value < minimum || value > maximum ||
                 ((field == SizingMovement || field == SizingContactDistance || field == SizingTolerance) && value == 0))
             { error = "Sizing numeric option exceeds bounds"; return false; }
         }
@@ -258,15 +273,16 @@ Bool ValidateSizingCharacters(const BaseContainer& characters, std::string& erro
     Int32 count = 0;
     for (Int32 key; (key = characters.GetIndexId(count)) != NOTOK; ++count)
     {
-        const auto* input = characters.GetContainerInstance(key);
+        const auto* input = NestedContainer(characters, key);
         if (key != count || count >= 16 || !input)
         { error = "Expected 1-16 ordered character containers"; return false; }
         for (Int32 j = 0, field; (field = input->GetIndexId(j)) != NOTOK; ++j)
         {
             if (field == SizingOptions)
             {
-                const auto* values = input->GetContainerInstance(field);
-                if (!values || !ValidateSizingOptions(*values, error)) return false;
+                const auto* values = NestedContainer(*input, field);
+                if (!values) { error = "Character sizing_options must be a container"; return false; }
+                if (!ValidateSizingOptions(*values, error)) return false;
             }
             else if (field == SizingModel || field == SizingSource || field == Path || field == Slot)
             {
@@ -303,7 +319,7 @@ Bool ValidateRequest(const BaseContainer& request, Operation operation, std::str
 		{ error = "Missing or invalid request string"; return false; }
 	if (!IsUuid(Text(request, OperationId))) { error = "operation_id must be a UUID"; return false; }
 	if (operation == Operation::Invalid) { error = "Unknown operation"; return false; }
-	const BaseContainer* options = request.GetContainerInstance(Options);
+	const BaseContainer* options = NestedContainer(request, Options);
 	if (!options) { error = "Missing options container"; return false; }
 	const auto allowed = AllowedOptions(operation);
 	for (Int32 index = 0, field; (field = options->GetIndexId(index)) != NOTOK; ++index)
@@ -313,8 +329,9 @@ Bool ValidateRequest(const BaseContainer& request, Operation operation, std::str
 		const Int32 type = options->GetData(field).GetType();
 		if (field == SizingOptions || field == SizingCharacters)
         {
-            const auto* values = options->GetContainerInstance(field);
-            if (!values || !(field == SizingOptions ? ValidateSizingOptions(*values, error) : ValidateSizingCharacters(*values, error)))
+            const auto* values = NestedContainer(*options, field);
+            if (!values) { error = "Sizing options and characters must be containers"; return false; }
+            if (!(field == SizingOptions ? ValidateSizingOptions(*values, error) : ValidateSizingCharacters(*values, error)))
                 return false;
         }
         else if (IsBooleanOption(field) || field == SizingOverlay)
@@ -810,7 +827,7 @@ Json ContainerFingerprint(const BaseContainer& container)
     std::vector<std::pair<std::string, Json>> fields;
     for (Int32 field : ids)
     {
-        const auto* nested = container.GetContainerInstance(field);
+        const auto* nested = NestedContainer(container, field);
         const Json value = nested ? ContainerFingerprint(*nested) : container.GetData(field).GetType() == DA_STRING ?
             Json::StringValue(container.GetString(field)) : Json::Number(Number(container, field));
         fields.push_back({std::to_string(field), value});
@@ -909,9 +926,15 @@ void PruneSizingJobs()
             it->session->Cancel();
         }
         // Destroy only completed workers; never wait on the main thread.
-        if (expired && !it->session->IsRunning())
-        {
-            sizing::WithdrawPanelState(it->panel);
+          if (expired && !it->session->IsRunning())
+          {
+              it->session->ClosePreview();
+              if (it->session->GetPreviewDocument())
+              {
+                  ++it; // Keep ownership and retry retirement on the next prune.
+                  continue;
+              }
+              sizing::WithdrawPanelState(it->panel);
             it = jobs.erase(it);
         }
         else ++it;
@@ -1051,12 +1074,17 @@ Json ExecuteSizing(Operation operation, BaseDocument* document, const std::strin
     if (operation == Operation::SizingClosePreview)
     {
         session.ClosePreview();
+        if (session.GetPreviewDocument())
+            return Envelope(id, false, "sizing_close_failed", string_util::GetStdString(session.GetError()));
         sizing::PublishPanelState(entry.panel);
         return Envelope(id, true, "ok", "", SizingJobData(entry));
     }
     if (operation == Operation::SizingRelease)
     {
         if (session.IsRunning()) return Envelope(id, false, "sizing_busy", "Cancel and poll until the worker finishes before releasing its job.");
+        session.ClosePreview();
+        if (session.GetPreviewDocument())
+            return Envelope(id, false, "sizing_close_failed", string_util::GetStdString(session.GetError()));
         sizing::WithdrawPanelState(entry.panel);
         jobs.erase(found);
         return Envelope(id, true, "ok", "", Json::Object({{"job", Json::StringValue(handle)}, {"released", Json::Boolean(true)}}));
@@ -1126,7 +1154,7 @@ Json Execute(Operation operation, const BaseContainer& request);
 Bool Dispatch(BaseDocument* owner, BaseContainer* storage)
 {
 	if (!owner || !storage || storage->GetId() != kContainerId ||
-		!storage->GetContainerInstance(kRequestContainer)) return false;
+		!NestedContainer(*storage, kRequestContainer)) return false;
 	const BaseContainer request = storage->GetContainer(kRequestContainer);
 	const std::string id = Text(request, OperationId);
 	const Operation operation = ParseOperation(Text(request, OperationName));

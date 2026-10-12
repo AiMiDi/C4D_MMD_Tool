@@ -13,6 +13,9 @@ public:
     Bool Command(Int32 id, const BaseContainer& msg) override;
     void Timer(const BaseContainer& msg) override;
     Bool AskClose() override;
+#if defined(CMT_ENABLE_RUNTIME_REGRESSION)
+    void WriteRegressionState(BaseContainer& output) const;
+#endif
 private:
     void Refresh();
     void RefreshQueue();

@@ -46,6 +46,11 @@ class CMTToolCommand final : public CommandData
 	Bool BuildSubmenu(BaseContainer& submenu);
 
 public:
+#if defined(CMT_ENABLE_RUNTIME_REGRESSION)
+	CMTToolCommand();
+	~CMTToolCommand() override;
+	static MotionSizingDialog* GetRegressionSizingDialog();
+#endif
 	Bool RestoreLayout(void* secret) override;
 #if CMT_SDK_HAS_COMMANDDATA_EXECUTE_WITH_PARENT
 	Bool Execute(BaseDocument* doc, GeDialog* parentManager) override

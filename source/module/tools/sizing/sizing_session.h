@@ -64,6 +64,7 @@ private:
     };
     std::vector<std::unique_ptr<Target>> targets_;
     AutoAlloc<BaseLink> preview_;
+    AutoAlloc<BaseLink> previewOriginalCamera_;
     AutoAlloc<BaseLink> previewCamera_;
     std::future<libmmd::sizing::BatchResult> job_;
     std::atomic_bool cancel_{false};
