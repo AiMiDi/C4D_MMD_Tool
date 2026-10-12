@@ -20,6 +20,7 @@ Description:	scene manager
 #include <algorithm>
 #include <vector>
 #if defined(CMT_ENABLE_RUNTIME_REGRESSION)
+#include "module/ui/cmt_tools_dialog.h"
 #include "utils/cmt_runtime_regression_protocol.hpp"
 #include "utils/filename_util.hpp"
 #include "utils/string_util.hpp"
@@ -650,7 +651,8 @@ Bool CMTSceneManager::Message(GeListNode* node, Int32 type, void* data)
 			production_response_ = String{};
 			auto* hook = static_cast<BaseList2D*>(node);
 			const Bool dispatched = cmt::automation::Dispatch(hook->GetDocument(), packet);
-			production_response_ = packet->GetString(cmt::automation::kResponseJson);
+			if (packet->GetData(cmt::automation::kResponseJson).GetType() == DA_STRING)
+				production_response_ = packet->GetString(cmt::automation::kResponseJson);
 			return dispatched;
 		}
 	}
@@ -680,7 +682,7 @@ Bool CMTSceneManager::Message(GeListNode* node, Int32 type, void* data)
 		request->SetString(cmt_regression::Error, String());
 		return true;
 	}
-	if ((operation >= cmt_regression::Operation::SizingStart && operation <= cmt_regression::Operation::SizingDialogClose) ||
+	if ((operation >= cmt_regression::Operation::SizingStart && operation <= cmt_regression::Operation::SizingDialogCommand) ||
         (operation >= cmt_regression::Operation::SizingBatchStart && operation <= cmt_regression::Operation::SizingSceneSlotStart))
 	{
 		try
@@ -740,13 +742,30 @@ Bool CMTSceneManager::Message(GeListNode* node, Int32 type, void* data)
 			case cmt_regression::Operation::SizingCancel: session.Cancel(); break;
 			case cmt_regression::Operation::SizingClose: session.ClosePreview(); break;
             case cmt_regression::Operation::SizingDialogOpen:
-                if (!sizing_test_dialog_) sizing_test_dialog_ = std::make_unique<MotionSizingDialog>();
-                  success = sizing_test_dialog_->Open(DLG_TYPE::ASYNC, g_cmt_command_id, -1, -1, 720, 760, 1);
+            {
+                // Exercise the actual command-owned dialog, including its
+                // RestoreLayout callback. A separate hook-owned instance with
+                // the same plugin/subdialog ID conflicts with C4D restoration.
+                auto* dialog = CMTToolCommand::GetRegressionSizingDialog();
+                success = dialog && dialog->Open(DLG_TYPE::ASYNC, g_cmt_command_id, -1, -1, 720, 760, 1);
                 break;
+            }
             case cmt_regression::Operation::SizingDialogClose:
-                if (sizing_test_dialog_) sizing_test_dialog_->Close();
-                sizing_test_dialog_.reset();
+                if (auto* dialog = CMTToolCommand::GetRegressionSizingDialog()) dialog->Close();
                 break;
+            case cmt_regression::Operation::SizingDialogCommand:
+            {
+                auto* dialog = CMTToolCommand::GetRegressionSizingDialog();
+                if (!dialog || !dialog->IsOpen()) { success = false; break; }
+                const Int32 control = request->GetInt32(cmt_regression::SizingDialogControl);
+                const auto& value = request->GetData(cmt_regression::SizingDialogValue);
+                if (value.GetType() == DA_STRING) dialog->SetString(control, value.GetString());
+                else if (value.GetType() == DA_REAL) dialog->SetFloat(control, value.GetFloat());
+                else if (value.GetType() == DA_LONG) dialog->SetInt32(control, value.GetInt32());
+                if (control > 0) success = dialog->Command(control, BaseContainer());
+                dialog->WriteRegressionState(*request);
+                break;
+            }
 			default: break;
 			}
 			request->SetBool(cmt_regression::SizingRunning, session.IsRunning());

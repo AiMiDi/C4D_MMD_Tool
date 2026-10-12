@@ -71,6 +71,8 @@ Adapt a VMD made for one character to another. Source and target PMX proportions
 5. Calculate and watch progress in the C4D status bar; long operations can be cancelled. Select stages and scrub the timeline to compare original, scale, offset, stance, twist, avoidance and contact results. Side-by-side/overlay previews and automatic refresh after parameter changes are available.
 6. Inspect residuals and important poses, then **apply as a new animation slot** or export VMD. The original slot is retained.
 
+Enable camera adaptation and select a camera VMD to preview a **blue original camera** alongside an **orange adjusted camera**. Changing stages retains the currently viewed camera role. **Create comparison cameras** adds both cameras to the source scene as one undo step. The original camera uses the unmodified camera VMD for composition checks; side-by-side previews shift both camera groups with their respective characters. Object Manager icons use the same colors on C4D versions that support icon coloring.
+
 Afu 2.0 with Stay Tonight Heaven Lee Ver., captured in the native C4D viewport with physics disabled.
 
 **Legs and overall pose: the original, unadapted VMD on the left and the complete adaptation result on the right.** Both use the same import scale, animation frame and camera view.
@@ -106,7 +108,11 @@ Windows development: `cmake --preset dev-windows` then `cmake --build --preset w
 
 ## Changelog
 
-The three most recent version entries are shown below. See the [complete changelog](CHANGELOG.md) for earlier changes.
+Unreleased improvements and the three most recent version entries are shown below. See the [complete changelog](CHANGELOG.md) for earlier changes.
+
+### Unreleased · Constraint continuity and comparison cameras
+
+Improve the release of floor corrections across frames and strengthen continuity guards for leg/contact adjustments. Fix computation-budget checks for batch contact participants. Add blue original and orange adjusted VMD cameras, preserve the current camera role across stages, and create or undo the pair together. Restore queued panel inputs on reopening, show deleted animation slots explicitly, and preserve manual edits against older MCP state. Local joint validation is still in progress; a new installer has not been published.
 
 ### 0.9.3.5 · Motion adaptation fixes and controller workflow (2026-10-10)
 

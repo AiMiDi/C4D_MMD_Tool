@@ -5,6 +5,9 @@
 #include "module/tools/object/mmd_model_manager.h"
 #include <algorithm>
 #include <iterator>
+#if defined(CMT_ENABLE_RUNTIME_REGRESSION)
+#include "utils/cmt_runtime_regression_protocol.hpp"
+#endif
 
 namespace
 {
@@ -123,13 +126,47 @@ Bool MotionSizingDialog::InitValues()
     SetBool(LivePreview, true);
     pendingCalculation_ = false;
     RefreshQueue();
-    RefreshMotionSlots();
-    if (targetBox_) targetBox_->SetLink(target_->GetLink(nullptr, Obase));
+    // Queue entries outlive the dialog's controls. Reopening must display the
+    // stored input that Calculate will consume, rather than the UI defaults.
+    if (!entries_.empty()) LoadEntry(entries_.size() - 1);
+    else
+    {
+        RefreshMotionSlots();
+        if (targetBox_) targetBox_->SetLink(target_->GetLink(nullptr, Obase));
+    }
     SetTimer(100);
-    SyncFromMcp(true);
+    // A reopened panel restores its own edits. Only a newly published MCP
+    // revision may replace them; reopening is not a new programmatic request.
+    SyncFromMcp();
     Refresh();
     return true;
 }
+
+#if defined(CMT_ENABLE_RUNTIME_REGRESSION)
+void MotionSizingDialog::WriteRegressionState(BaseContainer& output) const
+{
+    String source, motion, report;
+    Int32 slot = 0; Float movement = 0.;
+    GetString(SourcePath, source); GetString(MotionPath, motion); GetString(Report, report);
+    GetInt32(MotionSlot, slot); GetFloat(Movement, movement);
+    output.SetString(cmt_regression::SizingDialogSource, source);
+    output.SetString(cmt_regression::SizingDialogMotion, motion);
+    output.SetString(cmt_regression::SizingDialogReport, report);
+    output.SetInt32(cmt_regression::SizingDialogSlot, slot);
+    output.SetFloat(cmt_regression::SizingDialogMovement, movement);
+    output.SetInt32(cmt_regression::SizingDialogQueueCount, static_cast<Int32>(entries_.size()));
+    const auto* target = static_cast<BaseObject*>(target_->GetLink(nullptr, Obase));
+    output.SetString(cmt_regression::SizingDialogTarget, target ? target->GetName() : String());
+    if (!entries_.empty())
+    {
+        const auto& entry = *entries_.back();
+        output.SetString(cmt_regression::SizingDialogStoredSource, entry.source.GetString());
+        output.SetString(cmt_regression::SizingDialogStoredMotion, entry.motion.GetString());
+        output.SetFloat(cmt_regression::SizingDialogStoredMovement, entry.options.movementMultiplier);
+        output.SetInt64(cmt_regression::SizingDialogStoredSlot, static_cast<Int64>(entry.motionSlotIdentity));
+    }
+}
+#endif
 
 cmt::sizing::HostSession& MotionSizingDialog::ActiveSession()
 {
@@ -411,6 +448,15 @@ void MotionSizingDialog::RefreshMotionSlots(UInt64 selected)
             AddChild(MotionSlot, index, String::IntToString(index) + String(" : ") + slot.name);
             if (slot.runtime_identity == selected) selection = index;
         }
+    }
+    if (selected != 0 && selection == 0)
+    {
+        // A deleted scene slot is still the selected input until the artist
+        // explicitly chooses a replacement. Do not silently switch to a
+        // leftover file path when another option is edited.
+        motionSlots_.push_back(selected);
+        selection = static_cast<Int32>(motionSlots_.size());
+        AddChild(MotionSlot, selection, Text(IDS_SIZING_MISSING_MOTION_SLOT));
     }
     SetInt32(MotionSlot, selection);
 }

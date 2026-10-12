@@ -216,6 +216,14 @@ void StylePreview(BaseObject* root, const Vector& color, bool ghost)
         pending.pop_back();
         auto properties = MakeObjectColorProperties(color, ID_BASEOBJECT_USECOLOR_ALWAYS, false);
         object->SetColorProperties(&properties);
+#if CMT_SDK_HAS_ICON_COLORIZE
+        if (object->IsInstanceOf(g_mmd_camera_object_id) || object->IsInstanceOf(Ocamera))
+        {
+            object->SetParameter(ConstDescID(DescLevel(ID_BASELIST_ICON_COLORIZE_MODE)),
+                GeData(ID_BASELIST_ICON_COLORIZE_MODE_CUSTOM), DESCFLAGS_SET::NONE);
+            object->SetParameter(ConstDescID(DescLevel(ID_BASELIST_ICON_COLOR)), GeData(color), DESCFLAGS_SET::NONE);
+        }
+#endif
         object->SetParameter(ConstDescID(DescLevel(ID_BASEOBJECT_XRAY)), GeData(ghost), DESCFLAGS_SET::NONE);
         if (object->IsInstanceOf(Opolygon))
         {
@@ -404,6 +412,7 @@ void HostSession::ClosePreview()
         KillDocument(preview);
     }
     if (preview_) preview_->SetLink(nullptr);
+    if (previewOriginalCamera_) previewOriginalCamera_->SetLink(nullptr);
     if (previewCamera_) previewCamera_->SetLink(nullptr);
     for (auto& target : targets_) { target->before->SetLink(nullptr); target->after->SetLink(nullptr); }
 }
@@ -433,6 +442,15 @@ bool HostSession::CheckTarget(size_t index)
 
 namespace
 {
+uint32_t PreviewMotionLastFrame(const libmmd::VMDFile& motion)
+{
+    uint32_t lastFrame = 0;
+    for (const auto& key : motion.m_motions) lastFrame = std::max(lastFrame, key.m_frame);
+    for (const auto& key : motion.m_morphs) lastFrame = std::max(lastFrame, key.m_frame);
+    for (const auto& key : motion.m_iks) lastFrame = std::max(lastFrame, key.m_frame);
+    return lastFrame;
+}
+
 BaseObject* ImportCamera(BaseDocument* document, const libmmd::VMDFile& data, Float scale)
 {
     auto animation = std::make_unique<libmmd::VMDCameraAnimation>();
@@ -488,12 +506,15 @@ bool HostSession::Preview(size_t stage, bool overlay)
         preview_->SetLink(preview);
     }
     const BaseTime time = preview->GetTime();
+    uint32_t lastFrame = 0;
     double extent = 1.;
     for (const auto& target : targets_)
         for (const auto& bone : target->snapshot.m_bones) extent = std::max(extent, std::abs(static_cast<double>(bone.m_position.x())));
     for (size_t i = 0; i < targets_.size(); ++i)
     {
         auto& entry = *targets_[i];
+        lastFrame = std::max(lastFrame, PreviewMotionLastFrame(batch_.characters[i].stages[0]));
+        lastFrame = std::max(lastFrame, PreviewMotionLastFrame(batch_.characters[i].stages[stage]));
         auto* before = static_cast<BaseObject*>(entry.before->GetLink(preview, Obase));
         auto* after = static_cast<BaseObject*>(entry.after->GetLink(preview, Obase));
         if (!ImportStage(preview, after, batch_.characters[i].stages[stage], entry.scale, true, GeLoadString(IDS_SIZING_AFTER)))
@@ -506,15 +527,54 @@ bool HostSession::Preview(size_t stage, bool overlay)
     if (HasCamera())
     {
         auto* oldCamera = static_cast<BaseObject*>(previewCamera_->GetLink(preview, Obase));
+        auto* oldOriginalCamera = static_cast<BaseObject*>(previewOriginalCamera_->GetLink(preview, Obase));
+        auto* view = preview->GetActiveBaseDraw();
+        auto* sceneCamera = view ? view->GetSceneCamera(preview) : nullptr;
+        bool viewedOriginal = false, viewedAdjusted = false;
+        for (auto* object = sceneCamera; object; object = object->GetUp())
+        {
+            viewedOriginal = viewedOriginal || object == oldOriginalCamera;
+            viewedAdjusted = viewedAdjusted || object == oldCamera;
+        }
+        auto originalCameraMotion = batch_.originalCamera;
         auto cameraMotion = stage == static_cast<size_t>(libmmd::sizing::Stage::MultiCharacter) ? batch_.camera : batch_.originalCamera;
-        // The camera follows the adjusted group when comparing side by side.
-        if (!overlay) for (auto& key : cameraMotion.m_cameras) key.m_interest.x() += static_cast<float>(extent * 1.3);
+        for (const auto& key : originalCameraMotion.m_cameras) lastFrame = std::max(lastFrame, key.m_frame);
+        for (const auto& key : cameraMotion.m_cameras) lastFrame = std::max(lastFrame, key.m_frame);
+        // Both camera tracks retain their own motion. In a side-by-side view,
+        // only the comparison group's translation is added to each interest.
+        if (!overlay)
+        {
+            for (auto& key : originalCameraMotion.m_cameras) key.m_interest.x() -= static_cast<float>(extent * 1.3);
+            for (auto& key : cameraMotion.m_cameras) key.m_interest.x() += static_cast<float>(extent * 1.3);
+        }
+        auto* originalCamera = ImportCamera(preview, originalCameraMotion, targets_.front()->scale);
         auto* camera = ImportCamera(preview, cameraMotion, targets_.front()->scale);
-        if (!camera) { error_ = GeLoadString(IDS_SIZING_ERR_CAMERA); return false; }
+        if (!originalCamera || !camera)
+        {
+            if (originalCamera) { originalCamera->Remove(); BaseObject::Free(originalCamera); }
+            if (camera) { camera->Remove(); BaseObject::Free(camera); }
+            error_ = GeLoadString(IDS_SIZING_ERR_CAMERA); return false;
+        }
+        originalCamera->SetName(GeLoadString(IDS_SIZING_CAMERA_ORIGINAL));
+        StylePreview(originalCamera, Vector(.15, .45, 1.), false);
+        StylePreview(camera, Vector(1., .5, .1), false);
+        if (oldOriginalCamera) { oldOriginalCamera->Remove(); BaseObject::Free(oldOriginalCamera); }
         if (oldCamera) { oldCamera->Remove(); BaseObject::Free(oldCamera); }
+        previewOriginalCamera_->SetLink(originalCamera);
         previewCamera_->SetLink(camera);
+        if (viewedOriginal) view->SetSceneCamera(originalCamera->GetDown());
+        else if (viewedAdjusted) view->SetSceneCamera(camera->GetDown());
     }
     preview->FlushUndoBuffer();
+    // Each normal motion import resets the document range to that one model.
+    // Restore the complete comparison range after all imports, independent of
+    // member order and including model-info/morph keys beyond the bone motion.
+    const BaseTime startTime(0);
+    const BaseTime endTime(static_cast<Float>(lastFrame) / 30.);
+    preview->SetMinTime(startTime);
+    preview->SetMaxTime(endTime);
+    preview->SetLoopMinTime(startTime);
+    preview->SetLoopMaxTime(endTime);
     preview->SetTime(time);
     preview->ExecutePasses(nullptr, true, true, true, BUILDFLAGS::NONE);
     SetActiveDocument(preview);
@@ -568,16 +628,31 @@ bool HostSession::ApplyCamera()
     ScopedStatus status(IDS_SIZING_PROGRESS_APPLY);
     for (size_t i = 0; i < targets_.size(); ++i) if (!CheckTarget(i)) return false;
     auto* document = static_cast<BaseDocument*>(targets_.front()->document->GetLink(nullptr, Tbasedocument));
-    document->StartUndo();
+    const BaseTime previousMax = document->GetMaxTime(), previousLoopMax = document->GetLoopMaxTime();
+    auto* originalCamera = ImportCamera(document, batch_.originalCamera, targets_.front()->scale);
     auto* camera = ImportCamera(document, batch_.camera, targets_.front()->scale);
-    if (camera)
+    if (!originalCamera || !camera)
     {
-        document->AddUndo(UNDOTYPE::NEWOBJ, camera);
-        document->SetActiveObject(camera, SELECTION_NEW);
+        if (originalCamera) { originalCamera->Remove(); BaseObject::Free(originalCamera); }
+        if (camera) { camera->Remove(); BaseObject::Free(camera); }
+        document->SetMaxTime(previousMax); document->SetLoopMaxTime(previousLoopMax);
+        error_ = GeLoadString(IDS_SIZING_ERR_CAMERA); return false;
     }
-    document->EndUndo();
-    if (!camera) { error_ = GeLoadString(IDS_SIZING_ERR_CAMERA); return false; }
+    originalCamera->SetName(GeLoadString(IDS_SIZING_CAMERA_ORIGINAL));
+    StylePreview(originalCamera, Vector(.15, .45, 1.), false);
+    StylePreview(camera, Vector(1., .5, .1), false);
+    // The pair is created as one undo step. Select before starting the undo
+    // transaction so selection does not consume the first undo operation.
     SetActiveDocument(document);
+    document->SetActiveObject(camera, SELECTION_NEW);
+    const BaseTime cameraMax = document->GetMaxTime(), cameraLoopMax = document->GetLoopMaxTime();
+    document->SetMaxTime(previousMax); document->SetLoopMaxTime(previousLoopMax);
+    document->StartUndo();
+    document->AddUndo(UNDOTYPE::CHANGE_SMALL, document);
+    document->SetMaxTime(cameraMax); document->SetLoopMaxTime(cameraLoopMax);
+    document->AddUndo(UNDOTYPE::NEWOBJ, originalCamera);
+    document->AddUndo(UNDOTYPE::NEWOBJ, camera);
+    document->EndUndo();
     EventAdd();
     return true;
 }

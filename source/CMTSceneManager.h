@@ -187,7 +187,6 @@ private:
 	String production_response_;
 #if defined(CMT_ENABLE_RUNTIME_REGRESSION)
 	std::unique_ptr<cmt::sizing::HostSession> sizing_test_session_;
-    std::unique_ptr<MotionSizingDialog> sizing_test_dialog_;
 #endif
 
 };

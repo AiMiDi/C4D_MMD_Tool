@@ -140,7 +140,7 @@ STRINGTABLE
 	IDS_SIZING_CLOSE_PREVIEW "Close temporary preview";
 	IDS_SIZING_APPLY "Apply character to a new slot";
 	IDS_SIZING_EXPORT "Export character stage VMD";
-	IDS_SIZING_CAMERA_APPLY "Create adjusted camera";
+	IDS_SIZING_CAMERA_APPLY "Create comparison cameras";
 	IDS_SIZING_CAMERA_EXPORT "Export adjusted camera VMD";
 	IDS_SIZING_PREVIEW_HINT "Play with the C4D timeline; closing this window removes the temporary preview.";
 	IDS_SIZING_BOUNDARY "Avoidance checks wrists/elbows; inspect residuals and the resulting motion.";
@@ -192,4 +192,6 @@ STRINGTABLE
 	IDS_SIZING_PROGRESS_EXPORT "Exporting VMD result";
 	IDS_SIZING_PROGRESS_CANCELLING "Cancelling calculation...";
 	IDS_SIZING_LEG_AVOIDANCE "Leg self-collision avoidance";
+	IDS_SIZING_CAMERA_ORIGINAL "Original VMD camera";
+	IDS_SIZING_MISSING_MOTION_SLOT "Missing VMD slot - choose another input";
 }

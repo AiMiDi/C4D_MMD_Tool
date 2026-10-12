@@ -20,7 +20,22 @@ namespace
 	constexpr Int32 kPanelCommand = 1000;
 	constexpr Int32 kSizingCommand = 1001;
 	constexpr Int32 kSizingDialog = 1;
+#if defined(CMT_ENABLE_RUNTIME_REGRESSION)
+	CMTToolCommand* regressionCommand = nullptr;
+#endif
 }
+
+#if defined(CMT_ENABLE_RUNTIME_REGRESSION)
+CMTToolCommand::CMTToolCommand() { regressionCommand = this; }
+CMTToolCommand::~CMTToolCommand()
+{
+	if (regressionCommand == this) regressionCommand = nullptr;
+}
+MotionSizingDialog* CMTToolCommand::GetRegressionSizingDialog()
+{
+	return regressionCommand ? &regressionCommand->sizing_dialog_ : nullptr;
+}
+#endif
 
 Bool CMTToolCommand::TogglePanel()
 {
