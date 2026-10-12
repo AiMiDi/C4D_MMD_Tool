@@ -4,9 +4,9 @@
 
 Entries for 0.9.1.x were reconstructed from tagged source changes and release dates. Intermediate build tags are grouped below; original entries through 0.4.6.1 are retained.
 
-### Unreleased · Constraint continuity and comparison cameras
+### 0.9.3.6 · Constraint continuity and comparison cameras (2026-10-12)
 
-These development-branch changes are undergoing local joint validation. A new installer has not been published.
+Merged into main after Windows C4D 2026.4 native validation. Release packaging runs in GitHub CI; automated tests remain available locally and no longer run in CI.
 
 1. Improve the release of added floor corrections across frames and strengthen continuity guards for leg avoidance and contact adjustments.
 2. Check computation budgets only for actual multi-character contact participants, so unrelated characters cannot block a batch.

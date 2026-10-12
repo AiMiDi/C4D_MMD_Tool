@@ -104,15 +104,15 @@ Afu 2.0 with Stay Tonight Heaven Lee Ver., captured in the native C4D viewport w
 
 **Developer documentation:** [DEVELOPMENT.md](DEVELOPMENT.md) · [中文 DEVELOPMENT_zh.md](DEVELOPMENT_zh.md)
 
-Windows development: `cmake --preset dev-windows` then `cmake --build --preset workflow-dev`. Release: configure `release-windows` then build `workflow-release`. Test preset `dev-windows-deps-test` supports `cmt-deps-test` and `cmt-plugin-tests`; benchmarks use the separate `cmt-deps-benchmark` target. PR/main CI runs functional tests and a latest-SDK compile; releases build the complete SDK matrix. Built plugin folders include copied, verified resources. See the developer guide for packaging and normal-start/attach debugging.
+Windows development: `cmake --preset dev-windows` then `cmake --build --preset workflow-dev`. Release: configure `release-windows` then build `workflow-release`. Test preset `dev-windows-deps-test` supports `cmt-deps-test` and `cmt-plugin-tests`; benchmarks use the separate `cmt-deps-benchmark` target. PR/main CI compiles the latest SDK; releases build the complete SDK matrix. CI does not execute tests or benchmarks. Built plugin folders include copied, verified resources. See the developer guide for packaging and normal-start/attach debugging.
 
 ## Changelog
 
-Unreleased improvements and the three most recent version entries are shown below. See the [complete changelog](CHANGELOG.md) for earlier changes.
+Recent version entries are shown below. See the [complete changelog](CHANGELOG.md) for earlier changes.
 
-### Unreleased · Constraint continuity and comparison cameras
+### 0.9.3.6 · Constraint continuity and comparison cameras (2026-10-12)
 
-Improve the release of floor corrections across frames and strengthen continuity guards for leg/contact adjustments. Fix computation-budget checks for batch contact participants. Add blue original and orange adjusted VMD cameras, preserve the current camera role across stages, and create or undo the pair together. Restore queued panel inputs on reopening, show deleted animation slots explicitly, and preserve manual edits against older MCP state. Local joint validation is still in progress; a new installer has not been published.
+Improve the release of floor corrections across frames and strengthen continuity guards for leg/contact adjustments. Fix computation-budget checks for batch contact participants. Add blue original and orange adjusted VMD cameras, preserve the current camera role across stages, and create or undo the pair together. Restore queued panel inputs on reopening, show deleted animation slots explicitly, and preserve manual edits against older MCP state. Also fix MCP field-type assertions and defer preview destruction until close/release calls return. Merged into main after Windows C4D 2026.4 native validation; GitHub CI produces the release packages.
 
 ### 0.9.3.5 · Motion adaptation fixes and controller workflow (2026-10-10)
 

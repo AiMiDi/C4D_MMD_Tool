@@ -117,7 +117,7 @@ Cinema 4D的mmdtool。
   2. `cmake --preset windows_vs2022_v143`
   3. `cmake --build ..\_build_msvc\sdk_2026 --config Debug`（将 `sdk_2026` 换成当前目录名）
 - **产物**：Debug 下插件一般在 `_build_msvc/sdk_2026/bin/Debug/plugins/mmdtool/`（相对仓库根；SDK 目录名随版本变化）。
-- **Release 与测试**：`cmake --preset release-windows` 后 `cmake --build --preset workflow-release`；测试用 `dev-windows-deps-test` 配置后运行 `cmt-deps-test`、`cmt-plugin-tests`，benchmark 使用独立的 `cmt-deps-benchmark`。PR/main CI 跑功能测试及最新 SDK 编译，发布跑完整 SDK 矩阵。
+- **Release 与测试**：`cmake --preset release-windows` 后 `cmake --build --preset workflow-release`；测试用 `dev-windows-deps-test` 配置后运行 `cmt-deps-test`、`cmt-plugin-tests`，benchmark 使用独立的 `cmt-deps-benchmark`。PR/main CI 编译最新 SDK，发布跑完整 SDK 矩阵；CI 不执行测试或 Benchmark。
 - **运行资源**：产物中的 `res/` 是经过校验的真实副本，资源单独修改也会刷新。`CMT_RUNTIME_RESOURCE_CONFIG_POLICY=reset` 默认使用仓库配置；本地 `preserve` 可保留输出目录中的偏好。调试时正常启动 C4D，插件加载后再 attach，详见开发文档。
 - **Windows 安装包（Inno）**：`cmake --preset package-windows` 后 `cmake --build --preset inno-installer`，自动构建八套 SDK 再出包。`setup/Common/installer_script.iss` 消费 `_build_msvc/<sdk>/bin/Release/plugins/mmdtool/` 中的二进制与完整 `res/`。S22/S24/S26 组件分别复用 sdk_r21 / sdk_r23 / sdk_r25 产物；自定义路径可传 `/DSdkBuildDir=...`、`/DSdkBinConfig=...`。
 
@@ -127,11 +127,11 @@ Cinema 4D的mmdtool。
 
 ## 版本更新
 
-以下列出待发布改进和最近三个版本的主要变化，完整历史见 [更新日志](CHANGELOG_zh.md)。
+以下列出最近版本的主要变化，完整历史见 [更新日志](CHANGELOG_zh.md)。
 
-### 未发布 · 连续约束与摄像机对比
+### 0.9.3.6 · 连续约束与摄像机对比（2026-10-12）
 
-改善落地修正的跨帧释放和腿部／接触约束的连续性保护；修正批量接触的参与角色预算判断。新增蓝色的调整前 VMD 摄像机与橙色的调整后摄像机，可保持阶段切换时的当前摄像机角色，并一起创建、撤销。补全面板队列重开恢复与动画槽删除提示，防止旧 MCP 状态覆盖手工修改。当前仍在本地联合验证，尚未发布新安装包。
+改善落地修正的跨帧释放和腿部／接触约束的连续性保护；修正批量接触的参与角色预算判断。新增蓝色的调整前 VMD 摄像机与橙色的调整后摄像机，可保持阶段切换时的当前摄像机角色，并一起创建、撤销。补全面板队列重开恢复与动画槽删除提示，防止旧 MCP 状态覆盖手工修改。同时修复 MCP 字段类型断言，并延迟预览文档销毁，确保关闭／释放调用安全返回。已完成 Windows C4D 2026.4 原生验证并合入 main，由 GitHub CI 编译发布包。
 
 ### 0.9.3.5 · 动作适配修正与控制器工作流（2026-10-10）
 
