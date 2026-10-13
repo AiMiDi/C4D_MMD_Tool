@@ -110,6 +110,10 @@ Windows development: `cmake --preset dev-windows` then `cmake --build --preset w
 
 Recent version entries are shown below. See the [complete changelog](CHANGELOG.md) for earlier changes.
 
+### 0.9.3.7 · Single-character parallel motion adaptation (2026-10-13)
+
+Speed up independent twist, arm-avoidance and contact calculations with up to four workers by default, while retaining ordered temporal leg/floor corrections and identical motion results. Keep progress on the coordinator thread and release every worker safely on cancellation or failure. libMMD uses C++20 internally with C++17-compatible public headers; MCP exposes `worker_count` for serial comparison. Native comparisons cover Windows C4D 2026.4 at scene scale 8.5. Release CI can package a verified, source-compatible full Build run without compiling the same 21 SDK/platform jobs again.
+
 ### 0.9.3.6 · Constraint continuity and comparison cameras (2026-10-12)
 
 Improve the release of floor corrections across frames and strengthen continuity guards for leg/contact adjustments. Fix computation-budget checks for batch contact participants. Add blue original and orange adjusted VMD cameras, preserve the current camera role across stages, and create or undo the pair together. Restore queued panel inputs on reopening, show deleted animation slots explicitly, and preserve manual edits against older MCP state. Also fix MCP field-type assertions and defer preview destruction until close/release calls return. Merged into main after Windows C4D 2026.4 native validation; GitHub CI produces the release packages.

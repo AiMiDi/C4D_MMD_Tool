@@ -40,7 +40,7 @@ OPTION_IDS = {
     "multi_contact": 159, "contact_distance": 160, "floor_height": 161,
     "collision_margin": 162, "tolerance": 163, "iterations": 164,
     "max_bake_frames": 165, "max_baked_keys": 166, "max_diagnostics": 167,
-    "avoidance_bodies": 168, "leg_avoidance": 169, "model": 200,
+    "avoidance_bodies": 168, "leg_avoidance": 169, "worker_count": 170, "model": 200,
 
 }
 
@@ -179,6 +179,8 @@ SIZING_OPTIONS = obj({
     "collision_margin": {"type": "number", "minimum": 0, "maximum": 10000},
     "tolerance": {"type": "number", "exclusiveMinimum": 0, "maximum": 1000},
     "iterations": {"type": "integer", "minimum": 1, "maximum": 1000},
+    "worker_count": {"type": "integer", "minimum": 0, "maximum": 16,
+                     "description": "Independent frame workers: 0 selects up to four, 1 is the serial reference."},
     "max_bake_frames": {"type": "integer", "minimum": 1, "maximum": 18000},
     "max_baked_keys": {"type": "integer", "minimum": 1, "maximum": 2000000},
     "max_diagnostics": {"type": "integer", "minimum": 0, "maximum": 20000},

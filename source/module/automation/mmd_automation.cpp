@@ -244,6 +244,11 @@ Bool ValidateSizingOptions(const BaseContainer& options, std::string& error)
                     Text(*bodies, key).empty() || Text(*bodies, key).size() > 1024)
                 { error = "Invalid avoidance body list"; return false; }
         }
+        else if (field == SizingWorkerCount)
+        {
+            if (type != DA_LONG || options.GetInt32(field) < 0 || options.GetInt32(field) > 16)
+            { error = "worker_count must be an integer from 0 to 16"; return false; }
+        }
         else if (field >= SizingIterations && field <= SizingMaxDiagnostics)
         {
             const Int32 upper = field == SizingIterations ? 1000 : field == SizingMaxFrames ? 18000 :
@@ -864,6 +869,7 @@ void ApplySizingOptions(const BaseContainer& values, libmmd::sizing::Options& op
     options.collisionMargin = Number(values, SizingCollisionMargin, options.collisionMargin);
     options.tolerance = Number(values, SizingTolerance, options.tolerance);
     options.iterations = static_cast<unsigned>(values.GetInt32(SizingIterations, options.iterations));
+    options.workerCount = static_cast<unsigned>(values.GetInt32(SizingWorkerCount, options.workerCount));
     options.maxBakeFrames = static_cast<uint32_t>(values.GetInt32(SizingMaxFrames, options.maxBakeFrames));
     options.maxBakedKeys = static_cast<size_t>(values.GetInt32(SizingMaxKeys, static_cast<Int32>(options.maxBakedKeys)));
     options.maxDiagnostics = static_cast<size_t>(values.GetInt32(SizingMaxDiagnostics, static_cast<Int32>(options.maxDiagnostics)));
