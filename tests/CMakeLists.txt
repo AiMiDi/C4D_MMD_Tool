@@ -67,10 +67,12 @@ if(TARGET libMMD)
   add_test(NAME cmt_motion_sizing_advanced COMMAND mmd_motion_sizing_advanced_test
     "${_cmt_libmmd_root}/tests/fixtures/vmd-sizing"
     "${_cmt_libmmd_root}/tests/fixtures/vmd-sizing-advanced")
-  set_tests_properties(cmt_motion_sizing_core cmt_motion_sizing_advanced
+  add_test(NAME cmt_motion_sizing_parallel COMMAND mmd_motion_sizing_parallel_test
+    "${_cmt_libmmd_root}/tests/fixtures/vmd-sizing-advanced")
+  set_tests_properties(cmt_motion_sizing_core cmt_motion_sizing_advanced cmt_motion_sizing_parallel
     PROPERTIES LABELS "plugin;unit;regression")
   set_property(GLOBAL APPEND PROPERTY CMT_PLUGIN_TEST_TARGETS
-    mmd_motion_sizing_test mmd_motion_sizing_advanced_test)
+    mmd_motion_sizing_test mmd_motion_sizing_advanced_test mmd_motion_sizing_parallel_test)
   add_subdirectory(runtime)
 endif()
 

@@ -217,7 +217,7 @@ class SchemaTests(unittest.TestCase):
                  "max_camera_distance_ratio", "member", "overlay", "movement_multiplier", "leg_offset",
                  "center_offsets", "leg_offsets", "stance", "twist", "avoidance", "wrist_contact", "finger_contact",
                  "floor_contact", "multi_contact", "contact_distance", "floor_height", "collision_margin",
-                 "tolerance", "iterations", "max_bake_frames", "max_baked_keys", "max_diagnostics", "avoidance_bodies", "leg_avoidance"]
+                 "tolerance", "iterations", "max_bake_frames", "max_baked_keys", "max_diagnostics", "avoidance_bodies", "leg_avoidance", "worker_count"]
         native_names = [name for name in fields if name.startswith("Sizing") and name != "SizingModel"]
         self.assertEqual(len(names), len(native_names))
         for name, native_name in zip(names, native_names):
@@ -239,7 +239,7 @@ class SchemaTests(unittest.TestCase):
 
     def test_nested_sizing_bounds_and_absolute_paths(self):
         base = {"document": "d", "characters": [{"model": "m", "source_pmx": r"C:\source.pmx", "path": r"C:\motion.vmd"}]}
-        for values in ({"iterations": True}, {"iterations": 1001}, {"max_bake_frames": 18001},
+        for values in ({"worker_count": True}, {"worker_count": -1}, {"worker_count": 17}, {"iterations": True}, {"iterations": 1001}, {"max_bake_frames": 18001},
                        {"max_baked_keys": 2000001}, {"max_diagnostics": -1}, {"tolerance": 0},
                        {"floor_height": float("nan")}, {"avoidance_bodies": ["body"] * 257},
                        {"unknown": 0}):

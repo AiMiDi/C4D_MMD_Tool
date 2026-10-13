@@ -45,6 +45,7 @@ enum Option : Int32
 	SizingIterations, SizingMaxFrames, SizingMaxKeys, SizingMaxDiagnostics,
 	SizingAvoidanceBodies,
 	SizingLegAvoidance = 169,
+	SizingWorkerCount = 170,
 	SizingModel = 200 // Only inside a character input container.
 };
 

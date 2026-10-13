@@ -36,6 +36,7 @@ if(CMT_DEPS_ENABLE_LIBMMD_TESTS)
     vmd_interpolation_test
     mmd_motion_sizing_test
     mmd_motion_sizing_advanced_test
+    mmd_motion_sizing_parallel_test
   )
   set(CMT_DEPS_TEST_CONFIG Debug CACHE STRING "Configuration used by dependency CTest targets")
   add_custom_target(cmt-deps-test
