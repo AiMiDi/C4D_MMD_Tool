@@ -1,4 +1,4 @@
-# Tag release: reusable Build (cmt-workflow artifacts) → Inno Setup (Windows) → zip (macOS) → GitHub Release.
+# Tag release: verified existing Build (or a fresh matrix) → Inno → ZIP → Release.
 # Local packaging: cmake --preset package-windows && cmake --build --preset inno-installer (see DEVELOPMENT.md, CMakeUserPresets.json).
 
 name: Package
@@ -11,27 +11,65 @@ on:
         type: string
         required: true
         default: '0.0.0'
+      build_run_id:
+        description: Optional successful full Build run; empty selects a compatible run automatically
+        type: string
+        required: false
+        default: ''
   push:
     tags:
       - 'v*'
 
 permissions:
   contents: write
+  actions: read
 
 concurrency:
   group: package-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
+  build-source:
+    name: Resolve verified build artifacts
+    runs-on: ubuntu-latest
+    outputs:
+      reused: ${{ steps.resolve.outputs.reused }}
+      artifact_run_id: ${{ steps.resolve.outputs.artifact_run_id }}
+      artifact_source_commit: ${{ steps.resolve.outputs.artifact_source_commit }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          submodules: false
+      - name: Select source-compatible successful full Build
+        id: resolve
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REQUESTED_BUILD_RUN: ${{ inputs.build_run_id }}
+        run: |
+          python scripts/resolve_package_build.py \
+            --repository "$GITHUB_REPOSITORY" --target "$GITHUB_SHA" \
+            --current-run "$GITHUB_RUN_ID" --build-run-id "$REQUESTED_BUILD_RUN" \
+            --output package-build-provenance.json
+      - name: Save source and artifact provenance
+        uses: actions/upload-artifact@v7
+        with:
+          name: package-build-provenance
+          path: package-build-provenance.json
+          if-no-files-found: error
+
   build:
     name: Build (reusable)
+    needs: build-source
+    if: needs.build-source.outputs.reused != 'true'
     uses: ./.github/workflows/build.yml
     secrets: inherit
     with:
       ref: ${{ github.sha }}
 
   package-windows:
-    needs: build
+    needs: [build-source, build]
+    if: ${{ !cancelled() && needs.build-source.result == 'success' && (needs.build-source.outputs.reused == 'true' || needs.build.result == 'success') }}
     runs-on: windows-latest
     defaults:
       run:
@@ -54,6 +92,8 @@ jobs:
           pattern: build-Windows-x64-*
           path: ${{ github.workspace }}/_dl
           merge-multiple: false
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          run-id: ${{ needs.build-source.outputs.artifact_run_id }}
 
       - name: Layout _build_msvc for installer_script.iss
         run: |
@@ -127,7 +167,8 @@ jobs:
           if-no-files-found: error
 
   package-macos:
-    needs: build
+    needs: [build-source, build]
+    if: ${{ !cancelled() && needs.build-source.result == 'success' && (needs.build-source.outputs.reused == 'true' || needs.build.result == 'success') }}
     runs-on: macos-latest
     defaults:
       run:
@@ -139,6 +180,8 @@ jobs:
           pattern: build-macOS-x86_64-*
           path: ${{ github.workspace }}/_dl
           merge-multiple: false
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          run-id: ${{ needs.build-source.outputs.artifact_run_id }}
 
       - name: Zip complete per-SDK plugin artifacts
         env:
@@ -184,7 +227,7 @@ jobs:
 
   release:
     if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
-    needs: [package-windows, package-macos]
+    needs: [build-source, package-windows, package-macos]
     runs-on: ubuntu-latest
     steps:
       - name: Download installer
@@ -217,6 +260,7 @@ jobs:
             _Add release notes here._
 
             Built from commit `${{ github.sha }}`.
+            SDK artifacts from verified Build run `${{ needs.build-source.outputs.artifact_run_id }}`, source `${{ needs.build-source.outputs.artifact_source_commit }}`.
           files: |
             assets/*.exe
             assets/*.zip

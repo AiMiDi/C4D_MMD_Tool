@@ -4,6 +4,15 @@
 
 Entries for 0.9.1.x were reconstructed from tagged source changes and release dates. Intermediate build tags are grouped below; original entries through 0.4.6.1 are retained.
 
+### 0.9.3.7 · Single-character parallel motion adaptation (2026-10-13)
+
+Native validation covers Windows C4D 2026.4 at scene scale 8.5. Release packaging runs in GitHub CI; automated tests remain local.
+
+1. Run independent twist, arm-avoidance and frame-local contact corrections in bounded worker lanes, each with its own playback IK state. Merge keys and diagnostics in frame order, retaining serial temporal leg/floor corrections and identical motion results.
+2. Use cancellation-safe C++20 workers, join on callback/solver failures, and publish progress only from the coordinator. Retain C++17 public headers and existing sizing precision/ISA settings.
+3. Cache validated names for baked VMD tracks and transfer empty key maps without repeated conversion or insertion. MCP `worker_count` selects automatic or serial execution.
+4. Reuse a successful full Build run for formal packaging when runtime source, SDKs, resources and dependency revisions match. Verify all 21 jobs and 16 unexpired SDK artifacts; otherwise build a fresh matrix. Save artifact/source provenance in CI.
+
 ### 0.9.3.6 · Constraint continuity and comparison cameras (2026-10-12)
 
 Merged into main after Windows C4D 2026.4 native validation. Release packaging runs in GitHub CI; automated tests remain available locally and no longer run in CI.
