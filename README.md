@@ -37,13 +37,13 @@ If there is a problem with selecting multiple-parts when the model is imported, 
 
 ### Interface and features
 
-Captured in Cinema 4D 2026.4.0 on 2026-10-06, these screenshots show the current working-tree plugin with its Chinese UI. Screenshots are cropped to the relevant controls. Scroll within each tab to reach the lower sections. Published releases may have a different interface.
+The tool-panel screenshots below were captured in English Cinema 4D 2026.4.0 on 2026-10-13. Screenshots are cropped to the relevant controls. Scroll within each tab to reach the lower sections. Published releases may have a different interface.
 
 #### Camera · VMD import, export and conversion
 
 | Import and export | Camera conversion |
 | --- | --- |
-| ![VMD camera import and export panel](docs/images/camera-vmd.png) | ![MMD camera conversion controls](docs/images/camera-conversion.png) |
+| ![VMD camera import and export panel](docs/images/camera-vmd-en.png) | ![MMD camera conversion controls](docs/images/camera-conversion-en.png) |
 
 - **Import camera**: Load camera animation from a VMD file, with scale and start-frame offset settings.
 - **Export camera**: Save camera animation as VMD, with scale, start-frame offset, rotation-curve and bake options.
@@ -53,12 +53,173 @@ Captured in Cinema 4D 2026.4.0 on 2026-10-06, these screenshots show the current
 
 | Motion import | Motion export and pose |
 | --- | --- |
-| ![VMD motion import panel with bone, morph and model-information options](docs/images/motion-import.png) | ![VMD motion export and VPD pose import and export panel](docs/images/motion-export-pose.png) |
+| ![VMD motion import panel with bone, morph and model-information options](docs/images/motion-import-en.png) | ![VMD motion export and VPD pose import and export panel](docs/images/motion-export-pose-en.png) |
 
 - **Import motion**: Load VMD bone animation, morph animation and model information onto a model, with scale and start-frame offset settings.
 - **Import options**: Match local names, ignore physics bones, overwrite previous animation and show a detailed report. Model information includes IK switches and model visibility.
 - **Export motion**: Save bone animation, morph animation and model information as VMD, with rotation-curve and bake options.
 - **Pose**: Import a VPD pose, or export the selected MMD model's pose at the current frame as VPD.
+
+#### Model · PMX import and export
+
+| Model import | Model export |
+| --- | --- |
+| ![PMX model import panel with material-conversion options](docs/images/model-import-en.png) | ![PMX model export panel](docs/images/model-export-en.png) |
+
+- **Import model**: Set the scale and choose which data to import: polygons, normals, UVs, materials, bones, weights, IK, inherit bones and morphs.
+- **Material conversion**: Choose Standard, RedShift, Octane or Corona materials. The corresponding renderer must be available when required.
+- **Import options**: Use separate meshes, English names and manual confirmation of English names.
+- **Export model**: Save the selected MMD model as PMX, with scale and data-selection options. The source must be an MMD model managed by the plugin.
+
+#### MMD model · Attribute Manager
+
+Select the imported **MMD Model Manager** root in the Object Manager to open these pages in the Attribute Manager. Select the model root rather than a mesh, bone or bone tag. The standard Basic and Coordinates pages belong to Cinema 4D; the remaining pages belong to MMD Tool. Lists for materials, morphs, display frames and IK are populated from the selected model, so their contents vary between PMX files.
+
+Screenshots were captured in English Cinema 4D 2026.4.0 on 2026-10-13. Model and material names are asset data and can remain Japanese or Chinese even when the interface is English. Some controls are unavailable until a valid list entry is selected.
+
+Example model: **Sour式初音ミク Ver.1.02, Black.pmx**, by **Sour暄**. Model, material and morph names retain the original asset text. The model files are not distributed with this guide.
+
+[1. Basic](#1-basic) · [2. Coordinates](#2-coordinates) · [3. MMD Model info](#3-mmd-model-info) · [4. Controllers](#4-controllers) · [5. Animation](#5-animation) · [6. Physics](#6-physics) · [7. Material](#7-material) · [8. Morph](#8-morph) · [9. Display Frame](#9-display-frame) · [10. IK](#10-ik) · [11. Material Morph](#11-material-morph)
+
+##### 1. Basic
+
+![Basic tab in English](docs/images/model-attributes-basic-en.png)
+
+This standard C4D page contains the scene object's name, layer, editor/render visibility and display color. Renaming the scene object is separate from changing the Local / Universal model names stored in PMX. Use the visibility controls for the whole object hierarchy; the Controllers page filters controller outlines separately. Animated VMD model visibility can also influence the model during playback.
+
+##### 2. Coordinates
+
+![Coordinates tab in English](docs/images/model-attributes-coordinates-en.png)
+
+This standard C4D page sets the model root's position, rotation and scale in the scene. Move the root to place the whole character; use bones/controllers to pose its limbs. Root scale and **Position Multiple** serve different purposes: root scale is a scene transform, while Position Multiple is the MMD coordinate-conversion setting used with model/motion data. Keep model and VMD import scales consistent.
+
+##### 3. MMD Model info
+
+![MMD model information in the English Attribute Manager](docs/images/model-attributes-info-en.png)
+
+| Control | Meaning and use |
+| --- | --- |
+| Version | PMX format version, 2.0 or 2.1. Keep it consistent with the features required by the model. |
+| Position Multiple | The model's MMD-to-C4D coordinate conversion scale, normally 8.5. Use the same scale when importing motion. This is not a substitute for resizing the model with the C4D Scale tool. |
+| Local / Universal model name | The two model names stored in PMX. Universal is normally used for the English name. |
+| Local / Universal comments | Model description, credits and usage conditions stored in PMX. Preserve the original author's notices when editing or exporting. |
+| Edit mode | Edit the model's bind state and PMX data. Generated animation controllers are hidden. |
+| Animation mode | Evaluate the selected animation, morphs, IK and enabled physics; show controllers according to their display settings. |
+
+**Mode changes affect the bind state:** switching Edit → Animation commits the edited bind state. Switching Animation → Edit restores the bind state for editing. To change a pose, work in Animation mode and use the animation/controller controls; do not switch to Edit expecting the current animated pose to become the new rest pose.
+
+##### 4. Controllers
+
+![MMD controller settings in English](docs/images/model-attributes-controls-en.png)
+
+| Control | Meaning and use |
+| --- | --- |
+| Create / refresh controllers | Generate or refresh viewport controller outlines for the imported skeleton. Refresh retains existing controller transforms and animation tracks. |
+| Select visible controllers | Select the controls allowed by the current display and part filters. |
+| Show | Primary controllers, All controllers or Hide controllers. Edit mode hides generated controls regardless of this choice. |
+| Workflow | MMD adjustment, IK animation, FK posing or Custom. Choose a starting workflow, then refine individual limb modes as needed. |
+| Solo part / body groups | Isolate Root / center, Torso, Face, either arm or leg, or Fingers. Group checkboxes and Helpers refine visibility. These filters change which controls you see, not the PMX mesh's visibility. |
+| Left / Right arm or leg control | Auto (MMD compatible), FK or IK. FK poses joint rotations; IK uses end goals and direction controls. Mode switching matches the current pose where the supported chain permits it. |
+| Reset selected inputs | Reset selected controller inputs. Use Undo if you need to recover the previous adjustment. |
+| Key selected controls | Key the selected generated controllers' inputs in C4D. This differs from registering the model state into its MMD animation slot. |
+| Controller size / Show through mesh | Adjust outline size and whether controls remain visible through the mesh. Hovering a visible outline shows its bone name. |
+
+For an imported VMD, start with **MMD adjustment**, show Primary controllers and isolate the body part you need. For a pose authored in C4D, choose an IK or FK workflow and key the controls. Available controls depend on the model's bone structure.
+
+##### 5. Animation
+
+![MMD animation settings in English](docs/images/model-attributes-animation-en.png)
+
+| Control | Meaning and use |
+| --- | --- |
+| Animation list | Choose the model's active VMD animation slot. Slots are alternatives; selecting one does not blend every imported motion together. |
+| Load VMD to animation list | Import a VMD as another animation slot using the model's Position Multiple. Use the main Motion panel when you need detailed channel, offset or matching options. |
+| Merge VMD to selected VMD animation | Merge file data into the selected slot. Select the destination slot first; this changes that slot. |
+| Delete selected VMD animation | Remove the selected slot, rather than just disabling its playback. |
+| Import / Export VPD | Import a static pose, or export the selected model's pose at the current time. VPD does not contain a full animation sequence. |
+| Register current state | Register eligible changed bone inputs and morph strengths at the current MMD frame in the active animation workflow. Imported VPD poses can be registered this way. |
+| Delete current-frame key | Remove keys at the current MMD frame from the selected slot, including bone, morph and model-information channels. This is broader than deleting a selected controller's C4D key. |
+
+MMD animation uses a **30 fps frame basis**. A different C4D project frame rate changes the timeline's frame numbering, so confirm the corresponding time before registering or deleting keys. For VMD export, choose whether to bake in the main Motion panel and inspect the resulting motion.
+
+##### 6. Physics
+
+![MMD physics settings in English](docs/images/model-attributes-physics-en.png)
+
+| Control | Meaning and use |
+| --- | --- |
+| Enable physics | Enable the model's MMD rigid-body and joint simulation. The model must contain suitable rigid bodies and joints. Disable it when comparing animation or IK without simulation. |
+| Gravity strength | Set the gravity magnitude. |
+| Gravity direction | Set the gravity vector's direction; downward is normally negative Y. |
+| Reset on seek | Reset simulation state when seeking through time. Useful when scrubbing; jumping to a frame is not equivalent to simulating every preceding frame. |
+
+For consistent inspection, return to the beginning and play forward. Physics results depend on elapsed simulation history; a single paused frame does not establish the quality of an entire animation.
+
+##### 7. Material
+
+![MMD material attributes in English](docs/images/model-attributes-material-en.png)
+
+![Material textures and memo in English](docs/images/model-attributes-material-textures-en.png)
+
+Select an entry in **Material list** before editing. These fields describe PMX material data and its connection to a C4D material.
+
+| Area | Meaning and use |
+| --- | --- |
+| List, ↑ / ↓, − / + | Select, reorder, delete or add PMX material entries. Check mesh assignments and face ranges when changing the list. |
+| Face count, names, Mesh, Selection | Inspect face allocation, local/universal names and the linked mesh/polygon selection used for the C4D assignment. |
+| Material link | The corresponding C4D material. Verify this link when a material change does not appear on the intended mesh. |
+| Create material type / Create material | Create a renderer material from the selected PMX entry: Standard, RedShift, Octane, Corona or RS Toon. Renderer availability and supported conversion paths depend on the installed renderer and C4D version. |
+| Sync material | Send the stored MMD material fields to the linked C4D material. |
+| Update from material | Read supported fields from an unmanaged C4D material back into PMX base data. Available in Edit mode with material preview disabled. Managed morph shader outputs have no separate base values to import. |
+| Convert to RS Toon / Material status | Convert the selected assignment to the supported MMD-style Redshift Toon setup and inspect its status. Redshift is required. |
+| Material Color | Diffuse color and opacity, specular color and power, and ambient color. |
+| Draw Flags / Edge | PMX two-sided, shadow and vertex-color flags; outline enable, size, color and opacity. Stored PMX flags do not guarantee identical behavior in every C4D renderer. |
+| Texture | Base texture path; sphere texture path and None / Multiply / Add / Sub texture mode; Separate or Common toon texture, including toon01–toon10. |
+| Memo | The selected PMX material's notes. |
+
+##### 8. Morph
+
+![MMD morph controls in English](docs/images/model-attributes-morph-en.png)
+
+The **Morph** page exposes model-dependent strengths grouped by type: Group, Flip, Vertex, UV, Bone, Material and Impulse. Group and Flip morphs reference other morphs; vertex/UV/bone morphs modify their respective data; material morphs change material fields; impulse morphs affect physics bodies.
+
+Use the strength sliders to pose or animate expressions. Imported VMD morph channels drive their corresponding strengths in Animation mode. The Add name / Add controls create Group, Flip, Material or Impulse entries; they do not automatically author a vertex or UV deformation. Expand an entry to edit the fields exposed for its type. To define a material morph's actual offsets, use the separate **Material Morph** page below.
+
+##### 9. Display Frame
+
+![PMX display-frame editor in English](docs/images/model-attributes-display-frame-en.png)
+
+**Display Frame** means PMX bone/morph display groups, not timeline frames. Select a frame in Frame list or enter a New frame name and create one. Edit its Local / Universal name, choose Bone or Morph as Add type, select Add target and click Add entry. Existing entries can be edited or removed; Delete frame removes the selected group. These groups organize the model's PMX control lists and are retained for export; they do not key animation or hide geometry.
+
+##### 10. IK
+
+![MMD IK solver switches in English](docs/images/model-attributes-ik-en.png)
+
+The **IK** page lists the solvers available in the imported skeleton. Each switch enables or disables its chain. VMD model-information channels can animate IK switches, so a setting can change with the selected slot or frame. If a foot or hand goal does not affect the pose, check this page, the limb's controller mode and the model's IK bone definitions. Disabling one chain is different from disabling physics for the whole model.
+
+##### 11. Material Morph
+
+![MMD material-morph editor in English](docs/images/model-attributes-material-morph-en.png)
+
+The **Morph** page controls strengths; **Material Morph** edits the data those strengths apply. Select a morph, then an offset, before changing its values.
+
+| Control | Meaning and use |
+| --- | --- |
+| Material Morph / Delete entire Morph | Select a material morph or delete the complete entry. Complete deletion is available in Edit mode. |
+| Add / Delete Offset, Offset | Manage the selected morph's individual material-change records. |
+| Target Material | Select one PMX material or All Materials. |
+| Operation | Multiply or Add. Neutral multiplier components are 1; neutral additive components are 0. Reset offset to neutral initializes the selected record accordingly. |
+| Color / Edge / Texture Factor | Edit diffuse/alpha, specular/power, ambient, outline color/alpha/size and base/sphere/toon texture factors. A renderer may display only a subset; consult status. |
+| Enable preview (EDIT only), Morph, Preview weight | Preview material effects in Edit mode without creating animation keys. Weights are retained separately for each selected preview morph, allowing a mixed preview. Group/Flip entries are offered only when suitable for material-only preview. |
+| Clear preview weights | Clear the temporary mixed-preview weights. Entering Animation mode also clears this preview. |
+| Upgrade material Morph | Prepare managed material bindings for the supported material-morph workflow in Edit mode. |
+| Repair selected binding | Repair the selected material's managed binding in Edit mode. |
+| Create independent material | Create an independent binding for the selected material in Edit mode, useful when a shared material would affect other models. |
+| Display support / binding status | Check renderer support and binding diagnostics when an effect is missing or shared unexpectedly. |
+
+PMX export stores the authored material and morph data. Preview support in a particular C4D renderer does not determine whether an offset is present in the PMX. Clear preview before updating base data from a C4D material, and test animated morphs in Animation mode after editing their offsets.
+
+In this example, **23: 照れ消** targets **17: 照れ** with Multiply and Diffuse Alpha = 0. At full morph strength this removes that material's opacity; the multiplier is not the material's base opacity. To inspect it, enter Edit mode, enable preview, select the morph and raise Preview weight from 0 to 1. If the effect is unavailable, check the binding status and upgrade the material binding where supported. Clear preview weights before returning to ordinary editing.
 
 #### VMD motion adaptation · Body proportions and stage previews
 
@@ -70,6 +231,55 @@ Adapt a VMD made for one character to another. Source and target PMX proportions
 4. Check scale and offset results first, then enable constraints as needed. Wrist/finger contact preserves the relative arrangement of nearby source hand landmarks; it does not generate grips or finger curls. Leg self-collision avoidance makes bounded adjustments to foot IK goals.
 5. Calculate and watch progress in the C4D status bar; long operations can be cancelled. Select stages and scrub the timeline to compare original, scale, offset, stance, twist, avoidance and contact results. Side-by-side/overlay previews and automatic refresh after parameter changes are available.
 6. Inspect residuals and important poses, then **apply as a new animation slot** or export VMD. The original slot is retained.
+
+##### Panel controls and inputs
+
+![VMD Motion Sizing panel in English Cinema 4D](docs/images/motion-sizing-ui-en.png)
+
+Captured in English Cinema 4D 2026.4.0 on 2026-10-13. The target is Sour式初音ミク Ver.1.02 (Black.pmx), by Sour暄. This screenshot shows input setup: source PMX and motion have not yet been selected, so stage previews and output actions are unavailable. The viewport comparisons below are separate, previously captured solver examples.
+
+| Input / queue control | Meaning and use |
+| --- | --- |
+| Source PMX / Browse | Choose the model for which the motion was authored. Its bind skeleton provides the reference proportions; choosing the target PMX again does not describe the original character's proportions. |
+| Input VMD / Model VMD slot | Use a VMD file, or select an imported slot on the target model. “Use VMD file above” selects the file input. Re-select the slot if its source slot was deleted. |
+| Target model / Use selected model | Drag in the imported MMD model root, or select it in the original scene and click Use selected model. A mesh or an individual bone is not a model root. |
+| Current character / Add / update character | An empty queue processes the current input. For multiple characters, set each target, source, motion and parameters, then add/update its queue entry. Choosing a queued character restores its settings. |
+| Remove character | Remove the selected queue entry. A new draft does not participate until added. A batch supports up to 16 distinct targets in one document, using the same scale, MMD coordinate system and timeline. |
+
+##### Scale and constraint settings
+
+Start with the default scale/offset, bind-pose and twist settings. Inspect their results before adding constraints; enabling every option does not guarantee a better pose.
+
+| Setting | Effect and practical use |
+| --- | --- |
+| Horizontal multiplier | Additional horizontal movement multiplier, default 1. Adjust travel after the source/target proportions have been analyzed; it does not resize the mesh. |
+| Leg IK offset / Center compensation / Leg IK compensation | Adjust the additional leg-IK offset and enable center/foot-IK compensation. Inspect the scale and offset stages separately to locate unwanted displacement. |
+| Bind pose correction | Compensate for supported source/target shoulder, arm and torso bind-axis differences. This does not change the target model's stored rest pose. |
+| Distribute twist | Distribute rotation along supported twist-bone chains. Check wrist and elbow orientation after enabling it. |
+| Rigid body avoidance / Avoidance margin | Use supported PMX rigid-body shapes to move wrist/elbow targets away from obstacles. The margin is a clearance parameter, not a mesh collision guarantee. |
+| Wrist contact / Finger contact / Contact threshold | Preserve nearby source hand landmarks. The threshold controls which proximity relationships are considered; it is not a grip-strength setting. |
+| Floor contact / Floor height | Correct supported hand/foot contacts relative to the specified ground plane. Set the ground height in MMD units and inspect stepping, crouching and airborne poses. |
+| Leg self-collision avoidance | Make bounded foot-IK target adjustments for leg interference. Inspect knees and ankles; deep intersections can remain. |
+| Cross-character contact | Include supported hand contacts across queued characters. It requires a shared MMD space and time basis. |
+| Adapt camera VMD / Max distance ratio | Enable camera fitting, choose a camera VMD and cap its distance multiplier (default 5). Model motion input and camera motion input are separate files. |
+
+Distance controls use **MMD units**, not the scaled C4D viewport units. The default contact threshold is 0.3, avoidance margin 0.05 and floor height 0; choose values for the actual source motion and target models.
+
+##### Calculate, compare and output
+
+| Control | Meaning and use |
+| --- | --- |
+| Calculate stages / Cancel calculation | Start the calculation or request cancellation. Read the status and diagnostics before using the result. Cancellation does not apply a new animation slot. |
+| Auto update model comparison after parameter changes | Recalculate after parameter changes and refresh the temporary comparison. Disable it while entering several settings if you prefer to calculate manually. |
+| Stage selector | Compare 0 Original, 1 Movement scale, 2 Center / IK offsets, 3 Bind pose correction, 4 Twist distribution, 5 Rigid body avoidance, 6 Contact correction and 7 Batch / camera result. An optional stage only contributes its enabled corrections. |
+| Preview selected stage / Overlay comparison | Open the temporary before/after models. Blue is original motion, orange is the selected result; leave Overlay unchecked for side-by-side comparison. Scrub or play the C4D timeline, especially at contacts and transitions. Preview physics is disabled. |
+| Diagnostics | Inspect warnings, maximum residual and unresolved constraints. A completed calculation can still contain unreachable or conflicting targets. |
+| Close temporary preview | Close the comparison document. Closing the tool also removes its temporary preview; a preview is not an applied animation. |
+| Apply character to a new slot | Add the selected character's result as a new slot on the source-scene model. The original motion is retained; applying supports Undo/Redo. Recalculate if the target bind model changed. |
+| Export character stage VMD | Export the selected character and stage. Confirm both selectors before writing the file, particularly with a multi-character queue. |
+| Create comparison cameras / Export adjusted camera VMD | Add the original/adjusted camera pair to the source scene, or write the adjusted camera motion to a VMD file. These actions require a valid camera result. |
+
+Use standard MMD bone names and inspect warnings about missing references. The offline solver does not evaluate scene controller overrides, dynamic physics or external parents. Finish by checking important poses on the target model; motion adaptation can reduce manual work but does not eliminate it.
 
 Enable camera adaptation and select a camera VMD to preview a **blue original camera** alongside an **orange adjusted camera**. Changing stages retains the currently viewed camera role. **Create comparison cameras** adds both cameras to the source scene as one undo step. The original camera uses the unmodified camera VMD for composition checks; side-by-side previews shift both camera groups with their respective characters. Object Manager icons use the same colors on C4D versions that support icon coloring.
 
@@ -88,17 +298,6 @@ Afu 2.0 with Stay Tonight Heaven Lee Ver., captured in the native C4D viewport w
 **Reference project:** Body-proportion and movement compensation adapts formulae from [miu200521358/vmd_sizing](https://github.com/miu200521358/vmd_sizing), revision `e5c30358696f688c96544e3af33ea9871961487d`. Its [MIT license and copyright notice](res/S24_up/licenses/vmd_sizing-MIT.txt) are retained. Advanced constraints are this project's C++ implementation; full feature or numerical equivalence with the Python tool is not claimed.
 
 [Usage and solver limits](docs/dev/vmd-sizing.md) · [MCP interface](docs/dev/motion-sizing-mcp.md) · [Real-asset validation](docs/validation/vmd-sizing/leg-ik-fix-20261010/README.md)
-
-#### Model · PMX import and export
-
-| Model import | Model export |
-| --- | --- |
-| ![PMX model import panel with material-conversion options](docs/images/model-import.png) | ![PMX model export panel](docs/images/model-export.png) |
-
-- **Import model**: Set the scale and choose which data to import: polygons, normals, UVs, materials, bones, weights, IK, inherit bones and morphs.
-- **Material conversion**: Choose Standard, RedShift, Octane or Corona materials. The corresponding renderer must be available when required.
-- **Import options**: Use separate meshes, English names and manual confirmation of English names.
-- **Export model**: Save the selected MMD model as PMX, with scale and data-selection options. The source must be an MMD model managed by the plugin.
 
 ## Developers
 

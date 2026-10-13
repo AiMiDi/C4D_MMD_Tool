@@ -62,4 +62,6 @@ STRINGTABLE OMMDJoint
 	ConeTwist "ConeTwist";
 	Slider "Slider";
 	Hinge "Hinge";
+	JOINT_RIGID_NONE "-";
+	JOINT_BONE_NONE "-";
 }
