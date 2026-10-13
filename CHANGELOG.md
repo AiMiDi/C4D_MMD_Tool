@@ -4,7 +4,9 @@
 
 Entries for 0.9.1.x were reconstructed from tagged source changes and release dates. Intermediate build tags are grouped below; original entries through 0.4.6.1 are retained.
 
-### 0.9.3.7 · Single-character parallel motion adaptation (2026-10-13)
+### 0.9.3.8 · Single-character parallel motion adaptation (2026-10-13)
+
+The 0.9.3.7 tag produced packages but did not create a Release because a skipped build dependency also skipped publication. This version fixes the release condition while still requiring both packaging jobs to succeed; the runtime binaries are unchanged.
 
 Native validation covers Windows C4D 2026.4 at scene scale 8.5. Release packaging runs in GitHub CI; automated tests remain local.
 

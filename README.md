@@ -110,7 +110,7 @@ Windows development: `cmake --preset dev-windows` then `cmake --build --preset w
 
 Recent version entries are shown below. See the [complete changelog](CHANGELOG.md) for earlier changes.
 
-### 0.9.3.7 · Single-character parallel motion adaptation (2026-10-13)
+### 0.9.3.8 · Single-character parallel motion adaptation (2026-10-13)
 
 Speed up independent twist, arm-avoidance and contact calculations with up to four workers by default, while retaining ordered temporal leg/floor corrections and identical motion results. Keep progress on the coordinator thread and release every worker safely on cancellation or failure. libMMD uses C++20 internally with C++17-compatible public headers; MCP exposes `worker_count` for serial comparison. Native comparisons cover Windows C4D 2026.4 at scene scale 8.5. Release CI can package a verified, source-compatible full Build run without compiling the same 21 SDK/platform jobs again.
 
