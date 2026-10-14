@@ -2,6 +2,7 @@
 #include "plugin_resource.h"
 #include "CMTSceneManager.h"
 #include "module/ui/cmt_tools_dialog.h"
+#include "module/ui/cmt_update_ui.h"
 #include "module/tools/loader/vmd_loader.h"
 #include "module/tools/tag/mmd_bone.h"
 #include "module/tools/object/mmd_joint.h"
@@ -79,6 +80,8 @@ namespace
 
 Bool cmt_register::RegisterPlugin()
 {
+	if (!RegisterCMTUpdateUI())
+		return false;
 	if (!RegisterCMTTool())
 		return false;
 	if (!RegisterCMTSceneManager())

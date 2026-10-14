@@ -14,6 +14,7 @@ Description:	CMT tools main dialog.
 #include "cmt_tools_config_manager.h"
 #include "cmt_tools_manager.h"
 #include "utils/filename_util.hpp"
+#include "cmt_update_manager.h"
 
 namespace
 {
@@ -41,6 +42,7 @@ Bool CMTToolCommand::TogglePanel()
 {
 	if (cmd_tool_dialog.IsOpen())
 		return cmd_tool_dialog.Close();
+	CMTUpdateManager::GetInstance().OnToolUse();
 	return cmd_tool_dialog.Open(DLG_TYPE::ASYNC, g_cmt_command_id);
 }
 
@@ -61,6 +63,7 @@ Bool CMTToolCommand::ExecuteMenuItem(const Int32 subid)
 	case kPanelCommand:
 		return TogglePanel();
 	case kSizingCommand:
+		CMTUpdateManager::GetInstance().OnToolUse();
 		return sizing_dialog_.Open(DLG_TYPE::ASYNC, g_cmt_command_id, -1, -1, 720, 760, kSizingDialog);
 	default:
 		return false;

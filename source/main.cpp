@@ -13,6 +13,8 @@ Description:	Entrance of the plugin
 #include "module/core/cmt_marco.h"
 #include "module/ui/cmt_name_conversion_dialog.h"
 #include "maxon/string.h"
+#include "cmt_update_manager.h"
+#include "module/ui/cmt_update_ui.h"
 
 Bool CINEMA_NAMESPACE PluginStart()
 {
@@ -22,11 +24,15 @@ Bool CINEMA_NAMESPACE PluginStart()
 	}
 	UpdateNameConversionDialog::Init();
 	CMTToolConfigManager::GetInstance().InitConfigManager();
+	CMTUpdateManager::GetInstance().Init();
 	return TRUE;
 }
 
 void CINEMA_NAMESPACE PluginEnd()
 {
+	CloseCMTUpdateUI();
+	CMTUpdateManager::GetInstance().Shutdown();
+	CMTUpdateManager::GetInstance().Poll();
 	CMTToolConfigManager::GetInstance().SaveConfig();
 }
 

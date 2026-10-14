@@ -1,0 +1,10 @@
+STRINGTABLE PCMTUpdate
+{
+	PCMTUpdate "MMD Tools";
+	CMT_UPDATE_GROUP "Updates";
+	CMT_UPDATE_AUTOMATIC "Automatically check for updates";
+	CMT_UPDATE_STATUS "Version (installed -> latest)";
+	CMT_UPDATE_CHECK "Check for Updates";
+	CMT_UPDATE_OPEN "View Release";
+	CMT_UPDATE_HINT "Check once a day. New release details appear when you use MMD Tools.";
+}

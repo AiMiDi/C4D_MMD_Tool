@@ -246,6 +246,17 @@ if(NOT CMT_INNO_SETUP_ISCC STREQUAL "")
   if(NOT CMT_ISS_EXTRA_ARGS STREQUAL "")
     separate_arguments(_CMT_ISS_EXTRA NATIVE_COMMAND "${CMT_ISS_EXTRA_ARGS}")
   endif()
+  # Match the installer's fallback and /DPluginVersion override. Stamp after
+  # resource synchronization so the package and runtime identity agree.
+  set(_CMT_PACKAGE_VERSION "0.0.0.0")
+  foreach(_iss_arg IN LISTS _CMT_ISS_EXTRA)
+    if(_iss_arg MATCHES "^/DPluginVersion=(.+)$")
+      set(_CMT_PACKAGE_VERSION "${CMAKE_MATCH_1}")
+    endif()
+  endforeach()
+  if(NOT _CMT_PACKAGE_VERSION MATCHES "^[0-9]+\\.[0-9]+\\.[0-9]+(\\.[0-9]+)?$")
+    message(FATAL_ERROR "PluginVersion must be a numeric three-part or four-part version")
+  endif()
 
   # Build shared deps (bullet3 + libMMD) once; all SDKs link pre-built .libs.
   set(_cmt_deps_prebuilt "${CMAKE_SOURCE_DIR}/_build_msvc/cmt_deps_prebuilt")
@@ -291,6 +302,10 @@ if(NOT CMT_INNO_SETUP_ISCC STREQUAL "")
     list(APPEND _CMT_PACKAGE_COMMANDS
       COMMAND ${CMAKE_COMMAND} ${_sdk_cfg}
       COMMAND ${CMAKE_COMMAND} --build "${_sdk_bin}" --config Release --target mmdtool
+      COMMAND ${CMAKE_COMMAND}
+        "-DRESOURCE_DIR=${_sdk_bin}/bin/Release/plugins/mmdtool/res"
+        "-DVERSION=${_CMT_PACKAGE_VERSION}"
+        -P "${CMAKE_SOURCE_DIR}/cmake/stamp_package_version.cmake"
     )
   endforeach()
 

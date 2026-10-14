@@ -1,0 +1,18 @@
+{
+  "pid": 55564,
+  "action": "preferences",
+  "sequence": 30,
+  "automatic": true,
+  "ignored": "",
+  "last_attempt": 1791976251,
+  "latest": "v0.9.3.8",
+  "notes_bytes": 4716,
+  "preferences_plugin": true,
+  "preference_command": null,
+  "command_names": {
+    "12200": "",
+    "12104": "退出",
+    "1056563": "MMD Tools - 工具面板..."
+  },
+  "document": "MMD-Update-Validation.c4d"
+}

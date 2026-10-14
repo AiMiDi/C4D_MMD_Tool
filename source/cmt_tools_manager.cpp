@@ -10,6 +10,7 @@ Description:	tools manager
 
 
 #include "cmt_tools_manager.h"
+#include "cmt_update_manager.h"
 #include "CMTSceneManager.h"
 #include "module/ui/cmt_name_conversion_dialog.h"
 #include "utils/string_util.hpp"
@@ -21,6 +22,7 @@ namespace CMTToolsManager
 {
 	bool ImportVMDCamera(const CMTToolsSetting::CameraImport& setting)
 	{
+		CMTUpdateManager::GetInstance().OnToolUse();
 		LoadVmdCameraLog logger;
 
 		auto vmd_camera_animation = std::make_unique<libmmd::VMDCameraAnimation>();
@@ -62,6 +64,7 @@ namespace CMTToolsManager
 
 	bool ConversionCamera(const CMTToolsSetting::CameraConversion& setting)
 	{
+		CMTUpdateManager::GetInstance().OnToolUse();
 		if (ConversionVmdCameraLog logger; CMTSceneManager::ConversionCamera(setting))
 		{
 			logger.LogOK();
@@ -72,6 +75,7 @@ namespace CMTToolsManager
 
 	bool ExportVMDCamera(const CMTToolsSetting::CameraExport& setting)
 	{
+		CMTUpdateManager::GetInstance().OnToolUse();
 		SaveVmdCameraLog logger;
 		libmmd::VMDFile vmd_file;
 		if (!CMTSceneManager::SaveVMDCamera(setting, vmd_file))
@@ -92,6 +96,7 @@ namespace CMTToolsManager
 
 	bool ImportVMDMotion(const CMTToolsSetting::MotionImport& setting, BaseObject* select_object)
 	{
+		CMTUpdateManager::GetInstance().OnToolUse();
 		LoadVmdMotionLog logger;
 
 		std::vector<uint8_t> file_data;
@@ -120,6 +125,7 @@ namespace CMTToolsManager
 
 	bool ImportVPDPose(const CMTToolsSetting::PoseImport& setting, BaseObject* select_object)
 	{
+		CMTUpdateManager::GetInstance().OnToolUse();
 		LoadVpdPoseLog logger;
 
 		const auto vpd_path = string_util::GetStdString(setting.fn.GetString());
@@ -141,6 +147,7 @@ namespace CMTToolsManager
 
 	bool ExportVPDPose(const CMTToolsSetting::PoseExport& setting, BaseObject* select_object)
 	{
+		CMTUpdateManager::GetInstance().OnToolUse();
 		SaveVpdPoseLog logger;
 
 		libmmd::VPDFile vpd_file;
@@ -164,6 +171,7 @@ namespace CMTToolsManager
 
 	bool ExportVMDMotion(const CMTToolsSetting::MotionExport& setting)
 	{
+		CMTUpdateManager::GetInstance().OnToolUse();
 		SaveVmdMotionLog logger;
 
 		libmmd::VMDFile vmd_file;
@@ -195,6 +203,7 @@ namespace CMTToolsManager
 
 	bool ImportPMXModel(const CMTToolsSetting::ModelImport& setting)
 	{
+		CMTUpdateManager::GetInstance().OnToolUse();
 		LoadModelLog logger;
 
 		if (!setting.fn.CheckSuffix("pmx"_s))
@@ -232,6 +241,7 @@ namespace CMTToolsManager
 
 	bool ExportPMXModel(const CMTToolsSetting::ModelExport& setting)
 	{
+		CMTUpdateManager::GetInstance().OnToolUse();
 		SavePmxModelLog logger;
 
 		libmmd::PMXFile pmx_file;

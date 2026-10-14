@@ -194,4 +194,20 @@ STRINGTABLE
 	IDS_SIZING_LEG_AVOIDANCE "Leg self-collision avoidance";
 	IDS_SIZING_CAMERA_ORIGINAL "Original VMD camera";
 	IDS_SIZING_MISSING_MOTION_SLOT "Missing VMD slot - choose another input";
+	IDS_CMT_UPDATE_AUTO "Automatically check for updates";
+	IDS_CMT_UPDATE_CHECK "Check for Updates";
+	IDS_CMT_UPDATE_OPEN "View Release";
+	IDS_CMT_UPDATE_IGNORE "Ignore This Version";
+	IDS_CMT_UPDATE_INSTALLED "Installed:";
+	IDS_CMT_UPDATE_UNKNOWN "unknown version";
+	IDS_CMT_UPDATE_CHECKING "Checking...";
+	IDS_CMT_UPDATE_AVAILABLE "New version:";
+	IDS_CMT_UPDATE_FAILED "Check failed";
+	IDS_CMT_UPDATE_TITLE "MMD Tools Update";
+	IDS_CMT_UPDATE_LATER "Later";
+	IDS_CMT_UPDATE_LATEST "Latest:";
+	IDS_CMT_UPDATE_NOT_CHECKED "Not checked";
+	IDS_CMT_UPDATE_LANGUAGE_CODE "en-US";
+	IDS_CMT_UPDATE_NO_NOTES "Release notes in this language are unavailable. View the release page for details.";
+	IDS_CMT_UPDATE_HINT "Check once a day. New release details appear when you use MMD Tools.";
 }

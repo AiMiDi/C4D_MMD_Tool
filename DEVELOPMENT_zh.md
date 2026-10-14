@@ -435,3 +435,5 @@ cmt_setup_mmdtool_plugin(...)
 | `windows_vs2022_clangcl`     | Visual Studio 17 2022     | ClangCL   | Clang-CL 编译    |
 | `macos_universal_xcode`      | Xcode                     | -         | macOS 通用二进制  |
 | `linux_ninja`                | Ninja Multi-Config        | -         | Linux 构建        |
+
+插件更新提醒的首选项、弹窗、版本资源与聚焦验证见 [plugin-update-reminder.md](docs/dev/plugin-update-reminder.md)。发布打包会以最终包版本覆盖 `res/cmt_version.txt`，包括复用二进制的包。

@@ -96,6 +96,8 @@ inline constexpr bool kSDKHasIconColorize = bool(CMT_SDK_HAS_ICON_COLORIZE);
 #define CMT_SDK_HAS_COMMANDDATA_EXECUTE_WITH_PARENT (API_VERSION >= 21000)
 /// Custom placeholder text for link boxes was added in the 2026 SDK.
 #define CMT_SDK_HAS_LINKBOX_EMPTY_TEXT (API_VERSION >= 2026000)
+// HTTP Url flags moved from core/url.h to network/network_url.h in R21.
+#define CMT_SDK_HAS_NETWORK_URL_HEADER (API_VERSION >= 21000)
 /// R20 链接需补全局 ToString(const String&,...)；R21+ 不需要
 #define CMT_SDK_NEEDS_GLOBAL_TOSTRING_STRING_LINK (API_VERSION < 21000)
 inline constexpr bool kSDKHasCinemaNamespace = (API_VERSION >= 2024900);

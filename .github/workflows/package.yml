@@ -128,6 +128,10 @@ jobs:
       - name: Run ISCC
         shell: pwsh
         run: |
+          foreach ($sdk in @('sdk_r20','sdk_r21','sdk_r23','sdk_r25','sdk_2023','sdk_2024','sdk_2025','sdk_2026')) {
+            cmake "-DRESOURCE_DIR=$env:GITHUB_WORKSPACE/_build_msvc/$sdk/bin/Release/plugins/mmdtool/res" "-DVERSION=${{ steps.ver.outputs.version }}" -P cmake/stamp_package_version.cmake
+            if ($LASTEXITCODE -ne 0) { throw "Version stamping failed for $sdk" }
+          }
           ./cmake/prepare_installer_resources.ps1 -ProjectRoot $env:GITHUB_WORKSPACE
           $isccCandidates = @()
           $isccCommand = Get-Command ISCC.exe -ErrorAction SilentlyContinue
@@ -209,6 +213,7 @@ jobs:
             mkdir -p "pkg/${sdk}/mmdtool"
             cp -R "$src"/. "pkg/${sdk}/mmdtool/"
             test -f "pkg/${sdk}/mmdtool/res/cmt_config.json"
+            printf '%s\n' "$version" > "pkg/${sdk}/mmdtool/res/cmt_version.txt"
             test -f "pkg/${sdk}/mmdtool/res/c4d_symbols.h"
             test -d "pkg/${sdk}/mmdtool/res/description"
             if find "pkg/${sdk}/mmdtool" -type l | grep -q .; then

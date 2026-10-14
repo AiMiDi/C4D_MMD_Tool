@@ -262,6 +262,8 @@ macro(cmt_setup_mmdtool_plugin)
 
     nodespace.framework
 
+    network.framework
+
   )
 
   if(CMT_FRAMEWORK_DEPENDENCIES)

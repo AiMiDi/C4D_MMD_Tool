@@ -13,6 +13,10 @@ Description:	plugin load resource
 /*------------Plugin ID------------*/
 //	GUI
 constexpr auto g_cmt_command_id = 1056563;
+// Reuse project-owned IDs reserved for entities which were never registered
+// by the maintained plugin. Keep them distinct from command and scene IDs.
+constexpr auto g_cmt_update_preferences_id = 1056725;
+constexpr auto g_cmt_update_message_id = 1056721;
 
 //	Entity
 constexpr auto g_mmd_model_manager_object_id		= 1056724;
