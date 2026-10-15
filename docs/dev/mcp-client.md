@@ -24,7 +24,7 @@ MMD Tool 的生产 API 与运行期回归桥是独立入口。`mcp/` 内的 `mmd
 
 截至 2026-10-08，Python fixture 为 35/35 通过；普通 Release、回归桥 OFF 的 Windows 八阶段、
 PMX 单步 Undo/Redo、真实响应超时与去重恢复、宿主重启及干净客户端接入均已通过。
-macOS 和旧宿主 UI 依用户明确要求延期并保留未验证；见 [完整记录](mcp-acceptance-20261008.md)。
+macOS 和旧宿主 UI 依用户明确要求延期并保留未验证；见 [完整记录](https://github.com/AiMiDi/C4D_MMD_Tool/blob/32753932d529ce82677538d109d0709fec8be520/docs/dev/mcp-acceptance-20261008.md)。
 当前工作树的实现状态不表示已发布安装包包含这些改动。
 
 ## 启动与客户端配置

@@ -17,4 +17,4 @@ Evidence: `output/controller-design-20261008/receipt.json`, 27 native controller
 - [x] 3.2 Validate native FK ownership, IK/toe/parent motion, neutral recovery, tracks, refresh and reload on Afu, including VMD.
 - [x] 3.3 Rebuild all packaged Windows SDKs, verify the installer artifact, sync/archive both session changes and commit the completed source.
 
-Final delivery: see `docs/dev/controllers-acceptance-20261008.md` and its committed JSON receipt. All eight Windows SDK Release builds pass; 252 lower-body, 27 presentation and 180 native PSR checks pass. Private installer lifecycle verifies 869 actual Release files. Local 0.9.2.3 Windows package; no public release.
+Final delivery: see [历史记录](https://github.com/AiMiDi/C4D_MMD_Tool/blob/32753932d529ce82677538d109d0709fec8be520/docs/dev/controllers-acceptance-20261008.md) and its committed JSON receipt. All eight Windows SDK Release builds pass; 252 lower-body, 27 presentation and 180 native PSR checks pass. Private installer lifecycle verifies 869 actual Release files. Local 0.9.2.3 Windows package; no public release.

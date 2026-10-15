@@ -16,4 +16,4 @@ C4D 2026.4 已加载最终二进制 ED2F4DF276AB807D69B68109944CFDE016A86B0FD6F8
 原始关键帧复现场景直接重开后，控制器位移 10/20 时，脚踝分别响应约 9.90/19.36。
 以上为早期修复回执；R20 仅编译验证，未进行 R20 现场测试。
 
-最终与控制器改进合并交付 Windows 0.9.2.3 本地安装包，8 个 SDK 编译通过，最终模块上 PMX / PMX+VMD PSR 各 90 项重新通过。参见 `docs/dev/controllers-acceptance-20261008.md`；没有发布远端版本。
+最终与控制器改进合并交付 Windows 0.9.2.3 本地安装包，8 个 SDK 编译通过，最终模块上 PMX / PMX+VMD PSR 各 90 项重新通过。参见 [历史记录](https://github.com/AiMiDi/C4D_MMD_Tool/blob/32753932d529ce82677538d109d0709fec8be520/docs/dev/controllers-acceptance-20261008.md)；没有发布远端版本。

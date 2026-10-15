@@ -26,6 +26,6 @@ cmake --build S:\tmp\cmt-update-tests-v18 --config Debug --target update_policy_
 ctest --test-dir S:\tmp\cmt-update-tests-v18 -C Debug -R update_policy_test --output-on-failure
 ```
 
-测试覆盖三/四段数字版本、数字溢出、忽略版本、手动检查、检查节流、时钟回拨、嵌套 JSON、转义中文、非法/重复字段、预发布、限流响应、中英文说明分段和中文折行。Windows C4D 2026.4.0 已完成中英文设置、弹窗、关闭/忽略跨重启保留、稍后和发布页跳转的原生验证，见 [验收证据](../validation/plugin-update-reminder/20261014/README.md)。SDK 编译通过不代表其他宿主或 macOS 已完成原生验收。
+测试覆盖三/四段数字版本、数字溢出、忽略版本、手动检查、检查节流、时钟回拨、嵌套 JSON、转义中文、非法/重复字段、预发布、限流响应、中英文说明分段和中文折行。Windows C4D 2026.4.0 已完成中英文设置、弹窗、关闭/忽略跨重启保留、稍后和发布页跳转的原生验证，见 [验收证据](https://github.com/AiMiDi/C4D_MMD_Tool/blob/32753932d529ce82677538d109d0709fec8be520/docs/validation/plugin-update-reminder/20261014/README.md)。SDK 编译通过不代表其他宿主或 macOS 已完成原生验收。
 
 接口依据：[GitHub Releases REST API](https://docs.github.com/en/rest/releases/releases)、[C4D 首选项插件接口](https://developers.maxon.net/docs/cpp/2025_2_0/classcinema_1_1_prefs_dialog_object.html)。

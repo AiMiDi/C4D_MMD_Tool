@@ -1,5 +1,8 @@
 release/
 
+# Local delivery bundles, downloaded CI artifacts, and experiment outputs
+/output/
+
 CMakeUserPresets.json
 dependency/install/
 setup/Output/

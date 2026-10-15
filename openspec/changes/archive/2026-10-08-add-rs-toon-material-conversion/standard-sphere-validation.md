@@ -21,21 +21,21 @@
 最终 SDK 2026 Release 模块 SHA-256：
 `469f60fcff65b15d51e2427663ccc6a61932e276b57dd1497cb4dd386accb463`。
 
-证据目录：[standard-sphere-20261007-469f60fc](../../../../_build_msvc/validation/rs-toon-material/standard-sphere-20261007-469f60fc)。
+证据目录：standard-sphere-20261007-469f60fc（已清理：`../../../../_build_msvc/validation/rs-toon-material/standard-sphere-20261007-469f60fc`）。
 
-- [原生收据](../../../../_build_msvc/validation/rs-toon-material/standard-sphere-20261007-469f60fc/native/receipt.json)：
+- 原生收据（已清理：`../../../../_build_msvc/validation/rs-toon-material/standard-sphere-20261007-469f60fc/native/receipt.json`）：
   Standard/RS Sphere RGBA Morph 与重置、路径/模式、采样和艺术家输入保护、立即保存重开通过；
   Standard 的颜色运算以独立手算公式校验。RS 十字段的数值与独立手算一致。
 - 同一收据覆盖三种材质的基础属性自动同步、原有 Toon Sphere 回归、RS 旧无 binding
   结构的批量升级与三轮 Undo/Redo 保存重开，以及普通 RS 高光/反向读取和连接保护。
-- [旧七字段 v2 收据](../../../../_build_msvc/validation/rs-toon-material/standard-sphere-20261007-469f60fc/native/legacy-seven/receipt.json)：
+- 旧七字段 v2 收据（已清理：`../../../../_build_msvc/validation/rs-toon-material/standard-sphere-20261007-469f60fc/native/legacy-seven/receipt.json`）：
   runtime 保持旧配方；显式修复迁移后仅保留十个属性，没有遗留旧字段；Undo/Redo 立即重开通过。
 - SDK 2026、2024、R20 Release 构建通过；现有三个 focused CTest 通过。
   旧 SDK 的编译证据不代表该宿主上的原生渲染验收。
 
 ## 图片结果
 
-[渲染收据](../../../../_build_msvc/validation/rs-toon-material/standard-sphere-20261007-469f60fc/visual/receipt.json)
+渲染收据（已清理：`../../../../_build_msvc/validation/rs-toon-material/standard-sphere-20261007-469f60fc/visual/receipt.json`）
 记录 11 个保存重开后执行的成功样例，包含两种材质的正面/换向无光照渐变球，
 实际阿芙丝袜的 Sphere None/Add，以及完整模型。默认材质使用 CPU；RS 使用 GPU，
 丝袜 Add 另有 CPU 对照。方向测试还验证中心 Alpha=255，与 Sphere 图片的 Alpha=96 无关。
@@ -43,7 +43,7 @@
 实际模型：`C:\白银之城—阿芙2.0\阿芙2.0.pmx`。丝袜仍使用原始 `mc3.png`、Add 模式、
 原始主贴图和零 Specular；一个方向光 `(0.25,-0.65,1)`，没有替换用户源贴图。
 
-[像素分析](../../../../_build_msvc/validation/rs-toon-material/standard-sphere-20261007-469f60fc/visual/pixel-analysis.json)：
+像素分析（已清理：`../../../../_build_msvc/validation/rs-toon-material/standard-sphere-20261007-469f60fc/visual/pixel-analysis.json`）：
 
 | 比较 | 最大 RGB 差异（8 位） | 最大 Alpha 差异 | 解释 |
 | --- | ---: | ---: | --- |
@@ -72,7 +72,7 @@
 
 ## 交付场景
 
-- [阿芙-Matcap-standard.c4d](../../../../_build_msvc/validation/rs-toon-material/standard-sphere-20261007-469f60fc/visual/阿芙-Matcap-standard.c4d)
-- [阿芙-Matcap-redshift.c4d](../../../../_build_msvc/validation/rs-toon-material/standard-sphere-20261007-469f60fc/visual/阿芙-Matcap-redshift.c4d)
+- 阿芙-Matcap-standard.c4d（已清理：`../../../../_build_msvc/validation/rs-toon-material/standard-sphere-20261007-469f60fc/visual/阿芙-Matcap-standard.c4d`）
+- 阿芙-Matcap-redshift.c4d（已清理：`../../../../_build_msvc/validation/rs-toon-material/standard-sphere-20261007-469f60fc/visual/阿芙-Matcap-redshift.c4d`）
 
 两者均已实际保存、重开并渲染，继续保留原始模型文件中的 MMD 材质数据。

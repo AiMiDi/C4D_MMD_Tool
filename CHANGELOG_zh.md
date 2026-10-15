@@ -62,7 +62,7 @@
 4. 编辑模式隐藏生成控制器，动画模式恢复主要／全部／隐藏设置；刷新时保留已有变换和动画轨道。
 5. 修复 CI 拉取 Eigen 时受 GitLab 临时过载影响的问题：使用相同锁定提交的镜像，并加入有限重试。
 
-[相对 0.9.3.0 的变更](https://github.com/AiMiDi/C4D_MMD_Tool/compare/v0.9.3.0...v0.9.3.2) · [验证范围](docs/dev/controllers-eye-hover-20261009.md)
+[相对 0.9.3.0 的变更](https://github.com/AiMiDi/C4D_MMD_Tool/compare/v0.9.3.0...v0.9.3.2) · [验证范围](https://github.com/AiMiDi/C4D_MMD_Tool/blob/32753932d529ce82677538d109d0709fec8be520/docs/dev/controllers-eye-hover-20261009.md)
 
 ### 0.9.3.0 · MMD 控制器层级与轮廓（2026-10-09）
 
@@ -72,7 +72,7 @@
 4. 增加模型级创建／刷新、选择可见控制器、主要／全部／隐藏、整体尺寸与连续穿透网格显示。
 5. 刷新外观、调整尺寸和保存重开时保留控制器对象、变换、动画轨道、链接及绑定姿态。
 
-[相对 0.9.2.2 的变更](https://github.com/AiMiDi/C4D_MMD_Tool/compare/v0.9.2.2...v0.9.3.0) · [控制器验收](docs/dev/controllers-acceptance-20261008.md)
+[相对 0.9.2.2 的变更](https://github.com/AiMiDi/C4D_MMD_Tool/compare/v0.9.2.2...v0.9.3.0) · [控制器验收](https://github.com/AiMiDi/C4D_MMD_Tool/blob/32753932d529ce82677538d109d0709fec8be520/docs/dev/controllers-acceptance-20261008.md)
 
 ### 0.9.2.3 · MMD 控制器更新（2026-10-08）
 
@@ -81,7 +81,7 @@
 3. 调整控制器轮廓与左右分色，增加连续穿透网格显示；模型属性新增生成、选择、主要/全部/隐藏和整体尺寸设置。
 4. 刷新外观时保留已有控制器变换、链接、动画轨道及绑定姿态。
 
-验证范围与 Windows 安装包回执见[控制器验收记录](docs/dev/controllers-acceptance-20261008.md)。
+验证范围与 Windows 安装包回执见[控制器验收记录](https://github.com/AiMiDi/C4D_MMD_Tool/blob/32753932d529ce82677538d109d0709fec8be520/docs/dev/controllers-acceptance-20261008.md)。
 
 ### 0.9.2.2 · 架构、表情与材质更新（2026-10-08）
 
@@ -93,7 +93,7 @@
 4. **材质表情：** 增加带版本的 Standard Shader 和固定 Redshift 节点绑定；分开保存纹理乘/加 RGBA 系数，在采样后运算，并区分 factor Alpha 与图片透明度。增加混合预览、重置、支持诊断、显式升级/修复和独立材质副本，完善事务撤销/重做及所有权检查。
 5. **Standard 与 Redshift 材质：** 新增基于原生 Toon/Contour 的 MMD 风格 RS Toon 转换，覆盖主贴图透明度、Toon 回退、风格化高光、轮廓线和 Sphere Multiply/Add。改进 Standard 球面贴图及普通 RS 高光颜色/Power 换算和反向同步；保留用户连接及采样器颜色空间设置。
 6. **PMX 导出：** 统一长度字段缩放，修正 PMX 2.0/2.1 的 softbody 序列化边界；完善写入失败清理和源场景状态保护。
-7. **生产 MCP：** 提供 16 个有类型工具和 stdio 适配器，覆盖检查、PMX/VMD 导入导出、动画槽、模式、物理、表情和帧求值，并支持 `redshift_toon` 导入。宿主接入要求 Cinema 4D 2026.4 或更高版本；Windows 验收覆盖真实操作、超时恢复和宿主重启，见[验收记录](docs/dev/mcp-acceptance-20261008.md)。
+7. **生产 MCP：** 提供 16 个有类型工具和 stdio 适配器，覆盖检查、PMX/VMD 导入导出、动画槽、模式、物理、表情和帧求值，并支持 `redshift_toon` 导入。宿主接入要求 Cinema 4D 2026.4 或更高版本；Windows 验收覆盖真实操作、超时恢复和宿主重启，见[验收记录](https://github.com/AiMiDi/C4D_MMD_Tool/blob/32753932d529ce82677538d109d0709fec8be520/docs/dev/mcp-acceptance-20261008.md)。
 8. **构建、打包与文档：** 多 SDK 共用源码、资源和 CMake 层，明确 Debug/Release/测试预设，产物携带真实资源副本。Windows x64 安装包覆盖 R20–2026，macOS Intel 按适用 C4D 版本分别提供 ZIP；产物名称包含平台、架构和版本。补充回归工具、开发说明与功能截图。
 
 **兼容与限制：** RS Toon 需要相应 Redshift 原生节点，不支持时会报告原因。材质表情 v1 绑定需显式升级到 v2，旧 Toon 图配方需显式重新转换。Toon 光照/高光和部分轮廓线仍为近似，尚未证明与 MMD 原生图像等价。macOS/旧宿主运行时和完整真实模型物理重放仍未验证。公开 macOS 资产为 Intel 构建，Apple Silicon 构建仅用于 CI 验证。

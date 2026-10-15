@@ -62,7 +62,7 @@ Validation: 21 SDK/platform builds, 41 MCP tests, 15 libMMD tests and 24 plugin 
 4. Hide generated controllers in Edit mode and restore Primary/All/Hidden settings in Animation mode. Preserve existing controller transforms and animation tracks when refreshing.
 5. Avoid transient GitLab Eigen checkout failures in CI by using a mirror of the same pinned commit and bounded checkout retries.
 
-[Changes since 0.9.3.0](https://github.com/AiMiDi/C4D_MMD_Tool/compare/v0.9.3.0...v0.9.3.2) · [Validation scope](docs/dev/controllers-eye-hover-20261009.md)
+[Changes since 0.9.3.0](https://github.com/AiMiDi/C4D_MMD_Tool/compare/v0.9.3.0...v0.9.3.2) · [Validation scope](https://github.com/AiMiDi/C4D_MMD_Tool/blob/32753932d529ce82677538d109d0709fec8be520/docs/dev/controllers-eye-hover-20261009.md)
 
 ### 0.9.3.0 · MMD controller hierarchy and silhouettes (2026-10-09)
 
@@ -72,7 +72,7 @@ Validation: 21 SDK/platform builds, 41 MCP tests, 15 libMMD tests and 24 plugin 
 4. Add model-level controller generation, visible-control selection, Primary/All/Hidden display, proportional sizing and continuous outlines through meshes.
 5. Preserve controller identities, transforms, animation tracks, links and bind poses when refreshing, changing size or saving and reopening.
 
-[Changes since 0.9.2.2](https://github.com/AiMiDi/C4D_MMD_Tool/compare/v0.9.2.2...v0.9.3.0) · [Controller acceptance](docs/dev/controllers-acceptance-20261008.md)
+[Changes since 0.9.2.2](https://github.com/AiMiDi/C4D_MMD_Tool/compare/v0.9.2.2...v0.9.3.0) · [Controller acceptance](https://github.com/AiMiDi/C4D_MMD_Tool/blob/32753932d529ce82677538d109d0709fec8be520/docs/dev/controllers-acceptance-20261008.md)
 
 ### 0.9.2.3 · MMD controllers (2026-10-08)
 
@@ -81,7 +81,7 @@ Validation: 21 SDK/platform builds, 41 MCP tests, 15 libMMD tests and 24 plugin 
 3. Redesign control silhouettes and left/right colors, with continuous outlines through meshes. Add model-level generation, selection, Primary/All/Hidden display and size settings.
 4. Preserve existing control transforms, links, animation tracks and bind pose when refreshing the presentation.
 
-Validation scope and Windows package receipts: [controller acceptance](docs/dev/controllers-acceptance-20261008.md).
+Validation scope and Windows package receipts: [controller acceptance](https://github.com/AiMiDi/C4D_MMD_Tool/blob/32753932d529ce82677538d109d0709fec8be520/docs/dev/controllers-acceptance-20261008.md).
 
 ### 0.9.2.2 · Architecture, Morph and materials (2026-10-08)
 
@@ -93,7 +93,7 @@ Changes since `v0.9.1.20`, grouped by module:
 4. **Material Morph:** Add versioned Standard shader and fixed Redshift node bindings. Keep texture Multiply/Add RGBA factors separate, evaluate them after sampling and separate factor Alpha from image opacity. Add mixed preview, reset, support diagnostics, explicit upgrade/repair and independent material copies, with transactional Undo/Redo and ownership checks.
 5. **Standard and Redshift materials:** Add MMD-style RS Toon conversion using native Toon/Contour nodes, including main-texture transparency, Toon fallback, stylized specular, outlines and Sphere Multiply/Add. Improve Standard Sphere rendering and ordinary RS specular color/Power conversion and reverse synchronization. Preserve user connections and sampler color-space choices.
 6. **PMX export:** Apply length scaling consistently, enforce PMX 2.0/2.1 softbody serialization boundaries and improve write-failure cleanup while preserving source-scene state.
-7. **Production MCP:** Add 16 typed tools and a stdio adapter for inspection, PMX/VMD import/export, animation slots, modes, physics, Morphs and frame evaluation, including `redshift_toon` import. Host integration requires Cinema 4D 2026.4 or later. Windows acceptance includes real operations, timeout recovery and host restart; see the [acceptance record](docs/dev/mcp-acceptance-20261008.md).
+7. **Production MCP:** Add 16 typed tools and a stdio adapter for inspection, PMX/VMD import/export, animation slots, modes, physics, Morphs and frame evaluation, including `redshift_toon` import. Host integration requires Cinema 4D 2026.4 or later. Windows acceptance includes real operations, timeout recovery and host restart; see the [acceptance record](https://github.com/AiMiDi/C4D_MMD_Tool/blob/32753932d529ce82677538d109d0709fec8be520/docs/dev/mcp-acceptance-20261008.md).
 8. **Build, packaging and documentation:** Share source, resources and CMake setup across SDKs, with explicit Debug/Release/test presets and real runtime resource copies. Package Windows x64 for R20–2026 and separate macOS Intel ZIPs by compatible C4D version. Include platform/architecture/version in artifact names, expand regression tooling and refresh development guides and feature screenshots.
 
 **Compatibility and limits:** RS Toon needs the required native Redshift nodes; unsupported hosts report the reason. Material Morph binding v1 requires an explicit upgrade to v2; older Toon graph revisions require explicit conversion. Toon lighting/specular and some outlines remain approximations; native MMD image equivalence is unverified. macOS/older-host runtime execution and full real-model physics replay remain unverified. Published macOS assets are Intel builds; Apple Silicon builds are CI validation only.

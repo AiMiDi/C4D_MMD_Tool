@@ -243,6 +243,8 @@ source/
 
 ## 架构与开发导航
 
+[文档索引](docs/README.md)汇总持续维护的指南、按日期记录的验收、待完成检查和工作区清理约定。
+
 插件从 `source/main.cpp` 启动：它初始化共享配置并调用 `source/register_entity.cpp` 中的集中注册。UI 命令和文件 loader 将 PMX/VMD/VPD/相机操作委托给按文档存在的 `CMTSceneManager`；`source/module/tools/` 下的模型、骨骼、网格、材质、IK 与物理 manager 随后拥有具体场景对象和运行时求值。
 
 修改某个子系统前，先从对应的代码地图进入：

@@ -4,7 +4,7 @@ Date: 2026-10-14. Windows host: Cinema 4D 2026.4.0.
 
 ## Build and focused checks
 
-- SDK 2026 Debug and SDK R20 Debug compiled and linked with the final source. Both runtime resource trees were synchronized after the final preferences layout change. Logs are preserved in `docs/validation/plugin-update-reminder/20261014/`.
+- SDK 2026 Debug and SDK R20 Debug compiled and linked with the final source. Both runtime resource trees were synchronized after the final preferences layout change. Logs are available in the [historical evidence directory](https://github.com/AiMiDi/C4D_MMD_Tool/tree/32753932d529ce82677538d109d0709fec8be520/docs/validation/plugin-update-reminder/20261014/); the local directory was removed during cleanup on 2026-10-15.
 - `update_policy_test` passed numeric version ordering, throttling, ignores, manual checks, bounded JSON parsing, Unicode surrogate pairs, bilingual note selection and CJK wrapping.
 - The same test parsed a freshly fetched full GitHub release response, selected both language sections, and reported `v0.9.3.8`. Fixture: `S:\tmp\cmt-update-live-release-full.json`.
 - OpenSpec strict validation and `git diff --check` passed. No installer or release was published.
@@ -37,4 +37,4 @@ Window access recovered and the following checks passed in Windows Cinema 4D 202
 - **View release:** 查看更新 in process 55564 closed the popup and opened Chrome at `https://github.com/AiMiDi/C4D_MMD_Tool/releases/tag/v0.9.3.8`. Browser title and visible release heading confirmed the target.
 - **Normal exit:** the final task-owned process 55564 exited through C4D Quit command 12104, and an external lookup confirmed it was gone. The probe disposed only the task-owned empty validation document.
 
-Screenshots, native receipts, build logs, the task-only Python probe and external exit receipt are preserved in [the evidence index](../../../docs/validation/plugin-update-reminder/20261014/README.md). Native acceptance covers Windows C4D 2026.4.0; R20 compilation does not establish R20 runtime acceptance, and macOS was not exercised. No installer or release was published.
+Screenshots, native receipts, build logs, the task-only Python probe and external exit receipt are preserved in [the evidence index](https://github.com/AiMiDi/C4D_MMD_Tool/blob/32753932d529ce82677538d109d0709fec8be520/docs/validation/plugin-update-reminder/20261014/README.md). Native acceptance covers Windows C4D 2026.4.0; R20 compilation does not establish R20 runtime acceptance, and macOS was not exercised. No installer or release was published.

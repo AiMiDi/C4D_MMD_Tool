@@ -171,4 +171,4 @@ Toon 角色表追加 ToonScale/Bias/Add、Edge RGB、Edge Alpha、Edge Width；�
 - [Redshift Toon Material](https://help.maxon.net/r3d/cinema/en-us/Content/html/Material%2BToon.html)：Base Tonemap、光照影响和高光分支。
 - [Redshift Contour](https://help.maxon.net/c4d/2024/en-us/Subsystems/Default/Content/html/Utility%2BContour.html)：Output Contour、内侧轮廓、线宽与分辨率。
 - [Texture Sampler](https://help.maxon.net/r3d/cinema/en-us/Content/html/Texture%2BSampler.html)：外部纹理的 tone-mapping UV 覆盖和颜色空间。
-- [既有 Morph 设计](../../shader-driven-material-morph/design.md)及[验收记录](../../shader-driven-material-morph/validation.md)：本地依赖与历史证据边界。
+- [既有 Morph 设计](../2026-10-08-shader-driven-material-morph/design.md)及[验收记录](../2026-10-08-shader-driven-material-morph/validation.md)：本地依赖与历史证据边界。

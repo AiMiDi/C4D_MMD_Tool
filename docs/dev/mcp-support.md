@@ -4,7 +4,7 @@
 
 状态：**生产 API、16 个 typed tools 和 stdio 适配器已实现；2026-10-08 的 Windows / C4D 2026.4+ 验收范围完成，OpenSpec 19/19**。
 macOS 和旧宿主 UI 按用户明确要求延期，保持未验证。公开发行尚未验收；本状态不表示 GitHub 已发布安装包包含这些改动。
-最新 [验收记录](mcp-acceptance-20261008.md)包含同一普通 Release、桥 OFF 的八阶段、UV/Impulse 数据、
+[2026-10-08 验收记录](https://github.com/AiMiDi/C4D_MMD_Tool/blob/32753932d529ce82677538d109d0709fec8be520/docs/dev/mcp-acceptance-20261008.md)包含同一普通 Release、桥 OFF 的八阶段、UV/Impulse 数据、
 真实响应超时/重连、宿主重启及干净客户端证据。模块为 `806a5091…`，源码/资源指纹为 `f75f9c77…`。
 本轮按模块提交时，Python 客户端、测试及构建资源已分别固化；C++ dispatcher 与共享 ModelManager
 仍与进行中的材质验收一起保留在工作树。下列原生结果属于明确标识的已构建模块，
@@ -48,9 +48,9 @@ VPD 和专用定义编辑工具留作后续扩展。
 `38c9aa87d3de24810568fe3bd1d4dbed71782b195880b00c33a525f1d2d8afeb`，
 源码/资源指纹为 `200335730bcb1effd70a74d2b0da3536c2b4c0cbc4e95a6a74469f45ca88edd1`。
 run ID `34ed5e42-8b56-435a-be92-55d3404e81b4` 的
-[原生收据](../../_build_msvc/validation/remaining/production-no-contact-default/native-run/receipt.json)
+原生收据（已清理：`../../_build_msvc/validation/remaining/production-no-contact-default/native-run/receipt.json`）
 为 `passed`、`acceptance_eligible=true`，原始文档已恢复，所属测试文档清理完成。
-[manifest](../../_build_msvc/validation/remaining/production-no-contact-default/native-run/manifest.json)
+manifest（已清理：`../../_build_msvc/validation/remaining/production-no-contact-default/native-run/manifest.json`）
 另记录 libMMD/Bullet 维护源码及该 CMake cache 实际选择的静态库路径与 SHA-256；
 这属于该冻结切片的验证，不表示后续并行编辑的工作树或安装包已经验收。
 
@@ -60,7 +60,7 @@ run ID `34ed5e42-8b56-435a-be92-55d3404e81b4` 的
 
 较早失败运行的 `manifest.json`、`receipt.json`、`state.json` 和 `transcript.jsonl` 已保存在仓库根目录下的
 `_build_msvc/validation/remaining/final-evidence/production-49d331/`，
-见 [失败 receipt](../../_build_msvc/validation/remaining/final-evidence/production-49d331/receipt.json)，
+见 失败 receipt（已清理：`../../_build_msvc/validation/remaining/final-evidence/production-49d331/receipt.json`），
 run ID 为 `6b8bb50d-e750-4117-91ef-438b129a693b`。
 该失败记录的原始输出是 `S:\tmp\cmt-prod-pmx-simple/receipt.json`，记录 C4D 版本 `2026400`、普通 Release 模块和 SHA-256
 `49d33120a7f41444a8829e04e99810add4d47c67e232cb3e244aaaa52a876605`。
@@ -73,17 +73,17 @@ run ID 为 `6b8bb50d-e750-4117-91ef-438b129a693b`。
 当时受桌面锁定及模态窗口影响，尚未加载该候选到 C4D 验证。候选源码/构建与上述已加载失败模块属于不同证据，
 不得据此把 Windows 事务验收改为通过。
 三个候选的编译、模块及真实运行文件身份见
-[primary-build-audit.json](../../_build_msvc/validation/remaining/final-evidence/primary-build-audit.json)。
+primary-build-audit.json（已清理：`../../_build_msvc/validation/remaining/final-evidence/primary-build-audit.json`）。
 Windows 八个 SDK 的最终 Debug 编译也已通过，SDK 2024 使用本机实测的专属兼容片段；
-其他六个构建见 [final-matrix.json](../../_build_msvc/validation/remaining/final-evidence/sdk-builds/final-matrix.json)。
+其他六个构建见 final-matrix.json（已清理：`../../_build_msvc/validation/remaining/final-evidence/sdk-builds/final-matrix.json`）。
 这些编译结果未覆盖对应旧宿主 UI、所有 SDK Release 安装包或 macOS 原生验收。
 独立普通 Release 候选模块为
 `f9c88eeb47a6c6319ee4d640a17d72d41849838d8e896d55178bfb1ed0f0bcc7`；
-其 [prepare receipt](../../_build_msvc/validation/remaining/final-evidence/candidate-prepare/receipt.json)
+其 prepare receipt（已清理：`../../_build_msvc/validation/remaining/final-evidence/candidate-prepare/receipt.json`）
 仍为 `pending_native_runtime`，并非候选已通过原生验收。
 
 适配器最终 fixture 日志为
-[adapter-unittest-final-p2.log](../../_build_msvc/validation/remaining/final-evidence/adapter-review/adapter-unittest-final-p2.log)。
+adapter-unittest-final-p2.log（已清理：`../../_build_msvc/validation/remaining/final-evidence/adapter-review/adapter-unittest-final-p2.log`）。
 提交后的导出身份校验异常返回 `outcome_unknown`，重复 operation ID 不会重复修改。
 显式 JSON-RPC `id:null` 被拒绝，完成且成功的结果通过标准 Schema `if`/`then`/`anyOf` 校验各工具必要 data 字段；
 失败、running 和 outcome_unknown 结果仍允许空 data。状态恢复按缓存原工具的 Schema 验证，
@@ -118,7 +118,7 @@ MCP 调用使用宿主 Python API。该要求是宿主能力要求，不自动�
 随后普通 Release 模块 `b21d630a6e78a4cb89a34345e56d2b2fc2aed8d387aa3f3b5905f2107728776a`，
 源码/资源指纹 `4a542f52dc29f97577be75213e1e3eee961ee4530188bdb6a7d5964e0bdf5db2`，
 run ID `b17dcd3c-e551-4e21-88d7-16215654125c` 的
-[八阶段原生收据](../../_build_msvc/validation/remaining/production-pmx-final-b21d630a/native-run/receipt.json)
+八阶段原生收据（已清理：`../../_build_msvc/validation/remaining/production-pmx-final-b21d630a/native-run/receipt.json`）
 为 passed、acceptance_eligible=true，原文档已恢复、测试文档清理完成。PMX 倍率 1/2/.5 和
 三种格式 × 四种写盘失败共 12 例均通过。模块、库、源码与两次新失败运行的原始记录已经归档，
 PMX 2.0 尾部格式失败和测试端状态字段错误的旧收据保持失败状态。
@@ -127,11 +127,11 @@ PMX 2.0 尾部格式失败和测试端状态字段错误的旧收据保持失败
 `c7ad243ee135a7135f2e58ff6c99585b4d9ae95b2562b3a1501faac281700478`，源码/资源冻结指纹仍为 `4a542f52…`。
 因构建目录变化后模块哈希不同，另用新 run `743bb4c9-b778-4899-8284-6933d4441f60`
 重跑八阶段，全部通过；回归桥 OFF、PMX 三倍率、12 个实际写盘失败及原文档恢复均通过。
-[最终原生收据](../../_build_msvc/validation/remaining/windows-release-candidate-20261006/native-run/receipt.json)
+最终原生收据（已清理：`../../_build_msvc/validation/remaining/windows-release-candidate-20261006/native-run/receipt.json`）
 与八 SDK Release 构建、实际安装文件身份核对、ISCC 候选包及隔离安装/重复安装/卸载记录一并归档。
 安装测试使用私有 AppId 和目录、真实 Release 文件，869 项文件哈希通过；没有把公开 AppId 的候选包安装到用户 host。
 
 2026-10-08 已补齐响应超时/重连集成、宿主重启后的身份矩阵、普通 UV Morph 和 Impulse 数据导出。
 旧宿主 UI 与 macOS 依用户明确调整延期，实际公开发行包验证仍独立保留。此前历史模块的八阶段记录不覆盖本次新增范围。
-真实阿芙 0–60 帧的严格 seek 重放仍失败，另见 [剩余验证](remaining-validation.md)；
+当时真实阿芙 0–60 帧的严格 seek 重放仍失败，另见 [2026-10-06 运行时验收记录](https://github.com/AiMiDi/C4D_MMD_Tool/blob/32753932d529ce82677538d109d0709fec8be520/docs/dev/remaining-validation.md)；
 物理开关工具的事务验证不意味着物理模拟重放已经通过。

@@ -195,6 +195,8 @@ source/
 
 ## Architecture and developer navigation
 
+The [documentation index](docs/README.md) links maintained guides, dated validation records, outstanding acceptance, and workspace cleanup conventions.
+
 The plugin starts in `source/main.cpp`, which initializes shared configuration and calls the central registration routine in `source/register_entity.cpp`. UI commands and file loaders delegate PMX/VMD/VPD/camera work to the per-document `CMTSceneManager`; the model, bone, mesh, material, IK, and physics managers under `source/module/tools/` then own the concrete scene objects and runtime evaluation.
 
 Use the detailed maps before changing a subsystem:

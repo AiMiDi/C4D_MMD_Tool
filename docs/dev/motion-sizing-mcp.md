@@ -90,7 +90,7 @@
 
 首次接口交付时 Python 协议/固定调用测试 41/41 通过，SDK 2026 普通 Release（测试桥 OFF）编译通过。已通过真实 stdio 发现 11 个新增工具，但当时原会话的 C4D 仍加载旧模块，尚未执行新模块的原生业务回归。同一安装程序的第二个进程未保持运行，未重启或关闭原会话实例。
 
-持久证据见 [本轮回执](validation/motion-sizing-mcp-20261009/receipt.json)。同一模块及运行资源已另存到 `_build_msvc/validation/motion-sizing-mcp-20261009/plugins/mmdtool/`，避免后续并行构建覆盖本轮产物；使用这份副本复验时，再传 `--build-cache _build_msvc/vmd-sizing-production/sdk_2026/CMakeCache.txt`。
+持久证据见 [本轮回执](../validation/motion-sizing-mcp-20261009/receipt.json)。同一模块及运行资源已另存到 `_build_msvc/validation/motion-sizing-mcp-20261009/plugins/mmdtool/`，避免后续并行构建覆盖本轮产物；使用这份副本复验时，再传 `--build-cache _build_msvc/vmd-sizing-production/sdk_2026/CMakeCache.txt`。
 
 新 Release 插件位于 `_build_msvc/vmd-sizing-production/sdk_2026/bin/Release/plugins/mmdtool/`。加载它之后，使用现有已授权的宿主 endpoint/token-file，运行下列脚本。脚本不启用服务、不启动或重启 C4D，也不使用测试桥；当前模块缺少接口时，在创建文档之前写出 `blocked` 回执。
 

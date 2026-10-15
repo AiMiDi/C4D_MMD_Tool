@@ -35,7 +35,7 @@ Toon ramp、独立 Ambient、边线和 SubTexture/Additional UV 不因此获得�
 
 本文区分源码已实现、原生着色器或节点已验证、实际图像已验证三个状态。
 构建成功和节点连接成功都不能代替图像验收。导入与材质表情的数据链路见
-[import-flow.md](import-flow.md)，剩余整体验收见 [remaining-validation.md](remaining-validation.md)。
+[import-flow.md](import-flow.md)，早期整体验收与未通过项见 [2026-10-06 运行时验收记录](https://github.com/AiMiDi/C4D_MMD_Tool/blob/32753932d529ce82677538d109d0709fec8be520/docs/dev/remaining-validation.md)。
 以下支持矩阵和完整 Alpha 图像证据对应旧 `9d132…` Release 模块、`fd274…` 源码/资源切片。
 后来新增的 shader binding 有独立 `26f84838…` Debug 最小闭环，范围见本文后段；
 旧图像通过不能用于验收新的工作区源码或 binding。
@@ -106,20 +106,20 @@ raw/document 两档均直接断言原始图片 A 乘有效 Alpha 系数。
 
 | 验证层 | 已有事实 | 仍未证明的范围 |
 | --- | --- | --- |
-| 旧模块原生 shader/graph | 普通 Release `97b6…` 的 [Standard 收据](../../_build_msvc/validation/remaining/material-97b6/standard-material-receipt.json)、[Redshift 收据](../../_build_msvc/validation/remaining/material-97b6/redshift-material-receipt.json) 与 [manifest](../../_build_msvc/validation/remaining/material-97b6/manifest.json) 保留原始身份和结果 | 不是本轮新增内嵌 Alpha 检测、opaque texture Alpha morph 或最终图像的通过证据 |
+| 旧模块原生 shader/graph | 普通 Release `97b6…` 的 Standard 收据（已清理：`../../_build_msvc/validation/remaining/material-97b6/standard-material-receipt.json`）、Redshift 收据（已清理：`../../_build_msvc/validation/remaining/material-97b6/redshift-material-receipt.json`） 与 manifest（已清理：`../../_build_msvc/validation/remaining/material-97b6/manifest.json`） 保留原始身份和结果 | 不是本轮新增内嵌 Alpha 检测、opaque texture Alpha morph 或最终图像的通过证据 |
 | 本轮构建 | 主任务已报告 `fd274…` 源码切片的 SDK 2026 Debug 与 R20 Debug 构建成功 | 编译不能证明 Alpha 采样和画面正确；完整身份以本轮构建收据为准 |
 | 宿主图片解码探测 | C4D 2026.4 实际 RGB PNG 无 internal Alpha、channel count 0；RGBA PNG 有 internal Alpha、channel count 1 | 证明新检测使用的接口能区分这两个样例，不证明其他格式和材质渲染 |
-| 本轮 Standard 原生采样 | [Standard 矩阵收据](../../_build_msvc/validation/remaining/material-alpha-9d132/standard/standard_matrix_receipt.json) 为 `passed`，10/10 样例；raw/document 两档采样、PNG/JPEG/TGA/TIFF/无贴图、中文相对路径、重复系数、保存重开及重置均执行 | `native_shader_sampling=true`、`full_image_render=false`；不证明默认材质的最终图像或完整光照等效 |
-| 本轮 Redshift 原生图 | [RS 矩阵收据](../../_build_msvc/validation/remaining/material-alpha-9d132/redshift/redshift_matrix_receipt.json) 为 `passed`，10/10 样例；节点、RGB/Alpha 系数、连接、路径、保存重开及重置均执行 | `native_graph_inspection=true`、`native_shader_sampling=false`、`full_image_render=false`；不能据图连接推定实际采样或遮罩像素通过 |
-| Standard 隔离通道图 | [render-summary](../../_build_msvc/validation/remaining/material-alpha-9d132/render-summary.json) 及 [Standard 原图/收据](../../_build_msvc/validation/remaining/material-alpha-9d132/render-standard) 中 10/10 为 `passed`，覆盖 Alpha 0/1、非均匀 Alpha、变化 RGB/固定 Alpha、RGB 无 Alpha、PNG/JPEG/TGA/TIFF 和无贴图；指定样例保存重开 | `isolated_channels` 的 Alpha 像素结果，不是默认 RGB/BRDF 外观验收 |
-| Redshift 隔离通道图 | 同一汇总及 [RS 原图/收据](../../_build_msvc/validation/remaining/material-alpha-9d132/render-redshift) 中 10/10 为 `passed`，覆盖同组样例和指定重开 | 已超过节点连线检查，实际 Alpha 图通过；RS 默认材质图在这个模块尚未验收 |
+| 本轮 Standard 原生采样 | Standard 矩阵收据（已清理：`../../_build_msvc/validation/remaining/material-alpha-9d132/standard/standard_matrix_receipt.json`） 为 `passed`，10/10 样例；raw/document 两档采样、PNG/JPEG/TGA/TIFF/无贴图、中文相对路径、重复系数、保存重开及重置均执行 | `native_shader_sampling=true`、`full_image_render=false`；不证明默认材质的最终图像或完整光照等效 |
+| 本轮 Redshift 原生图 | RS 矩阵收据（已清理：`../../_build_msvc/validation/remaining/material-alpha-9d132/redshift/redshift_matrix_receipt.json`） 为 `passed`，10/10 样例；节点、RGB/Alpha 系数、连接、路径、保存重开及重置均执行 | `native_graph_inspection=true`、`native_shader_sampling=false`、`full_image_render=false`；不能据图连接推定实际采样或遮罩像素通过 |
+| Standard 隔离通道图 | render-summary（已清理：`../../_build_msvc/validation/remaining/material-alpha-9d132/render-summary.json`） 及 Standard 原图/收据（已清理：`../../_build_msvc/validation/remaining/material-alpha-9d132/render-standard`） 中 10/10 为 `passed`，覆盖 Alpha 0/1、非均匀 Alpha、变化 RGB/固定 Alpha、RGB 无 Alpha、PNG/JPEG/TGA/TIFF 和无贴图；指定样例保存重开 | `isolated_channels` 的 Alpha 像素结果，不是默认 RGB/BRDF 外观验收 |
+| Redshift 隔离通道图 | 同一汇总及 RS 原图/收据（已清理：`../../_build_msvc/validation/remaining/material-alpha-9d132/render-redshift`） 中 10/10 为 `passed`，覆盖同组样例和指定重开 | 已超过节点连线检查，实际 Alpha 图通过；RS 默认材质图在这个模块尚未验收 |
 | Standard 默认材质 Alpha | 4/4 为 `passed`：`alpha_full` strength 0、`gray_varied_alpha` strength 0.5 并重开、`varied_rgb_fixed_alpha` strength 0.5、`rgb_without_alpha` strength 1 并重开 | 判定 Alpha，未接受完整默认 RGB 外观；`default_rgb_visual_acceptance=false` |
 | 默认 RGB 与完整外观 | 汇总保留 `default_rgb_visual_acceptance=false` | 两端默认 RGB/光照效果、完整 toon/sphere/边线仍需独立验收；这些 24 张旧图不验证新 binding |
 
 两个采样/图矩阵及输入、保存场景和最初校准图的逐文件来源/字节数/SHA-256 见
-[归档清单](../../_build_msvc/validation/remaining/material-alpha-9d132/collection-material-fidelity.json)。
+归档清单（已清理：`../../_build_msvc/validation/remaining/material-alpha-9d132/collection-material-fidelity.json`）。
 完整渲染汇总另列 94 个归档文件，并记录上述 24 份图像/原始收据的 SHA-256。
-[render-summary 单独清单](../../_build_msvc/validation/remaining/material-alpha-9d132/collection-render-summary.json)
+render-summary 单独清单（已清理：`../../_build_msvc/validation/remaining/material-alpha-9d132/collection-render-summary.json`）
 补充登记主任务本地生成的汇总文件；原始 native receipt 的 `full_image_render=false` 保留原值，
 后续 render 成功由独立 render receipt 证明，不回填或改写旧 receipt。
 离线核对 94 个引用文件和 24 组 receipt/image 的 hash 一致，所有记录为 `passed`；
@@ -127,9 +127,9 @@ raw/document 两档均直接断言原始图片 A 乘有效 Alpha 系数。
 这次核对只读取本地证据，没有新宿主调用或重新渲染。
 两个 run 的 finally cleanup 均为零错误、零剩余所属文档，并恢复原文档。
 原始矩阵收据自身未记录 loaded module 或源码/资源指纹；主任务将本轮运行关联到 `fd274…` 源码与
-`9d132…` Release 模块。独立 [原生上下文](../../_build_msvc/validation/remaining/material-alpha-9d132/native-context.json)
+`9d132…` Release 模块。独立 原生上下文（已清理：`../../_build_msvc/validation/remaining/material-alpha-9d132/native-context.json`）
 记录同一持续运行的 C4D 2026.4 进程、实际 loaded module 以及两份矩阵收据的 SHA-256；
-[manifest](../../_build_msvc/validation/remaining/material-alpha-9d132/manifest.json) 保留普通 Release、
+manifest（已清理：`../../_build_msvc/validation/remaining/material-alpha-9d132/manifest.json`） 保留普通 Release、
 runtime regression OFF 的准备身份。两者及原始收据的引用 hash 已在归档时互相核对，未修改原收据。
 渲染汇总关联同一旧模块/源码和独立 native context，并记录各 receipt/image 的原始 SHA-256。
 原始单图 JSON 不含 loaded-module 字段，不把汇总关联写成单图收据自带的身份证明。
@@ -148,12 +148,12 @@ Alpha 变化而 RGB 不变时，只应改变遮罩覆盖率。
 
 ## 新 shader binding 的独立最小闭环
 
-后来 shader-driven 实现的 [minimum-receipt.json](../../_build_msvc/validation/shader-driven-material-morph/minimum-26f84838/minimum-receipt.json)
+后来 shader-driven 实现的 minimum-receipt.json（已清理：`../../_build_msvc/validation/shader-driven-material-morph/minimum-26f84838/minimum-receipt.json`）
 对应 SDK 2026 Debug 模块 `26f84838f7171521381330fea72fe801b25a48cf6883ab466f27dc935d40b0c2`。
 这是与 `9d132…` 分开的双材质最小样例：一个模型包含 plain/RGBA 两种材质、两个 Material Morph、Group 与 Flip。
 具体实现与验收边界见已归档变更的 [validation.md](../../openspec/changes/archive/2026-10-08-shader-driven-material-morph/validation.md)。
 
-独立 [Standard sampling](../../_build_msvc/validation/shader-driven-material-morph/minimum-26f84838/standard-sampling.json)
+独立 Standard sampling（已清理：`../../_build_msvc/validation/shader-driven-material-morph/minimum-26f84838/standard-sampling.json`）
 记录 base、add、add/mul、Group、Flip、reset 六组状态；实现方还记录线性强度轨道第 15 帧的原生检查。
 最小图像收据列五张实际 RGBA 图及像素/hash：Standard 第 0/30 帧内部 Alpha 分别为 `[128,48]` 与 `[153,72]`；
 Redshift 默认材质第 30 帧为 `[153,72]`，隔离图第 0/30 帧分别为 `[128,48]` 与 `[153,72]`。
@@ -161,7 +161,7 @@ Redshift 默认材质第 30 帧为 `[153,72]`，隔离图第 0/30 帧分别为 `
 
 这一闭环证明指定新 binding 样例的 shader/原生 reader 能随动画读到有效值，不是新功能全面验收。
 完整默认 RGB/BRDF 外观、完整图像矩阵、preview authoring、旧场景迁移、Undo/Redo、保存重开、复制隔离与兼容构建仍待该实现独立完成。
-该目录的通用 [receipt.json](../../_build_msvc/validation/shader-driven-material-morph/minimum-26f84838/receipt.json)
+该目录的通用 receipt.json（已清理：`../../_build_msvc/validation/shader-driven-material-morph/minimum-26f84838/receipt.json`）
 仍为 prepare 时的 `pending_native_runtime`；它不能覆盖、替代或扩展最小图像收据的已验范围。
 
 ## 路径同步与旧场景迁移的后续验收

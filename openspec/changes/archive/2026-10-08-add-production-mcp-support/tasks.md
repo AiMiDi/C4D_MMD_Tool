@@ -3,7 +3,7 @@
 2026-10-08 当前范围验收完成：19/19。普通 Release 模块 `806a5091…`，
 源码/资源指纹 `f75f9c77…`，回归桥 OFF。真实 HTTP/stdio 八阶段、原生 UV 4 例、
 Impulse 7 例、延迟响应/重连/宿主重启，以及独立测试构建的现有业务 9 例通过。
-[完整记录](../../../../docs/dev/mcp-acceptance-20261008.md)及 [MCP 支持说明](../../../../docs/dev/mcp-support.md)。
+[完整记录](https://github.com/AiMiDi/C4D_MMD_Tool/blob/32753932d529ce82677538d109d0709fec8be520/docs/dev/mcp-acceptance-20261008.md)及 [MCP 支持说明](../../../../docs/dev/mcp-support.md)。
 macOS 与旧宿主 UI 已按用户要求延期并保持未验证；当前完成不表示公开发行已验收。
 以下保留历史收据，并在各节注明本次补齐的项目。
 

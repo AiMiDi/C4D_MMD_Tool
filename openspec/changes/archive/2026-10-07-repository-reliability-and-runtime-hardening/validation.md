@@ -18,7 +18,7 @@
 | 构建 | 回归桥接 | 产物 | 证据 |
 |---|---|---|---|
 | SDK 2026 Debug | ON | `_build_msvc/sdk_2026/bin/Debug/plugins/mmdtool/mmdtool_Debug.xdl64` | [configure 日志](/S:/tmp/cmt-reliability-sdk2026-configure.log)、[build 日志](/S:/tmp/cmt-reliability-sdk2026-debug.log)、[实际缓存](/C:/code/C4D_MMD_Tool/_build_msvc/sdk_2026/CMakeCache.txt) |
-| SDK 2026 Release | OFF | `_build_msvc/sdk_2026_release/bin/Release/plugins/mmdtool/mmdtool.xdl64` | [configure 日志](/S:/tmp/cmt-reliability-sdk2026-release-configure.log)、[build 日志](/S:/tmp/cmt-reliability-sdk2026-release.log)、[实际缓存](/C:/code/C4D_MMD_Tool/_build_msvc/sdk_2026_release/CMakeCache.txt) |
+| SDK 2026 Release | OFF | `_build_msvc/sdk_2026_release/bin/Release/plugins/mmdtool/mmdtool.xdl64` | [configure 日志](/S:/tmp/cmt-reliability-sdk2026-release-configure.log)、[build 日志](/S:/tmp/cmt-reliability-sdk2026-release.log)、实际缓存（已清理：`/C:/code/C4D_MMD_Tool/_build_msvc/sdk_2026_release/CMakeCache.txt`） |
 | SDK R20 Debug | OFF | `_build_msvc/sdk_r20/bin/Debug/plugins/mmdtool/mmdtool_Debug.xdl64` | [configure 日志](/S:/tmp/cmt-reliability-sdk-r20-configure.log)、[build 日志](/S:/tmp/cmt-reliability-sdk-r20-debug.log)、[实际缓存](/C:/code/C4D_MMD_Tool/_build_msvc/sdk_r20/CMakeCache.txt) |
 
 R20 构建中有 SDK math header 的既有 C4756 警告，插件链接与资源同步成功。
@@ -92,7 +92,7 @@ Debug 回归桥为 ON；Release 和 R20 构建为 OFF。原始清单与实际模
 
 九项原生回归全部通过，回执为 `status=passed`、`binary_identity_confirmed=true`、
 `acceptance_eligible=true`。证据在
-[native receipt](/C:/code/C4D_MMD_Tool/_build_msvc/validation/repository-reliability-and-runtime-hardening/native/receipt.json)
+native receipt（已清理：`/C:/code/C4D_MMD_Tool/_build_msvc/validation/repository-reliability-and-runtime-hardening/native/receipt.json`）
 和同目录的 manifest、输入、`.c4d`、PMX/VMD 导出文件及 MCP 调用结果中。
 
 原生发现后的修复已由这轮运行覆盖：
@@ -162,10 +162,10 @@ toon 发光通道为关闭状态。保存重开的最大顶点差为 `1.76869327
 相机源 93 个关键帧展开为 1,691 个逐帧关键帧，导出重导入的采样矩阵与 FOV 最大差均为 0。
 
 本轮证据在仓库忽略的
-[summary](/C:/code/C4D_MMD_Tool/_build_msvc/validation/real-assets-and-materials/summary.json)、
-[native receipt](/C:/code/C4D_MMD_Tool/_build_msvc/validation/real-assets-and-materials/native/receipt.json)、
-[model receipt](/C:/code/C4D_MMD_Tool/_build_msvc/validation/real-assets-and-materials/real-model/receipt.json) 和
-[motion receipt](/C:/code/C4D_MMD_Tool/_build_msvc/validation/real-assets-and-materials/real-motion/receipt.json) 中。
+summary（已清理：`/C:/code/C4D_MMD_Tool/_build_msvc/validation/real-assets-and-materials/summary.json`）、
+native receipt（已清理：`/C:/code/C4D_MMD_Tool/_build_msvc/validation/real-assets-and-materials/native/receipt.json`）、
+model receipt（已清理：`/C:/code/C4D_MMD_Tool/_build_msvc/validation/real-assets-and-materials/real-model/receipt.json`） 和
+motion receipt（已清理：`/C:/code/C4D_MMD_Tool/_build_msvc/validation/real-assets-and-materials/real-motion/receipt.json`） 中。
 同目录保留对照图、派生测试场景、公开生成输入、实际使用的 harness 快照和构建日志。
 三个原 PMX 和两份原 VMD 的 SHA 均保持不变，没有提交或发布私有资产。
 

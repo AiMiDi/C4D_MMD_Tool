@@ -165,7 +165,7 @@ python -m unittest discover -s mcp/tests -v
 ```
 
 本次最终 35/35 通过只证明 Python 协议和模拟 host 行为。
-另有 [历史 envelope Schema 检查](../../_build_msvc/validation/remaining/final-evidence/captured-envelope-schema-audit.json)：
+另有 历史 envelope Schema 检查（已清理：`../../_build_msvc/validation/remaining/final-evidence/captured-envelope-schema-audit.json`）：
 最终 output Schema 对旧 `49d331…` transcript 的 11 个真实 HTTP 原生 envelope 只读校验通过，没有新 host 调用或原生重跑，不改变 Redo 失败结论。
 OpenSpec strict validation 与 `git diff --check` 只证明 change 格式和文本完整性，也不能替代业务验收。
 
@@ -203,7 +203,7 @@ runner 使用真实 stdio subprocess 和真实 HTTP typed 调用；创建、复�
 manifest 同时记录 libMMD/Bullet 维护源码、submodule HEAD/源码脏状态与该 cache 的实际静态链接输入；
 完整依赖快照未确认的 run 不能成为新的完整验收通过记录。源码/库变动后使用新 run，旧 manifest 不改写。
 这些是切片身份及原生结果，不构成依赖历史构建来源证明。2026-10-08 的响应超时、去重重连和宿主重启
-已通过，见 [最新验收记录](mcp-acceptance-20261008.md)。macOS 与旧宿主 UI 依用户要求延期，保留未验证。
+已通过，见 [2026-10-08 验收记录](https://github.com/AiMiDi/C4D_MMD_Tool/blob/32753932d529ce82677538d109d0709fec8be520/docs/dev/mcp-acceptance-20261008.md)。macOS 与旧宿主 UI 依用户要求延期，保留未验证。
 
 两阶段恢复 runner `scripts/c4d_mcp_recovery_validation.py` 的 `--phase before-restart` 使用真实普通打包适配器，
 在本机故障代理中延迟已执行的响应；`--phase after-restart` 检查新宿主 nonce、旧句柄拒绝与新句柄可用。

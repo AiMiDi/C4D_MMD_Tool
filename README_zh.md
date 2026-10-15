@@ -300,7 +300,7 @@ PMX 导出保存所编辑的材质与表情数据；某个 C4D 渲染器是否�
 
 **开发文档：** [DEVELOPMENT_zh.md](DEVELOPMENT_zh.md) · [English DEVELOPMENT.md](DEVELOPMENT.md)
 
-**MCP 接入：** [客户端配置](docs/dev/mcp-client.md) · [实现与验收状态](docs/dev/mcp-support.md) · [2026-10-08 验收](docs/dev/mcp-acceptance-20261008.md)。当前工作树的 16 个生产工具与适配器已完成 Windows / C4D 2026.4+ 验收，包含普通 Release/桥 OFF 的真实调用、超时恢复与宿主重启。macOS 和旧宿主 UI 已明确延期并保留未验证；公开发行尚未验收。
+**MCP 接入：** [客户端配置](docs/dev/mcp-client.md) · [实现与验收状态](docs/dev/mcp-support.md) · [2026-10-08 验收](https://github.com/AiMiDi/C4D_MMD_Tool/blob/32753932d529ce82677538d109d0709fec8be520/docs/dev/mcp-acceptance-20261008.md)。当前工作树的 16 个生产工具与适配器已完成 Windows / C4D 2026.4+ 验收，包含普通 Release/桥 OFF 的真实调用、超时恢复与宿主重启。macOS 和旧宿主 UI 已明确延期并保留未验证；公开发行尚未验收。
 
 ### 开发者：CMake 构建（多 SDK）
 
@@ -368,7 +368,7 @@ PMX 导出保存所编辑的材质与表情数据；某个 C4D 渲染器是否�
 4. 编辑模式隐藏生成控制器，动画模式恢复主要／全部／隐藏设置；刷新时保留已有变换和动画轨道。
 5. 修复 CI 拉取 Eigen 时受 GitLab 临时过载影响的问题：使用相同锁定提交的镜像，并加入有限重试。
 
-[相对 0.9.3.0 的变更](https://github.com/AiMiDi/C4D_MMD_Tool/compare/v0.9.3.0...v0.9.3.2) · [验证范围](docs/dev/controllers-eye-hover-20261009.md)
+[相对 0.9.3.0 的变更](https://github.com/AiMiDi/C4D_MMD_Tool/compare/v0.9.3.0...v0.9.3.2) · [验证范围](https://github.com/AiMiDi/C4D_MMD_Tool/blob/32753932d529ce82677538d109d0709fec8be520/docs/dev/controllers-eye-hover-20261009.md)
 
 ## 作者
 

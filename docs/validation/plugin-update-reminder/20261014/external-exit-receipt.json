@@ -1,7 +1,0 @@
-{
-  "pid": 55564,
-  "process_running": false,
-  "observed_at": "2026-10-14T19:36:42.9972614+08:00",
-  "method": "C4D Quit command 12104, then external process lookup",
-  "quit_sequence": 32
-}
