@@ -587,6 +587,17 @@ namespace
 		};
 	}
 
+	void ApplyPlaybackRelativeMatrix(BaseObject* object, const Matrix& matrix)
+	{
+		// SetRelMl chooses Euler angles near the previous pose. Equivalent turns
+		// then round differently when C4D reconstructs the matrix, so a cold
+		// Bullet replay can depend on the pose preceding the seek. Decompose
+		// without that history for both animation and solved IK/physics poses.
+		object->SetRelPos(matrix.off);
+		object->SetRelRot(MatrixToHPB(matrix, object->GetRotationOrder()));
+		object->SetRelScale(Vector(1.0));
+	}
+
 	Int32 GetAnimationFrameFromDocument(BaseDocument* doc)
 	{
 		return doc ? doc->GetTime().GetFrame(kBoneAnimationFps) : 0;
@@ -784,7 +795,7 @@ void C4DIKChainNodeAdapter::ApplyLocalToBoneObject() const
 
 	const Eigen::Matrix4f relative_local = initial_local_transform_.inverse() * local_transform_;
 	const Eigen::Vector3f relative_translation = relative_local.block<3, 1>(0, 3);
-	bone_object_->SetRelMl(RelativeMatrixFromTranslationRotation(relative_translation, ExtractRotation(relative_local)));
+	ApplyPlaybackRelativeMatrix(bone_object_, RelativeMatrixFromTranslationRotation(relative_translation, ExtractRotation(relative_local)));
 	MarkBoneTransformDirty(bone_object_);
 	if (bone_tag_)
 		bone_tag_->evaluated_ik_rotation_ = ToQuaternionArray(ik_rotation_);
@@ -3344,7 +3355,7 @@ Bool MMDBoneTag::ApplyStaticPose(BaseObject* op, const Vector& input_translation
 	const Vector final_translation = evaluated_animation_translation_ + evaluated_append_animation_translation_;
 	const std::array<Float32, 4> final_rotation = ToQuaternionArray(
 		ToEigenQuaternion(evaluated_animation_rotation_) * ToEigenQuaternion(evaluated_append_animation_rotation_));
-	op->SetRelMl(BuildAnimationMatrix(final_translation, final_rotation));
+	ApplyPlaybackRelativeMatrix(op, BuildAnimationMatrix(final_translation, final_rotation));
 	MarkBoneTransformDirty(op);
 	if (self_tag)
 		self_tag->SetDirty(DIRTYFLAGS::DATA | DIRTYFLAGS::CACHE);
@@ -3530,7 +3541,7 @@ Bool MMDBoneTag::ApplyActiveAnimation(BaseObject* op, BaseDocument* doc, const B
 	}
 	if (apply_to_scene)
 	{
-		op->SetRelMl(BuildAnimationMatrix(final_translation, final_rotation));
+		ApplyPlaybackRelativeMatrix(op, BuildAnimationMatrix(final_translation, final_rotation));
 		MarkBoneTransformDirty(op);
 	}
 	if (static_pose_segment)

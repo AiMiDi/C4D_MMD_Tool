@@ -373,6 +373,7 @@ IK 忽略同链的 FK 输入。标准手臂增加扁平手部目标和方向控�
 | IK 看似解了但骨骼没动 | `ApplyStandaloneBoneAdaptersToScene()` 是否写回 affected indices；`CacheIKSolveRuntimeOverrides()` 是否防止后续覆盖 |
 | 物理/IK 存档重开后丢失 | `EnsureStandaloneRuntimeManagers()` 是否重建 adapters/IK/physics；rigid/joint pointer 是否 reconnect |
 | 连续播放和拖动时间轴表现不同 | `needs_physics_reset` 判断、`prev_time_`、`ResetStandalonePhysics()` 与 `StepStandalonePhysics()` 的分支 |
+| 冷重置后重放仍逐渐偏离 | 骨骼矩阵写回是否依赖前一次欧拉角表示；刚性播放姿态使用 `ApplyPlaybackRelativeMatrix()`，避免 `SetRelMl()` 选择等价圈数造成细小输入差异 |
 | append/inherit 骨骼顺序异常 | `PrepareSceneForPhysicsPlaybackLayer()` 的 `(PMX_BONE_LAYER, append_recursion_depth, bone_index)` 排序 |
 | 物理结果被动画覆盖 | `MMDBoneManagerObject::SetPhysicsOverride()`、`GetPlaybackRuntimeOverride()` 和 BoneManager final pass |
 | runtime 未按新设置生效 | 对应参数是否调用 `InvalidateStandaloneRuntime()` 或刷新 `prev_time_` / `is_animation_initialized_` |
@@ -381,6 +382,10 @@ IK 忽略同链的 FK 输入。标准手臂增加扁平手部目标和方向控�
 
 配合运行时日志时，先看 `docs/dev/anim-flow-debug.md` 里的 `[CMT][AnimFlow]` 诊断。对 C4D 2026
 现场调试，按 `AGENTS.md` 的 LLDB-DAP attach 流程：先正常启动 C4D 加载插件，再 attach 到进程。
+
+严格回放检查应比较连续播放、跳回开头重放、初始和末帧存档重开后的逐帧矩阵与求值几何。
+仅检查物理世界已重建不足以证明相同输入；等价欧拉角在矩阵重建时也可能引入可被物理放大的舍入差异。
+2026 / 2027 的 Sour 用例及修复边界见 [原生验证记录](../validation/physics-replay-determinism-20261019/README.md)。
 
 本页使用 Mermaid 作为流程图格式，因为函数名、箭头和运行顺序需要可 diff、可维护、可审查。
 

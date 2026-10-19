@@ -1,0 +1,6072 @@
+{
+  "host_version": 2027000,
+  "pid": 15756,
+  "input": "S:\\tmp\\cmt-replay-repair-20261019\\baseline\\reference0-all-bones.json",
+  "samples": [
+    {
+      "index": "0",
+      "name": "全ての親",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "1",
+      "name": "右足IK親",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "2",
+      "name": "右足ＩＫ",
+      "legacy_error": 1.5317608292875207e-15,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 4,
+      "legacy_rotations": [
+        [
+          -3.129999607671161,
+          0.0,
+          0.0
+        ],
+        [
+          3.153185699508427,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "3",
+      "name": "右足ＩＫ先",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "4",
+      "name": "右つま先ＩＫ",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "5",
+      "name": "右つま先ＩＫ先",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "6",
+      "name": "左足IK親",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "7",
+      "name": "左足ＩＫ",
+      "legacy_error": 1.1310397063368782e-15,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 4,
+      "legacy_rotations": [
+        [
+          -3.0799995858380766,
+          0.0,
+          0.0
+        ],
+        [
+          3.2031857213415087,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "8",
+      "name": "左足ＩＫ先",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "9",
+      "name": "左つま先ＩＫ",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "10",
+      "name": "左つま先ＩＫ先",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "11",
+      "name": "センター",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "12",
+      "name": "センター先",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "13",
+      "name": "グルーブ",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "14",
+      "name": "腰",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "15",
+      "name": "下半身",
+      "legacy_error": 2.942024417291187e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 1,
+      "legacy_rotations": [
+        [
+          -3.1415920257570105,
+          -0.24999999000519146,
+          0.0
+        ],
+        [
+          3.141593281422576,
+          6.033185317174395,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "16",
+      "name": "スカート_0_11",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "17",
+      "name": "スカート_1_11",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "18",
+      "name": "スカート_2_11",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "19",
+      "name": "スカート_3_11",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "20",
+      "name": "スカート_4_11",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "21",
+      "name": "スカート_5_11",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "22",
+      "name": "スカート_6_11",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "23",
+      "name": "スカート_7_11",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "24",
+      "name": "スカート_0_10",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "25",
+      "name": "スカート_1_10",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "26",
+      "name": "スカート_2_10",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "27",
+      "name": "スカート_3_10",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "28",
+      "name": "スカート_4_10",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "29",
+      "name": "スカート_5_10",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "30",
+      "name": "スカート_6_10",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "31",
+      "name": "スカート_7_10",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "32",
+      "name": "スカート_0_9",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "33",
+      "name": "スカート_1_9",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "34",
+      "name": "スカート_2_9",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "35",
+      "name": "スカート_3_9",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "36",
+      "name": "スカート_4_9",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "37",
+      "name": "スカート_5_9",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "38",
+      "name": "スカート_6_9",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "39",
+      "name": "スカート_7_9",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "40",
+      "name": "スカート_0_8",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "41",
+      "name": "スカート_1_8",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "42",
+      "name": "スカート_2_8",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "43",
+      "name": "スカート_3_8",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "44",
+      "name": "スカート_4_8",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "45",
+      "name": "スカート_5_8",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "46",
+      "name": "スカート_6_8",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "47",
+      "name": "スカート_7_8",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "48",
+      "name": "スカート_0_7",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "49",
+      "name": "スカート_1_7",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "50",
+      "name": "スカート_2_7",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "51",
+      "name": "スカート_3_7",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "52",
+      "name": "スカート_4_7",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "53",
+      "name": "スカート_5_7",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "54",
+      "name": "スカート_6_7",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "55",
+      "name": "スカート_7_7",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "56",
+      "name": "スカート_0_6",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "57",
+      "name": "スカート_1_6",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "58",
+      "name": "スカート_2_6",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "59",
+      "name": "スカート_3_6",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "60",
+      "name": "スカート_4_6",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "61",
+      "name": "スカート_5_6",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "62",
+      "name": "スカート_6_6",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "63",
+      "name": "スカート_7_6",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "64",
+      "name": "スカート_0_5",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "65",
+      "name": "スカート_1_5",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "66",
+      "name": "スカート_2_5",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "67",
+      "name": "スカート_3_5",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "68",
+      "name": "スカート_4_5",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "69",
+      "name": "スカート_5_5",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "70",
+      "name": "スカート_6_5",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "71",
+      "name": "スカート_7_5",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "72",
+      "name": "スカート_0_4",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "73",
+      "name": "スカート_1_4",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "74",
+      "name": "スカート_2_4",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "75",
+      "name": "スカート_3_4",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "76",
+      "name": "スカート_4_4",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "77",
+      "name": "スカート_5_4",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "78",
+      "name": "スカート_6_4",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "79",
+      "name": "スカート_7_4",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "80",
+      "name": "スカート_0_3",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "81",
+      "name": "スカート_1_3",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "82",
+      "name": "スカート_2_3",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "83",
+      "name": "スカート_3_3",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "84",
+      "name": "スカート_4_3",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "85",
+      "name": "スカート_5_3",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "86",
+      "name": "スカート_6_3",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "87",
+      "name": "スカート_7_3",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "88",
+      "name": "スカート_0_2",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "89",
+      "name": "スカート_1_2",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "90",
+      "name": "スカート_2_2",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "91",
+      "name": "スカート_3_2",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "92",
+      "name": "スカート_4_2",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "93",
+      "name": "スカート_5_2",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "94",
+      "name": "スカート_6_2",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "95",
+      "name": "スカート_7_2",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "96",
+      "name": "スカート_0_1",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "97",
+      "name": "スカート_1_1",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "98",
+      "name": "スカート_2_1",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "99",
+      "name": "スカート_3_1",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "100",
+      "name": "スカート_4_1",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "101",
+      "name": "スカート_5_1",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "102",
+      "name": "スカート_6_1",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "103",
+      "name": "スカート_7_1",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "104",
+      "name": "スカート_0_0",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "105",
+      "name": "スカート_1_0",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "106",
+      "name": "スカート_2_0",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "107",
+      "name": "スカート_3_0",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "108",
+      "name": "スカート_4_0",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "109",
+      "name": "スカート_5_0",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "110",
+      "name": "スカート_6_0",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "111",
+      "name": "スカート_7_0",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "112",
+      "name": "下半身先",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "113",
+      "name": "腰キャンセル左",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "114",
+      "name": "左足D",
+      "legacy_error": 2.220446049250313e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 0,
+      "legacy_rotations": [
+        [
+          -0.1334905650199314,
+          0.19603100049653463,
+          0.1582238390645655
+        ],
+        [
+          6.149694742159655,
+          6.479216307676121,
+          6.441409146244152
+        ]
+      ]
+    },
+    {
+      "index": "115",
+      "name": "左ひざD",
+      "legacy_error": 3.385219044834399e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 4,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.39208989355178037,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.675275200731367,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "116",
+      "name": "左足首D",
+      "legacy_error": 5.828670879282072e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 0,
+      "legacy_rotations": [
+        [
+          0.1730576555588923,
+          -0.4688171019353149,
+          -0.10087651807437314
+        ],
+        [
+          6.456242962738479,
+          5.814368205244271,
+          6.182308789105214
+        ]
+      ]
+    },
+    {
+      "index": "117",
+      "name": "左足先EX",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "118",
+      "name": "左足",
+      "legacy_error": 1.1379786002407855e-15,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 0,
+      "legacy_rotations": [
+        [
+          -0.13349056501993228,
+          0.19603100049653488,
+          0.1582238390645655
+        ],
+        [
+          6.149694742159653,
+          6.479216307676121,
+          6.441409146244152
+        ]
+      ]
+    },
+    {
+      "index": "119",
+      "name": "左ひざ",
+      "legacy_error": 3.385219044834399e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 4,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.39208989355178037,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.675275200731367,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "120",
+      "name": "左足首",
+      "legacy_error": 1.1379786002407855e-15,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 0,
+      "legacy_rotations": [
+        [
+          0.17305763910499183,
+          -0.46881710309467195,
+          -0.10087650594284181
+        ],
+        [
+          6.456242946284578,
+          5.814368204084914,
+          6.1823088012367435
+        ]
+      ]
+    },
+    {
+      "index": "121",
+      "name": "左つま先",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "122",
+      "name": "腰キャンセル右",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "123",
+      "name": "右足D",
+      "legacy_error": 4.0939474033052647e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 0,
+      "legacy_rotations": [
+        [
+          0.04395696699476676,
+          -0.15519938461994087,
+          -0.10860141019656488
+        ],
+        [
+          6.327142274174353,
+          6.127985922559645,
+          6.174583896983021
+        ]
+      ]
+    },
+    {
+      "index": "124",
+      "name": "右ひざD",
+      "legacy_error": 3.1882140369739483e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 4,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.306461758131182,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.589647065310769,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "125",
+      "name": "右足首D",
+      "legacy_error": 1.1332081106818492e-15,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 0,
+      "legacy_rotations": [
+        [
+          -0.08738814818622487,
+          -0.0036627048651771688,
+          0.07585356148935936
+        ],
+        [
+          6.195797158993361,
+          6.279522602314408,
+          6.359038868668946
+        ]
+      ]
+    },
+    {
+      "index": "126",
+      "name": "右足先EX",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "127",
+      "name": "右足",
+      "legacy_error": 4.0939474033052647e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 0,
+      "legacy_rotations": [
+        [
+          0.04395696699476676,
+          -0.15519938461994087,
+          -0.10860141019656488
+        ],
+        [
+          6.327142274174353,
+          6.127985922559645,
+          6.174583896983021
+        ]
+      ]
+    },
+    {
+      "index": "128",
+      "name": "右ひざ",
+      "legacy_error": 3.1882140369739483e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 4,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.306461758131182,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.589647065310769,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "129",
+      "name": "右足首",
+      "legacy_error": 1.1332081106818492e-15,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 0,
+      "legacy_rotations": [
+        [
+          -0.08738814818622487,
+          -0.0036627048651771688,
+          0.07585356148935936
+        ],
+        [
+          6.195797158993361,
+          6.279522602314408,
+          6.359038868668946
+        ]
+      ]
+    },
+    {
+      "index": "130",
+      "name": "右つま先",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "131",
+      "name": "上半身",
+      "legacy_error": 6.453171330633722e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 1,
+      "legacy_rotations": [
+        [
+          3.1415920257566756,
+          -0.060000061892893974,
+          0.0
+        ],
+        [
+          9.424777332936262,
+          6.223185245286693,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "132",
+      "name": "上半身2",
+      "legacy_error": 6.432168920806451e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 4,
+      "legacy_rotations": [
+        [
+          -8.881784197001252e-16,
+          0.010000005410379247,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.293185312589966,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "133",
+      "name": "ネクタイ親",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "134",
+      "name": "ネクタイ1",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "135",
+      "name": "ネクタイ2",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "136",
+      "name": "ネクタイ3",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "137",
+      "name": "ネクタイ4",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "138",
+      "name": "ネクタイ5",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "139",
+      "name": "ネクタイ6",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "140",
+      "name": "ネクタイ7",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "141",
+      "name": "ネクタイ8",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "142",
+      "name": "ネクタイ9",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "143",
+      "name": "ネクタイ10",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "144",
+      "name": "ネクタイ11",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "145",
+      "name": "ネクタイ12",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "146",
+      "name": "ネクタイ13",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "147",
+      "name": "右胸",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "148",
+      "name": "右胸先",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "149",
+      "name": "左胸",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "150",
+      "name": "左胸先",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "151",
+      "name": "左肩P",
+      "legacy_error": 2.82836368929565e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 4,
+      "legacy_rotations": [
+        [
+          0.1699999914260642,
+          -1.3460024206324306e-09,
+          0.0
+        ],
+        [
+          6.453185298605651,
+          6.283185305833584,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "152",
+      "name": "左肩",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "153",
+      "name": "左腕W",
+      "legacy_error": 6.591949208711867e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 0,
+      "legacy_rotations": [
+        [
+          0.011788405699783585,
+          0.05256745115640006,
+          0.631702978485196
+        ],
+        [
+          6.2949737128793695,
+          6.335752758335986,
+          6.914888285664782
+        ]
+      ]
+    },
+    {
+      "index": "154",
+      "name": "左腕W先",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "155",
+      "name": "左肩C",
+      "legacy_error": 2.8283635890000007e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 2,
+      "legacy_rotations": [
+        [
+          -0.16999997673970668,
+          -1.846157005047644e-09,
+          2.9802322387695312e-08
+        ],
+        [
+          6.1131853304398796,
+          6.283185305333429,
+          6.283185336981909
+        ]
+      ]
+    },
+    {
+      "index": "156",
+      "name": "左腕",
+      "legacy_error": 4.3237982638721917e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 0,
+      "legacy_rotations": [
+        [
+          0.0020066999229168777,
+          0.09003950097412423,
+          0.6397690447362125
+        ],
+        [
+          6.285192007102503,
+          6.373224808153711,
+          6.9229543519157986
+        ]
+      ]
+    },
+    {
+      "index": "157",
+      "name": "左腕捩",
+      "legacy_error": 5.551115123125783e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 0,
+      "legacy_rotations": [
+        [
+          0.43929902000871157,
+          -0.43759600876821736,
+          0.11557608128990901
+        ],
+        [
+          6.7224843271882975,
+          5.845589298411369,
+          6.398761388469495
+        ]
+      ]
+    },
+    {
+      "index": "158",
+      "name": "左ひじW",
+      "legacy_error": 1.970645868709653e-15,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 0,
+      "legacy_rotations": [
+        [
+          -0.27226470959446125,
+          -0.22272808015028822,
+          -0.030633249664784756
+        ],
+        [
+          6.010920597585125,
+          6.060457227029296,
+          6.2525520575148015
+        ]
+      ]
+    },
+    {
+      "index": "159",
+      "name": "左ひじW先",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "160",
+      "name": "左ひじ",
+      "legacy_error": 1.0547118733938987e-15,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 0,
+      "legacy_rotations": [
+        [
+          -0.27226468016292227,
+          -0.22272811098672296,
+          -0.030633468096262106
+        ],
+        [
+          6.010920627016663,
+          6.060457196192864,
+          6.252551839083324
+        ]
+      ]
+    },
+    {
+      "index": "161",
+      "name": "左腕WIK",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "162",
+      "name": "左手捩",
+      "legacy_error": 4.996003610813204e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 0,
+      "legacy_rotations": [
+        [
+          -0.40969921996080405,
+          0.4370965091234583,
+          0.10420560109461115
+        ],
+        [
+          5.873486087218783,
+          6.720281816303045,
+          6.387390908274197
+        ]
+      ]
+    },
+    {
+      "index": "163",
+      "name": "左手W",
+      "legacy_error": 6.713379852030243e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 0,
+      "legacy_rotations": [
+        [
+          -0.022425816675063714,
+          0.008164571211379795,
+          0.378604967502423
+        ],
+        [
+          6.2607594905045225,
+          6.291349878390966,
+          6.6617902746820095
+        ]
+      ]
+    },
+    {
+      "index": "164",
+      "name": "左手W先",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "165",
+      "name": "左手首",
+      "legacy_error": 3.1830655095336293e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 1,
+      "legacy_rotations": [
+        [
+          -3.853715213608666e-08,
+          2.1277967832133968e-08,
+          0.3800000132171846
+        ],
+        [
+          6.283185268642434,
+          6.283185328457554,
+          6.663185320396771
+        ]
+      ]
+    },
+    {
+      "index": "166",
+      "name": "左小指１",
+      "legacy_error": 1.1379786002407855e-15,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 0,
+      "legacy_rotations": [
+        [
+          0.2653497096331832,
+          -0.06857852550693178,
+          1.5965153313566276
+        ],
+        [
+          6.548535016812769,
+          6.214606781672654,
+          7.879700638536214
+        ]
+      ]
+    },
+    {
+      "index": "167",
+      "name": "左小指２",
+      "legacy_error": 3.0408842795431965e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 0,
+      "legacy_rotations": [
+        [
+          1.6101447499736155e-06,
+          1.186356143987448e-06,
+          1.2700000797851962
+        ],
+        [
+          6.283186917324336,
+          6.28318649353573,
+          7.553185386964783
+        ]
+      ]
+    },
+    {
+      "index": "168",
+      "name": "左小指３",
+      "legacy_error": 3.30265769430977e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 0,
+      "legacy_rotations": [
+        [
+          1.0368366929465916e-06,
+          -1.7102549918490695e-06,
+          1.0900002540413953
+        ],
+        [
+          6.283186344016279,
+          6.283183596924594,
+          7.373185561220982
+        ]
+      ]
+    },
+    {
+      "index": "169",
+      "name": "左小指３先",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "170",
+      "name": "左薬指１",
+      "legacy_error": 1.1796119636642288e-15,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 0,
+      "legacy_rotations": [
+        [
+          0.15865715915413436,
+          -0.03578510809596924,
+          1.419458403579626
+        ],
+        [
+          6.44184246633372,
+          6.247400199083616,
+          7.7026437107592125
+        ]
+      ]
+    },
+    {
+      "index": "171",
+      "name": "左薬指２",
+      "legacy_error": 6.661338147750939e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 0,
+      "legacy_rotations": [
+        [
+          1.6041929029583914e-06,
+          1.194392211798628e-06,
+          1.2800003194965996
+        ],
+        [
+          6.283186911372489,
+          6.283186501571798,
+          7.563185626676185
+        ]
+      ]
+    },
+    {
+      "index": "172",
+      "name": "左薬指３",
+      "legacy_error": 3.063351828469117e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 0,
+      "legacy_rotations": [
+        [
+          1.1863561439889857e-06,
+          -1.6101447499750066e-06,
+          1.2700000797890167
+        ],
+        [
+          6.28318649353573,
+          6.283183697034836,
+          7.553185386968603
+        ]
+      ]
+    },
+    {
+      "index": "173",
+      "name": "左薬指３先",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "174",
+      "name": "左中指１",
+      "legacy_error": 3.22397468625695e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 0,
+      "legacy_rotations": [
+        [
+          1.6838019973858998e-06,
+          1.0792640523485327e-06,
+          1.1399999456271812
+        ],
+        [
+          6.283186990981584,
+          6.283186386443639,
+          7.423185252806768
+        ]
+      ]
+    },
+    {
+      "index": "175",
+      "name": "左中指２",
+      "legacy_error": 2.6911210822158464e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 0,
+      "legacy_rotations": [
+        [
+          1.3349259688758398e-06,
+          1.4892859780932946e-06,
+          1.6799994995697185
+        ],
+        [
+          6.283186642105555,
+          6.283186796465564,
+          7.963184806749305
+        ]
+      ]
+    },
+    {
+      "index": "176",
+      "name": "左中指３",
+      "legacy_error": 3.2465735252896945e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 0,
+      "legacy_rotations": [
+        [
+          1.0792650755316021e-06,
+          -1.6838046121847583e-06,
+          1.1399993835301447
+        ],
+        [
+          6.283186386444662,
+          6.283183623374974,
+          7.423184690709731
+        ]
+      ]
+    },
+    {
+      "index": "177",
+      "name": "左中指３先",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "178",
+      "name": "左人指１",
+      "legacy_error": 1.124100812432971e-15,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 0,
+      "legacy_rotations": [
+        [
+          -0.12409519176005457,
+          0.0388422114390347,
+          0.6424115887827698
+        ],
+        [
+          6.159090115419531,
+          6.322027518618621,
+          6.925596895962356
+        ]
+      ]
+    },
+    {
+      "index": "179",
+      "name": "左人指２",
+      "legacy_error": 5.551115123125783e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 0,
+      "legacy_rotations": [
+        [
+          4.46484000346334e-06,
+          -2.554405682531069e-07,
+          2.09999889849854
+        ],
+        [
+          6.28318977201959,
+          6.283185051739018,
+          8.383184205678127
+        ]
+      ]
+    },
+    {
+      "index": "180",
+      "name": "左人指３",
+      "legacy_error": 3.4170071421891005e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 0,
+      "legacy_rotations": [
+        [
+          -1.7785869204089977e-06,
+          -9.146775141744001e-07,
+          0.9499999219871782
+        ],
+        [
+          6.283183528592666,
+          6.283184392502072,
+          7.233185229166764
+        ]
+      ]
+    },
+    {
+      "index": "181",
+      "name": "左人指３先",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "182",
+      "name": "左親指０",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "183",
+      "name": "左親指１",
+      "legacy_error": 6.106226635438361e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 0,
+      "legacy_rotations": [
+        [
+          0.25238228841168114,
+          0.2445140382356147,
+          -0.42067169943797467
+        ],
+        [
+          6.535567595591267,
+          6.527699345415201,
+          5.862513607741612
+        ]
+      ]
+    },
+    {
+      "index": "184",
+      "name": "左親指２",
+      "legacy_error": 1.096345236817342e-15,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 0,
+      "legacy_rotations": [
+        [
+          -0.053123281188538485,
+          -0.19283919241649272,
+          -0.11317813428421086
+        ],
+        [
+          6.230062025991048,
+          6.0903461147630935,
+          6.1700071728953745
+        ]
+      ]
+    },
+    {
+      "index": "185",
+      "name": "左親指２先",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "186",
+      "name": "左ひじWIK",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "187",
+      "name": "左手先",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "188",
+      "name": "左手WIK",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "189",
+      "name": "左ダミー",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "190",
+      "name": "右肩P",
+      "legacy_error": 6.38378239159465e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 4,
+      "legacy_rotations": [
+        [
+          -0.1699999914260646,
+          -1.3460024206324306e-09,
+          0.0
+        ],
+        [
+          6.1131853157535225,
+          6.283185305833584,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "191",
+      "name": "右肩",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "192",
+      "name": "右腕W",
+      "legacy_error": 1.1345091532888318e-15,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 0,
+      "legacy_rotations": [
+        [
+          -0.01178841409269804,
+          0.05256741394976513,
+          -0.6317028107301548
+        ],
+        [
+          6.271396893086887,
+          6.335752721129351,
+          5.651482496449432
+        ]
+      ]
+    },
+    {
+      "index": "193",
+      "name": "右腕W先",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "194",
+      "name": "右肩C",
+      "legacy_error": 1.1582114909633917e-15,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 2,
+      "legacy_rotations": [
+        [
+          0.16999997673970707,
+          -1.846157005047644e-09,
+          -2.5809568704460162e-08
+        ],
+        [
+          6.453185283919293,
+          6.283185305333429,
+          6.283185281370017
+        ]
+      ]
+    },
+    {
+      "index": "195",
+      "name": "右腕",
+      "legacy_error": 6.40546643504436e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 0,
+      "legacy_rotations": [
+        [
+          -0.002006699922916688,
+          0.09003950097412423,
+          -0.6397690447362123
+        ],
+        [
+          6.28117860725667,
+          6.373224808153711,
+          5.643416262443374
+        ]
+      ]
+    },
+    {
+      "index": "196",
+      "name": "右腕捩",
+      "legacy_error": 9.992007221626409e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 0,
+      "legacy_rotations": [
+        [
+          -0.4392993999648622,
+          -0.43759632180841646,
+          -0.1155762454295548
+        ],
+        [
+          5.843885907214723,
+          5.845588985371169,
+          6.167609061750031
+        ]
+      ]
+    },
+    {
+      "index": "197",
+      "name": "右ひじW",
+      "legacy_error": 1.1102230246251565e-15,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 0,
+      "legacy_rotations": [
+        [
+          0.27226469316001806,
+          -0.22272799480373795,
+          0.03063329142913808
+        ],
+        [
+          6.555450000339604,
+          6.060457312375847,
+          6.313818598608725
+        ]
+      ]
+    },
+    {
+      "index": "198",
+      "name": "キューブ親",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "199",
+      "name": "キューブIK",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "200",
+      "name": "キューブ先",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "201",
+      "name": "キューブ",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "202",
+      "name": "右ひじW先",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "203",
+      "name": "右ひじ",
+      "legacy_error": 6.38378239159465e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 0,
+      "legacy_rotations": [
+        [
+          0.27226468016292243,
+          -0.22272811098672296,
+          0.0306334680962691
+        ],
+        [
+          6.5554499873425085,
+          6.060457196192864,
+          6.313818775275855
+        ]
+      ]
+    },
+    {
+      "index": "204",
+      "name": "右腕WIK",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "205",
+      "name": "右手捩",
+      "legacy_error": 7.216449660063518e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 0,
+      "legacy_rotations": [
+        [
+          0.40969950582168024,
+          0.4370967605477996,
+          -0.10420573101148367
+        ],
+        [
+          6.692884813001267,
+          6.720282067727386,
+          6.1789795761681034
+        ]
+      ]
+    },
+    {
+      "index": "206",
+      "name": "右手W",
+      "legacy_error": 1.1102230246251565e-15,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 0,
+      "legacy_rotations": [
+        [
+          0.022425760807897058,
+          0.008164533038656413,
+          -0.37860443072816974
+        ],
+        [
+          6.305611067987483,
+          6.291349840218243,
+          5.904580876451416
+        ]
+      ]
+    },
+    {
+      "index": "207",
+      "name": "右手W先",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "208",
+      "name": "右手首",
+      "legacy_error": 3.1830652448358333e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 1,
+      "legacy_rotations": [
+        [
+          3.8537152136086654e-08,
+          2.1277967832133968e-08,
+          -0.3800000132171846
+        ],
+        [
+          6.283185345716738,
+          6.283185328457554,
+          5.903185293962402
+        ]
+      ]
+    },
+    {
+      "index": "209",
+      "name": "右小指１",
+      "legacy_error": 1.1796119636642288e-15,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 0,
+      "legacy_rotations": [
+        [
+          -0.26534970963318294,
+          -0.06857852550693178,
+          -1.5965153313566276
+        ],
+        [
+          6.017835597546403,
+          6.214606781672654,
+          4.686669975822959
+        ]
+      ]
+    },
+    {
+      "index": "210",
+      "name": "右小指２",
+      "legacy_error": 3.058799026377625e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 0,
+      "legacy_rotations": [
+        [
+          -1.6101447499750066e-06,
+          1.186356143987448e-06,
+          -1.2700000797851967
+        ],
+        [
+          6.283183697034836,
+          6.28318649353573,
+          5.0131852273943895
+        ]
+      ]
+    },
+    {
+      "index": "211",
+      "name": "右小指３",
+      "legacy_error": 3.3043687008632236e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 0,
+      "legacy_rotations": [
+        [
+          -1.036836692946963e-06,
+          -1.7102549918490695e-06,
+          -1.0900002540413958
+        ],
+        [
+          6.283184270342893,
+          6.283183596924594,
+          5.1931850531381905
+        ]
+      ]
+    },
+    {
+      "index": "212",
+      "name": "右小指３先",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "213",
+      "name": "右薬指１",
+      "legacy_error": 1.304512053934559e-15,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 0,
+      "legacy_rotations": [
+        [
+          -0.15865715915413414,
+          -0.03578510809596924,
+          -1.4194584035796263
+        ],
+        [
+          6.124528148025451,
+          6.247400199083616,
+          4.863726903599961
+        ]
+      ]
+    },
+    {
+      "index": "214",
+      "name": "右薬指２",
+      "legacy_error": 3.042682106973744e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 0,
+      "legacy_rotations": [
+        [
+          -1.6041929029597668e-06,
+          1.194392211798628e-06,
+          -1.2800003194965992
+        ],
+        [
+          6.283183702986683,
+          6.283186501571798,
+          5.003184987682987
+        ]
+      ]
+    },
+    {
+      "index": "215",
+      "name": "右薬指３",
+      "legacy_error": 1.0547118733938987e-15,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 0,
+      "legacy_rotations": [
+        [
+          -1.186356143989542e-06,
+          -1.6101447499750066e-06,
+          -1.2700000797890167
+        ],
+        [
+          6.283184120823442,
+          6.283183697034836,
+          5.013185227390569
+        ]
+      ]
+    },
+    {
+      "index": "216",
+      "name": "右薬指３先",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "217",
+      "name": "右中指１",
+      "legacy_error": 3.2401890144497653e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 0,
+      "legacy_rotations": [
+        [
+          -1.6838019973874907e-06,
+          1.0792640523485327e-06,
+          -1.1399999456271814
+        ],
+        [
+          6.283183623377589,
+          6.283186386443639,
+          5.143185361552405
+        ]
+      ]
+    },
+    {
+      "index": "218",
+      "name": "右中指２",
+      "legacy_error": 6.38378239159465e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 0,
+      "legacy_rotations": [
+        [
+          -1.3349259688766324e-06,
+          1.4892859780932946e-06,
+          -1.6799994995697185
+        ],
+        [
+          6.283183972253617,
+          6.283186796465564,
+          4.603185807609869
+        ]
+      ]
+    },
+    {
+      "index": "219",
+      "name": "右中指３",
+      "legacy_error": 1.0547118733938987e-15,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 0,
+      "legacy_rotations": [
+        [
+          -1.079265075532021e-06,
+          -1.6838046121847583e-06,
+          -1.139999383530145
+        ],
+        [
+          6.283184227914511,
+          6.283183623374974,
+          5.14318592364944
+        ]
+      ]
+    },
+    {
+      "index": "220",
+      "name": "右中指３先",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "221",
+      "name": "右人指１",
+      "legacy_error": 2.220446049250313e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 0,
+      "legacy_rotations": [
+        [
+          0.12409519176005414,
+          0.0388422114390347,
+          -0.6424115887827693
+        ],
+        [
+          6.407280498939641,
+          6.322027518618621,
+          5.640773718396817
+        ]
+      ]
+    },
+    {
+      "index": "222",
+      "name": "右人指２",
+      "legacy_error": 9.992007221626409e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 0,
+      "legacy_rotations": [
+        [
+          -4.464840003493009e-06,
+          -2.554405682531069e-07,
+          -2.09999889849854
+        ],
+        [
+          6.283180842339583,
+          6.283185051739018,
+          4.1831864086810455
+        ]
+      ]
+    },
+    {
+      "index": "223",
+      "name": "右人指３",
+      "legacy_error": 3.4017520788090505e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 0,
+      "legacy_rotations": [
+        [
+          1.7785869204071228e-06,
+          -9.146775141744001e-07,
+          -0.9499999219871782
+        ],
+        [
+          6.283187085766507,
+          6.283184392502072,
+          5.333185385192408
+        ]
+      ]
+    },
+    {
+      "index": "224",
+      "name": "右人指３先",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "225",
+      "name": "右親指０",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "226",
+      "name": "右親指１",
+      "legacy_error": 6.661338147750939e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 0,
+      "legacy_rotations": [
+        [
+          -0.2523822884116811,
+          0.2445140382356147,
+          0.42067169943797506
+        ],
+        [
+          6.030803018767905,
+          6.527699345415201,
+          6.703857006617561
+        ]
+      ]
+    },
+    {
+      "index": "227",
+      "name": "右親指２",
+      "legacy_error": 2.255140518769849e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 0,
+      "legacy_rotations": [
+        [
+          0.053123281188538436,
+          -0.19283919241649272,
+          0.11317813428421147
+        ],
+        [
+          6.336308588368125,
+          6.0903461147630935,
+          6.396363441463798
+        ]
+      ]
+    },
+    {
+      "index": "228",
+      "name": "右親指２先",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "229",
+      "name": "右ひじWIK",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "230",
+      "name": "右手先",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "231",
+      "name": "右手WIK",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "232",
+      "name": "右ダミー",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "233",
+      "name": "首W",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "234",
+      "name": "首W先",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "235",
+      "name": "首",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "236",
+      "name": "頭",
+      "legacy_error": 2.9598731061867165e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 4,
+      "legacy_rotations": [
+        [
+          -1.5987211554602254e-14,
+          0.20999999789991167,
+          0.0
+        ],
+        [
+          6.28318530717957,
+          6.493185305079498,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "237",
+      "name": "髮親",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "238",
+      "name": "右髮親",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "239",
+      "name": "右髮1",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "240",
+      "name": "右髮2",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "241",
+      "name": "右髮3",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "242",
+      "name": "右髮4",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "243",
+      "name": "右髮5",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "244",
+      "name": "右髮6",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "245",
+      "name": "右髮7",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "246",
+      "name": "右髮8",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "247",
+      "name": "右髮9",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "248",
+      "name": "右髮10",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "249",
+      "name": "右髮11",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "250",
+      "name": "右髮12",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "251",
+      "name": "右髮13",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "252",
+      "name": "右髮14",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "253",
+      "name": "右髮15",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "254",
+      "name": "右髮16",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "255",
+      "name": "右髮17",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "256",
+      "name": "右髮18",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "257",
+      "name": "右髮19",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "258",
+      "name": "右髮20",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "259",
+      "name": "右髪飾り",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "260",
+      "name": "左髮親",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "261",
+      "name": "左髮1",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "262",
+      "name": "左髮2",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "263",
+      "name": "左髮3",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "264",
+      "name": "左髮4",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "265",
+      "name": "左髮5",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "266",
+      "name": "左髮6",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "267",
+      "name": "左髮7",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "268",
+      "name": "左髮8",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "269",
+      "name": "左髮9",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "270",
+      "name": "左髮10",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "271",
+      "name": "左髮11",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "272",
+      "name": "左髮12",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "273",
+      "name": "左髮13",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "274",
+      "name": "左髮14",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "275",
+      "name": "左髮15",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "276",
+      "name": "左髮16",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "277",
+      "name": "左髮17",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "278",
+      "name": "左髮18",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "279",
+      "name": "左髮19",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "280",
+      "name": "左髮20",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "281",
+      "name": "左髪飾り",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "282",
+      "name": "右前髮2_1",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "283",
+      "name": "右前髮2_2",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "284",
+      "name": "右前髮1_1",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "285",
+      "name": "右前髮1_2",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "286",
+      "name": "左前髮2_1",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "287",
+      "name": "左前髮2_2",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "288",
+      "name": "左前髮1_1",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "289",
+      "name": "左前髮1_2",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "290",
+      "name": "前髮5_1",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "291",
+      "name": "前髮5_2",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "292",
+      "name": "前髮5_3",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "293",
+      "name": "前髮4_1",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "294",
+      "name": "前髮4_2",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "295",
+      "name": "前髮3_1",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "296",
+      "name": "前髮3_2",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "297",
+      "name": "前髮2_1",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "298",
+      "name": "前髮2_2",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "299",
+      "name": "前髮1_1",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "300",
+      "name": "前髮1_2",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "301",
+      "name": "歯下",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "302",
+      "name": "歯上",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "303",
+      "name": "舌親",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "304",
+      "name": "舌1",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "305",
+      "name": "舌2",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "306",
+      "name": "舌3",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "307",
+      "name": "Excited!",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "308",
+      "name": "exciting",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "309",
+      "name": "メガネ",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "310",
+      "name": "頭先",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "311",
+      "name": "両目",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "312",
+      "name": "両目先",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "313",
+      "name": "右目",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "314",
+      "name": "右目先",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "315",
+      "name": "左目",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "316",
+      "name": "左目先",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "317",
+      "name": "首WIK",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    },
+    {
+      "index": "318",
+      "name": "操作中心",
+      "legacy_error": 2.449293598294707e-16,
+      "canonical_error": 0.0,
+      "float32_component_mismatches": 6,
+      "legacy_rotations": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          6.283185307179586,
+          6.283185307179586,
+          6.283185307179586
+        ]
+      ]
+    }
+  ],
+  "legacy_max_error": 1.970645868709653e-15,
+  "legacy_changed_bones": 319,
+  "legacy_float32_changed_bones": 269,
+  "canonical_max_error": 0.0
+}
