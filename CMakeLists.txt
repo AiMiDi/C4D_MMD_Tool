@@ -62,7 +62,7 @@ set(CMT_SDK_BUILD_CONFIG "Debug" CACHE STRING "Build configuration: Debug | Rele
 set(CMT_SDK_BUILD_TARGET "mmdtool" CACHE STRING "Build only this target; empty = default/all targets")
 
 # All sdk_* trees for cmt-package / cmt-sdk-configure-all (matches installer XdlSdkRel, deduplicated)
-set(_CMT_ALL_SDK_TREES sdk_r20 sdk_r21 sdk_r23 sdk_r25 sdk_2023 sdk_2024 sdk_2025 sdk_2026)
+set(_CMT_ALL_SDK_TREES sdk_r20 sdk_r21 sdk_r23 sdk_r25 sdk_2023 sdk_2024 sdk_2025 sdk_2026 sdk_2027)
 
 cmake_path(ABSOLUTE_PATH CMT_SDK_DIR NORMALIZE OUTPUT_VARIABLE CMT_SDK_DIR_ABS)
 if(CMT_SDK_BINARY_DIR STREQUAL "")

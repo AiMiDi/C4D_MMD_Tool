@@ -1,0 +1,10 @@
+#ifndef ODATACAPTURE_H__
+#define ODATACAPTURE_H__
+
+enum
+{
+	DATACAPTURE_FILENAME  = 1000,
+	DATACAPTURE_UID,
+};
+
+#endif // OBODYCAPTURE_H__

@@ -1,0 +1,306 @@
+{
+  "schema_version": 1,
+  "source_sha256": "f94e9a12d567648c666e99a3b59fcf6cc12c126a06e49ddd70c12ed537520a01",
+  "assets": [
+    {
+      "path": "S:\\tmp\\cmt-sdk2027-native-20261019\\real-assets\\Sour\\Black.pmx",
+      "sha256": "04fbfe59e4ea8ef1704b32bef71516b20afbd1e4abf1880dbc4f107e225a90ea"
+    },
+    {
+      "path": "S:\\tmp\\cmt-sdk2027-native-20261019\\real-assets\\Stay Tonight Heaven Lee Ver. 动作.vmd",
+      "sha256": "db7d3a542359c92d057d28be4b38e89c3368de1185bf23d1bbbd4d0e67eb187d"
+    }
+  ],
+  "hosts": {
+    "2026": {
+      "version": 2026400,
+      "plugin": {
+        "path": "C:\\code\\C4D_MMD_Tool\\_build_msvc\\sdk_2026\\bin\\Release\\plugins\\mmdtool\\mmdtool.xdl64",
+        "sha256": "19ceaae594a02dc57ce66edb3ffe6964fea5094ee09fee64f610f85309e323b7"
+      }
+    },
+    "2027": {
+      "version": 2027000,
+      "plugin": {
+        "path": "C:\\code\\C4D_MMD_Tool\\_build_msvc\\sdk_2027_v143\\bin\\Release\\plugins\\mmdtool\\mmdtool.xdl64",
+        "sha256": "40506105a9d082675d30f92c4b566472929247d49424829e47bfa192a1fd0d7f"
+      }
+    }
+  },
+  "same_source_and_assets": true,
+  "frame_window": [
+    0,
+    60
+  ],
+  "fps": 30,
+  "tolerance": 0.0001,
+  "cross_version": {
+    "reference": {
+      "frames": 61,
+      "finite_bone_count": 319,
+      "compared_dynamic_bone_count": 145,
+      "compared_matrix_components": 106140,
+      "max_bone_matrix_component_error": 0.0,
+      "max_error_location": null,
+      "max_final_point_coordinate_error": 0.0,
+      "compared_final_point_components": 100824,
+      "equal_geometry_hash_frames": 61,
+      "tolerance": 0.0001,
+      "passed": true
+    },
+    "seek_replay": {
+      "frames": 61,
+      "finite_bone_count": 319,
+      "compared_dynamic_bone_count": 145,
+      "compared_matrix_components": 106140,
+      "max_bone_matrix_component_error": 0.0,
+      "max_error_location": null,
+      "max_final_point_coordinate_error": 0.0,
+      "compared_final_point_components": 100824,
+      "equal_geometry_hash_frames": 61,
+      "tolerance": 0.0001,
+      "passed": true
+    },
+    "initial_reopen": {
+      "frames": 61,
+      "finite_bone_count": 319,
+      "compared_dynamic_bone_count": 145,
+      "compared_matrix_components": 106140,
+      "max_bone_matrix_component_error": 0.0,
+      "max_error_location": null,
+      "max_final_point_coordinate_error": 0.0,
+      "compared_final_point_components": 100824,
+      "equal_geometry_hash_frames": 61,
+      "tolerance": 0.0001,
+      "passed": true
+    },
+    "end_reopen": {
+      "frames": 61,
+      "finite_bone_count": 319,
+      "compared_dynamic_bone_count": 145,
+      "compared_matrix_components": 106140,
+      "max_bone_matrix_component_error": 0.0,
+      "max_error_location": null,
+      "max_final_point_coordinate_error": 0.0,
+      "compared_final_point_components": 100824,
+      "equal_geometry_hash_frames": 61,
+      "tolerance": 0.0001,
+      "passed": true
+    },
+    "physics_disabled": {
+      "frames": 61,
+      "finite_bone_count": 319,
+      "compared_dynamic_bone_count": 145,
+      "compared_matrix_components": 106140,
+      "max_bone_matrix_component_error": 0.0,
+      "max_error_location": null,
+      "max_final_point_coordinate_error": 0.0,
+      "compared_final_point_components": 100824,
+      "equal_geometry_hash_frames": 61,
+      "tolerance": 0.0001,
+      "passed": true
+    }
+  },
+  "within_version": {
+    "2026": {
+      "seek_replay": {
+        "frames": 61,
+        "finite_bone_count": 319,
+        "compared_dynamic_bone_count": 145,
+        "compared_matrix_components": 106140,
+        "max_bone_matrix_component_error": 0.045868372625538195,
+        "max_error_location": {
+          "frame": 39,
+          "bone_index": 279
+        },
+        "max_final_point_coordinate_error": 0.008281679299009248,
+        "compared_final_point_components": 100824,
+        "equal_geometry_hash_frames": 0,
+        "tolerance": 0.0001,
+        "passed": false
+      },
+      "initial_reopen": {
+        "frames": 61,
+        "finite_bone_count": 319,
+        "compared_dynamic_bone_count": 145,
+        "compared_matrix_components": 106140,
+        "max_bone_matrix_component_error": 3.552713678800501e-15,
+        "max_error_location": {
+          "frame": 0,
+          "bone_index": 57
+        },
+        "max_final_point_coordinate_error": 0.0,
+        "compared_final_point_components": 100824,
+        "equal_geometry_hash_frames": 59,
+        "tolerance": 0.0001,
+        "passed": true
+      },
+      "end_reopen": {
+        "frames": 61,
+        "finite_bone_count": 319,
+        "compared_dynamic_bone_count": 145,
+        "compared_matrix_components": 106140,
+        "max_bone_matrix_component_error": 0.045868372625538195,
+        "max_error_location": {
+          "frame": 39,
+          "bone_index": 279
+        },
+        "max_final_point_coordinate_error": 0.008281679299009248,
+        "compared_final_point_components": 100824,
+        "equal_geometry_hash_frames": 0,
+        "tolerance": 0.0001,
+        "passed": false
+      }
+    },
+    "2027": {
+      "seek_replay": {
+        "frames": 61,
+        "finite_bone_count": 319,
+        "compared_dynamic_bone_count": 145,
+        "compared_matrix_components": 106140,
+        "max_bone_matrix_component_error": 0.045868372625538195,
+        "max_error_location": {
+          "frame": 39,
+          "bone_index": 279
+        },
+        "max_final_point_coordinate_error": 0.008281679299009248,
+        "compared_final_point_components": 100824,
+        "equal_geometry_hash_frames": 0,
+        "tolerance": 0.0001,
+        "passed": false
+      },
+      "initial_reopen": {
+        "frames": 61,
+        "finite_bone_count": 319,
+        "compared_dynamic_bone_count": 145,
+        "compared_matrix_components": 106140,
+        "max_bone_matrix_component_error": 3.552713678800501e-15,
+        "max_error_location": {
+          "frame": 0,
+          "bone_index": 57
+        },
+        "max_final_point_coordinate_error": 0.0,
+        "compared_final_point_components": 100824,
+        "equal_geometry_hash_frames": 59,
+        "tolerance": 0.0001,
+        "passed": true
+      },
+      "end_reopen": {
+        "frames": 61,
+        "finite_bone_count": 319,
+        "compared_dynamic_bone_count": 145,
+        "compared_matrix_components": 106140,
+        "max_bone_matrix_component_error": 0.045868372625538195,
+        "max_error_location": {
+          "frame": 39,
+          "bone_index": 279
+        },
+        "max_final_point_coordinate_error": 0.008281679299009248,
+        "compared_final_point_components": 100824,
+        "equal_geometry_hash_frames": 0,
+        "tolerance": 0.0001,
+        "passed": false
+      }
+    }
+  },
+  "persistent_input_float32_hashes": {
+    "reference": {
+      "2026": "bb9a9e003dc5c2ac669bb599f1177a6a16d752eaf114b938060c70459cde1d1f",
+      "2027": "bb9a9e003dc5c2ac669bb599f1177a6a16d752eaf114b938060c70459cde1d1f",
+      "equal": true
+    },
+    "seek_replay": {
+      "2026": "bb9a9e003dc5c2ac669bb599f1177a6a16d752eaf114b938060c70459cde1d1f",
+      "2027": "bb9a9e003dc5c2ac669bb599f1177a6a16d752eaf114b938060c70459cde1d1f",
+      "equal": true
+    },
+    "initial_reopen": {
+      "2026": "775cdb5c97bb26a779bc68cb67f1af3336c3cd18c774f672d483affe7584b939",
+      "2027": "775cdb5c97bb26a779bc68cb67f1af3336c3cd18c774f672d483affe7584b939",
+      "equal": true
+    },
+    "end_reopen": {
+      "2026": "775cdb5c97bb26a779bc68cb67f1af3336c3cd18c774f672d483affe7584b939",
+      "2027": "775cdb5c97bb26a779bc68cb67f1af3336c3cd18c774f672d483affe7584b939",
+      "equal": true
+    },
+    "physics_disabled": {
+      "2026": "395299460090f023f71a125d33d46da2a23eb4dbb710e79de13fe237556a515a",
+      "2027": "395299460090f023f71a125d33d46da2a23eb4dbb710e79de13fe237556a515a",
+      "equal": true
+    }
+  },
+  "evidence": [
+    {
+      "path": "S:\\tmp\\cmt-sdk2026-compare-20261019\\extended\\receipt.json",
+      "bytes": 109296,
+      "sha256": "1c05cf91091d3cc09cdc002dba83cb33aecc55394f99dc3e7cceabbcfa8566e7"
+    },
+    {
+      "path": "S:\\tmp\\cmt-sdk2026-compare-20261019\\extended\\final-points.json",
+      "bytes": 10254694,
+      "sha256": "6a642ff6e59f750eea4a000369b832231eade154e7fb6a6884a7618893149c03"
+    },
+    {
+      "path": "S:\\tmp\\cmt-sdk2026-compare-20261019\\extended\\reference-trajectory.json",
+      "bytes": 2333808,
+      "sha256": "9a96986eb0ff6648c21f8a78c1907aeffdd5ec0608bb81ab6976c8c7c3f47ded"
+    },
+    {
+      "path": "S:\\tmp\\cmt-sdk2026-compare-20261019\\extended\\seek_replay-trajectory.json",
+      "bytes": 2334764,
+      "sha256": "342d58062d30b60595a4eb1ea18da56807b2812502b7676d67a7d908cea45fbd"
+    },
+    {
+      "path": "S:\\tmp\\cmt-sdk2026-compare-20261019\\extended\\initial_reopen-trajectory.json",
+      "bytes": 2333812,
+      "sha256": "c2d6374b7bee89c78bcfd1902417e8f17c98d01b6e8a367ff113d0c46b64c10b"
+    },
+    {
+      "path": "S:\\tmp\\cmt-sdk2026-compare-20261019\\extended\\end_reopen-trajectory.json",
+      "bytes": 2334764,
+      "sha256": "342d58062d30b60595a4eb1ea18da56807b2812502b7676d67a7d908cea45fbd"
+    },
+    {
+      "path": "S:\\tmp\\cmt-sdk2026-compare-20261019\\extended\\physics_disabled-trajectory.json",
+      "bytes": 2300114,
+      "sha256": "fec882b1d5d46f65ead405b5a927069034a5621c6b6c9e2148d72c3b52205579"
+    },
+    {
+      "path": "S:\\tmp\\cmt-sdk2027-native-20261019\\real-assets\\extended-complete\\receipt.json",
+      "bytes": 109430,
+      "sha256": "f86beb49a96687a318648199d41d05e421e39c8a184b8ee266ec44ec06030db9"
+    },
+    {
+      "path": "S:\\tmp\\cmt-sdk2027-native-20261019\\real-assets\\extended-complete\\final-points.json",
+      "bytes": 10254694,
+      "sha256": "6a642ff6e59f750eea4a000369b832231eade154e7fb6a6884a7618893149c03"
+    },
+    {
+      "path": "S:\\tmp\\cmt-sdk2027-native-20261019\\real-assets\\extended-complete\\reference-trajectory.json",
+      "bytes": 2333808,
+      "sha256": "9a96986eb0ff6648c21f8a78c1907aeffdd5ec0608bb81ab6976c8c7c3f47ded"
+    },
+    {
+      "path": "S:\\tmp\\cmt-sdk2027-native-20261019\\real-assets\\extended-complete\\seek_replay-trajectory.json",
+      "bytes": 2334764,
+      "sha256": "342d58062d30b60595a4eb1ea18da56807b2812502b7676d67a7d908cea45fbd"
+    },
+    {
+      "path": "S:\\tmp\\cmt-sdk2027-native-20261019\\real-assets\\extended-complete\\initial_reopen-trajectory.json",
+      "bytes": 2333812,
+      "sha256": "c2d6374b7bee89c78bcfd1902417e8f17c98d01b6e8a367ff113d0c46b64c10b"
+    },
+    {
+      "path": "S:\\tmp\\cmt-sdk2027-native-20261019\\real-assets\\extended-complete\\end_reopen-trajectory.json",
+      "bytes": 2334764,
+      "sha256": "342d58062d30b60595a4eb1ea18da56807b2812502b7676d67a7d908cea45fbd"
+    },
+    {
+      "path": "S:\\tmp\\cmt-sdk2027-native-20261019\\real-assets\\extended-complete\\physics_disabled-trajectory.json",
+      "bytes": 2300114,
+      "sha256": "fec882b1d5d46f65ead405b5a927069034a5621c6b6c9e2148d72c3b52205579"
+    }
+  ],
+  "interpretation": "The same strict replay failure reproduces in 2026.4.0 and 2027.0.0; the captured cross-version trajectories match. This case provides no evidence of a 2027-specific replay regression. It does not identify the underlying cause or accept strict replay."
+}

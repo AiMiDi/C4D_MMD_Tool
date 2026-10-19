@@ -1,0 +1,9 @@
+#ifndef XCOLORSTRIPES_H__
+#define XCOLORSTRIPES_H__
+
+enum
+{
+	COLORSTRIPESHADER_SCALE	= 1000 // VECTOR
+};
+
+#endif // XCOLORSTRIPES_H__

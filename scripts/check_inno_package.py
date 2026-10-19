@@ -20,7 +20,7 @@ import uuid
 REPO = Path(__file__).resolve().parents[1]
 VERSIONS = {"R20": "sdk_r20", "R21": "sdk_r21", "S22": "sdk_r21",
             "R23": "sdk_r23", "S24": "sdk_r23", "R25": "sdk_r25", "S26": "sdk_r25",
-            "2023": "sdk_2023", "2024": "sdk_2024", "2025": "sdk_2025", "2026": "sdk_2026"}
+            "2023": "sdk_2023", "2024": "sdk_2024", "2025": "sdk_2025", "2026": "sdk_2026", "2027": "sdk_2027"}
 MCP_FILES = ("run_mmdtool_mcp.py", "mmdtool_mcp/__init__.py", "mmdtool_mcp/schema.py",
              "mmdtool_mcp/host.py", "mmdtool_mcp/server.py")
 
@@ -164,7 +164,7 @@ def check(compiler, root, exercise_install, release_build_root=None):
             run(arguments + ["/LOG=" + str(root / "install-native.log")], root / "install-command.log")
             receipt["installed"] = True
             receipt["installed_file_checks"] = verify_payloads(root, payloads)
-            receipt["checks"].append("All 11 components install their matching eight SDK fixture payloads")
+            receipt["checks"].append(f"All {len(VERSIONS)} components install their matching {len(set(VERSIONS.values()))} SDK payloads")
             stale = root / "hosts/R20/plugins/CMT_Installer_Validation/obsolete.txt"
             stale.write_bytes(b"stale plugin fixture")
             run(arguments + ["/LOG=" + str(root / "upgrade-native.log")], root / "upgrade-command.log")

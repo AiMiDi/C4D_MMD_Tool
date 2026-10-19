@@ -1,0 +1,14 @@
+#ifndef XSLAVERTEXMAP_H__
+#define XSLAVERTEXMAP_H__
+
+enum
+{
+	SLA_DIRTY_VMAP_OBJECT											= 1001, // link
+	SLA_DIRTY_VMAP_INVERT											= 1002, // bool
+	SLA_DIRTY_VMAP_OCIO_COLORSPACE						= 1003, // long
+	SLA_DIRTY_VMAP_TAG_NAME    								= 1004, // string
+	SLA_DIRTY_VMAP_OCIO_COLORSPACE_NAME				= 1005, // not a UI element, but it is used to save the name of the profile.
+	SLA_DIRTY_VMAP_OCIO_USE_RENDER_COLORSPACE = 10000,
+};
+
+#endif // XSLAVERTEXMAP_H__

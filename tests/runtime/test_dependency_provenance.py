@@ -75,6 +75,12 @@ class DependencyProvenanceTests(unittest.TestCase):
         self.assertEqual(release["status"], "unknown")
         self.assertIn("libMMD.lib", release["missing_required"])
 
+    def test_modern_sdk_prebuilt_project_layout_is_supported(self):
+        modern = self.project.parents[3] / "modules/mmdtool_fixture/mmdtool.vcxproj"
+        modern.parent.mkdir(parents=True)
+        self.project.rename(modern)
+        self.assertEqual(runner.prebuilt_linker_identity(self.cache)["status"], "recorded")
+
     def test_unlinked_required_library_is_not_accepted_by_directory_scan(self):
         self.write_project(excluded=("BulletDynamics",))
         result = runner.prebuilt_linker_identity(self.cache)
@@ -98,6 +104,50 @@ class DependencyProvenanceTests(unittest.TestCase):
         result = runner.prebuilt_linker_identity(self.cache)
         self.assertEqual(result["status"], "unknown")
         self.assertEqual(result["reason"], "relative_prebuilt_cache_path_unresolved")
+
+    def subdir_project(self):
+        build = Path(self.cache["identity"]["path"]).parent
+        self.project.unlink()
+        self.project = build / "modules/mmdtool_fixture/mmdtool.vcxproj"
+        self.project.parent.mkdir(parents=True)
+        graph = ET.Element("Project")
+        group = ET.SubElement(graph, "ItemDefinitionGroup", {
+            "Condition": "'$(Configuration)|$(Platform)'=='Release|x64'"})
+        link = ET.SubElement(group, "Link")
+        ET.SubElement(link, "AdditionalDependencies").text = ";".join(
+            "../../bin/Release/libs/" + name + ".lib" for name in LIBRARIES)
+        references = ET.SubElement(graph, "ItemGroup")
+        for name in LIBRARIES:
+            ET.SubElement(references, "ProjectReference", {"Include": name + ".vcxproj"})
+            library = build / "bin/Release/libs" / (name + ".lib")
+            library.parent.mkdir(parents=True, exist_ok=True)
+            library.write_bytes(name.encode())
+        ET.ElementTree(graph).write(self.project, encoding="utf-8")
+        return build
+
+    def test_modern_subdir_release_inputs_are_recorded_without_needing_debug(self):
+        self.subdir_project()
+        result = runner.subdir_linker_identity(self.cache)
+        self.assertEqual(result["status"], "recorded")
+        self.assertEqual(len(result["configurations"]["Release"]["libraries"]), 7)
+        self.assertEqual(result["configurations"]["Debug"]["status"], "unknown")
+        self.assertFalse(result["source_build_relationship_verified"])
+
+    def test_subdir_missing_selected_input_is_unknown_despite_nearby_prebuilt(self):
+        build = self.subdir_project()
+        (build / "bin/Release/libs/libMMD.lib").unlink()
+        result = runner.subdir_linker_identity(self.cache)
+        self.assertEqual(result["status"], "unknown")
+        self.assertIn("libMMD.lib", result["configurations"]["Release"]["missing_required"])
+
+    def test_subdir_missing_dependency_target_reference_is_unknown(self):
+        self.subdir_project()
+        graph = ET.parse(self.project)
+        references = graph.find("ItemGroup")
+        references.remove(references[0])
+        graph.write(self.project, encoding="utf-8")
+        self.assertEqual(runner.subdir_linker_identity(self.cache)["reason"],
+                         "dependency_target_references_incomplete")
 
     def test_malformed_generated_project_remains_unknown(self):
         self.project.write_text("<broken", encoding="utf-8")

@@ -1,0 +1,50 @@
+#undef DELETE
+#undef INTERFACE
+#undef RELATIVE
+#undef ERROR
+#undef GetFirstChild
+#undef GetMessage
+#undef CreateWindow
+#undef GetObject
+#undef AddJob
+#undef GetClassInfo
+#undef PASSTHROUGH
+#undef SetPort
+#undef LoadString
+#undef LoadImage
+#undef DrawText
+#undef OFFSET
+#undef SB_NONE
+#undef ABSOLUTE
+#undef FindWindow
+#undef FindWindowW
+#undef FreeModule
+#ifdef IsMinimized
+	#undef IsMinimized
+#endif
+#ifdef LoadBitmap
+	#undef LoadBitmap
+#endif
+#undef rad1
+#undef rad2
+#undef rad3
+#undef rad4
+#undef rad5
+#undef rad6
+#undef rad7
+#undef rad8
+#undef rad9
+#undef rad10
+#undef rad11
+#undef rad12
+#undef rad13
+#undef rad14
+#undef rad15
+#undef rad16
+#undef AddPort
+#undef SendMessage
+#undef CreateDialog
+#undef WINDOWS
+#undef Int64ToInt
+#undef GetUserName
+#undef PLANES

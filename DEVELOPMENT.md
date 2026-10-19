@@ -8,10 +8,10 @@
 
 ### CI (GitHub Actions)
 
-- **`.github/workflows/build.yml`** — PRs and pushes to `main` compile `sdk_2026` Release on Windows 2022. CI does not execute automated tests or benchmarks; the local test presets below remain available. Manual dispatch and tag release calls run the complete **21-job Release matrix** (eight Windows, eight Intel macOS, five Apple Silicon SDKs). The matrix uses `release-windows` / `release-macos` configure presets with test targets disabled. Windows and Intel macOS upload complete plugin artifacts; Apple Silicon jobs compile only. Dependency caches include toolchain versions, architectures, build options, and nested submodule revisions.
+- **`.github/workflows/build.yml`** — PRs and pushes to `main` compile `sdk_2027` Release on Windows 2022. CI does not execute automated tests or benchmarks; the local test presets below remain available. Manual dispatch and tag release calls run the complete **24-job Release matrix** (nine Windows, nine Intel macOS, six Apple Silicon SDKs). The matrix uses `release-windows` / `release-macos` configure presets with test targets disabled. Windows and Intel macOS upload complete plugin artifacts; Apple Silicon jobs compile only. Dependency caches include toolchain versions, architectures, build options, and nested submodule revisions.
 - **`.github/workflows/package.yml`** — On tag `v*`: first selects a successful full Build run with matching runtime/build inputs, or calls `build.yml` when none is reusable. It lays out complete Windows artifacts under `_build_msvc/` for Inno Setup, zips each complete macOS artifact once (including its existing `res/`), and creates a **GitHub Release**. Packaging consumes built resources and does not add a second nested resource directory.
 
-Reuse verifies all 21 matrix jobs and all 16 unexpired SDK artifacts, including source commits and digests. Only explicitly listed documentation and packaging files may differ; source, resources, compiler configuration, SDKs and dependency gitlinks must match. CI saves `package-build-provenance.json`. Manual package dispatch accepts an optional `build_run_id`; an incompatible explicit run fails rather than silently rebuilding. With the input empty, selection is automatic and a fresh matrix is the fallback. Manual dispatch produces package artifacts; formal releases remain tag-triggered. Local provenance regressions: `python tests/test_package_build_reuse.py`.
+Reuse verifies all 24 matrix jobs and all 18 unexpired SDK artifacts, including source commits and digests. Only explicitly listed documentation and packaging files may differ; source, resources, compiler configuration, SDKs and dependency gitlinks must match. CI saves `package-build-provenance.json`. Manual package dispatch accepts an optional `build_run_id`; an incompatible explicit run fails rather than silently rebuilding. With the input empty, selection is automatic and a fresh matrix is the fallback. Manual dispatch produces package artifacts; formal releases remain tag-triggered. Local provenance regressions: `python tests/test_package_build_reuse.py`.
 
 Local packaging with Inno still uses `package-windows` + `inno-installer` / `CMakeUserPresets.json` as described below.
 
@@ -138,7 +138,7 @@ Start Cinema 4D normally with `g_additionalModulePath` pointing to the built `pl
 
 C4D_MMDTool is a Cinema 4D plugin for importing and managing MikuMikuDance (MMD) models, animation, cameras, rigid bodies, joints, and related data. It supports PMX/PMD and VMD/VPD.
 
-The project targets multiple Cinema 4D SDK versions (R20 through 2026). Active development uses the `source/` tree; the primary SDK is 2026.
+The project targets multiple Cinema 4D SDK versions (R20 through 2027). Active development uses the `source/` tree; the primary SDK is 2026.
 
 ---
 
@@ -166,7 +166,7 @@ C4D_MMDTool/
 │   │   ├── CMakeLists.txt          # Actual build config
 │   │   └── projectdefinition.txt   # Reference only when CMakeLists.txt exists
 │   └── sdk_modules.txt
-├── sdk_r20/, sdk_r21/, sdk_r23/, sdk_r25/, sdk_2023/ … sdk_2026/
+├── sdk_r20/, sdk_r21/, sdk_r23/, sdk_r25/, sdk_2023/ … sdk_2027/
 ├── docs/dev/                 # Import, export, runtime, and animation-debug maps
 ├── setup/                    # Inno Setup scripts
 └── .github/workflows/
@@ -271,7 +271,7 @@ Relevant only for **Mode B**. In Mode A, set the corresponding CMake variables d
 
 - Windows: `_build_msvc/sdk_2026/bin/{Debug|Release}/plugins/mmdtool/*.xdl64`（相对仓库根；其他 SDK 将 `sdk_2026` 换成对应目录名）
 - macOS: `.xlib` under the equivalent path
-- The post-build `res/` beside the plugin is a link to the resource tree selected by the SDK wrapper. `sdk_r20`, `sdk_r21`, and `sdk_r23` use `res/R20-S24`; `sdk_r25` and 2023–2026 use `res/S24_up`.
+- The post-build `res/` beside the plugin is a complete real copy of the resource tree selected by the SDK wrapper. `sdk_r20`, `sdk_r21`, and `sdk_r23` use `res/R20-S24`; `sdk_r25` and 2023–2027 use `res/S24_up`.
 
 ---
 
@@ -294,3 +294,22 @@ Human-readable metadata only when custom `CMakeLists.txt` exists—the build sys
 | `windows_vs2022_clangcl` | VS 2022 | ClangCL |
 | `macos_universal_xcode` | Xcode | Universal binary |
 | `linux_ninja` | Ninja Multi-Config | Linux |
+
+
+## Cinema 4D 2027 compatibility
+
+`sdk_2027/` contains the official 2027 SDK frameworks and build tools. Its thin plugin wrapper uses the common build layer; that layer translates plugin settings to the native descriptor API introduced in 2027. The default root development preset remains on 2026. CI and packaging include a separate 2027 binary and copied resources/MCP runtime.
+
+Build 2027 without launching Cinema 4D:
+
+```powershell
+cmake --preset windows_vs2022_v143 -S sdk_2027 -B _build_msvc/sdk_2027
+cmake --build _build_msvc/sdk_2027 --config Debug --target mmdtool
+cmake --build _build_msvc/sdk_2027 --config Release --target mmdtool
+```
+
+For Visual Studio 2026 with the v143 toolset installed, configure with `cmake -S sdk_2027 -B _build_msvc/sdk_2027_v143 -G "Visual Studio 18 2026" -A x64 -T v143`. The `windows_vs2026_v145` preset also remains available; use a separate build directory for each toolchain. The 2027 SDK requires CMake 3.30 and C++20. Build and installer fixture validation do not establish plugin loading, import, animation, or save/reopen behavior in the 2027 host.
+
+The [Windows 2027 native validation](docs/validation/c4d-2027-native-20261019/README.md) records production API and real-asset results, including the original strict physics seek-replay failure. It does not establish full runtime compatibility.
+
+The [2026.4.0 / 2027.0.0 native comparison](docs/validation/c4d-2026-2027-compare-20261019/README.md) reproduced the same strict replay failure in both hosts, with identical captured results for all five corresponding flows. The subsequent [physics replay repair](docs/validation/physics-replay-determinism-20261019/README.md) removes history-dependent Euler decomposition from playback writes: both hosts pass all three strict replay comparisons with zero captured difference for this model, motion, and 0–60 frame window. The reports retain the original failures, validated binary identities, and acceptance limits.

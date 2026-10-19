@@ -8,10 +8,10 @@
 
 ### CI（GitHub Actions）
 
-- **`.github/workflows/build.yml`** — PR 和 `main` push 在 Windows 2022 上编译 `sdk_2026` Release。CI 不运行自动化测试或 Benchmark；下文的本地测试预设继续保留。手动触发和 tag 发布调用执行 **21 个 Release job**（八个 Windows、八个 Intel macOS、五个 Apple Silicon SDK），使用 `release-windows` / `release-macos` configure 预设并关闭测试目标。Windows 与 Intel macOS 上传完整插件产物，Apple Silicon 仅编译。依赖缓存包含工具链版本、架构、构建选项和嵌套子模块版本。
+- **`.github/workflows/build.yml`** — PR 和 `main` push 在 Windows 2022 上编译 `sdk_2027` Release。CI 不运行自动化测试或 Benchmark；下文的本地测试预设继续保留。手动触发和 tag 发布调用执行 **24 个 Release job**（九个 Windows、九个 Intel macOS、六个 Apple Silicon SDK），使用 `release-windows` / `release-macos` configure 预设并关闭测试目标。Windows 与 Intel macOS 上传完整插件产物，Apple Silicon 仅编译。依赖缓存包含工具链版本、架构、构建选项和嵌套子模块版本。
 - **`.github/workflows/package.yml`** — 推送 `v*` 标签时先查找源码与构建输入一致的成功全矩阵 Build；没有可复用产物时才调用 `build.yml`。将完整 Windows 产物铺到 `_build_msvc/` 后运行 Inno，macOS 直接把每个完整产物（已包含 `res/`）打包一次，再创建 **GitHub Release**。两端打包都消费已构建资源，不额外嵌套第二层资源目录。
 
-复用时核对完整 21 项矩阵和 16 份未过期的 SDK 产物，包括源码提交与摘要。只有明确列出的文档和打包文件可不同；代码、资源、编译配置、SDK 与依赖子模块指针必须一致。CI 保存 `package-build-provenance.json`。手动 Package 可指定 `build_run_id`；指定的构建不兼容时直接报错，不偷偷重新构建。留空则自动选择，无可用产物时回退到完整构建。手动触发仅生成包产物，正式发布仍由标签触发。本地来源校验回归：`python tests/test_package_build_reuse.py`。
+复用时核对完整 24 项矩阵和 18 份未过期的 SDK 产物，包括源码提交与摘要。只有明确列出的文档和打包文件可不同；代码、资源、编译配置、SDK 与依赖子模块指针必须一致。CI 保存 `package-build-provenance.json`。手动 Package 可指定 `build_run_id`；指定的构建不兼容时直接报错，不偷偷重新构建。留空则自动选择，无可用产物时回退到完整构建。手动触发仅生成包产物，正式发布仍由标签触发。本地来源校验回归：`python tests/test_package_build_reuse.py`。
 
 本机 Inno 打包仍用下文 `package-windows` + `inno-installer` / `CMakeUserPresets.json`。
 
@@ -140,7 +140,7 @@ start ..\_build_msvc\sdk_2026\c4d-sdk.sln
 
 C4D_MMDTool 是一个 Cinema 4D 插件，用于在 Cinema 4D 中导入和管理 MikuMikuDance (MMD) 模型、动画、相机、刚体、关节等数据。插件支持 PMX/PMD 模型格式和 VMD/VPD 动画格式。
 
-项目支持多个 Cinema 4D SDK 版本（R20 ~ 2026），当前活跃开发源码目录为 `source/`，目标 SDK 为 2026。
+项目支持多个 Cinema 4D SDK 版本（R20 ~ 2027），当前活跃开发源码目录为 `source/`，目标 SDK 为 2026。
 
 ---
 
@@ -186,7 +186,7 @@ C4D_MMDTool/
 ├── sdk_2025/                 # Cinema 4D 2025 SDK 工程
 ├── sdk_2024/                 # Cinema 4D 2024 SDK 工程
 ├── sdk_2023/                 # Cinema 4D 2023 SDK 工程
-├── sdk_r20/、sdk_r21/、sdk_r23/、sdk_r25/、sdk_2023/ ~ sdk_2026/
+├── sdk_r20/、sdk_r21/、sdk_r23/、sdk_r25/、sdk_2023/ ~ sdk_2027/
 ├── docs/dev/                 # 导入、导出、运行时与动画调试代码地图
 ├── setup/                    # 安装包脚本 (Inno Setup)
 └── .github/workflows/        # CI/CD 配置
@@ -404,7 +404,7 @@ Junction 的创建是幂等的——如果已存在且指向正确目标则跳�
 
 - 插件动态库输出到 `_build_msvc/sdk_2026/bin/{Debug|Release}/plugins/mmdtool/`（相对仓库根；其他 SDK 替换目录名）
 - 输出文件扩展名：Windows 为 `.xdl64`，macOS 为 `.xlib`
-- 输出目录内的 `res/` 是所选资源树的真实完整副本：`sdk_r20`、`sdk_r21`、`sdk_r23` 使用 `res/R20-S24`；`sdk_r25` 与 2023–2026 使用 `res/S24_up`。旧资源缺少的 `cmt_config.json` 会由公共同步脚本补齐。
+- 输出目录内的 `res/` 是所选资源树的真实完整副本：`sdk_r20`、`sdk_r21`、`sdk_r23` 使用 `res/R20-S24`；`sdk_r25` 与 2023–2027 使用 `res/S24_up`。旧资源缺少的 `cmt_config.json` 会由公共同步脚本补齐。
 
 ---
 
@@ -439,3 +439,22 @@ cmt_setup_mmdtool_plugin(...)
 | `linux_ninja`                | Ninja Multi-Config        | -         | Linux 构建        |
 
 插件更新提醒的首选项、弹窗、版本资源与聚焦验证见 [plugin-update-reminder.md](docs/dev/plugin-update-reminder.md)。发布打包会以最终包版本覆盖 `res/cmt_version.txt`，包括复用二进制的包。
+
+
+## Cinema 4D 2027 兼容构建
+
+`sdk_2027/` 包含官方 2027 SDK 框架及构建工具。插件包装工程保持精简，由共享 CMake 层将插件设置转换为 2027 新引入的原生描述接口。根开发预设继续默认使用 2026；CI 和打包为 2027 单独构建二进制，并复制资源和 MCP 运行文件。
+
+仅编译、不启动 Cinema 4D：
+
+```powershell
+cmake --preset windows_vs2022_v143 -S sdk_2027 -B _build_msvc/sdk_2027
+cmake --build _build_msvc/sdk_2027 --config Debug --target mmdtool
+cmake --build _build_msvc/sdk_2027 --config Release --target mmdtool
+```
+
+本机若安装 Visual Studio 2026 及 v143 工具集，可使用 `cmake -S sdk_2027 -B _build_msvc/sdk_2027_v143 -G "Visual Studio 18 2026" -A x64 -T v143` 配置。也保留 `windows_vs2026_v145` 预设；不同工具链应使用独立构建目录。2027 SDK 要求 CMake 3.30 和 C++20。构建及私有安装器验证不能代替 2027 宿主中的插件加载、导入、动画及保存重开验证。
+
+[Windows 2027 原生验证](docs/validation/c4d-2027-native-20261019/README.md) 记录生产接口及真实资源结果，并保留最初发现的严格物理跳转重放失败，不能视为完整运行时兼容验收。
+
+[2026.4.0 / 2027.0.0 实机对照](docs/validation/c4d-2026-2027-compare-20261019/README.md) 已确认相同严格回放失败在两版复现，五条对应流程的捕获轨迹完全一致。后续 [物理严格回放修复](docs/validation/physics-replay-determinism-20261019/README.md) 消除了播放写回中依赖历史姿态的欧拉角分解；在该模型、动作及 0–60 帧窗口内，两版的三项严格回放比较均通过，捕获差异为零。报告保留原始失败、验证二进制身份及验收边界。

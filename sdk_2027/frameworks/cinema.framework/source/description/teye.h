@@ -1,0 +1,16 @@
+#ifndef TEYE_H__
+#define TEYE_H__
+
+enum
+{
+	EYETAG_CAPTURE = 1000,	
+	EYETAG_EYE = 1001,
+	EYETAG_EYE_LEFT = 0,
+	EYETAG_EYE_RIGHT = 1,
+	EYETAG_EYE_IOS12_EYETRACKING = 1002,
+};
+
+#endif // TEYE_H__
+
+
+

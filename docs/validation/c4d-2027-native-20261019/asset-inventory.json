@@ -1,0 +1,16 @@
+{
+  "model": {
+    "path": "S:\\tmp\\cmt-sdk2027-native-20261019\\real-assets\\Sour\\Black.pmx",
+    "sha256": "04fbfe59e4ea8ef1704b32bef71516b20afbd1e4abf1880dbc4f107e225a90ea",
+    "bones": 319
+  },
+  "files": [
+    {
+      "path": "S:\\tmp\\cmt-sdk2027-native-20261019\\real-assets\\Stay Tonight Heaven Lee Ver. 动作.vmd",
+      "sha256": "db7d3a542359c92d057d28be4b38e89c3368de1185bf23d1bbbd4d0e67eb187d",
+      "counts": {
+        "bone_keys": 7251
+      }
+    }
+  ]
+}

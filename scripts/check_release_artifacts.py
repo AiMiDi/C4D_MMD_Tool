@@ -12,7 +12,7 @@ import stat
 import struct
 
 REPO = Path(__file__).resolve().parents[1]
-SDKS = ("sdk_r20", "sdk_r21", "sdk_r23", "sdk_r25", "sdk_2023", "sdk_2024", "sdk_2025", "sdk_2026")
+SDKS = ("sdk_r20", "sdk_r21", "sdk_r23", "sdk_r25", "sdk_2023", "sdk_2024", "sdk_2025", "sdk_2026", "sdk_2027")
 MCP_FILES = ("run_mmdtool_mcp.py", "mmdtool_mcp/__init__.py", "mmdtool_mcp/schema.py",
              "mmdtool_mcp/host.py", "mmdtool_mcp/server.py")
 

@@ -1,0 +1,3805 @@
+{
+  "schema_version": 1,
+  "created_utc": "2026-10-19T07:42:36.149301+00:00",
+  "native_executed": true,
+  "status": "failed",
+  "acceptance_eligible": false,
+  "c4d_version": 2027000,
+  "sdk": "sdk_2027",
+  "diagnostic_environment_at_script_start": {
+    "CMT_RUNTIME_PROFILE": null,
+    "CMT_ANIM_FLOW_DEBUG": null,
+    "CMT_INITIAL_STATE_DEBUG": null
+  },
+  "loaded_plugin": {
+    "path": "C:\\code\\C4D_MMD_Tool\\_build_msvc\\sdk_2027_v143\\bin\\Release\\plugins\\mmdtool\\mmdtool.xdl64",
+    "sha256": "40506105a9d082675d30f92c4b566472929247d49424829e47bfa192a1fd0d7f"
+  },
+  "manifest": "S:\\tmp\\cmt-sdk2027-native-20261019\\real-assets\\native\\manifest.json",
+  "source_sha256": "f94e9a12d567648c666e99a3b59fcf6cc12c126a06e49ddd70c12ed537520a01",
+  "current_source_sha256": "f94e9a12d567648c666e99a3b59fcf6cc12c126a06e49ddd70c12ed537520a01",
+  "source_provenance": "prepared manifest; current checkout is checked separately",
+  "current_checkout_matches_manifest": true,
+  "binary_identity_confirmed": true,
+  "assets": [
+    {
+      "path": "S:\\tmp\\cmt-sdk2027-native-20261019\\real-assets\\Sour\\Black.pmx",
+      "sha256": "04fbfe59e4ea8ef1704b32bef71516b20afbd1e4abf1880dbc4f107e225a90ea"
+    },
+    {
+      "path": "S:\\tmp\\cmt-sdk2027-native-20261019\\real-assets\\Stay Tonight Heaven Lee Ver. 动作.vmd",
+      "sha256": "db7d3a542359c92d057d28be4b38e89c3368de1185bf23d1bbbd4d0e67eb187d"
+    }
+  ],
+  "frame_window": [
+    0,
+    60
+  ],
+  "simulation_fps": 30,
+  "phases": [
+    {
+      "name": "prepare_reference",
+      "status": "passed",
+      "seconds": 1.7911327999900095,
+      "result": {
+        "run": "reference",
+        "origin": "fresh",
+        "frame": 0,
+        "dynamic_bone_count": 145,
+        "finite_bone_count": 319,
+        "geometry": {
+          "meshes": [
+            {
+              "name": "Mesh",
+              "vertices": 33608,
+              "polygons": 49572
+            }
+          ],
+          "topology_sha256": "b24723437c2585680ea96b2acc279ff0b78fe1eed12818798327c6391404d39f",
+          "points_sha256": "bcee033614b58c512152514f2fe86975aa317a245be5595c841e17a71cbbfe14"
+        },
+        "evaluate_ms": 61.75920000532642
+      }
+    },
+    {
+      "name": "advance_reference",
+      "status": "passed",
+      "seconds": 0.7340340000228025,
+      "result": {
+        "run": "reference",
+        "processed_frames": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "next_frame": 6,
+        "complete": false,
+        "max_dynamic_step_distance": 0.3249547541132504,
+        "timing": {
+          "samples": 6,
+          "median_ms": 89.5060500188265,
+          "p95_ms": 97.02599997399375,
+          "max_ms": 97.02599997399375,
+          "zero_frame_initialization_or_seek_evaluate_ms": 61.75920000532642,
+          "zero_frame_scope": "time setting and two native passes; includes runtime cold reset if requested; load/import/capture excluded",
+          "measurement": "time setting and two ExecutePasses calls; Python capture/JSON excluded; native diagnostics included",
+          "steady_after_frame_9": {
+            "samples": 0,
+            "median_ms": null,
+            "p95_ms": null,
+            "max_ms": null
+          }
+        }
+      }
+    },
+    {
+      "name": "advance_reference",
+      "status": "passed",
+      "seconds": 0.6584065000060946,
+      "result": {
+        "run": "reference",
+        "processed_frames": [
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "next_frame": 11,
+        "complete": false,
+        "max_dynamic_step_distance": 0.6294243755150413,
+        "timing": {
+          "samples": 11,
+          "median_ms": 80.6260000099428,
+          "p95_ms": 97.02599997399375,
+          "max_ms": 97.02599997399375,
+          "zero_frame_initialization_or_seek_evaluate_ms": 61.75920000532642,
+          "zero_frame_scope": "time setting and two native passes; includes runtime cold reset if requested; load/import/capture excluded",
+          "measurement": "time setting and two ExecutePasses calls; Python capture/JSON excluded; native diagnostics included",
+          "steady_after_frame_9": {
+            "samples": 1,
+            "median_ms": 67.49029998900369,
+            "p95_ms": 67.49029998900369,
+            "max_ms": 67.49029998900369
+          }
+        }
+      }
+    },
+    {
+      "name": "advance_reference",
+      "status": "passed",
+      "seconds": 0.649659899994731,
+      "result": {
+        "run": "reference",
+        "processed_frames": [
+          11,
+          12,
+          13,
+          14,
+          15
+        ],
+        "next_frame": 16,
+        "complete": false,
+        "max_dynamic_step_distance": 0.6294243755150413,
+        "timing": {
+          "samples": 16,
+          "median_ms": 80.82430000649765,
+          "p95_ms": 97.02599997399375,
+          "max_ms": 97.02599997399375,
+          "zero_frame_initialization_or_seek_evaluate_ms": 61.75920000532642,
+          "zero_frame_scope": "time setting and two native passes; includes runtime cold reset if requested; load/import/capture excluded",
+          "measurement": "time setting and two ExecutePasses calls; Python capture/JSON excluded; native diagnostics included",
+          "steady_after_frame_9": {
+            "samples": 6,
+            "median_ms": 74.2564499960281,
+            "p95_ms": 86.39499999117106,
+            "max_ms": 86.39499999117106
+          }
+        }
+      }
+    },
+    {
+      "name": "advance_reference",
+      "status": "passed",
+      "seconds": 0.6704674999928102,
+      "result": {
+        "run": "reference",
+        "processed_frames": [
+          16,
+          17,
+          18,
+          19,
+          20
+        ],
+        "next_frame": 21,
+        "complete": false,
+        "max_dynamic_step_distance": 0.6294243755150413,
+        "timing": {
+          "samples": 21,
+          "median_ms": 81.0226000030525,
+          "p95_ms": 92.2786999726668,
+          "max_ms": 97.02599997399375,
+          "zero_frame_initialization_or_seek_evaluate_ms": 61.75920000532642,
+          "zero_frame_scope": "time setting and two native passes; includes runtime cold reset if requested; load/import/capture excluded",
+          "measurement": "time setting and two ExecutePasses calls; Python capture/JSON excluded; native diagnostics included",
+          "steady_after_frame_9": {
+            "samples": 11,
+            "median_ms": 81.0226000030525,
+            "p95_ms": 86.4146999665536,
+            "max_ms": 86.4146999665536
+          }
+        }
+      }
+    },
+    {
+      "name": "advance_reference",
+      "status": "passed",
+      "seconds": 0.6628191000199877,
+      "result": {
+        "run": "reference",
+        "processed_frames": [
+          21,
+          22,
+          23,
+          24,
+          25
+        ],
+        "next_frame": 26,
+        "complete": false,
+        "max_dynamic_step_distance": 0.6294243755150413,
+        "timing": {
+          "samples": 26,
+          "median_ms": 81.57705000485294,
+          "p95_ms": 92.2786999726668,
+          "max_ms": 97.02599997399375,
+          "zero_frame_initialization_or_seek_evaluate_ms": 61.75920000532642,
+          "zero_frame_scope": "time setting and two native passes; includes runtime cold reset if requested; load/import/capture excluded",
+          "measurement": "time setting and two ExecutePasses calls; Python capture/JSON excluded; native diagnostics included",
+          "steady_after_frame_9": {
+            "samples": 16,
+            "median_ms": 81.57705000485294,
+            "p95_ms": 86.4146999665536,
+            "max_ms": 86.4146999665536
+          }
+        }
+      }
+    },
+    {
+      "name": "advance_reference",
+      "status": "passed",
+      "seconds": 0.7656109999516048,
+      "result": {
+        "run": "reference",
+        "processed_frames": [
+          26,
+          27,
+          28,
+          29,
+          30
+        ],
+        "next_frame": 31,
+        "complete": false,
+        "max_dynamic_step_distance": 0.6294243755150413,
+        "timing": {
+          "samples": 31,
+          "median_ms": 83.25219998368993,
+          "p95_ms": 103.64379995735362,
+          "max_ms": 110.45400000875816,
+          "zero_frame_initialization_or_seek_evaluate_ms": 61.75920000532642,
+          "zero_frame_scope": "time setting and two native passes; includes runtime cold reset if requested; load/import/capture excluded",
+          "measurement": "time setting and two ExecutePasses calls; Python capture/JSON excluded; native diagnostics included",
+          "steady_after_frame_9": {
+            "samples": 21,
+            "median_ms": 83.25219998368993,
+            "p95_ms": 103.64379995735362,
+            "max_ms": 110.45400000875816
+          }
+        }
+      }
+    },
+    {
+      "name": "advance_reference",
+      "status": "passed",
+      "seconds": 0.6637340000015683,
+      "result": {
+        "run": "reference",
+        "processed_frames": [
+          31,
+          32,
+          33,
+          34,
+          35
+        ],
+        "next_frame": 36,
+        "complete": false,
+        "max_dynamic_step_distance": 0.6294243755150413,
+        "timing": {
+          "samples": 36,
+          "median_ms": 82.03404999221675,
+          "p95_ms": 103.64379995735362,
+          "max_ms": 110.45400000875816,
+          "zero_frame_initialization_or_seek_evaluate_ms": 61.75920000532642,
+          "zero_frame_scope": "time setting and two native passes; includes runtime cold reset if requested; load/import/capture excluded",
+          "measurement": "time setting and two ExecutePasses calls; Python capture/JSON excluded; native diagnostics included",
+          "steady_after_frame_9": {
+            "samples": 26,
+            "median_ms": 82.03404999221675,
+            "p95_ms": 103.64379995735362,
+            "max_ms": 110.45400000875816
+          }
+        }
+      }
+    },
+    {
+      "name": "advance_reference",
+      "status": "passed",
+      "seconds": 0.6803731000400148,
+      "result": {
+        "run": "reference",
+        "processed_frames": [
+          36,
+          37,
+          38,
+          39,
+          40
+        ],
+        "next_frame": 41,
+        "complete": false,
+        "max_dynamic_step_distance": 0.6294243755150413,
+        "timing": {
+          "samples": 41,
+          "median_ms": 81.93659997778013,
+          "p95_ms": 97.02599997399375,
+          "max_ms": 110.45400000875816,
+          "zero_frame_initialization_or_seek_evaluate_ms": 61.75920000532642,
+          "zero_frame_scope": "time setting and two native passes; includes runtime cold reset if requested; load/import/capture excluded",
+          "measurement": "time setting and two ExecutePasses calls; Python capture/JSON excluded; native diagnostics included",
+          "steady_after_frame_9": {
+            "samples": 31,
+            "median_ms": 81.93659997778013,
+            "p95_ms": 103.64379995735362,
+            "max_ms": 110.45400000875816
+          }
+        }
+      }
+    },
+    {
+      "name": "advance_reference",
+      "status": "passed",
+      "seconds": 0.8349816999980249,
+      "result": {
+        "run": "reference",
+        "processed_frames": [
+          41,
+          42,
+          43,
+          44,
+          45
+        ],
+        "next_frame": 46,
+        "complete": false,
+        "max_dynamic_step_distance": 0.6294243755150413,
+        "timing": {
+          "samples": 46,
+          "median_ms": 82.69184999517165,
+          "p95_ms": 103.64379995735362,
+          "max_ms": 132.24579999223351,
+          "zero_frame_initialization_or_seek_evaluate_ms": 61.75920000532642,
+          "zero_frame_scope": "time setting and two native passes; includes runtime cold reset if requested; load/import/capture excluded",
+          "measurement": "time setting and two ExecutePasses calls; Python capture/JSON excluded; native diagnostics included",
+          "steady_after_frame_9": {
+            "samples": 36,
+            "median_ms": 82.69184999517165,
+            "p95_ms": 110.45400000875816,
+            "max_ms": 132.24579999223351
+          }
+        }
+      }
+    },
+    {
+      "name": "advance_reference",
+      "status": "passed",
+      "seconds": 0.9185306999715976,
+      "result": {
+        "run": "reference",
+        "processed_frames": [
+          46,
+          47,
+          48,
+          49,
+          50
+        ],
+        "next_frame": 51,
+        "complete": false,
+        "max_dynamic_step_distance": 0.6294243755150413,
+        "timing": {
+          "samples": 51,
+          "median_ms": 83.73799995752051,
+          "p95_ms": 110.45400000875816,
+          "max_ms": 132.24579999223351,
+          "zero_frame_initialization_or_seek_evaluate_ms": 61.75920000532642,
+          "zero_frame_scope": "time setting and two native passes; includes runtime cold reset if requested; load/import/capture excluded",
+          "measurement": "time setting and two ExecutePasses calls; Python capture/JSON excluded; native diagnostics included",
+          "steady_after_frame_9": {
+            "samples": 41,
+            "median_ms": 83.9024999877438,
+            "p95_ms": 110.45400000875816,
+            "max_ms": 132.24579999223351
+          }
+        }
+      }
+    },
+    {
+      "name": "advance_reference",
+      "status": "passed",
+      "seconds": 1.0966715999529697,
+      "result": {
+        "run": "reference",
+        "processed_frames": [
+          51,
+          52,
+          53,
+          54,
+          55
+        ],
+        "next_frame": 56,
+        "complete": false,
+        "max_dynamic_step_distance": 0.6294243755150413,
+        "timing": {
+          "samples": 56,
+          "median_ms": 84.07705000718124,
+          "p95_ms": 132.24579999223351,
+          "max_ms": 171.11080000177026,
+          "zero_frame_initialization_or_seek_evaluate_ms": 61.75920000532642,
+          "zero_frame_scope": "time setting and two native passes; includes runtime cold reset if requested; load/import/capture excluded",
+          "measurement": "time setting and two ExecutePasses calls; Python capture/JSON excluded; native diagnostics included",
+          "steady_after_frame_9": {
+            "samples": 46,
+            "median_ms": 84.95114999823272,
+            "p95_ms": 132.24579999223351,
+            "max_ms": 171.11080000177026
+          }
+        }
+      }
+    },
+    {
+      "name": "advance_reference",
+      "status": "passed",
+      "seconds": 1.078010199998971,
+      "result": {
+        "run": "reference",
+        "processed_frames": [
+          56,
+          57,
+          58,
+          59,
+          60
+        ],
+        "next_frame": 61,
+        "complete": true,
+        "max_dynamic_step_distance": 0.6294243755150413,
+        "timing": {
+          "samples": 61,
+          "median_ms": 86.39499999117106,
+          "p95_ms": 134.08889999845996,
+          "max_ms": 175.17959995893762,
+          "zero_frame_initialization_or_seek_evaluate_ms": 61.75920000532642,
+          "zero_frame_scope": "time setting and two native passes; includes runtime cold reset if requested; load/import/capture excluded",
+          "measurement": "time setting and two ExecutePasses calls; Python capture/JSON excluded; native diagnostics included",
+          "steady_after_frame_9": {
+            "samples": 51,
+            "median_ms": 86.4146999665536,
+            "p95_ms": 147.56459998898208,
+            "max_ms": 175.17959995893762
+          }
+        }
+      }
+    },
+    {
+      "name": "save_continuous_end",
+      "status": "passed",
+      "seconds": 0.2084125999826938,
+      "result": {
+        "scene": "S:\\tmp\\cmt-sdk2027-native-20261019\\real-assets\\extended-complete\\continuous_end.c4d",
+        "frame": 60,
+        "acceptance": "persistent inputs will be replayed from frame zero; live Bullet state is not asserted saved"
+      }
+    },
+    {
+      "name": "prepare_seek_replay",
+      "status": "passed",
+      "seconds": 1.0088155000121333,
+      "result": {
+        "run": "seek_replay",
+        "origin": "seek",
+        "frame": 0,
+        "dynamic_bone_count": 145,
+        "finite_bone_count": 319,
+        "geometry": {
+          "meshes": [
+            {
+              "name": "Mesh",
+              "vertices": 33608,
+              "polygons": 49572
+            }
+          ],
+          "topology_sha256": "b24723437c2585680ea96b2acc279ff0b78fe1eed12818798327c6391404d39f",
+          "points_sha256": "040d891647e8a8f7a9ae4037e286e3aba2032ab0df087ad00db2e89ba913e979"
+        },
+        "evaluate_ms": 669.4300000090152
+      }
+    },
+    {
+      "name": "advance_seek_replay",
+      "status": "passed",
+      "seconds": 0.8648458999814466,
+      "result": {
+        "run": "seek_replay",
+        "processed_frames": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "next_frame": 6,
+        "complete": false,
+        "max_dynamic_step_distance": 0.3249547541132504,
+        "timing": {
+          "samples": 6,
+          "median_ms": 119.94130001403391,
+          "p95_ms": 669.4300000090152,
+          "max_ms": 669.4300000090152,
+          "zero_frame_initialization_or_seek_evaluate_ms": 669.4300000090152,
+          "zero_frame_scope": "time setting and two native passes; includes runtime cold reset if requested; load/import/capture excluded",
+          "measurement": "time setting and two ExecutePasses calls; Python capture/JSON excluded; native diagnostics included",
+          "steady_after_frame_9": {
+            "samples": 0,
+            "median_ms": null,
+            "p95_ms": null,
+            "max_ms": null
+          }
+        }
+      }
+    },
+    {
+      "name": "advance_seek_replay",
+      "status": "passed",
+      "seconds": 0.9886847999878228,
+      "result": {
+        "run": "seek_replay",
+        "processed_frames": [
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "next_frame": 11,
+        "complete": false,
+        "max_dynamic_step_distance": 0.6294243755150413,
+        "timing": {
+          "samples": 11,
+          "median_ms": 107.77770000277087,
+          "p95_ms": 669.4300000090152,
+          "max_ms": 669.4300000090152,
+          "zero_frame_initialization_or_seek_evaluate_ms": 669.4300000090152,
+          "zero_frame_scope": "time setting and two native passes; includes runtime cold reset if requested; load/import/capture excluded",
+          "measurement": "time setting and two ExecutePasses calls; Python capture/JSON excluded; native diagnostics included",
+          "steady_after_frame_9": {
+            "samples": 1,
+            "median_ms": 151.9702000077814,
+            "p95_ms": 151.9702000077814,
+            "max_ms": 151.9702000077814
+          }
+        }
+      }
+    },
+    {
+      "name": "advance_seek_replay",
+      "status": "passed",
+      "seconds": 0.931127900024876,
+      "result": {
+        "run": "seek_replay",
+        "processed_frames": [
+          11,
+          12,
+          13,
+          14,
+          15
+        ],
+        "next_frame": 16,
+        "complete": false,
+        "max_dynamic_step_distance": 0.6294243755150413,
+        "timing": {
+          "samples": 16,
+          "median_ms": 112.84555002930574,
+          "p95_ms": 669.4300000090152,
+          "max_ms": 669.4300000090152,
+          "zero_frame_initialization_or_seek_evaluate_ms": 669.4300000090152,
+          "zero_frame_scope": "time setting and two native passes; includes runtime cold reset if requested; load/import/capture excluded",
+          "measurement": "time setting and two ExecutePasses calls; Python capture/JSON excluded; native diagnostics included",
+          "steady_after_frame_9": {
+            "samples": 6,
+            "median_ms": 118.9989999984391,
+            "p95_ms": 151.9702000077814,
+            "max_ms": 151.9702000077814
+          }
+        }
+      }
+    },
+    {
+      "name": "advance_seek_replay",
+      "status": "passed",
+      "seconds": 0.9973064999794587,
+      "result": {
+        "run": "seek_replay",
+        "processed_frames": [
+          16,
+          17,
+          18,
+          19,
+          20
+        ],
+        "next_frame": 21,
+        "complete": false,
+        "max_dynamic_step_distance": 0.6294243755150413,
+        "timing": {
+          "samples": 21,
+          "median_ms": 112.89790004957467,
+          "p95_ms": 179.71619998570532,
+          "max_ms": 669.4300000090152,
+          "zero_frame_initialization_or_seek_evaluate_ms": 669.4300000090152,
+          "zero_frame_scope": "time setting and two native passes; includes runtime cold reset if requested; load/import/capture excluded",
+          "measurement": "time setting and two ExecutePasses calls; Python capture/JSON excluded; native diagnostics included",
+          "steady_after_frame_9": {
+            "samples": 11,
+            "median_ms": 116.7033999809064,
+            "p95_ms": 179.71619998570532,
+            "max_ms": 179.71619998570532
+          }
+        }
+      }
+    },
+    {
+      "name": "advance_seek_replay",
+      "status": "passed",
+      "seconds": 1.0732982999761589,
+      "result": {
+        "run": "seek_replay",
+        "processed_frames": [
+          21,
+          22,
+          23,
+          24,
+          25
+        ],
+        "next_frame": 26,
+        "complete": false,
+        "max_dynamic_step_distance": 0.6294243755150413,
+        "timing": {
+          "samples": 26,
+          "median_ms": 118.9989999984391,
+          "p95_ms": 179.71619998570532,
+          "max_ms": 669.4300000090152,
+          "zero_frame_initialization_or_seek_evaluate_ms": 669.4300000090152,
+          "zero_frame_scope": "time setting and two native passes; includes runtime cold reset if requested; load/import/capture excluded",
+          "measurement": "time setting and two ExecutePasses calls; Python capture/JSON excluded; native diagnostics included",
+          "steady_after_frame_9": {
+            "samples": 16,
+            "median_ms": 124.30500000482425,
+            "p95_ms": 179.71619998570532,
+            "max_ms": 179.71619998570532
+          }
+        }
+      }
+    },
+    {
+      "name": "advance_seek_replay",
+      "status": "passed",
+      "seconds": 1.3752199999871664,
+      "result": {
+        "run": "seek_replay",
+        "processed_frames": [
+          26,
+          27,
+          28,
+          29,
+          30
+        ],
+        "next_frame": 31,
+        "complete": false,
+        "max_dynamic_step_distance": 0.6294243755150413,
+        "timing": {
+          "samples": 31,
+          "median_ms": 126.39600003603846,
+          "p95_ms": 218.70169998146594,
+          "max_ms": 669.4300000090152,
+          "zero_frame_initialization_or_seek_evaluate_ms": 669.4300000090152,
+          "zero_frame_scope": "time setting and two native passes; includes runtime cold reset if requested; load/import/capture excluded",
+          "measurement": "time setting and two ExecutePasses calls; Python capture/JSON excluded; native diagnostics included",
+          "steady_after_frame_9": {
+            "samples": 21,
+            "median_ms": 128.63250001100823,
+            "p95_ms": 210.91949997935444,
+            "max_ms": 218.70169998146594
+          }
+        }
+      }
+    },
+    {
+      "name": "advance_seek_replay",
+      "status": "passed",
+      "seconds": 1.530906200001482,
+      "result": {
+        "run": "seek_replay",
+        "processed_frames": [
+          31,
+          32,
+          33,
+          34,
+          35
+        ],
+        "next_frame": 36,
+        "complete": false,
+        "max_dynamic_step_distance": 0.6294243755150413,
+        "timing": {
+          "samples": 36,
+          "median_ms": 121.75429999479093,
+          "p95_ms": 218.70169998146594,
+          "max_ms": 669.4300000090152,
+          "zero_frame_initialization_or_seek_evaluate_ms": 669.4300000090152,
+          "zero_frame_scope": "time setting and two native passes; includes runtime cold reset if requested; load/import/capture excluded",
+          "measurement": "time setting and two ExecutePasses calls; Python capture/JSON excluded; native diagnostics included",
+          "steady_after_frame_9": {
+            "samples": 26,
+            "median_ms": 126.72000002930872,
+            "p95_ms": 210.91949997935444,
+            "max_ms": 218.70169998146594
+          }
+        }
+      }
+    },
+    {
+      "name": "advance_seek_replay",
+      "status": "passed",
+      "seconds": 0.6662663000170141,
+      "result": {
+        "run": "seek_replay",
+        "processed_frames": [
+          36,
+          37,
+          38,
+          39,
+          40
+        ],
+        "next_frame": 41,
+        "complete": false,
+        "max_dynamic_step_distance": 0.6294243755150413,
+        "timing": {
+          "samples": 41,
+          "median_ms": 116.7033999809064,
+          "p95_ms": 210.91949997935444,
+          "max_ms": 669.4300000090152,
+          "zero_frame_initialization_or_seek_evaluate_ms": 669.4300000090152,
+          "zero_frame_scope": "time setting and two native passes; includes runtime cold reset if requested; load/import/capture excluded",
+          "measurement": "time setting and two ExecutePasses calls; Python capture/JSON excluded; native diagnostics included",
+          "steady_after_frame_9": {
+            "samples": 31,
+            "median_ms": 121.29460001597181,
+            "p95_ms": 210.91949997935444,
+            "max_ms": 218.70169998146594
+          }
+        }
+      }
+    },
+    {
+      "name": "advance_seek_replay",
+      "status": "passed",
+      "seconds": 0.7003813000046648,
+      "result": {
+        "run": "seek_replay",
+        "processed_frames": [
+          41,
+          42,
+          43,
+          44,
+          45
+        ],
+        "next_frame": 46,
+        "complete": false,
+        "max_dynamic_step_distance": 0.6294243755150413,
+        "timing": {
+          "samples": 46,
+          "median_ms": 112.84555002930574,
+          "p95_ms": 210.91949997935444,
+          "max_ms": 669.4300000090152,
+          "zero_frame_initialization_or_seek_evaluate_ms": 669.4300000090152,
+          "zero_frame_scope": "time setting and two native passes; includes runtime cold reset if requested; load/import/capture excluded",
+          "measurement": "time setting and two ExecutePasses calls; Python capture/JSON excluded; native diagnostics included",
+          "steady_after_frame_9": {
+            "samples": 36,
+            "median_ms": 116.4452999655623,
+            "p95_ms": 210.91949997935444,
+            "max_ms": 218.70169998146594
+          }
+        }
+      }
+    },
+    {
+      "name": "advance_seek_replay",
+      "status": "passed",
+      "seconds": 0.8497731999959797,
+      "result": {
+        "run": "seek_replay",
+        "processed_frames": [
+          46,
+          47,
+          48,
+          49,
+          50
+        ],
+        "next_frame": 51,
+        "complete": false,
+        "max_dynamic_step_distance": 0.6294243755150413,
+        "timing": {
+          "samples": 51,
+          "median_ms": 112.89790004957467,
+          "p95_ms": 210.91949997935444,
+          "max_ms": 669.4300000090152,
+          "zero_frame_initialization_or_seek_evaluate_ms": 669.4300000090152,
+          "zero_frame_scope": "time setting and two native passes; includes runtime cold reset if requested; load/import/capture excluded",
+          "measurement": "time setting and two ExecutePasses calls; Python capture/JSON excluded; native diagnostics included",
+          "steady_after_frame_9": {
+            "samples": 41,
+            "median_ms": 116.7033999809064,
+            "p95_ms": 209.521799988579,
+            "max_ms": 218.70169998146594
+          }
+        }
+      }
+    },
+    {
+      "name": "advance_seek_replay",
+      "status": "passed",
+      "seconds": 0.7096273999777623,
+      "result": {
+        "run": "seek_replay",
+        "processed_frames": [
+          51,
+          52,
+          53,
+          54,
+          55
+        ],
+        "next_frame": 56,
+        "complete": false,
+        "max_dynamic_step_distance": 0.6294243755150413,
+        "timing": {
+          "samples": 56,
+          "median_ms": 108.38354998850264,
+          "p95_ms": 210.91949997935444,
+          "max_ms": 669.4300000090152,
+          "zero_frame_initialization_or_seek_evaluate_ms": 669.4300000090152,
+          "zero_frame_scope": "time setting and two native passes; includes runtime cold reset if requested; load/import/capture excluded",
+          "measurement": "time setting and two ExecutePasses calls; Python capture/JSON excluded; native diagnostics included",
+          "steady_after_frame_9": {
+            "samples": 46,
+            "median_ms": 110.8912999916356,
+            "p95_ms": 209.521799988579,
+            "max_ms": 218.70169998146594
+          }
+        }
+      }
+    },
+    {
+      "name": "advance_seek_replay",
+      "status": "passed",
+      "seconds": 0.7631493000080809,
+      "result": {
+        "run": "seek_replay",
+        "processed_frames": [
+          56,
+          57,
+          58,
+          59,
+          60
+        ],
+        "next_frame": 61,
+        "complete": true,
+        "max_dynamic_step_distance": 0.6294243755150413,
+        "timing": {
+          "samples": 61,
+          "median_ms": 106.30109999328852,
+          "p95_ms": 209.521799988579,
+          "max_ms": 669.4300000090152,
+          "zero_frame_initialization_or_seek_evaluate_ms": 669.4300000090152,
+          "zero_frame_scope": "time setting and two native passes; includes runtime cold reset if requested; load/import/capture excluded",
+          "measurement": "time setting and two ExecutePasses calls; Python capture/JSON excluded; native diagnostics included",
+          "steady_after_frame_9": {
+            "samples": 51,
+            "median_ms": 103.4427999984473,
+            "p95_ms": 209.521799988579,
+            "max_ms": 218.70169998146594
+          }
+        }
+      }
+    },
+    {
+      "name": "prepare_initial_reopen",
+      "status": "passed",
+      "seconds": 0.44257529999595135,
+      "result": {
+        "run": "initial_reopen",
+        "origin": "initial",
+        "frame": 0,
+        "dynamic_bone_count": 145,
+        "finite_bone_count": 319,
+        "geometry": {
+          "meshes": [
+            {
+              "name": "Mesh",
+              "vertices": 33608,
+              "polygons": 49572
+            }
+          ],
+          "topology_sha256": "b24723437c2585680ea96b2acc279ff0b78fe1eed12818798327c6391404d39f",
+          "points_sha256": "f65597778a861cea8b950376a6743847c362fd8e30bb79a66f5c33a7a5417e50"
+        },
+        "evaluate_ms": 75.85039996774867
+      }
+    },
+    {
+      "name": "advance_initial_reopen",
+      "status": "passed",
+      "seconds": 0.6698406999930739,
+      "result": {
+        "run": "initial_reopen",
+        "processed_frames": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "next_frame": 6,
+        "complete": false,
+        "max_dynamic_step_distance": 0.3249547541132504,
+        "timing": {
+          "samples": 6,
+          "median_ms": 74.73644998390228,
+          "p95_ms": 80.00290003838018,
+          "max_ms": 80.00290003838018,
+          "zero_frame_initialization_or_seek_evaluate_ms": 75.85039996774867,
+          "zero_frame_scope": "time setting and two native passes; includes runtime cold reset if requested; load/import/capture excluded",
+          "measurement": "time setting and two ExecutePasses calls; Python capture/JSON excluded; native diagnostics included",
+          "steady_after_frame_9": {
+            "samples": 0,
+            "median_ms": null,
+            "p95_ms": null,
+            "max_ms": null
+          }
+        }
+      }
+    },
+    {
+      "name": "advance_initial_reopen",
+      "status": "passed",
+      "seconds": 0.7444888000027277,
+      "result": {
+        "run": "initial_reopen",
+        "processed_frames": [
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "next_frame": 11,
+        "complete": false,
+        "max_dynamic_step_distance": 0.6294243755150413,
+        "timing": {
+          "samples": 11,
+          "median_ms": 77.22869998542592,
+          "p95_ms": 92.66520000528544,
+          "max_ms": 92.66520000528544,
+          "zero_frame_initialization_or_seek_evaluate_ms": 75.85039996774867,
+          "zero_frame_scope": "time setting and two native passes; includes runtime cold reset if requested; load/import/capture excluded",
+          "measurement": "time setting and two ExecutePasses calls; Python capture/JSON excluded; native diagnostics included",
+          "steady_after_frame_9": {
+            "samples": 1,
+            "median_ms": 88.6422999901697,
+            "p95_ms": 88.6422999901697,
+            "max_ms": 88.6422999901697
+          }
+        }
+      }
+    },
+    {
+      "name": "advance_initial_reopen",
+      "status": "passed",
+      "seconds": 0.7394929000292905,
+      "result": {
+        "run": "initial_reopen",
+        "processed_frames": [
+          11,
+          12,
+          13,
+          14,
+          15
+        ],
+        "next_frame": 16,
+        "complete": false,
+        "max_dynamic_step_distance": 0.6294243755150413,
+        "timing": {
+          "samples": 16,
+          "median_ms": 81.62875002017245,
+          "p95_ms": 92.66520000528544,
+          "max_ms": 92.66520000528544,
+          "zero_frame_initialization_or_seek_evaluate_ms": 75.85039996774867,
+          "zero_frame_scope": "time setting and two native passes; includes runtime cold reset if requested; load/import/capture excluded",
+          "measurement": "time setting and two ExecutePasses calls; Python capture/JSON excluded; native diagnostics included",
+          "steady_after_frame_9": {
+            "samples": 6,
+            "median_ms": 87.79304998461157,
+            "p95_ms": 92.17909997096285,
+            "max_ms": 92.17909997096285
+          }
+        }
+      }
+    },
+    {
+      "name": "advance_initial_reopen",
+      "status": "passed",
+      "seconds": 0.7453066000016406,
+      "result": {
+        "run": "initial_reopen",
+        "processed_frames": [
+          16,
+          17,
+          18,
+          19,
+          20
+        ],
+        "next_frame": 21,
+        "complete": false,
+        "max_dynamic_step_distance": 0.6294243755150413,
+        "timing": {
+          "samples": 21,
+          "median_ms": 83.25460000196472,
+          "p95_ms": 92.66520000528544,
+          "max_ms": 93.33959996001795,
+          "zero_frame_initialization_or_seek_evaluate_ms": 75.85039996774867,
+          "zero_frame_scope": "time setting and two native passes; includes runtime cold reset if requested; load/import/capture excluded",
+          "measurement": "time setting and two ExecutePasses calls; Python capture/JSON excluded; native diagnostics included",
+          "steady_after_frame_9": {
+            "samples": 11,
+            "median_ms": 87.3896999983117,
+            "p95_ms": 93.33959996001795,
+            "max_ms": 93.33959996001795
+          }
+        }
+      }
+    },
+    {
+      "name": "advance_initial_reopen",
+      "status": "passed",
+      "seconds": 0.5631575000006706,
+      "result": {
+        "run": "initial_reopen",
+        "processed_frames": [
+          21,
+          22,
+          23,
+          24,
+          25
+        ],
+        "next_frame": 26,
+        "complete": false,
+        "max_dynamic_step_distance": 0.6294243755150413,
+        "timing": {
+          "samples": 26,
+          "median_ms": 78.61580001190305,
+          "p95_ms": 92.66520000528544,
+          "max_ms": 93.33959996001795,
+          "zero_frame_initialization_or_seek_evaluate_ms": 75.85039996774867,
+          "zero_frame_scope": "time setting and two native passes; includes runtime cold reset if requested; load/import/capture excluded",
+          "measurement": "time setting and two ExecutePasses calls; Python capture/JSON excluded; native diagnostics included",
+          "steady_after_frame_9": {
+            "samples": 16,
+            "median_ms": 84.11664998857304,
+            "p95_ms": 93.33959996001795,
+            "max_ms": 93.33959996001795
+          }
+        }
+      }
+    },
+    {
+      "name": "advance_initial_reopen",
+      "status": "passed",
+      "seconds": 0.48239969997666776,
+      "result": {
+        "run": "initial_reopen",
+        "processed_frames": [
+          26,
+          27,
+          28,
+          29,
+          30
+        ],
+        "next_frame": 31,
+        "complete": false,
+        "max_dynamic_step_distance": 0.6294243755150413,
+        "timing": {
+          "samples": 31,
+          "median_ms": 75.85039996774867,
+          "p95_ms": 92.66520000528544,
+          "max_ms": 93.33959996001795,
+          "zero_frame_initialization_or_seek_evaluate_ms": 75.85039996774867,
+          "zero_frame_scope": "time setting and two native passes; includes runtime cold reset if requested; load/import/capture excluded",
+          "measurement": "time setting and two ExecutePasses calls; Python capture/JSON excluded; native diagnostics included",
+          "steady_after_frame_9": {
+            "samples": 21,
+            "median_ms": 70.71289996383712,
+            "p95_ms": 92.17909997096285,
+            "max_ms": 93.33959996001795
+          }
+        }
+      }
+    },
+    {
+      "name": "advance_initial_reopen",
+      "status": "passed",
+      "seconds": 0.5086199000361376,
+      "result": {
+        "run": "initial_reopen",
+        "processed_frames": [
+          31,
+          32,
+          33,
+          34,
+          35
+        ],
+        "next_frame": 36,
+        "complete": false,
+        "max_dynamic_step_distance": 0.6294243755150413,
+        "timing": {
+          "samples": 36,
+          "median_ms": 69.81344998348504,
+          "p95_ms": 92.66520000528544,
+          "max_ms": 93.33959996001795,
+          "zero_frame_initialization_or_seek_evaluate_ms": 75.85039996774867,
+          "zero_frame_scope": "time setting and two native passes; includes runtime cold reset if requested; load/import/capture excluded",
+          "measurement": "time setting and two ExecutePasses calls; Python capture/JSON excluded; native diagnostics included",
+          "steady_after_frame_9": {
+            "samples": 26,
+            "median_ms": 56.18690000846982,
+            "p95_ms": 92.17909997096285,
+            "max_ms": 93.33959996001795
+          }
+        }
+      }
+    },
+    {
+      "name": "advance_initial_reopen",
+      "status": "passed",
+      "seconds": 0.49214350001420826,
+      "result": {
+        "run": "initial_reopen",
+        "processed_frames": [
+          36,
+          37,
+          38,
+          39,
+          40
+        ],
+        "next_frame": 41,
+        "complete": false,
+        "max_dynamic_step_distance": 0.6294243755150413,
+        "timing": {
+          "samples": 41,
+          "median_ms": 65.056299965363,
+          "p95_ms": 92.17909997096285,
+          "max_ms": 93.33959996001795,
+          "zero_frame_initialization_or_seek_evaluate_ms": 75.85039996774867,
+          "zero_frame_scope": "time setting and two native passes; includes runtime cold reset if requested; load/import/capture excluded",
+          "measurement": "time setting and two ExecutePasses calls; Python capture/JSON excluded; native diagnostics included",
+          "steady_after_frame_9": {
+            "samples": 31,
+            "median_ms": 53.58349997550249,
+            "p95_ms": 92.17909997096285,
+            "max_ms": 93.33959996001795
+          }
+        }
+      }
+    },
+    {
+      "name": "advance_initial_reopen",
+      "status": "passed",
+      "seconds": 0.515869399998337,
+      "result": {
+        "run": "initial_reopen",
+        "processed_frames": [
+          41,
+          42,
+          43,
+          44,
+          45
+        ],
+        "next_frame": 46,
+        "complete": false,
+        "max_dynamic_step_distance": 0.6294243755150413,
+        "timing": {
+          "samples": 46,
+          "median_ms": 60.823600011644885,
+          "p95_ms": 92.17909997096285,
+          "max_ms": 93.33959996001795,
+          "zero_frame_initialization_or_seek_evaluate_ms": 75.85039996774867,
+          "zero_frame_scope": "time setting and two native passes; includes runtime cold reset if requested; load/import/capture excluded",
+          "measurement": "time setting and two ExecutePasses calls; Python capture/JSON excluded; native diagnostics included",
+          "steady_after_frame_9": {
+            "samples": 36,
+            "median_ms": 53.53864998323843,
+            "p95_ms": 92.17909997096285,
+            "max_ms": 93.33959996001795
+          }
+        }
+      }
+    },
+    {
+      "name": "advance_initial_reopen",
+      "status": "passed",
+      "seconds": 0.5405516999890096,
+      "result": {
+        "run": "initial_reopen",
+        "processed_frames": [
+          46,
+          47,
+          48,
+          49,
+          50
+        ],
+        "next_frame": 51,
+        "complete": false,
+        "max_dynamic_step_distance": 0.6294243755150413,
+        "timing": {
+          "samples": 51,
+          "median_ms": 57.1887000114657,
+          "p95_ms": 92.17909997096285,
+          "max_ms": 93.33959996001795,
+          "zero_frame_initialization_or_seek_evaluate_ms": 75.85039996774867,
+          "zero_frame_scope": "time setting and two native passes; includes runtime cold reset if requested; load/import/capture excluded",
+          "measurement": "time setting and two ExecutePasses calls; Python capture/JSON excluded; native diagnostics included",
+          "steady_after_frame_9": {
+            "samples": 41,
+            "median_ms": 53.58349997550249,
+            "p95_ms": 89.8536000167951,
+            "max_ms": 93.33959996001795
+          }
+        }
+      }
+    },
+    {
+      "name": "advance_initial_reopen",
+      "status": "passed",
+      "seconds": 0.6551655000075698,
+      "result": {
+        "run": "initial_reopen",
+        "processed_frames": [
+          51,
+          52,
+          53,
+          54,
+          55
+        ],
+        "next_frame": 56,
+        "complete": false,
+        "max_dynamic_step_distance": 0.6294243755150413,
+        "timing": {
+          "samples": 56,
+          "median_ms": 58.63844999112189,
+          "p95_ms": 92.17909997096285,
+          "max_ms": 93.33959996001795,
+          "zero_frame_initialization_or_seek_evaluate_ms": 75.85039996774867,
+          "zero_frame_scope": "time setting and two native passes; includes runtime cold reset if requested; load/import/capture excluded",
+          "measurement": "time setting and two ExecutePasses calls; Python capture/JSON excluded; native diagnostics included",
+          "steady_after_frame_9": {
+            "samples": 46,
+            "median_ms": 55.91160000767559,
+            "p95_ms": 89.8536000167951,
+            "max_ms": 93.33959996001795
+          }
+        }
+      }
+    },
+    {
+      "name": "advance_initial_reopen",
+      "status": "passed",
+      "seconds": 0.6986839000019245,
+      "result": {
+        "run": "initial_reopen",
+        "processed_frames": [
+          56,
+          57,
+          58,
+          59,
+          60
+        ],
+        "next_frame": 61,
+        "complete": true,
+        "max_dynamic_step_distance": 0.6294243755150413,
+        "timing": {
+          "samples": 61,
+          "median_ms": 61.085599998477846,
+          "p95_ms": 89.8536000167951,
+          "max_ms": 93.33959996001795,
+          "zero_frame_initialization_or_seek_evaluate_ms": 75.85039996774867,
+          "zero_frame_scope": "time setting and two native passes; includes runtime cold reset if requested; load/import/capture excluded",
+          "measurement": "time setting and two ExecutePasses calls; Python capture/JSON excluded; native diagnostics included",
+          "steady_after_frame_9": {
+            "samples": 51,
+            "median_ms": 56.857299990952015,
+            "p95_ms": 89.8536000167951,
+            "max_ms": 93.33959996001795
+          }
+        }
+      }
+    },
+    {
+      "name": "prepare_end_reopen",
+      "status": "passed",
+      "seconds": 0.46757069998420775,
+      "result": {
+        "run": "end_reopen",
+        "origin": "saved",
+        "frame": 0,
+        "dynamic_bone_count": 145,
+        "finite_bone_count": 319,
+        "geometry": {
+          "meshes": [
+            {
+              "name": "Mesh",
+              "vertices": 33608,
+              "polygons": 49572
+            }
+          ],
+          "topology_sha256": "b24723437c2585680ea96b2acc279ff0b78fe1eed12818798327c6391404d39f",
+          "points_sha256": "040d891647e8a8f7a9ae4037e286e3aba2032ab0df087ad00db2e89ba913e979"
+        },
+        "evaluate_ms": 84.05689999926835
+      }
+    },
+    {
+      "name": "advance_end_reopen",
+      "status": "passed",
+      "seconds": 0.6483195000328124,
+      "result": {
+        "run": "end_reopen",
+        "processed_frames": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "next_frame": 6,
+        "complete": false,
+        "max_dynamic_step_distance": 0.3249547541132504,
+        "timing": {
+          "samples": 6,
+          "median_ms": 73.24464997509494,
+          "p95_ms": 84.05689999926835,
+          "max_ms": 84.05689999926835,
+          "zero_frame_initialization_or_seek_evaluate_ms": 84.05689999926835,
+          "zero_frame_scope": "time setting and two native passes; includes runtime cold reset if requested; load/import/capture excluded",
+          "measurement": "time setting and two ExecutePasses calls; Python capture/JSON excluded; native diagnostics included",
+          "steady_after_frame_9": {
+            "samples": 0,
+            "median_ms": null,
+            "p95_ms": null,
+            "max_ms": null
+          }
+        }
+      }
+    },
+    {
+      "name": "advance_end_reopen",
+      "status": "passed",
+      "seconds": 0.578435100032948,
+      "result": {
+        "run": "end_reopen",
+        "processed_frames": [
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "next_frame": 11,
+        "complete": false,
+        "max_dynamic_step_distance": 0.6294243755150413,
+        "timing": {
+          "samples": 11,
+          "median_ms": 67.77049996890128,
+          "p95_ms": 84.05689999926835,
+          "max_ms": 84.05689999926835,
+          "zero_frame_initialization_or_seek_evaluate_ms": 84.05689999926835,
+          "zero_frame_scope": "time setting and two native passes; includes runtime cold reset if requested; load/import/capture excluded",
+          "measurement": "time setting and two ExecutePasses calls; Python capture/JSON excluded; native diagnostics included",
+          "steady_after_frame_9": {
+            "samples": 1,
+            "median_ms": 54.125199967529625,
+            "p95_ms": 54.125199967529625,
+            "max_ms": 54.125199967529625
+          }
+        }
+      }
+    },
+    {
+      "name": "advance_end_reopen",
+      "status": "passed",
+      "seconds": 0.6163751999847591,
+      "result": {
+        "run": "end_reopen",
+        "processed_frames": [
+          11,
+          12,
+          13,
+          14,
+          15
+        ],
+        "next_frame": 16,
+        "complete": false,
+        "max_dynamic_step_distance": 0.6294243755150413,
+        "timing": {
+          "samples": 16,
+          "median_ms": 66.11600000178441,
+          "p95_ms": 84.05689999926835,
+          "max_ms": 84.05689999926835,
+          "zero_frame_initialization_or_seek_evaluate_ms": 84.05689999926835,
+          "zero_frame_scope": "time setting and two native passes; includes runtime cold reset if requested; load/import/capture excluded",
+          "measurement": "time setting and two ExecutePasses calls; Python capture/JSON excluded; native diagnostics included",
+          "steady_after_frame_9": {
+            "samples": 6,
+            "median_ms": 59.844749979674816,
+            "p95_ms": 71.41979999141768,
+            "max_ms": 71.41979999141768
+          }
+        }
+      }
+    },
+    {
+      "name": "advance_end_reopen",
+      "status": "passed",
+      "seconds": 0.8250731999869458,
+      "result": {
+        "run": "end_reopen",
+        "processed_frames": [
+          16,
+          17,
+          18,
+          19,
+          20
+        ],
+        "next_frame": 21,
+        "complete": false,
+        "max_dynamic_step_distance": 0.6294243755150413,
+        "timing": {
+          "samples": 21,
+          "median_ms": 71.41979999141768,
+          "p95_ms": 92.15169999515638,
+          "max_ms": 107.82719997223467,
+          "zero_frame_initialization_or_seek_evaluate_ms": 84.05689999926835,
+          "zero_frame_scope": "time setting and two native passes; includes runtime cold reset if requested; load/import/capture excluded",
+          "measurement": "time setting and two ExecutePasses calls; Python capture/JSON excluded; native diagnostics included",
+          "steady_after_frame_9": {
+            "samples": 11,
+            "median_ms": 71.41979999141768,
+            "p95_ms": 107.82719997223467,
+            "max_ms": 107.82719997223467
+          }
+        }
+      }
+    },
+    {
+      "name": "advance_end_reopen",
+      "status": "passed",
+      "seconds": 0.6400960999890231,
+      "result": {
+        "run": "end_reopen",
+        "processed_frames": [
+          21,
+          22,
+          23,
+          24,
+          25
+        ],
+        "next_frame": 26,
+        "complete": false,
+        "max_dynamic_step_distance": 0.6294243755150413,
+        "timing": {
+          "samples": 26,
+          "median_ms": 69.53489998704754,
+          "p95_ms": 95.57659999700263,
+          "max_ms": 107.82719997223467,
+          "zero_frame_initialization_or_seek_evaluate_ms": 84.05689999926835,
+          "zero_frame_scope": "time setting and two native passes; includes runtime cold reset if requested; load/import/capture excluded",
+          "measurement": "time setting and two ExecutePasses calls; Python capture/JSON excluded; native diagnostics included",
+          "steady_after_frame_9": {
+            "samples": 16,
+            "median_ms": 69.53090001479723,
+            "p95_ms": 107.82719997223467,
+            "max_ms": 107.82719997223467
+          }
+        }
+      }
+    },
+    {
+      "name": "advance_end_reopen",
+      "status": "passed",
+      "seconds": 0.643530200002715,
+      "result": {
+        "run": "end_reopen",
+        "processed_frames": [
+          26,
+          27,
+          28,
+          29,
+          30
+        ],
+        "next_frame": 31,
+        "complete": false,
+        "max_dynamic_step_distance": 0.6294243755150413,
+        "timing": {
+          "samples": 31,
+          "median_ms": 67.97480001114309,
+          "p95_ms": 95.57659999700263,
+          "max_ms": 107.82719997223467,
+          "zero_frame_initialization_or_seek_evaluate_ms": 84.05689999926835,
+          "zero_frame_scope": "time setting and two native passes; includes runtime cold reset if requested; load/import/capture excluded",
+          "measurement": "time setting and two ExecutePasses calls; Python capture/JSON excluded; native diagnostics included",
+          "steady_after_frame_9": {
+            "samples": 21,
+            "median_ms": 67.97480001114309,
+            "p95_ms": 95.57659999700263,
+            "max_ms": 107.82719997223467
+          }
+        }
+      }
+    },
+    {
+      "name": "advance_end_reopen",
+      "status": "passed",
+      "seconds": 0.6597301999572664,
+      "result": {
+        "run": "end_reopen",
+        "processed_frames": [
+          31,
+          32,
+          33,
+          34,
+          35
+        ],
+        "next_frame": 36,
+        "complete": false,
+        "max_dynamic_step_distance": 0.6294243755150413,
+        "timing": {
+          "samples": 36,
+          "median_ms": 67.87264999002218,
+          "p95_ms": 95.57659999700263,
+          "max_ms": 107.82719997223467,
+          "zero_frame_initialization_or_seek_evaluate_ms": 84.05689999926835,
+          "zero_frame_scope": "time setting and two native passes; includes runtime cold reset if requested; load/import/capture excluded",
+          "measurement": "time setting and two ExecutePasses calls; Python capture/JSON excluded; native diagnostics included",
+          "steady_after_frame_9": {
+            "samples": 26,
+            "median_ms": 67.86865001777187,
+            "p95_ms": 95.57659999700263,
+            "max_ms": 107.82719997223467
+          }
+        }
+      }
+    },
+    {
+      "name": "advance_end_reopen",
+      "status": "passed",
+      "seconds": 0.7754779999959283,
+      "result": {
+        "run": "end_reopen",
+        "processed_frames": [
+          36,
+          37,
+          38,
+          39,
+          40
+        ],
+        "next_frame": 41,
+        "complete": false,
+        "max_dynamic_step_distance": 0.6294243755150413,
+        "timing": {
+          "samples": 41,
+          "median_ms": 70.06470003398135,
+          "p95_ms": 95.57659999700263,
+          "max_ms": 107.82719997223467,
+          "zero_frame_initialization_or_seek_evaluate_ms": 84.05689999926835,
+          "zero_frame_scope": "time setting and two native passes; includes runtime cold reset if requested; load/import/capture excluded",
+          "measurement": "time setting and two ExecutePasses calls; Python capture/JSON excluded; native diagnostics included",
+          "steady_after_frame_9": {
+            "samples": 31,
+            "median_ms": 70.06470003398135,
+            "p95_ms": 97.58410003269091,
+            "max_ms": 107.82719997223467
+          }
+        }
+      }
+    },
+    {
+      "name": "advance_end_reopen",
+      "status": "passed",
+      "seconds": 0.9887807000195608,
+      "result": {
+        "run": "end_reopen",
+        "processed_frames": [
+          41,
+          42,
+          43,
+          44,
+          45
+        ],
+        "next_frame": 46,
+        "complete": false,
+        "max_dynamic_step_distance": 0.6294243755150413,
+        "timing": {
+          "samples": 46,
+          "median_ms": 71.38219999615103,
+          "p95_ms": 105.19370000110939,
+          "max_ms": 126.40409998130053,
+          "zero_frame_initialization_or_seek_evaluate_ms": 84.05689999926835,
+          "zero_frame_scope": "time setting and two native passes; includes runtime cold reset if requested; load/import/capture excluded",
+          "measurement": "time setting and two ExecutePasses calls; Python capture/JSON excluded; native diagnostics included",
+          "steady_after_frame_9": {
+            "samples": 36,
+            "median_ms": 71.38219999615103,
+            "p95_ms": 107.82719997223467,
+            "max_ms": 126.40409998130053
+          }
+        }
+      }
+    },
+    {
+      "name": "advance_end_reopen",
+      "status": "passed",
+      "seconds": 1.8222306999959983,
+      "result": {
+        "run": "end_reopen",
+        "processed_frames": [
+          46,
+          47,
+          48,
+          49,
+          50
+        ],
+        "next_frame": 51,
+        "complete": false,
+        "max_dynamic_step_distance": 0.6294243755150413,
+        "timing": {
+          "samples": 51,
+          "median_ms": 71.533799986355,
+          "p95_ms": 279.8727000481449,
+          "max_ms": 465.16850002808496,
+          "zero_frame_initialization_or_seek_evaluate_ms": 84.05689999926835,
+          "zero_frame_scope": "time setting and two native passes; includes runtime cold reset if requested; load/import/capture excluded",
+          "measurement": "time setting and two ExecutePasses calls; Python capture/JSON excluded; native diagnostics included",
+          "steady_after_frame_9": {
+            "samples": 41,
+            "median_ms": 75.12539997696877,
+            "p95_ms": 279.8727000481449,
+            "max_ms": 465.16850002808496
+          }
+        }
+      }
+    },
+    {
+      "name": "advance_end_reopen",
+      "status": "passed",
+      "seconds": 1.2898283999529667,
+      "result": {
+        "run": "end_reopen",
+        "processed_frames": [
+          51,
+          52,
+          53,
+          54,
+          55
+        ],
+        "next_frame": 56,
+        "complete": false,
+        "max_dynamic_step_distance": 0.6294243755150413,
+        "timing": {
+          "samples": 56,
+          "median_ms": 75.04044997040182,
+          "p95_ms": 324.2126000113785,
+          "max_ms": 465.16850002808496,
+          "zero_frame_initialization_or_seek_evaluate_ms": 84.05689999926835,
+          "zero_frame_scope": "time setting and two native passes; includes runtime cold reset if requested; load/import/capture excluded",
+          "measurement": "time setting and two ExecutePasses calls; Python capture/JSON excluded; native diagnostics included",
+          "steady_after_frame_9": {
+            "samples": 46,
+            "median_ms": 80.63250000122935,
+            "p95_ms": 324.2126000113785,
+            "max_ms": 465.16850002808496
+          }
+        }
+      }
+    },
+    {
+      "name": "advance_end_reopen",
+      "status": "passed",
+      "seconds": 0.766967499977909,
+      "result": {
+        "run": "end_reopen",
+        "processed_frames": [
+          56,
+          57,
+          58,
+          59,
+          60
+        ],
+        "next_frame": 61,
+        "complete": true,
+        "max_dynamic_step_distance": 0.6294243755150413,
+        "timing": {
+          "samples": 61,
+          "median_ms": 74.95549996383488,
+          "p95_ms": 279.8727000481449,
+          "max_ms": 465.16850002808496,
+          "zero_frame_initialization_or_seek_evaluate_ms": 84.05689999926835,
+          "zero_frame_scope": "time setting and two native passes; includes runtime cold reset if requested; load/import/capture excluded",
+          "measurement": "time setting and two ExecutePasses calls; Python capture/JSON excluded; native diagnostics included",
+          "steady_after_frame_9": {
+            "samples": 51,
+            "median_ms": 76.83889998588711,
+            "p95_ms": 324.2126000113785,
+            "max_ms": 465.16850002808496
+          }
+        }
+      }
+    },
+    {
+      "name": "prepare_physics_disabled",
+      "status": "passed",
+      "seconds": 0.47134819999337196,
+      "result": {
+        "run": "physics_disabled",
+        "origin": "initial",
+        "frame": 0,
+        "dynamic_bone_count": 145,
+        "finite_bone_count": 319,
+        "geometry": {
+          "meshes": [
+            {
+              "name": "Mesh",
+              "vertices": 33608,
+              "polygons": 49572
+            }
+          ],
+          "topology_sha256": "b24723437c2585680ea96b2acc279ff0b78fe1eed12818798327c6391404d39f",
+          "points_sha256": "f65597778a861cea8b950376a6743847c362fd8e30bb79a66f5c33a7a5417e50"
+        },
+        "evaluate_ms": 74.83669999055564
+      }
+    },
+    {
+      "name": "advance_physics_disabled",
+      "status": "passed",
+      "seconds": 0.6078642000211403,
+      "result": {
+        "run": "physics_disabled",
+        "processed_frames": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "next_frame": 6,
+        "complete": false,
+        "max_dynamic_step_distance": 0.06634836241978159,
+        "timing": {
+          "samples": 6,
+          "median_ms": 59.92894998053089,
+          "p95_ms": 74.83669999055564,
+          "max_ms": 74.83669999055564,
+          "zero_frame_initialization_or_seek_evaluate_ms": 74.83669999055564,
+          "zero_frame_scope": "time setting and two native passes; includes runtime cold reset if requested; load/import/capture excluded",
+          "measurement": "time setting and two ExecutePasses calls; Python capture/JSON excluded; native diagnostics included",
+          "steady_after_frame_9": {
+            "samples": 0,
+            "median_ms": null,
+            "p95_ms": null,
+            "max_ms": null
+          }
+        }
+      }
+    },
+    {
+      "name": "advance_physics_disabled",
+      "status": "passed",
+      "seconds": 0.546238099981565,
+      "result": {
+        "run": "physics_disabled",
+        "processed_frames": [
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "next_frame": 11,
+        "complete": false,
+        "max_dynamic_step_distance": 0.06634836241978159,
+        "timing": {
+          "samples": 11,
+          "median_ms": 56.95769999874756,
+          "p95_ms": 74.83669999055564,
+          "max_ms": 74.83669999055564,
+          "zero_frame_initialization_or_seek_evaluate_ms": 74.83669999055564,
+          "zero_frame_scope": "time setting and two native passes; includes runtime cold reset if requested; load/import/capture excluded",
+          "measurement": "time setting and two ExecutePasses calls; Python capture/JSON excluded; native diagnostics included",
+          "steady_after_frame_9": {
+            "samples": 1,
+            "median_ms": 54.99589996179566,
+            "p95_ms": 54.99589996179566,
+            "max_ms": 54.99589996179566
+          }
+        }
+      }
+    },
+    {
+      "name": "advance_physics_disabled",
+      "status": "passed",
+      "seconds": 0.6450057000038214,
+      "result": {
+        "run": "physics_disabled",
+        "processed_frames": [
+          11,
+          12,
+          13,
+          14,
+          15
+        ],
+        "next_frame": 16,
+        "complete": false,
+        "max_dynamic_step_distance": 0.06634836241978159,
+        "timing": {
+          "samples": 16,
+          "median_ms": 56.15774999023415,
+          "p95_ms": 74.83669999055564,
+          "max_ms": 74.83669999055564,
+          "zero_frame_initialization_or_seek_evaluate_ms": 74.83669999055564,
+          "zero_frame_scope": "time setting and two native passes; includes runtime cold reset if requested; load/import/capture excluded",
+          "measurement": "time setting and two ExecutePasses calls; Python capture/JSON excluded; native diagnostics included",
+          "steady_after_frame_9": {
+            "samples": 6,
+            "median_ms": 54.850349988555536,
+            "p95_ms": 69.37489996198565,
+            "max_ms": 69.37489996198565
+          }
+        }
+      }
+    },
+    {
+      "name": "advance_physics_disabled",
+      "status": "passed",
+      "seconds": 0.48795879998942837,
+      "result": {
+        "run": "physics_disabled",
+        "processed_frames": [
+          16,
+          17,
+          18,
+          19,
+          20
+        ],
+        "next_frame": 21,
+        "complete": false,
+        "max_dynamic_step_distance": 0.06634836241978159,
+        "timing": {
+          "samples": 21,
+          "median_ms": 54.77829999290407,
+          "p95_ms": 69.37489996198565,
+          "max_ms": 74.83669999055564,
+          "zero_frame_initialization_or_seek_evaluate_ms": 74.83669999055564,
+          "zero_frame_scope": "time setting and two native passes; includes runtime cold reset if requested; load/import/capture excluded",
+          "measurement": "time setting and two ExecutePasses calls; Python capture/JSON excluded; native diagnostics included",
+          "steady_after_frame_9": {
+            "samples": 11,
+            "median_ms": 51.62469996139407,
+            "p95_ms": 69.37489996198565,
+            "max_ms": 69.37489996198565
+          }
+        }
+      }
+    },
+    {
+      "name": "advance_physics_disabled",
+      "status": "passed",
+      "seconds": 0.5765992000233382,
+      "result": {
+        "run": "physics_disabled",
+        "processed_frames": [
+          21,
+          22,
+          23,
+          24,
+          25
+        ],
+        "next_frame": 26,
+        "complete": false,
+        "max_dynamic_step_distance": 0.06634836241978159,
+        "timing": {
+          "samples": 26,
+          "median_ms": 54.74155000410974,
+          "p95_ms": 69.37489996198565,
+          "max_ms": 74.83669999055564,
+          "zero_frame_initialization_or_seek_evaluate_ms": 74.83669999055564,
+          "zero_frame_scope": "time setting and two native passes; includes runtime cold reset if requested; load/import/capture excluded",
+          "measurement": "time setting and two ExecutePasses calls; Python capture/JSON excluded; native diagnostics included",
+          "steady_after_frame_9": {
+            "samples": 16,
+            "median_ms": 52.5344000197947,
+            "p95_ms": 69.37489996198565,
+            "max_ms": 69.37489996198565
+          }
+        }
+      }
+    },
+    {
+      "name": "advance_physics_disabled",
+      "status": "passed",
+      "seconds": 0.5964092999929562,
+      "result": {
+        "run": "physics_disabled",
+        "processed_frames": [
+          26,
+          27,
+          28,
+          29,
+          30
+        ],
+        "next_frame": 31,
+        "complete": false,
+        "max_dynamic_step_distance": 0.06634836241978159,
+        "timing": {
+          "samples": 31,
+          "median_ms": 54.99589996179566,
+          "p95_ms": 69.37489996198565,
+          "max_ms": 74.83669999055564,
+          "zero_frame_initialization_or_seek_evaluate_ms": 74.83669999055564,
+          "zero_frame_scope": "time setting and two native passes; includes runtime cold reset if requested; load/import/capture excluded",
+          "measurement": "time setting and two ExecutePasses calls; Python capture/JSON excluded; native diagnostics included",
+          "steady_after_frame_9": {
+            "samples": 21,
+            "median_ms": 54.2905000038445,
+            "p95_ms": 68.39309999486431,
+            "max_ms": 69.37489996198565
+          }
+        }
+      }
+    },
+    {
+      "name": "advance_physics_disabled",
+      "status": "passed",
+      "seconds": 0.685413500003051,
+      "result": {
+        "run": "physics_disabled",
+        "processed_frames": [
+          31,
+          32,
+          33,
+          34,
+          35
+        ],
+        "next_frame": 36,
+        "complete": false,
+        "max_dynamic_step_distance": 0.06634836241978159,
+        "timing": {
+          "samples": 36,
+          "median_ms": 55.505450000055134,
+          "p95_ms": 70.70899999234825,
+          "max_ms": 74.83669999055564,
+          "zero_frame_initialization_or_seek_evaluate_ms": 74.83669999055564,
+          "zero_frame_scope": "time setting and two native passes; includes runtime cold reset if requested; load/import/capture excluded",
+          "measurement": "time setting and two ExecutePasses calls; Python capture/JSON excluded; native diagnostics included",
+          "steady_after_frame_9": {
+            "samples": 26,
+            "median_ms": 54.90344998543151,
+            "p95_ms": 69.37489996198565,
+            "max_ms": 70.70899999234825
+          }
+        }
+      }
+    },
+    {
+      "name": "advance_physics_disabled",
+      "status": "passed",
+      "seconds": 0.6729616000084206,
+      "result": {
+        "run": "physics_disabled",
+        "processed_frames": [
+          36,
+          37,
+          38,
+          39,
+          40
+        ],
+        "next_frame": 41,
+        "complete": false,
+        "max_dynamic_step_distance": 0.06634836241978159,
+        "timing": {
+          "samples": 41,
+          "median_ms": 56.95769999874756,
+          "p95_ms": 69.37489996198565,
+          "max_ms": 74.83669999055564,
+          "zero_frame_initialization_or_seek_evaluate_ms": 74.83669999055564,
+          "zero_frame_scope": "time setting and two native passes; includes runtime cold reset if requested; load/import/capture excluded",
+          "measurement": "time setting and two ExecutePasses calls; Python capture/JSON excluded; native diagnostics included",
+          "steady_after_frame_9": {
+            "samples": 31,
+            "median_ms": 55.65310001838952,
+            "p95_ms": 69.37489996198565,
+            "max_ms": 70.70899999234825
+          }
+        }
+      }
+    },
+    {
+      "name": "advance_physics_disabled",
+      "status": "passed",
+      "seconds": 0.7175952999969013,
+      "result": {
+        "run": "physics_disabled",
+        "processed_frames": [
+          41,
+          42,
+          43,
+          44,
+          45
+        ],
+        "next_frame": 46,
+        "complete": false,
+        "max_dynamic_step_distance": 0.06634836241978159,
+        "timing": {
+          "samples": 46,
+          "median_ms": 57.28574999375269,
+          "p95_ms": 70.70899999234825,
+          "max_ms": 74.83669999055564,
+          "zero_frame_initialization_or_seek_evaluate_ms": 74.83669999055564,
+          "zero_frame_scope": "time setting and two native passes; includes runtime cold reset if requested; load/import/capture excluded",
+          "measurement": "time setting and two ExecutePasses calls; Python capture/JSON excluded; native diagnostics included",
+          "steady_after_frame_9": {
+            "samples": 36,
+            "median_ms": 57.28574999375269,
+            "p95_ms": 70.70899999234825,
+            "max_ms": 73.96510004764423
+          }
+        }
+      }
+    },
+    {
+      "name": "advance_physics_disabled",
+      "status": "passed",
+      "seconds": 0.651352799963206,
+      "result": {
+        "run": "physics_disabled",
+        "processed_frames": [
+          46,
+          47,
+          48,
+          49,
+          50
+        ],
+        "next_frame": 51,
+        "complete": false,
+        "max_dynamic_step_distance": 0.06634836241978159,
+        "timing": {
+          "samples": 51,
+          "median_ms": 57.36769997747615,
+          "p95_ms": 70.70899999234825,
+          "max_ms": 74.83669999055564,
+          "zero_frame_initialization_or_seek_evaluate_ms": 74.83669999055564,
+          "zero_frame_scope": "time setting and two native passes; includes runtime cold reset if requested; load/import/capture excluded",
+          "measurement": "time setting and two ExecutePasses calls; Python capture/JSON excluded; native diagnostics included",
+          "steady_after_frame_9": {
+            "samples": 41,
+            "median_ms": 57.36769997747615,
+            "p95_ms": 69.77210001787171,
+            "max_ms": 73.96510004764423
+          }
+        }
+      }
+    },
+    {
+      "name": "advance_physics_disabled",
+      "status": "passed",
+      "seconds": 0.6431269000167958,
+      "result": {
+        "run": "physics_disabled",
+        "processed_frames": [
+          51,
+          52,
+          53,
+          54,
+          55
+        ],
+        "next_frame": 56,
+        "complete": false,
+        "max_dynamic_step_distance": 0.06634836241978159,
+        "timing": {
+          "samples": 56,
+          "median_ms": 57.5601999880746,
+          "p95_ms": 70.70899999234825,
+          "max_ms": 74.83669999055564,
+          "zero_frame_initialization_or_seek_evaluate_ms": 74.83669999055564,
+          "zero_frame_scope": "time setting and two native passes; includes runtime cold reset if requested; load/import/capture excluded",
+          "measurement": "time setting and two ExecutePasses calls; Python capture/JSON excluded; native diagnostics included",
+          "steady_after_frame_9": {
+            "samples": 46,
+            "median_ms": 57.5601999880746,
+            "p95_ms": 69.77210001787171,
+            "max_ms": 73.96510004764423
+          }
+        }
+      }
+    },
+    {
+      "name": "advance_physics_disabled",
+      "status": "passed",
+      "seconds": 0.6293646999984048,
+      "result": {
+        "run": "physics_disabled",
+        "processed_frames": [
+          56,
+          57,
+          58,
+          59,
+          60
+        ],
+        "next_frame": 61,
+        "complete": true,
+        "max_dynamic_step_distance": 0.06634836241978159,
+        "timing": {
+          "samples": 61,
+          "median_ms": 57.16950003989041,
+          "p95_ms": 69.77210001787171,
+          "max_ms": 74.83669999055564,
+          "zero_frame_initialization_or_seek_evaluate_ms": 74.83669999055564,
+          "zero_frame_scope": "time setting and two native passes; includes runtime cold reset if requested; load/import/capture excluded",
+          "measurement": "time setting and two ExecutePasses calls; Python capture/JSON excluded; native diagnostics included",
+          "steady_after_frame_9": {
+            "samples": 51,
+            "median_ms": 57.16950003989041,
+            "p95_ms": 69.77210001787171,
+            "max_ms": 73.96510004764423
+          }
+        }
+      }
+    },
+    {
+      "name": "physics_participation",
+      "status": "passed",
+      "seconds": 0.04716580000240356,
+      "result": {
+        "affected_runtime_bone_count": 145,
+        "max_matrix_component_difference": 6.777973195012921,
+        "affected_runtime_bone_indices": [
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45,
+          46,
+          48,
+          49,
+          50,
+          51,
+          52,
+          53,
+          54,
+          56,
+          57,
+          58,
+          59,
+          60,
+          61,
+          62,
+          64,
+          65,
+          66,
+          67,
+          68,
+          69,
+          70,
+          72,
+          73,
+          74,
+          75,
+          76,
+          77,
+          78,
+          80,
+          81,
+          82,
+          83,
+          84,
+          85,
+          86,
+          88,
+          89,
+          90,
+          91,
+          92,
+          93,
+          94,
+          96,
+          97,
+          98,
+          99,
+          100,
+          101,
+          102,
+          104,
+          105,
+          106,
+          107,
+          108,
+          109,
+          110,
+          135,
+          136,
+          137,
+          138,
+          139,
+          140,
+          141,
+          142,
+          143,
+          144,
+          145,
+          147,
+          149,
+          239,
+          240,
+          241,
+          242,
+          243,
+          244,
+          245,
+          246,
+          247,
+          248,
+          249,
+          250,
+          251,
+          252,
+          253,
+          254,
+          255,
+          256,
+          257,
+          261,
+          262,
+          263,
+          264,
+          265,
+          266,
+          267,
+          268,
+          269,
+          270,
+          271,
+          272,
+          273,
+          274,
+          275,
+          276,
+          277,
+          278,
+          279,
+          282,
+          284,
+          286,
+          288,
+          290,
+          291,
+          293,
+          295,
+          297,
+          299
+        ],
+        "authoring_rigid_matrices_not_used_as_simulation_proof": true
+      }
+    },
+    {
+      "name": "control_delta_smoke",
+      "status": "passed",
+      "seconds": 0.5548501000157557,
+      "result": {
+        "bone_index": 201,
+        "control_name": "キューブ_ctrl",
+        "fixed_frame": 0,
+        "physics_enabled": false,
+        "max_inactive_pose_error": 0.0,
+        "max_inactive_geometry_error": 0.0,
+        "nonidentity_pose_difference": 0.28777080099658003,
+        "max_reset_pose_error": 3.552713678800501e-15,
+        "nonidentity_geometry_difference": 0.13134397181556068,
+        "max_reset_geometry_error": 1.2434497875801753e-14,
+        "bone_translatable": false,
+        "bone_rotatable": true,
+        "finite_evaluated_geometry": {
+          "baseline": {
+            "meshes": [
+              {
+                "name": "Mesh",
+                "vertices": 33608,
+                "polygons": 49572
+              }
+            ],
+            "topology_sha256": "b24723437c2585680ea96b2acc279ff0b78fe1eed12818798327c6391404d39f",
+            "points_sha256": "755e7f7242567603b630bfaec10b44d4bd94ce6f1d1d88fe5aeac865571123b0"
+          },
+          "inactive": {
+            "meshes": [
+              {
+                "name": "Mesh",
+                "vertices": 33608,
+                "polygons": 49572
+              }
+            ],
+            "topology_sha256": "b24723437c2585680ea96b2acc279ff0b78fe1eed12818798327c6391404d39f",
+            "points_sha256": "755e7f7242567603b630bfaec10b44d4bd94ce6f1d1d88fe5aeac865571123b0"
+          },
+          "active": {
+            "meshes": [
+              {
+                "name": "Mesh",
+                "vertices": 33608,
+                "polygons": 49572
+              }
+            ],
+            "topology_sha256": "b24723437c2585680ea96b2acc279ff0b78fe1eed12818798327c6391404d39f",
+            "points_sha256": "90145a96bc02a386430d59c73342d9ba6721df2e8442fe55b969e14494ff8eb0"
+          },
+          "reset": {
+            "meshes": [
+              {
+                "name": "Mesh",
+                "vertices": 33608,
+                "polygons": 49572
+              }
+            ],
+            "topology_sha256": "b24723437c2585680ea96b2acc279ff0b78fe1eed12818798327c6391404d39f",
+            "points_sha256": "b9f92025bdf3d6d5f500baa64141325f9788314788dfa8ac884ec00ff29dc35a"
+          }
+        }
+      }
+    },
+    {
+      "name": "compare_seek_replay",
+      "status": "failed",
+      "seconds": 0.02476780000142753,
+      "error": "Replay differs: bone matrix max=0.045868372625538195, final point coordinate max=0.008281679299009248",
+      "traceback": "Traceback (most recent call last):\n  File \"C:\\code\\C4D_MMD_Tool\\scripts\\c4d_extended_validation.py\", line 250, in phase\n    result = action()\n             ^^^^^^^^\n  File \"C:\\code\\C4D_MMD_Tool\\scripts\\c4d_extended_validation.py\", line 487, in action\n    raise AssertionError('Replay differs: bone matrix max='+str(largest)+', final point coordinate max='+str(point_error))\nAssertionError: Replay differs: bone matrix max=0.045868372625538195, final point coordinate max=0.008281679299009248\n"
+    }
+  ],
+  "runs": {
+    "reference": {
+      "origin": "fresh",
+      "physics_enabled": true,
+      "next_frame": 61,
+      "complete": true,
+      "evaluate_ms": [
+        61.75920000532642,
+        92.2786999726668,
+        97.02599997399375,
+        73.8124999916181,
+        87.12219999870285,
+        91.88990003895015,
+        83.47940002568066,
+        66.11630000406876,
+        67.51209998037666,
+        80.6260000099428,
+        67.49029998900369,
+        62.764299975242466,
+        84.23460001358762,
+        86.39499999117106,
+        67.0111000072211,
+        81.0226000030525,
+        82.13150000665337,
+        83.9024999877438,
+        66.89199997344986,
+        86.4146999665536,
+        67.82039999961853,
+        71.06799999019131,
+        83.91950000077486,
+        83.25219998368993,
+        78.99349997751415,
+        83.73799995752051,
+        103.64379995735362,
+        93.79850002005696,
+        110.45400000875816,
+        90.91410000110045,
+        63.672399963252246,
+        69.86359995789826,
+        67.78550002491102,
+        79.96389997424558,
+        89.00420001009479,
+        81.93659997778013,
+        71.69539999449626,
+        88.19039998343214,
+        77.1379999932833,
+        72.17050000326708,
+        85.66769998287782,
+        103.59880002215505,
+        73.8744999980554,
+        87.88210002239794,
+        92.27870003087446,
+        132.24579999223351,
+        111.31859995657578,
+        109.39009999856353,
+        108.73760003596544,
+        108.69739996269345,
+        103.92480000155047,
+        134.08889999845996,
+        121.996300003957,
+        122.84699996234849,
+        97.8021000046283,
+        171.11080000177026,
+        147.56459998898208,
+        175.17959995893762,
+        109.32160000083968,
+        118.74750000424683,
+        119.19190001208335
+      ],
+      "model_extent": 26.462238633488997,
+      "max_dynamic_step_distance": 0.6294243755150413,
+      "dynamic_bone_indices": [
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        64,
+        65,
+        66,
+        67,
+        68,
+        69,
+        70,
+        72,
+        73,
+        74,
+        75,
+        76,
+        77,
+        78,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        135,
+        136,
+        137,
+        138,
+        139,
+        140,
+        141,
+        142,
+        143,
+        144,
+        145,
+        147,
+        149,
+        239,
+        240,
+        241,
+        242,
+        243,
+        244,
+        245,
+        246,
+        247,
+        248,
+        249,
+        250,
+        251,
+        252,
+        253,
+        254,
+        255,
+        256,
+        257,
+        261,
+        262,
+        263,
+        264,
+        265,
+        266,
+        267,
+        268,
+        269,
+        270,
+        271,
+        272,
+        273,
+        274,
+        275,
+        276,
+        277,
+        278,
+        279,
+        282,
+        284,
+        286,
+        288,
+        290,
+        291,
+        293,
+        295,
+        297,
+        299
+      ],
+      "continuity_guard": "one model extent per adjacent 30fps frame; gross divergence only",
+      "timing": {
+        "samples": 61,
+        "median_ms": 86.39499999117106,
+        "p95_ms": 134.08889999845996,
+        "max_ms": 175.17959995893762,
+        "zero_frame_initialization_or_seek_evaluate_ms": 61.75920000532642,
+        "zero_frame_scope": "time setting and two native passes; includes runtime cold reset if requested; load/import/capture excluded",
+        "measurement": "time setting and two ExecutePasses calls; Python capture/JSON excluded; native diagnostics included",
+        "steady_after_frame_9": {
+          "samples": 51,
+          "median_ms": 86.4146999665536,
+          "p95_ms": 147.56459998898208,
+          "max_ms": 175.17959995893762
+        }
+      }
+    },
+    "seek_replay": {
+      "origin": "seek",
+      "physics_enabled": true,
+      "next_frame": 61,
+      "complete": true,
+      "evaluate_ms": [
+        669.4300000090152,
+        138.5909999953583,
+        112.89790004957467,
+        126.98469997849315,
+        82.2148000006564,
+        69.98099997872487,
+        107.77770000277087,
+        106.86310002347454,
+        91.80870000272989,
+        104.05480000190437,
+        151.9702000077814,
+        127.04400002257898,
+        121.29460001597181,
+        112.79320000903681,
+        106.30109999328852,
+        116.7033999809064,
+        116.1871999502182,
+        179.71619998570532,
+        128.63250001100823,
+        108.9893999742344,
+        103.4427999984473,
+        126.39600003603846,
+        132.1934000006877,
+        155.10219999123365,
+        122.21399997361004,
+        144.2986999754794,
+        218.70169998146594,
+        184.93589997524396,
+        209.521799988579,
+        146.1966999922879,
+        210.91949997935444,
+        118.7884000246413,
+        140.53839998086914,
+        92.0732999802567,
+        92.7129999618046,
+        92.15959999710321,
+        71.56930002383888,
+        84.54169996548444,
+        79.4292000355199,
+        79.35479999287054,
+        77.77459995122626,
+        77.32320000650361,
+        79.25790001172572,
+        66.07719999738038,
+        80.70789999328554,
+        89.86490004463121,
+        133.9733999921009,
+        127.45919998269528,
+        127.8667000005953,
+        74.36580001376569,
+        89.89750000182539,
+        70.06579998414963,
+        93.48179999506101,
+        64.55900002038106,
+        67.85639998270199,
+        91.16439998615533,
+        78.14749999670312,
+        92.34289999585599,
+        86.5458999760449,
+        84.55680002225563,
+        77.603799989447
+      ],
+      "model_extent": 26.462238633488994,
+      "max_dynamic_step_distance": 0.6294243755150413,
+      "dynamic_bone_indices": [
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        64,
+        65,
+        66,
+        67,
+        68,
+        69,
+        70,
+        72,
+        73,
+        74,
+        75,
+        76,
+        77,
+        78,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        135,
+        136,
+        137,
+        138,
+        139,
+        140,
+        141,
+        142,
+        143,
+        144,
+        145,
+        147,
+        149,
+        239,
+        240,
+        241,
+        242,
+        243,
+        244,
+        245,
+        246,
+        247,
+        248,
+        249,
+        250,
+        251,
+        252,
+        253,
+        254,
+        255,
+        256,
+        257,
+        261,
+        262,
+        263,
+        264,
+        265,
+        266,
+        267,
+        268,
+        269,
+        270,
+        271,
+        272,
+        273,
+        274,
+        275,
+        276,
+        277,
+        278,
+        279,
+        282,
+        284,
+        286,
+        288,
+        290,
+        291,
+        293,
+        295,
+        297,
+        299
+      ],
+      "continuity_guard": "one model extent per adjacent 30fps frame; gross divergence only",
+      "timing": {
+        "samples": 61,
+        "median_ms": 106.30109999328852,
+        "p95_ms": 209.521799988579,
+        "max_ms": 669.4300000090152,
+        "zero_frame_initialization_or_seek_evaluate_ms": 669.4300000090152,
+        "zero_frame_scope": "time setting and two native passes; includes runtime cold reset if requested; load/import/capture excluded",
+        "measurement": "time setting and two ExecutePasses calls; Python capture/JSON excluded; native diagnostics included",
+        "steady_after_frame_9": {
+          "samples": 51,
+          "median_ms": 103.4427999984473,
+          "p95_ms": 209.521799988579,
+          "max_ms": 218.70169998146594
+        }
+      }
+    },
+    "initial_reopen": {
+      "origin": "initial",
+      "physics_enabled": true,
+      "next_frame": 61,
+      "complete": true,
+      "evaluate_ms": [
+        75.85039996774867,
+        77.22869998542592,
+        73.62250000005588,
+        62.84200004301965,
+        80.00290003838018,
+        65.056299965363,
+        86.33089996874332,
+        92.66520000528544,
+        83.25460000196472,
+        68.91400000313297,
+        88.6422999901697,
+        85.48939996398985,
+        92.17909997096285,
+        76.48930000141263,
+        89.8536000167951,
+        86.94379997905344,
+        70.71289996383712,
+        87.3896999983117,
+        93.33959996001795,
+        82.74390001315624,
+        89.83570005511865,
+        67.05579999834299,
+        55.19430001731962,
+        53.58349997550249,
+        53.49379999097437,
+        51.86539998976514,
+        49.627000000327826,
+        46.703999978490174,
+        43.946499994490296,
+        47.397500020451844,
+        45.67050002515316,
+        50.425399967934936,
+        51.019800011999905,
+        57.17949999962002,
+        51.18969996692613,
+        47.01549996389076,
+        58.80519998027012,
+        46.115499979350716,
+        40.45799997402355,
+        43.28669997630641,
+        52.14759998489171,
+        57.1887000114657,
+        64.15009999182075,
+        47.6939000072889,
+        51.31569999502972,
+        44.88550004316494,
+        56.62889999803156,
+        56.74839997664094,
+        49.258199986070395,
+        41.16909997537732,
+        58.47170000197366,
+        61.085599998477846,
+        54.96430001221597,
+        73.27479997184128,
+        69.72510000923648,
+        69.74619999527931,
+        76.71260001370683,
+        56.857299990952015,
+        69.82560001779348,
+        64.83489996753633,
+        79.01649997802451
+      ],
+      "model_extent": 26.462238633488997,
+      "max_dynamic_step_distance": 0.6294243755150413,
+      "dynamic_bone_indices": [
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        64,
+        65,
+        66,
+        67,
+        68,
+        69,
+        70,
+        72,
+        73,
+        74,
+        75,
+        76,
+        77,
+        78,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        135,
+        136,
+        137,
+        138,
+        139,
+        140,
+        141,
+        142,
+        143,
+        144,
+        145,
+        147,
+        149,
+        239,
+        240,
+        241,
+        242,
+        243,
+        244,
+        245,
+        246,
+        247,
+        248,
+        249,
+        250,
+        251,
+        252,
+        253,
+        254,
+        255,
+        256,
+        257,
+        261,
+        262,
+        263,
+        264,
+        265,
+        266,
+        267,
+        268,
+        269,
+        270,
+        271,
+        272,
+        273,
+        274,
+        275,
+        276,
+        277,
+        278,
+        279,
+        282,
+        284,
+        286,
+        288,
+        290,
+        291,
+        293,
+        295,
+        297,
+        299
+      ],
+      "continuity_guard": "one model extent per adjacent 30fps frame; gross divergence only",
+      "timing": {
+        "samples": 61,
+        "median_ms": 61.085599998477846,
+        "p95_ms": 89.8536000167951,
+        "max_ms": 93.33959996001795,
+        "zero_frame_initialization_or_seek_evaluate_ms": 75.85039996774867,
+        "zero_frame_scope": "time setting and two native passes; includes runtime cold reset if requested; load/import/capture excluded",
+        "measurement": "time setting and two ExecutePasses calls; Python capture/JSON excluded; native diagnostics included",
+        "steady_after_frame_9": {
+          "samples": 51,
+          "median_ms": 56.857299990952015,
+          "p95_ms": 89.8536000167951,
+          "max_ms": 93.33959996001795
+        }
+      }
+    },
+    "end_reopen": {
+      "origin": "saved",
+      "physics_enabled": true,
+      "next_frame": 61,
+      "complete": true,
+      "evaluate_ms": [
+        84.05689999926835,
+        71.533799986355,
+        74.95549996383488,
+        71.48159999633208,
+        78.5331999650225,
+        59.1992000117898,
+        64.46949997916818,
+        63.038700027391315,
+        61.0053000273183,
+        67.77049996890128,
+        54.125199967529625,
+        67.76250002440065,
+        55.65639998530969,
+        56.71909998636693,
+        62.970399972982705,
+        71.41979999141768,
+        73.69140000082552,
+        90.74569999938831,
+        107.82719997223467,
+        92.15169999515638,
+        88.51659996435046,
+        95.57659999700263,
+        71.2993000051938,
+        54.19599998276681,
+        59.45390003034845,
+        67.67389999004081,
+        67.97480001114309,
+        58.73479996807873,
+        75.12539997696877,
+        55.906100024003536,
+        70.06470003398135,
+        75.37939999019727,
+        71.34460000088438,
+        65.63610001467168,
+        62.82990000909194,
+        66.66579999728128,
+        76.83889998588711,
+        69.35710000107065,
+        97.58410003269091,
+        84.42610001657158,
+        87.11530000437051,
+        126.40409998130053,
+        97.99519996158779,
+        105.19370000110939,
+        95.89930000947788,
+        98.66710001369938,
+        465.16850002808496,
+        132.89690000237897,
+        109.00669998954982,
+        279.8727000481449,
+        324.2126000113785,
+        124.02270000893623,
+        453.1783999991603,
+        99.775500013493,
+        85.57009999640286,
+        87.55860000383109,
+        84.22249997965991,
+        67.55259999772534,
+        74.1791000473313,
+        83.14429997699335,
+        74.33339999988675
+      ],
+      "model_extent": 26.462238633488994,
+      "max_dynamic_step_distance": 0.6294243755150413,
+      "dynamic_bone_indices": [
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        64,
+        65,
+        66,
+        67,
+        68,
+        69,
+        70,
+        72,
+        73,
+        74,
+        75,
+        76,
+        77,
+        78,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        135,
+        136,
+        137,
+        138,
+        139,
+        140,
+        141,
+        142,
+        143,
+        144,
+        145,
+        147,
+        149,
+        239,
+        240,
+        241,
+        242,
+        243,
+        244,
+        245,
+        246,
+        247,
+        248,
+        249,
+        250,
+        251,
+        252,
+        253,
+        254,
+        255,
+        256,
+        257,
+        261,
+        262,
+        263,
+        264,
+        265,
+        266,
+        267,
+        268,
+        269,
+        270,
+        271,
+        272,
+        273,
+        274,
+        275,
+        276,
+        277,
+        278,
+        279,
+        282,
+        284,
+        286,
+        288,
+        290,
+        291,
+        293,
+        295,
+        297,
+        299
+      ],
+      "continuity_guard": "one model extent per adjacent 30fps frame; gross divergence only",
+      "timing": {
+        "samples": 61,
+        "median_ms": 74.95549996383488,
+        "p95_ms": 279.8727000481449,
+        "max_ms": 465.16850002808496,
+        "zero_frame_initialization_or_seek_evaluate_ms": 84.05689999926835,
+        "zero_frame_scope": "time setting and two native passes; includes runtime cold reset if requested; load/import/capture excluded",
+        "measurement": "time setting and two ExecutePasses calls; Python capture/JSON excluded; native diagnostics included",
+        "steady_after_frame_9": {
+          "samples": 51,
+          "median_ms": 76.83889998588711,
+          "p95_ms": 324.2126000113785,
+          "max_ms": 465.16850002808496
+        }
+      }
+    },
+    "physics_disabled": {
+      "origin": "initial",
+      "physics_enabled": false,
+      "next_frame": 61,
+      "complete": true,
+      "evaluate_ms": [
+        74.83669999055564,
+        59.069200011435896,
+        63.158700009807944,
+        60.78869994962588,
+        54.77829999290407,
+        58.23869997402653,
+        37.234900053590536,
+        42.46120003517717,
+        55.357799981720746,
+        56.95769999874756,
+        54.99589996179566,
+        51.62469996139407,
+        53.00860002171248,
+        68.39309999486431,
+        69.37489996198565,
+        54.70480001531541,
+        49.96410000603646,
+        39.31550000561401,
+        36.65329999057576,
+        45.19319999963045,
+        44.14479999104515,
+        52.06020001787692,
+        55.65310001838952,
+        57.36769997747615,
+        52.03379999147728,
+        54.2905000038445,
+        60.56760001229122,
+        58.79740003729239,
+        57.20380001002923,
+        51.4608999947086,
+        57.16950003989041,
+        54.81100000906736,
+        70.70899999234825,
+        63.9033000334166,
+        65.26669999584556,
+        63.39079997269437,
+        69.20289999106899,
+        51.46950000198558,
+        59.90079999901354,
+        59.81429998064414,
+        57.75269999867305,
+        73.96510004764423,
+        66.06490002013743,
+        69.77210001787171,
+        65.50450000213459,
+        67.8242000285536,
+        58.899099996779114,
+        52.147399983368814,
+        69.49019996682182,
+        47.97130002407357,
+        61.883100017439574,
+        59.7884000162594,
+        59.41549997078255,
+        47.307000029832125,
+        51.56749999150634,
+        63.14320000819862,
+        43.59269997803494,
+        56.56479997560382,
+        56.20329995872453,
+        52.615800057537854,
+        49.656599992886186
+      ],
+      "model_extent": 26.462238633488997,
+      "max_dynamic_step_distance": 0.06634836241978159,
+      "dynamic_bone_indices": [
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        64,
+        65,
+        66,
+        67,
+        68,
+        69,
+        70,
+        72,
+        73,
+        74,
+        75,
+        76,
+        77,
+        78,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        135,
+        136,
+        137,
+        138,
+        139,
+        140,
+        141,
+        142,
+        143,
+        144,
+        145,
+        147,
+        149,
+        239,
+        240,
+        241,
+        242,
+        243,
+        244,
+        245,
+        246,
+        247,
+        248,
+        249,
+        250,
+        251,
+        252,
+        253,
+        254,
+        255,
+        256,
+        257,
+        261,
+        262,
+        263,
+        264,
+        265,
+        266,
+        267,
+        268,
+        269,
+        270,
+        271,
+        272,
+        273,
+        274,
+        275,
+        276,
+        277,
+        278,
+        279,
+        282,
+        284,
+        286,
+        288,
+        290,
+        291,
+        293,
+        295,
+        297,
+        299
+      ],
+      "continuity_guard": "one model extent per adjacent 30fps frame; gross divergence only",
+      "timing": {
+        "samples": 61,
+        "median_ms": 57.16950003989041,
+        "p95_ms": 69.77210001787171,
+        "max_ms": 74.83669999055564,
+        "zero_frame_initialization_or_seek_evaluate_ms": 74.83669999055564,
+        "zero_frame_scope": "time setting and two native passes; includes runtime cold reset if requested; load/import/capture excluded",
+        "measurement": "time setting and two ExecutePasses calls; Python capture/JSON excluded; native diagnostics included",
+        "steady_after_frame_9": {
+          "samples": 51,
+          "median_ms": 57.16950003989041,
+          "p95_ms": 69.77210001787171,
+          "max_ms": 73.96510004764423
+        }
+      }
+    }
+  },
+  "same_quality_historical_performance_accepted": false,
+  "assets_modified": false,
+  "document_owner_run_id": "30ac727e-b59f-4e48-90d2-783b11d9fde2",
+  "physics_participation": {
+    "affected_runtime_bone_count": 145,
+    "max_matrix_component_difference": 6.777973195012921,
+    "affected_runtime_bone_indices": [
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      40,
+      41,
+      42,
+      43,
+      44,
+      45,
+      46,
+      48,
+      49,
+      50,
+      51,
+      52,
+      53,
+      54,
+      56,
+      57,
+      58,
+      59,
+      60,
+      61,
+      62,
+      64,
+      65,
+      66,
+      67,
+      68,
+      69,
+      70,
+      72,
+      73,
+      74,
+      75,
+      76,
+      77,
+      78,
+      80,
+      81,
+      82,
+      83,
+      84,
+      85,
+      86,
+      88,
+      89,
+      90,
+      91,
+      92,
+      93,
+      94,
+      96,
+      97,
+      98,
+      99,
+      100,
+      101,
+      102,
+      104,
+      105,
+      106,
+      107,
+      108,
+      109,
+      110,
+      135,
+      136,
+      137,
+      138,
+      139,
+      140,
+      141,
+      142,
+      143,
+      144,
+      145,
+      147,
+      149,
+      239,
+      240,
+      241,
+      242,
+      243,
+      244,
+      245,
+      246,
+      247,
+      248,
+      249,
+      250,
+      251,
+      252,
+      253,
+      254,
+      255,
+      256,
+      257,
+      261,
+      262,
+      263,
+      264,
+      265,
+      266,
+      267,
+      268,
+      269,
+      270,
+      271,
+      272,
+      273,
+      274,
+      275,
+      276,
+      277,
+      278,
+      279,
+      282,
+      284,
+      286,
+      288,
+      290,
+      291,
+      293,
+      295,
+      297,
+      299
+    ],
+    "authoring_rigid_matrices_not_used_as_simulation_proof": true
+  },
+  "control_delta_smoke": {
+    "bone_index": 201,
+    "control_name": "キューブ_ctrl",
+    "fixed_frame": 0,
+    "physics_enabled": false,
+    "max_inactive_pose_error": 0.0,
+    "max_inactive_geometry_error": 0.0,
+    "nonidentity_pose_difference": 0.28777080099658003,
+    "max_reset_pose_error": 3.552713678800501e-15,
+    "nonidentity_geometry_difference": 0.13134397181556068,
+    "max_reset_geometry_error": 1.2434497875801753e-14,
+    "bone_translatable": false,
+    "bone_rotatable": true,
+    "finite_evaluated_geometry": {
+      "baseline": {
+        "meshes": [
+          {
+            "name": "Mesh",
+            "vertices": 33608,
+            "polygons": 49572
+          }
+        ],
+        "topology_sha256": "b24723437c2585680ea96b2acc279ff0b78fe1eed12818798327c6391404d39f",
+        "points_sha256": "755e7f7242567603b630bfaec10b44d4bd94ce6f1d1d88fe5aeac865571123b0"
+      },
+      "inactive": {
+        "meshes": [
+          {
+            "name": "Mesh",
+            "vertices": 33608,
+            "polygons": 49572
+          }
+        ],
+        "topology_sha256": "b24723437c2585680ea96b2acc279ff0b78fe1eed12818798327c6391404d39f",
+        "points_sha256": "755e7f7242567603b630bfaec10b44d4bd94ce6f1d1d88fe5aeac865571123b0"
+      },
+      "active": {
+        "meshes": [
+          {
+            "name": "Mesh",
+            "vertices": 33608,
+            "polygons": 49572
+          }
+        ],
+        "topology_sha256": "b24723437c2585680ea96b2acc279ff0b78fe1eed12818798327c6391404d39f",
+        "points_sha256": "90145a96bc02a386430d59c73342d9ba6721df2e8442fe55b969e14494ff8eb0"
+      },
+      "reset": {
+        "meshes": [
+          {
+            "name": "Mesh",
+            "vertices": 33608,
+            "polygons": 49572
+          }
+        ],
+        "topology_sha256": "b24723437c2585680ea96b2acc279ff0b78fe1eed12818798327c6391404d39f",
+        "points_sha256": "b9f92025bdf3d6d5f500baa64141325f9788314788dfa8ac884ec00ff29dc35a"
+      }
+    }
+  },
+  "failure_scenes": [
+    {
+      "label": "extended physics reference",
+      "path": "S:\\tmp\\cmt-sdk2027-native-20261019\\real-assets\\extended-complete\\failed-compare_seek_replay-0.c4d",
+      "saved": true
+    },
+    {
+      "label": "extended reopened initial_reopen",
+      "path": "S:\\tmp\\cmt-sdk2027-native-20261019\\real-assets\\extended-complete\\failed-compare_seek_replay-1.c4d",
+      "saved": true
+    },
+    {
+      "label": "extended reopened end_reopen",
+      "path": "S:\\tmp\\cmt-sdk2027-native-20261019\\real-assets\\extended-complete\\failed-compare_seek_replay-2.c4d",
+      "saved": true
+    },
+    {
+      "label": "extended reopened physics_disabled",
+      "path": "S:\\tmp\\cmt-sdk2027-native-20261019\\real-assets\\extended-complete\\failed-compare_seek_replay-3.c4d",
+      "saved": true
+    }
+  ],
+  "cleanup": {
+    "owner_run_id": "30ac727e-b59f-4e48-90d2-783b11d9fde2",
+    "closed_owned_documents": [
+      "extended physics reference",
+      "extended reopened initial_reopen",
+      "extended reopened end_reopen",
+      "extended reopened physics_disabled"
+    ],
+    "released_nonlive_documents": [],
+    "remaining_owned_documents": [],
+    "errors": [],
+    "original_document_restored": true
+  },
+  "current_source_sha256_at_start": "f94e9a12d567648c666e99a3b59fcf6cc12c126a06e49ddd70c12ed537520a01",
+  "current_source_accepted": false,
+  "finished_utc": "2026-10-19T07:48:29.348781+00:00"
+}

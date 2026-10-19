@@ -1,0 +1,9 @@
+#ifndef TOOL_MGSCATTER_H__
+#define TOOL_MGSCATTER_H__
+
+enum
+{
+	TOOL_MGSCATTER_MAIN_GROUP = 30000,
+};
+
+#endif // TOOL_MGSCATTER_H__

@@ -1,0 +1,9 @@
+#ifndef FTHREEMFIMPORT_H__
+#define FTHREEMFIMPORT_H__
+
+enum
+{
+	THREEMFIMPORT_GROUP = 999
+};
+
+#endif // FTHREEMFIMPORT_H__

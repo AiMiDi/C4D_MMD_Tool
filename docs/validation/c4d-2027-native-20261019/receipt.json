@@ -1,0 +1,136 @@
+{
+  "date": "2026-10-19",
+  "scope": "Windows C4D 2027 native API and real-asset validation",
+  "host_version": 2027000,
+  "native_identity": {
+    "host_version": 2027000,
+    "pid": 64328,
+    "loaded_binary": {
+      "path": "C:\\code\\C4D_MMD_Tool\\_build_msvc\\sdk_2027_v143\\bin\\Release\\plugins\\mmdtool\\mmdtool.xdl64",
+      "sha256": "40506105a9d082675d30f92c4b566472929247d49424829e47bfa192a1fd0d7f"
+    }
+  },
+  "status": "partial_pass_with_replay_failure",
+  "full_compatibility_accepted": false,
+  "production_suite": {
+    "status": "passed",
+    "stages": 8,
+    "run_id": "0ad4a7b3-878c-42cb-bc39-76c4b718c3a8"
+  },
+  "sour": {
+    "bones": 319,
+    "vertices": 33608,
+    "frame_range": [
+      0,
+      60
+    ],
+    "fps": 30,
+    "runs_completed": [
+      "reference",
+      "seek_replay",
+      "initial_reopen",
+      "end_reopen",
+      "physics_disabled"
+    ],
+    "native_psr_ik_checks": 90,
+    "native_psr_ik_passed": true,
+    "physics_affected_runtime_bones": 145,
+    "control_delta_smoke_passed": true,
+    "strict_seek_replay": {
+      "status": "failed",
+      "tolerance": 0.0001,
+      "max_bone_matrix_component_error": 0.045868372625538195,
+      "max_final_point_coordinate_error": 0.008281679299009248,
+      "specific_to_2027_established": false
+    }
+  },
+  "afu": {
+    "status": "passed",
+    "bones": 625,
+    "vertices": 70222,
+    "frame_range": [
+      0,
+      30
+    ],
+    "save_reopen_and_finite_geometry": true,
+    "strict_replay_equality_tested": false
+  },
+  "camera": {
+    "status": "passed",
+    "input_keys": 93,
+    "sample_frames": [
+      0,
+      30,
+      60
+    ],
+    "export_bytes": 103225,
+    "reopen_max_matrix_error": 0.0
+  },
+  "cleanup": {
+    "all_test_owned_documents_closed": true,
+    "original_document_restored": true,
+    "host_left_running": true
+  },
+  "not_accepted": [
+    "physics seek replay determinism",
+    "render and material appearance",
+    "visual screenshot acceptance",
+    "host restart and exit",
+    "macOS runtime",
+    "remote CI",
+    "public release"
+  ],
+  "evidence": {
+    "production-receipt.json": {
+      "source": "S:\\tmp\\cmt-sdk2027-native-20261019\\production-final\\receipt.json",
+      "bytes": 58408,
+      "sha256": "ae263d5bba336f188fd8c42e0a33714fb504ce2c28ee5eab648484f7ec61248b"
+    },
+    "sour-receipt.json": {
+      "source": "S:\\tmp\\cmt-sdk2027-native-20261019\\real-assets\\extended-complete\\receipt.json",
+      "bytes": 109430,
+      "sha256": "f86beb49a96687a318648199d41d05e421e39c8a184b8ee266ec44ec06030db9"
+    },
+    "sour-native-psr-results.json": {
+      "source": "S:\\tmp\\cmt-sdk2027-native-20261019\\real-assets\\extended-complete\\native-ik-center\\native-psr-results.json",
+      "bytes": 12164,
+      "sha256": "1842b0f0e5c7afbd3ad27364a7bfaf6e96c6f3ed7217e40d9bacec8757d408a5"
+    },
+    "afu-receipt.json": {
+      "source": "S:\\tmp\\cmt-sdk2027-native-20261019\\afu-smoke-final\\receipt.json",
+      "bytes": 14009,
+      "sha256": "88f5a548722006bf683b7e58eaf15960336b21be7873fe0e4403b1dbc7da65fe"
+    },
+    "camera-receipt.json": {
+      "source": "S:\\tmp\\cmt-sdk2027-native-20261019\\camera-real\\receipt.json",
+      "bytes": 2336,
+      "sha256": "57d24ca9241f6ef8740e98e00d7e90ab67fc7b074b42939af2bb6428ea50318a"
+    },
+    "asset-inventory.json": {
+      "source": "S:\\tmp\\cmt-sdk2027-native-20261019\\real-assets\\inventory.json",
+      "bytes": 490,
+      "sha256": "d9e5aa4d0308d05f2b1d710315b78a1bb687962436d6bc94ce7b2770ce02883a"
+    }
+  },
+  "final_host_state": {
+    "host_version": 2027000,
+    "documents": [
+      {
+        "name": "未标题 1",
+        "active": true
+      }
+    ],
+    "binary_sha256": "40506105a9d082675d30f92c4b566472929247d49424829e47bfa192a1fd0d7f"
+  },
+  "followup_2026_baseline": {
+    "date": "2026-10-19",
+    "report": "../c4d-2026-2027-compare-20261019/README.md",
+    "host_version": 2026400,
+    "same_source_and_assets": true,
+    "same_replay_failure_reproduced": true,
+    "all_five_corresponding_trajectories_equal": true,
+    "max_cross_version_matrix_and_final_point_error": 0.0,
+    "strict_replay_accepted": false,
+    "root_cause_identified": false
+  }
+}

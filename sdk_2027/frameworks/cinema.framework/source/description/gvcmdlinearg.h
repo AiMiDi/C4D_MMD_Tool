@@ -1,0 +1,14 @@
+#ifndef GVCMDLINEARG_H__
+#define GVCMDLINEARG_H__
+
+#include "gvbase.h"
+
+enum
+{
+	GV_CMDLINEARG_NAME = 2000,
+	GV_CMDLINEARG_DEFAULT_VALUE = 2001,
+	GV_CMDLINEARG_VALUE = 3000,
+	GV_CMDLINEARG_
+};
+
+#endif // GVCMDLINEARG_H__

@@ -2553,7 +2553,7 @@ void MMDBoneTag::CollectIKAffectedBoneIndices(maxon::BaseArray<Int32>& affected_
 			if (existing_index == bone_index)
 				return;
 		}
-		affected_indices.Append(bone_index)iferr_ignore("append ik affected bone"_s);
+		affected_indices.Append(bone_index)iferr_ignore("append ik affected bone");
 	};
 
 	append_unique_index(GetBoneIndex());

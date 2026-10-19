@@ -1,0 +1,9 @@
+#ifndef FINVENTORIMPORT_H__
+#define FINVENTORIMPORT_H__
+
+enum
+{
+	INVENTORIMPORT_GROUP = 999
+};
+
+#endif // FINVENTORIMPORT_H__

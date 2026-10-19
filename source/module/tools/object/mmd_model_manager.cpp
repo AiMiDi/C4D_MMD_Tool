@@ -3007,7 +3007,7 @@ void MMDModelManagerObject::RefreshDisplayFrameUI()
 			if (!browse_bc) continue;
 			const DescID* parent_id_ptr = GetContainerCustomDataType<DescID>(*browse_bc, DESC_PARENTGROUP, CUSTOMDATATYPE_DESCID);
 			if (parent_id_ptr && *parent_id_ptr == entries_grp_id)
-				to_remove.Append(browse_id) iferr_ignore("append failed"_s);
+				to_remove.Append(browse_id) iferr_ignore("append failed");
 		}
 		dd->BrowseFree(handle);
 		for (const auto& rid : to_remove)
@@ -3019,7 +3019,7 @@ void MMDModelManagerObject::RefreshDisplayFrameUI()
 				if (!browse_bc) continue;
 				const DescID* pid = GetContainerCustomDataType<DescID>(*browse_bc, DESC_PARENTGROUP, CUSTOMDATATYPE_DESCID);
 				if (pid && *pid == rid)
-					children.Append(browse_id) iferr_ignore("append failed"_s);
+					children.Append(browse_id) iferr_ignore("append failed");
 			}
 			dd->BrowseFree(handle);
 			for (const auto& cid : children)
@@ -3362,7 +3362,7 @@ void MMDModelManagerObject::AdjustMaterialMorphIndicesAfterMaterialRemoval(const
 			if (index == -1)
 				continue; // 全部材质，不受单材质删除影响
 			if (index == removed_index)
-				offsets.Erase(i) iferr_ignore("erase dangling material morph offset failed"_s);
+				offsets.Erase(i) iferr_ignore("erase dangling material morph offset failed");
 			else if (index > removed_index)
 				--index;
 		}
@@ -5576,7 +5576,7 @@ Bool MMDModelManagerObject::Message(GeListNode* node, Int32 type, void* data)
 						if (!doc) break;
 						doc->StartUndo();
 						doc->AddUndo(UNDOTYPE::CHANGE, node);
-						offs.Erase(material_morph_offset_selection_index_) iferr_ignore("erase material morph offset failed"_s);
+						offs.Erase(material_morph_offset_selection_index_) iferr_ignore("erase material morph offset failed");
 						if (material_morph_offset_selection_index_ >= offs.GetCount())
 							material_morph_offset_selection_index_ = static_cast<Int32>(offs.GetCount()) - 1;
 						doc->EndUndo();
@@ -5902,7 +5902,7 @@ Bool MMDModelManagerObject::Message(GeListNode* node, Int32 type, void* data)
 						}
 					}
 					const Int32 removed_material_index = material_selection_index_;
-					material_list_.Erase(material_selection_index_) iferr_ignore("erase failed"_s);
+					material_list_.Erase(material_selection_index_) iferr_ignore("erase failed");
 					AdjustMaterialMorphIndicesAfterMaterialRemoval(removed_material_index);
 					material_runtime_checksum_.Reset();
 					if (material_selection_index_ >= material_list_.GetCount())

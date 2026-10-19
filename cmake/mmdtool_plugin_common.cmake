@@ -419,9 +419,38 @@ macro(cmt_setup_mmdtool_plugin)
   set(maxon_targetFrameworkDependencies ${maxon_targetFrameworkDependencies} PARENT_SCOPE)
 
   include("${CMT_PROJECT_ROOT_DIR}/cmake/mmdtool_runtime_resources.cmake")
+  if(COMMAND MaxonSDKTools_Setup)
+    # Cinema 4D 2027 replaces the maxon_* descriptor variables with native
+    # CMake settings. Keep this translation here so SDK wrappers stay thin.
+    set(target_base_name mmdtool)
+    # The wrapper declares literal target_settings for Source Processor, which
+    # parses that file without evaluating CMake includes or variable expansion.
+    if(NOT DEFINED target_settings)
+      message(FATAL_ERROR "The modern SDK wrapper must declare target_settings")
+    endif()
+    set(target_platforms windows macos)
+    set(source_directories source res)
+    set(enable_rtti OFF)
+    set(enable_exception_handling ON)
+    set(additional_definitions ${maxon_additionalDefinitions})
+    set(additional_include_directories.WINDOWS ${maxon_additionalIncludeDirectories.WINDOWS})
+    set(additional_include_directories.WINDOWS.ARM ${maxon_additionalIncludeDirectories.WINDOWS.ARM})
+    set(additional_include_directories.MACOS ${maxon_additionalIncludeDirectories.MACOS})
+    set(additional_link_directories.WINDOWS.DEBUG ${_CMT_WIN_LINK_DIR_DBG})
+    set(additional_link_directories.WINDOWS.RELEASE ${_CMT_WIN_LINK_DIR_REL})
+    set(link_libraries.WINDOWS.DEBUG ${_DEBUG_LIBS})
+    set(link_libraries.WINDOWS.RELEASE ${_RELEASE_LIBS})
+    set(link_libraries.MACOS.DEBUG ${_MACOS_DEBUG_LIBS})
+    set(link_libraries.MACOS.RELEASE ${_MACOS_RELEASE_LIBS})
+    set(additional_compile_options.MSVC.CPP ${maxon_additionalCompileOptions.MSVC.CPP})
+    set(targetRegisterGeneratedFileNames ${maxon_targetRegisterGeneratedFileNames})
+  endif()
   cmt_prepare_runtime_resource_commands()
   MaxonTargets_ProcessCinemaTargetVars()
   cmt_restore_runtime_resource_commands()
+  if(COMMAND MaxonSDKTools_Setup)
+    set(maxon_targetName ${target_name})
+  endif()
 
   # POST_BUILD alone does not run when only .res/.str/config files changed.
   # This dependency refreshes the complete tree on every explicit plugin build.

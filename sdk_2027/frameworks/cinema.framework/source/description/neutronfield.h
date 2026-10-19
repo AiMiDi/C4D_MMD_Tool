@@ -1,0 +1,9 @@
+#ifndef NEUTRONFIELD_H__
+#define NEUTRONFIELD_H__
+
+enum
+{
+	NEUTRONFIELD_DUMMY
+};
+
+#endif // NEUTRONFIELD_H__

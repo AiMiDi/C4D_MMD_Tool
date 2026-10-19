@@ -98,7 +98,7 @@ jobs:
       - name: Layout _build_msvc for installer_script.iss
         run: |
           set -euo pipefail
-          for sdk in sdk_r20 sdk_r21 sdk_r23 sdk_r25 sdk_2023 sdk_2024 sdk_2025 sdk_2026; do
+          for sdk in sdk_r20 sdk_r21 sdk_r23 sdk_r25 sdk_2023 sdk_2024 sdk_2025 sdk_2026 sdk_2027; do
             mkdir -p "_build_msvc/${sdk}/bin/Release/plugins/mmdtool"
             src="_dl/build-Windows-x64-${sdk}"
             if [ -d "$src" ]; then
@@ -128,7 +128,7 @@ jobs:
       - name: Run ISCC
         shell: pwsh
         run: |
-          foreach ($sdk in @('sdk_r20','sdk_r21','sdk_r23','sdk_r25','sdk_2023','sdk_2024','sdk_2025','sdk_2026')) {
+          foreach ($sdk in @('sdk_r20','sdk_r21','sdk_r23','sdk_r25','sdk_2023','sdk_2024','sdk_2025','sdk_2026','sdk_2027')) {
             cmake "-DRESOURCE_DIR=$env:GITHUB_WORKSPACE/_build_msvc/$sdk/bin/Release/plugins/mmdtool/res" "-DVERSION=${{ steps.ver.outputs.version }}" -P cmake/stamp_package_version.cmake
             if ($LASTEXITCODE -ne 0) { throw "Version stamping failed for $sdk" }
           }
@@ -198,14 +198,14 @@ jobs:
             exit 1
           fi
           mkdir -p dist
-          for sdk in sdk_r20 sdk_r21 sdk_r23 sdk_r25 sdk_2023 sdk_2024 sdk_2025 sdk_2026; do
+          for sdk in sdk_r20 sdk_r21 sdk_r23 sdk_r25 sdk_2023 sdk_2024 sdk_2025 sdk_2026 sdk_2027; do
             # Show Cinema 4D compatibility instead of internal SDK directory names.
             case "$sdk" in
               sdk_r20) c4d="R20" ;;
               sdk_r21) c4d="R21-S22" ;;
               sdk_r23) c4d="R23-S24" ;;
               sdk_r25) c4d="R25-S26" ;;
-              sdk_2023|sdk_2024|sdk_2025|sdk_2026) c4d="${sdk#sdk_}" ;;
+              sdk_2023|sdk_2024|sdk_2025|sdk_2026|sdk_2027) c4d="${sdk#sdk_}" ;;
               *) echo "Unknown SDK: $sdk" >&2; exit 1 ;;
             esac
             src="_dl/build-macOS-x86_64-${sdk}"
@@ -257,7 +257,7 @@ jobs:
           body: |
             ## Downloads / 下载
 
-            - **Windows x64**: download `MMD-Tool-*-Windows-x64-Setup.exe`. The installer lets you select Cinema 4D R20 through 2026.
+            - **Windows x64**: download `MMD-Tool-*-Windows-x64-Setup.exe`. The installer lets you select Cinema 4D R20 through 2027.
             - **macOS Intel (x86_64)**: download the ZIP matching your Cinema 4D version, then place its `mmdtool` folder in your Cinema 4D plugins directory. `R21-S22`, `R23-S24`, and `R25-S26` each cover the paired releases.
             - **Windows**：下载 `Windows-x64-Setup.exe` 安装包，在安装向导中选择 Cinema 4D 版本。
             - **macOS Intel**：按 Cinema 4D 版本选择 `macOS-x86_64.zip`，解压后将 `mmdtool` 文件夹放入 Cinema 4D 插件目录。当前发布资产仅提供 Intel 构建，Apple Silicon 构建仍作为 CI 验证。

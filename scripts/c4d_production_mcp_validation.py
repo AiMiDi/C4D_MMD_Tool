@@ -147,6 +147,14 @@ def dependency_source_identity(root):
             "file_count": count, "bytes": size, "git": git}
 
 
+def generated_linker_project(cache):
+    build = Path(cache["identity"]["path"]).parent
+    candidates = [build / "plugins/mmdtool/project/mmdtool.vcxproj"]
+    candidates.extend((build / "modules").glob("mmdtool_*/mmdtool.vcxproj"))
+    projects = [path for path in candidates if path.is_file()]
+    return projects[0] if len(projects) == 1 else None
+
+
 def prebuilt_linker_identity(cache):
     """Record only libraries selected by this cache and generated VS project.
 
@@ -169,8 +177,8 @@ def prebuilt_linker_identity(cache):
     library_directory = directory / "lib"
     if not library_directory.is_dir():
         return {**result, "reason": "configured_prebuilt_lib_directory_missing"}
-    project = Path(cache["identity"]["path"]).parent / "plugins/mmdtool/project/mmdtool.vcxproj"
-    if not project.is_file():
+    project = generated_linker_project(cache)
+    if project is None:
         return {**result, "reason": "generated_linker_project_unavailable"}
     try:
         result["generated_project"] = file_identity(project)
@@ -220,6 +228,57 @@ def prebuilt_linker_identity(cache):
     return result
 
 
+def subdir_linker_identity(cache):
+    """Record explicit generated VS link inputs for add_subdirectory builds."""
+    build = Path(cache["identity"]["path"]).parent.resolve()
+    result = {"status": "unknown", "mode": "subdirectory",
+              "source_build_relationship_verified": False,
+              "configurations": {name: {"status": "unknown"} for name in ("Debug", "Release")}}
+    project = generated_linker_project(cache)
+    if project is None:
+        return {**result, "reason": "generated_linker_project_unavailable_or_ambiguous"}
+    try:
+        graph = ET.parse(project).getroot()
+        result["generated_project"] = file_identity(project)
+        references = {Path(item.get("Include").replace("\\", "/")).stem
+                      for item in graph.findall(".//{*}ProjectReference") if item.get("Include")}
+        required = {"libMMD", "Bullet3Common", "BulletCollision", "BulletDynamics",
+                    "BulletInverseDynamics", "BulletSoftBody", "LinearMath"}
+        if not required.issubset(references):
+            return {**result, "reason": "dependency_target_references_incomplete"}
+        for group in graph.findall("{*}ItemDefinitionGroup"):
+            condition = group.get("Condition", "")
+            configuration = next((name for name in result["configurations"] if re.search(
+                r"==\s*['\"]" + name + r"\|[^'\"]+['\"]", condition)), None)
+            if configuration is None:
+                continue
+            suffix = "_Debug.lib" if configuration == "Debug" else ".lib"
+            expected = {name + suffix for name in required}
+            selected = {}
+            for raw in (group.findtext("{*}Link/{*}AdditionalDependencies") or "").split(";"):
+                if not raw or "$(" in raw or "%(" in raw:
+                    continue
+                path = Path(raw.replace("\\", "/"))
+                if path.name not in expected:
+                    continue
+                path = (project.parent / path).resolve() if not path.is_absolute() else path.resolve()
+                # Only accept the selected build's actual output, never a nearby
+                # same-name library or an arbitrary external absolute path.
+                expected_path = build / "bin" / configuration / "libs" / path.name
+                if path == expected_path and path.is_file():
+                    selected[path.name] = file_identity(path)
+            missing = sorted(expected - selected.keys())
+            result["configurations"][configuration] = {
+                "status": "unknown" if missing else "recorded", "missing_required": missing,
+                "libraries": [selected[name] for name in sorted(selected)]}
+        result["status"] = result["configurations"]["Release"]["status"]
+        if result["status"] != "recorded":
+            result["reason"] = "configured_link_inputs_incomplete"
+    except (OSError, ET.ParseError):
+        result["reason"] = "generated_linker_project_unreadable"
+    return result
+
+
 def dependency_identity(cache):
     values = cache["values"]
 
@@ -232,7 +291,8 @@ def dependency_identity(cache):
 
     libmmd = dependency_source_identity(source_root("CMT_LIBMMD_SOURCE_DIR", "dependency/libMMD"))
     bullet = dependency_source_identity(source_root("CMT_BULLET_SOURCE_DIR", "dependency/bullet3"))
-    prebuilt = prebuilt_linker_identity(cache)
+    prebuilt = (prebuilt_linker_identity(cache) if values.get("CMT_DEPS_PREBUILT_DIR")
+                else subdir_linker_identity(cache))
     eligible = (libmmd["status"] == bullet["status"] == "recorded"
                 and prebuilt["configurations"]["Release"]["status"] == "recorded")
     return {"schema_version": 1, "libMMD": libmmd, "Bullet": bullet, "prebuilt_linker_inputs": prebuilt,

@@ -47,8 +47,8 @@ class PackageReuseTests(unittest.TestCase):
         for differences in [[], ['README.md', '.github/workflows/package.yml']]:
             result = self.validate(differences)
             self.assertTrue(result['reused'])
-            self.assertEqual(result['verified_matrix_jobs'], 21)
-            self.assertEqual(len(result['artifacts']), 16)
+            self.assertEqual(result['verified_matrix_jobs'], 24)
+            self.assertEqual(len(result['artifacts']), 18)
 
     def test_runtime_resource_dependency_and_build_changes_are_rejected(self):
         for path in ['source/main.cpp', 'res/S24_up/cmt_config.json', 'dependency/libMMD',

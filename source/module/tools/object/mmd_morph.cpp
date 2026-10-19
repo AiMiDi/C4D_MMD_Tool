@@ -713,7 +713,7 @@ Bool MaterialMorph::ValidateMaterialIndices(const Int material_count, const Bool
 			continue;
 		has_invalid = true;
 		if (drop_invalid)
-			m_offsets.Erase(i) iferr_ignore("erase invalid material morph offset failed"_s);
+			m_offsets.Erase(i) iferr_ignore("erase invalid material morph offset failed");
 	}
 	return has_invalid;
 }

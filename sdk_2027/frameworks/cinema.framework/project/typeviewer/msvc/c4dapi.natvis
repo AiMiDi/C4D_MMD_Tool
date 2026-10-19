@@ -1,0 +1,381 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
+	<!-- BaseList2D -->
+	<Type Name="cinema::BaseList2D">
+		<DisplayString>{((c4d_base.xdl64!cinema::BaseList2D*)this)->l_name}</DisplayString>
+	</Type>
+	<!-- Other BaseList2D derivatives (the ones where we want to see the Plugin ID) -->
+	<Type Name="cinema::BaseShader">
+		<DisplayString>{{ {*(BaseList2D*)this}, id={((c4d_base.xdl64!cinema::PluginLayer*)this)->plug_type} }</DisplayString>
+	</Type>
+	<Type Name="cinema::BasePlugin">
+		<DisplayString>{{ {*(BaseList2D*)this}, id={((c4d_base.xdl64!cinema::PluginLayer*)this)->plug_type} }</DisplayString>
+	</Type>
+	<Type Name="cinema::BaseSceneLoader">
+		<DisplayString>{{ {*(BaseList2D*)this}, id={((c4d_base.xdl64!cinema::PluginLayer*)this)->plug_type} }</DisplayString>
+	</Type>
+	<Type Name="cinema::BaseSceneSaver">
+		<DisplayString>{{ {*(BaseList2D*)this}, id={((c4d_base.xdl64!cinema::PluginLayer*)this)->plug_type} }</DisplayString>
+	</Type>
+	<Type Name="cinema::BaseVideoPost">
+		<DisplayString>{{ {*(BaseList2D*)this}, id={((c4d_base.xdl64!cinema::PluginLayer*)this)->plug_type} }</DisplayString>
+	</Type>
+	<Type Name="cinema::CCurve">
+		<DisplayString>{{ {*(BaseList2D*)this}, id={((c4d_base.xdl64!cinema::PluginLayer*)this)->plug_type} }</DisplayString>
+	</Type>
+	<Type Name="cinema::CTrack">
+		<DisplayString>{{ {*(BaseList2D*)this}, id={((c4d_base.xdl64!cinema::PluginLayer*)this)->plug_type} }</DisplayString>
+	</Type>
+	<Type Name="cinema::GvNode">
+		<DisplayString>{{ {*(BaseList2D*)this}, id={((c4d_base.xdl64!cinema::PluginLayer*)this)->plug_type} }</DisplayString>
+	</Type>
+	<Type Name="cinema::BaseSceneHook">
+		<Intrinsic Name="Cast" Expression="(c4d_base.xdl64!cinema::BaseSceneHook*)this" />
+		<DisplayString>{Cast()->plug!=0 &amp;&amp; Cast()->plug->ptr !=0 ? *(Cast()->plug[Cast()->plug_cnt-1].ptr->name) : Cast()->plug->disk->name }</DisplayString>
+		<Expand>
+			<Item Name="plugin type name" Condition="Cast()->plug!=0 &amp;&amp; Cast()->plug->ptr !=0"> *(Cast()->plug[Cast()->plug_cnt-1].ptr->name)   </Item>
+			<Item Name="plugin type name" Condition="Cast()->plug!=0 &amp;&amp; Cast()->plug->disk !=0">  Cast()->plug->disk->name   </Item>
+			<Item Name="plugin name">  Cast()->l_name   </Item>
+			<Item Name="plugin id">  Cast()->plug_type  </Item>
+			<Item Name="data">   Cast()->data  </Item>
+			<CustomListItems>
+				<Variable Name="index" InitialValue="0"/>
+				<Variable Name="desc_ptr_ptr" InitialValue="c4d_base.xdl64!cinema::descriptionres->t_array"/>
+				<Variable Name="description_root" InitialValue="(c4d_base.xdl64!cinema::DescriptionProperty*) (0)"/>
+				<Loop>
+					<Break Condition="*desc_ptr_ptr == 0 || index == 200 || (*desc_ptr_ptr)->id == Cast()->plug_type" />
+					<Exec>index = index + 1</Exec>
+					<Exec>desc_ptr_ptr = desc_ptr_ptr + 1</Exec>
+					<Exec>description_root = &amp;(((c4d_base.xdl64!cinema::BCResourceObj*)(*desc_ptr_ptr))->descriptionroot)</Exec>
+				</Loop>
+				<Item Name="Description" Condition= "*desc_ptr_ptr!=0">description_root </Item>
+			</CustomListItems>
+		</Expand>
+	</Type>
+	<Type Name="cinema::PhongTag">
+		<Intrinsic Name="Cast" Expression="(c4d_base.xdl64!cinema::PhongTag*)this" />
+		<DisplayString> Phong Tag {Cast()->l_name} </DisplayString>
+		<Expand>
+			<Item Name="tag name"> Cast()->l_name </Item>
+			<Item Name="type id"> 5612 </Item>
+			<Item Name="data"> Cast()->data </Item>
+			<Item Name="object"> Cast()->GetMain()</Item>
+			<CustomListItems>
+				<Variable Name="index" InitialValue="0"/>
+				<Variable Name="desc_ptr_ptr" InitialValue="c4d_base.xdl64!cinema::descriptionres->t_array"/>
+				<Variable Name="description_root" InitialValue="(c4d_base.xdl64!cinema::DescriptionProperty*) (0)"/>
+				<Loop>
+					<Break Condition="*desc_ptr_ptr == 0 || index == 200 || (*desc_ptr_ptr)->id == Cast()->plug_type" />
+					<Exec>index = index + 1</Exec>
+					<Exec>desc_ptr_ptr = desc_ptr_ptr + 1</Exec>
+					<Exec>description_root = &amp;(((c4d_base.xdl64!cinema::BCResourceObj*)(*desc_ptr_ptr))->descriptionroot)</Exec>
+				</Loop>
+				<Item Name="Description" Condition= "*desc_ptr_ptr!=0">description_root </Item>
+			</CustomListItems>
+		</Expand>
+	</Type>
+	<Type Name="cinema::BaseTag">
+		<Intrinsic Name="Cast" Expression="(c4d_base.xdl64!cinema::BaseTag*)this" />
+		<DisplayString> Base Tag {Cast()->l_name} </DisplayString>
+		<Expand>
+			<Item Name="tag name"> Cast()->l_name </Item>
+			<Item Name="data"> Cast()->data </Item>
+			<Item Name="object"> Cast()->GetMain()</Item>
+			<CustomListItems>
+				<Variable Name="index" InitialValue="0"/>
+				<Variable Name="desc_ptr_ptr" InitialValue="c4d_base.xdl64!cinema::descriptionres->t_array"/>
+				<Variable Name="description_root" InitialValue="(c4d_base.xdl64!cinema::DescriptionProperty*) (0)"/>
+				<Loop>
+					<Break Condition="*desc_ptr_ptr == 0 || index == 200 || (*desc_ptr_ptr)->id == Cast()->plug_type" />
+					<Exec>index = index + 1</Exec>
+					<Exec>desc_ptr_ptr = desc_ptr_ptr + 1</Exec>
+					<Exec>description_root = &amp;(((c4d_base.xdl64!cinema::BCResourceObj*)(*desc_ptr_ptr))->descriptionroot)</Exec>
+				</Loop>
+				<Item Name="Description" Condition= "*desc_ptr_ptr!=0">description_root </Item>
+			</CustomListItems>
+		</Expand>
+	</Type>
+	<Type Name="cinema::VertexColorTag">
+		<DisplayString> Vertex Color Tag {l_name} </DisplayString>
+		<Expand>
+			<Item Name="tag name"> l_name </Item>
+			<Item Name="type id"> 431000045 </Item>
+			<Item Name="data"> data </Item>
+			<Item Name="object"> GetMain()</Item>
+		</Expand>
+	</Type>
+	<Type Name="cinema::PluginTag">
+		<DisplayString> Plugin Tag {l_name} </DisplayString>
+		<Expand>
+			<Item Name="tag name"> l_name </Item>
+			<Item Name="plugin type id"> plug_type </Item>
+			<Item Name="plugin type name" Condition="plug!=0 &amp;&amp; plug->ptr !=0"> * (plug[plug_cnt-1].ptr->name)   </Item>
+			<Item Name="plugin type name" Condition="plug!=0 &amp;&amp; plug->disk !=0">  plug->disk->name   </Item>
+			<Item Name="data"> data </Item>
+			<Item Name="object"> GetMain()</Item>
+		</Expand>
+	</Type>
+	<Type Name="cinema::RootTagHead">
+		<DisplayString>{{Tag Map}}</DisplayString>
+		<Expand>
+			<Item Name = "Tag Map"> _tagMapPrivate </Item>
+			<TreeItems>
+				<HeadPointer>(cinema::GeListNode*)this->t_down</HeadPointer>
+				<LeftPointer>(cinema::GeListNode*)t_down</LeftPointer>
+				<RightPointer>(cinema::GeListNode*)t_next</RightPointer>
+				<ValueNode Name = "{*this}">this</ValueNode>
+			</TreeItems>
+		</Expand>
+	</Type>
+	<Type Name="cinema::GeListHead">
+		<DisplayString> First = {t_down} </DisplayString>
+		<Expand>
+			<TreeItems>
+				<HeadPointer>(cinema::GeListNode*)this->t_down</HeadPointer>
+				<LeftPointer>(cinema::GeListNode*)t_down</LeftPointer>
+				<RightPointer>(cinema::GeListNode*)t_next</RightPointer>
+				<ValueNode Name = "{*this}">this</ValueNode>
+			</TreeItems>
+		</Expand>
+	</Type>
+	<Type Name="cinema::Material">
+		<DisplayString>{{name = {l_name} type = 5703 }}</DisplayString>
+	</Type>
+	<Type Name="cinema::BaseDocument">
+		<Intrinsic Name="Cast" Expression="(c4d_base.xdl64!cinema::BaseDocument*)this" />
+		<DisplayString>{{filename = {Cast()->m_name}  }}</DisplayString>
+		<Expand>
+			<Item Name="Objects">Cast()->root_object</Item>
+			<Item Name="Materials">Cast()->root_material</Item>
+			<Item Name="Scene Hooks">Cast()->root_scenehook</Item>
+		</Expand>
+	</Type>
+	<Type Name="cinema::DescriptionProperty">
+		<DisplayString> Descriptions </DisplayString>
+		<Expand>
+			<TreeItems Condition = "this!=0">
+				<HeadPointer>this</HeadPointer>
+				<LeftPointer>(cinema::DescriptionProperty*)t_next</LeftPointer>
+				<RightPointer>(cinema::DescriptionProperty*)t_down</RightPointer>
+				<ValueNode Name = "name = {((BTreeContainerNodeDataList*)(this->_data._object->m_ulRoot &amp; ~3 ))->d} id = {_id._constData._ptr->id}">this->_data</ValueNode>
+			</TreeItems>
+		</Expand>
+	</Type>
+	<Type Name="cinema::BaseObject">
+		<Intrinsic Name="Cast" Expression="(c4d_base.xdl64!cinema::BaseObject*)this" />
+		<DisplayString>name = {Cast()->l_name}  type = {Cast()->plug_type}</DisplayString>
+		<Expand>
+			<Item Name="Name">Cast()->l_name</Item>
+			<Item Name="Type ID"> Cast()->plug_type </Item>
+			<Item Name="type name" Condition="Cast()->plug!=0 &amp;&amp; Cast()->plug->ptr !=0"> * (Cast()->plug[Cast()->plug_cnt-1].ptr->name)   </Item>
+			<Item Name="type name" Condition="Cast()->plug!=0 &amp;&amp; Cast()->plug->disk !=0"> Cast()->plug->disk->name   </Item>
+			<Item Name="Tags">Cast()->root_tag</Item>
+			<Item Name="BaseContainer">Cast()->data</Item>
+			<Item Name="Cache" Condition="Cast()->_xcache._ref._object!=0">Cast()->_xcache</Item>
+			<Item Name="Deform Cache" Condition="Cast()->_xdefcache._ref._object!=0">Cast()->_xdefcache</Item>
+			<Item Name="Next" Condition = "Cast()->t_next!=0"> Cast()->t_next </Item>
+			<Item Name="Down" Condition = "Cast()->t_down!=0"> Cast()->t_down </Item>
+			<Item Name="Prev" Condition = "Cast()->t_prev!=0"> Cast()->t_prev </Item>
+			<Item Name="Up" Condition = "Cast()->t_up!=0"> Cast()->t_up </Item>
+			<CustomListItems>
+				<Variable Name="index" InitialValue="0"/>
+				<Variable Name="desc_ptr_ptr" InitialValue="c4d_base.xdl64!cinema::descriptionres->t_array"/>
+				<Variable Name="description_root" InitialValue="(c4d_base.xdl64!cinema::DescriptionProperty*) (0)"/>
+				<Loop>
+					<Break Condition="*desc_ptr_ptr == 0 || index == 200 || (*desc_ptr_ptr)->id == Cast()->plug_type" />
+					<Exec>index = index + 1</Exec>
+					<Exec>desc_ptr_ptr = desc_ptr_ptr + 1</Exec>
+					<Exec>description_root = &amp;(((c4d_base.xdl64!cinema::BCResourceObj*)(*desc_ptr_ptr))->descriptionroot)</Exec>
+				</Loop>
+				<Item Name="Description" Condition= "*desc_ptr_ptr!=0">description_root </Item>
+			</CustomListItems>
+			<Item Name="AbsPos">Cast()->t_pos</Item>
+			<Item Name="AbsRot">Cast()->t_rot</Item>
+			<Item Name="AbsScale">Cast()->t_scale</Item>
+			<Item Name="Matrix Global">Cast()->GetMg()</Item>
+		</Expand>
+	</Type>
+	<!-- String -->
+	<Type Name="cinema::String">
+		<DisplayString>{ *((maxon::String*)this) }</DisplayString>
+	</Type>
+	<!-- Filename -->
+	<Type Name="cinema::Filename">
+		<DisplayString>{ *((maxon::Url*)this) }</DisplayString>
+	</Type>
+	<!-- SMinMax, LMinMax -->
+	<Type Name="cinema::SMinMax">
+		<AlternativeType Name="LMinMax"></AlternativeType>
+		<DisplayString>{{ Min={min}, Max={max} }</DisplayString>
+	</Type>
+	<!-- BaseTime -->
+	<Type Name="cinema::BaseTime">
+		<DisplayString>{{ {numerator/denominator} }</DisplayString>
+	</Type>
+	<!-- DateTime -->
+	<Type Name="cinema::DateTime">
+		<DisplayString>{{ {year}-{month}-{day}, {hour}:{minute}:{second} }</DisplayString>
+	</Type>
+	<!-- TriState -->
+	<Type Name="cinema::TriState&lt;*&gt;">
+		<DisplayString Condition="tri ==-1">{{ value={value} (unchanged) }</DisplayString>
+		<DisplayString Condition="tri == 0">{{ value={value} }</DisplayString>
+		<DisplayString Condition="tri == 1">{{ value={value} (Tri) }</DisplayString>
+	</Type>
+	<!-- CPolygon -->
+	<Type Name="cinema::CPolygon">
+		<DisplayString Condition="c == d">{{ {a}, {b}, {c} (Tri) }</DisplayString>
+		<DisplayString Condition="c != d">{{ {a}, {b}, {c}, {d} (Quad) }</DisplayString>
+		<Expand>
+			<Item Name="a">a</Item>
+			<Item Name="b">b</Item>
+			<Item Name="c">c</Item>
+			<Item Condition="c != d" Name="d">d</Item>
+			<Synthetic Condition="c == d" Name="Type">
+				<DisplayString>Triangle</DisplayString>
+			</Synthetic>
+			<Synthetic Condition="c != d" Name="Type">
+				<DisplayString>Quadrangle</DisplayString>
+			</Synthetic>
+		</Expand>
+	</Type>
+	<!-- BaseBitmap -->
+	<Type Name="cinema::BaseBitmap">
+		<DisplayString>{{ {*(int*)(this + 152)}x{*(int*)(this + 156)}, Bpp={*(int*)((*(int*)(((char*)this) + 48)) + 16)}, {(COLORMODE)(*(int*)(this + 168))} }</DisplayString>
+		<Expand>
+			<Item Name="Width">*(int*)(this + 152)</Item>
+			<Item Name="Height">*(int*)(this + 156)</Item>
+			<Item Name="Is Multipass">*(int*)(this + 164)</Item>
+			<Item Name="Bits per pixel">*(int*)((*(int*)(((char*)this) + 48)) + 16)</Item>
+			<Item Name="Colormode">(COLORMODE)(*(int*)(this + 168))</Item>
+		</Expand>
+	</Type>
+	<!-- IconData -->
+	<Type Name="cinema::IconData">
+		<DisplayString>{{ w={w}, h={h}, x={x}, y={y}, {flags} }</DisplayString>
+	</Type>
+	<Type Name="cinema::DescLevel">
+		<DisplayString>{id}/{(DTYPE)dtype}/{creator}</DisplayString>
+	</Type>
+	<Type Name="cinema::DescID">
+		<DisplayString Condition="*(Int64*)((char*)this + 8) > 0" >Const: {{ Depth={*(Int64*)((char*)this + 8)}, { (*(DescLevel**)((char*)this + 0)), [*(Int64*)((char*)this + 8)] }</DisplayString>
+		<DisplayString Condition="*(Int64*)((char*)this + 8) == 0 &amp;&amp; *(char**)this != nullptr">Ref({(*((long*)((*(char**)this)-8))/16)}x): {{ Depth={*(Int64*)(*(char**)this + 56)}, { (*(DescLevel**)(*(char**)this + 48)), [*(Int64*)(*(char**)this + 56)] }</DisplayString>
+		<DisplayString Condition="*(Int64*)((char*)this + 8) == 0 &amp;&amp; *(char**)this == nullptr">{{ Null }</DisplayString>
+		<DisplayString >{{ Error }</DisplayString>
+		<Expand>
+			<Item Name="Depth" Condition="*(Int64*)((char*)this + 8) > 0">*(Int64*)((char*)this + 8)</Item>
+			<Item Name="Depth" Condition="*(Int64*)((char*)this + 8) == 0 &amp;&amp; *(char**)this != nullptr">*(Int64*)(*(char**)this + 56)</Item>
+			<Item Name="Depth" Condition="*(Int64*)((char*)this + 8) == 0 &amp;&amp; *(char**)this == nullptr">0</Item>
+			<ArrayItems Condition="*(Int64*)((char*)this + 8) > 0">
+				<Size>*(Int64*)((char*)this + 8)</Size>
+				<ValuePointer>(*(DescLevel**)((char*)this + 0))</ValuePointer>
+			</ArrayItems>
+			<ArrayItems Condition="*(Int64*)((char*)this + 8) == 0 &amp;&amp; *(char**)this != nullptr">
+				<Size>*(Int64*)(*(char**)this + 56)</Size>
+				<ValuePointer>(*(DescLevel**)(*(char**)this + 48))</ValuePointer>
+			</ArrayItems>
+		</Expand>
+	</Type>
+	<!-- TempEntry - Makes legacy UI data easier to browse in c4d_base module. 
+	One can iterate through the groups and widgets easily with this structure. -->
+	<Type Name="cinema::TempEntry">
+		<DisplayString>Short={_shortName} GadgetId={_gadId} CustomGuiId={_customGuiId} Long={_longName}</DisplayString>
+		<Expand>
+			<Item Name="t_next">t_next</Item>
+			<Item Name="t_prev">t_prev</Item>
+			<Item Name="t_up">t_up</Item>
+			<Item Name="t_down">t_down</Item>
+			<Item Name="t_downlast">t_downlast</Item>
+			<Item Name="l_bits">l_bits</Item>
+		</Expand>
+	</Type>
+	<Type Name="cinema::GeData">
+		<Intrinsic Name="IsInt32" Expression="Type == DA_LONG" />
+		<Intrinsic Name="IsInt64" Expression="Type == DA_LLONG" />
+		<Intrinsic Name="IsNil" Expression="Type == DA_NIL" />
+		<Intrinsic Name="IsReal" Expression="Type == DA_REAL" />
+		<Intrinsic Name="IsTime" Expression="Type == DA_TIME" />
+		<Intrinsic Name="IsVector" Expression="Type == DA_VECTOR" />
+		<Intrinsic Name="IsMatrix" Expression="Type == DA_MATRIX" />
+		<Intrinsic Name="IsByteArray" Expression="Type == DA_BYTEARRAY" />
+		<Intrinsic Name="IsString" Expression="Type == DA_STRING" />
+		<Intrinsic Name="IsFileName" Expression="Type == DA_FILENAME" />
+		<Intrinsic Name="IsContainer" Expression="Type == DA_CONTAINER" />
+		<Intrinsic Name="IsAliasLink" Expression="Type == DA_ALIASLINK" />
+		<Intrinsic Name="IsMarker" Expression="Type == DA_MARKER" />
+		<Intrinsic Name="IsMissingPlugin" Expression="Type == DA_MISSINGPLUG" />
+		<Intrinsic Name="IsUUID" Expression="Type == DA_UUID" />
+		<Intrinsic Name="IsTriState" Expression="Type == DA_TRISTATE" />
+		<Intrinsic Name="IsData" Expression="Type == DA_DATA" />
+		<Intrinsic Name="IsCustomDataType" Expression="Type >= DA_CUSTOMDATATYPE" />
+		<DisplayString Condition="IsInt32()"> Int32: {DInteger} </DisplayString>
+		<DisplayString Condition="IsInt64()"> Int64: {DLLong} </DisplayString>
+		<DisplayString Condition="IsNil()"> Nil </DisplayString>
+		<DisplayString Condition="IsReal()"> Float: {DReal} </DisplayString>
+		<DisplayString Condition="IsTime()"> Time: {DBaseTime} </DisplayString>
+		<DisplayString Condition="IsVector()"> Vector: {*DVector._object} </DisplayString>
+		<DisplayString Condition="IsMatrix()"> Matrix: {*DMatrix._object} </DisplayString>
+		<DisplayString Condition="IsByteArray()"> ByteArray: {DArray} </DisplayString>
+		<DisplayString Condition="IsString()"> String: {DString} </DisplayString>
+		<DisplayString Condition="IsFileName()"> Filename: {DFilename} </DisplayString>
+		<DisplayString Condition="IsContainer()"> Container: {DContainer} </DisplayString>
+		<DisplayString Condition="IsAliasLink()"> AliasLink: {DBaseLink} </DisplayString>
+		<DisplayString Condition="IsMarker()"> Marker: {DMarker} </DisplayString>
+		<DisplayString Condition="IsMissingPlugin()"> MissingPlugin: {DMissingPlugin} </DisplayString>
+		<DisplayString Condition="IsUUID()"> UUID: {DUuid} </DisplayString>
+		<DisplayString Condition="IsTriState()"> TriState </DisplayString>
+		<DisplayString Condition="IsData()"> Data: {DData} </DisplayString>
+		<DisplayString Condition="IsCustomDataType()"> CustomDataType: {DCustomDataRef} </DisplayString>
+		<Expand>
+			<Item Name = "Data" Condition="IsInt32()"> DInteger </Item>
+			<Item Name = "Data" Condition="IsInt64()"> DLLong </Item>
+			<Item Name = "Data" Condition="IsNil()"> "Nil" </Item>
+			<Item Name = "Data" Condition="IsReal()"> DReal </Item>
+			<Item Name = "Data" Condition="IsTime()"> DBaseTime </Item>
+			<ExpandedItem Condition="IsVector()"> *DVector._object </ExpandedItem>
+			<ExpandedItem Condition="IsMatrix()"> *DMatrix._object </ExpandedItem>
+			<Item Name = "Data" Condition="IsByteArray()"> DArray </Item>
+			<Item Name = "Data" Condition="IsString()"> DString </Item>
+			<Item Name = "Data" Condition="IsFileName()"> DFilename </Item>
+			<Item Name = "Data" Condition="IsContainer()"> DContainer </Item>
+			<Item Name = "Data" Condition="IsAliasLink()"> DBaseLink </Item>
+			<Item Name = "Data" Condition="IsMarker()"> DMarker </Item>
+			<Item Name = "Data" Condition="IsMissingPlugin()"> DMissingPlugin </Item>
+			<Item Name = "Data" Condition="IsUUID()"> DUuid </Item>
+			<Item Name = "Data" Condition="IsData()"> DData </Item>
+			<Item Name = "Data" Condition="IsCustomDataType()"> DCustomDataRef </Item>
+		</Expand>
+	</Type>
+	<Type Name="cinema::BTreeContainerNodeDataList">
+		<DisplayString>{d}</DisplayString>
+		<Expand>
+			<Item Name="Id"> lID </Item>
+			<ExpandedItem> d </ExpandedItem>
+		</Expand>
+	</Type>
+	<!-- BaseContainer - Makes legacy UI data easier to browse outside of c4d_base module. -->
+	<Type Name="cinema::BaseContainer">
+		<Intrinsic Name="Cast" Expression="(c4d_base.xdl64!cinema::BaseContainer*)this" />
+		<Intrinsic Name="IsBTree" Expression="(((Cast()->m_ulRoot) &amp; 3) != 3)" />
+		<Intrinsic Name="GetRoot" Optional="true" Expression="((c4d_base.xdl64!cinema::BTreeContainerNodeDataList*)((Cast()->m_ulRoot) &amp; ~3))" />
+		<DisplayString>{(c4d_base.xdl64!cinema::BTreeContainer*)this}</DisplayString>
+		<Expand>
+			<Item Name="IsBTree"> IsBTree() </Item>
+			<CustomListItems Condition="!IsBTree()">
+				<Variable Name="root" InitialValue="GetRoot()"/>
+				<Loop>
+					<Break Condition="root == 0" />
+					<Item Name="Id: [{root->lID}]"> *root</Item>
+					<Exec>root = root->pNext</Exec>
+				</Loop>
+			</CustomListItems>
+			<Item Name="BTreeContainer">(c4d_base.xdl64!cinema::BTreeContainer*)this</Item>
+		</Expand>
+	</Type>
+	<Type Name="cinema::MoData">
+		<DisplayString>{(mograph.xdl64!cinema::iMoData*)this}</DisplayString>
+		<Expand>
+			<ExpandedItem>(mograph.xdl64!cinema::iMoData*)this</ExpandedItem>
+		</Expand>
+	</Type>
+</AutoVisualizer>

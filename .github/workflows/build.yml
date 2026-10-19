@@ -1,5 +1,5 @@
 # Root CMake workflow: same presets as locally (CMakePresets.json), override CMT_SDK_DIR per matrix cell.
-# PR/main: latest SDK Release compile. Release/dispatch: full 21-job matrix.
+# PR/main: latest SDK Release compile. Release/dispatch: full 24-job matrix.
 # Automated tests and benchmarks are run locally, outside CI.
 
 name: Build
@@ -44,7 +44,7 @@ jobs:
 
       - name: Configure latest SDK Release
         if: github.event_name == 'pull_request' || (github.event_name == 'push' && github.ref == 'refs/heads/main')
-        run: cmake --preset release-windows -D CMT_DEPS_ENABLE_LIBMMD_TESTS=OFF -D CMT_ENABLE_PLUGIN_TESTS=OFF -D CMT_ENABLE_RUNTIME_REGRESSION=OFF
+        run: cmake --preset release-windows -D CMT_SDK_DIR=sdk_2027 -D CMT_SDK_BINARY_DIR=_build_msvc/sdk_2027 -D CMT_DEPS_ENABLE_LIBMMD_TESTS=OFF -D CMT_ENABLE_PLUGIN_TESTS=OFF -D CMT_ENABLE_RUNTIME_REGRESSION=OFF
 
       - name: Compile latest SDK Release
         if: github.event_name == 'pull_request' || (github.event_name == 'push' && github.ref == 'refs/heads/main')
@@ -77,6 +77,7 @@ jobs:
           - sdk_2024
           - sdk_2025
           - sdk_2026
+          - sdk_2027
         include:
           - os: windows-2022
             configure_preset: release-windows
@@ -123,6 +124,13 @@ jobs:
             upload_artifact: false
           - os: macos-26
             sdk: sdk_2026
+            configure_preset: release-macos
+            build_preset: workflow-release-macos
+            deps_generator: Xcode
+            macos_arch: arm64
+            upload_artifact: false
+          - os: macos-26
+            sdk: sdk_2027
             configure_preset: release-macos
             build_preset: workflow-release-macos
             deps_generator: Xcode

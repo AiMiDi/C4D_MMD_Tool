@@ -13,7 +13,7 @@ from pathlib import Path
 
 
 SDKS = ('sdk_r20', 'sdk_r21', 'sdk_r23', 'sdk_r25',
-        'sdk_2023', 'sdk_2024', 'sdk_2025', 'sdk_2026')
+        'sdk_2023', 'sdk_2024', 'sdk_2025', 'sdk_2026', 'sdk_2027')
 PACKAGING_ONLY = frozenset({
     '.github/workflows/package.yml',
     'scripts/resolve_package_build.py',
@@ -74,8 +74,8 @@ def validate_candidate(repository, target, run, jobs, artifacts, differences):
             'Compiler/runtime inputs differ: ' + ', '.join(sorted(set(differences) - PACKAGING_ONLY)))
 
     matrix = [job for job in jobs if job.get('name', '').startswith('matrix-build (')]
-    require(len(matrix) == 21 and {job['name'] for job in matrix} == EXPECTED_JOBS,
-            'Build does not contain the complete 21 SDK/platform jobs')
+    require(len(matrix) == len(EXPECTED_JOBS) and {job['name'] for job in matrix} == EXPECTED_JOBS,
+            f'Build does not contain the complete {len(EXPECTED_JOBS)} SDK/platform jobs')
     require(all(job.get('status') == 'completed' and job.get('conclusion') == 'success' for job in matrix),
             'An SDK/platform job was not successful')
     require(any(job.get('name') == 'checks' and job.get('status') == 'completed' and
@@ -99,11 +99,11 @@ def validate_candidate(repository, target, run, jobs, artifacts, differences):
                 'SDK artifact digest is missing')
         outputs[artifact['name']] = {key: artifact[key] for key in
                                     ('id', 'name', 'digest', 'size_in_bytes')}
-    require(set(outputs) == EXPECTED_ARTIFACTS, 'The 16 packaged SDK artifacts are incomplete')
+    require(set(outputs) == EXPECTED_ARTIFACTS, f'The {len(EXPECTED_ARTIFACTS)} packaged SDK artifacts are incomplete')
     return {'reused': True, 'artifact_run_id': run['id'], 'artifact_source_commit': source,
             'target_commit': target, 'repository': repository,
             'packaging_only_differences': sorted(differences),
-            'verified_matrix_jobs': 21, 'artifacts': list(outputs.values())}
+            'verified_matrix_jobs': len(EXPECTED_JOBS), 'artifacts': list(outputs.values())}
 
 
 def resolve(repository, target, current_run, requested_run='', api=gh_json, diff=changed_paths):

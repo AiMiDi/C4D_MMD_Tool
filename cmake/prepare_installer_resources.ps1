@@ -45,15 +45,55 @@ if ($adapterMatches.Count -eq 0) {
     $newline = if ($content.Contains("`r`n")) { "`r`n" } else { "`n" }
     $adapted = $adapted.Insert($row.Index + $row.Length, $newline + $adapterRow)
 }
+# The setup submodule is shared with older releases. Extend its recognized
+# version tables here so a clean submodule checkout also packages the 2027 SDK.
+$versionTables = @(
+    @{ Name = 'VerArray'; Value = '2027' },
+    @{ Name = 'XdlSdkRel'; Value = 'sdk_2027' },
+    @{ Name = 'ResFolder'; Value = 'S24_up' }
+)
+$versionPattern = '(?m)^#dim VerArray\[VerCount\] \{([^}\r\n]+)\}'
+$versionMatch = [regex]::Match($adapted, $versionPattern)
+if (-not $versionMatch.Success) { throw 'Unrecognized installer version table. No changes made.' }
+$has2027 = $versionMatch.Groups[1].Value -match "'2027'"
+$expectedCount = if ($has2027) { 12 } else { 11 }
+foreach ($table in $versionTables) {
+    $pattern = '(?m)^#dim ' + $table.Name + '\[VerCount\] \{([^}\r\n]+)\}'
+    $matches = [regex]::Matches($adapted, $pattern)
+    if ($matches.Count -ne 1) { throw "Ambiguous installer table $($table.Name). No changes made." }
+    $match = $matches[0]
+    $entries = [regex]::Matches($match.Groups[1].Value, "'([^']+)'")
+    if ($entries.Count -ne $expectedCount) { throw "Unexpected size of installer table $($table.Name). No changes made." }
+    if ($has2027) {
+        if ($entries[-1].Groups[1].Value -ne $table.Value) { throw 'Inconsistent 2027 installer mapping. No changes made.' }
+    } else {
+        $replacement = $match.Value.TrimEnd('}') + ",'$($table.Value)'}"
+        $adapted = $adapted.Remove($match.Index, $match.Length).Insert($match.Index, $replacement)
+    }
+}
+$countPattern = '(?m)^#define VerCount = ' + $expectedCount + '(?=\r?$)'
+if ([regex]::Matches($adapted, $countPattern).Count -ne 1) { throw 'Unrecognized installer version count. No changes made.' }
+$adapted = [regex]::Replace($adapted, $countPattern, '#define VerCount = 12')
+foreach ($prefix in @('', 'C_')) {
+    $index = if ($has2027) { 11 } else { 10 }
+    $lastEntry = "'$prefix{#VerArray[$index]}'"
+    $pattern = [regex]::Escape($lastEntry) + ' \];'
+    if ([regex]::Matches($adapted, $pattern).Count -ne 1) { throw 'Unrecognized installer Pascal version mapping. No changes made.' }
+    if (-not $has2027) {
+        $newline = if ($content.Contains("`r`n")) { "`r`n" } else { "`n" }
+        $replacement = $lastEntry + ',' + $newline + "            '$prefix{#VerArray[11]}' ];"
+        $adapted = [regex]::Replace($adapted, $pattern, $replacement)
+    }
+}
 if ($adapted -ceq $content) {
-    Write-Host "Installer already consumes built resources and MCP runtime: $installerPathResolved"
+    Write-Host "Installer already includes 2027 and consumes built runtime files: $installerPathResolved"
     return
 }
 if ($CheckOnly) {
-    Write-Host "Installer would consume built runtime resources: $installerPathResolved"
+    Write-Host "Installer would include 2027 and consume built runtime files: $installerPathResolved"
     return
 }
-# Adapt the recognized resource row and add its paired MCP row. Preserve
-# includes, component guards, other user edits and original line endings.
+# Adapt the version tables and paired runtime rows. Preserve includes,
+# component guards, other user edits and original line endings.
 [IO.File]::WriteAllText($installerPathResolved, $adapted, $encoding)
-Write-Host "Installer resource Source adapted to built output: $installerPathResolved"
+Write-Host "Installer adapted for 2027 and built runtime files: $installerPathResolved"
