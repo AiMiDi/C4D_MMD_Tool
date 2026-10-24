@@ -4,6 +4,14 @@
 
 Entries for 0.9.1.x were reconstructed from tagged source changes and release dates. Intermediate build tags are grouped below; original entries through 0.4.6.1 are retained.
 
+### 0.9.3.9 · Playback performance and standalone motion-sizing panel (2026-10-24)
+
+Reduce VMD playback cost without changing motion results: reuse controller data and material ownership, skip empty physics passes, drop duplicate weight notifications, and keep the runtime/Bullet instrumentation reusable across runs. Physics substeps default to 3 (range 1–10), i.e. 90 Hz on a 30 FPS scene. Release dependency targets now build with the plugin's `/O2 /fp:strict /Ob0 /Oi-` flags. On the 625-bone scene the full-frame `ExecutePasses` dropped from 53.00 to 43.45 ms and Bullet from 23.06 to 13.77 ms, with byte-identical pose and geometry output; physics-off playback remains above the 60 FPS budget.
+
+Move the VMD motion-adaptation flow to its own command and panel instead of routing it through the VMD export command. A compact joint-table import candidate was measured on the real host — deformation identical, no measurable speed gain — so it is archived rather than merged. Runtime profiling stays compiled out of release packages, and validation records now keep conclusions only, with raw logs archived outside the repository.
+
+Native validation covers Windows C4D 2027 with 625 bones, 479 rigid bodies, 748 constraints and 70,222 vertices at 30 FPS. Release packaging runs in GitHub CI; automated tests remain local.
+
 ### 0.9.3.8 · Single-character parallel motion adaptation (2026-10-13)
 
 The 0.9.3.7 tag produced packages but did not create a Release because a skipped build dependency also skipped publication. This version fixes the release condition while still requiring both packaging jobs to succeed; the runtime binaries are unchanged.
