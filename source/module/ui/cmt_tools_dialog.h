@@ -40,32 +40,45 @@ public:
 class CMTToolCommand final : public CommandData
 {
 	CMTToolDialog cmd_tool_dialog;
-	MotionSizingDialog sizing_dialog_;
 	Bool TogglePanel();
 	Bool ExecuteMenuItem(Int32 subid);
-	Bool BuildSubmenu(BaseContainer& submenu);
 
 public:
 #if defined(CMT_ENABLE_RUNTIME_REGRESSION)
-	CMTToolCommand();
-	~CMTToolCommand() override;
 	static MotionSizingDialog* GetRegressionSizingDialog();
 #endif
 	Bool RestoreLayout(void* secret) override;
 #if CMT_SDK_HAS_COMMANDDATA_EXECUTE_WITH_PARENT
 	Bool Execute(BaseDocument* doc, GeDialog* parentManager) override
 	{ return TogglePanel(); }
-	Bool GetSubContainer(BaseDocument* doc, BaseContainer& submenu, GeDialog* parentManager) override
-	{ return BuildSubmenu(submenu); }
 	Bool ExecuteSubID(BaseDocument* doc, Int32 subid, GeDialog* parentManager) override
 	{ return ExecuteMenuItem(subid); }
 #else
 	Bool Execute(BaseDocument* doc) override
 	{ return TogglePanel(); }
-	Bool GetSubContainer(BaseDocument* doc, BaseContainer& submenu) override
-	{ return BuildSubmenu(submenu); }
 	Bool ExecuteSubID(BaseDocument* doc, Int32 subid) override
 	{ return ExecuteMenuItem(subid); }
+#endif
+};
+
+class CMTMotionSizingCommand final : public CommandData
+{
+	MotionSizingDialog sizing_dialog_;
+
+public:
+	CMTMotionSizingCommand();
+	~CMTMotionSizingCommand() override;
+	// The independent command owns the one dialog used by legacy shortcuts,
+	// saved layouts and the native regression bridge.
+	static MotionSizingDialog* GetDialog();
+	static Bool OpenPanel();
+	Bool RestoreLayout(void* secret) override;
+#if CMT_SDK_HAS_COMMANDDATA_EXECUTE_WITH_PARENT
+	Bool Execute(BaseDocument* doc, GeDialog* parentManager) override
+	{ return OpenPanel(); }
+#else
+	Bool Execute(BaseDocument* doc) override
+	{ return OpenPanel(); }
 #endif
 };
 

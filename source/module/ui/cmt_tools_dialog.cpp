@@ -20,21 +20,14 @@ namespace
 {
 	constexpr Int32 kPanelCommand = 1000;
 	constexpr Int32 kSizingCommand = 1001;
-	constexpr Int32 kSizingDialog = 1;
-#if defined(CMT_ENABLE_RUNTIME_REGRESSION)
-	CMTToolCommand* regressionCommand = nullptr;
-#endif
+	constexpr Int32 kLegacySizingDialog = 1;
+	CMTMotionSizingCommand* motionSizingCommand = nullptr;
 }
 
 #if defined(CMT_ENABLE_RUNTIME_REGRESSION)
-CMTToolCommand::CMTToolCommand() { regressionCommand = this; }
-CMTToolCommand::~CMTToolCommand()
-{
-	if (regressionCommand == this) regressionCommand = nullptr;
-}
 MotionSizingDialog* CMTToolCommand::GetRegressionSizingDialog()
 {
-	return regressionCommand ? &regressionCommand->sizing_dialog_ : nullptr;
+	return CMTMotionSizingCommand::GetDialog();
 }
 #endif
 
@@ -46,16 +39,6 @@ Bool CMTToolCommand::TogglePanel()
 	return cmd_tool_dialog.Open(DLG_TYPE::ASYNC, g_cmt_command_id);
 }
 
-Bool CMTToolCommand::BuildSubmenu(BaseContainer& submenu)
-{
-	// Subcommands reuse the registered command ID, including legacy toolbar
-	// shortcuts which still execute TogglePanel through Execute().
-	// Top-level entries expand at the command's position in Extensions.
-	submenu.SetString(kPanelCommand, String("MMD Tools - ") + GeLoadString(IDS_CMT_TOOL_PANEL));
-	submenu.SetString(kSizingCommand, String("MMD Tools - ") + GeLoadString(IDS_CMT_TOOL_MOTION_SIZING));
-	return true;
-}
-
 Bool CMTToolCommand::ExecuteMenuItem(const Int32 subid)
 {
 	switch (subid)
@@ -63,8 +46,7 @@ Bool CMTToolCommand::ExecuteMenuItem(const Int32 subid)
 	case kPanelCommand:
 		return TogglePanel();
 	case kSizingCommand:
-		CMTUpdateManager::GetInstance().OnToolUse();
-		return sizing_dialog_.Open(DLG_TYPE::ASYNC, g_cmt_command_id, -1, -1, 720, 760, kSizingDialog);
+		return CMTMotionSizingCommand::OpenPanel();
 	default:
 		return false;
 	}
@@ -74,9 +56,35 @@ Bool CMTToolCommand::RestoreLayout(void* secret)
 {
 	if (!secret) return false;
 	const auto* restore = static_cast<RestoreLayoutSecret*>(secret);
-	if (restore->subid == kSizingDialog)
-		return sizing_dialog_.RestoreLayout(g_cmt_command_id, kSizingDialog, secret);
+	if (restore->subid == kLegacySizingDialog)
+	{
+		auto* dialog = CMTMotionSizingCommand::GetDialog();
+		return dialog && dialog->RestoreLayout(g_cmt_command_id, kLegacySizingDialog, secret);
+	}
 	return cmd_tool_dialog.RestoreLayout(g_cmt_command_id, 0, secret);
+}
+
+CMTMotionSizingCommand::CMTMotionSizingCommand() { motionSizingCommand = this; }
+CMTMotionSizingCommand::~CMTMotionSizingCommand()
+{
+	if (motionSizingCommand == this) motionSizingCommand = nullptr;
+}
+
+MotionSizingDialog* CMTMotionSizingCommand::GetDialog()
+{
+	return motionSizingCommand ? &motionSizingCommand->sizing_dialog_ : nullptr;
+}
+
+Bool CMTMotionSizingCommand::OpenPanel()
+{
+	CMTUpdateManager::GetInstance().OnToolUse();
+	auto* dialog = GetDialog();
+	return dialog && dialog->Open(DLG_TYPE::ASYNC, g_cmt_motion_sizing_command_id, -1, -1, 720, 760);
+}
+
+Bool CMTMotionSizingCommand::RestoreLayout(void* secret)
+{
+	return secret && sizing_dialog_.RestoreLayout(g_cmt_motion_sizing_command_id, 0, secret);
 }
 
 inline void CMTToolDialog::GetItem(const Int32 id, Float& value) const

@@ -35,6 +35,8 @@ constexpr auto g_mmd_joint_manager_object_id	= 1057946;
 constexpr auto g_cmt_scene_manager_scene_hook_id = 1057017;
 constexpr auto g_mmd_vmd_loader_id             = 1057489;
 constexpr auto g_mmd_vmd_export_id             = 1057490;
+// Reuse the reserved, previously unregistered VMD export ID for this command.
+constexpr auto g_cmt_motion_sizing_command_id = g_mmd_vmd_export_id;
 
 //	Shader
 constexpr auto g_mmd_material_texture_morph_shader_id = 1068715;

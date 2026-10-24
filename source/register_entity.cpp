@@ -19,7 +19,21 @@ namespace
 {
 	Bool RegisterCMTTool()
 	{
-		return RegisterCommandPlugin(g_cmt_command_id, "MMDTool"_s, 0, AutoBitmap("MMDIcon.png"_s), "MMD tool for C4D"_s, NewObjClear(CMTToolCommand));
+		if (!RegisterCommandPlugin(g_cmt_command_id,
+			String("MMD Tools - ") + GeLoadString(IDS_CMT_TOOL_PANEL), 0,
+			AutoBitmap("MMDIcon.png"_s), "MMD tool for C4D"_s, NewObjClear(CMTToolCommand)))
+			return false;
+
+		AutoBitmap motionSizingArtwork("MMDMotionSizing.png"_s);
+		const BaseBitmap* artwork = motionSizingArtwork;
+		AutoAlloc<BaseBitmap> motionSizingIcon;
+		if (!artwork || !motionSizingIcon || motionSizingIcon->Init(64, 64) != IMAGERESULT::OK)
+			return false;
+		// Match the existing 64px MMD icon without changing the approved source artwork.
+		artwork->ScaleIt(motionSizingIcon, 256, true, false);
+		return RegisterCommandPlugin(g_cmt_motion_sizing_command_id,
+			String("MMD Tools - ") + GeLoadString(IDS_CMT_TOOL_MOTION_SIZING), 0,
+			motionSizingIcon, GeLoadString(IDS_SIZING_INPUT_HINT), NewObjClear(CMTMotionSizingCommand));
 	}
 
 	Bool RegisterCMTSceneManager()

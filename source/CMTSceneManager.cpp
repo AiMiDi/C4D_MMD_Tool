@@ -747,7 +747,7 @@ Bool CMTSceneManager::Message(GeListNode* node, Int32 type, void* data)
                 // RestoreLayout callback. A separate hook-owned instance with
                 // the same plugin/subdialog ID conflicts with C4D restoration.
                 auto* dialog = CMTToolCommand::GetRegressionSizingDialog();
-                success = dialog && dialog->Open(DLG_TYPE::ASYNC, g_cmt_command_id, -1, -1, 720, 760, 1);
+                success = dialog && CMTMotionSizingCommand::OpenPanel();
                 break;
             }
             case cmt_regression::Operation::SizingDialogClose:
