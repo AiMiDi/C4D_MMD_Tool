@@ -1,3 +1,5 @@
+> 本目录只保留结论与脚本。原始日志 / JSON / 截图 / TSV 已移出版本库，归档在 `S:\tmp\cmt_vmd_profile_20261019\repo-evidence-archive-20261024\docs-validation\vmd-sizing/joint-release-20261010`。
+
 # 动作适配与控制器联合验收，2026-10-10
 
 “评估PMX模型一键绑定兼容性”已完成实现、验证和归档；提交 `b4000dcb`、`e78b443b`、`6df5c6dd` 已汇总到动作适配分支。本次使用联合源码重新构建并加载 C4D 2026 Release 模块，未用旧 DLL 代替原生验收。发布进度和实际引用见 [receipt.json](receipt.json)。

@@ -1,3 +1,5 @@
+> 本目录只保留结论与脚本。原始日志 / JSON / 截图 / TSV 已移出版本库，归档在 `S:\tmp\cmt_vmd_profile_20261019\repo-evidence-archive-20261024\docs-validation\vmd-sizing/final-fixes-20261010`。
+
 # 动作适配后续修复，2026-10-10
 
 本轮后续修改保存在 `codex/sizing-final-fixes` 和 libMMD 的 `codex/motion-sizing-final-fixes`。用户要求先完成修复，等“评估PMX模型一键绑定兼容性”一起完成后统一发布；Package run `38042164707` 已取消，未创建 0.9.3.4 Release。

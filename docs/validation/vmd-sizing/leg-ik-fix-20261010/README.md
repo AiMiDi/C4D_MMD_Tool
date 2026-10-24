@@ -1,3 +1,5 @@
+> 本目录只保留结论与脚本。原始日志 / JSON / 截图 / TSV 已移出版本库，归档在 `S:\tmp\cmt_vmd_profile_20261019\repo-evidence-archive-20261024\docs-validation\vmd-sizing/leg-ik-fix-20261010`。
+
 # 腿部 IK 与约束复核，2026-10-10
 
 本轮修复离线求值缺失 PMX IK 的问题，并新增独立的腿部自碰撞避让。核心测试、真实素材离线扫描和 SDK 2026 Release 编译通过；已有 C4D 播放器完成有限帧对照，仍有姿态误差；**不代表全部穿插已解决，也不代表新版 UI/MCP 已加载验收**。

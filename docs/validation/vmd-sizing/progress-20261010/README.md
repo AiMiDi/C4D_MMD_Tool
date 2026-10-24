@@ -1,3 +1,5 @@
+> 本目录只保留结论与脚本。原始日志 / JSON / 截图 / TSV 已移出版本库，归档在 `S:\tmp\cmt_vmd_profile_20261019\repo-evidence-archive-20261024\docs-validation\vmd-sizing/progress-20261010`。
+
 # 动作适配状态栏进度验证
 
 2026-10-10：动作适配增加 C4D 状态栏进度，核心只提供 SDK 无关的观察回调，不改变求解目标、数值运算或默认参数。
@@ -32,4 +34,4 @@
 - R20 完整构建被工作区已有、未提交的 PE 同步代码中的三处 const 兼容问题阻断：`pmx_mesh_provenance.hpp:48/50` 和 `mmd_mesh_manager.cpp:2012`。没有修改这些其他工作的文件，也没有声称 R20 出包通过。
 - 当前是本地实现与验证，没有为这次进度功能新发 Release。
 
-`receipt.json` 记录二进制身份与验证边界。完整 native 操作和构建日志在 `output/motion-sizing-audit-20261010/`。算法缺口及改进建议见相邻 `algorithm-audit-20261010/README.md`。
+`receipt.json` 记录二进制身份与验证边界。完整 native 操作和构建日志在 `output/motion-sizing-audit-20261010/`。算法缺口及改进建议见相邻 `algorithm-audit-20261010`。

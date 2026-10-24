@@ -1,3 +1,5 @@
+> 本目录只保留结论与脚本。原始日志 / JSON / 截图 / TSV 已移出版本库，归档在 `S:\tmp\cmt_vmd_profile_20261019\repo-evidence-archive-20261024\docs-validation\physics-replay-determinism-20261019`。
+
 # 物理严格回放修复：2026 / 2027 原生验证
 
 2026-10-19，在 Sour Black PMX + Stay Tonight 动作、30 fps、0–60 帧窗口内，修复后两代宿主的三项严格回放比较均通过，最大骨骼矩阵分量差和末帧顶点坐标差均为 **0**。阈值仍为 `1e-4`。

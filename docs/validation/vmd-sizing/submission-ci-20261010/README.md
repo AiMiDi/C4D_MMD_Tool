@@ -1,3 +1,5 @@
+> 本目录只保留结论与脚本。原始日志 / JSON / 截图 / TSV 已移出版本库，归档在 `S:\tmp\cmt_vmd_profile_20261019\repo-evidence-archive-20261024\docs-validation\vmd-sizing/submission-ci-20261010`。
+
 # Motion sizing submission and CI packaging — 2026-10-10
 
 The libMMD motion-sizing core and CMT host integration are committed and pushed. The OpenSpec change is archived and synchronized to the main specification. The latest compatibility fix is `c7d9a8afba3dcc8dfc0453984f8ef0d961fb5d95`; its libMMD dependency is `e4aca1048af9216d65bea91ec734710e360bcdd0`, published on `codex/motion-sizing`.

@@ -1,3 +1,5 @@
+> 本目录只保留结论与脚本。原始日志 / JSON / 截图 / TSV 已移出版本库，归档在 `S:\tmp\cmt_vmd_profile_20261019\repo-evidence-archive-20261024\docs-validation\c4d-2026-2027-compare-20261019`。
+
 # Cinema 4D 2026 / 2027 实机对照
 
 后续：[物理回放修复验证](../physics-replay-determinism-20261019/README.md) 已在同一资产和帧窗口内通过两版的三项严格比较。以下保留修复前的原始结果。

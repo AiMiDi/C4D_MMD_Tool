@@ -1,3 +1,5 @@
+> 本目录只保留结论与脚本。原始日志 / JSON / 截图 / TSV 已移出版本库，归档在 `S:\tmp\cmt_vmd_profile_20261019\repo-evidence-archive-20261024\docs-validation\vmd-sizing/hand-contact-fix-20261010`。
+
 # Hand contact gesture preservation — 2026-10-10
 
 The previous contact stage collapsed connected wrist/finger landmarks to one

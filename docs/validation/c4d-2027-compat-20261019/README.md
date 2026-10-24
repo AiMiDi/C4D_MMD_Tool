@@ -1,3 +1,5 @@
+> 本目录只保留结论与脚本。原始日志 / JSON / 截图 / TSV 已移出版本库，归档在 `S:\tmp\cmt_vmd_profile_20261019\repo-evidence-archive-20261024\docs-validation\c4d-2027-compat-20261019`。
+
 # Cinema 4D 2027 兼容构建验证
 
 日期：2026-10-19。按要求未启动 Cinema 4D 2027。
