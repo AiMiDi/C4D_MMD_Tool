@@ -22,13 +22,14 @@ Description:	DESC
 
 class MMDModelManagerObject;
 class MMDBoneManagerObject;
+namespace mmd_control_workflow { class EvaluationContext; }
 
 namespace mmd_bone_control_util
 {
     void RefreshControlVisuals(MMDBoneManagerObject& bone_manager, BaseObject* bone_manager_object);
 	Bool CreateOrRefreshControls(MMDBoneManagerObject& bone_manager, BaseObject* bone_manager_object);
-	Bool HasActiveControlDelta(MMDBoneManagerObject& bone_manager);
-	UInt32 GetControlStateChecksum(MMDBoneManagerObject& bone_manager);
+	Bool HasActiveControlDelta(MMDBoneManagerObject& bone_manager, mmd_control_workflow::EvaluationContext* context);
+	UInt32 GetControlStateChecksum(MMDBoneManagerObject& bone_manager, mmd_control_workflow::EvaluationContext* context);
 	void SyncControlsToCurrentPose(MMDBoneManagerObject& bone_manager);
 }
 
@@ -115,8 +116,8 @@ class MMDBoneManagerObject final : public MMDManagerObject
 	friend class MMDMeshManagerObject;
 	friend void mmd_bone_control_util::RefreshControlVisuals(MMDBoneManagerObject& bone_manager, BaseObject* bone_manager_object);
 	friend Bool mmd_bone_control_util::CreateOrRefreshControls(MMDBoneManagerObject& bone_manager, BaseObject* bone_manager_object);
-	friend Bool mmd_bone_control_util::HasActiveControlDelta(MMDBoneManagerObject& bone_manager);
-	friend UInt32 mmd_bone_control_util::GetControlStateChecksum(MMDBoneManagerObject& bone_manager);
+	friend Bool mmd_bone_control_util::HasActiveControlDelta(MMDBoneManagerObject& bone_manager, mmd_control_workflow::EvaluationContext* context);
+	friend UInt32 mmd_bone_control_util::GetControlStateChecksum(MMDBoneManagerObject& bone_manager, mmd_control_workflow::EvaluationContext* context);
 	friend void mmd_bone_control_util::SyncControlsToCurrentPose(MMDBoneManagerObject& bone_manager);
 	MMDBoneManagerObject() = default;
 	~MMDBoneManagerObject() override = default;

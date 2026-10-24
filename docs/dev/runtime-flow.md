@@ -42,6 +42,11 @@ flowchart TD
 
 ## 原生 PSR 控制器接入
 
+四肢控制器的 `SolveLayer` 与 `CollectExtraControls` 在各自一次调用内集中查找左右手脚，
+保留原先骨骼顺序及“链骨骼取最后一个、足 IK 目标取第一个”的规则。结果不跨调用缓存，
+因此同帧改名、改 IK 标记、改链接仍会重新读取。材质表情运行时同样只在一次求值内共享
+场景材质绑定计数；仍逐材质验证 owner 和 shader/graph，模型或材质链接变更不会被跨帧缓存掩盖。
+
 ANIM 模式支持用普通空对象，通过骨骼上的 C4D 原生 Constraint/约束标签的 PSR
 位置、旋转通道驱动 PMX 骨骼。控制器放到骨架之外，初始世界矩阵对齐目标骨骼，
 再设置 PSR 目标。控制腿部时，将约束加到 PMX 的足 IK 目标骨；直接约束上身或手臂
@@ -205,6 +210,20 @@ BoneManager 在每次播放 pass 前通过 `EnsurePlaybackExecutionPlan()` 比�
 
 ## 物理 step 与 override
 
+模型“物理”页的“每动画帧物理子步数”默认 3，范围 1–10；旧场景缺少字段时也使用 3。
+`ApplyPhysicsConfigToRuntime()` 按 `文档 fps × 子步数` 设置 Bullet 固定频率，首次创建及冷重建后重新应用。
+动画仍按文档帧率传入 `elapsed`：30 fps、3 子步对应 90 Hz；60 fps、3 子步对应 180 Hz。
+修改子步数或文档 fps（包括同帧脚本写入）会冷重置物理，清除旧步长的累积时间。
+这不改变动作时长、求解器迭代或最大追赶子步数（10）；改变子步数会改变物理轨迹，并非无损优化。
+当前场景的 120 / 90 / 60 Hz 性能与效果对照见
+[90 Hz 验证记录](../validation/vmd-physics-90hz-20261020/README.md)。
+可配置子步数、同帧重置和默认值兼容性的原生验证见
+[物理子步数配置验证](../validation/vmd-physics-substeps-20261020/README.md)。
+
+Windows SDK 的 Release 构建显式为 Bullet / libMMD 设置保守的优化选项，避免 SDK 清空全局 flags 后依赖未启用优化。
+当前场景逐字节一致的验证和被排除的浮点优化组合见
+[Release 依赖优化验证](../validation/vmd-dependency-release-20261020/README.md)。
+
 `StepStandalonePhysics(elapsed)` 的运行顺序是：
 
 1. 每个 runtime rigid body `SyncBonePositionToPhysics(elapsed)`，把骨骼驱动的刚体同步到物理世界。
@@ -357,6 +376,11 @@ IK 忽略同链的 FK 输入。标准手臂增加扁平手部目标和方向控�
 显式 IK 在对应层的 VMD、附加变换求值之后解算，保持本帧两段长度，并限制不可达目标。
 脚尖仍使用原始 PMX IK。缺失、零长度、固定轴或跨后物理阶段的链不生成不成立的手部 IK。
 
+模型的单次 `Execute` 在栈上建立 `mmd_control_workflow::EvaluationContext`，初始/最终输入校验、
+活动输入检查和前后物理各层共用一次骨骼分类及四肢链查找。只复用骨骼身份与分类；链接、模式、层和矩阵仍在使用处读取。
+上下文在本次调用结束时销毁，同一时间点再次求值仍重新查找，因此不隐藏原始参数写入。
+未传入上下文的 UI 调用继续自行查找。
+
 切换会匹配当前求值姿势，包括肢体扭转。已有控制器轨道在当前时刻插入匹配键，其他时刻的键保留；
 没有轨道的控制器只更新当前输入。切换、预设、重置和打键均支持撤销。
 “重置选中”只清零本模型可见、选中的管理控制器，保留轨道；“选中打键”直接写控制器的相对位置、
@@ -391,10 +415,16 @@ IK 忽略同链的 FK 输入。标准手臂增加扁平手部目标和方向控�
 
 ## 阶段耗时与回归
 
-设置 `CMT_RUNTIME_PROFILE=1` 后，ModelManager 输出 `[CMT][RuntimeProfile]`，包含 `frame`、`rebuildMs`、
-`animationMs`、`ikMs`、`physicsMs`、`morphMs`、`materialMs` 和累计 `planRebuilds`。
-关闭时不读取时钟；嵌套文档求值使用独立统计并恢复外层上下文。统计覆盖当前线程调用栈中的阶段，
-`morphMs` 包含其材质同步子阶段，数值不能简单相加，也不能作为跨线程整帧总耗时。
+可复用的阶段插桩由 `CMT_ENABLE_RUNTIME_PROFILING` 编译宏控制，默认关闭，出包流程强制关闭并检查实际模块。
+分析构建显式开启该选项，再设置 `CMT_RUNTIME_PROFILE=1` 和 `CMT_PROFILE_LOG` 后正常启动 C4D。
+模块按文档、时间和线程聚合 JSONL，覆盖模型执行、骨骼、IK、物理、Morph，以及模型执行之前的动画参数回调。
+各阶段记录 inclusive/self/maximum 毫秒数和调用次数；inclusive 存在嵌套，不能直接相加。
+关闭宏时整个 scope（包括参数求值）移除；运行时关闭时不读取时钟。
+配置、日志语义、汇总工具和覆盖边界见 [runtime-profile.md](runtime-profile.md)。
+
+纯姿态播放中的物理写回和骨骼管理器覆写，只通知网格及 Skin 更新，不向所有权重标签发送 `MSG_UPDATE`。
+这两条路径没有修改权重或绑定矩阵；重复通知权重标签会产生显著开销。
+编辑模式的绑定状态提交/恢复仍保留完整权重标签更新，真实权重编辑也必须使用原生权重更新通知。
 
 算法、输入 fixture 和回执检查通过后，还需要按 [regression.md](regression.md) 在真实 C4D 中执行
 场景保存重开、模式/层级/动画槽/物理和材质回归；编译和纯逻辑测试不能替代原生场景验收。

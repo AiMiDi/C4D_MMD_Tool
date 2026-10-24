@@ -44,7 +44,7 @@ jobs:
 
       - name: Configure latest SDK Release
         if: github.event_name == 'pull_request' || (github.event_name == 'push' && github.ref == 'refs/heads/main')
-        run: cmake --preset release-windows -D CMT_SDK_DIR=sdk_2027 -D CMT_SDK_BINARY_DIR=_build_msvc/sdk_2027 -D CMT_DEPS_ENABLE_LIBMMD_TESTS=OFF -D CMT_ENABLE_PLUGIN_TESTS=OFF -D CMT_ENABLE_RUNTIME_REGRESSION=OFF
+        run: cmake --preset release-windows -D CMT_SDK_DIR=sdk_2027 -D CMT_SDK_BINARY_DIR=_build_msvc/sdk_2027 -D CMT_DEPS_ENABLE_LIBMMD_TESTS=OFF -D CMT_ENABLE_PLUGIN_TESTS=OFF -D CMT_ENABLE_RUNTIME_REGRESSION=OFF -D CMT_ENABLE_RUNTIME_PROFILING=OFF
 
       - name: Compile latest SDK Release
         if: github.event_name == 'pull_request' || (github.event_name == 'push' && github.ref == 'refs/heads/main')
@@ -209,6 +209,7 @@ jobs:
             -D CMT_DEPS_ENABLE_LIBMMD_TESTS=OFF \
             -D CMT_ENABLE_PLUGIN_TESTS=OFF \
             -D CMT_ENABLE_RUNTIME_REGRESSION=OFF \
+            -D CMT_ENABLE_RUNTIME_PROFILING=OFF \
             -D CMT_RUNTIME_RESOURCE_CONFIG_POLICY=reset \
             -D "CMT_DEPS_PREBUILT_DIR=${{ github.workspace }}/_build_msvc/cmt_deps_prebuilt" \
             "${extra_args[@]}"

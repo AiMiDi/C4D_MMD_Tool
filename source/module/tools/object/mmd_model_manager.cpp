@@ -54,6 +54,7 @@ Description:	MMD model object
 #include <limits>
 #include <set>
 #include <unordered_map>
+#include "utils/cmt_runtime_profile_c4d.hpp"
 
 #define COL_NAME 'name'
 
@@ -1353,6 +1354,7 @@ SDK2024_Init(MMDModelManagerObject)
 	bc->SetFloat(MODEL_PHYSICS_GRAVITY_STRENGTH, 98.0);
 	bc->SetVector(MODEL_PHYSICS_GRAVITY_DIRECTION, Vector(0, -1, 0));
 	bc->SetBool(MODEL_PHYSICS_RESET_ON_SEEK, true);
+	bc->SetInt32(MODEL_PHYSICS_SUBSTEPS, kDefaultPhysicsSubsteps);
 	bc->SetInt32(MODEL_ANIM_LIST, -1);
 	bc->SetInt32(MODEL_MATERIAL_LIST, MODEL_MATERIAL_NONE);
 	iferr(animation_slot_metadata_.Resize(0))
@@ -1610,6 +1612,8 @@ Bool MMDModelManagerObject::Read(GeListNode* node, HyperFile* hf, Int32 level) {
 	{
 		model_mode_ = NormalizeModelMode(bc->GetInt32(MODEL_MODE));
 		bc->SetInt32(MODEL_MODE, model_mode_);
+		if (bc->GetData(MODEL_PHYSICS_SUBSTEPS).GetType() == DA_NIL)
+			bc->SetInt32(MODEL_PHYSICS_SUBSTEPS, kDefaultPhysicsSubsteps);
 		if (bc->GetData(MODEL_CONTROLS_SIZE).GetType() == DA_NIL)
 			bc->SetFloat(MODEL_CONTROLS_SIZE, 1.0);
 		if (bc->GetData(MODEL_CONTROLS_OCCLUDED).GetType() == DA_NIL)
@@ -2203,6 +2207,7 @@ static void SendObjectUpdateMessage(BaseObject* dst, BaseObject* obj)
 
 Bool MMDModelManagerObject::UpdateManagers(BaseObject* op)
 {
+	CMT_PROFILE_SCOPE(cmt_runtime::RuntimeStage::ManagerUpdate);
 	if (!op)
 		op = reinterpret_cast<BaseObject*>(Get());
 	BaseObject* mesh_manager = nullptr;
@@ -2311,6 +2316,7 @@ Bool MMDModelManagerObject::UpdateManagers(BaseObject* op)
 
 EXECUTIONRESULT MMDModelManagerObject::Execute(BaseObject* op, BaseDocument* doc, BaseThread* bt, Int32 priority, EXECUTIONFLAGS flags)
 {
+	CMT_PROFILE_FUNCTION(cmt_runtime::RuntimeStage::ModelExecute, doc);
 	iferr_scope_handler
 	{
 		return EXECUTIONRESULT::OK;
@@ -2321,8 +2327,6 @@ EXECUTIONRESULT MMDModelManagerObject::Execute(BaseObject* op, BaseDocument* doc
 		return EXECUTIONRESULT::OK;
 	}
 
-	cmt_runtime::FrameMetrics metrics(cmt::debug::IsRuntimeProfileEnabled());
-	cmt_runtime::ScopedFrameMetrics metrics_guard(metrics);
 
 	if (BaseContainer* const bc = op->GetDataInstance())
 		model_mode_ = NormalizeModelMode(bc->GetInt32(MODEL_MODE));
@@ -2392,20 +2396,27 @@ EXECUTIONRESULT MMDModelManagerObject::Execute(BaseObject* op, BaseDocument* doc
 		if (has_transient_vpd_pose_ && now_time != transient_vpd_pose_time_)
 			ClearTransientVPDPoseState(doc);
 		const Bool time_changed = prev_time_ != now_time;
-		const UInt32 control_state_checksum = bone_manager_data_ ? mmd_bone_control_util::GetControlStateChecksum(*bone_manager_data_) : 0;
+		const Float32 document_fps = static_cast<Float32>(doc->GetFps());
+		const Int32 physics_substeps = GetPhysicsSubsteps(op);
+		// Detect document FPS changes and raw container edits even at the same
+		// animation time. A new timestep must start with a cold Bullet accumulator.
+		const Bool physics_timing_changed = fps_ != document_fps || physics_substeps_ != physics_substeps;
+		mmd_control_workflow::EvaluationContext control_context;
+		const UInt32 control_state_checksum = bone_manager_data_ ? mmd_bone_control_util::GetControlStateChecksum(*bone_manager_data_, &control_context) : 0;
 		const Bool control_state_changed = control_state_checksum != control_state_checksum_;
-		const Bool control_delta_active = bone_manager_data_ && mmd_bone_control_util::HasActiveControlDelta(*bone_manager_data_);
+		const Bool control_delta_active = bone_manager_data_ && mmd_bone_control_util::HasActiveControlDelta(*bone_manager_data_, &control_context);
 		const UInt64 bone_morph_state_checksum = GetBoneMorphStateChecksum();
 		const Bool bone_morph_state_changed = bone_morph_pose_dirty_ || !has_bone_morph_state_checksum_
 			|| bone_morph_state_checksum != bone_morph_state_checksum_;
-		if (time_changed || control_state_changed || control_delta_active || bone_morph_state_changed || external_pose_refresh_)
+		if (time_changed || control_state_changed || control_delta_active || bone_morph_state_changed || external_pose_refresh_ || physics_timing_changed)
 		{
-			fps_ = static_cast<Float32>(doc->GetFps());
+			fps_ = document_fps;
+			physics_substeps_ = physics_substeps;
 
 			const Float64 time_diff = now_time.Get() - prev_time_.Get();
 			const Float64 frame_time = 1.0 / static_cast<Float64>(fps_);
 			const Bool reset_on_seek = ShouldResetPhysicsOnSeek(op);
-			const Bool needs_physics_reset = !is_animation_initialized_ || now_time == doc->GetMinTime()
+			const Bool needs_physics_reset = !is_animation_initialized_ || physics_timing_changed || now_time == doc->GetMinTime()
 				|| (reset_on_seek && (time_diff < frame_time * 0.5 || time_diff > frame_time * 1.5));
 
 			if (!EnsureStandaloneRuntimeManagers())
@@ -2413,14 +2424,21 @@ EXECUTIONRESULT MMDModelManagerObject::Execute(BaseObject* op, BaseDocument* doc
 
 			ApplyIKSolverFromParameters(op);
 			ApplyPhysicsConfigToRuntime(op);
-			if ((bone_morph_state_changed || control_state_changed || control_delta_active) && !time_changed)
+			// A timestep edit can occur after this frame has already published a
+			// physical pose. Discard that cached pose before rebuilding the world.
+			if (physics_timing_changed ||
+				((bone_morph_state_changed || control_state_changed || control_delta_active) && !time_changed))
 				PrepareSameFrameReevaluation(doc);
-			RunLayeredBonePass(doc, false);
+			// Validate once for both phases of this model evaluation. Do not cache
+			// by frame number: scripts may change ordering fields at the same time.
+			if (bone_manager_data_)
+				bone_manager_data_->EnsurePlaybackExecutionPlan();
+			RunLayeredBonePass(doc, false, &control_context);
 
 			const Bool physics_enabled = IsPhysicsEnabled(op);
 			if (physics_enabled)
 			{
-				if (time_changed || !is_animation_initialized_)
+				if (time_changed || !is_animation_initialized_ || physics_timing_changed)
 				{
 					if (needs_physics_reset)
 						ResetStandalonePhysics();
@@ -2432,7 +2450,7 @@ EXECUTIONRESULT MMDModelManagerObject::Execute(BaseObject* op, BaseDocument* doc
 				{
 					// Reapply the existing physical pose after invalidating same-frame
 					// IK results. Control and morph edits must not advance Bullet time.
-					cmt_runtime::ScopedRuntimeStage stage(cmt_runtime::RuntimeStage::Physics);
+					CMT_PROFILE_SCOPE(cmt_runtime::RuntimeStage::Physics);
 					ApplyStandalonePhysicsResults();
 				}
 			}
@@ -2442,10 +2460,10 @@ EXECUTIONRESULT MMDModelManagerObject::Execute(BaseObject* op, BaseDocument* doc
 			}
 			// PMX after-deform is an evaluation phase, not a physics-only phase.
 			// Keep these bones and their IK chains active when Bullet is disabled.
-			RunLayeredBonePass(doc, true);
+			RunLayeredBonePass(doc, true, &control_context);
 			if (bone_manager_data_)
 				mmd_bone_control_util::SyncControlsToCurrentPose(*bone_manager_data_);
-			control_state_checksum_ = bone_manager_data_ ? mmd_bone_control_util::GetControlStateChecksum(*bone_manager_data_) : 0;
+			control_state_checksum_ = bone_manager_data_ ? mmd_bone_control_util::GetControlStateChecksum(*bone_manager_data_, &control_context) : 0;
 			bone_morph_state_checksum_ = bone_morph_state_checksum;
 			has_bone_morph_state_checksum_ = true;
 			bone_morph_pose_dirty_ = false;
@@ -2454,19 +2472,7 @@ EXECUTIONRESULT MMDModelManagerObject::Execute(BaseObject* op, BaseDocument* doc
 				prev_time_ = now_time;
 		}
 	}
-	if (metrics.enabled)
-	{
-		DebugOutput(maxon::OUTPUT::DIAGNOSTIC,
-			"[CMT][RuntimeProfile] frame=@ rebuildMs=@ animationMs=@ ikMs=@ physicsMs=@ morphMs=@ materialMs=@ planRebuilds=@",
-			doc->GetTime().GetFrame(kModelAnimationFps),
-			metrics.Milliseconds(cmt_runtime::RuntimeStage::Rebuild),
-			metrics.Milliseconds(cmt_runtime::RuntimeStage::Animation),
-			metrics.Milliseconds(cmt_runtime::RuntimeStage::IK),
-			metrics.Milliseconds(cmt_runtime::RuntimeStage::Physics),
-			metrics.Milliseconds(cmt_runtime::RuntimeStage::Morph),
-			metrics.Milliseconds(cmt_runtime::RuntimeStage::MaterialSync),
-			bone_manager_data_ ? bone_manager_data_->GetPlaybackPlanRebuildCount() : 0);
-	}
+
 	return EXECUTIONRESULT::OK;
 }
 
@@ -6067,6 +6073,10 @@ SDK2024_GetDParameter(MMDModelManagerObject)
 
 	switch (id[0].id)
 	{
+	case MODEL_PHYSICS_SUBSTEPS:
+		t_data.SetInt32(GetPhysicsSubsteps(static_cast<const BaseObject*>(paramNode)));
+		flags |= DESCFLAGS_GET::PARAM_GET;
+		return true;
 	case MODEL_MATMORPH_PREVIEW_ENABLED:
 		t_data = GeData(material_preview_enabled_);
 		flags |= DESCFLAGS_GET::PARAM_GET;
@@ -6246,6 +6256,7 @@ SDK2024_GetDParameter(MMDModelManagerObject)
 
 Bool MMDModelManagerObject::SetDParameter(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_SET& flags)
 {
+	CMT_PROFILE_FUNCTION(cmt_runtime::RuntimeStage::ModelSetParameter, node ? static_cast<BaseList2D*>(node)->GetDocument() : nullptr);
 	switch (id[0].id)
 	{
         case MODEL_CONTROLS_WORKFLOW:
@@ -6399,10 +6410,13 @@ Bool MMDModelManagerObject::SetDParameter(GeListNode* node, const DescID& id, co
 		case MODEL_PHYSICS_GRAVITY_STRENGTH:
 		case MODEL_PHYSICS_GRAVITY_DIRECTION:
 		case MODEL_PHYSICS_RESET_ON_SEEK:
+		case MODEL_PHYSICS_SUBSTEPS:
 		{
 			prev_time_ = BaseTime(-1.);
 			is_animation_initialized_ = false;
-			const Bool result = SUPER::SetDParameter(node, id, t_data, flags);
+			const GeData normalized = id[0].id == MODEL_PHYSICS_SUBSTEPS
+				? GeData(std::clamp(t_data.GetInt32(), Int32(1), kMaxPhysicsSubsteps)) : t_data;
+			const Bool result = SUPER::SetDParameter(node, id, normalized, flags);
 			ApplyPhysicsConfigToRuntime(reinterpret_cast<BaseObject*>(node));
 			return result;
 		}

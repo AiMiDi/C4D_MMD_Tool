@@ -73,4 +73,23 @@ function(mmdtool_plugin_dependencies_add PROJECT_ROOT_DIR)
   set(CMAKE_DEBUG_POSTFIX "_Debug" CACHE STRING "" FORCE)
 
   add_subdirectory("${_libmmd}" "${_lm_bin}" EXCLUDE_FROM_ALL)
+
+  # Maxon's SDK clears the global Release flags before adding dependencies.
+  # Restore optimization on these targets only; standalone dependency builds
+  # keep their toolchain defaults, and Debug keeps the SDK's original flags.
+  #
+  # /O2 alone (including /fp:precise) changes Bullet trajectories in the native
+  # playback fixture. Strict floating point, no inlining, and no intrinsic
+  # substitution preserve the baseline while still optimizing ordinary code.
+  if(MSVC AND DEFINED MAXON_SDK_ROOT_DIR)
+    foreach(_target IN ITEMS LinearMath Bullet3Common BulletInverseDynamics
+                             BulletCollision BulletDynamics BulletSoftBody libMMD)
+      target_compile_options(${_target} PRIVATE
+        "$<$<CONFIG:Release>:/O2>"
+        "$<$<CONFIG:Release>:/fp:strict>"
+        "$<$<CONFIG:Release>:/Ob0>"
+        "$<$<CONFIG:Release>:/Oi->"
+      )
+    endforeach()
+  endif()
 endfunction()

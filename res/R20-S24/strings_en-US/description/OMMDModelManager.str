@@ -29,6 +29,7 @@ STRINGTABLE OMMDModelManager
 		MODEL_ANIM_DELETE_CURRENT_FRAME_BUTTON "Delete current-frame key";
 	MODEL_PHYSICS_GRP "Physics";
 		MODEL_PHYSICS_ENABLED "Enable physics";
+		MODEL_PHYSICS_SUBSTEPS "Substeps per animation frame";
 		MODEL_PHYSICS_GRAVITY_STRENGTH "Gravity strength";
 		MODEL_PHYSICS_GRAVITY_DIRECTION "Gravity direction";
 		MODEL_PHYSICS_RESET_ON_SEEK "Reset on seek";

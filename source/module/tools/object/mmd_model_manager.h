@@ -37,6 +37,7 @@ class MMDRigidManagerObject;
 class MMDJointManagerObject;
 class MMDModelManagerObject;
 class C4DIKChainNodeAdapter;
+namespace mmd_control_workflow { class EvaluationContext; }
 enum class MMDMorphType : uint8_t;
 
 class StandaloneIKManager
@@ -269,6 +270,10 @@ class MMDModelManagerObject final : public ObjectData
 	Int32 model_mode_ = MODEL_MODE_EDIT;
 	BaseTime prev_time_{-1};
 	Float32 fps_{ 30.f };
+	static constexpr Int32 kDefaultPhysicsSubsteps = 3;
+	// Match libMMD's maximum catch-up steps so one animation frame is never truncated.
+	static constexpr Int32 kMaxPhysicsSubsteps = 10;
+	Int32 physics_substeps_ = kDefaultPhysicsSubsteps;
 	Bool is_animation_initialized_{ false };
 	UInt32 control_state_checksum_{ 0 };
 	UInt64 bone_morph_state_checksum_ = 0;
@@ -464,7 +469,7 @@ private:
 	Bool BuildStandaloneBoneAdapters();
 	Bool SolveStandaloneIKBeforePhysics(Bool include_after_physics_bones = false);
 	Int32 SolveStandaloneIKForLayer(Int32 layer, Bool after_physics, Bool sync_from_scene = true);
-	Bool RunLayeredBonePass(BaseDocument* doc, Bool after_physics);
+	Bool RunLayeredBonePass(BaseDocument* doc, Bool after_physics, mmd_control_workflow::EvaluationContext* controls);
 	void ResetStandalonePhysics();
 	void StepStandalonePhysics(Float elapsed);
 	void ApplyStandalonePhysicsResults();
@@ -472,6 +477,7 @@ private:
 	void CommitEditModeBindState(BaseDocument* doc);
 	void RestoreBindStateForEdit(BaseDocument* doc);
 	Bool IsPhysicsEnabled(const BaseObject* op) const;
+	Int32 GetPhysicsSubsteps(const BaseObject* op) const;
 	Bool ShouldResetPhysicsOnSeek(const BaseObject* op) const;
 	Vector GetPhysicsGravity(const BaseObject* op) const;
 	void ApplyPhysicsConfigToRuntime(const BaseObject* op);

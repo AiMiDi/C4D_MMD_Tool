@@ -9,10 +9,12 @@
 #include "utils/cmt_runtime_profile.hpp"
 
 #include <cstring>
+#include <unordered_map>
 #include "utils/cmt_morph_evaluation.hpp"
 #include "module/tools/material/mmd_material_morph_binding.h"
 #include "module/tools/material/mmd_redshift_toon_material.h"
 #include "plugin_resource.h"
+#include "utils/cmt_runtime_profile_c4d.hpp"
 
 namespace
 {
@@ -41,6 +43,7 @@ namespace
 
 UInt64 MMDModelManagerObject::GetBoneMorphStateChecksum() const
 {
+	CMT_PROFILE_SCOPE(cmt_runtime::RuntimeStage::BoneMorphChecksum);
 	UInt64 checksum = 14695981039346656037ULL;
 	UInt64 morph_count = 0;
 	if (!bone_manager_data_)
@@ -82,7 +85,7 @@ UInt64 MMDModelManagerObject::GetBoneMorphStateChecksum() const
 
 void MMDModelManagerObject::ApplyMorphRuntimeStrengths()
 {
-	cmt_runtime::ScopedRuntimeStage stage(cmt_runtime::RuntimeStage::Morph);
+	CMT_PROFILE_SCOPE(cmt_runtime::RuntimeStage::Morph);
 	GeListNode* const node = Get();
 	const Int morph_count = morph_data_.GetCount();
 	if (!node)
@@ -110,6 +113,7 @@ void MMDModelManagerObject::ApplyMorphRuntimeStrengths()
 std::vector<Float> MMDModelManagerObject::EvaluateMorphWeights(const BaseTime& time,
 	const Bool preview, const Bool sample_tracks, Bool* cyclic)
 {
+	CMT_PROFILE_SCOPE(cmt_runtime::RuntimeStage::MorphWeights);
 	BaseObject* const object = static_cast<BaseObject*>(Get());
 	std::vector<cmt_runtime::MorphNode> graph(static_cast<size_t>(morph_data_.GetCount()));
 	std::vector<double> input(graph.size(), 0.0);
@@ -281,7 +285,7 @@ Bool MMDModelManagerObject::PrepareMaterialMorphBindings(const Bool record_undo)
 
 void MMDModelManagerObject::EvaluateMaterialMorphRuntime(const std::vector<Float>& strengths)
 {
-	cmt_runtime::ScopedRuntimeStage stage(cmt_runtime::RuntimeStage::MaterialSync);
+	CMT_PROFILE_SCOPE(cmt_runtime::RuntimeStage::MaterialSync);
 	BaseObject* const object = static_cast<BaseObject*>(Get());
 	BaseDocument* const doc = object ? object->GetDocument() : nullptr;
 	if (!doc) return;
@@ -300,6 +304,35 @@ void MMDModelManagerObject::EvaluateMaterialMorphRuntime(const std::vector<Float
 		if (first_binding_error.IsEmpty())
 			first_binding_error = material->GetName() + String(": ") + reason;
 	};
+	std::unordered_map<BaseList2D*, Int> binding_counts;
+	Bool bindings_counted = false;
+	const auto has_unique_binding = [&](BaseMaterial* material)
+	{
+		CMT_PROFILE_SCOPE(cmt_runtime::RuntimeStage::MaterialOwnership);
+		if (!bindings_counted)
+		{
+			// Only share the traversal within this evaluation. A model/link edit
+			// at the same frame must be visible on the next call.
+			std::vector<BaseObject*> pending;
+			if (BaseObject* first = doc->GetFirstObject()) pending.push_back(first);
+			while (!pending.empty())
+			{
+				BaseObject* node = pending.back();
+				pending.pop_back();
+				if (node->GetNext()) pending.push_back(node->GetNext());
+				if (node->GetDown()) pending.push_back(node->GetDown());
+				if (!node->IsInstanceOf(g_mmd_model_manager_object_id)) continue;
+				const auto* model = node->GetNodeData<MMDModelManagerObject>();
+				if (!model) continue;
+				for (const auto& base : model->material_list_)
+					if (base.material_link && *base.material_link)
+						if (BaseList2D* linked = (*base.material_link)->GetLink(doc)) ++binding_counts[linked];
+			}
+			bindings_counted = true;
+		}
+		const auto found = binding_counts.find(material);
+		return found != binding_counts.end() && found->second == 1;
+	};
 	if (material_runtime_checksum_.GetCount() != material_list_.GetCount())
 	{
 		iferr(material_runtime_checksum_.Resize(material_list_.GetCount())) return;
@@ -313,7 +346,7 @@ void MMDModelManagerObject::EvaluateMaterialMorphRuntime(const std::vector<Float
 		if (!material) { legacy_sync_complete = false; continue; }
 		if (mmd_material_binding::IsBound(material))
 		{
-			if (!mmd_material_binding::IsOwner(material, object, doc) || !HasUniqueMaterialBinding(material))
+			if (!mmd_material_binding::IsOwner(material, object, doc) || !has_unique_binding(material))
 			{ record_error(material, "Material is owned by a different model; create an independent material"_s); continue; }
 			auto adapter = MMDMaterialAdapter::CreateFor(material);
 			String diagnostic;
@@ -359,6 +392,7 @@ void MMDModelManagerObject::EvaluateMaterialMorphRuntime(const std::vector<Float
 
 void MMDModelManagerObject::ApplyMorphRuntimeStrength(IMorph& morph, const Float strength)
 {
+	CMT_PROFILE_SCOPE(cmt_runtime::RuntimeStage::MorphApply);
 	switch (morph.GetType())
 	{
 	case MMDMorphType::MESH:
@@ -407,6 +441,7 @@ Float MMDModelManagerObject::GetMaterialPreviewWeight() const
 
 void MMDModelManagerObject::RefreshMaterialMorphPreview()
 {
+	CMT_PROFILE_FUNCTION(cmt_runtime::RuntimeStage::MorphPreview, Get() ? static_cast<BaseList2D*>(Get())->GetDocument() : nullptr);
 	BaseDocument* doc = Get() ? Get()->GetDocument() : nullptr;
 	if (!doc || !GeIsMainThread()) return;
 	Bool invalid_graph = false;

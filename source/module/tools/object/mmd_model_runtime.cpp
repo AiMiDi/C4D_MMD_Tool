@@ -22,6 +22,7 @@
 #include <btBulletDynamicsCommon.h>
 #include <algorithm>
 #include <limits>
+#include "utils/cmt_runtime_profile_c4d.hpp"
 
 namespace
 {
@@ -63,8 +64,9 @@ namespace
 		node->Message(MSG_UPDATE);
 	}
 
-	void MarkMeshHierarchyDirty(BaseObject* mesh_manager_object)
+	void MarkMeshHierarchyDirty(BaseObject* mesh_manager_object, const Bool weights_changed = true)
 	{
+		CMT_PROFILE_SCOPE(cmt_runtime::RuntimeStage::MeshInvalidation);
 		if (!mesh_manager_object)
 			return;
 
@@ -74,8 +76,13 @@ namespace
 
 			for (BaseTag* tag = mesh_object->GetFirstTag(); tag; tag = tag->GetNext())
 			{
-				if (tag->GetType() == Tweights)
+				// Pose writes do not change weights or bind matrices. MSG_UPDATE on
+				// every weight tag rebuilds its data even when only joints moved.
+				if (weights_changed && tag->GetType() == Tweights)
+				{
+					CMT_PROFILE_SCOPE(cmt_runtime::RuntimeStage::WeightUpdate);
 					MarkSceneNodeDirty(tag);
+				}
 			}
 
 			for (BaseObject* child = mesh_object->GetDown(); child; child = child->GetNext())
@@ -224,6 +231,7 @@ C4DIKChainNodeAdapter* MMDModelManagerObject::GetBoneAdapter(const Int32 bone_in
 
 void MMDModelManagerObject::SyncStandaloneBoneAdaptersFromScene(const Bool reset_ik_rotation)
 {
+	CMT_PROFILE_SCOPE(cmt_runtime::RuntimeStage::BoneStateSync);
 	for (const auto& adapter : physics_bone_pool_)
 	{
 		if (adapter)
@@ -239,6 +247,7 @@ void MMDModelManagerObject::SyncStandaloneBoneAdaptersFromScene(const Bool reset
 
 void MMDModelManagerObject::SyncStandaloneBoneAdaptersLocalFromGlobal(const maxon::BaseArray<Int32>& bone_indices) const
 {
+	CMT_PROFILE_SCOPE(cmt_runtime::RuntimeStage::BoneStateSync);
 	for (const Int32 bone_index : bone_indices)
 	{
 		if (C4DIKChainNodeAdapter* const adapter = GetBoneAdapter(bone_index))
@@ -271,7 +280,7 @@ Bool MMDModelManagerObject::SolveStandaloneIKBeforePhysics(const Bool include_af
 
 Int32 MMDModelManagerObject::SolveStandaloneIKForLayer(const Int32 layer, const Bool after_physics, const Bool sync_from_scene)
 {
-	cmt_runtime::ScopedRuntimeStage stage(cmt_runtime::RuntimeStage::IK);
+	CMT_PROFILE_SCOPE(cmt_runtime::RuntimeStage::IK);
 	if (!ik_manager_own_)
 		return 0;
 
@@ -373,7 +382,8 @@ Int32 MMDModelManagerObject::SolveStandaloneIKForLayer(const Int32 layer, const 
 	return solved_count;
 }
 
-Bool MMDModelManagerObject::RunLayeredBonePass(BaseDocument* doc, const Bool after_physics)
+Bool MMDModelManagerObject::RunLayeredBonePass(BaseDocument* doc, const Bool after_physics,
+    mmd_control_workflow::EvaluationContext* controls)
 {
 	if (!doc)
 		return false;
@@ -383,17 +393,24 @@ Bool MMDModelManagerObject::RunLayeredBonePass(BaseDocument* doc, const Bool aft
 		return false;
 
 	Bool touched = false;
-	bone_manager_data_->EnsurePlaybackExecutionPlan();
+	// Execute validates the shared plan before entering the two phases.
 	for (const Int32 layer : bone_manager_data_->GetPlaybackLayers())
 	{
+		// Empty after-deform layers have neither animation nor IK work. Keep
+		// pre-physics layers: controls can own after-deform bones, and Bullet
+		// must still receive the scene pose when every bone is after-deform.
+		if (after_physics && bone_manager_data_->GetPlaybackBonesForLayer(layer, after_physics).empty())
+			continue;
+
 		Int32 anim_count = 0;
 		{
-			cmt_runtime::ScopedRuntimeStage stage(cmt_runtime::RuntimeStage::Animation);
+			CMT_PROFILE_SCOPE(cmt_runtime::RuntimeStage::Animation);
 			anim_count = bone_manager_data_->PrepareSceneForPhysicsPlaybackLayer(doc, layer, after_physics);
 			SyncStandaloneBoneAdaptersFromScene(true);
 		}
-		const Int32 control_ik_count=mmd_control_workflow::SolveLayer(*bone_manager_data_,doc,layer,after_physics);
-		if (control_ik_count>0) SyncStandaloneBoneAdaptersFromScene(true);
+		const Int32 control_ik_count = mmd_control_workflow::SolveLayer(*bone_manager_data_, doc, layer, after_physics, controls);
+		if (control_ik_count > 0)
+			SyncStandaloneBoneAdaptersFromScene(true);
 		const Int32 ik_count = SolveStandaloneIKForLayer(layer, after_physics, false);
 		touched = touched || anim_count > 0 || ik_count > 0 || control_ik_count > 0;
 	}
@@ -763,7 +780,7 @@ Bool MMDModelManagerObject::EnsureStandaloneRuntimeManagers()
 
 	if (*is_runtime_initialized_.Read() && ik_manager_own_ && physics_manager_own_)
 		return true;
-	cmt_runtime::ScopedRuntimeStage stage(cmt_runtime::RuntimeStage::Rebuild);
+	CMT_PROFILE_SCOPE(cmt_runtime::RuntimeStage::Rebuild);
 
 	if (BaseObject* const op = reinterpret_cast<BaseObject*>(Get()))
 	{
@@ -810,7 +827,7 @@ Bool MMDModelManagerObject::EnsureStandaloneRuntimeManagers()
 
 void MMDModelManagerObject::ResetStandalonePhysics()
 {
-	cmt_runtime::ScopedRuntimeStage stage(cmt_runtime::RuntimeStage::Physics);
+	CMT_PROFILE_SCOPE(cmt_runtime::RuntimeStage::Physics);
 	if (!physics_manager_own_)
 		return;
 
@@ -860,7 +877,7 @@ void MMDModelManagerObject::ResetStandalonePhysics()
 
 void MMDModelManagerObject::StepStandalonePhysics(const Float elapsed)
 {
-	cmt_runtime::ScopedRuntimeStage stage(cmt_runtime::RuntimeStage::Physics);
+	CMT_PROFILE_SCOPE(cmt_runtime::RuntimeStage::Physics);
 	if (!physics_manager_own_)
 		return;
 
@@ -870,15 +887,21 @@ void MMDModelManagerObject::StepStandalonePhysics(const Float elapsed)
 	if (!physics || !rigid_bodies)
 		return;
 
-	for (const auto& rigid_body : *rigid_bodies)
-		rigid_body->SyncBonePositionToPhysics(elapsed);
-
-	physics->Update(elapsed);
+	{
+		CMT_PROFILE_SCOPE(cmt_runtime::RuntimeStage::PhysicsSync);
+		for (const auto& rigid_body : *rigid_bodies)
+			rigid_body->SyncBonePositionToPhysics(elapsed);
+	}
+	{
+		CMT_PROFILE_SCOPE(cmt_runtime::RuntimeStage::PhysicsStep);
+		physics->Update(elapsed);
+	}
 	ApplyStandalonePhysicsResults();
 }
 
 void MMDModelManagerObject::ApplyStandalonePhysicsResults()
 {
+	CMT_PROFILE_SCOPE(cmt_runtime::RuntimeStage::PhysicsWriteback);
 	if (!physics_manager_own_)
 		return;
 	auto* const rigid_bodies = physics_manager_own_->GetRigidBodys();
@@ -912,7 +935,7 @@ void MMDModelManagerObject::ApplyStandalonePhysicsResults()
 void MMDModelManagerObject::ApplyPhysicsResultsToBoneObjects() const
 {
 	ApplyStandaloneBoneAdaptersToScene(physics_dynamic_bone_indices_);
-	MarkMeshHierarchyDirty(GetMeshManagerObject());
+	MarkMeshHierarchyDirty(GetMeshManagerObject(), false);
 }
 
 void MMDModelManagerObject::CommitEditModeBindState(BaseDocument* doc)
@@ -977,6 +1000,13 @@ Bool MMDModelManagerObject::ShouldResetPhysicsOnSeek(const BaseObject* op) const
 	return bc ? bc->GetBool(MODEL_PHYSICS_RESET_ON_SEEK) : true;
 }
 
+Int32 MMDModelManagerObject::GetPhysicsSubsteps(const BaseObject* op) const
+{
+	const BaseContainer* const bc = op ? op->GetDataInstance() : nullptr;
+	const Int32 substeps = bc ? bc->GetInt32(MODEL_PHYSICS_SUBSTEPS, kDefaultPhysicsSubsteps) : kDefaultPhysicsSubsteps;
+	return std::clamp(substeps, Int32(1), kMaxPhysicsSubsteps);
+}
+
 Vector MMDModelManagerObject::GetPhysicsGravity(const BaseObject* op) const
 {
 	const BaseContainer* const bc = op ? op->GetDataInstance() : nullptr;
@@ -1000,6 +1030,12 @@ void MMDModelManagerObject::ApplyPhysicsConfigToRuntime(const BaseObject* op)
 	auto* const physics = physics_manager_own_->GetMMDPhysics();
 	if (!physics)
 		return;
+
+	// One document frame still advances 1 / fps seconds. Substeps only refine
+	// that interval; reapply the rate after both creation and cold world rebuilds.
+	const BaseDocument* const doc = op ? op->GetDocument() : nullptr;
+	const Float32 document_fps = doc ? static_cast<Float32>(doc->GetFps()) : fps_;
+	physics->SetFPS(document_fps * static_cast<Float32>(GetPhysicsSubsteps(op)));
 
 	if (auto* const world = physics->GetDynamicsWorld())
 	{

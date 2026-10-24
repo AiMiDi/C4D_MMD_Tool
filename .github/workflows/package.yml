@@ -129,6 +129,8 @@ jobs:
         shell: pwsh
         run: |
           foreach ($sdk in @('sdk_r20','sdk_r21','sdk_r23','sdk_r25','sdk_2023','sdk_2024','sdk_2025','sdk_2026','sdk_2027')) {
+            cmake "-DPLUGIN_DIR=$env:GITHUB_WORKSPACE/_build_msvc/$sdk/bin/Release/plugins/mmdtool" -P cmake/check_profiling_disabled.cmake
+            if ($LASTEXITCODE -ne 0) { throw "Instrumented or missing package module: $sdk" }
             cmake "-DRESOURCE_DIR=$env:GITHUB_WORKSPACE/_build_msvc/$sdk/bin/Release/plugins/mmdtool/res" "-DVERSION=${{ steps.ver.outputs.version }}" -P cmake/stamp_package_version.cmake
             if ($LASTEXITCODE -ne 0) { throw "Version stamping failed for $sdk" }
           }
@@ -212,6 +214,7 @@ jobs:
             if [ ! -d "$src" ]; then echo "Missing $src" >&2; exit 1; fi
             mkdir -p "pkg/${sdk}/mmdtool"
             cp -R "$src"/. "pkg/${sdk}/mmdtool/"
+            cmake "-DPLUGIN_DIR=pkg/${sdk}/mmdtool" -P cmake/check_profiling_disabled.cmake
             test -f "pkg/${sdk}/mmdtool/res/cmt_config.json"
             printf '%s\n' "$version" > "pkg/${sdk}/mmdtool/res/cmt_version.txt"
             test -f "pkg/${sdk}/mmdtool/res/c4d_symbols.h"

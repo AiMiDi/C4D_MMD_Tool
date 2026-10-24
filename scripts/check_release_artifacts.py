@@ -69,13 +69,19 @@ def inspect(build_root):
                     key, value = line.split("=", 1)
                     values[key.split(":", 1)[0]] = value
             record["runtime_regression"] = values.get("CMT_ENABLE_RUNTIME_REGRESSION", "unknown")
+            record["runtime_profiling"] = values.get("CMT_ENABLE_RUNTIME_PROFILING", "unknown")
+            if record["runtime_profiling"].upper() not in ("OFF", "FALSE", "0", "NO"):
+                record["issues"].append("Runtime profiling is enabled or not explicitly known OFF")
             if record["runtime_regression"].upper() not in ("OFF", "FALSE", "0", "NO"):
                 record["issues"].append("Regression bridge is enabled or not explicitly known OFF")
         else: record["issues"].append("SDK build cache missing")
         binary = plugin / "mmdtool.xdl64"
         if not binary.is_file(): record["issues"].append("Canonical Release module missing")
         elif linked(binary) or not pe_is_x64_dll(binary): record["issues"].append("Module is not a real x64 PE DLL")
-        else: record["binary"] = identity(binary)
+        else:
+            record["binary"] = identity(binary)
+            if b"CMT_RUNTIME_PROFILING=1" in binary.read_bytes():
+                record["issues"].append("Instrumented binary rejected by profiling marker")
         try:
             if not plugin.is_dir(): raise ValueError("Canonical Release plugin directory missing")
             if any(linked(parent) for parent in (graph, graph / "bin", graph / "bin/Release", plugin.parent, plugin)):

@@ -12,6 +12,7 @@
 #include "description/TMMDBone.h"
 #include "plugin_resource.h"
 #include "ospline.h"
+#include "utils/cmt_runtime_profile_c4d.hpp"
 
 namespace
 {
@@ -128,12 +129,57 @@ Bool GroupVisible(const ControlClass &control, BaseObject *model)
         return false;
     return !part || data->GetBool(kPartParameters[part], true);
 }
-struct ArmChain
+using ArmChain = mmd_control_workflow::LimbChain;
+using LimbChains = mmd_control_workflow::LimbChains;
+ControlClass ClassifyBoneNames(const std::string &local_name, const std::string &universal_name, Bool is_ik)
 {
-    BaseObject *upper = nullptr;
-    BaseObject *elbow = nullptr;
-    BaseObject *wrist = nullptr;
-};
+    const auto local = ClassifyControl(local_name, is_ik);
+    const auto universal = ClassifyControl(universal_name, is_ik);
+    auto result = local.part != Part::Other ? local : universal;
+    result.secondary = local.secondary || universal.secondary;
+    return result;
+}
+LimbChains FindLimbChains(MMDBoneManagerObject &manager, Bool include_goals)
+{
+    CMT_PROFILE_SCOPE(cmt_runtime::RuntimeStage::ControlChains);
+    LimbChains result;
+    maxon::BaseArray<BaseObject *> bones;
+    manager.BuildOrderedBoneObjectList(bones);
+    // Never reuse this snapshot across model evaluations:
+    // scripts can rename/reorder bones or change IK flags at the same frame.
+    for (BaseObject *bone : bones)
+    {
+        BaseTag *tag = bone->GetTag(g_mmd_bone_tag_id);
+        if (!tag) continue;
+        const auto *data = tag->GetDataInstance();
+        const auto local = string_util::GetStdString(data->GetString(PMX_BONE_NAME_LOCAL));
+        const auto universal = string_util::GetStdString(data->GetString(PMX_BONE_NAME_UNIVERSAL));
+        const Bool is_ik = data->GetBool(PMX_BONE_IS_IK);
+        const auto kind = ClassifyBoneNames(local, universal, is_ik);
+        const Int32 side = kind.side == Side::Left ? 0 : kind.side == Side::Right ? 1 : -1;
+        if (side < 0) continue;
+        // Match FindArm/FindLeg: the last eligible bone in manager order wins.
+        if (!kind.secondary)
+        {
+            auto purpose = ClassifyPurpose(local);
+            if (purpose == Purpose::Unknown) purpose = ClassifyPurpose(universal);
+            if (purpose == Purpose::Arm) result.arms[side].upper = bone;
+            if (purpose == Purpose::Elbow) result.arms[side].elbow = bone;
+            if (purpose == Purpose::Wrist) result.arms[side].wrist = bone;
+        }
+        const auto local_role = ClassifyName(local).role;
+        const auto universal_role = ClassifyName(universal).role;
+        const auto role = local_role == Role::None ? universal_role : local_role;
+        if (role == Role::Leg) result.legs[side].upper = bone;
+        if (role == Role::Knee) result.legs[side].elbow = bone;
+        if (role == Role::Ankle) result.legs[side].wrist = bone;
+        // FindLegGoal instead selects the first non-toe IK goal.
+        if (include_goals && !result.leg_goals[side] && kind.limb_ik && is_ik
+            && local_role != Role::ToeIk && universal_role != Role::ToeIk)
+            result.leg_goals[side] = bone;
+    }
+    return result;
+}
 Bool CanSolveChain(const ArmChain &chain)
 {
     if (!chain.upper || !chain.elbow || !chain.wrist)
@@ -338,13 +384,9 @@ cmt::controls::ControlClass mmd_control_workflow::ClassifyBone(const BaseContain
 {
     if (!data)
         return {};
-    const auto local =
-        ClassifyControl(string_util::GetStdString(data->GetString(PMX_BONE_NAME_LOCAL)), data->GetBool(PMX_BONE_IS_IK));
-    const auto universal = ClassifyControl(string_util::GetStdString(data->GetString(PMX_BONE_NAME_UNIVERSAL)),
-                                           data->GetBool(PMX_BONE_IS_IK));
-    auto result = local.part != Part::Other ? local : universal;
-    result.secondary = local.secondary || universal.secondary;
-    return result;
+    return ClassifyBoneNames(string_util::GetStdString(data->GetString(PMX_BONE_NAME_LOCAL)),
+                             string_util::GetStdString(data->GetString(PMX_BONE_NAME_UNIVERSAL)),
+                             data->GetBool(PMX_BONE_IS_IK));
 }
 
 cmt::controls::LimbMode mmd_control_workflow::GetLimbMode(BaseTag *bone)
@@ -414,11 +456,22 @@ UInt32 mmd_control_workflow::RuntimeChecksum(BaseObject *model)
             hash = (hash ^ static_cast<UInt32>(model->GetDataInstance()->GetInt32(parameter))) * 16777619u;
     return hash;
 }
-void mmd_control_workflow::CollectExtraControls(MMDBoneManagerObject &manager, std::vector<ExtraControl> &controls)
+const mmd_control_workflow::LimbChains& mmd_control_workflow::EvaluationContext::GetChains(MMDBoneManagerObject& manager)
 {
+    if (manager_ != &manager)
+    {
+        chains_ = FindLimbChains(manager, true);
+        manager_ = &manager;
+    }
+    return chains_;
+}
+void mmd_control_workflow::CollectExtraControls(MMDBoneManagerObject &manager, std::vector<ExtraControl> &controls,
+                                               EvaluationContext* context)
+{
+    const auto chains = context ? context->GetChains(manager) : FindLimbChains(manager, false);
     for (const auto side : {Side::Left, Side::Right})
     {
-        const auto chain = FindArm(manager, side);
+        const auto &chain = chains.arms[side == Side::Left ? 0 : 1];
         BaseTag *owner = chain.upper ? chain.upper->GetTag(g_mmd_bone_tag_id) : nullptr;
         for (const auto parameter : {kArmTargetLink, kArmPoleLink})
             if (BaseObject *control = Link(owner, parameter))
@@ -427,7 +480,7 @@ void mmd_control_workflow::CollectExtraControls(MMDBoneManagerObject &manager, s
     }
     for (const auto side : {Side::Left, Side::Right})
     {
-        const auto chain = FindLeg(manager, side);
+        const auto &chain = chains.legs[side == Side::Left ? 0 : 1];
         BaseTag *owner = chain.upper ? chain.upper->GetTag(g_mmd_bone_tag_id) : nullptr;
         if (BaseObject *pole = Link(owner, kArmPoleLink))
             controls.push_back({pole, owner, side == Side::Left ? Part::LeftLeg : Part::RightLeg, true});
@@ -641,22 +694,25 @@ Bool SolveEvaluatedChain(MMDBoneManagerObject &manager, BaseDocument *doc, const
 } // namespace
 
 Int32 mmd_control_workflow::SolveLayer(MMDBoneManagerObject &manager, BaseDocument *doc, const Int32 layer,
-                                       const Bool after_physics)
+                                       const Bool after_physics, EvaluationContext* context)
 {
+	CMT_PROFILE_SCOPE(cmt_runtime::RuntimeStage::ControlSolve);
     if (after_physics)
         return 0;
+    const auto chains = context ? context->GetChains(manager) : FindLimbChains(manager, true);
     Int32 solved = 0;
     for (const auto side : {Side::Left, Side::Right})
     {
         for (const Bool leg : {false, true})
         {
-            const auto chain = leg ? FindLeg(manager, side) : FindArm(manager, side);
+            const Int32 side_index = side == Side::Left ? 0 : 1;
+            const auto &chain = leg ? chains.legs[side_index] : chains.arms[side_index];
             if (!CanSolveChain(chain))
                 continue;
             BaseTag *owner = chain.upper->GetTag(g_mmd_bone_tag_id);
             if (!IsForcedIK(owner))
                 continue;
-            BaseObject *goal_bone = leg ? FindLegGoal(manager, side) : nullptr;
+            BaseObject *goal_bone = leg ? chains.leg_goals[side_index] : nullptr;
             BaseObject *goal =
                 leg ? (goal_bone ? Link(goal_bone->GetTag(g_mmd_bone_tag_id), PMX_BONE_CONTROL_LINK) : nullptr)
                     : Link(owner, kArmTargetLink);

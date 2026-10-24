@@ -36,6 +36,7 @@ option(CMT_WITH_DEPENDENCY_SUBDIR "Add dependency/ and register cmt-deps-build a
 set(CMT_DEPS_PREBUILT_DIR "" CACHE PATH "Pre-built dependency directory containing lib/*.lib or lib/*.a; empty builds dependencies from source")
 option(CMT_DEPS_ENABLE_LIBMMD_TESTS "Enable libMMD CTest in root dependency/ subproject (cache or preset dev-windows-deps-test)" OFF)
 option(CMT_ENABLE_RUNTIME_REGRESSION "Enable the test-only Cinema 4D scene regression bridge" OFF)
+option(CMT_ENABLE_RUNTIME_PROFILING "Compile optional stage profiling instrumentation" OFF)
 option(CMT_ENABLE_PLUGIN_TESTS "Build SDK-independent plugin algorithm tests" OFF)
 set(CMT_RUNTIME_RESOURCE_CONFIG_POLICY reset CACHE STRING "Runtime config policy: reset or preserve")
 set_property(CACHE CMT_RUNTIME_RESOURCE_CONFIG_POLICY PROPERTY STRINGS reset preserve)
@@ -113,6 +114,7 @@ macro(_cmt_forward_sdk_configure_args _args)
   _cmt_forward_cache_arg(${_args} CMT_LIBMMD_SOURCE_DIR PATH)
   _cmt_forward_cache_arg(${_args} CMT_RUNTIME_RESOURCE_CONFIG_POLICY STRING)
   list(APPEND ${_args} "-DCMT_ENABLE_RUNTIME_REGRESSION:BOOL=${CMT_ENABLE_RUNTIME_REGRESSION}")
+  list(APPEND ${_args} "-DCMT_ENABLE_RUNTIME_PROFILING:BOOL=${CMT_ENABLE_RUNTIME_PROFILING}")
 endmacro()
 
 _cmt_forward_sdk_configure_args(_CMT_SDK_CONFIGURE_ARGS)
@@ -290,6 +292,7 @@ if(NOT CMT_INNO_SETUP_ISCC STREQUAL "")
       "-DCMT_DEPS_PREBUILT_DIR:PATH=${_cmt_deps_prebuilt}"
       "-DCMT_RUNTIME_RESOURCE_CONFIG_POLICY:STRING=reset"
       "-DCMT_ENABLE_RUNTIME_REGRESSION:BOOL=OFF"
+      "-DCMT_ENABLE_RUNTIME_PROFILING:BOOL=OFF"
     )
     if(NOT CMT_SDK_SKIP_VS_A_AND_T)
       if(NOT CMT_SDK_MSVC_ARCH STREQUAL "")
@@ -302,6 +305,9 @@ if(NOT CMT_INNO_SETUP_ISCC STREQUAL "")
     list(APPEND _CMT_PACKAGE_COMMANDS
       COMMAND ${CMAKE_COMMAND} ${_sdk_cfg}
       COMMAND ${CMAKE_COMMAND} --build "${_sdk_bin}" --config Release --target mmdtool
+      COMMAND ${CMAKE_COMMAND}
+        "-DPLUGIN_DIR=${_sdk_bin}/bin/Release/plugins/mmdtool"
+        -P "${CMAKE_SOURCE_DIR}/cmake/check_profiling_disabled.cmake"
       COMMAND ${CMAKE_COMMAND}
         "-DRESOURCE_DIR=${_sdk_bin}/bin/Release/plugins/mmdtool/res"
         "-DVERSION=${_CMT_PACKAGE_VERSION}"

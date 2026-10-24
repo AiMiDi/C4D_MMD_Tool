@@ -9,6 +9,7 @@ Description:	MMD bone control utilities
 **************************************************************************/
 
 #include "module/core/cmt_old_sdk_stl_preload.h"
+#include "utils/cmt_runtime_profile_c4d.hpp"
 #include "utils/mmd_bone_control_util.hpp"
 
 #include <algorithm>
@@ -1382,10 +1383,11 @@ String mmd_bone_control_util::GetHoveredControlName(BaseDocument* doc, BaseDraw*
 	return name;
 }
 
-Bool mmd_bone_control_util::HasActiveControlDelta(MMDBoneManagerObject& bone_manager)
+Bool mmd_bone_control_util::HasActiveControlDelta(MMDBoneManagerObject& bone_manager, mmd_control_workflow::EvaluationContext* context)
 {
+	CMT_PROFILE_SCOPE(cmt_runtime::RuntimeStage::ControlDelta);
     std::vector<mmd_control_workflow::ExtraControl> extras;
-    mmd_control_workflow::CollectExtraControls(bone_manager, extras);
+    mmd_control_workflow::CollectExtraControls(bone_manager, extras, context);
     for (const auto& extra : extras) if (mmd_control_workflow::IsForcedIK(extra.owner)) return true;
 
 	for (const auto& entry : bone_manager.bone_list_)
@@ -1415,8 +1417,9 @@ Bool mmd_bone_control_util::HasActiveControlRotation(BaseTag* bone_tag)
 		&& (std::abs(rotation[0]) + std::abs(rotation[1]) + std::abs(rotation[2]) > 1.0e-6f);
 }
 
-UInt32 mmd_bone_control_util::GetControlStateChecksum(MMDBoneManagerObject& bone_manager)
+UInt32 mmd_bone_control_util::GetControlStateChecksum(MMDBoneManagerObject& bone_manager, mmd_control_workflow::EvaluationContext* context)
 {
+	CMT_PROFILE_SCOPE(cmt_runtime::RuntimeStage::ControlChecksum);
 	UInt32 hash = 2166136261u;
 	std::vector<Int32> sorted_indices;
 	sorted_indices.reserve(bone_manager.bone_list_.GetCount());
@@ -1440,13 +1443,14 @@ UInt32 mmd_bone_control_util::GetControlStateChecksum(MMDBoneManagerObject& bone
     BaseObject* model = GetControlModel(reinterpret_cast<BaseObject*>(bone_manager.Get()));
     hash = MixHash(hash, mmd_control_workflow::RuntimeChecksum(model));
     std::vector<mmd_control_workflow::ExtraControl> extras;
-    mmd_control_workflow::CollectExtraControls(bone_manager, extras);
+    mmd_control_workflow::CollectExtraControls(bone_manager, extras, context);
     for (const auto& extra : extras) hash = HashMatrix(hash, NormalizeMatrixBasis(extra.object->GetRelMl()));
 	return hash;
 }
 
 void mmd_bone_control_util::SyncControlsToCurrentPose(MMDBoneManagerObject& bone_manager)
 {
+	CMT_PROFILE_SCOPE(cmt_runtime::RuntimeStage::ControlSync);
 	BaseObject* controls_root = io_util::ResolveObjectLink(bone_manager.controls_root_link_);
 	if (!controls_root)
 		controls_root = reinterpret_cast<BaseObject*>(bone_manager.Get());

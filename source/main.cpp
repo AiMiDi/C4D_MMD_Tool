@@ -15,6 +15,7 @@ Description:	Entrance of the plugin
 #include "maxon/string.h"
 #include "cmt_update_manager.h"
 #include "module/ui/cmt_update_ui.h"
+#include "utils/cmt_runtime_profile_c4d.hpp"
 
 Bool CINEMA_NAMESPACE PluginStart()
 {
@@ -25,6 +26,7 @@ Bool CINEMA_NAMESPACE PluginStart()
 	UpdateNameConversionDialog::Init();
 	CMTToolConfigManager::GetInstance().InitConfigManager();
 	CMTUpdateManager::GetInstance().Init();
+	CMT_PROFILE_BULLET_INIT();
 	return TRUE;
 }
 
@@ -34,6 +36,8 @@ void CINEMA_NAMESPACE PluginEnd()
 	CMTUpdateManager::GetInstance().Shutdown();
 	CMTUpdateManager::GetInstance().Poll();
 	CMTToolConfigManager::GetInstance().SaveConfig();
+	CMT_PROFILE_FLUSH();
+	CMT_PROFILE_BULLET_SHUTDOWN();
 }
 
 Bool CINEMA_NAMESPACE PluginMessage(Int32 id, void* data)

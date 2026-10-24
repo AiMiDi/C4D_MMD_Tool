@@ -37,6 +37,7 @@ Description:	DESC
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
+#include "utils/cmt_runtime_profile_c4d.hpp"
 
 namespace
 {
@@ -629,6 +630,7 @@ namespace
 
 	void MarkMeshHierarchyDirty(BaseObject* mesh_manager_object)
 	{
+		CMT_PROFILE_SCOPE(cmt_runtime::RuntimeStage::MeshInvalidation);
 		if (!mesh_manager_object)
 			return;
 
@@ -636,11 +638,8 @@ namespace
 		{
 			MarkSceneNodeDirty(mesh_object);
 
-			for (BaseTag* tag = mesh_object->GetFirstTag(); tag; tag = tag->GetNext())
-			{
-				if (tag->GetType() == Tweights)
-					MarkSceneNodeDirty(tag);
-			}
+			// This path reapplies bone poses only. Preserve the weight/bind-data
+			// cache; the mesh and deformers still receive their update below.
 
 			for (BaseObject* child = mesh_object->GetDown(); child; child = child->GetNext())
 				MarkSceneNodeDirty(child);
@@ -955,6 +954,7 @@ DRAWRESULT MMDBoneManagerObject::Draw(BaseObject* op, DRAWPASS drawpass, BaseDra
 
 void MMDBoneManagerObject::SynchronizeControlPresentation(BaseObject* manager)
 {
+	CMT_PROFILE_SCOPE(cmt_runtime::RuntimeStage::ControlPresentation);
 	BaseObject* const model = io_util::ResolveObjectLink(model_manager_);
 	if (!manager || !model)
 		return;
@@ -1303,6 +1303,7 @@ bool MMDBoneManagerObject::SynchronizeBoneHierarchy(BaseObject* bone_manager_obj
 
 bool MMDBoneManagerObject::EnsureBoneHierarchyCurrent()
 {
+	CMT_PROFILE_SCOPE(cmt_runtime::RuntimeStage::HierarchySync);
 	BaseObject* const object = reinterpret_cast<BaseObject*>(Get());
 	if (!object)
 		return false;
@@ -1324,6 +1325,7 @@ void MMDBoneManagerObject::MarkAppendExecutionOrderDirty()
 
 void MMDBoneManagerObject::EnsurePlaybackExecutionPlan()
 {
+	CMT_PROFILE_SCOPE(cmt_runtime::RuntimeStage::PlaybackPlan);
 	if (!EnsureBoneHierarchyCurrent())
 		return;
 	// Scripts can write BaseContainer fields without sending description messages.
@@ -1407,6 +1409,7 @@ Int32 MMDBoneManagerObject::ComputeAppendRecursionDepth(const Int32 bone_index, 
 
 void MMDBoneManagerObject::EnsureAppendExecutionOrder()
 {
+	CMT_PROFILE_SCOPE(cmt_runtime::RuntimeStage::AppendOrder);
 	if (!append_execution_order_dirty_ || is_refreshing_append_execution_order_)
 		return;
 
@@ -2202,6 +2205,7 @@ void MMDBoneManagerObject::SetPhysicsOverride(const Int32 bone_index, const Base
 
 EXECUTIONRESULT MMDBoneManagerObject::Execute(BaseObject* op, BaseDocument* doc, BaseThread* bt, Int32 priority, EXECUTIONFLAGS flags)
 {
+	CMT_PROFILE_FUNCTION(cmt_runtime::RuntimeStage::BoneManagerExecute, doc);
 	iferr_scope_handler
 	{
 		return EXECUTIONRESULT::OK;

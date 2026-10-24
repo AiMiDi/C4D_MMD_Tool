@@ -31,6 +31,7 @@ Description:	DESC
 #include "utils/mmd_bone_control_util.hpp"
 #include "utils/mmd_control_workflow.hpp"
 #include "utils/string_util.hpp"
+#include "utils/cmt_runtime_profile_c4d.hpp"
 
 namespace
 {
@@ -2917,6 +2918,7 @@ Bool MMDBoneTag::Message(GeListNode* node, Int32 type, void* data)
 
 Bool MMDBoneTag::SetDParameter(GeListNode* node, const DescID& id, const GeData& t_data, DESCFLAGS_SET& flags)
 {
+	CMT_PROFILE_FUNCTION(cmt_runtime::RuntimeStage::BoneSetParameter, node ? static_cast<BaseList2D*>(node)->GetDocument() : nullptr);
 	BaseContainer* bc = reinterpret_cast<BaseList2D*>(node)->GetDataInstance();
 	if (bc == nullptr)
 	{
@@ -3364,6 +3366,7 @@ Bool MMDBoneTag::ApplyStaticPose(BaseObject* op, const Vector& input_translation
 
 Bool MMDBoneTag::ApplyActiveAnimation(BaseObject* op, BaseDocument* doc, const Bool apply_to_scene)
 {
+	CMT_PROFILE_FUNCTION(cmt_runtime::RuntimeStage::BoneAnimation, doc);
 	if (!op)
 		return false;
 
@@ -3630,6 +3633,7 @@ void MMDBoneTag::SetPositionLock(const bool flag) const
 
 EXECUTIONRESULT MMDBoneTag::Execute(BaseTag* tag, BaseDocument* doc, BaseObject* op, BaseThread* bt, Int32 priority, EXECUTIONFLAGS flags)
 {
+	CMT_PROFILE_FUNCTION(cmt_runtime::RuntimeStage::BoneTagExecute, doc);
 	if (!op)
 		return EXECUTIONRESULT::OK;
 

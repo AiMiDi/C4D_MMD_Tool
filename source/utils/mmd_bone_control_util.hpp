@@ -16,6 +16,7 @@ Description:	MMD bone control utilities
 #include "module/core/cmt_marco.h"
 
 class MMDBoneManagerObject;
+namespace mmd_control_workflow { class EvaluationContext; }
 
 namespace mmd_bone_control_util
 {
@@ -25,9 +26,9 @@ namespace mmd_bone_control_util
 	void SelectVisibleControls(MMDBoneManagerObject& bone_manager, BaseObject* bone_manager_object);
 	DRAWRESULT DrawControls(MMDBoneManagerObject& bone_manager, BaseObject* op, DRAWPASS drawpass, BaseDraw* bd, BaseDrawHelp* bh);
 	String GetHoveredControlName(BaseDocument* doc, BaseDraw* bd, Float x, Float y);
-	Bool HasActiveControlDelta(MMDBoneManagerObject& bone_manager);
+	Bool HasActiveControlDelta(MMDBoneManagerObject& bone_manager, mmd_control_workflow::EvaluationContext* context = nullptr);
 	Bool HasActiveControlRotation(BaseTag* bone_tag);
-	UInt32 GetControlStateChecksum(MMDBoneManagerObject& bone_manager);
+	UInt32 GetControlStateChecksum(MMDBoneManagerObject& bone_manager, mmd_control_workflow::EvaluationContext* context = nullptr);
 	void SyncControlsToCurrentPose(MMDBoneManagerObject& bone_manager);
 	Bool GetControlDeltaInBoneSpace(BaseTag* bone_tag, BaseObject* bone_object, Vector& translation, std::array<Float32, 4>& rotation,
 		const std::array<Float32, 4>& animation_rotation = { 0.F, 0.F, 0.F, 1.F }, const Vector& animation_translation = Vector());

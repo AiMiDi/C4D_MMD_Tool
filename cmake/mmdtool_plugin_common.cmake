@@ -478,6 +478,9 @@ macro(cmt_setup_mmdtool_plugin)
   add_dependencies(${maxon_targetName} mmdtool-mcp-adapter)
 
   option(CMT_ENABLE_RUNTIME_REGRESSION "Enable the test-only Cinema 4D scene regression bridge" OFF)
+  option(CMT_ENABLE_RUNTIME_PROFILING "Compile optional stage profiling instrumentation" OFF)
+  target_compile_definitions(${maxon_targetName} PRIVATE
+    CMT_ENABLE_RUNTIME_PROFILING=$<BOOL:${CMT_ENABLE_RUNTIME_PROFILING}>)
   if(CMT_ENABLE_RUNTIME_REGRESSION)
     target_compile_definitions(${maxon_targetName} PRIVATE CMT_ENABLE_RUNTIME_REGRESSION=1)
   endif()

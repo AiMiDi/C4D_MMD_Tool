@@ -29,6 +29,7 @@ Description:	MMD mesh root object
 #include <algorithm>
 #include <cmath>
 #include <vector>
+#include "utils/cmt_runtime_profile_c4d.hpp"
 
 namespace
 {
@@ -329,6 +330,7 @@ Bool MMDMeshManagerObject::Message(GeListNode* node, Int32 type, void* data)
 EXECUTIONRESULT MMDMeshManagerObject::Execute(BaseObject* op, BaseDocument* doc, BaseThread* bt, Int32 priority,
 	EXECUTIONFLAGS flags)
 {
+	CMT_PROFILE_FUNCTION(cmt_runtime::RuntimeStage::MeshManagerExecute, doc);
 	if (!io_util::ResolveObjectLink(model_manager_))
 	{
 		if (BaseObject* up_object = op->GetUp(); up_object->IsInstanceOf(g_mmd_model_manager_object_id))
