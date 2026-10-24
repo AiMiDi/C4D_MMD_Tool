@@ -1,0 +1,768 @@
+diff --git a/source/module/tools/object/mmd_mesh_manager.cpp b/source/module/tools/object/mmd_mesh_manager.cpp
+--- a/source/module/tools/object/mmd_mesh_manager.cpp
++++ b/source/module/tools/object/mmd_mesh_manager.cpp
+@@ -28,11 +28,535 @@ Description:	MMD mesh root object
+ 
+ #include <algorithm>
+ #include <cmath>
++#include <cstring>
+ #include <vector>
+ #include "utils/cmt_runtime_profile_c4d.hpp"
+ 
+ namespace
+ {
++	// ===== CMT_COMPACT_HELPERS_BEGIN reviewfix3 =====
++	// 紧凑关节表（reviewfix3）。约束来源：开发计划 §3 与 GPT 复审 R1–R6。
++	// 1. 权重数值累加与真实写入调用保持原样；判定只读聚合后的最终权重图与"原始读取异常"标记。
++	// 2. 判定使用与原写入路径相同的 maxon::Clamp01 绑定，不复制 clamp 数值实现。
++	// 3. 每顶点异常标记用 std::vector<unsigned char>：逐字节独立存储，并行写不同顶点不共享存储字。
++	// 4. 结果对象 CmtCompactImportResult 同时持有实际生效 tag、最终关节表与映射，调用点只从它取写入方式。
++	// 5. 紧凑提交失败一律丢掉本次新建 tag，并按原前驱位置重建全量表；重建失败即 Failed，不再写权重。
++	enum class CmtCompactImportMode : Int32
++	{
++		full = 0,
++		compact,
++		failed,
++	};
++
++	enum class CmtCompactRefuse : Int32
++	{
++		none = 0,
++		no_weight_tag,
++		no_weight_map,
++		unknown_weight_type,
++		raw_input_anomaly,
++		out_of_range_value,
++		no_used_joints,
++		no_bone_manager,
++		nothing_suppressed,
++		insert_failed,
++		inserted_but_untraceable,
++		inserted_at_unexpected_index,
++		joint_count_mismatch,
++		weight_map_mismatch,
++		weight_map_failed,
++		invalid_part_filter,
++		tag_identity_mismatch,
++		replacement_alloc_failed,
++	};
++
++	// 原始读取异常位：在 switch 里对"真正被读取的权重槽"逐项记录，不做任何算术变换。
++	enum : unsigned char
++	{
++		CMT_COMPACT_ANOMALY_NON_FINITE = 1u << 0,
++		CMT_COMPACT_ANOMALY_NEGATIVE = 1u << 1,
++		CMT_COMPACT_ANOMALY_ABOVE_ONE = 1u << 2,
++		CMT_COMPACT_ANOMALY_UNKNOWN_TYPE = 1u << 3,
++	};
++
++	static inline void CmtCompactMarkRawWeight(unsigned char& flags, const Float32 value)
++	{
++		unsigned char bits = flags;
++		if (std::isnan(value) || std::isinf(value))
++			bits = static_cast<unsigned char>(bits | CMT_COMPACT_ANOMALY_NON_FINITE);
++		if (value < 0.F)
++			bits = static_cast<unsigned char>(bits | CMT_COMPACT_ANOMALY_NEGATIVE);
++		if (value > 1.F)
++			bits = static_cast<unsigned char>(bits | CMT_COMPACT_ANOMALY_ABOVE_ONE);
++		flags = bits;
++	}
++
++	static Bool CmtCompactValueIsPositiveZero(const Float32 value)
++	{
++		// 只把 +0.0f 当作"可省略行"；-0.0f、极小正值、NaN 都不是。
++		const Float32 positive_zero = 0.F;
++		return std::memcmp(&value, &positive_zero, sizeof(Float32)) == 0;
++	}
++
++	struct CmtCompactPartFilter
++	{
++		Bool valid_ = false;
++		std::vector<Bool> participation_;
++		size_t scan_begin_ = 0;
++		size_t scan_end_ = 0;
++	};
++
++	struct CmtCompactDecision
++	{
++		Bool keep_full_legacy_ = true;
++		CmtCompactRefuse refuse_ = CmtCompactRefuse::none;
++		Int32 bone_count_ = 0;
++		Int32 target_joint_count_ = 0;
++		Int32 suppressed_joint_count_ = 0;
++		std::vector<Int32> kept_bone_index_;
++	};
++
++	struct CmtCompactImportResult
++	{
++		CmtCompactImportMode mode_ = CmtCompactImportMode::full;
++		CAWeightTag* weight_tag_ = nullptr;
++		std::vector<Int32> tag_joint_bones_;
++		std::vector<Int32> bone_to_tag_joint_;
++		Int32 joint_count_ = 0;
++
++		Bool IsCompact() const { return mode_ == CmtCompactImportMode::compact; }
++		Bool IsFailed() const { return mode_ == CmtCompactImportMode::failed; }
++	};
++
++	// 多部件：先校验面范围与每个被引用的顶点索引，非法即整体回退全量。
++	static CmtCompactPartFilter BuildCompactPartFilter(
++		const std::vector<libmmd::PMXFace>& faces,
++		const size_t surface_begin_index,
++		const Int32 part_face_num,
++		const size_t pmx_vertex_count)
++	{
++		CmtCompactPartFilter filter;
++		if (part_face_num <= 0)
++			return filter;
++		const size_t part_begin = surface_begin_index;
++		const size_t part_end = surface_begin_index + static_cast<size_t>(part_face_num);
++		if (part_end > faces.size() || part_end < part_begin)
++			return filter;
++		filter.participation_.assign(pmx_vertex_count, false);
++		for (size_t surface_index = part_begin; surface_index < part_end; ++surface_index)
++		{
++			for (int corner = 0; corner < 3; ++corner)
++			{
++				const uint32_t pmx_vertex_index = faces[surface_index].m_vertices[corner];
++				if (static_cast<size_t>(pmx_vertex_index) >= pmx_vertex_count)
++					return CmtCompactPartFilter{};
++				filter.participation_[pmx_vertex_index] = true;
++			}
++		}
++		filter.valid_ = true;
++		filter.scan_begin_ = part_begin;
++		filter.scan_end_ = part_end;
++		return filter;
++	}
++
++	static CmtCompactDecision RefuseCompactJointTable(const CmtCompactRefuse refuse)
++	{
++		CmtCompactDecision decision;
++		decision.keep_full_legacy_ = true;
++		decision.refuse_ = refuse;
++		return decision;
++	}
++
++	static CmtCompactDecision DecideCompactJointTable(
++		const std::vector<std::unordered_map<Int32, Float32>>& vertex_weight_data,
++		const Int32 vertex_count,
++		const Int32 bone_count,
++		const CmtCompactPartFilter* part_filter,
++		const std::vector<unsigned char>& weight_input_anomaly,
++		const std::vector<Bool>* bone_identity_ok)
++	{
++		if (vertex_count <= 0 || bone_count <= 0)
++			return RefuseCompactJointTable(CmtCompactRefuse::no_weight_map);
++		if (vertex_weight_data.size() != static_cast<size_t>(vertex_count))
++			return RefuseCompactJointTable(CmtCompactRefuse::no_weight_map);
++		if (weight_input_anomaly.size() != static_cast<size_t>(vertex_count))
++			return RefuseCompactJointTable(CmtCompactRefuse::raw_input_anomaly);
++		// 过滤器无效（部件面范围/顶点索引非法）时不能用"全顶点参与"代替：必须整体回退全量。
++		if (part_filter && !part_filter->valid_)
++			return RefuseCompactJointTable(CmtCompactRefuse::invalid_part_filter);
++		if (part_filter && part_filter->participation_.size() != static_cast<size_t>(vertex_count))
++			return RefuseCompactJointTable(CmtCompactRefuse::invalid_part_filter);
++
++		CmtCompactDecision decision;
++		decision.bone_count_ = bone_count;
++
++		// 数值/类型闸门：只看真正参与本次导入的顶点。
++		for (Int32 vertex_slot = 0; vertex_slot < vertex_count; ++vertex_slot)
++		{
++			if (part_filter && part_filter->valid_ && !part_filter->participation_[vertex_slot])
++				continue;
++			const unsigned char anomaly = weight_input_anomaly[vertex_slot];
++			if (anomaly & CMT_COMPACT_ANOMALY_UNKNOWN_TYPE)
++				return RefuseCompactJointTable(CmtCompactRefuse::unknown_weight_type);
++			if (anomaly != 0)
++				return RefuseCompactJointTable(CmtCompactRefuse::raw_input_anomaly);
++		}
++
++		// 逐行判定：该骨在所有参与顶点上的最终 Clamp01 值是否全为 +0.0f。
++		std::vector<Bool> bone_used(static_cast<size_t>(bone_count), false);
++		for (Int32 vertex_slot = 0; vertex_slot < vertex_count; ++vertex_slot)
++		{
++			if (part_filter && part_filter->valid_ && !part_filter->participation_[vertex_slot])
++				continue;
++			for (const auto& [bone_index, weight] : vertex_weight_data[vertex_slot])
++			{
++				if (bone_index < 0 || bone_index >= bone_count)
++					return RefuseCompactJointTable(CmtCompactRefuse::no_weight_map);
++				// 聚合值本身必须落在 [0,1] 且有限；用比较而非 isfinite，-0.0f 仍通过。
++				if (!(weight == weight) || !(weight >= 0.F) || !(weight <= 1.F))
++					return RefuseCompactJointTable(CmtCompactRefuse::out_of_range_value);
++				// 与真实写入同一个 SDK 绑定：maxon::Clamp01。
++				if (!CmtCompactValueIsPositiveZero(maxon::Clamp01(weight)))
++					bone_used[static_cast<size_t>(bone_index)] = true;
++			}
++		}
++
++		Int32 used = 0;
++		for (const Bool used_flag : bone_used)
++		{
++			if (used_flag)
++				++used;
++		}
++		if (used == 0)
++			return RefuseCompactJointTable(CmtCompactRefuse::no_used_joints);
++		if (used == bone_count)
++			return RefuseCompactJointTable(CmtCompactRefuse::nothing_suppressed);
++
++		// 反向身份：保留行必须能反查回原全局骨索引。
++		if (!bone_identity_ok || bone_identity_ok->size() != static_cast<size_t>(bone_count))
++			return RefuseCompactJointTable(CmtCompactRefuse::no_bone_manager);
++		for (Int32 bone_index = 0; bone_index < bone_count; ++bone_index)
++		{
++			if (bone_used[static_cast<size_t>(bone_index)] && !(*bone_identity_ok)[static_cast<size_t>(bone_index)])
++				return RefuseCompactJointTable(CmtCompactRefuse::no_bone_manager);
++		}
++
++		decision.keep_full_legacy_ = false;
++		decision.target_joint_count_ = used;
++		decision.suppressed_joint_count_ = bone_count - used;
++		for (Int32 bone_index = 0; bone_index < bone_count; ++bone_index)
++		{
++			if (bone_used[static_cast<size_t>(bone_index)])
++				decision.kept_bone_index_.push_back(bone_index);
++		}
++		return decision;
++	}
++
++	// 追加指定骨骼行并逐行读回身份；失败原因区分"未追加"与"已追加但不可追踪"。
++	static Bool CmtCompactFillJoints(
++		CAWeightTag& weight_tag,
++		const maxon::BaseArray<BaseObject*>& bone_list,
++		const std::vector<Int32>& bone_indices,
++		BaseDocument* const doc,
++		std::vector<Int32>& tag_joint_bones,
++		CmtCompactRefuse& refuse)
++	{
++		refuse = CmtCompactRefuse::none;
++		tag_joint_bones.clear();
++		const Int32 bone_count = static_cast<Int32>(bone_list.GetCount());
++		for (size_t row = 0; row < bone_indices.size(); ++row)
++		{
++			const Int32 bone_index = bone_indices[row];
++			if (bone_index < 0 || bone_index >= bone_count)
++			{
++				refuse = CmtCompactRefuse::no_weight_map;
++				return false;
++			}
++			const Int32 added = weight_tag.AddJoint(bone_list[bone_index]);
++			if (added < 0)
++			{
++				refuse = (weight_tag.GetJointCount() != static_cast<Int32>(row))
++					? CmtCompactRefuse::inserted_but_untraceable
++					: CmtCompactRefuse::insert_failed;
++				return false;
++			}
++			if (added != static_cast<Int32>(row))
++			{
++				refuse = CmtCompactRefuse::inserted_at_unexpected_index;
++				return false;
++			}
++			tag_joint_bones.push_back(bone_index);
++		}
++		if (weight_tag.GetJointCount() != static_cast<Int32>(bone_indices.size()))
++		{
++			refuse = CmtCompactRefuse::joint_count_mismatch;
++			return false;
++		}
++		for (size_t row = 0; row < tag_joint_bones.size(); ++row)
++		{
++			BaseObject* const joint_object = weight_tag.GetJoint(static_cast<Int32>(row), doc);
++			if (!joint_object || joint_object != bone_list[tag_joint_bones[row]])
++			{
++				refuse = CmtCompactRefuse::tag_identity_mismatch;
++				return false;
++			}
++		}
++		return true;
++	}
++
++	// 丢掉本次新建的 tag，并在原位置（原前驱之后）重建全量表。
++	// 前驱在移除前取得：Remove 只脱链，前驱仍在列表里，可直接作为 InsertTag 的 pred。
++	static Bool CmtCompactRebuildFullInPlace(
++		BaseObject& mesh_object,
++		CAWeightTag*& weight_tag,
++		const maxon::BaseArray<BaseObject*>& bone_list,
++		BaseDocument* const doc,
++		CmtCompactImportResult& result,
++		CmtCompactRefuse& refuse)
++	{
++		refuse = CmtCompactRefuse::none;
++		BaseTag* const predecessor = weight_tag ? static_cast<BaseTag*>(weight_tag->GetPred()) : nullptr;
++		if (weight_tag)
++		{
++			weight_tag->Remove();
++			BaseTag* released = static_cast<BaseTag*>(weight_tag);
++			BaseTag::Free(released);
++			weight_tag = nullptr;
++		}
++		CAWeightTag* const replacement = CAWeightTag::Alloc();
++		if (!replacement)
++		{
++			refuse = CmtCompactRefuse::replacement_alloc_failed;
++			result.mode_ = CmtCompactImportMode::failed;
++			result.weight_tag_ = nullptr;
++			return false;
++		}
++		mesh_object.InsertTag(replacement, predecessor);
++		weight_tag = replacement;
++		std::vector<Int32> all_bones;
++		all_bones.reserve(static_cast<size_t>(bone_list.GetCount()));
++		for (Int32 bone_index = 0; bone_index < static_cast<Int32>(bone_list.GetCount()); ++bone_index)
++			all_bones.push_back(bone_index);
++		std::vector<Int32> tag_joint_bones;
++		if (!CmtCompactFillJoints(*replacement, bone_list, all_bones, doc, tag_joint_bones, refuse))
++		{
++			replacement->Remove();
++			BaseTag* released = replacement;
++			BaseTag::Free(released);
++			weight_tag = nullptr;
++			result.mode_ = CmtCompactImportMode::failed;
++			result.weight_tag_ = nullptr;
++			return false;
++		}
++		result.mode_ = CmtCompactImportMode::full;
++		result.weight_tag_ = replacement;
++		result.tag_joint_bones_ = tag_joint_bones;
++		result.bone_to_tag_joint_ = all_bones;
++		result.joint_count_ = static_cast<Int32>(tag_joint_bones.size());
++		return true;
++	}
++
++	// 模型侧骨骼身份：管理器缺失、或任一骨骼标签反查不到原全局索引，都不能证明反向身份。
++	static Bool CmtCompactBuildBoneIdentity(
++		const maxon::BaseArray<BaseObject*>& bone_list,
++		MMDBoneManagerObject* const bone_manager,
++		std::vector<Bool>& identity_ok)
++	{
++		identity_ok.clear();
++		if (!bone_manager)
++			return false;
++		const Int32 bone_count = static_cast<Int32>(bone_list.GetCount());
++		identity_ok.assign(static_cast<size_t>(bone_count), false);
++		for (Int32 bone_index = 0; bone_index < bone_count; ++bone_index)
++		{
++			BaseObject* const bone_object = bone_list[bone_index];
++			if (!bone_object)
++				continue;
++			const BaseTag* const bone_tag = bone_object->GetTag(g_mmd_bone_tag_id);
++			if (!bone_tag)
++				continue;
++			if (bone_manager->FindBoneIndex(bone_tag) == bone_index)
++				identity_ok[static_cast<size_t>(bone_index)] = true;
++		}
++		return true;
++	}
++
++	// F1：由 mesh manager 自身解析 mesh → mesh manager → model 三层身份；任一环节失败按不可用处理（全量）。
++	struct CmtCompactModelContext
++	{
++		MMDBoneManagerObject* bone_manager_ = nullptr;
++		Bool mesh_root_is_mesh_manager_ = false;
++		Bool model_object_resolved_ = false;
++		Bool model_is_model_manager_ = false;
++
++		Bool IsUsable() const
++		{
++			return mesh_root_is_mesh_manager_ && model_object_resolved_ && model_is_model_manager_ && bone_manager_ != nullptr;
++		}
++	};
++
++	// mesh_root 必须是 mesh manager 对象；model 优先取 mesh manager 自己的 model_manager_ 链接，
++	// 链接为空时退回父节点，但两者都必须通过 g_mmd_model_manager_object_id 校验。
++	static CmtCompactModelContext ResolveCompactModelContext(BaseObject& mesh_root, const AutoAlloc<BaseLink>& model_manager_link)
++	{
++		CmtCompactModelContext context;
++		context.mesh_root_is_mesh_manager_ = mesh_root.IsInstanceOf(g_mmd_mesh_manager_object_id);
++
++		BaseObject* model_object = io_util::ResolveObjectLink(model_manager_link);
++		if (!model_object)
++			model_object = static_cast<BaseObject*>(mesh_root.GetUp());
++		if (model_object)
++		{
++			context.model_object_resolved_ = true;
++			context.model_is_model_manager_ = model_object->IsInstanceOf(g_mmd_model_manager_object_id);
++			if (context.model_is_model_manager_)
++			{
++				if (MMDModelManagerObject* const model_data = model_object->GetNodeData<MMDModelManagerObject>())
++					context.bone_manager_ = model_data->GetBoneManagerData();
++			}
++		}
++		return context;
++	}
++
++	// 唯一提交入口：判定 → 提交 → （失败时）原位重建全量，返回显式 Full/Compact/Failed。
++	static CmtCompactImportResult CommitCompactImport(
++		BaseObject& mesh_object,
++		CAWeightTag*& weight_tag,
++		const maxon::BaseArray<BaseObject*>& bone_list,
++		const std::vector<std::unordered_map<Int32, Float32>>& vertex_weight_data,
++		const Int32 vertex_count,
++		const CmtCompactPartFilter* part_filter,
++		const std::vector<unsigned char>& weight_input_anomaly,
++		const CmtCompactModelContext& model_context)
++	{
++		CmtCompactImportResult result;
++		result.weight_tag_ = weight_tag;
++		if (!weight_tag)
++		{
++			result.mode_ = CmtCompactImportMode::failed;
++			return result;
++		}
++		BaseDocument* const doc = weight_tag->GetDocument();
++
++		MMDBoneManagerObject* const bone_manager = model_context.bone_manager_;
++		const Bool model_context_ok = model_context.IsUsable();
++		std::vector<Bool> bone_identity_ok;
++		// F1：模型上下文不可用时不建立身份表，判定/提交一律走全量登记。
++		const Bool have_bone_identity = model_context_ok && CmtCompactBuildBoneIdentity(bone_list, bone_manager, bone_identity_ok);
++
++		const CmtCompactDecision decision = DecideCompactJointTable(vertex_weight_data, vertex_count,
++			static_cast<Int32>(bone_list.GetCount()), part_filter, weight_input_anomaly,
++			have_bone_identity ? &bone_identity_ok : nullptr);
++
++		if (!model_context_ok || decision.keep_full_legacy_)
++		{
++			std::vector<Int32> all_bones;
++			all_bones.reserve(static_cast<size_t>(bone_list.GetCount()));
++			for (Int32 bone_index = 0; bone_index < static_cast<Int32>(bone_list.GetCount()); ++bone_index)
++				all_bones.push_back(bone_index);
++			CmtCompactRefuse refuse = CmtCompactRefuse::none;
++			std::vector<Int32> tag_joint_bones;
++			if (!CmtCompactFillJoints(*weight_tag, bone_list, all_bones, doc, tag_joint_bones, refuse))
++			{
++				result.mode_ = CmtCompactImportMode::failed;
++				result.weight_tag_ = nullptr;
++				return result;
++			}
++			result.mode_ = CmtCompactImportMode::full;
++			result.tag_joint_bones_ = tag_joint_bones;
++			result.bone_to_tag_joint_ = all_bones;
++			result.joint_count_ = static_cast<Int32>(tag_joint_bones.size());
++			return result;
++		}
++
++		CmtCompactRefuse refuse = CmtCompactRefuse::none;
++		std::vector<Int32> tag_joint_bones;
++		if (CmtCompactFillJoints(*weight_tag, bone_list, decision.kept_bone_index_, doc, tag_joint_bones, refuse))
++		{
++			result.mode_ = CmtCompactImportMode::compact;
++			result.tag_joint_bones_ = tag_joint_bones;
++			result.bone_to_tag_joint_.assign(static_cast<size_t>(bone_list.GetCount()), -1);
++			for (size_t row = 0; row < tag_joint_bones.size(); ++row)
++				result.bone_to_tag_joint_[static_cast<size_t>(tag_joint_bones[row])] = static_cast<Int32>(row);
++			result.joint_count_ = static_cast<Int32>(tag_joint_bones.size());
++			return result;
++		}
++
++		// 紧凑提交失败（含"未追加任何行"）：一律丢掉本次新建 tag 并在原位置重建全量。
++		CmtCompactRefuse rebuild_refuse = CmtCompactRefuse::none;
++		if (!CmtCompactRebuildFullInPlace(mesh_object, weight_tag, bone_list, doc, result, rebuild_refuse))
++			return result;
++		return result;
++	}
++
++	// 唯一写入路径：Compact 只写保留行并跳过 -1；Full 逐全局骨写同名行。
++	static Bool WriteImportWeightMaps(
++		CAWeightTag& weight_tag,
++		const CmtCompactImportResult& result,
++		maxon::BaseArray<maxon::BaseArray<Float32>>& joint_weight_maps,
++		const Int32 vertex_count,
++		CmtCompactRefuse& refuse)
++	{
++		refuse = CmtCompactRefuse::none;
++		if (result.mode_ == CmtCompactImportMode::failed || !result.weight_tag_)
++		{
++			refuse = CmtCompactRefuse::no_weight_tag;
++			return false;
++		}
++		const Int32 bone_count = static_cast<Int32>(joint_weight_maps.GetCount());
++		if (static_cast<Int32>(result.bone_to_tag_joint_.size()) != bone_count)
++		{
++			refuse = CmtCompactRefuse::weight_map_mismatch;
++			return false;
++		}
++		for (Int32 bone_index = 0; bone_index < bone_count; ++bone_index)
++		{
++			const Int32 joint_row = result.bone_to_tag_joint_[static_cast<size_t>(bone_index)];
++			if (joint_row < 0)
++				continue;
++			if (!weight_tag.SetWeightMap(joint_row, joint_weight_maps[bone_index].GetFirst(), vertex_count))
++			{
++				refuse = CmtCompactRefuse::weight_map_failed;
++				return false;
++			}
++		}
++		return true;
++	}
++
++	// F2：权重映射预处理只有这一份实现，产品两个调用点与离线回归共用。
++	// 分配 bone_count 行、每行 vertex_count 个采样点；行内采样点由 CmtCompactAccumulateVertexWeights 填充。
++	static Bool CmtCompactPrepareJointWeightMaps(
++		maxon::BaseArray<maxon::BaseArray<Float32>>& joint_weight_maps,
++		const Int32 bone_count,
++		const Int32 vertex_count)
++	{
++		joint_weight_maps.Reset();
++		if (bone_count <= 0 || vertex_count <= 0)
++			return false;
++		if (joint_weight_maps.Resize(static_cast<Int>(bone_count)) == maxon::FAILED)
++			return false;
++		for (Int32 j = 0; j < bone_count; ++j)
++		{
++			if (joint_weight_maps[j].Resize(static_cast<Int>(vertex_count)) == maxon::FAILED)
++				return false;
++		}
++		return true;
++	}
++
++	// 单顶点权重落盘：与真实写入路径同一个 maxon::Clamp01 绑定，只写该顶点对应列。
++	// vertex_index 是本次写入表的列号：单 mesh 是全局顶点号，多部件是重编号后的部件局部号。
++	static inline void CmtCompactAccumulateVertexWeights(
++		maxon::BaseArray<maxon::BaseArray<Float32>>& joint_weight_maps,
++		const std::unordered_map<Int32, Float32>& weight_data,
++		const Int32 vertex_index)
++	{
++		for (const auto& [joint_index, weight] : weight_data)
++		{
++			joint_weight_maps[joint_index][vertex_index] = Clamp01(weight);
++		}
++	}
++	// ===== CMT_COMPACT_HELPERS_END reviewfix3 =====
++
+ 	Int32 NormalizeMeshMode(const Int32 mode)
+ 	{
+ 		constexpr Int32 kLegacyMeshModeVmd = 2;
+@@ -523,13 +1047,17 @@ Bool MMDMeshManagerObject::LoadPMX(
+ 		return false;
+ 
+ 	std::vector<std::unordered_map<Int32, Float32>> vertex_weight_data;
++	// 原始读取异常：逐顶点一个独立字节（非压位），并行时不同顶点写不同存储字。
++	std::vector<unsigned char> weight_input_anomaly;
+ 	if (setting.import_weights)
+ 	{
+ 		// statistics vertex weight data
+ 		vertex_weight_data.resize(vertex_count);
+-		ParallelForDynamic(Int(0), Int(vertex_count), [&pmx_vertices, &vertex_weight_data](const Int vertex_index)
++		weight_input_anomaly.assign(vertex_count, 0);
++		ParallelForDynamic(Int(0), Int(vertex_count), [&pmx_vertices, &vertex_weight_data, &weight_input_anomaly](const Int vertex_index)
+ 		{
+ 			auto& weight_data = vertex_weight_data[vertex_index];
++			// CMT_SLICE_BEGIN native-switch
+ 			switch (const auto& pmx_vertex = pmx_vertices[vertex_index]; pmx_vertex.m_weightType)
+ 			{
+ 			case libmmd::PMXVertexWeight::BDEF1:
+@@ -540,6 +1068,7 @@ Bool MMDMeshManagerObject::LoadPMX(
+ 			case libmmd::PMXVertexWeight::BDEF2:
+ 			{
+ 				const auto& bone_weight = pmx_vertex.m_boneWeights[0];
++				CmtCompactMarkRawWeight(weight_input_anomaly[vertex_index], bone_weight);
+ 				if (auto [it, inserted] = weight_data.try_emplace(pmx_vertex.m_boneIndices[0], bone_weight); !inserted)
+ 				{
+ 					it->second += bone_weight;
+@@ -556,6 +1085,10 @@ Bool MMDMeshManagerObject::LoadPMX(
+ 				const auto& bone_weight2 = pmx_vertex.m_boneWeights[1];
+ 				const auto& bone_weight3 = pmx_vertex.m_boneWeights[2];
+ 				const auto& bone_weight4 = pmx_vertex.m_boneWeights[3];
++				CmtCompactMarkRawWeight(weight_input_anomaly[vertex_index], bone_weight1);
++				CmtCompactMarkRawWeight(weight_input_anomaly[vertex_index], bone_weight2);
++				CmtCompactMarkRawWeight(weight_input_anomaly[vertex_index], bone_weight3);
++				CmtCompactMarkRawWeight(weight_input_anomaly[vertex_index], bone_weight4);
+ 				if (auto [it, inserted] = weight_data.try_emplace(pmx_vertex.m_boneIndices[0], bone_weight1); !inserted)
+ 				{
+ 					it->second += bone_weight1;
+@@ -577,6 +1110,7 @@ Bool MMDMeshManagerObject::LoadPMX(
+ 			case libmmd::PMXVertexWeight::SDEF:
+ 			{
+ 				const auto& bone_weight = pmx_vertex.m_boneWeights[0];
++				CmtCompactMarkRawWeight(weight_input_anomaly[vertex_index], bone_weight);
+ 				if (auto [it, inserted] = weight_data.try_emplace(pmx_vertex.m_boneIndices[0], bone_weight); !inserted)
+ 				{
+ 					it->second += bone_weight;
+@@ -593,6 +1127,10 @@ Bool MMDMeshManagerObject::LoadPMX(
+ 				const auto& bone_weight2 = pmx_vertex.m_boneWeights[1];
+ 				const auto& bone_weight3 = pmx_vertex.m_boneWeights[2];
+ 				const auto& bone_weight4 = pmx_vertex.m_boneWeights[3];
++				CmtCompactMarkRawWeight(weight_input_anomaly[vertex_index], bone_weight1);
++				CmtCompactMarkRawWeight(weight_input_anomaly[vertex_index], bone_weight2);
++				CmtCompactMarkRawWeight(weight_input_anomaly[vertex_index], bone_weight3);
++				CmtCompactMarkRawWeight(weight_input_anomaly[vertex_index], bone_weight4);
+ 				if (auto [it, inserted] = weight_data.try_emplace(pmx_vertex.m_boneIndices[0], bone_weight1); !inserted)
+ 				{
+ 					it->second += bone_weight1;
+@@ -611,7 +1149,15 @@ Bool MMDMeshManagerObject::LoadPMX(
+ 				}
+ 				break;
+ 			}
++			default:
++			{
++				// 原实现对该类型不做任何累加；这里同样不碰数值，只记录类型异常。
++				weight_input_anomaly[vertex_index] =
++					static_cast<unsigned char>(weight_input_anomaly[vertex_index] | CMT_COMPACT_ANOMALY_UNKNOWN_TYPE);
++				break;
+ 			}
++			}
++			// CMT_SLICE_END native-switch
+ 		}, 64, vertex_count > 1024);
+ 	}
+ 
+@@ -629,6 +1175,8 @@ Bool MMDMeshManagerObject::LoadPMX(
+ 
+ 		// if import_weights is true, create weight tag
+ 		CAWeightTag* weight_tag = nullptr;
++		// 唯一结果对象：实际生效 tag、最终关节表与映射都由它携带。
++		CmtCompactImportResult weight_result{};
+ 
+ 		// mmd bone index -> weight tag joint index
+ 		if (setting.import_weights)
+@@ -640,12 +1188,16 @@ Bool MMDMeshManagerObject::LoadPMX(
+ 			}
+ 			mesh_object->InsertTag(weight_tag);
+ 
+-			// add joint to weight tag
+-			const auto bone_count = bone_list.GetCount();
+-			for (auto mmd_bone_index = Int32{}; mmd_bone_index < bone_count; ++mmd_bone_index)
++			// CMT_SLICE_BEGIN single-commit
++			// F1：调用点从 mesh manager 自身解析三层身份（Get() 即 mesh manager 节点）；失败时直接走全量。
++			const CmtCompactModelContext model_context = ResolveCompactModelContext(*static_cast<BaseObject*>(Get()), model_manager_);
++			weight_result = CommitCompactImport(*mesh_object, weight_tag, bone_list, vertex_weight_data,
++				static_cast<Int32>(vertex_count), nullptr, weight_input_anomaly, model_context);
++			if (weight_result.IsFailed())
+ 			{
+-				weight_tag->AddJoint(bone_list[mmd_bone_index]);
++				return false;
+ 			}
++			// CMT_SLICE_END single-commit
+ 
+ 			// add morph skin
+ 			BaseObject* morph_skin_object = BaseObject::Alloc(Oskin);
+@@ -659,11 +1211,11 @@ Bool MMDMeshManagerObject::LoadPMX(
+ 		maxon::BaseArray<maxon::BaseArray<Float32>> joint_weight_maps;
+ 		if (setting.import_weights)
+ 		{
+-			const Int jc = bone_list.GetCount();
+-			joint_weight_maps.Resize(jc) iferr_return;
+-			for (Int j = 0; j < jc; ++j)
++			// F2：预处理只有 CmtCompactPrepareJointWeightMaps 一份实现，产品与离线回归共用。
++			if (!CmtCompactPrepareJointWeightMaps(joint_weight_maps, static_cast<Int32>(bone_list.GetCount()),
++				static_cast<Int32>(vertex_count)))
+ 			{
+-				joint_weight_maps[j].Resize(static_cast<Int>(vertex_count)) iferr_return;
++				return false;
+ 			}
+ 		}
+ 
+@@ -680,22 +1232,21 @@ Bool MMDMeshManagerObject::LoadPMX(
+ 
+ 			if (setting.import_weights)
+ 			{
+-				const Int32 vi = static_cast<Int32>(vertex_index);
+-				for (const auto& [joint_index, weight] : vertex_weight_data[vertex_index])
+-				{
+-					joint_weight_maps[joint_index][vi] = Clamp01(weight);
+-				}
++				CmtCompactAccumulateVertexWeights(joint_weight_maps, vertex_weight_data[vertex_index],
++					static_cast<Int32>(vertex_index));
+ 			}
+ 		}, 64, vertex_count > 1024);
+ 
+ 		if (setting.import_weights && weight_tag)
+ 		{
+-			const Int jc = bone_list.GetCount();
+-			for (Int j = 0; j < jc; ++j)
++			// CMT_SLICE_BEGIN single-write
++			CmtCompactRefuse write_refuse = CmtCompactRefuse::none;
++			if (!WriteImportWeightMaps(*weight_tag, weight_result, joint_weight_maps,
++				static_cast<Int32>(vertex_count), write_refuse))
+ 			{
+-				if (!weight_tag->SetWeightMap(static_cast<Int32>(j), joint_weight_maps[j].GetFirst(), static_cast<Int32>(vertex_count)))
+-					return false;
++				return false;
+ 			}
++			// CMT_SLICE_END single-write
+ 		}
+ 
+ 		// if import_normal is true, create normal tag
+@@ -1167,6 +1718,7 @@ Bool MMDMeshManagerObject::LoadPMX(
+ 
+ 			// if import_weights is true, create weight tag
+ 			CAWeightTag* weight_tag = nullptr;
++			CmtCompactImportResult weight_result{};
+ 
+ 			// mmd bone index -> weight tag joint index
+ 			if (setting.import_weights)
+@@ -1178,12 +1730,19 @@ Bool MMDMeshManagerObject::LoadPMX(
+ 				}
+ 				mesh_object->InsertTag(weight_tag);
+ 
+-				// add joint to weight tag
+-				const auto bone_count = bone_list.GetCount();
+-				for (auto mmd_bone_index = Int32{}; mmd_bone_index < bone_count; ++mmd_bone_index)
++				// CMT_SLICE_BEGIN split-commit
++				// F1：调用点从 mesh manager 自身解析三层身份（Get() 即 mesh manager 节点）；失败时直接走全量。
++				const CmtCompactModelContext model_context = ResolveCompactModelContext(*static_cast<BaseObject*>(Get()), model_manager_);
++				// 参与顶点来自当前部件的真实面范围；面/顶点索引非法时过滤器无效，判定层回退全量。
++				const CmtCompactPartFilter part_filter = BuildCompactPartFilter(pmx_faces, surface_begin_index,
++					part_face_num, vertex_count);
++				weight_result = CommitCompactImport(*mesh_object, weight_tag, bone_list, vertex_weight_data,
++					static_cast<Int32>(vertex_count), &part_filter, weight_input_anomaly, model_context);
++				if (weight_result.IsFailed())
+ 				{
+-					weight_tag->AddJoint(bone_list[mmd_bone_index]);
++					return false;
+ 				}
++				// CMT_SLICE_END split-commit
+ 
+ 				// add morph skin
+ 				BaseObject* morph_skin_object = BaseObject::Alloc(Oskin);
+@@ -1248,11 +1807,11 @@ Bool MMDMeshManagerObject::LoadPMX(
+ 				maxon::BaseArray<maxon::BaseArray<Float32>> joint_weight_maps;
+ 				if (setting.import_weights)
+ 				{
+-					const Int jc = bone_list.GetCount();
+-					joint_weight_maps.Resize(jc) iferr_return;
+-					for (Int j = 0; j < jc; ++j)
++					// F2：预处理只有 CmtCompactPrepareJointWeightMaps 一份实现；列数是部件重编号后的顶点数。
++					if (!CmtCompactPrepareJointWeightMaps(joint_weight_maps, static_cast<Int32>(bone_list.GetCount()),
++						part_vertex_count))
+ 					{
+-						joint_weight_maps[j].Resize(part_vertex_count) iferr_return;
++						return false;
+ 					}
+ 				}
+ 
+@@ -1274,10 +1833,8 @@ Bool MMDMeshManagerObject::LoadPMX(
+ 
+ 					if (setting.import_weights)
+ 					{
+-						for (const auto& [joint_index, weight] : vertex_weight_data[pmx_vertex_index])
+-						{
+-							joint_weight_maps[joint_index][c4d_vertex_index] = Clamp01(weight);
+-						}
++						CmtCompactAccumulateVertexWeights(joint_weight_maps, vertex_weight_data[pmx_vertex_index],
++							c4d_vertex_index);
+ 					}
+ 				}, 64, part_vertex_count > 1024);
+ 
+@@ -1299,12 +1856,13 @@ Bool MMDMeshManagerObject::LoadPMX(
+ 
+ 				if (setting.import_weights && weight_tag)
+ 				{
+-					const Int jc = bone_list.GetCount();
+-					for (Int j = 0; j < jc; ++j)
++					// CMT_SLICE_BEGIN split-write
++					CmtCompactRefuse write_refuse = CmtCompactRefuse::none;
++					if (!WriteImportWeightMaps(*weight_tag, weight_result, joint_weight_maps, part_vertex_count, write_refuse))
+ 					{
+-						if (!weight_tag->SetWeightMap(static_cast<Int32>(j), joint_weight_maps[j].GetFirst(), part_vertex_count))
+-							return false;
++						return false;
+ 					}
++					// CMT_SLICE_END split-write
+ 				}
+ 			}
+ 
