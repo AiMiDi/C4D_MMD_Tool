@@ -1033,7 +1033,9 @@ void MMDModelManagerObject::ApplyPhysicsConfigToRuntime(const BaseObject* op)
 
 	// One document frame still advances 1 / fps seconds. Substeps only refine
 	// that interval; reapply the rate after both creation and cold world rebuilds.
-	const BaseDocument* const doc = op ? op->GetDocument() : nullptr;
+	// R20 的 GeListNode::GetDocument() 是非 const 成员函数，这里只读取文档指针，
+	// 因此需要去掉 const 才能在各版本 SDK 上同时编译通过。
+	const BaseDocument* const doc = op ? const_cast<BaseObject*>(op)->GetDocument() : nullptr;
 	const Float32 document_fps = doc ? static_cast<Float32>(doc->GetFps()) : fps_;
 	physics->SetFPS(document_fps * static_cast<Float32>(GetPhysicsSubsteps(op)));
 

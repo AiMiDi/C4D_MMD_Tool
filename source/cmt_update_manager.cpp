@@ -37,6 +37,13 @@ std::string InstalledVersion()
 
 maxon::Result<std::string> FetchRelease(const std::atomic<bool>& cancel)
 {
+#if !CMT_SDK_HAS_NETWORK_URL_HEADER
+	// R21–2023 的 SDK 树没有配置 network.framework，URLFLAGS 里的网络标志（超时、跳转、
+	// 请求头）不可用，缺 User-Agent 的请求也会被 GitHub 拒绝。
+	// 这些版本不做 HTTP 更新检查，直接返回空响应，由 ParseStableRelease 判为「无新版本」。
+	(void)cancel;
+	return std::string();
+#else
 	iferr_scope;
 	maxon::Url url("https://api.github.com/repos/AiMiDi/C4D_MMD_Tool/releases/latest"_s);
 	url.Set(maxon::URLFLAGS::NETWORK_CONNECTTIMEOUT, maxon::Seconds(5)) iferr_return;
@@ -66,6 +73,7 @@ maxon::Result<std::string> FetchRelease(const std::atomic<bool>& cancel)
 		body.append(reinterpret_cast<const char*>(buffer), static_cast<std::size_t>(count));
 	}
 	return std::string();
+#endif
 }
 }
 
@@ -110,6 +118,12 @@ void CMTUpdateManager::SavePreferences() const
 
 void CMTUpdateManager::Check(bool manual)
 {
+#if !CMT_SDK_HAS_NETWORK_URL_HEADER
+	// 旧版 SDK（R21–2023）无法发起带请求头的 HTTPS 检查，保持 Status::Idle 并且不启动网络线程，
+	// 避免把「能力缺失」显示成检查失败。
+	(void)manual;
+	return;
+#else
 	Poll();
 	if (status_ == Status::Checking) return;
 	const auto now = static_cast<std::int64_t>(std::time(nullptr));
@@ -123,6 +137,7 @@ void CMTUpdateManager::Check(bool manual)
 	status_ = Status::Checking;
 	try { worker_ = std::thread([this]() { RunCheck(); }); }
 	catch (const std::exception&) { status_ = Status::Failed; }
+#endif
 }
 
 void CMTUpdateManager::RunCheck()

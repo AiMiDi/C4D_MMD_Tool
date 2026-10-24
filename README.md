@@ -309,6 +309,13 @@ Windows development: `cmake --preset dev-windows` then `cmake --build --preset w
 
 Recent version entries are shown below. See the [complete changelog](CHANGELOG.md) for earlier changes.
 
+### 0.9.3.10 · Legacy SDK build matrix fixes (2026-10-24)
+
+The v0.9.3.9 tag produced no packages: five legacy-SDK jobs failed to compile on Windows and two on macOS, so the release job never ran. The runtime changes themselves are unaffected.
+
+Gate the update checker's HTTP flags behind the same SDK capability that gates its `maxon/network_url.h` include. The R21–2023 SDK trees kept in this repository do not configure `network.framework`, so that header is never generated; those versions now skip the HTTP update check instead of failing to compile, while R20 and 2024+ keep the existing behaviour. R20 also needs a non-const `BaseObject` to reach `GeListNode::GetDocument`.
+
+Motion results, performance characteristics and the 0.9.3.9 changes are unchanged; release packaging runs in GitHub CI.
 ### 0.9.3.9 · Playback performance and standalone motion-sizing panel (2026-10-24)
 
 Cut VMD playback cost without changing motion results: reuse controller data and material ownership, skip empty physics passes, drop duplicate weight notifications, and default to three physics substeps (90 Hz at 30 FPS). On the 625-bone scene the full-frame `ExecutePasses` dropped from 53.00 to 43.45 ms and Bullet from 23.06 to 13.77 ms with byte-identical output. The motion-adaptation flow now has its own command and panel, a measured compact joint-table candidate was archived as neutral, and release packages keep runtime profiling compiled out.
