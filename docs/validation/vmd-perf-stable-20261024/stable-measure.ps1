@@ -128,7 +128,7 @@ function Get-SystemState {
                 threads       = $_.Threads.Count
                 cpu_s         = [math]::Round([double]$_.CPU, 1)
                 working_set   = $_.WorkingSet64
-                priority      = $_.PriorityClass.ToString()
+                priority      = $(if ($_.PriorityClass) { $_.PriorityClass.ToString() } else { 'Unknown' })
             }
         })
     return [ordered]@{
