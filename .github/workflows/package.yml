@@ -12,7 +12,7 @@ on:
         required: true
         default: '0.0.0'
       build_run_id:
-        description: Optional successful full Build run; empty selects a compatible run automatically
+        description: Optional Build or Package run with a successful full build matrix; empty selects automatically
         type: string
         required: false
         default: ''
@@ -41,7 +41,7 @@ jobs:
         with:
           fetch-depth: 0
           submodules: false
-      - name: Select source-compatible successful full Build
+      - name: Select source-compatible successful build matrix
         id: resolve
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -26,6 +26,14 @@ class PackageReuseTests(unittest.TestCase):
                            'workflow_run': {'id': 123, 'head_sha': self.source,
                                             'repository_id': 42, 'head_repository_id': 42}}
                           for i, name in enumerate(sorted(reuse.EXPECTED_ARTIFACTS))]
+        self.packages = []
+
+    def use_package_run(self, conclusion='failure'):
+        self.run.update(path='.github/workflows/package.yml', event='push', conclusion=conclusion)
+        for job in self.jobs:
+            job['name'] = 'Build (reusable) / ' + job['name']
+        self.jobs.append({'name': 'package-macos', 'status': 'completed', 'conclusion': conclusion})
+        self.packages = [self.run]
 
     def validate(self, differences=()):
         return reuse.validate_candidate(self.repository, self.target, self.run,
@@ -37,14 +45,18 @@ class PackageReuseTests(unittest.TestCase):
             return {'jobs': self.jobs}
         if endpoint.endswith('/artifacts?per_page=100'):
             return {'artifacts': self.artifacts}
-        if endpoint.startswith('actions/workflows/'):
-            return {'workflow_runs': [self.run]}
+        if endpoint.startswith('actions/workflows/build.yml/'):
+            return {'workflow_runs': [] if self.packages else [self.run]}
+        if endpoint.startswith('actions/workflows/package.yml/'):
+            return {'workflow_runs': self.packages}
         if endpoint == 'actions/runs/123':
             return self.run
         raise AssertionError(endpoint)
 
     def test_complete_same_source_or_packaging_only_run_is_reused(self):
-        for differences in [[], ['README.md', '.github/workflows/package.yml']]:
+        for differences in [[], ['README.md', '.github/workflows/package.yml'],
+                            ['docs/dev/example.md', 'docs/validation/probe.py',
+                             'res/R20-S24/cmt_version.txt', 'res/S24_up/cmt_version.txt']]:
             result = self.validate(differences)
             self.assertTrue(result['reused'])
             self.assertEqual(result['verified_matrix_jobs'], 24)
@@ -53,7 +65,8 @@ class PackageReuseTests(unittest.TestCase):
     def test_runtime_resource_dependency_and_build_changes_are_rejected(self):
         for path in ['source/main.cpp', 'res/S24_up/cmt_config.json', 'dependency/libMMD',
                      'cmake/mmdtool_plugin_common.cmake', 'sdk_r20/frameworks/a.h',
-                     '.github/workflows/build.yml', 'setup']:
+                     '.github/workflows/build.yml', 'setup', 'res/S24_up/c4d_symbols.h',
+                     'docs.cpp', 'scripts/build.py']:
             with self.subTest(path=path), self.assertRaises(reuse.IncompatibleBuild):
                 self.validate([path])
 
@@ -111,6 +124,39 @@ class PackageReuseTests(unittest.TestCase):
                                    api=self.api, diff=lambda *_: ['CHANGELOG.md'])
             self.assertEqual(result['artifact_run_id'], 123)
             self.assertEqual(result['artifact_source_commit'], self.source)
+
+    def test_failed_package_with_successful_matrix_is_reused(self):
+        self.use_package_run()
+        for requested in ['', '123']:
+            result = reuse.resolve(self.repository, self.target, 456, requested,
+                                   api=self.api, diff=lambda *_: ['docs/validation/result.md'])
+            self.assertTrue(result['reused'])
+            self.assertEqual(result['artifact_run_id'], 123)
+            self.assertEqual(result['verified_matrix_jobs'], 24)
+
+    def test_package_requires_its_own_complete_successful_matrix(self):
+        self.use_package_run()
+        original = copy.deepcopy(self.jobs)
+        for mutation in ['failed', 'skipped', 'missing', 'prefix', 'checks']:
+            self.jobs = copy.deepcopy(original)
+            if mutation in ('failed', 'skipped'):
+                self.jobs[0]['conclusion'] = mutation
+            elif mutation == 'missing':
+                self.jobs.pop(0)
+            elif mutation == 'prefix':
+                self.jobs[0]['name'] = self.jobs[0]['name'].removeprefix('Build (reusable) / ')
+            else:
+                next(job for job in self.jobs if job['name'].endswith(' / checks'))['conclusion'] = 'failure'
+            with self.subTest(mutation=mutation), self.assertRaises(reuse.IncompatibleBuild):
+                self.validate()
+
+    def test_cancelled_running_or_pr_package_is_rejected(self):
+        self.use_package_run()
+        original = copy.deepcopy(self.run)
+        for update in [{'conclusion': 'cancelled'}, {'status': 'in_progress'}, {'event': 'pull_request'}]:
+            self.run = {**original, **update}
+            with self.subTest(update=update), self.assertRaises(reuse.IncompatibleBuild):
+                self.validate()
 
 
 if __name__ == '__main__':

@@ -1,8 +1,8 @@
-"""Select a successful, source-compatible full Build run for packaging.
+"""Select a source-compatible run with a successful full build matrix.
 
-Only an explicit list of documentation/packaging files may differ. Runtime
-source, SDKs, resources, dependency gitlinks and compiler configuration must
-match. No artifact or plugin is installed or executed by this check.
+Only documentation, listed packaging files and restamped version metadata may
+differ. Runtime source, SDKs, other resources, dependency gitlinks and compiler
+configuration must match. No artifact or plugin is installed or executed here.
 """
 import argparse
 import json
@@ -20,6 +20,8 @@ PACKAGING_ONLY = frozenset({
     'tests/test_package_build_reuse.py',
     'README.md', 'README_zh.md', 'CHANGELOG.md', 'CHANGELOG_zh.md',
     'DEVELOPMENT.md', 'DEVELOPMENT_zh.md',
+    # Both packaging jobs replace this metadata with the final package version.
+    'res/R20-S24/cmt_version.txt', 'res/S24_up/cmt_version.txt',
 })
 EXPECTED_JOBS = {
     f'matrix-build ({platform}, {sdk})'
@@ -43,8 +45,31 @@ def require(condition, message):
         raise IncompatibleBuild(message)
 
 
+def compiler_input_changes(differences):
+    return sorted(path for path in differences
+                  if path not in PACKAGING_ONLY and not path.startswith('docs/'))
+
+
+def build_job_prefix(run):
+    """Accept only known workflows capable of producing the full matrix."""
+    require(run.get('status') == 'completed', 'Build run has not completed')
+    if run.get('path') == '.github/workflows/build.yml':
+        require(run.get('event') == 'workflow_dispatch' and run.get('conclusion') == 'success',
+                'Reuse requires a successful standalone full Build workflow')
+        return ''
+    if run.get('path') == '.github/workflows/package.yml':
+        # A packaging failure does not invalidate successful compilation. A run
+        # which itself reused artifacts has no complete matrix and fails below.
+        require(run.get('event') in ('push', 'workflow_dispatch') and
+                run.get('conclusion') in ('success', 'failure'),
+                'Reuse requires a completed Package workflow')
+        return 'Build (reusable) / '
+    raise IncompatibleBuild('Unknown build workflow')
+
+
 def gh_json(repository, endpoint):
-    output = subprocess.check_output(['gh', 'api', f'repos/{repository}/{endpoint}'], text=True)
+    output = subprocess.check_output(['gh', 'api', f'repos/{repository}/{endpoint}'],
+                                     text=True, encoding='utf-8')
     return json.loads(output)
 
 
@@ -61,24 +86,22 @@ def changed_paths(source, target):
 def validate_candidate(repository, target, run, jobs, artifacts, differences):
     source = run.get('head_sha', '')
     require(re.fullmatch(r'[0-9a-f]{40}', source), 'Invalid source commit')
-    require(run.get('status') == 'completed' and run.get('conclusion') == 'success',
-            'Build run has not completed successfully')
-    require(run.get('event') == 'workflow_dispatch' and run.get('path') == '.github/workflows/build.yml',
-            'Reuse requires the standalone full Build workflow')
+    prefix = build_job_prefix(run)
     repository_id = run.get('repository', {}).get('id')
     require(isinstance(repository_id, int) and repository_id > 0 and
             run.get('repository', {}).get('full_name') == repository and
             run.get('head_repository', {}).get('id') == repository_id,
             'Build does not belong to the release repository')
-    require(not (set(differences) - PACKAGING_ONLY),
-            'Compiler/runtime inputs differ: ' + ', '.join(sorted(set(differences) - PACKAGING_ONLY)))
+    require(not compiler_input_changes(differences),
+            'Compiler/runtime inputs differ: ' + ', '.join(compiler_input_changes(differences)))
 
-    matrix = [job for job in jobs if job.get('name', '').startswith('matrix-build (')]
-    require(len(matrix) == len(EXPECTED_JOBS) and {job['name'] for job in matrix} == EXPECTED_JOBS,
+    matrix = [job for job in jobs if job.get('name', '').startswith(prefix + 'matrix-build (')]
+    require(len(matrix) == len(EXPECTED_JOBS) and
+            {job['name'][len(prefix):] for job in matrix} == EXPECTED_JOBS,
             f'Build does not contain the complete {len(EXPECTED_JOBS)} SDK/platform jobs')
     require(all(job.get('status') == 'completed' and job.get('conclusion') == 'success' for job in matrix),
             'An SDK/platform job was not successful')
-    require(any(job.get('name') == 'checks' and job.get('status') == 'completed' and
+    require(any(job.get('name') == prefix + 'checks' and job.get('status') == 'completed' and
                 job.get('conclusion') == 'success' for job in jobs),
             'Build input checks were not successful')
 
@@ -113,14 +136,19 @@ def resolve(repository, target, current_run, requested_run='', api=gh_json, diff
         require(requested_run.isdecimal() and int(requested_run) > 0, 'Invalid Build run ID')
         candidates = [api(repository, f'actions/runs/{requested_run}')]
     else:
-        # PR/main checks compile one SDK; only dispatch runs contain the full matrix.
-        candidates = api(repository, 'actions/workflows/build.yml/runs?event=workflow_dispatch&status=success&per_page=30')['workflow_runs']
+        # PR/main checks compile one SDK. Package runs may contain a complete
+        # successful matrix even when a later installer/ZIP step failed.
+        builds = api(repository, 'actions/workflows/build.yml/runs?event=workflow_dispatch&status=success&per_page=30')['workflow_runs']
+        packages = api(repository, 'actions/workflows/package.yml/runs?status=completed&per_page=30')['workflow_runs']
+        candidates = sorted(builds + packages, key=lambda run: run['id'], reverse=True)
     for run in candidates:
         try:
+            build_job_prefix(run)
             source = run.get('head_sha', '')
             require(re.fullmatch(r'[0-9a-f]{40}', source), 'Invalid source commit')
             differences = diff(source, target)
-            require(not (set(differences) - PACKAGING_ONLY), 'Runtime/build inputs changed')
+            incompatible = compiler_input_changes(differences)
+            require(not incompatible, 'Compiler/runtime inputs differ: ' + ', '.join(incompatible))
             jobs = api(repository, f"actions/runs/{run['id']}/jobs?filter=latest&per_page=100")['jobs']
             artifacts = api(repository, f"actions/runs/{run['id']}/artifacts?per_page=100")['artifacts']
             return validate_candidate(repository, target, run, jobs, artifacts, differences)

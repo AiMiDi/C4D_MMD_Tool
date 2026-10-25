@@ -11,7 +11,7 @@
 - **`.github/workflows/build.yml`** — PR 和 `main` push 在 Windows 2022 上编译 `sdk_2027` Release。CI 不运行自动化测试或 Benchmark；下文的本地测试预设继续保留。手动触发和 tag 发布调用执行 **24 个 Release job**（九个 Windows、九个 Intel macOS、六个 Apple Silicon SDK），使用 `release-windows` / `release-macos` configure 预设并关闭测试目标。Windows 与 Intel macOS 上传完整插件产物，Apple Silicon 仅编译。依赖缓存包含工具链版本、架构、构建选项和嵌套子模块版本。
 - **`.github/workflows/package.yml`** — 推送 `v*` 标签时先查找源码与构建输入一致的成功全矩阵 Build；没有可复用产物时才调用 `build.yml`。将完整 Windows 产物铺到 `_build_msvc/` 后运行 Inno，macOS 直接把每个完整产物（已包含 `res/`）打包一次，再创建 **GitHub Release**。两端打包都消费已构建资源，不额外嵌套第二层资源目录。
 
-复用时核对完整 24 项矩阵和 18 份未过期的 SDK 产物，包括源码提交与摘要。只有明确列出的文档和打包文件可不同；代码、资源、编译配置、SDK 与依赖子模块指针必须一致。CI 保存 `package-build-provenance.json`。手动 Package 可指定 `build_run_id`；指定的构建不兼容时直接报错，不偷偷重新构建。留空则自动选择，无可用产物时回退到完整构建。手动触发仅生成包产物，正式发布仍由标签触发。本地来源校验回归：`python tests/test_package_build_reuse.py`。
+复用时核对完整 24 项矩阵和 18 份未过期的 SDK 产物，包括源码提交与摘要。可使用成功的独立 Build，也可使用自身编译矩阵和输入检查全部成功、随后打包失败的已完成 Package；仅复用他人产物的 Package 不能充当产物来源。允许 `docs/`、明确列出的文档和打包文件，以及两处 `res/*/cmt_version.txt` 不同；打包时会重新写入最终版本。代码、其他资源、编译配置、SDK 与依赖子模块指针必须一致。CI 保存 `package-build-provenance.json`。手动 Package 可指定这两种工作流的 `build_run_id`；指定的构建不兼容时直接报错，不偷偷重新构建。留空则自动选择，无可用产物时回退到完整构建。手动触发仅生成包产物，正式发布仍由标签触发。本地来源校验回归：`python tests/test_package_build_reuse.py`。
 
 本机 Inno 打包仍用下文 `package-windows` + `inno-installer` / `CMakeUserPresets.json`。
 
