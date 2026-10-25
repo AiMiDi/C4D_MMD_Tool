@@ -180,6 +180,9 @@ jobs:
       run:
         shell: bash
     steps:
+      # 需要仓库里的 cmake/check_profiling_disabled.cmake 做插桩标记门禁，
+      # 否则 cmake -P 会因工作区没有仓库而报 "Not a file"。
+      - uses: actions/checkout@v6
       - name: Download macOS build artifacts
         uses: actions/download-artifact@v8
         with:
