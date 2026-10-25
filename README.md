@@ -309,6 +309,11 @@ Windows development: `cmake --preset dev-windows` then `cmake --build --preset w
 
 Recent version entries are shown below. See the [complete changelog](CHANGELOG.md) for earlier changes.
 
+### 0.9.3.11 · macOS 2027 build fix (2026-10-24)
+
+The v0.9.3.10 tag produced no packages: both macOS C4D 2027 jobs failed because the sizing progress bar mixed `uint64_t` counters into `double` implicitly, which clang in the 2027 SDK rejects as an error under `-Wimplicit-int-float-conversion`. Make the conversion explicit; the computed percentage and its rounding are unchanged.
+
+The 0.9.3.10 legacy-SDK fixes are unaffected — every Windows job and the older macOS jobs compiled in that run. Release packaging runs in GitHub CI.
 ### 0.9.3.10 · Legacy SDK build matrix fixes (2026-10-24)
 
 The v0.9.3.9 tag produced no packages: five legacy-SDK jobs failed to compile on Windows and two on macOS, so the release job never ran. The runtime changes themselves are unaffected.

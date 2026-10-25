@@ -140,7 +140,14 @@ private:
         }
         StatusSetText(text);
         if (label || !value.total) StatusSetSpin();
-        else StatusSetBar(static_cast<Int32>(100. * std::min(value.completed, value.total) / value.total));
+        else
+        {
+            // 显式转换：clang 的 -Wimplicit-int-float-conversion 在 2027 SDK 上是错误级，
+            // uint64 -> double 必须写明，不能依赖隐式提升。
+            const double completed = static_cast<double>(std::min(value.completed, value.total));
+            const double total = static_cast<double>(value.total);
+            StatusSetBar(static_cast<Int32>(100.0 * completed / total));
+        }
     }
 
     std::mutex mutex_;
