@@ -309,6 +309,10 @@ Windows development: `cmake --preset dev-windows` then `cmake --build --preset w
 
 Recent version entries are shown below. See the [complete changelog](CHANGELOG.md) for earlier changes.
 
+### 0.9.3.13 · macOS packaging fix (2026-10-25)
+
+The v0.9.3.12 tag compiled on every SDK but still produced no release: the macOS packaging job never checked out the repository, so the profiling guard script (`cmake/check_profiling_disabled.cmake`) was missing from the empty workspace. Add the checkout step. The plugin binaries are unchanged from 0.9.3.12.
+
 ### 0.9.3.12 · macOS 2027 automation build fix (2026-10-25)
 
 The v0.9.3.11 tag produced no packages: both macOS C4D 2027 jobs failed on the automation JSON bridge, which fed the sizing progress counters (`uint64_t`) into a `double` percentage implicitly — an error under the 2027 SDK's `-Wimplicit-int-float-conversion`. Convert explicitly; the reported percentage is unchanged. Release packaging runs in GitHub CI.
