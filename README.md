@@ -309,6 +309,10 @@ Windows development: `cmake --preset dev-windows` then `cmake --build --preset w
 
 Recent version entries are shown below. See the [complete changelog](CHANGELOG.md) for earlier changes.
 
+### 0.9.3.12 · macOS 2027 automation build fix (2026-10-25)
+
+The v0.9.3.11 tag produced no packages: both macOS C4D 2027 jobs failed on the automation JSON bridge, which fed the sizing progress counters (`uint64_t`) into a `double` percentage implicitly — an error under the 2027 SDK's `-Wimplicit-int-float-conversion`. Convert explicitly; the reported percentage is unchanged. Release packaging runs in GitHub CI.
+
 ### 0.9.3.11 · macOS 2027 build fix (2026-10-24)
 
 The v0.9.3.10 tag produced no packages: both macOS C4D 2027 jobs failed because the sizing progress bar mixed `uint64_t` counters into `double` implicitly, which clang in the 2027 SDK rejects as an error under `-Wimplicit-int-float-conversion`. Make the conversion explicit; the computed percentage and its rounding are unchanged.

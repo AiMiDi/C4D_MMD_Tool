@@ -902,12 +902,18 @@ Json SizingJobData(const SizingJobEntry& entry, const std::vector<std::pair<std:
 {
     BaseDocument* preview = entry.session->GetPreviewDocument();
     const auto progress = entry.session->GetProgress();
+    // macOS 构建把隐式整型转浮点当错误（-Werror=implicit-int-float-conversion）：
+    // uint64_t → double 必须显式转换，否则 2027 的 macOS 矩阵编译失败。
+    const double phasePercent = progress.total
+                                    ? 100.0 * static_cast<double>(std::min(progress.completed, progress.total)) /
+                                          static_cast<double>(progress.total)
+                                    : 0.0;
     const char* const progressPhases[] = {"validation", "movement", "stance", "twist", "avoidance", "contact", "multi_character", "camera", "leg_avoidance"};
     const Json progressData = Json::Object({
         {"phase", Json::StringValue(std::string(progressPhases[static_cast<size_t>(progress.phase)]))},
         {"completed", Json::Integer(progress.completed)}, {"total", Json::Integer(progress.total)},
         {"character_index", Json::Integer(progress.characterIndex)}, {"character_count", Json::Integer(progress.characterCount)},
-        {"phase_percent", Json::Number(progress.total ? 100. * std::min(progress.completed, progress.total) / progress.total : 0.)},
+        {"phase_percent", Json::Number(phasePercent)},
         {"indeterminate", Json::Boolean(progress.total == 0)}});
     std::vector<std::pair<std::string, Json>> fields{{"job", Json::StringValue(entry.handle)},
         {"job_state", Json::StringValue(std::string(SizingState(entry)))},
