@@ -13,6 +13,8 @@
 
 复用时核对完整 24 项矩阵和 18 份未过期的 SDK 产物，包括源码提交与摘要。可使用成功的独立 Build，也可使用自身编译矩阵和输入检查全部成功、随后打包失败的已完成 Package；仅复用他人产物的 Package 不能充当产物来源。允许 `docs/`、明确列出的文档和打包文件，以及两处 `res/*/cmt_version.txt` 不同；打包时会重新写入最终版本。代码、其他资源、编译配置、SDK 与依赖子模块指针必须一致。CI 保存 `package-build-provenance.json`。手动 Package 可指定这两种工作流的 `build_run_id`；指定的构建不兼容时直接报错，不偷偷重新构建。留空则自动选择，无可用产物时回退到完整构建。手动触发仅生成包产物，正式发布仍由标签触发。本地来源校验回归：`python tests/test_package_build_reuse.py`。
 
+仅修复 Windows 安装器时，手动触发可设置 `windows_only=true`，并指定原始 `build_run_id` 和发布 `version`；这样跳过 macOS 打包，生成可供检查的 Windows 产物。安装器适配脚本及其聚焦用例属于纯打包输入。适配脚本同时维护版本表和按年份查询注册表的分支，包括 C4D 2027。运行 `pwsh -NoProfile -File scripts/check_installer_resources.ps1`；另加 `-PinnedInstallerPath setup/Common/installer_script.iss` 可检查固定版本的 setup 模板。
+
 本机 Inno 打包仍用下文 `package-windows` + `inno-installer` / `CMakeUserPresets.json`。
 
 ### 前置条件

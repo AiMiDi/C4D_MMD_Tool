@@ -17,9 +17,21 @@ $encoding = [Text.UTF8Encoding]::new($false)
 if ($PinnedInstallerPath) {
     $original = [IO.File]::ReadAllText([IO.Path]::GetFullPath($PinnedInstallerPath), $encoding)
 } else {
-    # The exact pinned submodule Source form; CI can exercise the root-only
-    # adapter without initializing setup just for this fixture.
-    $original = '#include "common_setup.iss"' + "`r`n" + $oldSource + "`r`n; preserve this comment`r`n"
+    # Include the pinned template's version tables and registry dispatch so the
+    # root-only fixture exercises every adaptation without requiring submodules.
+    $template = @'
+#include "common_setup.iss"
+#define VerCount = 11
+#dim VerArray[VerCount] {'R20','R21','S22','R23','S24','R25','S26','2023','2024','2025','2026'}
+#dim XdlSdkRel[VerCount] {'sdk_r20','sdk_r21','sdk_r21','sdk_r23','sdk_r23','sdk_r25','sdk_r25','sdk_2023','sdk_2024','sdk_2025','sdk_2026'}
+#dim ResFolder[VerCount] {'R20-S24','R20-S24','R20-S24','R20-S24','R20-S24','S24_up','S24_up','S24_up','S24_up','S24_up','S24_up'}
+DccVer := [ '{#VerArray[10]}' ];
+DccComponentName := [ 'C_{#VerArray[10]}' ];
+else if (ver = '2024') or (ver = '2025') or (ver = '2026') then
+  install_dir := FindInstallDirByYear(ver);
+; preserve this comment
+'@
+    $original = $template.Replace("`r`n", "`n").Replace("`n", "`r`n") + "`r`n" + $oldSource + "`r`n"
 }
 [IO.File]::WriteAllText($installer, $original, $encoding)
 $passed = [Collections.Generic.List[string]]::new()
@@ -51,12 +63,34 @@ if (-not $expected.Contains($adapterRow)) {
     $newline = if ($expected.Contains("`r`n")) { "`r`n" } else { "`n" }
     $expected = $expected.Replace($resourceRow, $resourceRow + $newline + $adapterRow)
 }
+$newline = if ($expected.Contains("`r`n")) { "`r`n" } else { "`n" }
+if (-not $expected.Contains("'2027'")) {
+    $expected = $expected.Replace('#define VerCount = 11', '#define VerCount = 12')
+    $expected = $expected.Replace("'2026'}", "'2026','2027'}")
+    $expected = $expected.Replace("'sdk_2026'}", "'sdk_2026','sdk_2027'}")
+    $expected = $expected.Replace("'S24_up'}", "'S24_up','S24_up'}")
+    foreach ($prefix in @('', 'C_')) {
+        $expected = $expected.Replace("'$prefix{#VerArray[10]}' ];", "'$prefix{#VerArray[10]}'," + $newline + "            '$prefix{#VerArray[11]}' ];")
+    }
+}
+$oldYearCondition = "else if (ver = '2024') or (ver = '2025') or (ver = '2026') then"
+$yearCondition = 'else if StrToIntDef(ver, 0) >= 2024 then'
+$expected = $expected.Replace($oldYearCondition, $yearCondition)
 Assert-True ([IO.File]::ReadAllText($installer, $encoding) -ceq $expected) 'Adaptation changed unrelated installer content'
-$passed.Add('resource Source and paired MCP runtime adapt with other bytes preserved')
+$passed.Add('2027 tables, registry dispatch, resource Source and paired MCP runtime adapt with other bytes preserved')
 $before = (Get-FileHash -LiteralPath $installer).Hash
 & $prepare -ProjectRoot $fixture
 Assert-True ((Get-FileHash -LiteralPath $installer).Hash -eq $before) 'Repeated adaptation is not idempotent'
 $passed.Add('already adapted Source is idempotent')
+
+[IO.File]::WriteAllText($installer, $expected.Replace($yearCondition, "else if ver = '2099' then"), $encoding)
+$before = (Get-FileHash -LiteralPath $installer).Hash
+Assert-Rejected { & $prepare -ProjectRoot $fixture } 'unknown registry lookup rejected'
+Assert-True ((Get-FileHash -LiteralPath $installer).Hash -eq $before) 'Unknown registry lookup changed installer'
+[IO.File]::WriteAllText($installer, $expected.Replace($yearCondition, $yearCondition + $newline + $oldYearCondition), $encoding)
+$before = (Get-FileHash -LiteralPath $installer).Hash
+Assert-Rejected { & $prepare -ProjectRoot $fixture } 'ambiguous registry lookups rejected'
+Assert-True ((Get-FileHash -LiteralPath $installer).Hash -eq $before) 'Ambiguous registry lookup changed installer'
 
 [IO.File]::WriteAllText($installer, $oldSource + "`r`n" + $newSource, $encoding)
 $before = (Get-FileHash -LiteralPath $installer).Hash

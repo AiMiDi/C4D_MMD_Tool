@@ -85,15 +85,28 @@ foreach ($prefix in @('', 'C_')) {
         $adapted = [regex]::Replace($adapted, $pattern, $replacement)
     }
 }
+# The year tables also need the matching registry-discovery path. Newer C4D
+# installers use hashed Maxon subkeys, not a literal "Maxon Cinema 4D 2027" key.
+# Keep 2023 and the R/S versions on their existing lookup paths.
+$oldYearCondition = "else if (ver = '2024') or (ver = '2025') or (ver = '2026') then"
+$yearCondition = 'else if StrToIntDef(ver, 0) >= 2024 then'
+$oldYearMatches = [regex]::Matches($adapted, [regex]::Escape($oldYearCondition))
+$yearMatches = [regex]::Matches($adapted, [regex]::Escape($yearCondition))
+if ($oldYearMatches.Count + $yearMatches.Count -ne 1) {
+    throw 'Unrecognized installer year-based registry lookup. No changes made.'
+}
+if ($oldYearMatches.Count -eq 1) {
+    $adapted = $adapted.Replace($oldYearCondition, $yearCondition)
+}
 if ($adapted -ceq $content) {
-    Write-Host "Installer already includes 2027 and consumes built runtime files: $installerPathResolved"
+    Write-Host "Installer already includes 2027 detection and consumes built runtime files: $installerPathResolved"
     return
 }
 if ($CheckOnly) {
-    Write-Host "Installer would include 2027 and consume built runtime files: $installerPathResolved"
+    Write-Host "Installer would include 2027 detection and consume built runtime files: $installerPathResolved"
     return
 }
 # Adapt the version tables and paired runtime rows. Preserve includes,
 # component guards, other user edits and original line endings.
 [IO.File]::WriteAllText($installerPathResolved, $adapted, $encoding)
-Write-Host "Installer adapted for 2027 and built runtime files: $installerPathResolved"
+Write-Host "Installer adapted for 2027 detection and built runtime files: $installerPathResolved"

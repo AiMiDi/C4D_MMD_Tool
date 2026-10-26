@@ -13,6 +13,8 @@
 
 Reuse verifies all 24 matrix jobs and all 18 unexpired SDK artifacts, including source commits and digests. It accepts a successful standalone Build or a completed Package whose own build matrix and input checks all succeeded, even if packaging subsequently failed. A Package that reused artifacts cannot serve as their source. Files under `docs/`, explicitly listed documentation/packaging files and the two `res/*/cmt_version.txt` files may differ; packaging stamps the final version again. Source, other resources, compiler configuration, SDKs and dependency gitlinks must match. CI saves `package-build-provenance.json`. Manual package dispatch accepts an optional `build_run_id` from either workflow; an incompatible explicit run fails rather than silently rebuilding. With the input empty, selection is automatic and a fresh matrix is the fallback. Manual dispatch produces package artifacts; formal releases remain tag-triggered. Local provenance regressions: `python tests/test_package_build_reuse.py`.
 
+For an installer-only repair, manual dispatch can set `windows_only=true` together with the original `build_run_id` and release `version`; this skips macOS packaging and produces a Windows artifact for review. The installer adapter and its focused fixtures are packaging-only inputs. The adapter keeps the supported version tables and year-based registry detection in sync, including C4D 2027. Run `pwsh -NoProfile -File scripts/check_installer_resources.ps1`; add `-PinnedInstallerPath setup/Common/installer_script.iss` to check the pinned setup template too.
+
 Local packaging with Inno still uses `package-windows` + `inno-installer` / `CMakeUserPresets.json` as described below.
 
 ### Prerequisites

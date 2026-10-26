@@ -6,6 +6,10 @@ name: Package
 on:
   workflow_dispatch:
     inputs:
+      windows_only:
+        description: 'Only repackage the Windows installer'
+        type: boolean
+        default: false
       version:
         description: Numeric installer version for CI artifacts (does not publish a release)
         type: string
@@ -174,7 +178,7 @@ jobs:
 
   package-macos:
     needs: [build-source, build]
-    if: ${{ !cancelled() && needs.build-source.result == 'success' && (needs.build-source.outputs.reused == 'true' || needs.build.result == 'success') }}
+    if: ${{ !cancelled() && !inputs.windows_only && needs.build-source.result == 'success' && (needs.build-source.outputs.reused == 'true' || needs.build.result == 'success') }}
     runs-on: macos-latest
     defaults:
       run:

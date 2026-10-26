@@ -55,6 +55,8 @@ class PackageReuseTests(unittest.TestCase):
 
     def test_complete_same_source_or_packaging_only_run_is_reused(self):
         for differences in [[], ['README.md', '.github/workflows/package.yml'],
+                            ['cmake/prepare_installer_resources.ps1',
+                             'scripts/check_installer_resources.ps1'],
                             ['docs/dev/example.md', 'docs/validation/probe.py',
                              'res/R20-S24/cmt_version.txt', 'res/S24_up/cmt_version.txt']]:
             result = self.validate(differences)

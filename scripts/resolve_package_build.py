@@ -18,6 +18,8 @@ PACKAGING_ONLY = frozenset({
     '.github/workflows/package.yml',
     'scripts/resolve_package_build.py',
     'tests/test_package_build_reuse.py',
+    'cmake/prepare_installer_resources.ps1',
+    'scripts/check_installer_resources.ps1',
     'README.md', 'README_zh.md', 'CHANGELOG.md', 'CHANGELOG_zh.md',
     'DEVELOPMENT.md', 'DEVELOPMENT_zh.md',
     # Both packaging jobs replace this metadata with the final package version.
