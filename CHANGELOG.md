@@ -4,6 +4,12 @@
 
 Entries for 0.9.1.x were reconstructed from tagged source changes and release dates. Intermediate build tags are grouped below; original entries through 0.4.6.1 are retained.
 
+### 0.9.4 · Async physics enabled by default (2026-10-28)
+
+Bullet physics now runs off the main thread and is **on by default**: the solver advances in a resident worker while the main thread only submits bone world matrices, collects the resulting rigid-body transforms, and writes them back to the scene. On a 625-bone / 479-rigid-body / 748-joint scene at 30 FPS, a frame drops from 37.75 ms to 20.53 ms and main-thread physics cost from 16.47 ms to 0.78 ms (15.69 ms saved per frame; A/B/A launches drifted 0.84%).
+
+Semantics are validated per rigid-body class: solved dynamic bodies match the synchronous path one frame behind, bit for bit (36,160 comparisons, zero out of tolerance), while bone-following bodies match on the same frame (2,187 comparisons, zero out of tolerance). The first frame after a seek-driven world rebuild is reported separately and excluded from the verdict. The release also fixes the shadow world's construction pose and joint anchors, primes first-step bone velocity, avoids starting a worker when there are no rigid bodies, and falls back to synchronous physics when the worker falls 4 frames behind. Set `CMT_PHYSICS_ASYNC=0` to force synchronous physics.
+
 ### 0.9.3.13 · macOS packaging fix (2026-10-25)
 
 The v0.9.3.12 tag compiled on every SDK but still produced no release: the macOS packaging job never checked out the repository, so the profiling guard script (`cmake/check_profiling_disabled.cmake`) was missing from the empty workspace. Add the checkout step. The plugin binaries are unchanged from 0.9.3.12.
