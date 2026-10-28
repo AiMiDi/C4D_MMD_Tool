@@ -1194,6 +1194,9 @@ void MMDModelManagerObject::StepStandaloneAsyncPhysics(const Float elapsed)
 		{
 			async_backpressure_reported_ = true;
 			const cmt::physics::PhysicsAsyncPipeline::Counters counters = async_physics_pipeline_.GetCounters();
+			// macOS Release 会把 DIAGNOSTIC 输出整体编译掉，counters 随之变成未使用变量，
+			// 而 clang 侧 -Werror=unused-variable 会直接判错；显式吞掉引用，两种平台都安全。
+			(void)counters;
 			DebugOutput(maxon::OUTPUT::DIAGNOSTIC,
 				"[CMT] async physics back-pressure: submit_skipped=@ submit_blocked_result_pending=@",
 				Int64(counters.submit_skipped), Int64(counters.submit_blocked_result_pending));
