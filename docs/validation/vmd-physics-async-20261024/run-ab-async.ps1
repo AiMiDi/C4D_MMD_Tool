@@ -39,7 +39,7 @@ param(
     # 两版插件目录（都指向包含 mmdtool\mmdtool.xdl64 的 plugins 目录）
     [string]$SyncPluginsPath = '',
     [string]$AsyncPluginsPath = '',
-    [Parameter(Mandatory = $true)][string]$OutRoot,
+    [string]$OutRoot = '',
 
     # 计量参数（透传给 stable-measure.ps1）
     [int]$Pairs = 5,
@@ -53,10 +53,11 @@ param(
 
     # 语义采样帧：sync 需要覆盖 async 的 N-1 与 N-2，故多采 539/541/559/561/618
     [string]$SyncFrames = '539,540,541,559,560,561,618,619,620',
-    [string]$AsyncFrames = '540,560,619',
+    # 两段必须按同一帧序列升序求值：物理是逐步推进的，帧序列不同会让 async(N) 与 sync(N-1) 不可比
+    [string]$AsyncFrames = '539,540,541,559,560,561,618,619,620',
     [int]$ExpectRigid = 479,
     [int]$ExpectPoints = 70222,
-    [switch]$DisableRigidDisplay,
+    [switch]$SkipRigidDisplay,
 
     # 场景与宿主
     [string]$PmxPath = 'C:\pmx\白银之城—阿芙2.0\阿芙2.0.pmx',
@@ -89,6 +90,10 @@ $script:HostDriver = Join-Path $script:RepoRoot 'docs\validation\vmd-host-restor
 $script:ProbeRigid = Join-Path $PSScriptRoot 'probe-rigid.py'
 $script:Failures = [System.Collections.Generic.List[string]]::new()
 $script:Checks = [System.Collections.Generic.List[object]]::new()
+
+if (-not $OutRoot) {
+    $OutRoot = 'S:\tmp\cmt_vmd_profile_20261019\physics-async\runs\' + (Get-Date -Format 'yyyyMMddTHHmmss')
+}
 
 function Write-Step([string]$Text) { Write-Host ('[{0}] {1}' -f (Get-Date -Format 'HH:mm:ss'), $Text) }
 
@@ -133,7 +138,8 @@ function Get-OurHostProcesses {
 }
 
 function Clear-OurHost {
-    $ours = Get-OurHostProcesses
+    # 显式包成数组：Get-OurHostProcesses 可能返回 $null（没有残留宿主），StrictMode 下 $null.Count 会抛
+    $ours = @(Get-OurHostProcesses)
     foreach ($proc in $ours) {
         & taskkill /F /T /PID $proc.ProcessId 2>&1 | Out-Null
     }
@@ -181,8 +187,14 @@ function Invoke-SegmentTiming {
     }
     $summary = Get-Content -LiteralPath $summaryPath -Raw | ConvertFrom-Json
     $loads = @($summary.launches | ForEach-Object { $_.load_pct })
-    $onMedian = @($summary.launches | ForEach-Object { $_.on.median_ms })
-    $offMedian = @($summary.launches | ForEach-Object { $_.off.median_ms })
+    # stable-measure 的 run-summary 把逐轮结果放在 aggregate.on/off（launches[] 内只有 probe/modes），
+    # 早先按 $_.on.median_ms 取值会在 StrictMode 下抛「找不到属性 on」。
+    $onMedian = if ($summary.aggregate -and $summary.aggregate.PSObject.Properties['on']) {
+        @($summary.aggregate.on.per_launch_median_ms)
+    } else { @() }
+    $offMedian = if ($summary.aggregate -and $summary.aggregate.PSObject.Properties['off']) {
+        @($summary.aggregate.off.per_launch_median_ms)
+    } else { @() }
     Add-Check "timing_${Segment}_exit" ($(if ($exit -eq 0) { 'passed' } else { 'failed' })) "stable-measure exit=$exit，launches=$(@($summary.launches).Count)"
 
     return [pscustomobject]@{
@@ -223,13 +235,24 @@ function Invoke-SegmentSemantics {
 
         & python $script:HostDriver new-scene 2>&1 | Tee-Object -FilePath (Join-Path $OutRoot "logs\segment-$Segment-driver.log") | Out-Host
         & python $script:HostDriver import --pmx $PmxPath --vmd $VmdPath 2>&1 | Tee-Object -Append -FilePath (Join-Path $OutRoot "logs\segment-$Segment-driver.log") | Out-Host
+        $motionLog = & python $script:HostDriver import-motion --vmd $VmdPath 2>&1
+        $motionLog | Tee-Object -Append -FilePath (Join-Path $OutRoot "logs\segment-$Segment-driver.log") | Out-Host
+        # 必须单独走 import-motion：`import --pmx --vmd` 只建模型不建动画槽（slot_count=0），
+        # 场景会静止不动的假象，后续 C0/C1 全部无意义。
+        $slotPresent = ($motionLog -join "`n") -match '"slot"\s*:\s*"'
+        Add-Check "semantics_${Segment}_motion_slot" ($(if ($slotPresent) { 'passed' } else { 'failed' })) `
+            $(if ($slotPresent) { 'import-motion 创建了动画槽' } else { 'import-motion 未返回 slot，场景不会求值' })
+        if (-not $slotPresent) { return $null }
+
         & python $script:HostDriver set-mode --mode anim 2>&1 | Out-Null
         & python $script:HostDriver physics --enabled on 2>&1 | Out-Null
 
         $probeArgs = @($script:ProbeRigid, '--frames', $FrameList, '--out', $probeOut,
             '--expect-rigid', "$ExpectRigid", '--expect-points', "$ExpectPoints",
             '--prefs-path', $PrefsPath)
-        if (-not $DisableRigidDisplay) { $probeArgs += '--enable-rigid-display' }
+        # 刚体管理器 RIGID_DISPLAY_TYPE(1001) 出厂是 None(=OFF)：不开显示时 MMDRigidObject::Execute
+# 根本不写 GetRelMl，刚体世界矩阵不会随物理更新（本任务实测）。默认必须打开。
+if (-not $SkipRigidDisplay) { $probeArgs += '--enable-rigid-display' }
         & python @probeArgs 2>&1 | Tee-Object -FilePath (Join-Path $OutRoot "logs\segment-$Segment-probe.log") | Out-Host
         $probeExit = $LASTEXITCODE
         Add-Check "semantics_${Segment}_probe" ($(if ($probeExit -eq 0) { 'passed' } else { 'failed' })) "probe-rigid.py exit=$probeExit"
@@ -260,6 +283,25 @@ function Get-MeshLocalSha($Probe, [int]$Frame, [string]$ObjectFilter = 'Mesh') {
     return $mesh.local_sha256
 }
 
+function Get-RecordField($Probe, [int]$Frame, [string]$Field) {
+    # StrictMode 下 (Get-FrameRecord ...).field 在缺记录时会抛「找不到属性」，这里统一返回 $null
+    $record = Get-FrameRecord $Probe $Frame
+    if (-not $record) { return $null }
+    if (-not $record.PSObject.Properties[$Field]) { return $null }
+    return $record.$Field
+}
+
+function Get-RosterKey($Probe) {
+    # P2-004：把名册压成可逐项比较的键列表（RIGID_INDEX|name_local|bone_index|bone_name）
+    if (-not $Probe) { return $null }
+    if (-not $Probe.PSObject.Properties['roster']) { return $null }
+    $rows = @($Probe.roster)
+    if ($rows.Count -eq 0) { return $null }
+    return @($rows | ForEach-Object {
+            '{0}|{1}|{2}|{3}' -f $_.rigid_index, $_.name_local, $_.bone_index, $_.bone_name
+        } | Sort-Object)
+}
+
 # ---------------------------------------------------------------- 计划（dry-run 也走这里）
 New-Item -ItemType Directory -Force -Path $OutRoot, (Join-Path $OutRoot 'logs') | Out-Null
 $syncModule = Get-ModulePath $SyncPluginsPath
@@ -274,7 +316,7 @@ $plan = [pscustomobject]@{
         [pscustomobject]@{ name = 'A2-sync'; env = 'CMT_PHYSICS_ASYNC=0'; plugins = $SyncPluginsPath }
     )
     timing        = [pscustomobject]@{ tool = $script:StableMeasure; pairs = $Pairs; rounds = $Rounds; warmup = $Warmup; frames = $Frames; start_frame = $StartFrame; max_load_pct = $MaxLoadPct; exec_flags = $ExecFlags }
-    semantics     = [pscustomobject]@{ sync_frames = $SyncFrames; async_frames = $AsyncFrames; expect_rigid = $ExpectRigid; expect_points = $ExpectPoints; rigid_display = (-not $DisableRigidDisplay) }
+    semantics     = [pscustomobject]@{ sync_frames = $SyncFrames; async_frames = $AsyncFrames; expect_rigid = $ExpectRigid; expect_points = $ExpectPoints; rigid_display_disabled = [bool]$SkipRigidDisplay }
     thresholds    = [pscustomobject]@{ promote_ms = $PromoteThresholdMs; invisible_ms = $InvisibleThresholdMs }
     sync_artifact = [pscustomobject]@{ module = $syncModule; size = $(if ($syncModule -and (Test-Path -LiteralPath $syncModule)) { (Get-Item -LiteralPath $syncModule).Length } else { $null }); sha256 = (Get-FileSha $syncModule) }
     async_artifact = [pscustomobject]@{ module = $asyncModule; size = $(if ($asyncModule -and (Test-Path -LiteralPath $asyncModule)) { (Get-Item -LiteralPath $asyncModule).Length } else { $null }); sha256 = (Get-FileSha $asyncModule) }
@@ -317,8 +359,9 @@ foreach ($segment in $segments) {
     Write-Step "=== $($segment.name)"
     if (-not $SkipTiming) { $timing[$segment.name] = Invoke-SegmentTiming -Segment $segment.name -PluginsPath $segment.plugins -AsyncFlag $segment.flag }
     if (-not $SkipSemantics) {
-        $frames = if ($segment.name -eq 'B-async') { $AsyncFrames } else { $SyncFrames }
-        $semantics[$segment.name] = Invoke-SegmentSemantics -Segment $segment.name -PluginsPath $segment.plugins -AsyncFlag $segment.flag -FrameList $frames
+        # 注意：变量名不能叫 $frames —— PowerShell 变量大小写不敏感，会撞上 [int]$Frames 参数
+        $semanticFrames = if ($segment.name -eq 'B-async') { $AsyncFrames } else { $SyncFrames }
+        $semantics[$segment.name] = Invoke-SegmentSemantics -Segment $segment.name -PluginsPath $segment.plugins -AsyncFlag $segment.flag -FrameList $semanticFrames
     }
     Clear-OurHost | Out-Null
 }
@@ -340,10 +383,10 @@ if (-not $SkipSemantics) {
     foreach ($frame in (($AsyncFrames -split ',') | ForEach-Object { [int]$_.Trim() } | Where-Object { $_ })) {
         $prev = $frame - 1
         $prev2 = $frame - 2
-        $asyncRigid = (Get-FrameRecord $asyncProbe $frame).rigid_sha256
-        $syncPrevRigid = (Get-FrameRecord $syncProbe $prev).rigid_sha256
-        $syncRigid = (Get-FrameRecord $syncProbe $frame).rigid_sha256
-        $syncPrev2Rigid = (Get-FrameRecord $syncProbe $prev2).rigid_sha256
+        $asyncRigid = Get-RecordField $asyncProbe $frame 'rigid_sha256'
+        $syncPrevRigid = Get-RecordField $syncProbe $prev 'rigid_sha256'
+        $syncRigid = Get-RecordField $syncProbe $frame 'rigid_sha256'
+        $syncPrev2Rigid = Get-RecordField $syncProbe $prev2 'rigid_sha256'
 
         # C1：刚体晚一帧，逐字节
         Add-Check "C1_rigid_shift_$frame" ($(if ($asyncRigid -and $syncPrevRigid -and $asyncRigid -eq $syncPrevRigid) { 'passed' } else { 'failed' })) "async($frame)=$(if($asyncRigid){$asyncRigid.Substring(0,16)}) vs sync($prev)=$(if($syncPrevRigid){$syncPrevRigid.Substring(0,16)})"
@@ -383,6 +426,34 @@ if (-not $SkipSemantics) {
             if (-not ($ra -and $rb -and $ra -eq $rb)) { $same = $false }
         }
         Add-Check 'C6_sync_segments_identical' ($(if ($same) { 'passed' } else { 'failed' })) 'A1 与 A2 两段 sync 的网格+刚体 sha 必须完全相同'
+    }
+
+    # C7（P2-004）：刚体名册一一对应 —— 数量 / RIGID_INDEX / name / 关联骨骼
+    $syncKeys = Get-RosterKey $syncProbe
+    $asyncKeys = Get-RosterKey $asyncProbe
+    if (-not ($syncKeys -and $asyncKeys)) {
+        Add-Check 'C7_p2_004_roster' 'failed' 'probe 输出缺少 roster（probe-rigid.py 版本不对或宿主里读不到 RIGID_INDEX）'
+    } else {
+        $sameContent = (($syncKeys -join "`n") -eq ($asyncKeys -join "`n"))
+        Add-Check 'C7_p2_004_roster' ($(if (($syncKeys.Count -eq $asyncKeys.Count) -and $sameContent) { 'passed' } else { 'failed' })) "sync=$($syncKeys.Count) async=$($asyncKeys.Count) 逐项一致=$sameContent（键=RIGID_INDEX|name_local|bone_index|bone_name）"
+
+        $ids = @($syncProbe.roster | ForEach-Object { [int]$_.rigid_index } | Sort-Object)
+        $contiguous = ($ids.Count -gt 0) -and ($ids[0] -eq 0) -and ($ids[$ids.Count - 1] -eq ($ids.Count - 1))
+        Add-Check 'C7_roster_index_contiguous' ($(if ($contiguous) { 'passed' } else { 'failed' })) "RIGID_INDEX 范围 $($ids[0])..$($ids[$ids.Count - 1])，共 $($ids.Count) 个（必须 0..N-1 连续）"
+
+        $shaSync = [string]$syncProbe.roster_sha256
+        $shaAsync = [string]$asyncProbe.roster_sha256
+        Add-Check 'C7_roster_sha256' ($(if ($shaSync -and $shaSync -eq $shaAsync) { 'passed' } else { 'failed' })) "sync=$($shaSync.Substring(0, [math]::Min(16, $shaSync.Length))) async=$($shaAsync.Substring(0, [math]::Min(16, $shaAsync.Length)))"
+
+        $bonesSync = if ($syncProbe.PSObject.Properties['roster_bones_unresolved']) { [int]$syncProbe.roster_bones_unresolved } else { -1 }
+        $bonesAsync = if ($asyncProbe.PSObject.Properties['roster_bones_unresolved']) { [int]$asyncProbe.roster_bones_unresolved } else { -1 }
+        Add-Check 'C7_roster_bones_resolved' ($(if (($bonesSync -eq 0) -and ($bonesAsync -eq 0)) { 'passed' } else { 'failed' })) "未解析骨骼数 sync=$bonesSync async=$bonesAsync（>0 说明 RIGID_INDEX→骨骼映射断了）"
+
+        if ($sync2Probe) {
+            $sync2Keys = Get-RosterKey $sync2Probe
+            $a2Same = if ($sync2Keys) { (($syncKeys -join "`n") -eq ($sync2Keys -join "`n")) } else { $false }
+            Add-Check 'C7_roster_a2_identical' ($(if ($a2Same) { 'passed' } else { 'failed' })) 'A1 与 A2 的名册必须逐项相同（关掉开关时场景完全一致）'
+        }
     }
 }
 

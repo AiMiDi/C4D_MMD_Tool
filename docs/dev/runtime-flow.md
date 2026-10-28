@@ -236,6 +236,32 @@ Windows SDK 的 Release 构建显式为 Bullet / libMMD 设置保守的优化选
 IK 也会通过 `CacheIKSolveRuntimeOverrides()` 把受影响骨骼的 relative state 写入 BoneManager override。
 这样后续 BoneManager pass 不会把刚刚由 IK/物理写回的骨骼又用普通动画覆盖掉。
 
+### 异步物理（默认开启）
+
+物理求解默认在常驻 worker 线程里推进，主线程不再阻塞在 `physics->Update()` 上。
+`CMT_PHYSICS_ASYNC=0`（或以 `0/f/n/o` 开头的值）退回同步物理；未设置时走异步。
+
+数据流：主线程每帧把本帧骨骼世界矩阵作为纯数据提交给 worker（`Submit`），worker 在自己的影子
+世界（独立的 Bullet 世界、刚体、关节和影子骨骼节点）里执行与同步路径相同的
+`SyncBonePositionToPhysics → Update → ReflectGlobalTransform` 序列，然后把 479 条刚体变换
+快照回传；主线程 `TryConsume` 后按刚体身份写回主世界刚体，再走上面的第 4–6 步。
+
+- **滞后语义**：参与求解的动力学刚体（PMX 类型 1/2）比同步路径慢一帧；骨骼跟随刚体
+  （类型 0）不参与求解、由当帧骨骼直接驱动，因此没有滞后。验收按这两档分别比较。
+- **影子世界一致性**：影子世界必须在绑定姿态下建世界（与主世界 Pin 回绑定姿态后重建同一窗口），
+  关节锚点由建世界瞬间的刚体变换决定；种子化统一放在主世界三连 reset 之后。
+- **失败回退**：没有刚体时不起 worker；worker 落后超过 4 帧时关闭异步并回退同步，日志标记
+  `[CMT][physics-async] fallback_to_sync`。seek/冷重建时影子世界按新 epoch 重建，重建首帧属于
+  瞬态，不计入逐帧等价判定。
+- **实现位置**：`source/module/tools/object/cmt_physics_pipeline.{h,cpp}`（Produce/Consume/Flush
+  状态机与结果槽）、`cmt_physics_async.{h,cpp}`、`cmt_physics_shadow.h`（影子骨骼节点）、
+  `cmt_physics_seed.h`（世界状态种子化）、`cmt_rigid_identity.h`（刚体身份）；接入点在
+  `mmd_model_runtime.cpp` 的 `StepStandaloneAsyncPhysics()` 与
+  `mmd_model_manager.cpp` 的逐帧调度分支。
+
+语义与性能证据（工件 sha、分档 lag 表、主线程开销 A/B/A）见
+[异步物理语义与开销验证](../validation/vmd-physics-async-20261024/p8-semantics-evidence.md)。
+
 ## BoneManager 最终协调
 
 `MMDBoneManagerObject::Execute()` 在 `MODEL_MODE_ANIM` 下遍历骨骼，主要消费两类 runtime override：

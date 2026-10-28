@@ -73,10 +73,28 @@ import json
 import struct
 
 FRAMES = __FRAMES__
+# seek 场景（P4）：在采完 SEEK_AFTER 帧后，一次性跳到 SEEK_TO 帧求值一次，
+# 目的是让宿主走「时间跳变 → 物理重建」路径；之后继续按 FRAMES 采样。
+SEEK_AFTER = __SEEK_AFTER__
+SEEK_TO = __SEEK_TO__
+MESH_FRAMES = __MESH_FRAMES__
 ENABLE_RIGID_DISPLAY = __ENABLE_RIGID_DISPLAY__
 EXEC_FLAGS = __EXEC_FLAGS__
 RIGID_MANAGER_DISPLAY_ID = 1001   # res/S24_up/description/OMMDRigidManager.h
 RIGID_DISPLAY_ON = 1
+
+# res/S24_up/description/OMMDRigid.h: PMX_RIGID_OBJ_GRP=10000 起
+RIGID_INDEX_ID = 10001            # 字符串参数（String::IntToString 存储）
+RIGID_NAME_LOCAL_ID = 10003
+RIGID_NAME_UNIVERSAL_ID = 10004
+RIGID_RELATED_BONE_ID = 10006     # Int32，-1 表示不关联骨骼
+# 0 = 跟随骨骼（libMMD Kinematic）、1 = 物理（Dynamic）、2 = 物理+骨骼对齐（DynamicAndBoneMerge / libMMD Aligned）
+# 注意：单独放在 rigid_modes 里，不进 roster，避免改变 roster_sha256 这个跨轮锚点。
+RIGID_PHYSICS_MODE_ID = 10007     # res/S24_up/description/OMMDRigid.h: PMX_RIGID_OBJ_GRP=10000 起第 8 个
+# 0 = 跟随骨骼（不参与求解，异步下无 lag），1 = 物理演算，2 = 物理演算 + 骨骼位置对齐。
+# 注意 10013 是 RIGID_SHAPE_SIZE_Z（浮点尺寸），早先误当成类型读，导致 477 个刚体都读成 0。
+# res/S24_up/description/TMMDBone.h: PMX_BONE_INFO_GRP=10000 起
+BONE_INDEX_ID = 10001
 
 doc = c4d.documents.GetActiveDocument()
 if doc is None:
@@ -119,13 +137,46 @@ def type_name(obj):
 
 
 def is_rigid(obj):
+    # 首选按描述参数判定（RIGID_INDEX 只有刚体对象才有），名称前缀只作为兜底
+    if read_int_param(obj, RIGID_INDEX_ID) is not None:
+        return True
     name = type_name(obj)
-    if name and "rigid" in name.lower():
+    if name and "rigid" in name.lower() and "manager" not in name.lower():
         return True
     try:
-        return obj.GetName().startswith("MMD刚体")
+        # 兜底必须排除「MMD刚体管理器」——它的名字也以 MMD刚体 开头，会把 479 数成 480
+        object_name = obj.GetName()
+        return object_name.startswith("MMD刚体") and "管理器" not in object_name
     except Exception:
         return False
+
+
+def read_param(obj, param_id):
+    try:
+        return obj[param_id]
+    except Exception:
+        return None
+
+
+def read_int_param(obj, param_id):
+    """RIGID_INDEX 是字符串参数，RIGID_RELATED_BONE_INDEX / BONE_INDEX 是 Int32，统一读成 int。"""
+    value = read_param(obj, param_id)
+    if value is None:
+        return None
+    if isinstance(value, str):
+        try:
+            return int(value.strip())
+        except Exception:
+            return None
+    try:
+        return int(value)
+    except Exception:
+        return None
+
+
+def read_str_param(obj, param_id):
+    value = read_param(obj, param_id)
+    return None if value is None else str(value)
 
 
 def path_of(obj):
@@ -156,7 +207,8 @@ if ENABLE_RIGID_DISPLAY:
     walk(doc.GetFirstObject(), objects)
     for obj in objects:
         name = type_name(obj)
-        if name and "rigidmanagers" in name.lower() or (name and name.startswith("MMDRigidManager")):
+        # 修正运算符优先级：原写法 `A and B or (A and C)` 在中文类型名（MMD刚体管理器）下永不命中
+        if name and ("rigidmanagers" in name.lower() or name.startswith("MMDRigidManager") or "刚体管理器" in name):
             before = None
             try:
                 before = obj[RIGID_MANAGER_DISPLAY_ID]
@@ -173,7 +225,52 @@ if ENABLE_RIGID_DISPLAY:
     except Exception:
         pass
 
+# --- P2-004：刚体名册（与帧无关，只取一次）----------------------------------
+objects_all = []
+walk(doc.GetFirstObject(), objects_all)
+
+bone_map = {}
+for obj in objects_all:
+    try:
+        tags = obj.GetTags() or []   # 2027 的 GetTags() 返回 list，不是链表
+    except Exception:
+        tags = []
+    for tag in tags:
+        bone_index_in_tag = read_int_param(tag, BONE_INDEX_ID)
+        if bone_index_in_tag is not None and bone_index_in_tag not in bone_map:
+            bone_map[bone_index_in_tag] = {"object": path_of(obj), "name": obj.GetName()}
+
+roster = []
+rigid_modes = {}
+for obj in objects_all:
+    rigid_index = read_int_param(obj, RIGID_INDEX_ID)
+    if rigid_index is None:
+        continue
+    bone_index = read_int_param(obj, RIGID_RELATED_BONE_ID)
+    bone_name = None
+    bone_path = None
+    if bone_index is not None and bone_index >= 0:
+        entry = bone_map.get(bone_index)
+        if entry is not None:
+            bone_name = entry["name"]
+            bone_path = entry["object"]
+    mode = read_int_param(obj, RIGID_PHYSICS_MODE_ID)
+    if mode is not None:
+        rigid_modes[str(rigid_index)] = mode
+    roster.append({
+        "rigid_index": rigid_index,
+        "name_local": read_str_param(obj, RIGID_NAME_LOCAL_ID),
+        "name_universal": read_str_param(obj, RIGID_NAME_UNIVERSAL_ID),
+        "bone_index": bone_index,
+        "bone_name": bone_name,
+        "bone_path": bone_path,
+        "path": path_of(obj),
+    })
+roster.sort(key=lambda item: item["rigid_index"])
+roster_sha256 = hashlib.sha256(json.dumps(roster, sort_keys=True, ensure_ascii=False).encode("utf-8")).hexdigest()
+
 records = []
+seek_events = []
 for frame in FRAMES:
     evaluate(frame)
     objects = []
@@ -193,7 +290,8 @@ for frame in FRAMES:
     rigids.sort(key=lambda item: item["path"])
 
     meshes = []
-    for obj in objects:
+    mesh_objects = objects if frame in MESH_FRAMES else []
+    for obj in mesh_objects:
         try:
             if obj.GetType() != c4d.Opolygon:
                 continue
@@ -221,14 +319,55 @@ for frame in FRAMES:
         "meshes": meshes,
     })
 
-print(json.dumps({
-    "schema": "vmd-async-probe/1",
+    if SEEK_AFTER >= 0 and SEEK_TO >= 0 and frame == SEEK_AFTER:
+        # 时间跳变求值：宿主会走物理重建路径（P4 是 RebuildStandaloneAsyncShadow）。
+        # 这里只记录跳变前后的刚体状态指纹与文档时间，等价判定留给客户端脚本。
+        evaluate(SEEK_TO)
+        seek_objects = []
+        walk(doc.GetFirstObject(), seek_objects)
+        seek_rigids = [obj for obj in seek_objects if is_rigid(obj)]
+        seek_blob = b"".join(matrix_bytes(obj.GetMg())[0] for obj in seek_rigids)
+        seek_events.append({
+            "after_frame": frame,
+            "target_frame": SEEK_TO,
+            "rigid_count": len(seek_rigids),
+            "rigid_sha256_before": records[-1]["rigid_sha256"],
+            "rigid_sha256_after": hashlib.sha256(seek_blob).hexdigest(),
+            "doc_time_seconds_after": doc.GetTime().Get(),
+        })
+
+payload = {
+    "schema": "vmd-async-probe/2",
     "document": doc.GetDocumentName(),
     "fps": doc.GetFps(),
     "frames": FRAMES,
     "rigid_display": rigid_display,
+    "roster_count": len(roster),
+    "roster_sha256": roster_sha256,
+    "bone_map_count": len(bone_map),
+    "roster": roster,
+    # 刚体类型（10013）：0=骨骼跟随（不参与求解，无 lag），1/2=动力学（参与求解，异步下 lag=1）。
+    # 判据必须按类型分档比较：把骨骼跟随刚体也按 lag=1 比，等于拿两帧不同的骨骼姿态相减，
+    # 天生差几毫米到几十毫米，会把「语义正确」误判成发散。
+    "rigid_modes": rigid_modes,
     "records": records,
-}, ensure_ascii=False))
+    "seek_events": seek_events,
+}
+
+# 结果落盘而不是从 stdout 回传：9 帧 × 479 刚体的矩阵清单有几百 KB，
+# exec_python 的 stdout 通道会把它截断（实测 "no JSON in host stdout"）。
+try:
+    with open(__OUT_PATH__, "w", encoding="utf-8") as handle:
+        json.dump(payload, handle, ensure_ascii=False)
+    print(json.dumps({
+        "schema": "vmd-async-probe/2",
+        "written": __OUT_PATH__,
+        "records": len(records),
+        "roster_count": len(roster),
+        "roster_sha256": roster_sha256,
+    }, ensure_ascii=False), flush=True)
+except Exception as exc:  # noqa: BLE001 - 用 stdout 把失败原因带回客户端
+    print(json.dumps({"error": "write_failed", "detail": repr(exc)}, ensure_ascii=False), flush=True)
 '''
 
 
@@ -249,29 +388,45 @@ def run_host_code(connection, code: str, timeout: float) -> dict:
 
     exec_python 抛异常时 isError=True，且 structuredContent 里没有 stdout/stderr，
     所以模板自己保证「正常路径 print(json)」，异常由这里显式报错。
-    """
-    import uuid
 
-    result = connection.call_production(
-        "exec_python",
-        {"code": code, "timeout_seconds": int(timeout)},
-        str(uuid.uuid4()),
-        may_mutate=True,
-    )
-    data = result.get("data") or {}
-    if result.get("is_error") or data.get("is_error"):
-        raise RuntimeError(f"exec_python failed: {json.dumps(result.get('raw', data))[:2000]}")
-    stdout = ""
-    structured = data.get("structuredContent") or data.get("structured_content") or {}
-    if isinstance(structured, dict):
-        stdout = structured.get("stdout") or ""
-    if not stdout:
-        stdout = data.get("stdout") or ""
+    传输层与 host-driver.py 一致：直接 `tools/call`，读 structuredContent.stdout；
+    isError 时从 content[].text 的 "--- stdout before the error" 之后取回已打印的 stdout。
+    """
+    started = time.perf_counter()
+    result = connection.request("tools/call", {"name": "exec_python", "arguments": {
+        "code": code, "timeout_seconds": int(timeout), "max_iterations": 50000000}})
+    elapsed = time.perf_counter() - started
+    structured = result.get("structuredContent") or {}
+    stdout = structured.get("stdout", "") if isinstance(structured, dict) else ""
+    teardown_note = None
+    if result.get("isError"):
+        text = json.dumps(result, ensure_ascii=False)
+        blobs = [item.get("text", "") for item in (result.get("content") or []) if isinstance(item, dict)]
+        marker = "--- stdout before the error"
+        embedded = ""
+        for blob in blobs:
+            index = blob.find(marker)
+            if index >= 0:
+                tail = blob[index:]
+                newline = tail.find("\n")
+                embedded = tail[newline + 1:] if newline >= 0 else ""
+                break
+        if embedded.strip():
+            # 已有输出就算成功：C4D 的 exec 包装器常在收尾时抛 ReferenceError("... is not alive")
+            stdout = embedded
+            teardown_note = "teardown_error: " + text[:600]
+        else:
+            raise RuntimeError("host_execution_failed: " + text[:2000])
     text = stdout.strip()
     start = text.find("{")
     if start < 0:
         raise RuntimeError(f"no JSON in host stdout: {text[:800]}")
-    return json.loads(text[start:])
+    payload = json.loads(text[start:])
+    if isinstance(payload, dict):
+        payload.setdefault("exec_elapsed_s", round(elapsed, 3))
+        if teardown_note:
+            payload.setdefault("teardown_note", teardown_note)
+    return payload
 
 
 def main(argv=None) -> int:
@@ -286,9 +441,19 @@ def main(argv=None) -> int:
     parser.add_argument("--expect-points", type=int, default=70222)
     parser.add_argument("--enable-rigid-display", action="store_true", help="打开刚体显示，否则刚体矩阵不随物理更新")
     parser.add_argument("--exec-flags", choices=["all", "default"], default="all")
+    parser.add_argument("--strict-roster", action="store_true", help="关联骨骼名解析不出来时直接失败（P2-004 严格模式）")
+    parser.add_argument("--seek-after-frame", type=int, default=-1, help="P4 seek 场景：采完该帧后做一次时间跳变（需配 --seek-to-frame）")
+    parser.add_argument("--seek-to-frame", type=int, default=-1, help="P4 seek 场景：跳变目标帧（跳变后继续按 --frames 采样）")
+    parser.add_argument("--mesh-frames", default="540,560,619", help="只在这些帧计算网格 sha（锚点旁证）；其余帧 meshes=[]")
     args = parser.parse_args(argv)
 
     frames = parse_frames(args.frames)
+    if (args.seek_after_frame >= 0) != (args.seek_to_frame >= 0):
+        print("PROBE_ERROR seek_after_frame and seek_to_frame must be given together", file=sys.stderr)
+        return 3
+    if args.seek_after_frame >= 0 and args.seek_after_frame not in frames:
+        print(f"PROBE_ERROR seek_after_frame {args.seek_after_frame} not in --frames", file=sys.stderr)
+        return 3
     prefs = Path(args.prefs_path)
     token_file = Path(args.token_file) if args.token_file else prefs / TOKEN_RELATIVE
     endpoint = args.endpoint or DEFAULT_ENDPOINT
@@ -298,25 +463,47 @@ def main(argv=None) -> int:
         return 4
 
     flags_expr = "c4d.EXECUTIONFLAGS_PASS_ALL" if args.exec_flags == "all" else "c4d.EXECUTIONFLAGS_0"
+    host_json_path = Path(args.out).with_suffix(".host.json")
+    host_json_path.parent.mkdir(parents=True, exist_ok=True)
+    if host_json_path.exists():
+        host_json_path.unlink()
     code = (
         HOST_CODE.replace("__FRAMES__", repr(frames))
         .replace("__ENABLE_RIGID_DISPLAY__", "True" if args.enable_rigid_display else "False")
         .replace("__EXEC_FLAGS__", flags_expr)
+        .replace("__SEEK_AFTER__", repr(int(args.seek_after_frame)))
+        .replace("__SEEK_TO__", repr(int(args.seek_to_frame)))
+        .replace("__OUT_PATH__", repr(str(host_json_path)))
+    .replace("__MESH_FRAMES__", repr(sorted(int(x) for x in str(args.mesh_frames).split(",") if x.strip())))
     )
 
     HostConnection = import_host_module()
     started = time.time()
     try:
         connection = HostConnection(endpoint, str(token_file), int(args.timeout))
+        connection.initialize()
     except Exception as error:  # noqa: BLE001 - host may be down, report as data
         print(f"PROBE_ERROR connect failed: {error!r}", file=sys.stderr)
         return 4
 
     try:
-        payload = run_host_code(connection, code, args.timeout)
+        ack = run_host_code(connection, code, args.timeout)
     except Exception as error:  # noqa: BLE001
         print(f"PROBE_ERROR exec failed: {error!r}", file=sys.stderr)
         return 4
+
+    # 宿主把完整结果写在 host_json_path，stdout 只回一行 ack（避免大 payload 被截断）
+    if isinstance(ack, dict) and ack.get("written"):
+        try:
+            payload = json.loads(Path(ack["written"]).read_text(encoding="utf-8"))
+        except Exception as error:  # noqa: BLE001
+            print(f"PROBE_ERROR read host payload failed: {error!r}", file=sys.stderr)
+            return 4
+    elif isinstance(ack, dict) and ack.get("error"):
+        print(f"PROBE_ERROR host write failed: {ack.get('detail')}", file=sys.stderr)
+        return 4
+    else:
+        payload = ack
 
     records = payload.get("records") or []
     if not records:
@@ -326,6 +513,18 @@ def main(argv=None) -> int:
     rigid_counts = sorted({item["rigid_count"] for item in records})
     if rigid_counts != [args.expect_rigid]:
         print(f"PROBE_ERROR rigid count mismatch: {rigid_counts} != [{args.expect_rigid}]", file=sys.stderr)
+        return 3
+
+    # P2-004：名册必须与 --expect-rigid 一致，否则说明选择器抓错对象或场景不对
+    roster = payload.get("roster") or []
+    roster_count = len(roster)
+    if roster_count != args.expect_rigid:
+        print(f"PROBE_ERROR rigid roster count mismatch: {roster_count} != {args.expect_rigid}", file=sys.stderr)
+        return 3
+    roster_ids = [entry.get("rigid_index") for entry in roster]
+    missing_bones = [entry for entry in roster if entry.get("bone_index") is not None and entry.get("bone_index") >= 0 and not entry.get("bone_name")]
+    if args.strict_roster and missing_bones:
+        print(f"PROBE_ERROR roster bones unresolved: {len(missing_bones)} (first: {missing_bones[0].get('path')})", file=sys.stderr)
         return 3
 
     point_counts = sorted({mesh["point_count"] for item in records for mesh in item["meshes"] if mesh["point_count"] > 0})
@@ -340,7 +539,7 @@ def main(argv=None) -> int:
         return 2
 
     result = {
-        "schema": "vmd-async-probe-result/1",
+        "schema": "vmd-async-probe-result/2",
         "endpoint": endpoint,
         "token_file": str(token_file),
         "prefs_path": str(prefs),
@@ -350,8 +549,14 @@ def main(argv=None) -> int:
         "rigid_count": rigid_counts,
         "distinct_rigid_sha256": distinct_rigid,
         "point_counts": point_counts,
+        "roster_count": roster_count,
+        "roster_sha256": payload.get("roster_sha256"),
+        "bone_map_count": payload.get("bone_map_count"),
+        "roster_ids_first_last": [roster_ids[0], roster_ids[-1]] if roster_ids else [],
+        "roster_bones_unresolved": len(missing_bones),
         "elapsed_s": round(time.time() - started, 3),
         "host": payload,
+        "roster": roster,
     }
 
     out_path = Path(args.out)
@@ -362,6 +567,9 @@ def main(argv=None) -> int:
         "frames": frames,
         "rigid_count": rigid_counts,
         "distinct_rigid_sha256": distinct_rigid,
+        "roster_count": roster_count,
+        "roster_sha256": payload.get("roster_sha256"),
+        "roster_bones_unresolved": len(missing_bones),
         "mesh_shas": {item["frame"]: [mesh["local_sha256"] for mesh in item["meshes"]] for item in records},
     }, ensure_ascii=False))
     return 0
