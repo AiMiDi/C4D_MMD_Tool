@@ -1,4 +1,5 @@
 #include "sizing_session.h"
+#include "module/tools/object/mmd_model_manager.h"
 #include "CMTSceneManager.h"
 #include "plugin_resource.h"
 #include "module/tools/object/mmd_model_manager.h"
@@ -626,6 +627,7 @@ bool HostSession::Preview(size_t stage, bool overlay)
     preview->SetLoopMaxTime(endTime);
     preview->SetTime(time);
     preview->ExecutePasses(nullptr, true, true, true, BUILDFLAGS::NONE);
+    MMDModelManagerObject::FlushAsyncPhysicsForDocument(*preview);
     SetActiveDocument(preview);
     preview->SetActiveObject(static_cast<BaseObject*>(targets_[selected_]->after->GetLink(preview, Obase)), SELECTION_NEW);
     EventAdd();

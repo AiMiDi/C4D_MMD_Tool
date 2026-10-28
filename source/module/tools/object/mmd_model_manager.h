@@ -27,6 +27,14 @@ Description:	MMD model object
 #include "utils/images_user_area_util.hpp"
 #include "utils/mmd_model_info_animation.h"
 #include "utils/cmt_runtime_identity.hpp"
+#include "module/tools/object/cmt_physics_pipeline.h"
+//! P2：影子骨骼 + 常驻 worker + 结果槽（默认关闭，见 CMT_PHYSICS_ASYNC）。
+#include "module/tools/object/cmt_physics_async.h"
+//! P4-001：epoch 单调计数器（世界边界推进，绝不回退到 1）。
+#include "module/tools/object/cmt_physics_epoch.h"
+#include "module/tools/object/cmt_physics_seed.h"
+#include "module/tools/object/cmt_rigid_identity.h"
+#include "module/tools/object/cmt_physics_shadow.h"
 
 class IMorph;
 class MaterialMorph;
@@ -257,6 +265,42 @@ class MMDModelManagerObject final : public ObjectData
 	std::vector<std::unique_ptr<C4DIKChainNodeAdapter>> physics_bone_pool_;
 	maxon::HashMap<Int32, C4DIKChainNodeAdapter*> physics_bone_adapters_;
 	maxon::BaseArray<Int32> physics_dynamic_bone_indices_;
+	//! 物理生产/消费缝（P1）：结果槽状态机，见 cmt_physics_pipeline.h。
+	cmt_physics_pipeline::CmtPhysicsPipeline physics_pipeline_;
+	//! 本模型当前帧的生产帧号（同帧重算时用它校验消费契约）。
+	std::uint64_t physics_frame_id_ = 0;
+	//! P2：影子世界、影子骨骼、常驻 worker 与结果槽。
+	std::unique_ptr<libmmd::MMDPhysicsManager> async_physics_manager_own_;
+	cmt::physics::ShadowBoneSet async_shadow_bones_;
+	cmt::physics::PhysicsAsyncPipeline async_physics_pipeline_;
+	//! P2：seek/重置/关开关时递增，旧 epoch 的在途结果一律作废。
+	std::uint64_t async_physics_epoch_ = 0;
+//! P4-001：epoch 的唯一来源；0 表示尚未建立过异步世界。
+cmt::physics::PhysicsEpochCounter async_epoch_counter_;
+	//! P6-001：最近一次影子世界种子化的统计（bodies/copied/skipped/ok）。
+	cmt::physics::RigidSeedStats async_seed_stats_;
+	//! P7-001：影子 motion state 已用当帧骨骼姿态预热过上一帧原点。
+	Bool async_prev_primed_ = false;
+	//! P2：已提交给 worker 的最后一帧与最近一次写回的帧。
+	std::uint64_t async_submitted_frame_ = 0;
+	std::uint64_t async_frames_since_reset_ = 0;
+	Bool async_replaying_ = false;
+	std::uint64_t async_applied_frame_ = 0;
+	Bool async_physics_active_ = false;
+	//! P9-002：最近一次成功写回的异步结果。同一帧重算（控制/形态/外部姿态编辑）直接重放它，
+	//! 既不第二次推进 Bullet，也不因为异步档没有 frame id 而丢掉物理姿态回写。
+	cmt::physics::AsyncFrameResult async_last_result_;
+	Bool has_async_last_result_ = false;
+	//! P9-003：连续被拒的提交次数。worker 卡死时 submitted 不推进 ⇒ 滞后看不出来，
+	//! 必须单独计数，否则物理会静默停摆（只留一条背压日志）。
+	std::uint64_t async_submit_fail_streak_ = 0;
+	//! 诊断只打一次（按模型，不是按进程）。
+	Bool async_dispatch_reported_ = false;
+	Bool async_backpressure_reported_ = false;
+	//! P2-004：影子/主世界的刚体稳定身份（PMX 刚体下标）与错位计数。
+	std::vector<Int32> async_rigid_identity_;
+	std::vector<Int32> main_rigid_identity_;
+	std::uint64_t async_rigid_identity_mismatch_ = 0;
 	struct ExternalBonePose
 	{
 		Matrix relative;
@@ -311,6 +355,8 @@ public:
 
 	~MMDModelManagerObject() override = default;
 	static NodeData* Alloc();
+	//! P2：文档求值后落定异步物理结果（未启用时为 no-op）。
+	static void FlushAsyncPhysicsForDocument(BaseDocument& doc);
 	SDK2024_InitOverride;
 	Bool Read(GeListNode* node, HyperFile* hf, Int32 level) override;
 	SDK2024_WriteOverride;
@@ -473,6 +519,39 @@ private:
 	void ResetStandalonePhysics();
 	void StepStandalonePhysics(Float elapsed);
 	void ApplyStandalonePhysicsResults();
+	//! 单个物理步（Sync + Update，含 substeps）：不含结果槽与回写。
+	void RunStandalonePhysicsStep(Float elapsed);
+	//! 旧路径原语：Sync + Update + 回写，不触碰生产/消费缝（off 档使用）。
+	void StepStandalonePhysicsRaw(Float elapsed);
+	//! 生产：把当前帧 Bullet 结果写入结果槽（P1 只记录状态，不复制物理量）。
+	//! 返回本次生产对应的帧号；返回 0 表示没有可用物理对象。
+	std::uint64_t ProduceStandalonePhysicsFrame(Float elapsed);
+	//! 首次消费：仅当结果槽帧号与 frame 一致且属于当前 epoch 时回写骨骼。
+	void ConsumeStandalonePhysicsFrame(std::uint64_t frame);
+	//! 同帧重算：对已消费的同一帧结果再次回写（数值不变，不推进 Bullet）。
+	void ReapplyStandalonePhysicsFrame(std::uint64_t frame);
+	//! P9-002：async 档的同帧重算——重放最近一次已写回的异步结果。
+	Bool ReapplyLastAsyncPhysicsResult();
+	//! 供插件内部直接调用 ExecutePasses 的路径使用：保证返回时是当前帧结果。
+	Bool FlushStandalonePhysicsPipeline(std::uint64_t frame);
+	//! P2：异步开关（默认关闭；CMT_PHYSICS_ASYNC=1 打开）。
+	static Bool AsyncPhysicsSwitchEnabled();
+	Bool AsyncPhysicsEnabled() const { return async_physics_active_; }
+	Bool StartStandaloneAsyncPhysics();
+	//! P6-001：从主世界当前真实刚体状态（变换/线速度/角速度/激活态）种子化影子世界。
+	Bool SeedStandaloneAsyncWorldFromMain();
+	//! P7-001：worker 启动前钉住每个 motion state 的 prev bone origin，不注入速度。
+	Bool PrimeStandaloneAsyncPreviousBoneOrigins();
+	Int32 async_seed_rejected_ = 0;
+	void ShutdownStandaloneAsyncPhysics();
+	void StepStandaloneAsyncPhysics(Float elapsed);
+	Bool FlushStandaloneAsyncPhysics();
+	//! P3：从共同起点 replay 到目标帧（中途开启 / seek / 导出用）。
+	// P4：seek / 导出 / 中途开启统一走镜像重建（不再用重复步进冒充历史）。
+	Bool RebuildStandaloneAsyncShadow();
+	//! P2-001/P2-002：结果写回（骨骼 + 刚体显示）与刚体快照映射。
+	Bool ApplyStandaloneAsyncResult(const cmt::physics::AsyncFrameResult& result);
+	Bool ApplyStandaloneAsyncRigidWorld(const std::vector<Eigen::Matrix4f>& rigid_world);
 	void ApplyPhysicsResultsToBoneObjects() const;
 	void CommitEditModeBindState(BaseDocument* doc);
 	void RestoreBindStateForEdit(BaseDocument* doc);
@@ -481,6 +560,8 @@ private:
 	Bool ShouldResetPhysicsOnSeek(const BaseObject* op) const;
 	Vector GetPhysicsGravity(const BaseObject* op) const;
 	void ApplyPhysicsConfigToRuntime(const BaseObject* op);
+	//! t56：影子世界与主线程同一口径（同一取值表达式，目标管理器不同）。
+	void ApplyPhysicsConfigToAsyncWorld(libmmd::MMDPhysicsManager* async_manager, const BaseObject* op);
 	void BuildIKSolverUI();
 	void ApplyIKSolverStates();
 	void ApplyIKSolverFromParameters(BaseObject* op);

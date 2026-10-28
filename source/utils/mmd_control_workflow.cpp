@@ -1,4 +1,5 @@
 #include "module/core/cmt_old_sdk_stl_preload.h"
+#include "module/tools/object/mmd_model_manager.h"
 #include "utils/mmd_control_workflow.hpp"
 
 #include <algorithm>
@@ -883,6 +884,7 @@ Bool mmd_control_workflow::SetLimbMode(MMDBoneManagerObject &manager, BaseObject
                      {std::make_pair(chain.upper, kUpperTwist), std::make_pair(chain.elbow, kLowerTwist)})
                 {
                     doc->ExecutePasses(nullptr, true, true, true, BUILDFLAGS::NONE);
+                    MMDModelManagerObject::FlushAsyncPhysicsForDocument(*doc);
                     for (const auto &pose : poses)
                         if (pose.bone == joint.first)
                         {
@@ -906,6 +908,7 @@ Bool mmd_control_workflow::SetLimbMode(MMDBoneManagerObject &manager, BaseObject
         for (Int32 iteration = 0; iteration < 3; ++iteration)
         {
             doc->ExecutePasses(nullptr, true, true, true, BUILDFLAGS::NONE);
+            MMDModelManagerObject::FlushAsyncPhysicsForDocument(*doc);
             for (BaseObject *bone : bones)
             {
                 BaseTag *tag = bone->GetTag(g_mmd_bone_tag_id);
@@ -933,6 +936,7 @@ Bool mmd_control_workflow::SetLimbMode(MMDBoneManagerObject &manager, BaseObject
         for (Int32 iteration = 0; iteration < 8; ++iteration)
         {
             doc->ExecutePasses(nullptr, true, true, true, BUILDFLAGS::NONE);
+            MMDModelManagerObject::FlushAsyncPhysicsForDocument(*doc);
             Float error = 0;
             for (const auto &pose : poses)
             {

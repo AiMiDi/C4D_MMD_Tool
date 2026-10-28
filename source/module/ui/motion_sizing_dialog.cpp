@@ -1,4 +1,5 @@
 #include "motion_sizing_dialog.h"
+#include "module/tools/object/mmd_model_manager.h"
 #include "plugin_resource.h"
 #include "utils/filename_util.hpp"
 #include <c4d_symbols.h>
@@ -543,6 +544,7 @@ void MotionSizingDialog::Timer(const BaseContainer&)
                 auto* preview = ActiveSession().GetPreviewDocument();
                 preview->SetTime(previewTime_);
                 preview->ExecutePasses(nullptr, true, true, true, BUILDFLAGS::NONE);
+                MMDModelManagerObject::FlushAsyncPhysicsForDocument(*preview);
                 EventAdd();
             }
         }

@@ -1,4 +1,5 @@
 #include "module/core/cmt_old_sdk_stl_preload.h"
+#include "module/tools/object/mmd_model_manager.h"
 #include <algorithm>
 #include <chrono>
 #include <cmath>
@@ -1506,6 +1507,7 @@ Json Execute(Operation operation, const BaseContainer& request)
 		evaluated_document->SetTime(evaluation_time);
 		if (!evaluated_document->ExecutePasses(nullptr, true, true, true, BUILDFLAGS::NONE))
 			return Envelope(id, false, "evaluation_failed", "Document evaluation failed.");
+		MMDModelManagerObject::FlushAsyncPhysicsForDocument(*evaluated_document);
 		Bool finite = true;
 		const auto bones = BoneObjects(evaluated_model);
 		for (BaseObject* bone : bones)

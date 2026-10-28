@@ -2441,9 +2441,27 @@ EXECUTIONRESULT MMDModelManagerObject::Execute(BaseObject* op, BaseDocument* doc
 				if (time_changed || !is_animation_initialized_ || physics_timing_changed)
 				{
 					if (needs_physics_reset)
+					{
+						physics_frame_id_ = 0;
 						ResetStandalonePhysics();
-					else
+					}
+					else if (!physics_pipeline_.SeamEnabled())
+					{
+						// off 档：完全走旧路径，不触碰缝的状态机，也不取计时。
+						physics_frame_id_ = 0;
 						StepStandalonePhysics(1.f / fps_);
+					}
+					else if (AsyncPhysicsEnabled())
+					{
+						// P2：默认 seam 档由异步分发接管物理步（结果晚一帧）。
+						physics_frame_id_ = 0;
+						StepStandaloneAsyncPhysics(1.f / fps_);
+					}
+					else
+					{
+						physics_frame_id_ = ProduceStandalonePhysicsFrame(1.f / fps_);
+						ConsumeStandalonePhysicsFrame(physics_frame_id_);
+					}
 					is_animation_initialized_ = true;
 				}
 				else if (bone_morph_state_changed || control_state_changed || external_pose_refresh_)
@@ -2451,7 +2469,15 @@ EXECUTIONRESULT MMDModelManagerObject::Execute(BaseObject* op, BaseDocument* doc
 					// Reapply the existing physical pose after invalidating same-frame
 					// IK results. Control and morph edits must not advance Bullet time.
 					CMT_PROFILE_SCOPE(cmt_runtime::RuntimeStage::Physics);
-					ApplyStandalonePhysicsResults();
+					// 同一帧重算：再次回写已有结果（数值不变，不走第二次生产）。
+					// P9-002：async 档没有 physics_frame_id_（恒 0），必须重放最近一次异步结果，
+					// 否则控制/形态编辑后物理姿态不回写（同步档的 Reapply 会因帧号 0 失败）。
+					if (!physics_pipeline_.SeamEnabled())
+						ApplyStandalonePhysicsResults();
+					else if (AsyncPhysicsEnabled())
+						ReapplyLastAsyncPhysicsResult();
+					else
+						ReapplyStandalonePhysicsFrame(physics_frame_id_);
 				}
 			}
 			else
@@ -4427,7 +4453,10 @@ Bool MMDModelManagerObject::BakeVMDMotion(libmmd::VMDFile& motion, const CMTTool
 	for (const Int32 frame : sample_frames)
 	{
 		doc->SetTime(BaseTime(static_cast<Float>(frame), kModelAnimationFps));
-		if (!doc->ExecutePasses(nullptr, true, true, true, BUILDFLAGS::NONE) || !*model->is_runtime_initialized_.Read())
+		const Bool export_passes_ok = doc->ExecutePasses(nullptr, true, true, true, BUILDFLAGS::NONE);
+		if (export_passes_ok)
+			MMDModelManagerObject::FlushAsyncPhysicsForDocument(*doc);
+		if (!export_passes_ok || !*model->is_runtime_initialized_.Read())
 			return false;
 		if (setting.export_motion)
 		{
